@@ -1,0 +1,27 @@
+{
+  "sourceRoot": "apps/lora-tracking-e2e/src",
+  "projectType": "application",
+  "targets": {
+    "e2e": {
+      "executor": "@nrwl/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/lora-tracking-e2e/cypress.json",
+        "devServerTarget": "lora-tracking:serve:development"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "lora-tracking:serve:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/lora-tracking-e2e/**/*.{js,ts}"]
+      }
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["lora-tracking"]
+}
