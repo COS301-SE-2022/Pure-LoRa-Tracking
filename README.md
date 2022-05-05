@@ -1,9 +1,11 @@
 <h1 align="center"> Pure LoRa tracking </h1>
 
-![GitHub issues](https://img.shields.io/github/issues/COS301-SE-2022/Pure-LoRa-Tracking?style=plastic)
-![GitHub pull requests](https://img.shields.io/github/issues-pr/COS301-SE-2022/Pure-LoRa-Tracking?style=plastic)
+![GitHub issues](https://img.shields.io/github/issues/COS301-SE-2022/Pure-LoRa-Tracking)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/COS301-SE-2022/Pure-LoRa-Tracking)
 [![codecov](https://codecov.io/gh/COS301-SE-2022/Pure-LoRa-Tracking/branch/main/graph/badge.svg?token=2BANYONTYU)](https://codecov.io/gh/COS301-SE-2022/Pure-LoRa-Tracking)
 [![Requirements Status](https://requires.io/github/COS301-SE-2022/Pure-LoRa-Tracking/requirements.svg?branch=main)](https://requires.io/github/COS301-SE-2022/Pure-LoRa-Tracking/requirements/?branch=main)
+[![CodeQL](https://github.com/COS301-SE-2022/Pure-LoRa-Tracking/actions/workflows/codeql-analysis.yml/badge.svg?branch=main)](https://github.com/COS301-SE-2022/Pure-LoRa-Tracking/actions/workflows/codeql-analysis.yml)
+[![StaticTests](https://github.com/COS301-SE-2022/Pure-LoRa-Tracking/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/COS301-SE-2022/Pure-LoRa-Tracking/actions/workflows/tests.yml)
 
 ## Table of Contents
 
