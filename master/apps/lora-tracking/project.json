@@ -1,41 +1,86 @@
 {
-  "sourceRoot": "apps/lora-tracking/src",
   "projectType": "application",
+  "sourceRoot": "apps/lora-tracking/src",
+  "prefix": "master",
   "targets": {
     "build": {
-      "executor": "@nrwl/node:webpack",
+      "executor": "@angular-devkit/build-angular:browser",
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/apps/lora-tracking",
+        "index": "apps/lora-tracking/src/index.html",
         "main": "apps/lora-tracking/src/main.ts",
+        "polyfills": "apps/lora-tracking/src/polyfills.ts",
         "tsConfig": "apps/lora-tracking/tsconfig.app.json",
-        "assets": ["apps/lora-tracking/src/assets"]
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          "apps/lora-tracking/src/favicon.ico",
+          "apps/lora-tracking/src/assets"
+        ],
+        "styles": ["apps/lora-tracking/src/styles.scss"],
+        "scripts": []
       },
       "configurations": {
         "production": {
-          "optimization": true,
-          "extractLicenses": true,
-          "inspect": false,
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
           "fileReplacements": [
             {
               "replace": "apps/lora-tracking/src/environments/environment.ts",
               "with": "apps/lora-tracking/src/environments/environment.prod.ts"
             }
-          ]
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
         }
-      }
+      },
+      "defaultConfiguration": "production"
     },
     "serve": {
-      "executor": "@nrwl/node:node",
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "configurations": {
+        "production": {
+          "browserTarget": "lora-tracking:build:production"
+        },
+        "development": {
+          "browserTarget": "lora-tracking:build:development"
+        }
+      },
+      "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "lora-tracking:build"
+        "proxyConfig": "apps/lora-tracking/proxy.conf.json"
+      }
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "browserTarget": "lora-tracking:build"
       }
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
-      "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["apps/lora-tracking/**/*.ts"]
+        "lintFilePatterns": [
+          "apps/lora-tracking/**/*.ts",
+          "apps/lora-tracking/**/*.html"
+        ]
       }
     },
     "test": {

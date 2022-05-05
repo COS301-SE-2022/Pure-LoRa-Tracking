@@ -14,10 +14,8 @@ describe('AppService', () => {
   });
 
   describe('getData', () => {
-    it('should return "Welcome to lora-tracking!"', () => {
-      expect(service.getData()).toEqual({
-        message: 'Welcome to lora-tracking!',
-      });
+    it('should return "Welcome to api!"', () => {
+      expect(service.getData()).toEqual({ message: 'Welcome to api!' });
     });
   });
 });
