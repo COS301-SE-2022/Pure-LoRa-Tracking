@@ -1,0 +1,43 @@
+# dependencies
+/node_modules
+
+# IDEs and editors
+/.idea
+/.awcache
+/.vscode
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# bundle
+packages/**/*.d.ts
+packages/**/*.js
+
+# misc
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+yarn-error.log
+/**/npm-debug.log
+testem.log
+/out-tsc
+/typings
+/packages/**/.npmignore
+/packages/**/LICENSE
+
+# System Files
+.DS_Store
+Thumbs.db
+/tmp
+/dst
+
+# Angular
+.angular
+
+# NPM
+/package-lock.json

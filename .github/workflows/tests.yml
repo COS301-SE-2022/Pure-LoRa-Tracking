@@ -1,0 +1,24 @@
+name: StaticTests
+
+# Controls when the workflow will run
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+  # Allows running this workflow manually
+  workflow_dispatch:
+
+
+jobs:
+  test:
+    runs-on: debian-latest
+
+    # sequence of tasks that will be executed as part of the job
+    steps:
+      
+      - name: Codecov
+        uses: codecov/codecov-action@v3.1.0
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
