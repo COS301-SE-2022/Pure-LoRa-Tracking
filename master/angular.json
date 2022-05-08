@@ -4,6 +4,7 @@
     "api": "apps/api",
     "api-interfaces": "libs/api-interfaces",
     "lora-tracking": "apps/lora-tracking",
-    "lora-tracking-e2e": "apps/lora-tracking-e2e"
+    "lora-tracking-e2e": "apps/lora-tracking-e2e",
+    "server-thingsboard-user": "libs/server/thingsboard-user"
   }
 }
