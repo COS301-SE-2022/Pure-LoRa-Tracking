@@ -5,7 +5,6 @@ import { AxiosResponse } from 'axios';
 
 describe('ServerThingsboardUserService', () => {
   let service: ServerThingsboardUserService;
-
   beforeEach(async () => {
     const module = await Test.createTestingModule({
       providers: [ServerThingsboardUserService],
@@ -19,11 +18,20 @@ describe('ServerThingsboardUserService', () => {
     expect(service).toBeTruthy();
   });
 
-it('login should return something', () => {
+it('valid login should return token and refreshToken', () => {
   service.login("liamburgess299@gmail.com","L19m2992").subscribe((resp : AxiosResponse)=> {
-    //console.log(resp.data['token']);
-    expect(resp.data).toHaveProperty('refreshToken')  
+    expect(resp.data).toHaveProperty('token');
+    expect(resp.data).toHaveProperty('refreshToken');
   });
 });
+
+it('should logout and return status 200 - OK', ()=> {
+  service.login("liamburgess299@gmail.com","L19m2992").subscribe((resp : AxiosResponse)=> {
+    service.logout(resp.data['token']).subscribe((resp: AxiosResponse)=> {
+      expect(resp.data).toEqual('');
+    })
+  });
+    
+ }); 
 
 });

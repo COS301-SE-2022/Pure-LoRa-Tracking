@@ -12,9 +12,14 @@ export class ServerThingsboardUserService {
         return this.httpService.post('http://localhost:8080/api/auth/login', {
             'username':name,
             'password':password
-        })/*.subscribe((resp : AxiosResponse)=> {
-            //console.log(resp.data['token']);
-            return resp.data;
-        })*/
+        })
+    }
+
+    logout(jwt : string) : Observable<AxiosResponse<any>> {
+        const headersReq = {
+            'Content-Type':'application/json',
+            'Authorization':'Bearer '+jwt
+        };
+        return this.httpService.post('http://localhost:8080/api/auth/logout',{},{headers:headersReq});
     }
 }
