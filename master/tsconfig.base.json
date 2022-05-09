@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@lora/apiRouter": ["libs/api/api-router/src/index.ts"],
       "@lora/thingsboard-user": ["libs/server/thingsboard-user/src/index.ts"],
       "@master/api-interfaces": ["libs/api-interfaces/src/index.ts"]
     }

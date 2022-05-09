@@ -2,6 +2,7 @@
   "version": 2,
   "projects": {
     "api": "apps/api",
+    "api-api-router": "libs/api/api-router",
     "api-interfaces": "libs/api-interfaces",
     "lora-tracking": "apps/lora-tracking",
     "lora-tracking-e2e": "apps/lora-tracking-e2e",
