@@ -4,6 +4,7 @@
     "api": "apps/api",
     "api-interfaces": "libs/api-interfaces",
     "client-defaultpage": "libs/client/defaultpage",
+    "client-demo": "libs/client/demo",
     "client-maps": "libs/client/maps",
     "lora-tracking": "apps/lora-tracking",
     "lora-tracking-e2e": "apps/lora-tracking-e2e",
