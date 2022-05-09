@@ -15,6 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@lora/api/mapEndpoint": ["libs/api/map-endpoint/src/index.ts"],
+      "@lora/apiRouter": ["libs/api/api-router/src/index.ts"],
       "@lora/thingsboard-user": ["libs/server/thingsboard-user/src/index.ts"],
       "@master/api-interfaces": ["libs/api-interfaces/src/index.ts"]
     }
