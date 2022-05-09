@@ -16,26 +16,32 @@ export interface MapApiHistorical {
     reserveID : string,
     options : {
         limit : number,
-        sort : ["new","old"]
+        sort : sortHistorical
     }
+}
+
+enum sortHistorical {
+    new = 'new',
+    old = 'old'
 }
 
 export interface MapApiLatestResponse {
     code : number,
     status : string,
     explanation : string,
-    data : [
-        {
-            deviceID : string,
-            locationData : {
-                timeStamp:number,
-                locationData : {
-                    latitude : string,
-                    longitude : string
-                }
+    data? : Device[]
+}
+
+interface Device {
+        deviceID : string,
+        type : string,
+        locationData : {
+            timeStamp:number,
+            location : {
+                latitude : string,
+                longitude : string
             }
         }
-    ]
 }
 
 export interface MapApiReserveResponse {
