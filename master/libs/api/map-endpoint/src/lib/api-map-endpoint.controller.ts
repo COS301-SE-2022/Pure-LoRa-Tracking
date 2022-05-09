@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ApiMapEndpointService } from './api-map-endpoint.service';
-import { MapApiHistorical, MapApiLatest, MapApiReserve } from './map-api.interface';
+import { MapApiHistorical, MapApiHistoricalResponse, MapApiLatest, MapApiLatestResponse, MapApiReserve, MapApiReserveResponse } from './map-api.interface';
 
 @Controller('map')
 export class ApiMapEndpointController {
@@ -12,17 +12,17 @@ export class ApiMapEndpointController {
   }
 
   @Post('latest')
-  LatestRepsonse(@Body() content : MapApiLatest) {
-    return {status:'success'};
+  LatestRepsonse(@Body() content : MapApiLatest) : MapApiLatestResponse {
+    return this.apiMapEndpointService.LatestProcess(content);
   }
 
   @Post('reserve')
-  ReserveRepsonse(@Body() content : MapApiReserve) {
-    return {status:'success'};
+  ReserveRepsonse(@Body() content : MapApiReserve) : MapApiReserveResponse {
+    return this.apiMapEndpointService.ReserveProcess(content);
   }
 
   @Post('historical')
-  HistoricalRepsonse(@Body() content : MapApiHistorical) {
-    return {status:'success'};
+  HistoricalRepsonse(@Body() content : MapApiHistorical) : MapApiHistoricalResponse {
+    return this.apiMapEndpointService.HistoricalProcess(content); 
   }
 }

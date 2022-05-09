@@ -1,5 +1,3 @@
-export interface MapApi {}
-
 export interface MapApiLatest {
     token : string,
     reserveID : string
