@@ -14,7 +14,7 @@ export interface MapApiReserve {
 export interface MapApiHistorical {
     token : string,
     reserveID : string,
-    options : {
+    options? : {
         limit : number,
         sort : sortHistorical
     }
@@ -48,14 +48,13 @@ export interface MapApiReserveResponse {
     code : number,
     status : string,
     explanation : string,
-    data : {
+    data? : {
         reserveName : string,
-        location : [
+        location :
             {
                 latitude : string,
                 longitude : string
-            }
-        ]
+            } []
     }
 }
 
@@ -63,14 +62,13 @@ export interface MapApiHistoricalResponse {
     code : number,
     status : string,
     explanation : string,
-    data : [
+    data? : {
         deviceID : string,
-        locations : [
+        locations :
             {
                 timestamp : number,
                 latitude : string,
                 longitude : string
-            }
-        ]
-    ]
+            } []
+    } []
 }
