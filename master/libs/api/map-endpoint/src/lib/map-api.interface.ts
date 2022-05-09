@@ -1,5 +1,3 @@
-export interface MapApi {}
-
 export interface MapApiLatest {
     token : string,
     reserveID : string
@@ -16,42 +14,47 @@ export interface MapApiReserve {
 export interface MapApiHistorical {
     token : string,
     reserveID : string,
-    options : {
+    options? : {
         limit : number,
-        sort : ["new","old"]
+        sort : sortHistorical
     }
+}
+
+enum sortHistorical {
+    new = 'new',
+    old = 'old'
 }
 
 export interface MapApiLatestResponse {
     code : number,
     status : string,
     explanation : string,
-    data : [
-        {
-            deviceID : string,
-            locationData : {
-                timeStamp:number,
-                locationData : {
-                    latitude : string,
-                    longitude : string
-                }
+    data? : Device[]
+}
+
+interface Device {
+        deviceID : string,
+        type : string,
+        locationData : {
+            timeStamp:number,
+            location : {
+                latitude : string,
+                longitude : string
             }
         }
-    ]
 }
 
 export interface MapApiReserveResponse {
     code : number,
     status : string,
     explanation : string,
-    data : {
+    data? : {
         reserveName : string,
-        location : [
+        location :
             {
                 latitude : string,
                 longitude : string
-            }
-        ]
+            } []
     }
 }
 
@@ -59,14 +62,13 @@ export interface MapApiHistoricalResponse {
     code : number,
     status : string,
     explanation : string,
-    data : [
+    data? : {
         deviceID : string,
-        locations : [
+        locations :
             {
                 timestamp : number,
                 latitude : string,
                 longitude : string
-            }
-        ]
-    ]
+            } []
+    } []
 }
