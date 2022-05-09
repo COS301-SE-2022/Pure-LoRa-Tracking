@@ -3,6 +3,8 @@
   "projects": {
     "api": "apps/api",
     "api-interfaces": "libs/api-interfaces",
+    "client-defaultpage": "libs/client/defaultpage",
+    "client-maps": "libs/client/maps",
     "lora-tracking": "apps/lora-tracking",
     "lora-tracking-e2e": "apps/lora-tracking-e2e",
     "server-thingsboard-user": "libs/server/thingsboard-user"
