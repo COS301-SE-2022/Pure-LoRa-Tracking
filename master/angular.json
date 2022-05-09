@@ -2,10 +2,12 @@
   "version": 2,
   "projects": {
     "api": "apps/api",
+    "api-api-router": "libs/api/api-router",
     "api-interfaces": "libs/api-interfaces",
     "client-defaultpage": "libs/client/defaultpage",
     "client-demo": "libs/client/demo",
     "client-maps": "libs/client/maps",
+    "api-map-endpoint": "libs/api/map-endpoint",
     "lora-tracking": "apps/lora-tracking",
     "lora-tracking-e2e": "apps/lora-tracking-e2e",
     "server-thingsboard-user": "libs/server/thingsboard-user"

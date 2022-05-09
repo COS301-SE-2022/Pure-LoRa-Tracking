@@ -1,11 +1,8 @@
 import { Module } from '@nestjs/common';
-
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { ConfigModule } from '@nestjs/config';
+import { ApiApiRouterModule } from '@lora/apiRouter'
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [ApiApiRouterModule,ConfigModule.forRoot()],
 })
 export class AppModule {}
