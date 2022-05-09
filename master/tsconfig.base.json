@@ -18,7 +18,10 @@
       "@lora/api/mapEndpoint": ["libs/api/map-endpoint/src/index.ts"],
       "@lora/apiRouter": ["libs/api/api-router/src/index.ts"],
       "@lora/thingsboard-user": ["libs/server/thingsboard-user/src/index.ts"],
-      "@master/api-interfaces": ["libs/api-interfaces/src/index.ts"]
+      "@master/api-interfaces": ["libs/api-interfaces/src/index.ts"],
+      "@master/client/defaultpage": ["libs/client/defaultpage/src/index.ts"],
+      "@master/client/demo": ["libs/client/demo/src/index.ts"],
+      "@master/client/maps": ["libs/client/maps/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
