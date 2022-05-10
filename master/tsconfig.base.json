@@ -21,6 +21,9 @@
       "@lora/thingsboard-device": [
         "libs/thingsboard/thingsboard-device/src/index.ts"
       ],
+      "@lora/thingsboard-telemetry": [
+        "libs/thingsboard/thingsboard-telemetry/src/index.ts"
+      ],
       "@master/api-interfaces": ["libs/api-interfaces/src/index.ts"],
       "@master/client/defaultpage": ["libs/client/defaultpage/src/index.ts"],
       "@master/client/demo": ["libs/client/demo/src/index.ts"],
