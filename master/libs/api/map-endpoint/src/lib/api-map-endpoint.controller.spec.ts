@@ -17,4 +17,5 @@ describe('ApiMapEndpointController', () => {
   it('should be defined', () => {
     expect(controller).toBeTruthy();
   });
+
 });
