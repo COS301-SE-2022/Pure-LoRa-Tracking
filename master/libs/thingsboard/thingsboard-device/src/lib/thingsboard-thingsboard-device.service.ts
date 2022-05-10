@@ -5,7 +5,11 @@ import { map } from 'rxjs';
 @Injectable()
 export class ThingsboardThingsboardDeviceService {
     private token : string;
-    constructor(token : string, private httpService: HttpService) {this.token = token}
+    constructor(private httpService: HttpService) {}
+
+    setToken(token : string) : void {
+      this.token = token;
+    }
 
     getCustomerDevices(page:number, pageSize:number, customerID:string) {
         const headersReq = {
