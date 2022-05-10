@@ -1,1 +1,8 @@
-<p>interactive-map works!</p>
+<div *ngIf="apiready | async">
+  <google-map height="400px" width="800px" [center]="center" [zoom]="zoom">
+    <!-- sage to do .length cause we do a null check first -->
+    <div *ngIf="MapOutline && MapOutline.length > 2">
+      <map-polygon [paths]="MapOutline"></map-polygon>
+    </div>
+  </google-map>
+</div>
