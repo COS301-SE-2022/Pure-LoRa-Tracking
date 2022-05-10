@@ -3,7 +3,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { catchError, map, Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { MapApiReserveResponse } from '@master/shared-interfaces';
+import { MapApiReserveResponse,MapApiLatestResponse } from '@master/shared-interfaces';
+import { devicemarker } from './devicemarker';
 
 @Component({
   selector: 'master-interactive-map',
@@ -12,14 +13,16 @@ import { MapApiReserveResponse } from '@master/shared-interfaces';
 })
 export class InteractiveMapComponent implements OnInit {
   @Input() Reserve: MapApiReserveResponse|null = null;
-  @Input() MapOutline: Array<google.maps.LatLng> | null = null;
+  @Input() Latest:MapApiLatestResponse|null=null;
+  MapOutline: Array<google.maps.LatLng> | null = null;
+  CurrentLocations: Array<devicemarker> | null = null;
   apiready: Observable<boolean>;
   center: google.maps.LatLngLiteral = {
     lat: -25.739803433797874,
     lng: 27.91649993973261,
   };
   zoom = 15;
-
+  test="jack";
   constructor(private http: HttpClient) {
     //checks if api is loaded and working correctly
     this.apiready = http
@@ -32,7 +35,7 @@ export class InteractiveMapComponent implements OnInit {
           //set map view
           if (this.Reserve == null) {
             //show error message of no input
-          } else if (this.Reserve['code'] != 200) {
+          } else if (this.Reserve.code != 200) {
             //show error message of bad response code
           } else if(this.Reserve.data!=null){
             this.center = {
@@ -48,6 +51,22 @@ export class InteractiveMapComponent implements OnInit {
               );
             }
           }
+
+          //set markers, this is optional
+          if(this.Latest!=null && this.Latest.code==200){
+              if(this.Latest.data!=null){
+                this.CurrentLocations=this.Latest.data?.map((x:any)=>{
+                  return {
+                    devicename:x.deviceID,
+                    location:{
+                      lat:parseFloat(x.locationData.location.latitude),
+                      lng:parseFloat(x.locationData.location.longitude),
+                    } as unknown as google.maps.LatLng
+                  } as unknown as devicemarker
+                })
+              }
+          }
+
           return true;
         }),
         catchError(() => of(false))
