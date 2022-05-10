@@ -21,18 +21,19 @@ describe('ServerThingsboardUserService', () => {
   it('valid login should return token and refreshToken', () => {
     service
       .login('liamburgess299@gmail.com', 'L19m2992')
-      .subscribe((resp: AxiosResponse) => {
-        expect(resp.data).toHaveProperty('token');
-        expect(resp.data).toHaveProperty('refreshToken');
+      .subscribe((resp : AxiosResponse["data"]) => {
+        expect(resp).toHaveProperty('token');
+        expect(resp).toHaveProperty('refreshToken');
       });
+
   });
 
   it('should logout and return status 200 - OK', () => {
     service
       .login('liamburgess299@gmail.com', 'L19m2992')
-      .subscribe((resp: AxiosResponse) => {
-        service.logout(resp.data['token']).subscribe((resp: AxiosResponse) => {
-          expect(resp.data).toEqual('');
+      .subscribe((resp : AxiosResponse["data"]) => {
+        service.logout(resp['token']).subscribe((resp : AxiosResponse['data']) => {
+          expect(resp).toEqual('');
         });
       });
   });
