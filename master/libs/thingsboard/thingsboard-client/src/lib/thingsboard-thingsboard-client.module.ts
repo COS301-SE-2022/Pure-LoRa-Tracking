@@ -1,11 +1,13 @@
 import { Module, Global } from '@nestjs/common';
 import { ThingsboardThingsboardClientService } from './thingsboard-thingsboard-client.service';
-import {  } from '' 
+import { ThingsboardThingsboardUserModule } from '@lora/thingsboard-user'
+import { ThingsboardThingsboardDeviceModule } from '@lora/thingsboard-device';
+import { ThingsboardThingsboardTelemetryModule } from '@lora/thingsboard-telemetry';
 
 @Global()
 @Module({
   controllers: [],
-  imports : [],
+  imports : [ThingsboardThingsboardUserModule, ThingsboardThingsboardDeviceModule, ThingsboardThingsboardTelemetryModule],
   providers: [ThingsboardThingsboardClientService],
   exports: [ThingsboardThingsboardClientService],
 })
