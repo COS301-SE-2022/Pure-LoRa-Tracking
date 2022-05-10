@@ -18,6 +18,9 @@
       "@lora/api/mapEndpoint": ["libs/api/map-endpoint/src/index.ts"],
       "@lora/apiRouter": ["libs/api/api-router/src/index.ts"],
       "@lora/hardware-debug": ["libs/api/hardware-debug/src/index.ts"],
+      "@lora/thingsboard-client": [
+        "libs/thingsboard/thingsboard-client/src/index.ts"
+      ],
       "@lora/thingsboard-device": [
         "libs/thingsboard/thingsboard-device/src/index.ts"
       ],

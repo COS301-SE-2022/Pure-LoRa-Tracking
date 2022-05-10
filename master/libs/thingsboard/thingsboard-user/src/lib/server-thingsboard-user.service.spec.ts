@@ -25,7 +25,6 @@ describe('ServerThingsboardUserService', () => {
         expect(resp).toHaveProperty('token');
         expect(resp).toHaveProperty('refreshToken');
       });
-
   });
 
   it('should logout and return status 200 - OK', () => {
