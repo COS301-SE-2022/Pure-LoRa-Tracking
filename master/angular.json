@@ -1,6 +1,7 @@
 {
   "version": 2,
   "projects": {
+    "-api-hardware-debug": "libs/api/hardware-debug",
     "api": "apps/api",
     "api-api-router": "libs/api/api-router",
     "api-interfaces": "libs/api-interfaces",
