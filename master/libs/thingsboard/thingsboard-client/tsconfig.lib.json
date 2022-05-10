@@ -4,11 +4,7 @@
     "outDir": "../../../dist/out-tsc",
     "declaration": true,
     "types": [],
-    "target": "es6",
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true
+    "target": "es6"
   },
   "include": ["**/*.ts"],
   "exclude": ["jest.config.ts", "**/*.spec.ts", "**/*.test.ts"]
