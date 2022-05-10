@@ -1,17 +1,18 @@
 import { Test } from '@nestjs/testing';
-import { ServerThingsboardUserService } from './server-thingsboard-user.service';
+import { ThingsboardThingsboardUserService } from './thingsboard-thingsboard-user.service';
 import { HttpModule } from '@nestjs/axios';
 import { AxiosResponse } from 'axios';
 
-describe('ServerThingsboardUserService', () => {
-  let service: ServerThingsboardUserService;
+describe('ThingsboardThingsboardUserService', () => {
+  let service: ThingsboardThingsboardUserService;
+
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      providers: [ServerThingsboardUserService],
-      imports: [HttpModule],
+      providers: [ThingsboardThingsboardUserService],
+      imports: [HttpModule]
     }).compile();
 
-    service = module.get(ServerThingsboardUserService);
+    service = module.get(ThingsboardThingsboardUserService);
   });
 
   it('should be defined', () => {

@@ -1,2 +1,2 @@
-export * from './lib/server-thingsboard-user.service';
-export * from './lib/server-thingsboard-user.module';
+export * from './lib/thingsboard-thingsboard-user.service';
+export * from './lib/thingsboard-thingsboard-user.module';
