@@ -7,7 +7,7 @@ import { map, Observable } from 'rxjs';
 export class ThingsboardThingsboardUserService {
     constructor(private httpService: HttpService) {}
 
-    login(name: string, password: string) : AxiosResponse['data'] {
+    login(name: string, password: string) : Observable<AxiosResponse['data']> {
         return this.httpService.post('http://localhost:8080/api/auth/login', {
         username: name,
         password: password,

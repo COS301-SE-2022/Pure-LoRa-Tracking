@@ -29,24 +29,21 @@ export class ThingsboardThingsboardTelemetryService {
           ) 
     }
 
-    sendTelemetry(EntityID: string, DeviceType : string, latitude : number, longitude : number) : Observable<AxiosResponse['data']> {
+    sendTelemetry(EntityID: string, DeviceType : string, latitude : number, longitude : number) : Observable<AxiosResponse> {
         const headersReq = {
             'Content-Type': 'application/json',
             Authorization: 'Bearer ' + this.token,
           };
           return this.httpService.post(
-            'http://localhost:8080/api/plugins/telemetry/'+
-            +DeviceType+'/'+
-            EntityID+
-            '/timeseries/any',
+            "http://localhost:8080/api/plugins/telemetry/"+DeviceType+"/"+EntityID+"/timeseries/any",
             {
-                latitude : latitude,
-                longitude : longitude
+                "latitude": latitude,
+                "longitude" : longitude
             },
             { headers: headersReq }
           ).pipe(
             map(
-              Response => Response.data
+              Response => Response
             )
           ) 
     }
