@@ -3,7 +3,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { catchError, map, Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { ignoreElements } from 'rxjs';
+import { MapApiReserveResponse } from '@master/shared-interfaces';
 
 @Component({
   selector: 'master-interactive-map',
@@ -11,7 +11,7 @@ import { ignoreElements } from 'rxjs';
   styleUrls: ['./interactive-map.component.scss'],
 })
 export class InteractiveMapComponent implements OnInit {
-  @Input() Reserve: any = null;
+  @Input() Reserve: MapApiReserveResponse|null = null;
   @Input() MapOutline: Array<google.maps.LatLng> | null = null;
   apiready: Observable<boolean>;
   center: google.maps.LatLngLiteral = {
@@ -34,17 +34,17 @@ export class InteractiveMapComponent implements OnInit {
             //show error message of no input
           } else if (this.Reserve['code'] != 200) {
             //show error message of bad response code
-          } else {
+          } else if(this.Reserve.data!=null){
             this.center = {
-              lat: parseFloat(this.Reserve['data']['center']['latitude']),
-              lng: parseFloat(this.Reserve['data']['center']['longitude']),
+              lat: parseFloat(this.Reserve.data?.center.latitude),
+              lng: parseFloat(this.Reserve.data?.center.longitude),
             };
-            if (this.Reserve['data']['location'].length > 2) {
-              this.MapOutline = this.Reserve['data']['location'].map(
-                (x: any) => ({
+            if (this.Reserve.data?.location.length > 2) {
+              this.MapOutline = this.Reserve.data?.location.map(
+                (x: any) => {return {
                   lat: parseFloat(x.latitude),
-                  lng: parseFloat(x.longitude),
-                })
+                  lng: parseFloat(x.longitude)
+                } as unknown as google.maps.LatLng}
               );
             }
           }
