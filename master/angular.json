@@ -11,6 +11,7 @@
     "client-maps": "libs/client/maps",
     "lora-tracking": "apps/lora-tracking",
     "lora-tracking-e2e": "apps/lora-tracking-e2e",
+    "thingsboard-thingsboard-device": "libs/thingsboard/thingsboard-device",
     "thingsboard-thingsboard-user": "libs/thingsboard/thingsboard-user"
   }
 }
