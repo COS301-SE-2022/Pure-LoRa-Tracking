@@ -1,7 +1,7 @@
 /* eslint-disable @angular-eslint/no-empty-lifecycle-method */
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { Component, OnInit } from '@angular/core';
-
+import {MapCallerService} from "@master/client/map-apicaller"
 @Component({
   selector: 'master-demo-map-page',
   templateUrl: './demo-map-page.component.html',
@@ -42,7 +42,9 @@ export class DemoMapPageComponent implements OnInit {
         ]
     }
 }
-  constructor() {}
+  constructor(private caller:MapCallerService) {
+      
+  }
 
   ngOnInit(): void {}
 }
