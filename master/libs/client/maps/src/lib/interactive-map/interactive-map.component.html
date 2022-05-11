@@ -1,11 +1,1 @@
-<div *ngIf="apiready | async">
-  <google-map height="400px" width="800px" [center]="center" [zoom]="zoom">
-    <!-- safe to do .length cause we do a null check first -->
-    <div *ngIf="MapOutline && MapOutline.length > 2">
-      <map-polygon [paths]="MapOutline"></map-polygon>
-    </div>
-    <div *ngIf="CurrentLocations && CurrentLocations.length>0">
-        <map-marker *ngFor="let pos of CurrentLocations" [position]="pos.location" [label]="pos.devicename" [title]="pos.devicename"></map-marker>
-    </div>
-  </google-map>
-</div>
+<p>interactive-map works!</p>
