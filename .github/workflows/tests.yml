@@ -3,9 +3,9 @@ name: StaticTests
 # Controls when the workflow will run
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ master, dev ]
   pull_request:
-    branches: [ main, develop ]
+    branches: [ master, dev ]
 
   # Allows running this workflow manually
   workflow_dispatch:
@@ -19,7 +19,7 @@ jobs:
     steps:
 
       #Check out to the develop branch
-      - name: Checkout develop
+      - name: Checkout dev
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
