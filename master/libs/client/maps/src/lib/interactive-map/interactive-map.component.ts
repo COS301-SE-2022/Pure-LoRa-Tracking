@@ -5,6 +5,7 @@ import { catchError, map, Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { MapApiReserveResponse,MapApiLatestResponse } from '@master/shared-interfaces';
 import { devicemarker } from './devicemarker';
+import { MapInfoWindow, MapMarker } from '@angular/google-maps';
 
 @Component({
   selector: 'master-interactive-map',
@@ -17,6 +18,9 @@ export class InteractiveMapComponent implements OnInit {
   MapOutline: Array<google.maps.LatLng> | null = null;
   CurrentLocations: Array<devicemarker> | null = null;
   apiready: Observable<boolean>;
+  mapoptions={
+    fullscreenControl:true
+  }
   center: google.maps.LatLngLiteral = {
     lat: -25.739803433797874,
     lng: 27.91649993973261,
@@ -61,7 +65,8 @@ export class InteractiveMapComponent implements OnInit {
                     location:{
                       lat:parseFloat(x.locationData.location.latitude),
                       lng:parseFloat(x.locationData.location.longitude),
-                    } as unknown as google.maps.LatLng
+                    } as unknown as google.maps.LatLng,
+                    timestamp:x.locationData.timeStamp
                   } as unknown as devicemarker
                 })
               }
@@ -74,5 +79,9 @@ export class InteractiveMapComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  }
+
+  showinfo(currmarker:MapMarker,currwindow:MapInfoWindow):void{
+    currwindow.open(currmarker);
   }
 }

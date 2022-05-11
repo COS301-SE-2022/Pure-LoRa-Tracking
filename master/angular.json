@@ -12,8 +12,7 @@
     "client-maps": "libs/client/maps",
     "lora-tracking": "apps/lora-tracking",
     "lora-tracking-e2e": "apps/lora-tracking-e2e",
-    "server-thingsboard-user": "libs/server/thingsboard-user",
-    "shared-interfaces": "libs/shared-interfaces"
+    "shared-interfaces": "libs/shared-interfaces",
     "thingsboard-thingsboard-client": "libs/thingsboard/thingsboard-client",
     "thingsboard-thingsboard-device": "libs/thingsboard/thingsboard-device",
     "thingsboard-thingsboard-telemetry": "libs/thingsboard/thingsboard-telemetry",
