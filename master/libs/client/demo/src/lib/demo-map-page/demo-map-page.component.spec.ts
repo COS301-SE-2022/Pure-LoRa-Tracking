@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { DemoMapPageComponent } from './demo-map-page.component';
 
 describe('DemoMapPageComponent', () => {
@@ -9,6 +9,7 @@ describe('DemoMapPageComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [DemoMapPageComponent],
+      imports: [HttpClientTestingModule],
     }).compileComponents();
   });
 
