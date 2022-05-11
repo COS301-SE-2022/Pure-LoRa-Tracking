@@ -36,6 +36,7 @@ jobs:
 
       #Run tests on the entire repository
       - name: Test
+        working-directory: ./master/
         run: |
           yarn nx run-many --target=test --all --skip-nx-cache --parallel --coverage
           yarn nx run-many --target=e2e --all --skip-nx-cache --parallel --coverage
