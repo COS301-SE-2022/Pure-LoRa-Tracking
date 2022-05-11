@@ -34,6 +34,10 @@ jobs:
       - name: Install yarn
         run: npm install yarn -g
 
+      #Install required packages
+      - name: Install packages
+        run: yarn install --frozen-lockfile
+
       #Run tests on the entire repository
       - name: Test
         working-directory: ./master/
