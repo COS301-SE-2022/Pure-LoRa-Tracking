@@ -1,1 +1,3 @@
-<p>demo-map-page works!</p>
+<div *ngIf="Reserve">
+    <master-interactive-map [Reserve]="Reserve" [Latest]="Latest"></master-interactive-map>
+</div>
