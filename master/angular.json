@@ -1,6 +1,7 @@
 {
   "version": 2,
   "projects": {
+    "-api-hardware-debug": "libs/api/hardware-debug",
     "api": "apps/api",
     "api-api-router": "libs/api/api-router",
     "api-interfaces": "libs/api-interfaces",
@@ -13,5 +14,9 @@
     "lora-tracking-e2e": "apps/lora-tracking-e2e",
     "server-thingsboard-user": "libs/server/thingsboard-user",
     "shared-interfaces": "libs/shared-interfaces"
+    "thingsboard-thingsboard-client": "libs/thingsboard/thingsboard-client",
+    "thingsboard-thingsboard-device": "libs/thingsboard/thingsboard-device",
+    "thingsboard-thingsboard-telemetry": "libs/thingsboard/thingsboard-telemetry",
+    "thingsboard-thingsboard-user": "libs/thingsboard/thingsboard-user"
   }
 }
