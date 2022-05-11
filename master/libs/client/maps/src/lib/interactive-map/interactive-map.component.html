@@ -6,7 +6,9 @@
     </div>
     <div *ngIf="CurrentLocations && CurrentLocations.length>0">
         <map-marker *ngFor="let pos of CurrentLocations" [position]="pos.location" #currentmarker="mapMarker" [label]="pos.devicename" [title]="pos.devicename" (mapClick)="showinfo(currentmarker,currentwindow)">
-          <map-info-window #currentwindow="mapInfoWindow">This is the sensor for {{pos.devicename}} at the time of {{pos.timestamp|date:'full'}}</map-info-window>
+          <map-info-window #currentwindow="mapInfoWindow">This is the sensor for {{pos.devicename}} at the time of {{pos.timestamp|date:'full'}}
+            
+          </map-info-window>
         </map-marker>
     </div>
   </google-map>
