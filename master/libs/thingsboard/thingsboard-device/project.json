@@ -1,0 +1,45 @@
+{
+  "sourceRoot": "libs/thingsboard/thingsboard-device/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/thingsboard/thingsboard-device",
+        "tsConfig": "libs/thingsboard/thingsboard-device/tsconfig.lib.json",
+        "packageJson": "libs/thingsboard/thingsboard-device/package.json",
+        "main": "libs/thingsboard/thingsboard-device/src/index.ts",
+        "assets": ["libs/thingsboard/thingsboard-device/*.md"]
+      }
+    },
+    "publish": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "node tools/scripts/publish.mjs thingsboard-thingsboard-device {args.ver} {args.tag}"
+      },
+      "dependsOn": [
+        {
+          "projects": "self",
+          "target": "build"
+        }
+      ]
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/thingsboard/thingsboard-device/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/thingsboard/thingsboard-device"],
+      "options": {
+        "jestConfig": "libs/thingsboard/thingsboard-device/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

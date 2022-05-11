@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: 'server-thingsboard-user',
+  displayName: 'thingsboard-thingsboard-user',
   preset: '../../../jest.preset.ts',
   globals: {
     'ts-jest': {
@@ -11,5 +11,5 @@ module.exports = {
     '^.+\\.[tj]s$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageDirectory: '../../../coverage/libs/server/thingsboard-user',
+  coverageDirectory: '../../../coverage/libs/thingsboard/thingsboard-user',
 };
