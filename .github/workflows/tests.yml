@@ -36,6 +36,7 @@ jobs:
 
       #Install required packages
       - name: Install packages
+        working-directory: ./master/
         run: yarn install --frozen-lockfile
 
       #Run tests on the entire repository
