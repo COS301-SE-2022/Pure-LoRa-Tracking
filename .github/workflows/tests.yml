@@ -35,8 +35,7 @@ jobs:
         run: npm install yarn -g
 
       #Run tests on the entire repository
-      - name: Test all
-        if: inputs.test == 'all' 
+      - name: Test
         run: |
           yarn nx run-many --target=test --all --skip-nx-cache --parallel --coverage
           yarn nx run-many --target=e2e --all --skip-nx-cache --parallel --coverage
@@ -45,3 +44,4 @@ jobs:
         uses: codecov/codecov-action@v3.1.0
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ./master/coverage/
