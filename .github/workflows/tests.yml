@@ -44,7 +44,6 @@ jobs:
         working-directory: ./master/
         run: |
           yarn nx run-many --target=test --all --skip-nx-cache --parallel --coverage
-          yarn nx run-many --target=e2e --all --skip-nx-cache --parallel --coverage
         
       - name: Codecov
         uses: codecov/codecov-action@v3.1.0
