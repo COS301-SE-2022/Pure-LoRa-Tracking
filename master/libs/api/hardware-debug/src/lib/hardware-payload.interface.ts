@@ -6,27 +6,27 @@ export interface acknowledge {
     explanation : string
 }
 
-interface rxInfo {
-    gatewayID : string;
-    time : string;
-    timeSinceGPSEpoch? : null;
-    rssi : number;
-    loRaSNR : number;
-    channel : number;
-    rfChain : number;
-    board : number;
-    antenna : number;
+export interface rxInfo {
+    gatewayID : string,
+    time : string,
+    timeSinceGPSEpoch? : null,
+    rssi : number,
+    loRaSNR : number,
+    channel : number,
+    rfChain : number,
+    board : number,
+    antenna : number,
     location? : {
-        latitude : DoubleRange;
-        longitude : DoubleRange;
-        altitude : DoubleRange;
+        latitude : number,
+        longitude : number,
+        altitude : number,
     },
     fineTimestampType: string,
     context : string,
     uplinkID : string
 }
 
-interface txInfo {
+export interface txInfo {
     frequency : bigint,
     modulation : string,  
 }
@@ -35,12 +35,12 @@ export interface device_status {
     devEUI : string,
     deviceName : string,
     applicationID : string,
-    applicationName : string
+    applicationName : string,
     margin : number,
     externalPowerSource : boolean,
     batteryLevelUnavailable : boolean,
     batteryLevel : number,
-    tags : Map<string,string>
+    tags : {[index:string]:string}
 }
 
 export interface device_up {
@@ -55,7 +55,7 @@ export interface device_up {
     adr : boolean,
     fCnt : bigint,
     fPort : number,
-    tags : Map<string,string>,
+    tags : {[index:string]:string},
     data : string,
     rxInfo : rxInfo,
     txInfo : txInfo,
@@ -76,7 +76,7 @@ export interface device_join {
     rxInfo : rxInfo,
     txInfo : txInfo,
     dr : number,
-    tags : Map<string,string>,
+    tags : {[index:string]:string},
 }
 
 export interface device_ack {
@@ -88,7 +88,7 @@ export interface device_ack {
     txInfo : txInfo,
     acknowledged : boolean,
     fCnt : bigint,
-    tags : Map<string,string>,
+    tags : {[index:string]:string},
 }
 
 export interface device_error {
@@ -98,7 +98,7 @@ export interface device_error {
     applicationName : string,
     type : string,
     error : string,
-    tags : Map<string,string>,
+    tags : {[index:string]:string},
 }
 
 export interface device_location {
@@ -123,7 +123,7 @@ export interface device_txack {
     applicationName : string,
     gatewayID : string,
     fCnt : bigint,
-    tags : Map<string,string>,
+    tags : {[index:string]:string},
     txInfo : txInfo,
 }
 

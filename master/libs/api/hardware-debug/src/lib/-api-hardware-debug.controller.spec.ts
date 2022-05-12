@@ -1,6 +1,7 @@
 import { Test } from '@nestjs/testing';
 import { ApiHardwareDebugController } from './-api-hardware-debug.controller';
 import { ApiHardwareDebugService } from './-api-hardware-debug.service';
+import { acknowledge } from './hardware-payload.interface'
 
 describe('ApiHardwareDebugController', () => {
   let controller: ApiHardwareDebugController;
@@ -22,7 +23,7 @@ describe('ApiHardwareDebugController', () => {
 
   describe('deviceData', () => {
     it('should return acknowledge interface', () => {
-      const result = {
+      const result: acknowledge = {
         code: 200,
         status: 'ACK',
         explanation: 'Data received...',
