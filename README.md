@@ -6,6 +6,7 @@
 [![Requirements Status](https://requires.io/github/COS301-SE-2022/Pure-LoRa-Tracking/requirements.svg?branch=master)](https://requires.io/github/COS301-SE-2022/Pure-LoRa-Tracking/requirements/?branch=master)
 [![CodeQL](https://github.com/COS301-SE-2022/Pure-LoRa-Tracking/actions/workflows/codeql-analysis.yml/badge.svg?branch=main)](https://github.com/COS301-SE-2022/Pure-LoRa-Tracking/actions/workflows/codeql-analysis.yml)
 [![StaticTests](https://github.com/COS301-SE-2022/Pure-LoRa-Tracking/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/COS301-SE-2022/Pure-LoRa-Tracking/actions/workflows/tests.yml)
+![Monitoring](https://img.shields.io/website?down_color=lightgrey&down_message=Awaiting%20Website&up_color=green&up_message=online&url=https%3A%2F%2Fdd)
 
 ## Table of Contents
 
