@@ -1,9 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { acknowledge } from './hardware-payload.interface';
+import { acknowledge, device_status, device_up, 
+        device_join, device_ack, device_error, 
+        device_location ,device_txack } from './hardware-payload.interface';
 
 @Injectable()
 export class ApiHardwareDebugService {
-  deviceStatusProcess(content: any): acknowledge {
+  deviceStatusProcess(content: device_status): acknowledge {
     console.log(content);
     return {
       code: 200,
@@ -12,16 +14,19 @@ export class ApiHardwareDebugService {
     };
   }
 
-    deviceUpProcess(content: any): acknowledge {
+  deviceUpProcess(content: device_up): acknowledge {
     console.log(content);
+    // console.log(content.applicationID);
+    // console.log(content.devEUI);
+    // console.log(content.rxInfo.location);
     return {
-        code: 200,
-        status: 'ACK',
-        explanation: 'Data received...',
+      code: 200,
+      status: 'ACK',
+      explanation: 'Data received...',
     };
-    }
+  }
 
-  deviceJoinProcess(content: any): acknowledge {
+  deviceJoinProcess(content: device_join): acknowledge {
     console.log(content);
     return {
       code: 200,
@@ -30,7 +35,7 @@ export class ApiHardwareDebugService {
     };
   }
 
-  deviceAckProcess(content: any): acknowledge {
+  deviceAckProcess(content: device_ack): acknowledge {
     console.log(content);
     return {
       code: 200,
@@ -39,7 +44,7 @@ export class ApiHardwareDebugService {
     };
   }
 
-  deviceErrorProcess(content: any): acknowledge {
+  deviceErrorProcess(content: device_error): acknowledge {
     console.log(content);
     return {
       code: 200,
@@ -48,7 +53,7 @@ export class ApiHardwareDebugService {
     };
   }
 
-  deviceLocationProcess(content: any): acknowledge {
+  deviceLocationProcess(content: device_location): acknowledge {
     console.log(content);
     return {
       code: 200,
@@ -57,7 +62,7 @@ export class ApiHardwareDebugService {
     };
   }
 
-  deviceTxackProcess(content: any): acknowledge {
+  deviceTxackProcess(content: device_txack): acknowledge {
     console.log(content);
     return {
       code: 200,
