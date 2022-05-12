@@ -6,13 +6,13 @@ import { acknowledge } from './hardware-payload.interface';
 export class ApiHardwareDebugController {
   constructor(private apiHardwareDebugService: ApiHardwareDebugService) {}
 
-  @Post('device-status')
-  deviceStatusResponse(@Body() content: any): acknowledge {
-    return this.apiHardwareDebugService.deviceStatusProcess(content);
-  }
+  // @Post('device-status')
+  // deviceStatusResponse(@Body() content: any): acknowledge {
+  //   return this.apiHardwareDebugService.deviceStatusProcess(content);
+  // }
 
   @Post('device-data')
-  deviceUpResponse(@Query() query: { event: string }, @Body() content: any): acknowledge {
+  deviceData(@Query() query: { event: string }, @Body() content: any): acknowledge {
     console.log(query);
     switch (query.event) {
       case 'up':
