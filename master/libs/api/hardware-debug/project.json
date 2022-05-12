@@ -1,0 +1,45 @@
+{
+  "sourceRoot": "libs/api/hardware-debug/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs//api/hardware-debug",
+        "tsConfig": "libs/api/hardware-debug/tsconfig.lib.json",
+        "packageJson": "libs/api/hardware-debug/package.json",
+        "main": "libs/api/hardware-debug/src/index.ts",
+        "assets": ["libs/api/hardware-debug/*.md"]
+      }
+    },
+    "publish": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "node tools/scripts/publish.mjs -api-hardware-debug {args.ver} {args.tag}"
+      },
+      "dependsOn": [
+        {
+          "projects": "self",
+          "target": "build"
+        }
+      ]
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/api/hardware-debug/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/api/hardware-debug"],
+      "options": {
+        "jestConfig": "libs/api/hardware-debug/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

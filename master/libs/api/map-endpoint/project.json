@@ -1,0 +1,45 @@
+{
+  "sourceRoot": "libs/api/map-endpoint/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/api/map-endpoint",
+        "tsConfig": "libs/api/map-endpoint/tsconfig.lib.json",
+        "packageJson": "libs/api/map-endpoint/package.json",
+        "main": "libs/api/map-endpoint/src/index.ts",
+        "assets": ["libs/api/map-endpoint/*.md"]
+      }
+    },
+    "publish": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "node tools/scripts/publish.mjs api-map-endpoint {args.ver} {args.tag}"
+      },
+      "dependsOn": [
+        {
+          "projects": "self",
+          "target": "build"
+        }
+      ]
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/api/map-endpoint/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/api/map-endpoint"],
+      "options": {
+        "jestConfig": "libs/api/map-endpoint/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

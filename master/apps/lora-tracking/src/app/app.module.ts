@@ -3,12 +3,20 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
 import { NxWelcomeComponent } from './nx-welcome.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HttpClientJsonpModule } from '@angular/common/http';
+import { AppRoutingModule } from './app-routing.module';
+import { GoogleMap, GoogleMapsModule } from '@angular/google-maps';
 
 @NgModule({
   declarations: [AppComponent, NxWelcomeComponent],
-  imports: [BrowserModule, HttpClientModule],
-  providers: [],
+  imports: [
+    BrowserModule,
+    HttpClientModule,
+    HttpClientJsonpModule,
+    AppRoutingModule,
+    GoogleMapsModule,
+  ],
+  providers: [GoogleMap],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
