@@ -1,78 +1,104 @@
+import { Timestamp } from "rxjs"
+
 export interface acknowledge {
     code : number,
     status : string,
     explanation : string
 }
 
+export interface rxInfo {
+    gatewayID : string,
+    time : string,
+    timeSinceGPSEpoch? : null,
+    rssi : number,
+    loRaSNR : number,
+    channel : number,
+    rfChain : number,
+    board : number,
+    antenna : number,
+    location? : {
+        latitude : number,
+        longitude : number,
+        altitude : number,
+    },
+    fineTimestampType: string,
+    context : string,
+    uplinkID : string
+}
+
+export interface txInfo {
+    frequency : bigint,
+    modulation : string,  
+}
+
 export interface device_status {
-    id : number,
-    received_at : string,
-    dev_eui : ArrayBuffer,
-    device_name : string,
-    application_id : bigint,
-    application_name : string,
+    devEUI : string,
+    deviceName : string,
+    applicationID : string,
+    applicationName : string,
     margin : number,
-    external_power_source : boolean,
-    battery_level_unavailable : boolean,
-    battery_level : number,
-    tags? : string
+    externalPowerSource : boolean,
+    batteryLevelUnavailable : boolean,
+    batteryLevel : number,
+    tags : {[index:string]:string}
 }
 
 export interface device_up {
-    id : number,
-    received_at : string,
-    dev_eui : ArrayBuffer,
-    device_name : string,
-    application_id : bigint,
-    application_name : string,
+    // id : number,
+    // received_at : string,
+    devEUI : string,
+    deviceName : string,
+    applicationID : string,
+    applicationName : string,
     frequency : bigint,
     dr : number,
     adr : boolean,
-    f_cnt : bigint,
-    f_port : number,
-    tags : string,
-    data : ArrayBuffer,
-    rx_info : JSON,
-    object : JSON,
-    dev_addr : ArrayBuffer,
-    confirmed_uplink : boolean,
-    tx_info : JSON
+    fCnt : bigint,
+    fPort : number,
+    tags : {[index:string]:string},
+    data : string,
+    rxInfo : rxInfo,
+    txInfo : txInfo,
+    
+    objectJSON : JSON,
+    // dev_addr : ArrayBuffer,
+    // confirmed_uplink : boolean,
+    // tx_info : JSON
 }
 
 export interface device_join {
-    id : number,
-    received_at : string,
-    dev_eui : ArrayBuffer,
-    device_name : string,
-    application_id : bigint,
-    application_name : string,
-    dev_addr : ArrayBuffer,
-    tags : string,
+    // id : number,
+    devEUI : string,
+    deviceName : string,
+    applicationID : string,
+    applicationName : string,
+    devAddr : string,
+    rxInfo : rxInfo,
+    txInfo : txInfo,
+    dr : number,
+    tags : {[index:string]:string},
 }
 
 export interface device_ack {
-    id : number,
-    received_at : string,
-    dev_eui : ArrayBuffer,
-    device_name : string,
-    application_id : bigint,
-    application_name : string,
+    devEUI : string,
+    deviceName : string,
+    applicationID : string,
+    applicationName : string,
+    rxInfo : rxInfo,
+    txInfo : txInfo,
     acknowledged : boolean,
-    f_cnt : bigint,
-    tags : string,
+    fCnt : bigint,
+    tags : {[index:string]:string},
 }
 
 export interface device_error {
-    id : number,
-    received_at : string,
-    dev_eui : ArrayBuffer,
-    device_name : string,
-    application_id : bigint,
-    application_name : string,
+    devEUI : string,
+    deviceName : string,
+    applicationID : string,
+    applicationName : string,
     type : string,
     error : string,
-    f_cnt : bigint,
-    tags : string,
+    tags : {[index:string]:string},
 }
 
 export interface device_location {
@@ -91,15 +117,13 @@ export interface device_location {
 }
 
 export interface device_txack {
-    id : number,
-    received_at : string,
-    dev_eui : ArrayBuffer,
-    device_name : string,
-    application_id : bigint,
-    application_name : string,
-    gateway_id : ArrayBuffer,
-    f_cnt : bigint,
-    tags : string,
-    tx_info : JSON,
+    devEUI : string,
+    deviceName : string,
+    applicationID : string,
+    applicationName : string,
+    gatewayID : string,
+    fCnt : bigint,
+    tags : {[index:string]:string},
+    txInfo : txInfo,
 }
 
