@@ -13,7 +13,7 @@ export class MapCallerService {
   async getReserve(token:string,reserveID:string):Promise<any>{
     return new Promise((res,rej)=>{
       this.http.post("/api/map/reserve",{"token":token,"reserveID":reserveID}).subscribe(val=>{
-        res(val)
+        res(val)  
       });
     })
   }
