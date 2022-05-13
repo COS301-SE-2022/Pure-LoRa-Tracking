@@ -1,0 +1,41 @@
+{
+  "projectType": "library",
+  "sourceRoot": "libs/client/map-apicaller/src",
+  "prefix": "master",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:ng-packagr-lite",
+      "outputs": ["dist/libs/client/map-apicaller"],
+      "options": {
+        "project": "libs/client/map-apicaller/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/client/map-apicaller/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/client/map-apicaller/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/client/map-apicaller"],
+      "options": {
+        "jestConfig": "libs/client/map-apicaller/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/client/map-apicaller/**/*.ts",
+          "libs/client/map-apicaller/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

@@ -85,6 +85,10 @@ export class ApiMapEndpointService {
             explanation : "",
             data : {
                 reserveName : "UP",
+                center : {
+                    latitude : "-25.755123",
+                    longitude : "28.231999"
+                },
                 location : [
                     {
                         latitude : "-25.753785",
