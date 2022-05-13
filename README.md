@@ -27,7 +27,7 @@ The stored data will be processed using the location of each tower to calculate 
 
 ## Documentation
 
-- :page_facing_up: [SRS](https://docs.google.com/document/d/1f_poZjREHVOXTHFxO15pyZQBPYSx1QV19H5TOpUgPdA/edit?usp=sharing)
+- :page_facing_up: [SRS](https://drive.google.com/drive/u/1/folders/17XnxpxX_vRhwJxuSY59CrX9YKGTLF-wD)
 
 ## Project Management
 
