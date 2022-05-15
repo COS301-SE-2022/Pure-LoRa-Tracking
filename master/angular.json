@@ -10,7 +10,6 @@
     "client-demo": "libs/client/demo",
     "client-leaflet-library": "libs/client/leaflet-library",
     "client-map-apicaller": "libs/client/map-apicaller",
-    "client-maps": "libs/client/maps",
     "lora-tracking": "apps/lora-tracking",
     "lora-tracking-e2e": "apps/lora-tracking-e2e",
     "shared-interfaces": "libs/shared-interfaces",

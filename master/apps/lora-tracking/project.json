@@ -17,7 +17,10 @@
           "apps/lora-tracking/src/favicon.ico",
           "apps/lora-tracking/src/assets"
         ],
-        "styles": ["apps/lora-tracking/src/styles.scss","./node_modules/leaflet/dist/leaflet.css"],
+        "styles": [
+          "apps/lora-tracking/src/styles.scss",
+          "./node_modules/leaflet/dist/leaflet.css"
+        ],
         "scripts": []
       },
       "configurations": {
