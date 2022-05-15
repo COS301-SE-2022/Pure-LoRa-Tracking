@@ -5,7 +5,6 @@ import { AppComponent } from './app.component';
 import { NxWelcomeComponent } from './nx-welcome.component';
 import { HttpClientModule, HttpClientJsonpModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
-import { GoogleMap, GoogleMapsModule } from '@angular/google-maps';
 
 @NgModule({
   declarations: [AppComponent, NxWelcomeComponent],
@@ -14,9 +13,8 @@ import { GoogleMap, GoogleMapsModule } from '@angular/google-maps';
     HttpClientModule,
     HttpClientJsonpModule,
     AppRoutingModule,
-    GoogleMapsModule,
   ],
-  providers: [GoogleMap],
+  providers: [],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

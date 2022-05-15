@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: 'client-maps',
+  displayName: 'client-leaflet-library',
   preset: '../../../jest.preset.ts',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {
@@ -8,7 +8,7 @@ module.exports = {
       stringifyContentPathRegex: '\\.(html|svg)$',
     },
   },
-  coverageDirectory: '../../../coverage/libs/client/maps',
+  coverageDirectory: '../../../coverage/libs/client/leaflet-library',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': 'jest-preset-angular',
   },
