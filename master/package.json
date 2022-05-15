@@ -27,6 +27,7 @@
     "@nestjs/platform-express": "^8.0.0",
     "@nrwl/angular": "14.1.4",
     "cors": "^2.8.5",
+    "leaflet": "^1.8.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "~7.4.0",
     "tslib": "^2.0.0",
