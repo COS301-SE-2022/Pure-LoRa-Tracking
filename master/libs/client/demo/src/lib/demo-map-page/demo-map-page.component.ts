@@ -1,21 +1,36 @@
 /* eslint-disable @angular-eslint/no-empty-lifecycle-method */
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { ThisReceiver } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
-import {MapCallerService} from "@master/client/map-apicaller"
-import {MapApiLatestResponse, MapApiReserveResponse} from "@master/shared-interfaces"
+import { MapCallerService } from "@master/client/map-apicaller"
+import { MapApiLatestResponse, MapApiReserveResponse, MapRender, ViewMapType } from "@master/shared-interfaces"
 @Component({
   selector: 'master-demo-map-page',
   templateUrl: './demo-map-page.component.html',
   styleUrls: ['./demo-map-page.component.scss'],
 })
 export class DemoMapPageComponent implements OnInit {
-  Reserve:MapApiReserveResponse|null= null
-  Latest:MapApiLatestResponse|null=null;
-  constructor(private caller:MapCallerService) {
-    caller.getReserve("sf","sdf").then(val=>this.Reserve=val);
-    caller.getLatest("sf","sdf").then(val=>this.Latest=val)
+  Reserve: MapApiReserveResponse | null = null
+  Latest: MapApiLatestResponse | null = null;
+  MapRenderInput: MapRender;
+  ViewMapTypeInput: ViewMapType;
+  constructor(private caller: MapCallerService) {
+    //set default map options
+    this.MapRenderInput = MapRender.ALL;
+    this.ViewMapTypeInput = ViewMapType.NORMAL_OPEN_STREET_VIEW;
+    //call the api
+    caller.getReserve("sf", "sdf").then(val => this.Reserve = val);
+    caller.getLatest("sf", "sdf").then(val => this.Latest = val);
   }
 
-  ngOnInit(): void {}
+  updateMapView(type: any) {
+    if (type == "normal") {
+      this.ViewMapTypeInput = ViewMapType.NORMAL_OPEN_STREET_VIEW;
+    }
+    else if (type == "esri") {
+      this.ViewMapTypeInput = ViewMapType.SATELLITE_ESRI_1;
+      if(this.Latest!=null)this.Latest.code=100;
+    }
+  }
+
+  ngOnInit(): void { }
 }

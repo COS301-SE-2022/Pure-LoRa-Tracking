@@ -1,3 +1,9 @@
-<div *ngIf="Reserve">
-    <reserve-map [Reserve]="Reserve"></reserve-map>
+<div class="map" *ngIf="Reserve">
+    <reserve-map class="map" [Reserve]="Reserve" [Latest]="Latest" [MapRenderInput]="MapRenderInput" [ViewMapTypeInput]="ViewMapTypeInput"></reserve-map>
 </div>
+
+<select class="selectbox" #current (change)="updateMapView(current.value)">
+    <option value="normal">Normal</option>
+    <option value="esri">ESRI Satalite View</option>
+</select>
+
