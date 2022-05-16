@@ -1,0 +1,143 @@
+import { DatePipe } from '@angular/common';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, } from '@angular/core';
+import { MapApiLatestResponse, MapApiReserveResponse, MapRender, ViewMapType, } from '@master/shared-interfaces';
+import * as L from 'leaflet';
+@Component({
+  selector: 'reserve-map',
+  templateUrl: './reserve-map.component.html',
+  styleUrls: ['./reserve-map.component.scss'],
+})
+export class ReserveMapComponent implements OnInit,OnChanges {
+  
+  private _Latest: MapApiLatestResponse | null = null;
+  private _Reserve: MapApiReserveResponse | null = null;
+  private _MapRenderInput:MapRender;
+  private _ViewMapTypeInput:ViewMapType;
+  private mainmap: any = null;
+  private maptiles:any=null;
+
+
+  constructor() {
+    //set default map options
+    this._MapRenderInput=MapRender.ALL;
+    this._ViewMapTypeInput=ViewMapType.NORMAL_OPEN_STREET_VIEW;
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log(changes.hasOwnProperty("ViewMapTypeInput"));
+    console.log(changes);
+  }
+
+  //input for reserve
+  @Input()
+  get Reserve(): MapApiReserveResponse | null {
+    return this._Reserve;
+  }
+  set Reserve(reserveinput: MapApiReserveResponse | null) {
+    this._Reserve = reserveinput;
+    this.loadmap();
+  }
+
+  //input for latest
+  @Input()
+  get Latest(): MapApiLatestResponse | null { return this._Latest; }
+  set Latest(latestinput: MapApiLatestResponse | null) {
+    this._Latest = latestinput;
+    this.loadMarkers();
+  }
+
+  //input for maprender
+  @Input()
+  get MapRenderInput():MapRender{return this._MapRenderInput;}
+  set MapRenderInput(maprenderinput:MapRender){
+    this._MapRenderInput=maprenderinput;
+  }
+
+  @Input()
+  get ViewMapTypeInput():ViewMapType {return this._ViewMapTypeInput}
+  set ViewMapTypeInput(inputviewmaptype:ViewMapType){
+    this._ViewMapTypeInput=inputviewmaptype;
+    // this.maptiles.remove();
+  }
+
+  private loadmaptiles():void{
+      
+  }
+
+
+  private loadmap(): void {
+    if (this.Reserve?.data != null) {
+      if (this.mainmap != null) this.mainmap.remove();//if change to main map reload
+      this.mainmap = L.map('map', {
+        center: [
+          parseFloat(this.Reserve?.data?.center.latitude),
+          parseFloat(this.Reserve?.data?.center.longitude),
+        ],
+        zoom: 19,
+      });
+
+      this.maptiles = L.tileLayer(
+        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        {
+          maxZoom: 22,
+          minZoom: 2,
+          attribution:
+            '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        }
+      );
+      console.log(this.maptiles);
+      this.maptiles.addTo(this.mainmap);
+
+      // tiles = L.tileLayer(
+      //   'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+      //   {
+      //     maxZoom: 22,
+      //     minZoom: 2,
+      //     attribution:
+      //       'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+      //   }
+      // );
+
+      //load the polygon points
+      if (
+        this.Reserve.data.location != null &&
+        this.Reserve.data.location.length > 2
+      ) {
+        var points = this.Reserve.data.location.map((val) => [
+          parseFloat(val.latitude),
+          parseFloat(val.longitude),
+        ]) as unknown as L.LatLngExpression[];
+        console.log(points);
+        L.polygon(points).addTo(this.mainmap);
+      }
+    }
+  }
+
+
+  //load the map markers
+  private loadMarkers(): void {
+    if (this.Latest != null && this.Latest.data != null) {
+      if (this.mainmap != null) {
+        const pipes = new DatePipe('en-UK');
+        this.Latest.data.forEach((curr) => {
+          var marker = L.marker([
+            parseFloat(curr.locationData.location.latitude),
+            parseFloat(curr.locationData.location.longitude),
+          ])
+            .addTo(this.mainmap)
+            .bindPopup(
+              `<b>${curr.deviceID}:</b> Location as of ${pipes.transform(
+                curr.locationData.timeStamp,
+                'full'
+              )}`
+            );
+        });
+      }
+    }
+  }
+
+  ngOnInit(): void {
+    // this.loadmap();
+    // this.loadMarkers();
+  }
+}
