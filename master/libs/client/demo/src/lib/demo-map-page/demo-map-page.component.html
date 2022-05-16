@@ -1,9 +1,26 @@
 <div class="map" *ngIf="Reserve">
-    <reserve-map class="map" [Reserve]="Reserve" [Latest]="Latest" [MapRenderInput]="MapRenderInput" [ViewMapTypeInput]="ViewMapTypeInput"></reserve-map>
+  <reserve-map
+    class="map"
+    [Reserve]="Reserve"
+    [Latest]="Latest"
+    [MapRenderInput]="MapRenderInput"
+    [ViewMapTypeInput]="ViewMapTypeInput"
+    [ShowMarkers]="ShowMarkers"
+  ></reserve-map>
 </div>
 
 <select class="selectbox" #current (change)="updateMapView(current.value)">
-    <option value="normal">Normal</option>
-    <option value="esri">ESRI Satalite View</option>
+  <option value="normal">Normal</option>
+  <option value="esri">ESRI Satalite View</option>
 </select>
-
+<div class="markers">
+  <label for="markers">Show markers</label>
+  <input
+    type="checkbox"
+    name="markers"
+    id="markers"
+    #markers
+    (change)="updateMarkerView(markers.checked)"
+    checked="checked"
+  />
+</div>

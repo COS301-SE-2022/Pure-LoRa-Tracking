@@ -21,4 +21,13 @@ describe('ReserveMapComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  describe("loadmaptiles",()=>{
+    it("should return nothing",()=>{
+      expect(component.loadmaptiles()).toEqual(undefined);
+    })
+  })
+
 });
+
+

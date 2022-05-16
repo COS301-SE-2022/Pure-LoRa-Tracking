@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, Input, OnChanges, SimpleChanges, } from '@angular/core';
-import { MapApiLatestResponse, MapApiReserveResponse, MapRender, ViewMapType, } from '@master/shared-interfaces';
+import { MapApiLatestResponse, MapApiReserveResponse, MapRender, MarkerView, ViewMapType, } from '@master/shared-interfaces';
 import * as L from 'leaflet';
 @Component({
   selector: 'reserve-map',
@@ -13,39 +13,52 @@ export class ReserveMapComponent implements OnInit, OnChanges {
   @Input() Reserve: MapApiReserveResponse | null = null;
   @Input() MapRenderInput: MapRender;
   @Input() ViewMapTypeInput: ViewMapType;
+  @Input() MarkerViewInput: MarkerView;
+  @Input() ShowMarkers:boolean;
   private mainmap: any = null;
   private maptiles: any = null;
-
+  private mapmarkers: Array<L.Marker<any>> = [];
 
   constructor() {
     //set default map options
     this.MapRenderInput = MapRender.ALL;
     this.ViewMapTypeInput = ViewMapType.NORMAL_OPEN_STREET_VIEW;
+    this.MarkerViewInput = MarkerView.DEFAULT_MARKER;
+    this.ShowMarkers=true;
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     //assume that if reserve is changed, reload everything
-    console.log(changes);
+    // console.log(changes);
 
     if (changes.hasOwnProperty("Reserve")) {
       this.loadmap();
       this.loadmaptiles();
       this.loadMarkers();//maybe remove for double call
+      this.showmarkers();
     }
     else {
       if (changes.hasOwnProperty("Latest")) {
         this.loadMarkers();
+      this.showmarkers();
+
       }
       if (changes.hasOwnProperty("ViewMapTypeInput")) {
         this.loadmaptiles();
+      }
+      if (changes.hasOwnProperty("ShowMarkers")) {
+        if(this.ShowMarkers){
+          this.showmarkers();
+        }else{
+          this.hidemarkers();
+        }
       }
     }
 
   }
 
 
-  private loadmaptiles(): void {
-
+  public loadmaptiles(): void {
     if (this.mainmap != null) {
       if (this.maptiles != null) {
         //if there are tiles, reset them
@@ -76,6 +89,7 @@ export class ReserveMapComponent implements OnInit, OnChanges {
       }
       this.maptiles.addTo(this.mainmap);
     }
+    console.log(this.mainmap);
   }
 
 
@@ -99,32 +113,42 @@ export class ReserveMapComponent implements OnInit, OnChanges {
           parseFloat(val.latitude),
           parseFloat(val.longitude),
         ]) as unknown as L.LatLngExpression[];
-        console.log(points);
         L.polygon(points).addTo(this.mainmap);
       }
     }
   }
 
+  private showmarkers(): void {
+    this.mapmarkers.forEach((curr)=>{curr.addTo(this.mainmap)})
+  }
+
+  private hidemarkers(): void{
+    this.mapmarkers.forEach((curr)=>curr.remove());
+  }
 
   //load the map markers
   private loadMarkers(): void {
-    if (this.Latest != null && this.Latest.data != null) {
-      if (this.mainmap != null) {
-        const pipes = new DatePipe('en-UK');
-        this.Latest.data.forEach((curr) => {
-          var marker = L.marker([
-            parseFloat(curr.locationData.location.latitude),
-            parseFloat(curr.locationData.location.longitude),
-          ])
-            .addTo(this.mainmap)
-            .bindPopup(
-              `<b>${curr.deviceID}:</b> Location as of ${pipes.transform(
-                curr.locationData.timeStamp,
-                'full'
-              )}`
-            );
-        });
+    if (this.Latest != null && this.Latest.data != null && this.mainmap != null) {
+      const pipes = new DatePipe('en-UK');
+
+      //if there is markers, destroy them
+      if(this.mapmarkers.length>0){
+        this.mapmarkers=[];
       }
+
+      this.Latest.data.forEach((curr) => {
+        var marker = L.marker([
+          parseFloat(curr.locationData.location.latitude),
+          parseFloat(curr.locationData.location.longitude),
+        ])
+          .bindPopup(
+            `<b>${curr.deviceID}:</b> Location as of ${pipes.transform(
+              curr.locationData.timeStamp,
+              'full'
+            )}`
+          );
+        this.mapmarkers.push(marker);
+      });
     }
   }
 
