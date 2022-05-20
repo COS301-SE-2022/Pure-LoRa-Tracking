@@ -7,7 +7,7 @@ import { firstValueFrom, lastValueFrom, map, Observable } from 'rxjs';
 export class ThingsboardThingsboardUserService {
     constructor(private httpService: HttpService) {}
 
-    async login(name: string, password: string) : Promise<AxiosResponse> | Promise<thingsboard_failure> {
+    async login(name: string, password: string) : Promise<AxiosResponse> | Promise<thingsboard> {
         return await firstValueFrom(this.httpService.post('http://localhost:8080/api/auth/login', {
         username: name,
         password: password,
