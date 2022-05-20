@@ -33,8 +33,8 @@ describe('ThingsboardThingsboardUserService', () => {
     service
       .login('liamburgess299@gmail.com', 'L19m2992')
       .subscribe((resp : AxiosResponse["data"]) => {
-        service.logout(resp['token']).subscribe((resp : AxiosResponse['data']) => {
-          expect(resp).toEqual('');
+        service.logout(resp['token']).subscribe((resp : AxiosResponse) => {
+          expect(resp.status).toEqual(200);
         });
       });
   });

@@ -1,3 +1,4 @@
+import { ThingsboardThingsboardUserModule } from '@lora/thingsboard-user';
 import { HttpModule } from '@nestjs/axios';
 import { Module, Global } from '@nestjs/common';
 import { ThingsboardThingsboardTelemetryService } from './thingsboard-thingsboard-telemetry.service';
