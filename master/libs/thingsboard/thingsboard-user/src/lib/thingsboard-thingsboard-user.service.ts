@@ -18,7 +18,7 @@ export class ThingsboardThingsboardUserService {
       )
     }
   
-    logout(token: string): Observable<AxiosResponse['data']> {
+    logout(token: string): Observable<AxiosResponse> {
       const headersReq = {
         'Content-Type': 'application/json',
         Authorization: 'Bearer ' + token,
@@ -29,7 +29,7 @@ export class ThingsboardThingsboardUserService {
         { headers: headersReq }
       ).pipe(
         map(
-          Response => Response.data
+          Response => Response
         )
       )
     }
