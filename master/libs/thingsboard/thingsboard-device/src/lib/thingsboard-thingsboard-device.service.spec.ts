@@ -28,6 +28,7 @@ describe('ThingsboardThingsboardDeviceService', () => {
     const data = await loginService.login(username, password);
     service.setToken(data['data']['token']);
     const userinfo = await loginService.userInfo(data['data']['token']);
-    console.log(userinfo['data']);
+    //console.log(userinfo['data']);
+    expect(userinfo).toBeDefined();
   })
 });

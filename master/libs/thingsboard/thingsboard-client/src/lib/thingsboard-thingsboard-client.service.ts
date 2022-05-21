@@ -9,12 +9,12 @@ export class ThingsboardThingsboardClientService {
         private telemetryService : ThingsboardThingsboardTelemetryService
         ) {}
 
-    adminSendTelemetry(deviceID:string, username : string, password : string, deviceType :string, payload) {
+    /*adminSendTelemetry(deviceID:string, username : string, password : string, deviceType :string, payload) {
             this.userService.login(username, password).subscribe((resp: AxiosResponse['data'])=> {
             this.telemetryService.setToken(resp['token']);
             this.telemetryService.sendTelemetry(deviceID, deviceType, payload['latitude'], payload['longitude']).subscribe(()=> {
                 //console.log(resp.status);
             })
         })
-    }
+    }*/
 }
