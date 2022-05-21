@@ -11,6 +11,8 @@ export class ThingsboardThingsboardUserService {
         username: name,
         password: password,
       })).catch((error)=> {
+        if(error.response == undefined)
+          return null;
         if(error.response.status==401)
           return new Promise((resolve, reject) => {
             return {
@@ -30,6 +32,8 @@ export class ThingsboardThingsboardUserService {
         {},
         { headers: headersReq }
       )).catch((error)=> {
+        if(error.response == undefined)
+          return null;
         if(error.response.status==401)
           return new Promise((resolve, reject) => {
             return {
@@ -48,6 +52,8 @@ export class ThingsboardThingsboardUserService {
         'http://localhost:8080/api/auth/user',
         { headers: headersReq }
       )).catch((error)=> {
+        if(error.response == undefined)
+          return null;
         if(error.response.status==401)
           return new Promise((resolve, reject) => {
             return {
