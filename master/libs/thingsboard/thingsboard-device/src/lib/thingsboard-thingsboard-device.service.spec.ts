@@ -25,7 +25,7 @@ describe('ThingsboardThingsboardDeviceService', () => {
   });
 
   it('should get the device infos and print them...', async()=> {
-    const data = await loginService.login(username, password);
+    /*const data = await loginService.login(username, password);*/
     /*service.setToken(data['data']['token']);
     const userinfo = await loginService.userInfo(data['data']['token']);
     //console.log(userinfo['data']);
