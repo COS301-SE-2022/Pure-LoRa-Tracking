@@ -1,23 +1,27 @@
 import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
-import { map } from 'rxjs';
+import { lastValueFrom, map } from 'rxjs';
 
 @Injectable()
 export class ThingsboardThingsboardDeviceService {
     private token : string;
-    constructor(private httpService: HttpService) {}
+    private baseURL = "http://localhost:8080/api/customer/";
+    constructor(private httpService: HttpService) {this.token="";}
 
     setToken(token : string) : void {
       this.token = token;
     }
 
-    getCustomerDevices(page:number, pageSize:number, customerID:string) {
+    async getCustomerDevices(page:number, pageSize:number, customerID:string) {
+      if(this.token == "")
+        return null;
+
         const headersReq = {
             'Content-Type': 'application/json',
             Authorization: 'Bearer ' + this.token,
           };
-          return this.httpService.post(
-            'http://localhost:8080/api/customer/'+
+          return await lastValueFrom(this.httpService.post(
+            this.baseURL+
             +customerID+'/deviceInfos?'+
             'pageSize='+pageSize+'&'+
             'page='+page+'&'+
@@ -28,6 +32,6 @@ export class ThingsboardThingsboardDeviceService {
             map(
               Response => Response.data
             )
-        )
+        ))
     }
 }

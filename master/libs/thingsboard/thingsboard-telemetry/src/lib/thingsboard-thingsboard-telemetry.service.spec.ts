@@ -15,8 +15,7 @@ describe('ThingsboardThingsboardTelemetryService', () => {
     }).compile();
     service = module.get(ThingsboardThingsboardTelemetryService);
 
-    service.setToken('eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJsaWFtYnVyZ2VzczI5OUBnbWFpbC5jb20iLCJzY29wZXMiOlsiVEVOQU5UX0FETUlOIl0sInVzZXJJZCI6IjhhNWZhYTkwLWNlMDAtMTFlYy1iZmJlLWM5MWZkMjJmMmI0YyIsImZpcnN0TmFtZSI6ImxpYW0iLCJlbmFibGVkIjp0cnVlLCJpc1B1YmxpYyI6ZmFsc2UsInRlbmFudElkIjoiNjhjMzYzNDAtY2UwMC0xMWVjLWJmYmUtYzkxZmQyMmYyYjRjIiwiY3VzdG9tZXJJZCI6IjEzODE0MDAwLTFkZDItMTFiMi04MDgwLTgwODA4MDgwODA4MCIsImlzcyI6InRoaW5nc2JvYXJkLmlvIiwiaWF0IjoxNjUyMzkyOTA2LCJleHAiOjE2NTI0MDE5MDZ9.589AxKu5eTwV2MiKcCPWW8I8kYlvmvUr-73W0jDX0jltYtEq67lG4EqoetyzteHp0G_HAmuQBD2FXvdgAWhCBA')
-  });
+ });
 
   it('should be defined', () => {
     expect(service).toBeTruthy();

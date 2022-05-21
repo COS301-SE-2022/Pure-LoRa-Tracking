@@ -20,12 +20,7 @@ describe('ThingsboardThingsboardClientService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should not throw an error to pass', ()=> {
-    const username = "liamburgess299@gmail.com";
-    const password = "L19m2992";
-    const deviceID = "acf22a00-ce06-11ec-b2d0-bd829ba84846";
-    const deviceType = "DEVICE_PROFILE";
+  /*it('should not throw an error to pass', ()=> {
 
-    expect(service.adminSendTelemetry(deviceID, username, password, deviceType, {"latitude":-21.89, "longitude":19.56}))
-  })
+  })*/
 });
