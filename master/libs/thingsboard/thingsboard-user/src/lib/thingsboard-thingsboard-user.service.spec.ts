@@ -1,8 +1,6 @@
 import { HttpModule } from '@nestjs/axios';
 import { Test } from '@nestjs/testing';
 import { ThingsboardThingsboardUserService } from './thingsboard-thingsboard-user.service';
-import { AxiosResponse } from 'axios';
-
 
 describe('ThingsboardThingsboardUserService', () => {
   let service: ThingsboardThingsboardUserService;
