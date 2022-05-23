@@ -6,13 +6,13 @@ import { rssiData, RSSIdataDocument } from '../database-interfaces.interface';
 export class DatabaseProxyService {
     constructor(@InjectModel(rssiData.name) private rssiDataModel: Model<RSSIdataDocument>) {}
 
-    async insertRecord() : Promise<boolean> {}
+    async insertRecord() : Promise<boolean> {return null}
 
-    async removeDeviceRecords() : Promise<boolean> {}
+    async removeDeviceRecords() : Promise<boolean> {return null}
 
-    async removeDeviceRecordWithTimestamp() : Promise<boolean> {}
+    async removeDeviceRecordWithTimestamp() : Promise<boolean> {return null}
 
-    async readDeviceRecords() : Promise<rssiData[]> {}
+    async readDeviceRecords() : Promise<rssiData[]> {return null}
 }
 
 
