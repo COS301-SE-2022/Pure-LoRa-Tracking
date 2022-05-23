@@ -11,7 +11,7 @@ export class rssiData {
     @Prop()
     gatewayCoord : {
         latitude : number;
-        longitude : number;
+        longitude : number ;
     };
 
     @Prop()
