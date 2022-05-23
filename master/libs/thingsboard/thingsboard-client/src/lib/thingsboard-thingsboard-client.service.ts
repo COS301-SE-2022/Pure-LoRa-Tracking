@@ -30,4 +30,8 @@ export class ThingsboardThingsboardClientService {
         const DeviceResp = await this.deviceService.getCustomerDevices(0, 5, InfoResp['data']['customerId']['id']);
         return DeviceResp;
     }
+
+    async getDeviceTelemetry(DeviceID: string) : Promise<any> {
+        
+    }
 }

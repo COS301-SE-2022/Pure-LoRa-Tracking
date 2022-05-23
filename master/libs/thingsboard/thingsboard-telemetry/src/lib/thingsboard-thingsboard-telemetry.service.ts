@@ -1,7 +1,7 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { AxiosResponse } from 'axios';
-import { map, Observable } from 'rxjs';
+import { lastValueFrom, map, Observable } from 'rxjs';
 
 @Injectable()
 export class ThingsboardThingsboardTelemetryService {
@@ -12,29 +12,26 @@ export class ThingsboardThingsboardTelemetryService {
         this.token = token;
     }
 
-    getTelemetry(EntityID : string) : Observable<AxiosResponse['data']> {
+    getTelemetry(DeviceID : string, DeviceProfile: string) : Promise<AxiosResponse> {
         const headersReq = {
             'Content-Type': 'application/json',
             Authorization: 'Bearer ' + this.token,
           };
-          return this.httpService.get(
-            'http://localhost:8080/api/plugins/telemetry/DEVICE_PROFILE/'
-            +EntityID
+          return lastValueFrom(this.httpService.get(
+            'http://localhost:8080/api/plugins/telemetry/'+DeviceProfile+'/'
+            +DeviceID
             +'/values/timeseries',
             { headers: headersReq }
-          ).pipe(
-            map(
-              Response => Response.data
-            )
-          ) 
+          )
+          )
     }
 
-    sendTelemetry(EntityID: string, DeviceType : string, latitude : number, longitude : number) : Observable<AxiosResponse> {
+    sendTelemetry(EntityID: string, DeviceType : string, latitude : number, longitude : number) : Promise<AxiosResponse> {
         const headersReq = {
             'Content-Type': 'application/json',
             Authorization: 'Bearer ' + this.token,
           };
-          return this.httpService.post(
+          return lastValueFrom(this.httpService.post(
             "http://localhost:8080/api/plugins/telemetry/"+DeviceType+"/"+EntityID+"/timeseries/any",
             {
                 "latitude": latitude,
@@ -45,7 +42,7 @@ export class ThingsboardThingsboardTelemetryService {
             map(
               Response => Response
             )
-          ) 
+          )) 
     }
 
 }
