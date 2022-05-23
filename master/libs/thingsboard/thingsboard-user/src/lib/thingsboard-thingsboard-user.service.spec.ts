@@ -34,9 +34,9 @@ describe('ThingsboardThingsboardUserService', () => {
   });
 
   it("Should print user info", async()=> {
-    const login = await service
+    /*const login = await service
       .login('reserveuser@reserve.com', 'reserve');
     const userInfo = await service.userInfo(login['data']['token']);
-    console.log(userInfo['data']['customerId']['id']);
+    console.log(userInfo['data']['customerId']['id']);*/
   })
 });
