@@ -13,14 +13,18 @@ export class ThingsboardThingsboardTelemetryService {
     }
 
     getTelemetry(DeviceID : string, DeviceProfile: string) : Promise<AxiosResponse> {
+      const url = 'http://localhost:8080/api/plugins/telemetry/'+
+      DeviceProfile
+      +'/'
+      +DeviceID
+      +'/values/timeseries';
+
         const headersReq = {
             'Content-Type': 'application/json',
             Authorization: 'Bearer ' + this.token,
           };
           return lastValueFrom(this.httpService.get(
-            'http://localhost:8080/api/plugins/telemetry/'+DeviceProfile+'/'
-            +DeviceID
-            +'/values/timeseries',
+            url,
             { headers: headersReq }
           )
           )
@@ -34,6 +38,7 @@ export class ThingsboardThingsboardTelemetryService {
           return lastValueFrom(this.httpService.post(
             "http://localhost:8080/api/plugins/telemetry/"+DeviceType+"/"+EntityID+"/timeseries/any",
             {
+                "timestamp":+new Date(),
                 "latitude": latitude,
                 "longitude" : longitude
             },

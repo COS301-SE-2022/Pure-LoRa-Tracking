@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { lastValueFrom, map } from 'rxjs';
-import { extend } from 'leaflet';
 
 @Injectable()
 export class ThingsboardThingsboardDeviceService {
