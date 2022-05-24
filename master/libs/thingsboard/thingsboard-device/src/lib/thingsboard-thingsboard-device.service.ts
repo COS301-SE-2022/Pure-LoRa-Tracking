@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { lastValueFrom, map } from 'rxjs';
+import { extend } from 'leaflet';
 
 @Injectable()
 export class ThingsboardThingsboardDeviceService {
@@ -17,10 +18,10 @@ export class ThingsboardThingsboardDeviceService {
         return null;
 
         const url = this.baseURL+'/'+
-        customerID+'/deviceInfos?'+
-        'pageSize='+pageSize+'&'+
-        'page='+page+'&'+
-        'customerId='+customerID;
+        customerID+
+        '/deviceInfos?pageSize='+pageSize+
+        '&page='+page+
+        '&customerId='+customerID;
 
         const headersReq = {
             'Content-Type': 'application/json',
@@ -31,4 +32,26 @@ export class ThingsboardThingsboardDeviceService {
             { headers: headersReq }
           ))
     }
+
+    processDevices(devices) : deviceList[] {
+      let list:[deviceList];
+      devices.forEach((item, list) => {
+        list.push({
+          deviceID : item['id']['id'],
+          isGateway : item['additionalInfo']['gateway'],
+          name : item['name'],
+          profile : item['id']['entityType']
+        })
+      });
+      return list;
+    }
+
+    
+}
+
+export class deviceList {
+  deviceID : string;
+  isGateway : boolean;
+  name : string;
+  profile : string;
 }

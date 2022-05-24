@@ -7,7 +7,7 @@ import { ThingsboardThingsboardDeviceService } from './thingsboard-thingsboard-d
 describe('ThingsboardThingsboardDeviceService', () => {
   let service: ThingsboardThingsboardDeviceService;
   let loginService: ThingsboardThingsboardUserService;
-  const username = "reserveAdmin@reserve.com";
+  const username = "reserveuser@reserve.com";
   const password = "reserve";
 
   beforeEach(async () => {
@@ -25,10 +25,12 @@ describe('ThingsboardThingsboardDeviceService', () => {
   });
 
   it('should get the device infos and print them...', async()=> {
-    /*const data = await loginService.login(username, password);*/
-    /*service.setToken(data['data']['token']);
+    const data = await loginService.login(username, password);
+    service.setToken(data['data']['token']);
     const userinfo = await loginService.userInfo(data['data']['token']);
-    //console.log(userinfo['data']);
-    expect(userinfo).toBeDefined();*/
+    const custID = userinfo['data']['customerId']['id'];
+    expect(custID).toBeDefined();
+    const DeviceData = await service.getCustomerDevices(0, 5, custID);
+    console.log(service.processDevices(DeviceData['data']['data']));
   })
 });
