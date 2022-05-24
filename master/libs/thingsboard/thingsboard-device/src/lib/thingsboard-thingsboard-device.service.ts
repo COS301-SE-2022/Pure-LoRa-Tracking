@@ -34,15 +34,17 @@ export class ThingsboardThingsboardDeviceService {
     }
 
     processDevices(devices) : deviceList[] {
-      let list:[deviceList];
-      devices.forEach((item, list) => {
+      const list : deviceList[] = new Array<deviceList>();
+      for (let i = 0; i < devices.length; i++) {
         list.push({
-          deviceID : item['id']['id'],
-          isGateway : item['additionalInfo']['gateway'],
-          name : item['name'],
-          profile : item['id']['entityType']
-        })
-      });
+          deviceID : devices[i]['id']['id'],
+          isGateway : devices[i]['additionalInfo']['gateway'],
+          name : devices[i]['name'],
+          profile : devices[i]['id']['entityType']
+        }) 
+      }
+        
+
       return list;
     }
 
