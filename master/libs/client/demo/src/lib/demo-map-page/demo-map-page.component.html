@@ -6,6 +6,7 @@
     [MapRenderInput]="MapRenderInput"
     [ViewMapTypeInput]="ViewMapTypeInput"
     [ShowMarkers]="ShowMarkers"
+    [ShowPolygon]="ShowPolygon"
   ></reserve-map>
 </div>
 
@@ -23,4 +24,14 @@
     (change)="updateMarkerView(markers.checked)"
     checked="checked"
   />
+  <label for="ploygon">Show polyygon</label>
+  <input
+    type="checkbox"
+    name="polygon"
+    id="polygon"
+    #polygon
+    (change)="updatePolygonView(polygon.checked)"
+    checked="checked"
+  />
+  
 </div>

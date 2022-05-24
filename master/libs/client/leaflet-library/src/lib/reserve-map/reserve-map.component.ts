@@ -14,43 +14,54 @@ export class ReserveMapComponent implements OnInit, OnChanges {
   @Input() MapRenderInput: MapRender;
   @Input() ViewMapTypeInput: ViewMapType;
   @Input() MarkerViewInput: MarkerView;
-  @Input() ShowMarkers:boolean;
+  @Input() ShowMarkers: boolean;
+  @Input() ShowPolygon: boolean;
   private mainmap: any = null;
   private maptiles: any = null;
   private mapmarkers: Array<L.Marker<any>> = [];
+  private mappolygons: L.Polygon | null = null;
 
   constructor() {
     //set default map options
     this.MapRenderInput = MapRender.ALL;
     this.ViewMapTypeInput = ViewMapType.NORMAL_OPEN_STREET_VIEW;
     this.MarkerViewInput = MarkerView.DEFAULT_MARKER;
-    this.ShowMarkers=true;
+    this.ShowMarkers = true;
+    this.ShowPolygon = true;
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     //assume that if reserve is changed, reload everything
-    // console.log(changes);
-
     if (changes.hasOwnProperty("Reserve")) {
       this.loadmap();
       this.loadmaptiles();
       this.loadMarkers();//maybe remove for double call
       this.showmarkers();
+      this.loadPolygons();
+      this.showpolygon();
     }
     else {
+      //using else if as these are single changes
+
       if (changes.hasOwnProperty("Latest")) {
         this.loadMarkers();
-      this.showmarkers();
-
+        this.showmarkers();
       }
-      if (changes.hasOwnProperty("ViewMapTypeInput")) {
+      else if (changes.hasOwnProperty("ViewMapTypeInput")) {
         this.loadmaptiles();
       }
-      if (changes.hasOwnProperty("ShowMarkers")) {
-        if(this.ShowMarkers){
+      else if (changes.hasOwnProperty("ShowMarkers")) {
+        if (this.ShowMarkers) {
           this.showmarkers();
-        }else{
+        } else {
           this.hidemarkers();
+        }
+      }
+      else if (changes.hasOwnProperty("ShowPolygon")) {
+        if (this.ShowPolygon) {
+          this.showpolygon();
+        } else {
+          this.hidepolygon();
         }
       }
     }
@@ -103,28 +114,44 @@ export class ReserveMapComponent implements OnInit, OnChanges {
         ],
         zoom: 19,
       });
+    }
+  }
 
+  private showmarkers(): void {
+    this.mapmarkers.forEach((curr) => { curr.addTo(this.mainmap) })
+  }
+
+  private hidemarkers(): void {
+    this.mapmarkers.forEach((curr) => curr.remove());
+  }
+
+  public showpolygon(): void {
+    if (this.mappolygons != null) {
+      this.mappolygons.addTo(this.mainmap);
+    }
+  }
+
+  public hidepolygon(): void {
+    if (this.mappolygons != null) {
+      this.mappolygons.remove();
+    }
+  }
+
+  public loadPolygons(): void {
+    if (this.Reserve?.data != null) {
       //load the polygon points
       if (
         this.Reserve.data.location != null &&
         this.Reserve.data.location.length > 2
       ) {
-        var points = this.Reserve.data.location.map((val) => [
+        this.mappolygons = L.polygon(this.Reserve.data.location.map((val) => [
           parseFloat(val.latitude),
           parseFloat(val.longitude),
-        ]) as unknown as L.LatLngExpression[];
-        L.polygon(points).addTo(this.mainmap);
+        ]) as unknown as L.LatLngExpression[])
       }
     }
   }
 
-  private showmarkers(): void {
-    this.mapmarkers.forEach((curr)=>{curr.addTo(this.mainmap)})
-  }
-
-  private hidemarkers(): void{
-    this.mapmarkers.forEach((curr)=>curr.remove());
-  }
 
   //load the map markers
   private loadMarkers(): void {
@@ -132,8 +159,8 @@ export class ReserveMapComponent implements OnInit, OnChanges {
       const pipes = new DatePipe('en-UK');
 
       //if there is markers, destroy them
-      if(this.mapmarkers.length>0){
-        this.mapmarkers=[];
+      if (this.mapmarkers.length > 0) {
+        this.mapmarkers = [];
       }
 
       this.Latest.data.forEach((curr) => {
