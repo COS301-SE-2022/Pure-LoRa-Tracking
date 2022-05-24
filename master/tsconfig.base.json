@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@chirpstack": ["libs/chirpstack/src/index.ts"],
       "@lora/api/mapEndpoint": ["libs/api/map-endpoint/src/index.ts"],
       "@lora/apiRouter": ["libs/api/api-router/src/index.ts"],
       "@lora/database": ["libs/database-proxy/src/index.ts"],
