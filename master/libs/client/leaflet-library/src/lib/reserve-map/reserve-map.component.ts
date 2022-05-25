@@ -230,8 +230,8 @@ export class ReserveMapComponent implements OnInit, OnChanges {
     this.HistoricalMode=true;
     //try just show one
     if(historical.data!=null){
-      console.log(historical.data[0])
-      var current=L.polyline(historical.data[0].locations.map(val=>[parseFloat(val.latitude),parseFloat(val.longitude)]) as unknown as L.LatLngExpression[],{"smoothFactor":0.1,"color":"#fcba03"});
+      console.log(historical.data)
+      var current=L.polyline(historical.data.locations.map(val=>[parseFloat(val.latitude),parseFloat(val.longitude)]) as unknown as L.LatLngExpression[],{"smoothFactor":0.1,"color":"#fcba03"});
       this.historicalpath.push(current);
       current.addTo(this.mainmap);
     }
