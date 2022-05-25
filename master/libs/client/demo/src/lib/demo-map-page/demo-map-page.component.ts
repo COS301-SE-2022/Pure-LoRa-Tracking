@@ -65,8 +65,10 @@ export class DemoMapPageComponent implements OnInit {
   }
 
   hidehistorical(deviceID:string):void{
+    this.HistoricalLoading=true;
     this.HistoricalView=this.HistoricalView.filter(val=>val!=deviceID);
     this.reservemap?.hidehistorical(deviceID);
+    this.HistoricalLoading=false;
   }
 
   ngOnInit(): void {
