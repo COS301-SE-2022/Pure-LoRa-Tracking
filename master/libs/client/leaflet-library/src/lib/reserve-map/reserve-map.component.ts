@@ -16,14 +16,15 @@ export class ReserveMapComponent implements OnInit, OnChanges {
   @Input() MarkerViewInput: MarkerView;
   @Input() ShowMarkers: boolean;
   @Input() ShowPolygon: boolean;
-  @Input() CurrentHistorical: MapApiHistoricalResponse | null = null;
   @Input() HistoricalMode: boolean;
+  @Input() CurrentHistorical:Array<string>=[];
   private mainmap: any = null;
   private maptiles: any = null;
   private mapmarkers: Array<L.Marker<any>> = [];
   private mappolygons: L.Polygon | null = null;
-  private historicalpath: L.Polyline | null = null;
+  private historicalpath: Array<L.Polyline>=[];
   private historicalpoints: Array<L.LatLngExpression>=[];
+  private currentHistoricalList: Array<string> = [];
 
   constructor() {
     //set default map options
@@ -40,6 +41,7 @@ export class ReserveMapComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    console.log(changes);
     //assume that if reserve is changed, reload everything
     if (changes.hasOwnProperty("Reserve")) {
       this.loadmap();
@@ -205,26 +207,35 @@ export class ReserveMapComponent implements OnInit, OnChanges {
 
   //HISTORICAL
 
-  private loadHistorical(): void {
-    if (this.HistoricalMode && this.CurrentHistorical != null) {
-      this.historicalpath;
-    }
-  }
+  // private loadHistorical(): void {
+  //   if (this.HistoricalMode && this.CurrentHistorical != null) {
+      
+  //   }
+  // }
 
-  private updateHistoical(): void {
-    if(this.CurrentHistorical!=null && this.CurrentHistorical.data!=null){
-      this.historicalpoints=this.CurrentHistorical.data.map((val)=>[
+  // private updateHistoical(): void {
+  //   if(this.CurrentHistorical!=null && this.CurrentHistorical.data!=null){
+  //     this.historicalpoints=this.CurrentHistorical.data.map((val)=>[
         
-      ]) as unknown as L.LatLngExpression[]
-    }
-  }
-
-  private showhistorical(): void {
-
-  }
+  //     ]) as unknown as L.LatLngExpression[]
+  //   }
+  // }
 
   private hidehistorical(): void {
 
+  }
+
+  public displayhistorical(historical:MapApiHistoricalResponse):void{
+    console.log(historical)
+    this.hidemarkers();
+    this.HistoricalMode=true;
+    //try just show one
+    if(historical.data!=null){
+      console.log(historical.data[0])
+      var current=L.polyline(historical.data[0].locations.map(val=>[parseFloat(val.latitude),parseFloat(val.longitude)]) as unknown as L.LatLngExpression[],{"smoothFactor":0.1,"color":"#fcba03"});
+      this.historicalpath.push(current);
+      current.addTo(this.mainmap);
+    }
   }
 
 }

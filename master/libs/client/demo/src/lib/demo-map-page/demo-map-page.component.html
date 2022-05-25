@@ -1,5 +1,6 @@
 <div class="map" *ngIf="Reserve">
   <reserve-map
+    #reservemap
     class="map"
     [Reserve]="Reserve"
     [Latest]="Latest"
@@ -8,30 +9,39 @@
     [ShowMarkers]="ShowMarkers"
     [ShowPolygon]="ShowPolygon"
   ></reserve-map>
-</div>
-
-<select class="selectbox" #current (change)="updateMapView(current.value)">
-  <option value="normal">Normal</option>
-  <option value="esri">ESRI Satalite View</option>
-</select>
-<div class="markers">
-  <label for="markers">Show markers</label>
-  <input
+  
+  <select class="selectbox" #current (change)="updateMapView(current.value)">
+    <option value="normal">Normal</option>
+    <option value="esri">ESRI Satalite View</option>
+  </select>
+  <div class="markers">
+    <label for="markers">Show markers</label>
+    <input
     type="checkbox"
     name="markers"
     id="markers"
     #markers
     (change)="updateMarkerView(markers.checked)"
     checked="checked"
-  />
-  <label for="ploygon">Show polyygon</label>
-  <input
+    />
+    <label for="polygon">Show polyygon</label>
+    <input
     type="checkbox"
     name="polygon"
     id="polygon"
     #polygon
     (change)="updatePolygonView(polygon.checked)"
     checked="checked"
-  />
+    /> 
+  </div>
+
+  
   
 </div>
+<ul *ngIf="Latest" class="devices">
+  <li *ngFor="let i of Latest.data">
+    <button (click)="viewhistorical(i.deviceID)">View</button>
+    {{i.deviceID}}
+    
+  </li>
+</ul>
