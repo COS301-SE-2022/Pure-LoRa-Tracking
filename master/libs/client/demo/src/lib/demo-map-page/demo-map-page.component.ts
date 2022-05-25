@@ -13,10 +13,14 @@ export class DemoMapPageComponent implements OnInit {
   Latest: MapApiLatestResponse | null = null;
   MapRenderInput: MapRender;
   ViewMapTypeInput: ViewMapType;
+  ShowMarkers:boolean;
+  ShowPolygon:boolean;
   constructor(private caller: MapCallerService) {
     //set default map options
     this.MapRenderInput = MapRender.ALL;
     this.ViewMapTypeInput = ViewMapType.NORMAL_OPEN_STREET_VIEW;
+    this.ShowMarkers=true;
+    this.ShowPolygon=true;
     //call the api
     caller.getReserve("sf", "sdf").then(val => this.Reserve = val);
     caller.getLatest("sf", "sdf").then(val => this.Latest = val);
@@ -31,6 +35,15 @@ export class DemoMapPageComponent implements OnInit {
       if(this.Latest!=null)this.Latest.code=100;
     }
   }
+
+  updateMarkerView(checked:boolean){
+    this.ShowMarkers=checked;
+  }
+
+  updatePolygonView(checked:boolean){
+    this.ShowPolygon=checked;
+  }
+
 
   ngOnInit(): void { }
 }

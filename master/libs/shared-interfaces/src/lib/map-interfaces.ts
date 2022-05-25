@@ -11,19 +11,19 @@ export interface MapApiReserve {
     }
 }
 
+//if timestamp left empty give the upper/lower limit
 export interface MapApiHistorical {
     token : string,
     reserveID : string,
-    options? : {
-        limit : number,
-        sort : sortHistorical
-    }
+    deviceID: string[],
+    startTime?: number,
+    endTime?:number
 }
 
-enum sortHistorical {
-    new = 'new',
-    old = 'old'
-}
+// enum sortHistorical {
+//     new = 'new',
+//     old = 'old'
+// }
 
 export interface MapApiLatestResponse {
     code : number,
@@ -34,6 +34,7 @@ export interface MapApiLatestResponse {
 
 interface Device {
         deviceID : string,
+        deviceName: string,
         type : string,
         locationData : {
             timeStamp:number,
