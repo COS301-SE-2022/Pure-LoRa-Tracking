@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { MapApiHistorical, MapApiHistoricalResponse, MapApiLatest, MapApiLatestResponse, MapApiReserve, MapApiReserveResponse } from '@master/shared-interfaces';
+import { MapApiHistorical, MapApiHistoricalResponse, MapApiLatest, MapApiLatestResponse, MapApiReserve, MapApiReserveResponse } from './map-api.interface';
 
 @Injectable()
 export class ApiMapEndpointService {

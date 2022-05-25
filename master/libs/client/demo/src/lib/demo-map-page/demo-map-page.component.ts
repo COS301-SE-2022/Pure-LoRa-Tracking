@@ -53,7 +53,7 @@ export class DemoMapPageComponent implements OnInit {
 
   viewhistorical(deviceID:string):void{
     //still need to change it so only new ones are called
-    this.caller.getHistorical("sd","sd",["d","sdf"]).then(val=>{
+    this.caller.getHistorical("sd","sd","sens-11").then(val=>{
       this.Historical=val
       this.reservemap?.displayhistorical(val);
     });
