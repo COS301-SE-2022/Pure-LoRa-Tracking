@@ -81,8 +81,8 @@ export interface MapApiHistoricalData {
         }[]
 }
 
-// export interface MapHistoricalPoints{
-//     deviceID:string,
-//     polyline:L.Polyline,
-//     markers:L.Marker[]
-// }
+export interface MapHistoricalPoints{
+    deviceID:string,
+    polyline:L.Polyline,
+    markers:L.Marker[]
+}

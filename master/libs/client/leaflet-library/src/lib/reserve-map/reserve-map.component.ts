@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, Input, OnChanges, SimpleChanges, } from '@angular/core';
-import { MapApiHistoricalResponse, MapApiLatestResponse, MapApiReserveResponse, MapRender, MarkerView, ViewMapType, } from '@master/shared-interfaces';
+import { MapApiHistoricalResponse, MapApiLatestResponse, MapApiReserveResponse, MapHistoricalPoints, MapRender, MarkerView, ViewMapType, } from '@master/shared-interfaces';
 import * as L from 'leaflet';
 @Component({
   selector: 'reserve-map',
@@ -17,13 +17,11 @@ export class ReserveMapComponent implements OnInit, OnChanges {
   @Input() ShowMarkers: boolean;
   @Input() ShowPolygon: boolean;
   @Input() HistoricalMode: boolean;
-  @Input() CurrentHistorical:Array<string>=[];
   private mainmap: any = null;
   private maptiles: any = null;
   private mapmarkers: Array<L.Marker<any>> = [];
   private mappolygons: L.Polygon | null = null;
-  private historicalpath: Array<L.Polyline>=[];
-  private historicalpoints: Array<L.LatLngExpression>=[];
+  private historicalpath: Array<MapHistoricalPoints> = [];
 
   constructor() {
     //set default map options
@@ -40,7 +38,7 @@ export class ReserveMapComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes);
+    // console.log(changes);
     //assume that if reserve is changed, reload everything
     if (changes.hasOwnProperty("Reserve")) {
       this.loadmap();
@@ -208,32 +206,47 @@ export class ReserveMapComponent implements OnInit, OnChanges {
 
   // private loadHistorical(): void {
   //   if (this.HistoricalMode && this.CurrentHistorical != null) {
-      
+
   //   }
   // }
 
   // private updateHistoical(): void {
   //   if(this.CurrentHistorical!=null && this.CurrentHistorical.data!=null){
   //     this.historicalpoints=this.CurrentHistorical.data.map((val)=>[
-        
+
   //     ]) as unknown as L.LatLngExpression[]
   //   }
   // }
 
-  private hidehistorical(): void {
-
+  public hidehistorical(deviceID: string): void {
+    var point = this.historicalpath.find(val => val.deviceID == deviceID);
+    if (point != null) {
+      //remove markers
+      point.polyline.remove();
+      this.historicalpath=this.historicalpath.filter(val=>val.deviceID!=deviceID)
+      if (this.historicalpath.length == 0) {
+        this.HistoricalMode = false;
+        this.showmarkers();
+      }
+    }
   }
 
-  public displayhistorical(historical:MapApiHistoricalResponse):void{
-    console.log(historical)
-    this.hidemarkers();
-    this.HistoricalMode=true;
-    //try just show one
-    if(historical.data!=null){
-      console.log(historical.data)
-      var current=L.polyline(historical.data.locations.map(val=>[parseFloat(val.latitude),parseFloat(val.longitude)]) as unknown as L.LatLngExpression[],{"smoothFactor":0.1,"color":"#fcba03"});
-      this.historicalpath.push(current);
-      current.addTo(this.mainmap);
+  public displayhistorical(historical: MapApiHistoricalResponse): void {
+    if (historical.data != null) {
+      this.hidemarkers();
+      this.HistoricalMode = true;
+      //try just show one
+      if (historical.data != null) {
+        // console.log(historical.data)
+        var current = L.polyline(historical.data.locations.map(val => [parseFloat(val.latitude), parseFloat(val.longitude)]) as unknown as L.LatLngExpression[], { "smoothFactor": 0.1 });
+        var newpoint = {
+          deviceID: historical.data?.deviceID,
+          polyline: current,
+          markers: []
+        } as MapHistoricalPoints
+        this.historicalpath.push(newpoint);
+        current.addTo(this.mainmap);
+      }
     }
   }
 

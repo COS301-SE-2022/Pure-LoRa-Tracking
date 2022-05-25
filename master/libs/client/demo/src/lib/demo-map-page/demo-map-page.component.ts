@@ -20,6 +20,7 @@ export class DemoMapPageComponent implements OnInit {
   ViewMapTypeInput: ViewMapType;
   ShowMarkers:boolean;
   ShowPolygon:boolean;
+  HistoricalLoading:boolean;
 
   constructor(private caller: MapCallerService) {
     //set default map options
@@ -27,7 +28,7 @@ export class DemoMapPageComponent implements OnInit {
     this.ViewMapTypeInput = ViewMapType.NORMAL_OPEN_STREET_VIEW;
     this.ShowMarkers=true;
     this.ShowPolygon=true;
-    
+    this.HistoricalLoading=false;
     //call the api
     caller.getReserve("sf", "sdf").then(val => this.Reserve = val);
     caller.getLatest("sf", "sdf").then(val => this.Latest = val);
@@ -52,15 +53,20 @@ export class DemoMapPageComponent implements OnInit {
   }
 
   viewhistorical(deviceID:string):void{
-    //still need to change it so only new ones are called
-    this.caller.getHistorical("sd","sd","sens-11").then(val=>{
+    //we use historical loading to prevent another call
+    //while we are waiting for the then
+    this.HistoricalLoading=true;
+    this.caller.getHistorical("sd","sd",deviceID).then(val=>{
       this.Historical=val
       this.reservemap?.displayhistorical(val);
+      this.HistoricalView.push(deviceID);
+      this.HistoricalLoading=false;
     });
   }
 
   hidehistorical(deviceID:string):void{
-
+    this.HistoricalView=this.HistoricalView.filter(val=>val!=deviceID);
+    this.reservemap?.hidehistorical(deviceID);
   }
 
   ngOnInit(): void {
