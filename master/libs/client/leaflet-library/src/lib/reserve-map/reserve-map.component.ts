@@ -24,7 +24,6 @@ export class ReserveMapComponent implements OnInit, OnChanges {
   private mappolygons: L.Polygon | null = null;
   private historicalpath: Array<L.Polyline>=[];
   private historicalpoints: Array<L.LatLngExpression>=[];
-  private currentHistoricalList: Array<string> = [];
 
   constructor() {
     //set default map options

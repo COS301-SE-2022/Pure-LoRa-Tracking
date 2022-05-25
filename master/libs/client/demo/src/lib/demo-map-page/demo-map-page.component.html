@@ -40,7 +40,9 @@
 </div>
 <ul *ngIf="Latest" class="devices">
   <li *ngFor="let i of Latest.data">
-    <button (click)="viewhistorical(i.deviceID)">View</button>
+    <button *ngIf="!HistoricalView.includes(i.deviceID); else hidebutton" (click)="viewhistorical(i.deviceID)">View</button>
+    <ng-template #hidebutton><button (click)="hidehistorical(i.deviceID)">Hide</button></ng-template>
+    
     {{i.deviceID}}
     
   </li>

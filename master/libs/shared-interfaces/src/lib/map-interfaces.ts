@@ -15,7 +15,7 @@ export interface MapApiReserve {
 export interface MapApiHistorical {
     token: string,
     reserveID: string,
-    deviceID: string[],
+    deviceID: string,
     startTime?: number,
     endTime?: number
 }
@@ -68,7 +68,7 @@ export interface MapApiHistoricalResponse {
     code: number,
     status: string,
     explanation: string,
-    data?: MapApiHistoricalData[]
+    data?: MapApiHistoricalData
 }
 
 export interface MapApiHistoricalData {
@@ -79,4 +79,10 @@ export interface MapApiHistoricalData {
             latitude: string,
             longitude: string
         }[]
+}
+
+export interface MapHistoricalPoints{
+    deviceID:string,
+    polyline:L.Polyline,
+    markers:L.Marker[]
 }

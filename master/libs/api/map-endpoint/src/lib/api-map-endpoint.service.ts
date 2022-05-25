@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { MapApiHistorical, MapApiHistoricalResponse, MapApiLatest, MapApiLatestResponse, MapApiReserve, MapApiReserveResponse } from './map-api.interface';
+import { MapApiHistorical, MapApiHistoricalResponse, MapApiLatest, MapApiLatestResponse, MapApiReserve, MapApiReserveResponse } from '@master/shared-interfaces';
 
 @Injectable()
 export class ApiMapEndpointService {
@@ -29,6 +29,7 @@ export class ApiMapEndpointService {
             data : [
                 {
                     deviceID : "sens-11",
+                    deviceName: "Lion (harry)",
                     type : "sensor",
                     locationData : {
                         timeStamp : Date.now(),
@@ -40,6 +41,7 @@ export class ApiMapEndpointService {
                 },
                 {
                     deviceID : "sens-12",
+                    deviceName: "Zebra (larry)",
                     type : "sensor",
                     locationData : {
                         timeStamp : Date.now(),
@@ -51,6 +53,7 @@ export class ApiMapEndpointService {
                 },
                 {
                     deviceID : "sens-13",
+                    deviceName: "Giraffe (parry)",
                     type : "sensor",
                     locationData : {
                         timeStamp : Date.now(),
@@ -130,13 +133,13 @@ export class ApiMapEndpointService {
                 status : 'failure',
                 explanation : "Token missing"
             }  
-        return {
+
+        if(content.deviceID=="sens-11") return {
             code : 200,
             status : "success",
             explanation : "",
-            data : [
-                {
-                    deviceID : "sens-11",
+            data:{
+                deviceID : "sens-11",
                     locations : [
                         {
                             timestamp : Date.now()-6000,
@@ -154,9 +157,14 @@ export class ApiMapEndpointService {
                             longitude : '28.232314'
                         }
                     ]
-                },
-                {
-                    deviceID : "sens-12",
+            }
+        }
+        else if(content.deviceID=="sens-12") return {
+            code : 200,
+            status : "success",
+            explanation : "",
+            data: {
+                deviceID : "sens-12",
                     locations : [
                         {
                             timestamp : Date.now()-6000,
@@ -174,23 +182,32 @@ export class ApiMapEndpointService {
                             longitude : '28.233245'
                         }
                     ]
-                },
-                {
-                    deviceID : "sens-13",
-                    locations : [
-                        {
-                            timestamp : Date.now()-6000,
-                            latitude : "-25.755332",
-                            longitude : "28.232264"
-                        },
-                        {
-                            timestamp : Date.now()-3000,
-                            latitude : '-25.756632',
-                            longitude : '28.233760'
-                        }
-                    ]
-                }
-            ]
+            }
+        }
+        else if(content.deviceID=="sens-13") return{
+            code : 200,
+            status : "success",
+            explanation : "",
+            data:{
+                deviceID : "sens-13",
+                locations : [
+                    {
+                        timestamp : Date.now()-6000,
+                        latitude : "-25.755332",
+                        longitude : "28.232264"
+                    },
+                    {
+                        timestamp : Date.now()-3000,
+                        latitude : '-25.756632',
+                        longitude : '28.233760'
+                    }
+                ]
+            }
+        }
+        return {
+            code : 401,
+            status : "failure",
+            explanation : "Could not find sensor"
         }
     }
 }

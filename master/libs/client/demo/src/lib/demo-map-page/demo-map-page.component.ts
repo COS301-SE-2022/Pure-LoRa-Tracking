@@ -15,6 +15,7 @@ export class DemoMapPageComponent implements OnInit {
   Reserve: MapApiReserveResponse | null = null
   Latest: MapApiLatestResponse | null = null;
   Historical:MapApiHistoricalResponse|null=null;
+  HistoricalView:Array<string>=[];
   MapRenderInput: MapRender;
   ViewMapTypeInput: ViewMapType;
   ShowMarkers:boolean;
@@ -51,12 +52,15 @@ export class DemoMapPageComponent implements OnInit {
   }
 
   viewhistorical(deviceID:string):void{
-    console.log("called");
     //still need to change it so only new ones are called
     this.caller.getHistorical("sd","sd",["d","sdf"]).then(val=>{
       this.Historical=val
       this.reservemap?.displayhistorical(val);
     });
+  }
+
+  hidehistorical(deviceID:string):void{
+
   }
 
   ngOnInit(): void {
