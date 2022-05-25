@@ -17,10 +17,10 @@ export class ThingsboardThingsboardDeviceService {
         return null;
 
         const url = this.baseURL+'/'+
-        customerID+'/deviceInfos?'+
-        'pageSize='+pageSize+'&'+
-        'page='+page+'&'+
-        'customerId='+customerID;
+        customerID+
+        '/deviceInfos?pageSize='+pageSize+
+        '&page='+page+
+        '&customerId='+customerID;
 
         const headersReq = {
             'Content-Type': 'application/json',
@@ -31,4 +31,28 @@ export class ThingsboardThingsboardDeviceService {
             { headers: headersReq }
           ))
     }
+
+    processDevices(devices) : deviceList[] {
+      const list : deviceList[] = new Array<deviceList>();
+      for (let i = 0; i < devices.length; i++) {
+        list.push({
+          deviceID : devices[i]['id']['id'],
+          isGateway : devices[i]['additionalInfo']['gateway'],
+          name : devices[i]['name'],
+          profile : devices[i]['id']['entityType']
+        }) 
+      }
+        
+
+      return list;
+    }
+
+    
+}
+
+export class deviceList {
+  deviceID : string;
+  isGateway : boolean;
+  name : string;
+  profile : string;
 }
