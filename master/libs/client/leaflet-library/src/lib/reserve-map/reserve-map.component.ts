@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, Input, OnChanges, SimpleChanges, } from '@angular/core';
-import { MapApiLatestResponse, MapApiReserveResponse, MapRender, MarkerView, ViewMapType, } from '@master/shared-interfaces';
+import { MapApiHistoricalResponse, MapApiLatestResponse, MapApiReserveResponse, MapRender, MarkerView, ViewMapType, } from '@master/shared-interfaces';
 import * as L from 'leaflet';
 @Component({
   selector: 'reserve-map',
@@ -16,10 +16,14 @@ export class ReserveMapComponent implements OnInit, OnChanges {
   @Input() MarkerViewInput: MarkerView;
   @Input() ShowMarkers: boolean;
   @Input() ShowPolygon: boolean;
+  @Input() CurrentHistorical: MapApiHistoricalResponse | null = null;
+  @Input() HistoricalMode: boolean;
   private mainmap: any = null;
   private maptiles: any = null;
   private mapmarkers: Array<L.Marker<any>> = [];
   private mappolygons: L.Polygon | null = null;
+  private historicalpath: L.Polyline | null = null;
+  private historicalpoints: Array<L.LatLngExpression>=[];
 
   constructor() {
     //set default map options
@@ -28,6 +32,11 @@ export class ReserveMapComponent implements OnInit, OnChanges {
     this.MarkerViewInput = MarkerView.DEFAULT_MARKER;
     this.ShowMarkers = true;
     this.ShowPolygon = true;
+    this.HistoricalMode = false;
+  }
+
+  ngOnInit(): void {
+
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -64,10 +73,33 @@ export class ReserveMapComponent implements OnInit, OnChanges {
           this.hidepolygon();
         }
       }
+      else if (changes.hasOwnProperty("CurrentHistorical")) {
+
+      }
+      else if (changes.hasOwnProperty("ShowHistorical")) {
+
+      }
     }
 
   }
 
+  //MAP
+
+  private loadmap(): void {
+    if (this.Reserve?.data != null) {
+      if (this.mainmap != null) this.mainmap.remove();//if change to main map reload
+      this.mainmap = L.map('map', {
+        center: [
+          parseFloat(this.Reserve?.data?.center.latitude),
+          parseFloat(this.Reserve?.data?.center.longitude),
+        ],
+        zoom: 18,
+      });
+    }
+
+  }
+
+  //MAPTILES
 
   public loadmaptiles(): void {
     if (this.mainmap != null) {
@@ -91,7 +123,7 @@ export class ReserveMapComponent implements OnInit, OnChanges {
         this.maptiles = L.tileLayer(
           'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
           {
-            maxZoom: 22,
+            maxZoom: 19,
             minZoom: 2,
             attribution:
               'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
@@ -104,38 +136,7 @@ export class ReserveMapComponent implements OnInit, OnChanges {
   }
 
 
-  private loadmap(): void {
-    if (this.Reserve?.data != null) {
-      if (this.mainmap != null) this.mainmap.remove();//if change to main map reload
-      this.mainmap = L.map('map', {
-        center: [
-          parseFloat(this.Reserve?.data?.center.latitude),
-          parseFloat(this.Reserve?.data?.center.longitude),
-        ],
-        zoom: 19,
-      });
-    }
-  }
-
-  private showmarkers(): void {
-    this.mapmarkers.forEach((curr) => { curr.addTo(this.mainmap) })
-  }
-
-  private hidemarkers(): void {
-    this.mapmarkers.forEach((curr) => curr.remove());
-  }
-
-  public showpolygon(): void {
-    if (this.mappolygons != null) {
-      this.mappolygons.addTo(this.mainmap);
-    }
-  }
-
-  public hidepolygon(): void {
-    if (this.mappolygons != null) {
-      this.mappolygons.remove();
-    }
-  }
+  //POLYGONS
 
   public loadPolygons(): void {
     if (this.Reserve?.data != null) {
@@ -152,6 +153,20 @@ export class ReserveMapComponent implements OnInit, OnChanges {
     }
   }
 
+  public showpolygon(): void {
+    if (this.mappolygons != null) {
+      this.mappolygons.addTo(this.mainmap);
+    }
+  }
+
+  public hidepolygon(): void {
+    if (this.mappolygons != null) {
+      this.mappolygons.remove();
+    }
+  }
+
+
+  //MAP MARKERS
 
   //load the map markers
   private loadMarkers(): void {
@@ -179,8 +194,37 @@ export class ReserveMapComponent implements OnInit, OnChanges {
     }
   }
 
-  ngOnInit(): void {
-    // this.loadmap();
-    // this.loadMarkers();
+  private showmarkers(): void {
+    this.mapmarkers.forEach((curr) => { curr.addTo(this.mainmap) })
   }
+
+  private hidemarkers(): void {
+    this.mapmarkers.forEach((curr) => curr.remove());
+  }
+
+
+  //HISTORICAL
+
+  private loadHistorical(): void {
+    if (this.HistoricalMode && this.CurrentHistorical != null) {
+      this.historicalpath;
+    }
+  }
+
+  private updateHistoical(): void {
+    if(this.CurrentHistorical!=null && this.CurrentHistorical.data!=null){
+      this.historicalpoints=this.CurrentHistorical.data.map((val)=>[
+        
+      ]) as unknown as L.LatLngExpression[]
+    }
+  }
+
+  private showhistorical(): void {
+
+  }
+
+  private hidehistorical(): void {
+
+  }
+
 }
