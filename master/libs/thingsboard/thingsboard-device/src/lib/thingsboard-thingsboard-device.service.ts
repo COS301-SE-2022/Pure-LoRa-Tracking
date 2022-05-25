@@ -42,12 +42,32 @@ export class ThingsboardThingsboardDeviceService {
           profile : devices[i]['id']['entityType']
         }) 
       }
-        
-
       return list;
     }
 
-    
+    async createDevice(hardwareID: string, labelName: string, isGateway: boolean) : Promise<boolean> {
+      return false;
+    }
+
+    async assignDevicetoCustomer(custID : string, deviceID: string) : Promise<boolean> {
+      return false;
+    }
+
+    async getDeviceProfiles() {
+      return null;
+    }
+
+    processDeviceProfiles(profiles:any) : profileList[] {
+      return null;
+    }
+
+    async deleteDevice() : Promise<boolean> {
+      return false;
+    }
+
+    async removeDeviceFromCustomer(custID:string, deviceID:string) : Promise<boolean> {
+      return false;
+    }
 }
 
 export class deviceList {
@@ -55,4 +75,9 @@ export class deviceList {
   isGateway : boolean;
   name : string;
   profile : string;
+}
+
+export class profileList {
+  profileID : string;
+  profileName : string
 }
