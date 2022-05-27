@@ -22,6 +22,19 @@ export class ReserveMapComponent implements OnInit, OnChanges {
   private mapmarkers: Array<L.Marker<any>> = [];
   private mappolygons: L.Polygon | null = null;
   private historicalpath: Array<MapHistoricalPoints> = [];
+  private bluecirlceicon: L.Icon=new L.Icon({
+    iconUrl:"assets/MapIcons/BaseCircle.png",
+    iconSize:[20,20]
+  });
+  private starticon: L.Icon=new L.Icon({
+    iconUrl:"assets/MapIcons/StartCircle.png",
+    iconSize:[30,40]
+  });
+  private endicon: L.Icon=new L.Icon({
+    iconUrl:"assets/MapIcons/EndCircle.png",
+    iconSize:[30,40]
+  });
+
 
   constructor() {
     //set default map options
@@ -236,9 +249,22 @@ export class ReserveMapComponent implements OnInit, OnChanges {
       this.hidemarkers();
       this.HistoricalMode = true;
       //try just show one
-      if (historical.data != null) {
+      if (historical.data != null && historical.data.locations!=null) {
         // console.log(historical.data)
-        var current = L.polyline(historical.data.locations.map(val => [parseFloat(val.latitude), parseFloat(val.longitude)]) as unknown as L.LatLngExpression[], { "smoothFactor": 0.1 });
+        var current = L.polyline(historical.data.locations.map(val =>
+           [parseFloat(val.latitude), parseFloat(val.longitude)]) as unknown as L.LatLngExpression[], 
+           { "smoothFactor": 0.1 });
+        var markers=[];
+        var length=historical.data.locations.length;
+        historical.data.locations.forEach((val,i)=>{
+          let tempicon=this.bluecirlceicon;
+          if(i==0)tempicon=this.starticon;
+          else if(i==length-1)tempicon=this.endicon;
+
+          let temp=L.marker([parseFloat(val.latitude),parseFloat(val.longitude)],{icon:tempicon});
+          markers.push(temp);
+          temp.addTo(this.mainmap);
+        })
         var newpoint = {
           deviceID: historical.data?.deviceID,
           polyline: current,
