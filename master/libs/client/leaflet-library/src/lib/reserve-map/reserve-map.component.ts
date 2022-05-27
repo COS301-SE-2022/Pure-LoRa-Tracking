@@ -17,8 +17,8 @@ export class ReserveMapComponent implements OnInit, OnChanges {
   @Input() ShowMarkers: boolean;
   @Input() ShowPolygon: boolean;
   @Input() HistoricalMode: boolean;
-  private mainmap: any = null;
-  private maptiles: any = null;
+  public mainmap: any = null;
+  public maptiles: any = null;
   private mapmarkers: Array<L.Marker<any>> = [];
   private mappolygons: L.Polygon | null = null;
   private historicalpath: Array<MapHistoricalPoints> = [];
@@ -97,7 +97,7 @@ export class ReserveMapComponent implements OnInit, OnChanges {
 
   //MAP
 
-  private loadmap(): void {
+  public loadmap(): void {
     if (this.Reserve?.data != null) {
       if (this.mainmap != null) this.mainmap.remove();//if change to main map reload
       this.mainmap = L.map('map', {
@@ -144,7 +144,6 @@ export class ReserveMapComponent implements OnInit, OnChanges {
       }
       this.maptiles.addTo(this.mainmap);
     }
-    console.log(this.mainmap);
   }
 
 
