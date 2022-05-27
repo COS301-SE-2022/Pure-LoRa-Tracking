@@ -1,23 +1,23 @@
 export interface MapApiLatest {
-    token : string,
-    reserveID : string
+    token: string,
+    reserveID: string
 }
 
 export interface MapApiReserve {
-    token : string,
-    reserveID : string,
-    options : {
-        items : ""
+    token: string,
+    reserveID: string,
+    options: {
+        items: ""
     }
 }
 
 //if timestamp left empty give the upper/lower limit
 export interface MapApiHistorical {
-    token : string,
-    reserveID : string,
-    deviceID: string[],
+    token: string,
+    reserveID: string,
+    deviceID: string,
     startTime?: number,
-    endTime?:number
+    endTime?: number
 }
 
 // enum sortHistorical {
@@ -26,55 +26,63 @@ export interface MapApiHistorical {
 // }
 
 export interface MapApiLatestResponse {
-    code : number,
-    status : string,
-    explanation : string,
-    data? : Device[]
+    code: number,
+    status: string,
+    explanation: string,
+    data?: Device[]
 }
 
 interface Device {
-        deviceID : string,
-        deviceName: string,
-        type : string,
-        locationData : {
-            timeStamp:number,
-            location : {
-                latitude : string,
-                longitude : string
-            }
+    deviceID: string,
+    deviceName: string,
+    type: string,
+    locationData: {
+        timeStamp: number,
+        location: {
+            latitude: string,
+            longitude: string
         }
-}
-
-export interface MapApiReserveResponse {
-    code : number,
-    status : string,
-    explanation : string,
-    data? : {
-        reserveName : string,
-        center : {
-            latitude : string,
-            longitude : string
-        },
-        location :
-            {
-                latitude : string,
-                longitude : string
-            } []
     }
 }
 
-export interface MapApiHistoricalResponse {
-    code : number,
-    status : string,
-    explanation : string,
-    data? : {
-        deviceID : string,
-        locations :
-            {
-                timestamp : number,
-                latitude : string,
-                longitude : string
-            } []
-    } []
+export interface MapApiReserveResponse {
+    code: number,
+    status: string,
+    explanation: string,
+    data?: {
+        reserveName: string,
+        center: {
+            latitude: string,
+            longitude: string
+        },
+        location:
+        {
+            latitude: string,
+            longitude: string
+        }[]
+    }
 }
 
+
+export interface MapApiHistoricalResponse {
+    code: number,
+    status: string,
+    explanation: string,
+    data?: MapApiHistoricalData
+}
+
+export interface MapApiHistoricalData {
+    deviceID: string,
+        locations:
+        {
+            timestamp: number,
+            latitude: string,
+            longitude: string
+        }[]
+}
+
+export interface MapHistoricalPoints{
+    deviceID:string,
+    polyline:L.Polyline,
+    markers:L.Marker[]
+}

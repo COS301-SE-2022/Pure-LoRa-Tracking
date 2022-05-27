@@ -26,5 +26,13 @@ export class MapCallerService {
     });
   }
 
+  async getHistorical(token:string,reserveID:string,deviceID:string):Promise<any>{
+    return new Promise((res,rej)=>{
+      this.http.post("/api/map/historical",{"token":token,"reserveID":reserveID,"deviceID":deviceID}).subscribe(val=>{
+        res(val)  
+      });
+    })
+  }
+
 
 }
