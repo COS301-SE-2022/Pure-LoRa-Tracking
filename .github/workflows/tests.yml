@@ -3,9 +3,9 @@ name: StaticTests
 # Controls when the workflow will run
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ master, dev ]
   pull_request:
-    branches: [ main, develop ]
+    branches: [ master, dev ]
 
   # Allows running this workflow manually
   workflow_dispatch:
@@ -17,8 +17,36 @@ jobs:
 
     # sequence of tasks that will be executed as part of the job
     steps:
-      
+
+      #Check out to the develop branch
+      - name: Checkout dev
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      #Install node.js
+      - name: Use Node.js 16
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+        
+      #Install yarn
+      - name: Install yarn
+        run: npm install yarn -g
+
+      #Install required packages
+      - name: Install packages
+        working-directory: ./master/
+        run: yarn install --frozen-lockfile
+
+      #Run tests on the entire repository
+      - name: Test
+        working-directory: ./master/
+        run: |
+          yarn nx run-many --target=test --all --skip-nx-cache --parallel --coverage
+        
       - name: Codecov
         uses: codecov/codecov-action@v3.1.0
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ./master/coverage/

@@ -1,0 +1,41 @@
+{
+  "projectType": "library",
+  "sourceRoot": "libs/client/leaflet-library/src",
+  "prefix": "master",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:ng-packagr-lite",
+      "outputs": ["dist/libs/client/leaflet-library"],
+      "options": {
+        "project": "libs/client/leaflet-library/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/client/leaflet-library/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/client/leaflet-library/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/client/leaflet-library"],
+      "options": {
+        "jestConfig": "libs/client/leaflet-library/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/client/leaflet-library/**/*.ts",
+          "libs/client/leaflet-library/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

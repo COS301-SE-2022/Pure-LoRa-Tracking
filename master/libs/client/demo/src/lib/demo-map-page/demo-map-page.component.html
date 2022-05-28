@@ -1,0 +1,54 @@
+<div class="map" *ngIf="Reserve">
+  <reserve-map
+    #reservemap
+    class="map"
+    [Reserve]="Reserve"
+    [Latest]="Latest"
+    [MapRenderInput]="MapRenderInput"
+    [ViewMapTypeInput]="ViewMapTypeInput"
+    [ShowMarkers]="ShowMarkers"
+    [ShowPolygon]="ShowPolygon"
+  ></reserve-map>
+  
+  <select class="selectbox" #current (change)="updateMapView(current.value)">
+    <option value="normal">Normal</option>
+    <option value="esri">ESRI Satalite View</option>
+  </select>
+  <div class="markers">
+    <label for="markers">Show markers</label>
+    <input
+    type="checkbox"
+    name="markers"
+    id="markers"
+    #markers
+    (change)="updateMarkerView(markers.checked)"
+    checked="checked"
+    />
+    <label for="polygon">Show polyygon</label>
+    <input
+    type="checkbox"
+    name="polygon"
+    id="polygon"
+    #polygon
+    (change)="updatePolygonView(polygon.checked)"
+    checked="checked"
+    /> 
+  </div>
+
+  
+  
+</div>
+<ul *ngIf="Latest" class="devices">
+  <li *ngFor="let i of Latest.data">
+    <div *ngIf="!HistoricalLoading">
+      <button *ngIf="!HistoricalView.includes(i.deviceID); else hidebutton" (click)="viewhistorical(i.deviceID)">View</button>
+      <ng-template #hidebutton><button (click)="hidehistorical(i.deviceID)">Hide</button></ng-template>
+    </div>
+    <div *ngIf="HistoricalLoading">
+      <i>Loading please wait</i>
+    </div>
+    
+    {{i.deviceID}}
+    
+  </li>
+</ul>

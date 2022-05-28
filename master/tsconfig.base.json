@@ -17,9 +17,34 @@
     "paths": {
       "@lora/api/mapEndpoint": ["libs/api/map-endpoint/src/index.ts"],
       "@lora/apiRouter": ["libs/api/api-router/src/index.ts"],
+      "@lora/database": ["libs/database-proxy/src/index.ts"],
       "@lora/hardware-debug": ["libs/api/hardware-debug/src/index.ts"],
-      "@lora/thingsboard-user": ["libs/server/thingsboard-user/src/index.ts"],
-      "@master/api-interfaces": ["libs/api-interfaces/src/index.ts"]
+      "@lora/thingsboard-client": [
+        "libs/thingsboard/thingsboard-client/src/index.ts"
+      ],
+      "@lora/thingsboard-device": [
+        "libs/thingsboard/thingsboard-device/src/index.ts"
+      ],
+      "@lora/thingsboard-interfaces": [
+        "libs/thingsboard/thingsboard-interfaces/src/index.ts"
+      ],
+      "@lora/thingsboard-telemetry": [
+        "libs/thingsboard/thingsboard-telemetry/src/index.ts"
+      ],
+      "@lora/thingsboard-user": [
+        "libs/thingsboard/thingsboard-user/src/index.ts"
+      ],
+      "@master/api-interfaces": ["libs/api-interfaces/src/index.ts"],
+      "@master/client/apiservice": ["libs/client/apiservice/src/index.ts"],
+      "@master/client/defaultpage": ["libs/client/defaultpage/src/index.ts"],
+      "@master/client/demo": ["libs/client/demo/src/index.ts"],
+      "@master/client/leaflet-library": [
+        "libs/client/leaflet-library/src/index.ts"
+      ],
+      "@master/client/map-apicaller": [
+        "libs/client/map-apicaller/src/index.ts"
+      ],
+      "@master/shared-interfaces": ["libs/shared-interfaces/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
