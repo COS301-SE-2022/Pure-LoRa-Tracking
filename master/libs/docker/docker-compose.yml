@@ -6,6 +6,13 @@
 #  - Look at kubernetes
 
 services:
+  # MongoDB for our server
+  mongodb:
+  image: mongo:5.0
+  environment:
+    - MONGO_INITDB_ROOT_USERNAME=AzureDiamond
+    - MONGO_INITDB_ROOT_PASSWORD=hunter2
+
   # Chirpstack
   postgresql:
       image: postgres:9.6-alpine
