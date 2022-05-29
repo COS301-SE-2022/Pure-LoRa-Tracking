@@ -6,14 +6,21 @@
 #  - Look at kubernetes
 
 services:
+  # MongoDB for our server
+  mongodb:
+    image: mongo:5.0
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=AzureDiamond
+      - MONGO_INITDB_ROOT_PASSWORD=hunter2
+
   # Chirpstack
   postgresql:
-      image: postgres:9.6-alpine
-      environment:
-        - POSTGRES_PASSWORD=root 
-      volumes:
-        - ./configs/postgreSQL:/docker-entrypoint-initdb.d # configs scripts for setup
-        - postgresqldata:/var/lib/postgresql/data # persistence
+    image: postgres:9.6-alpine
+    environment:
+      - POSTGRES_PASSWORD=root 
+    volumes:
+      - ./configs/postgreSQL:/docker-entrypoint-initdb.d # configs scripts for setup
+      - postgresqldata:/var/lib/postgresql/data # persistence
 
   redis:
     image: redis:5-alpine
@@ -76,8 +83,8 @@ services:
     volumes:
       - ~/.mytb-data:/data
       - ~/.mytb-logs:/var/log/thingsboard
-    networks:
-      - thingsboards
+#    networks:
+#      - thingsboards
 
   # GLOBAL
 
