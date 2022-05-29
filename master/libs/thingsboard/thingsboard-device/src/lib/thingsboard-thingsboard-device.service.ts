@@ -142,12 +142,30 @@ export class ThingsboardThingsboardDeviceService {
     })
   return resp.status == 200;
   }
-  //Ted.
+  
   async removeDeviceFromCustomer(
     custID: string,
     deviceID: string
   ): Promise<boolean> {
-    return false;
+    if (this.token == '') return false;
+    const url = this.baseURL +
+      "customer/device/" +
+      deviceID;
+
+    const headersReq = {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + this.token,
+    };
+
+    const resp = await lastValueFrom(this.httpService.delete(url, { headers: headersReq })).catch((error) => {
+      if (error.response == undefined)
+        return null;
+      if (error.response.status == 400) {
+        return { status: 400 }
+      }
+    });
+
+    return resp.status == 200;
   }
 }
 
