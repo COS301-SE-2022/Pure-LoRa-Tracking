@@ -40,7 +40,7 @@ jobs:
         working-directory: ./master/
         run: yarn install --frozen-lockfile
 
-      run docker
+      # run docker
       - name: Start containers
         working-directory: ./master/
         # run: yarn nx run docker
