@@ -40,9 +40,17 @@ describe('ThingsboardThingsboardDeviceService', () => {
     expect(await service.createDevice('123', 'testingSensor', false)).toEqual(true);*/
   })
 
-  it('should delete te target device and return status 200', async()=> {
+  it('should delete the target device and return status 200', async()=> {
     /*const data = await loginService.login(username, password);
     service.setToken(data['data']['token']);
+    expect(await service.deleteDevice("8e4fcc90-dc0e-11ec-931b-3544ea43758e")).toEqual(true);*/
+  })
+
+  it('should assign the specified device to the specified customer and return status 200', async () => {
+    /*const data = await loginService.login(username, password);
+    service.setToken(data['data']['token']);
+    const custID = userinfo['data']['customerId']['id'];
+    expect(custID).toBeDefined();
     expect(await service.deleteDevice("8e4fcc90-dc0e-11ec-931b-3544ea43758e")).toEqual(true);*/
   })
 });
