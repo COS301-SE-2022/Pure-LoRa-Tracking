@@ -13,6 +13,7 @@ on:
 
 jobs:
   test:
+    timeout-minutes: 10
     runs-on: ubuntu-latest
 
     # sequence of tasks that will be executed as part of the job
@@ -39,12 +40,29 @@ jobs:
         working-directory: ./master/
         run: yarn install --frozen-lockfile
 
+      run docker
+      - name: Start containers
+        working-directory: ./master/
+        # run: yarn nx run docker
+        run: docker compose -f libs/docker/docker-compose.yml up -d
+
+      - name: Wait for containers startup
+        run: sleep 2m
+        shell: bash
+
       #Run tests on the entire repository
       - name: Test
         working-directory: ./master/
         run: |
+          yarn nx run-many --target=lint --all --skip-nx-cache --parallel
+          yarn nx run-many --target=build --all --skip-nx-cache --parallel
           yarn nx run-many --target=test --all --skip-nx-cache --parallel --coverage
-        
+          # yarn nx run-many --target=e2e --all --skip-nx-cache --parallel --coverage
+          
+      - name: Kill containers
+        if: always()
+        run: docker compose -f libs/docker/docker-compose.yml down
+
       - name: Codecov
         uses: codecov/codecov-action@v3.1.0
         with:
