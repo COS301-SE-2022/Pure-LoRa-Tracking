@@ -53,4 +53,12 @@ describe('ThingsboardThingsboardDeviceService', () => {
     expect(custID).toBeDefined();
     expect(await service.deleteDevice("8e4fcc90-dc0e-11ec-931b-3544ea43758e")).toEqual(true);*/
   })
+
+  it('should unassign the specified device from the specified customer and return status 200', async () => {
+    /*const data = await loginService.login(username, password);
+    service.setToken(data['data']['token']);
+    const custID = userinfo['data']['customerId']['id'];
+    expect(custID).toBeDefined();
+    expect(await service.deleteDevice("8e4fcc90-dc0e-11ec-931b-3544ea43758e")).toEqual(true);*/
+  })
 });
