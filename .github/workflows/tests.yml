@@ -60,6 +60,7 @@ jobs:
           # yarn nx run-many --target=e2e --all --skip-nx-cache --parallel --coverage
           
       - name: Kill containers
+        working-directory: ./master/
         if: always()
         run: docker compose -f libs/docker/docker-compose.yml down
 
