@@ -92,7 +92,33 @@ export class ThingsboardThingsboardDeviceService {
     custID: string,
     deviceID: string
   ): Promise<boolean> {
-    return false;
+    if (this.token == '') return false;
+    const url = this.baseURL +
+      "customer/" +
+      custID +
+      "/device/" +
+      deviceID;
+
+    const headersReq = {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + this.token,
+    };
+
+    const resp = await lastValueFrom(this.httpService.post(url,
+      {
+        "customerId": "",
+        "deviceId": ""
+      },
+      { headers: headersReq }
+    )).catch((error) => {
+      if (error.response == undefined)
+        return null;
+      if (error.response.status == 400) {
+        return { status: 400 }
+      }
+    });
+
+    return resp.status == 200;
   }
 
   async getDeviceProfiles() {
@@ -122,12 +148,29 @@ export class ThingsboardThingsboardDeviceService {
     })
   return resp.status == 200;
   }
-
+  
   async removeDeviceFromCustomer(
-    custID: string,
     deviceID: string
   ): Promise<boolean> {
-    return false;
+    if (this.token == '') return false;
+    const url = this.baseURL +
+      "customer/device/" +
+      deviceID;
+
+    const headersReq = {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + this.token,
+    };
+
+    const resp = await lastValueFrom(this.httpService.delete(url, { headers: headersReq })).catch((error) => {
+      if (error.response == undefined)
+        return null;
+      if (error.response.status == 400) {
+        return { status: 400 }
+      }
+    });
+
+    return resp.status == 200;
   }
 }
 
