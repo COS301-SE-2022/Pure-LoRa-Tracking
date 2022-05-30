@@ -104,13 +104,23 @@ export class ThingsboardThingsboardDeviceService {
       Authorization: 'Bearer ' + this.token,
     };
 
-    const resp = await lastValueFrom(this.httpService.post(url, { headers: headersReq })).catch((error) => {
+    console.log(url);
+
+    const resp = await lastValueFrom(this.httpService.post(url,
+      {
+        "customerId": "",
+        "deviceId": ""
+      },
+      { headers: headersReq }
+    )).catch((error) => {
       if (error.response == undefined)
         return null;
       if (error.response.status == 400) {
         return { status: 400 }
       }
     });
+
+    console.log(resp);
 
     return resp.status == 200;
   }
@@ -144,7 +154,6 @@ export class ThingsboardThingsboardDeviceService {
   }
   
   async removeDeviceFromCustomer(
-    custID: string,
     deviceID: string
   ): Promise<boolean> {
     if (this.token == '') return false;
