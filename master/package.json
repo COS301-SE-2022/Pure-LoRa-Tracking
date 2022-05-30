@@ -31,7 +31,6 @@
     "cors": "^2.8.5",
     "leaflet": "^1.8.0",
     "mongoose": "^6.3.4",
-    "docker": "^1.0.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "~7.4.0",
     "tslib": "^2.0.0",
