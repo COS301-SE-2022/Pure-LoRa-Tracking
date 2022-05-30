@@ -51,7 +51,6 @@ describe('ThingsboardThingsboardDeviceService', () => {
     service.setToken(data['data']['token']);
     const userinfo = await loginService.userInfo(data['data']['token']);
     const custID = userinfo['data']['customerId']['id'];
-    console.log(custID);
     expect(custID).toBeDefined();
     expect(await service.assignDevicetoCustomer("9fed2a30-dfa9-11ec-b99c-f7477a3db362", "7beb3910-df9f-11ec-b124-d5b7f09de50f")).toEqual(true);*/
   })
