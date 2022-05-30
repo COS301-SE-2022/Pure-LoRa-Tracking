@@ -104,8 +104,6 @@ export class ThingsboardThingsboardDeviceService {
       Authorization: 'Bearer ' + this.token,
     };
 
-    console.log(url);
-
     const resp = await lastValueFrom(this.httpService.post(url,
       {
         "customerId": "",
@@ -119,8 +117,6 @@ export class ThingsboardThingsboardDeviceService {
         return { status: 400 }
       }
     });
-
-    console.log(resp);
 
     return resp.status == 200;
   }
