@@ -1,8 +1,6 @@
 import { Test } from '@nestjs/testing';
 import { ChirpstackChirpstackSensorService } from './chirpstack-chirpstack-sensor.service';
-// import {Metadata} from '@grpc/grpc-js/src/metadata';
-// import {Metadata} from '@grpc/grpc-js';
-// import { DeviceServiceClient } from '@chirpstack/chirpstack-api/as/external/api/device_grpc_pb';
+import * as deviceMessages from '@chirpstack/chirpstack-api/as/external/api/device_pb';
 
 
 describe('ChirpstackChirpstackSensorService', () => {
@@ -22,13 +20,12 @@ describe('ChirpstackChirpstackSensorService', () => {
     expect(service).toBeTruthy();
   });
 
-  test('it should run', done => {
-    const getAttributeMock = jest.fn((error, data) => {
-      console.log(data);
-      done();
-    });
+  it('it should run', async() => {
+
     const authtoken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5X2lkIjoiMWIwMmZhNDAtMzI4OS00NzllLWI2NjUtM2MwMzg4YmEzZDRmIiwiYXVkIjoiYXMiLCJpc3MiOiJhcyIsIm5iZiI6MTY1Mzg1MDYwNywic3ViIjoiYXBpX2tleSJ9.epxodFKkLwrvinNBVgo0r9k4PWLxumzAGw61oKrTMrI';
-    service.list_devices(getAttributeMock, authtoken);
+    const data = await service.list_devices(authtoken);
+    console.log(data);
+    expect(data).toBeInstanceOf(deviceMessages.ListDeviceResponse);
     // expect(getAttributeMock).toHaveBeenCalled();
   });
   
