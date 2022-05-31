@@ -23,7 +23,7 @@ describe('ChirpstackChirpstackSensorService', () => {
   });
 
   describe('list_devices', () =>{
-    it('it should list devices', async () => {
+    it('it should list devices', async() => {
       const data = await service.list_devices(authtoken);
       console.log(data);
       expect(data).toBeInstanceOf(deviceMessages.ListDeviceResponse);
@@ -31,7 +31,7 @@ describe('ChirpstackChirpstackSensorService', () => {
       
   });
   describe('get_profiles', () => {
-    it('it should get device profiles', async () => {
+    it('it should get device profiles', async() => {
       const data = await service.get_profiles(authtoken);
       console.log(data);
 
@@ -39,5 +39,33 @@ describe('ChirpstackChirpstackSensorService', () => {
       
     });
   });
-  
+
+    describe('add_device', () => {
+      //tests will only work if thingsboard is already configured
+
+      // it('it should add a device', async() => {
+      //   const data = await service.add_device(
+      //     authtoken,
+      //     'test',
+      //     '70b3d5000000000b',
+      //     'cb71e932-cd57-44a0-b5ab-aebb6b377541'
+      //   );
+      //   console.log(data);
+
+      //   expect(data).toBeDefined();
+      // });
+
+      // it('it should give ALREADY_EXISTS error', async() => {
+      //   // https://grpc.github.io/grpc/core/md_doc_statuscodes.html || https://developers.google.com/maps-booking/reference/grpc-api/status_codes
+      //   await expect(
+      //     service.add_device(
+      //       authtoken,
+      //       'test_',
+      //       '70b3d5000000000b',
+      //       'cb71e932-cd57-44a0-b5ab-aebb6b377541'
+      //     )
+      //   ).rejects.toThrow('6 ALREADY_EXISTS: object already exists');
+      // });
+    });
+
 });
