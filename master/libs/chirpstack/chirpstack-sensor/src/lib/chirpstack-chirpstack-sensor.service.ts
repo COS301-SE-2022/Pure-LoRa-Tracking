@@ -43,9 +43,7 @@ export class ChirpstackChirpstackSensorService {
     this.metadata = new grpc.Metadata();
   }
 
-  async list_devices(
-    authtoken: string
-  ): Promise<deviceMessages.ListDeviceResponse> {
+  async list_devices(authtoken: string): Promise<deviceMessages.ListDeviceResponse> {
     return new Promise((res, rej) => {
       this.metadata.set('authorization', 'Bearer ' + authtoken);
       const listDeviceRequest = new deviceMessages.ListDeviceRequest();
@@ -82,6 +80,30 @@ export class ChirpstackChirpstackSensorService {
           } else rej(error);
         }
       );
+    });
+  }
+
+  async add_device(authtoken: string, devName: string ,devEUI: string, deviceProfileId: string, deviceDesc = 'General device', deviceAppl = 1) {
+    return new Promise((res, rej) => {
+      this.metadata.set('authorization', 'Bearer ' + authtoken);
+      const listDeviceRequest = new deviceMessages.CreateDeviceRequest();
+      const device = new deviceMessages.Device();
+      device.setName(devName);
+      device.setDevEui(devEUI);
+      device.setDescription(deviceDesc)
+      device.setDeviceProfileId(deviceProfileId)
+      device.setApplicationId(deviceAppl)
+      
+      listDeviceRequest.setDevice(device);
+      this.deviceServiceClient.create(
+        listDeviceRequest,
+        this.metadata,
+        (error, data) => {
+          if (data) res(data);
+          else rej(error);
+        }
+      );
+
     });
   }
 
