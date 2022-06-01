@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotImplementedException } from '@nestjs/common';
 import { ThingsboardThingsboardUserService } from '@lora/thingsboard-user';
 import { ThingsboardThingsboardTelemetryService } from '@lora/thingsboard-telemetry';
 import { ThingsboardThingsboardDeviceService } from '@lora/thingsboard-device';
@@ -32,6 +32,6 @@ export class ThingsboardThingsboardClientService {
     }
 
     async getDeviceTelemetry(DeviceID: string) : Promise<any> {
-        
+        throw NotImplementedException
     }
 }
