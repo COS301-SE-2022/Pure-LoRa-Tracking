@@ -4,7 +4,7 @@ import { ThingsboardThingsboardTelemetryService } from './thingsboard-thingsboar
 import { ThingsboardThingsboardUserModule, ThingsboardThingsboardUserService } from '@lora/thingsboard-user';
 import { ThingsboardThingsboardDeviceModule, ThingsboardThingsboardDeviceService } from '@lora/thingsboard-device';
 
-describe('ThingsboardThingsboardTelemetryService', () => {
+/*describe('ThingsboardThingsboardTelemetryService', () => {
   let service: ThingsboardThingsboardTelemetryService;
   let deviceService : ThingsboardThingsboardDeviceService;
   let userService : ThingsboardThingsboardUserService;
@@ -26,18 +26,10 @@ describe('ThingsboardThingsboardTelemetryService', () => {
   });
 
   it('should get telemetry and return 200 - OK', async() => {
-    /*const data = await userService.login(username, password);
-    deviceService.setToken(data['data']['token']);
+    const data = await userService.login(username, password);
     service.setToken(data['data']['token']);
-    const userinfo = await userService.userInfo(data['data']['token']);
-    const custID = userinfo['data']['customerId']['id'];
-    const DeviceData = await deviceService.getCustomerDevices(0, 5, custID);
-    const devices = deviceService.processDevices(DeviceData['data']['data']);
-    devices.forEach(async item => {
-      const resp = await service.getTelemetry(item['deviceID'], item['profile']);
-      console.log(resp['data']);
-      expect(resp).toBeDefined();
-    });*/
+    console.log(await service.getTelemetry("25c31a40-dfe9-11ec-bdb3-750ce7ed2451", "DEVICE", 0, 1654072587463));
+    
   })
 
   it('should send the telemetry and respond with status 200 - OK', ()=> {
@@ -45,6 +37,9 @@ describe('ThingsboardThingsboardTelemetryService', () => {
       //console.log(resp.status);
       expect(resp.status).toEqual(200)
     });*/
-  })
+ /* })
 
-});
+});*/
+
+/*jest.mock('HttpModule');*/
+
