@@ -43,12 +43,16 @@ export class ChirpstackChirpstackSensorService {
     this.metadata = new grpc.Metadata();
   }
 
-  async list_devices(authtoken: string): Promise<deviceMessages.ListDeviceResponse> {
+  async listDevices(
+    authtoken: string
+  ): Promise<deviceMessages.ListDeviceResponse> {
+    this.metadata.set('authorization', 'Bearer ' + authtoken);
+
+    const listDeviceRequest = new deviceMessages.ListDeviceRequest();
+    listDeviceRequest.setLimit(1000);
+    listDeviceRequest.setApplicationId(1);
+
     return new Promise((res, rej) => {
-      this.metadata.set('authorization', 'Bearer ' + authtoken);
-      const listDeviceRequest = new deviceMessages.ListDeviceRequest();
-      listDeviceRequest.setLimit(1000);
-      listDeviceRequest.setApplicationId(1);
       this.deviceServiceClient.list(
         listDeviceRequest,
         this.metadata,
@@ -60,12 +64,14 @@ export class ChirpstackChirpstackSensorService {
     });
   }
 
-  async get_profiles(authtoken: string): Promise<Record<string, string>> {
+  async getProfiles(authtoken: string): Promise<Record<string, string>> {
+    this.metadata.set('authorization', 'Bearer ' + authtoken);
+
+    const listDeviceProfileRequest = new ListDeviceProfileRequest();
+    listDeviceProfileRequest.setLimit(1000);
+    listDeviceProfileRequest.setApplicationId(1);
+
     return new Promise((res, rej) => {
-      this.metadata.set('authorization', 'Bearer ' + authtoken);
-      const listDeviceProfileRequest = new ListDeviceProfileRequest();
-      listDeviceProfileRequest.setLimit(1000);
-      listDeviceProfileRequest.setApplicationId(1);
       this.deviceProfileServiceClient.list(
         listDeviceProfileRequest,
         this.metadata,
@@ -83,28 +89,56 @@ export class ChirpstackChirpstackSensorService {
     });
   }
 
-  async add_device(authtoken: string, devName: string ,devEUI: string, deviceProfileId: string, deviceDesc = 'General device', deviceAppl = 1) {
+  async addDevice(
+    authtoken: string,
+    thingsBoardDeviceToken: string,
+    devName: string,
+    devEUI: string,
+    deviceProfileId: string,
+    deviceDesc = 'General device',
+    deviceAppl = 1
+  ) {
+    this.metadata.set('authorization', 'Bearer ' + authtoken);
+
+    const createDeviceRequest = new deviceMessages.CreateDeviceRequest();
+    const device = new deviceMessages.Device();
+    device.setName(devName);
+    device.setDevEui(devEUI);
+    device.setDescription(deviceDesc);
+    device.setDeviceProfileId(deviceProfileId);
+    device.setApplicationId(deviceAppl);
+    // set thingsBoardDeviceToken as a variable on the chirpstack "device" to identify it when data is received
+    const deviceVariables = device.getVariablesMap();
+    deviceVariables.set('ThingsBoardAccessToken', thingsBoardDeviceToken);
+    createDeviceRequest.setDevice(device);
+
     return new Promise((res, rej) => {
-      this.metadata.set('authorization', 'Bearer ' + authtoken);
-      const listDeviceRequest = new deviceMessages.CreateDeviceRequest();
-      const device = new deviceMessages.Device();
-      device.setName(devName);
-      device.setDevEui(devEUI);
-      device.setDescription(deviceDesc)
-      device.setDeviceProfileId(deviceProfileId)
-      device.setApplicationId(deviceAppl)
-      
-      listDeviceRequest.setDevice(device);
       this.deviceServiceClient.create(
-        listDeviceRequest,
+        createDeviceRequest,
         this.metadata,
         (error, data) => {
           if (data) res(data);
           else rej(error);
         }
       );
-
     });
   }
 
+  async removeDevice(authtoken: string, devEUI: string) {
+    this.metadata.set('authorization', 'Bearer ' + authtoken);
+
+    const deleteDeviceRequest = new deviceMessages.DeleteDeviceRequest();
+    deleteDeviceRequest.setDevEui(devEUI);
+
+    return new Promise((res, rej) => {
+      this.deviceServiceClient.delete(
+        deleteDeviceRequest,
+        this.metadata,
+        (error, data) => {
+          if (data) res(data);
+          else rej(error);
+        }
+      );
+    });
+  }
 }

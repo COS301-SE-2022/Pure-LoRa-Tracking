@@ -2,6 +2,7 @@ import { Test } from '@nestjs/testing';
 import { ChirpstackChirpstackSensorService } from './chirpstack-chirpstack-sensor.service';
 import * as deviceMessages from '@chirpstack/chirpstack-api/as/external/api/device_pb';
 import { ListDeviceProfileResponse } from '@chirpstack/chirpstack-api/as/external/api/deviceProfile_pb';
+import { Empty } from 'google-protobuf/google/protobuf/empty_pb';
 
 describe('ChirpstackChirpstackSensorService', () => {
   let service: ChirpstackChirpstackSensorService;
@@ -24,7 +25,7 @@ describe('ChirpstackChirpstackSensorService', () => {
 
   describe('list_devices', () =>{
     it('it should list devices', async() => {
-      const data = await service.list_devices(authtoken);
+      const data = await service.listDevices(authtoken);
       console.log(data);
       expect(data).toBeInstanceOf(deviceMessages.ListDeviceResponse);
     });
@@ -32,7 +33,7 @@ describe('ChirpstackChirpstackSensorService', () => {
   });
   describe('get_profiles', () => {
     it('it should get device profiles', async() => {
-      const data = await service.get_profiles(authtoken);
+      const data = await service.getProfiles(authtoken);
       console.log(data);
 
       expect(data).toBeDefined();
@@ -40,32 +41,45 @@ describe('ChirpstackChirpstackSensorService', () => {
     });
   });
 
-    describe('add_device', () => {
-      //tests will only work if thingsboard is already configured
+  describe('add/remove devices', () => {
+    //tests will only work if thingsboard is already configured
+    
+    it('it should add a device', async() => {
+      // const data = await service.addDevice(
+      //   authtoken,
+      //   'test_token',
+      //   'test',
+      //   '70b3d5000000000b',
+      //   'cb71e932-cd57-44a0-b5ab-aebb6b377541'
+      // );
+      // console.log(data);
 
-      // it('it should add a device', async() => {
-      //   const data = await service.add_device(
+      // expect(data).toBeDefined();
+    });
+
+    it('it should give ALREADY_EXISTS error', async() => {
+      // https://grpc.github.io/grpc/core/md_doc_statuscodes.html || https://developers.google.com/maps-booking/reference/grpc-api/status_codes
+      // await expect(
+      //   service.addDevice(
       //     authtoken,
-      //     'test',
+      //     'test_token',
+      //     'test_',
       //     '70b3d5000000000b',
       //     'cb71e932-cd57-44a0-b5ab-aebb6b377541'
-      //   );
-      //   console.log(data);
-
-      //   expect(data).toBeDefined();
-      // });
-
-      // it('it should give ALREADY_EXISTS error', async() => {
-      //   // https://grpc.github.io/grpc/core/md_doc_statuscodes.html || https://developers.google.com/maps-booking/reference/grpc-api/status_codes
-      //   await expect(
-      //     service.add_device(
-      //       authtoken,
-      //       'test_',
-      //       '70b3d5000000000b',
-      //       'cb71e932-cd57-44a0-b5ab-aebb6b377541'
-      //     )
-      //   ).rejects.toThrow('6 ALREADY_EXISTS: object already exists');
-      // });
+      //   )
+      // ).rejects.toThrow('6 ALREADY_EXISTS: object already exists');
     });
+
+    it('it should remove a devices', async () => {
+      // const data = await service.removeDevice(
+      //   authtoken,
+      //   '70b3d5000000000b'
+      // );
+      // console.log(data);
+
+      // expect(data).toBeInstanceOf(Empty);
+    });
+
+  });
 
 });
