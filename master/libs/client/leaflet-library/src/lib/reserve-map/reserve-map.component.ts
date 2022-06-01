@@ -3,7 +3,7 @@ import { Component, OnInit, Input, OnChanges, SimpleChanges, } from '@angular/co
 import { MapApiHistoricalResponse, MapApiLatestResponse, MapApiReserveResponse, MapHistoricalPoints, MapRender, MarkerView, ViewMapType, } from '@master/shared-interfaces';
 import * as L from 'leaflet';
 @Component({
-  selector: 'reserve-map',
+  selector: 'master-reserve-map',
   templateUrl: './reserve-map.component.html',
   styleUrls: ['./reserve-map.component.scss'],
 })
@@ -47,13 +47,13 @@ export class ReserveMapComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-
+    console.log("Component loaded");
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     // console.log(changes);
     //assume that if reserve is changed, reload everything
-    if (changes.hasOwnProperty("Reserve")) {
+    if (Object.prototype.hasOwnProperty.call(changes,"Reserve")) {
       this.loadmap();
       this.loadmaptiles();
       this.loadMarkers();//maybe remove for double call
@@ -64,32 +64,26 @@ export class ReserveMapComponent implements OnInit, OnChanges {
     else {
       //using else if as these are single changes
 
-      if (changes.hasOwnProperty("Latest")) {
+      if (Object.prototype.hasOwnProperty.call(changes,"Lastest")) {
         this.loadMarkers();
         this.showmarkers();
       }
-      else if (changes.hasOwnProperty("ViewMapTypeInput")) {
+      else if (Object.prototype.hasOwnProperty.call(changes,"ViewMapTypeInput")) {
         this.loadmaptiles();
       }
-      else if (changes.hasOwnProperty("ShowMarkers")) {
+      else if (Object.prototype.hasOwnProperty.call(changes,"ShowMarkers")) {
         if (this.ShowMarkers) {
           this.showmarkers();
         } else {
           this.hidemarkers();
         }
       }
-      else if (changes.hasOwnProperty("ShowPolygon")) {
+      else if (Object.prototype.hasOwnProperty.call(changes,"ShowPolygon")) {
         if (this.ShowPolygon) {
           this.showpolygon();
         } else {
           this.hidepolygon();
         }
-      }
-      else if (changes.hasOwnProperty("CurrentHistorical")) {
-
-      }
-      else if (changes.hasOwnProperty("ShowHistorical")) {
-
       }
     }
 
@@ -190,7 +184,7 @@ export class ReserveMapComponent implements OnInit, OnChanges {
       }
 
       this.Latest.data.forEach((curr) => {
-        var marker = L.marker([
+        const marker = L.marker([
           parseFloat(curr.locationData.location.latitude),
           parseFloat(curr.locationData.location.longitude),
         ])
@@ -231,7 +225,7 @@ export class ReserveMapComponent implements OnInit, OnChanges {
   // }
 
   public hidehistorical(deviceID: string): void {
-    var point = this.historicalpath.find(val => val.deviceID == deviceID);
+    const point = this.historicalpath.find(val => val.deviceID == deviceID);
     if (point != null) {
       //remove markers
       point.polyline.remove();
@@ -250,21 +244,21 @@ export class ReserveMapComponent implements OnInit, OnChanges {
       //try just show one
       if (historical.data != null && historical.data.locations!=null) {
         // console.log(historical.data)
-        var current = L.polyline(historical.data.locations.map(val =>
+        const current = L.polyline(historical.data.locations.map(val =>
            [parseFloat(val.latitude), parseFloat(val.longitude)]) as unknown as L.LatLngExpression[], 
            { "smoothFactor": 0.1 });
-        var markers=[];
-        var length=historical.data.locations.length;
+        const markers=[];
+        const length=historical.data.locations.length;
         historical.data.locations.forEach((val,i)=>{
           let tempicon=this.bluecirlceicon;
           if(i==0)tempicon=this.starticon;
           else if(i==length-1)tempicon=this.endicon;
 
-          let temp=L.marker([parseFloat(val.latitude),parseFloat(val.longitude)],{icon:tempicon});
+          const temp=L.marker([parseFloat(val.latitude),parseFloat(val.longitude)],{icon:tempicon});
           markers.push(temp);
           temp.addTo(this.mainmap);
         })
-        var newpoint = {
+        const newpoint = {
           deviceID: historical.data?.deviceID,
           polyline: current,
           markers: []
