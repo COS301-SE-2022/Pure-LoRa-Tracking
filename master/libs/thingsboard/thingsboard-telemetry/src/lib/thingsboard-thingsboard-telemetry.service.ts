@@ -18,9 +18,7 @@ export class ThingsboardThingsboardTelemetryService {
     timeStart?: number,
     timeStop?: number
   ): Promise<TelemetryResult[]> {
-
-    if(this.token == "")
-      return [];
+    if (this.token == '') return [];
 
     let url = '';
     if (timeStart != undefined) {
@@ -68,37 +66,40 @@ export class ThingsboardThingsboardTelemetryService {
     return TelList;
   }
 
-  sendTelemetry(
+  async sendTelemetry(
     EntityID: string,
     DeviceType: string,
     latitude: number,
     longitude: number
-  ): Promise<AxiosResponse> {
-
-    if(this.token == "")
-      return;
+  ): Promise<boolean> {
+    if (this.token == '') return;
 
     const headersReq = {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + this.token,
     };
-    return lastValueFrom(
-      this.httpService
-        .post(
-          'http://localhost:8080/api/plugins/telemetry/' +
-            DeviceType +
-            '/' +
-            EntityID +
-            '/timeseries/any',
-          {
-            timestamp: +new Date(),
-            latitude: latitude,
-            longitude: longitude,
-          },
-          { headers: headersReq }
-        )
-        .pipe(map((Response) => Response))
-    );
+    const resp = await lastValueFrom(
+      this.httpService.post(
+        'http://localhost:8080/api/plugins/telemetry/' +
+          DeviceType +
+          '/' +
+          EntityID +
+          '/timeseries/any',
+        {
+          timestamp: +new Date(),
+          latitude: latitude,
+          longitude: longitude,
+        },
+        { headers: headersReq }
+      )
+    ).catch((error)=> {
+      if(error.response == undefined)
+        return {status:400};
+      if(error.response.status==400) {
+        return {status:400}   
+      }
+    })
+  return resp.status == 200;
   }
 }
 
