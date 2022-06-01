@@ -18,6 +18,10 @@ export class ThingsboardThingsboardTelemetryService {
     timeStart?: number,
     timeStop?: number
   ): Promise<TelemetryResult[]> {
+
+    if(this.token == "")
+      return [];
+
     let url = '';
     if (timeStart != undefined) {
       url =
@@ -45,14 +49,14 @@ export class ThingsboardThingsboardTelemetryService {
       Authorization: 'Bearer ' + this.token,
     };
 
-    const data = await lastValueFrom(this.httpService.get(url, { headers: headersReq }));
-
-    return this.buildTelemetryResults(
-      data['data']
+    const data = await lastValueFrom(
+      this.httpService.get(url, { headers: headersReq })
     );
+
+    return this.buildTelemetryResults(data['data']);
   }
 
-  buildTelemetryResults(items): TelemetryResult[] {
+  buildTelemetryResults(items: AxiosResponse): TelemetryResult[] {
     const TelList: TelemetryResult[] = new Array<TelemetryResult>();
     for (let i = 0; i < items['longitude'].length; i++) {
       TelList.push({
@@ -70,6 +74,10 @@ export class ThingsboardThingsboardTelemetryService {
     latitude: number,
     longitude: number
   ): Promise<AxiosResponse> {
+
+    if(this.token == "")
+      return;
+
     const headersReq = {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + this.token,
