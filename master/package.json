@@ -8,7 +8,9 @@
     "start": "nx serve",
     "build": "nx build",
     "test": "nx test",
-    "docker": "docker compose -f libs/docker/docker-compose.yml up -d"
+    "docker:start": "export PURELORABUILD=DEV;docker compose -f 'libs/docker/docker-compose.yml' up",
+    "docker:stop": "docker compose -f 'libs/docker/docker-compose.yml' stop",
+    "docker:reset": "docker compose -f 'libs/docker/docker-compose.yml' down;docker volume rm docker_redisdata docker_postgresqldata"
   },
   "private": true,
   "dependencies": {
@@ -31,7 +33,6 @@
     "cors": "^2.8.5",
     "leaflet": "^1.8.0",
     "mongoose": "^6.3.4",
-    "docker": "^1.0.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "~7.4.0",
     "tslib": "^2.0.0",
