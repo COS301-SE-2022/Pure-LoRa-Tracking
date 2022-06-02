@@ -29,7 +29,7 @@ describe('ThingsboardThingsboardClientService', () => {
   });
 
   it('should return the reserve perimeter for the reserve user', async()=> {
-    await service.loginUser("reserveuser@reserve.com", 'reserve');
-    console.log(await service.getReservePerimeter());
+    /*await service.loginUser("reserveuser@reserve.com", 'reserve');
+    console.log(await service.getReservePerimeter());*/
   })
 });
