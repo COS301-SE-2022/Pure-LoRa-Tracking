@@ -13,11 +13,15 @@ export interface MapApiReserve {
     }
 }
 
-//if timestamp left empty give the upper/lower limit
+/*
+if either timestamp left empty give past 24 hours
+if deviceID is not given, give all devices of that reserve
+otherwise an array of deviceIDs will be given
+*/
 export interface MapApiHistorical {
     token: string,
     reserveID: string,
-    deviceID: string,
+    deviceID?: string[],
     startTime?: number,
     endTime?: number
 }
@@ -72,6 +76,8 @@ export interface MapApiHistoricalResponse {
     explanation: string,
     data?: MapApiHistoricalData
 }
+
+
 
 export interface MapApiHistoricalData {
     deviceID: string,
