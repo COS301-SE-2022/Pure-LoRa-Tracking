@@ -2,6 +2,8 @@ import { Injectable, NotImplementedException } from '@nestjs/common';
 import { ThingsboardThingsboardUserService } from '@lora/thingsboard-user';
 import { ThingsboardThingsboardTelemetryService } from '@lora/thingsboard-telemetry';
 import { ThingsboardThingsboardDeviceService } from '@lora/thingsboard-device';
+import { ThingsboardThingsboardAssetService } from '@lora/thingsboard-asset';
+import { MapApiReserveResponse } from '@master/shared-interfaces';
 @Injectable()
 export class ThingsboardThingsboardClientService {
 
@@ -11,7 +13,8 @@ export class ThingsboardThingsboardClientService {
     constructor(private userService : ThingsboardThingsboardUserService,
         private telemetryService : ThingsboardThingsboardTelemetryService,
         private loginService : ThingsboardThingsboardUserService,
-        private deviceService : ThingsboardThingsboardDeviceService
+        private deviceService : ThingsboardThingsboardDeviceService,
+        private assetService : ThingsboardThingsboardAssetService
         ) {}
 
     async loginUser(username : string, password : string) : Promise<boolean> {
@@ -31,7 +34,58 @@ export class ThingsboardThingsboardClientService {
         return DeviceResp;
     }
 
-    async getDeviceTelemetry(DeviceID: string) : Promise<any> {
-        throw NotImplementedException
+    setToken(token: string) {
+        this.token = token;
+    }
+
+    /*async getDeviceTelemetry(DeviceID: string) : Promise<any> {
+        
+    }*/
+
+    /*
+        check token
+        check customerID
+        get asset list
+        get, build and return perim
+        this may be multiple if admin
+    */
+    async getReservePerimeter() : Promise<MapApiReserveResponse>  {
+        if(this.token == undefined)
+            return {
+                code : 401,
+                status : "failure",
+                explanation : "no access token"
+            }
+
+        const userInfo = await this.userService.getUserID(this.token);
+        if(userInfo['code'] != undefined) {
+            /* fail */
+        }
+
+        this.assetService.setToken(this.token);
+        
+        let ids = []
+        if(userInfo['type'] == 'user') {
+            ids = await this.assetService.getAssetIDs(userInfo['id']);
+            
+        } else {
+            return null;
+        }
+
+        //console.log(ids.length);
+
+        for (let i = 0; i < ids.length; i++) {
+            const element = ids[i];
+            if(element['type'] == 'Reserve')
+                return this.assetService.getReservePerimeter(element['EntityID'])
+            
+        }
+
+        return {
+            code: 404,
+            status: 'not found',
+            explanation: 'no reserve set',
+          };
+        
     }
 }

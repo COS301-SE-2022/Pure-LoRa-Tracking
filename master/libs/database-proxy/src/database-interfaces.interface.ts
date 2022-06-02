@@ -8,11 +8,11 @@ export class rssiData {
     @Prop()
     gateway : string;
 
-    @Prop()
+    /*@Prop()
     gatewayCoord : {
         latitude : number;
-        longitude : number ;
-    };
+        longitude : number;
+    };*/
 
     @Prop()
     FirstPoint : number;

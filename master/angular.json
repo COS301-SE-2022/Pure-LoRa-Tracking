@@ -14,6 +14,7 @@
     "lora-tracking": "apps/lora-tracking",
     "lora-tracking-e2e": "apps/lora-tracking-e2e",
     "shared-interfaces": "libs/shared-interfaces",
+    "thingsboard-thingsboard-asset": "libs/thingsboard/thingsboard-asset",
     "thingsboard-thingsboard-client": "libs/thingsboard/thingsboard-client",
     "thingsboard-thingsboard-device": "libs/thingsboard/thingsboard-device",
     "thingsboard-thingsboard-telemetry": "libs/thingsboard/thingsboard-telemetry",

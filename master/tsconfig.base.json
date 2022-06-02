@@ -19,6 +19,9 @@
       "@lora/apiRouter": ["libs/api/api-router/src/index.ts"],
       "@lora/database": ["libs/database-proxy/src/index.ts"],
       "@lora/hardware-debug": ["libs/api/hardware-debug/src/index.ts"],
+      "@lora/thingsboard-asset": [
+        "libs/thingsboard/thingsboard-asset/src/index.ts"
+      ],
       "@lora/thingsboard-client": [
         "libs/thingsboard/thingsboard-client/src/index.ts"
       ],
