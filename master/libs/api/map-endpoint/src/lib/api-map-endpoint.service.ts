@@ -1,8 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { MapApiHistorical, MapApiHistoricalResponse, MapApiLatest, MapApiLatestResponse, MapApiReserve, MapApiReserveResponse } from './map-api.interface';
+import { ThingsboardThingsboardClientService } from '@lora/thingsboard-client';
 
 @Injectable()
 export class ApiMapEndpointService {
+
+    constructor(private thingsboardClient : ThingsboardThingsboardClientService) {}
 
     LatestProcess(content : MapApiLatest) : MapApiLatestResponse {
         /* Validate Token and ReserveID */
@@ -67,7 +70,7 @@ export class ApiMapEndpointService {
         }
     }
 
-    ReserveProcess(content : MapApiReserve) : MapApiReserveResponse {
+    async ReserveProcess(content : MapApiReserve) : Promise<MapApiReserveResponse> {
         /* Validate Token and ReserveID */
         if(content.reserveID == undefined)
             return {
@@ -82,6 +85,20 @@ export class ApiMapEndpointService {
                 status : 'failure',
                 explanation : "Token missing"
             }  
+
+        
+        this.thingsboardClient.setToken(content.token);
+        const data = await this.thingsboardClient.getReservePerimeter();
+        /*return {
+            code : 200,
+            status : "success",
+            explanation : "",
+            "data" : {
+                reserveName : data['value']['reserveName'],
+                center : data['value']['center'],
+                location : data['value']['location']
+            }
+        }*/
         return {
             code : 200,
             status : "success",
