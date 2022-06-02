@@ -7,6 +7,8 @@ export class ThingsboardThingsboardClientService {
 
     private token : string;
     private refreshToken : string;
+    private customerID : string;
+    private userType : string;
 
     constructor(private userService : ThingsboardThingsboardUserService,
         private telemetryService : ThingsboardThingsboardTelemetryService,
@@ -31,7 +33,28 @@ export class ThingsboardThingsboardClientService {
         return DeviceResp;
     }
 
-    async getDeviceTelemetry(DeviceID: string) : Promise<any> {
+    /*async getDeviceTelemetry(DeviceID: string) : Promise<any> {
         
-    }
+    }*/
+
+    /*
+        check token
+        check customerID
+        get asset list
+        get, build and return perim
+    */
+    /*async getReservePerimeterForReserveUser() {
+        if(this.token == undefined)
+            return {
+                code : 401,
+                status : "failure",
+                explanation : "no access token"
+            }
+        if(this.userType != 'reserveUser')
+        return {
+            code : 401,
+            status : "failure",
+            explanation : "no access token"
+        }
+    }*/
 }
