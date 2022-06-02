@@ -9,8 +9,9 @@ import * as L from 'leaflet';
 })
 export class ReserveMapComponent implements OnInit, OnChanges {
 
-  @Input() Latest: MapApiLatestResponse | null = null;
+  // @Input() Latest: MapApiLatestResponse | null = null;
   @Input() Reserve: MapApiReserveResponse | null = null;
+  @Input() LatestData: MapApiHistoricalResponse|null = null;
   @Input() MapRenderInput: MapRender;
   @Input() ViewMapTypeInput: ViewMapType;
   @Input() MarkerViewInput: MarkerView;
@@ -19,21 +20,21 @@ export class ReserveMapComponent implements OnInit, OnChanges {
   @Input() HistoricalMode: boolean;
   public mainmap: any = null;
   public maptiles: any = null;
-  private mapmarkers: Array<L.Marker<any>> = [];
+  // private mapmarkers: Array<L.Marker<any>> = [];
   private mappolygons: L.Polygon | null = null;
   private historicalpath: Array<MapHistoricalPoints> = [];
   private bluecirlceicon: L.Icon=new L.Icon({
     iconUrl:"assets/MapIcons/BaseCircle.png",
     iconSize:[20,20]
   });
-  private starticon: L.Icon=new L.Icon({
-    iconUrl:"assets/MapIcons/StartCircle.png",
-    iconSize:[30,40]
-  });
-  private endicon: L.Icon=new L.Icon({
-    iconUrl:"assets/MapIcons/EndCircle.png",
-    iconSize:[30,40]
-  });
+  // private starticon: L.Icon=new L.Icon({
+  //   iconUrl:"assets/MapIcons/StartCircle.png",
+  //   iconSize:[30,40]
+  // });
+  // private endicon: L.Icon=new L.Icon({
+  //   iconUrl:"assets/MapIcons/EndCircle.png",
+  //   iconSize:[30,40]
+  // });
 
 
   constructor() {
@@ -56,27 +57,27 @@ export class ReserveMapComponent implements OnInit, OnChanges {
     if (Object.prototype.hasOwnProperty.call(changes,"Reserve")) {
       this.loadmap();
       this.loadmaptiles();
-      this.loadMarkers();//maybe remove for double call
-      this.showmarkers();
+      // this.loadMarkers();//maybe remove for double call
+      // this.showmarkers();
       this.loadPolygons();
       this.showpolygon();
     }
     else {
       //using else if as these are single changes
 
-      if (Object.prototype.hasOwnProperty.call(changes,"Lastest")) {
-        this.loadMarkers();
-        this.showmarkers();
-      }
-      else if (Object.prototype.hasOwnProperty.call(changes,"ViewMapTypeInput")) {
+      // if (Object.prototype.hasOwnProperty.call(changes,"Lastest")) {
+      //   this.loadMarkers();
+      //   this.showmarkers();
+      // }
+      // else if (Object.prototype.hasOwnProperty.call(changes,"ShowMarkers")) {
+      //   if (this.ShowMarkers) {
+      //     this.showmarkers();
+      //   } else {
+      //     this.hidemarkers();
+      //   }
+      // }
+      if (Object.prototype.hasOwnProperty.call(changes,"ViewMapTypeInput")) {
         this.loadmaptiles();
-      }
-      else if (Object.prototype.hasOwnProperty.call(changes,"ShowMarkers")) {
-        if (this.ShowMarkers) {
-          this.showmarkers();
-        } else {
-          this.hidemarkers();
-        }
       }
       else if (Object.prototype.hasOwnProperty.call(changes,"ShowPolygon")) {
         if (this.ShowPolygon) {
@@ -174,38 +175,38 @@ export class ReserveMapComponent implements OnInit, OnChanges {
   //MAP MARKERS
 
   //load the map markers
-  private loadMarkers(): void {
-    if (this.Latest != null && this.Latest.data != null && this.mainmap != null) {
-      const pipes = new DatePipe('en-UK');
+  // private loadMarkers(): void {
+  //   if (this.Latest != null && this.Latest.data != null && this.mainmap != null) {
+  //     const pipes = new DatePipe('en-UK');
 
-      //if there is markers, destroy them
-      if (this.mapmarkers.length > 0) {
-        this.mapmarkers = [];
-      }
+  //     //if there is markers, destroy them
+  //     if (this.mapmarkers.length > 0) {
+  //       this.mapmarkers = [];
+  //     }
 
-      this.Latest.data.forEach((curr) => {
-        const marker = L.marker([
-          parseFloat(curr.locationData.location.latitude),
-          parseFloat(curr.locationData.location.longitude),
-        ])
-          .bindPopup(
-            `<b>${curr.deviceID}:</b> Location as of ${pipes.transform(
-              curr.locationData.timeStamp,
-              'full'
-            )}`
-          );
-        this.mapmarkers.push(marker);
-      });
-    }
-  }
+  //     this.Latest.data.forEach((curr) => {
+  //       const marker = L.marker([
+  //         parseFloat(curr.locationData.location.latitude),
+  //         parseFloat(curr.locationData.location.longitude),
+  //       ])
+  //         .bindPopup(
+  //           `<b>${curr.deviceID}:</b> Location as of ${pipes.transform(
+  //             curr.locationData.timeStamp,
+  //             'full'
+  //           )}`
+  //         );
+  //       this.mapmarkers.push(marker);
+  //     });
+  //   }
+  // }
 
-  private showmarkers(): void {
-    this.mapmarkers.forEach((curr) => { curr.addTo(this.mainmap) })
-  }
+  // private showmarkers(): void {
+  //   this.mapmarkers.forEach((curr) => { curr.addTo(this.mainmap) })
+  // }
 
-  private hidemarkers(): void {
-    this.mapmarkers.forEach((curr) => curr.remove());
-  }
+  // private hidemarkers(): void {
+  //   this.mapmarkers.forEach((curr) => curr.remove());
+  // }
 
 
   //HISTORICAL
@@ -232,14 +233,14 @@ export class ReserveMapComponent implements OnInit, OnChanges {
       this.historicalpath=this.historicalpath.filter(val=>val.deviceID!=deviceID)
       if (this.historicalpath.length == 0) {
         this.HistoricalMode = false;
-        this.showmarkers();
+        // this.showmarkers();
       }
     }
   }
 
   public displayhistorical(historical: MapApiHistoricalResponse): void {
     if (historical.data != null) {
-      this.hidemarkers();
+      // this.hidemarkers();
       this.HistoricalMode = true;
       //try just show one
       if (historical.data != null && historical.data.locations!=null) {
@@ -250,11 +251,7 @@ export class ReserveMapComponent implements OnInit, OnChanges {
         const markers=[];
         const length=historical.data.locations.length;
         historical.data.locations.forEach((val,i)=>{
-          let tempicon=this.bluecirlceicon;
-          if(i==0)tempicon=this.starticon;
-          else if(i==length-1)tempicon=this.endicon;
-
-          const temp=L.marker([parseFloat(val.latitude),parseFloat(val.longitude)],{icon:tempicon});
+          const temp=L.marker([parseFloat(val.latitude),parseFloat(val.longitude)],{icon:this.bluecirlceicon});
           markers.push(temp);
           temp.addTo(this.mainmap);
         })
