@@ -10,8 +10,10 @@ services:
   mongodb:
     image: mongo:5.0
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=AzureDiamond
-      - MONGO_INITDB_ROOT_PASSWORD=hunter2
+      - MONGO_INITDB_ROOT_USERNAME=lora
+      - MONGO_INITDB_ROOT_PASSWORD=''
+    ports:
+      - "27017:27017"
 
   # Chirpstack
   postgresql:
@@ -21,7 +23,7 @@ services:
       - PURELORABUILD=${PURELORABUILD-''}
     volumes:
       - ./configs/dev_db:/dev_db
-      - ./configs/postgreSQL:/docker-entrypoint-initdb.d # configs scripts for setup
+      - ./configs/postgreSQL/chirpstack.sh:/docker-entrypoint-initdb.d/chirpstack.sh # configs scripts for setup
       - postgresqldata:/var/lib/postgresql/data # persistence
 
   redis:
@@ -73,6 +75,7 @@ services:
   
   # Thingsboard
   mytb:
+    restart: always
     image: "thingsboard/tb-postgres"
     ports:
       - "9090:9090" # local:docker
@@ -85,6 +88,8 @@ services:
     volumes:
       - ~/.mytb-data:/data
       - ~/.mytb-logs:/var/log/thingsboard
+      # - ./configs/postgreSQL/thingsboard.sh:/thingsboard.sh
+    # command: /thingsboard.sh # hijack entrypoint
 #    networks:
 #      - thingsboards
 
