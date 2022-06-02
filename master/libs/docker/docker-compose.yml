@@ -10,16 +10,20 @@ services:
   mongodb:
     image: mongo:5.0
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=AzureDiamond
-      - MONGO_INITDB_ROOT_PASSWORD=hunter2
+      - MONGO_INITDB_ROOT_USERNAME=lora
+      - MONGO_INITDB_ROOT_PASSWORD=''
+    ports:
+      - "27017:27017"
 
   # Chirpstack
   postgresql:
     image: postgres:9.6-alpine
     environment:
       - POSTGRES_PASSWORD=root 
+      - PURELORABUILD=${PURELORABUILD-''}
     volumes:
-      - ./configs/postgreSQL:/docker-entrypoint-initdb.d # configs scripts for setup
+      - ./configs/dev_db:/dev_db
+      - ./configs/postgreSQL/chirpstack.sh:/docker-entrypoint-initdb.d/chirpstack.sh # configs scripts for setup
       - postgresqldata:/var/lib/postgresql/data # persistence
 
   redis:
@@ -80,18 +84,27 @@ services:
       - "5683-5688:5683-5688/udp"
     environment:
       TB_QUEUE_TYPE: in-memory # while-testing
+      PURELORABUILD: ${PURELORABUILD-''}
+      # SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/thingsboard
+      # SPRING_DATASOURCE_PASSWORD: postgres
+      # SPRING_DATASOURCE_USERNAME: postgres
     volumes:
-      - ~/.mytb-data:/data
+      - thingsboard_data:/data
       - ~/.mytb-logs:/var/log/thingsboard
+      - ./configs/postgreSQL/thingsboard.sh:/thingsboard.sh
+      - ./configs/dev_db/thingsboard:/dev_db/thingsboard
+    command: /thingsboard.sh # hijack entrypoint
 #    networks:
 #      - thingsboards
 
   # GLOBAL
 
 volumes:
+  thingsboard_data:
   postgresqldata:
   redisdata:
+  
 
-networks:
-  thingsboard: {}
+# networks:
+  # thingsboard: {}
 #  chirpstack: {}

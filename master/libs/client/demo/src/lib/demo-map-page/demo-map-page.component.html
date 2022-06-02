@@ -1,5 +1,5 @@
 <div class="map" *ngIf="Reserve">
-  <reserve-map
+  <master-reserve-map
     #reservemap
     class="map"
     [Reserve]="Reserve"
@@ -8,7 +8,7 @@
     [ViewMapTypeInput]="ViewMapTypeInput"
     [ShowMarkers]="ShowMarkers"
     [ShowPolygon]="ShowPolygon"
-  ></reserve-map>
+  ></master-reserve-map>
   
   <select class="selectbox" #current (change)="updateMapView(current.value)">
     <option value="normal">Normal</option>

@@ -8,7 +8,9 @@
     "start": "nx serve",
     "build": "nx build",
     "test": "nx test",
-    "docker": "docker compose -f libs/docker/docker-compose.yml up -d"
+    "docker:start": "export PURELORABUILD=DEV;docker compose -f 'libs/docker/docker-compose.yml' up",
+    "docker:stop": "docker compose -f 'libs/docker/docker-compose.yml' stop",
+    "docker:reset": "docker compose -f 'libs/docker/docker-compose.yml' down;docker volume rm docker_redisdata docker_postgresqldata thingsboard"
   },
   "private": true,
   "dependencies": {
@@ -70,7 +72,7 @@
     "nx": "14.1.4",
     "postcss": "^8.4.5",
     "postcss-import": "^14.0.2",
-    "postcss-preset-env": "^6.7.0",
+    "postcss-preset-env": "^7.7.0",
     "postcss-url": "^10.1.1",
     "prettier": "^2.5.1",
     "ts-jest": "27.1.4",
