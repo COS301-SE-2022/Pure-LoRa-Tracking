@@ -1,3 +1,5 @@
+import * as L from "leaflet"
+
 export interface MapApiLatest {
     token: string,
     reserveID: string

@@ -1,3 +1,4 @@
+import { ThingsboardThingsboardAssetModule } from '@lora/thingsboard-asset';
 import { ThingsboardThingsboardDeviceModule } from '@lora/thingsboard-device';
 import { ThingsboardThingsboardTelemetryModule } from '@lora/thingsboard-telemetry';
 import { ThingsboardThingsboardUserModule } from '@lora/thingsboard-user';
@@ -10,7 +11,7 @@ describe('ThingsboardThingsboardClientService', () => {
   beforeAll(async () => {
     const module = await Test.createTestingModule({
       providers: [ThingsboardThingsboardClientService],
-      imports : [ThingsboardThingsboardUserModule, ThingsboardThingsboardTelemetryModule, ThingsboardThingsboardDeviceModule]
+      imports : [ThingsboardThingsboardUserModule, ThingsboardThingsboardTelemetryModule, ThingsboardThingsboardDeviceModule, ThingsboardThingsboardAssetModule]
     }).compile();
 
     service = module.get(ThingsboardThingsboardClientService);
@@ -26,4 +27,9 @@ describe('ThingsboardThingsboardClientService', () => {
     const resp = await service.getUserDevices();
     console.log(resp['data']);*/
   });
+
+  it('should return the reserve perimeter for the reserve user', async()=> {
+    await service.loginUser("reserveuser@reserve.com", 'reserve');
+    console.log(await service.getReservePerimeter());
+  })
 });
