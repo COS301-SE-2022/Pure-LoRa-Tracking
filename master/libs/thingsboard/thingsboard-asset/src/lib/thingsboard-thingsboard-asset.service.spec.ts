@@ -16,8 +16,8 @@ describe('ThingsboardThingsboardAssetService', () => {
     service = module.get(ThingsboardThingsboardAssetService);
     UserService = module.get(ThingsboardThingsboardUserService);
 
-    const data = await UserService.login("reserveuser@reserve.com", "reserve");
-    service.setToken(data['data']['token']);
+    /*const data = await UserService.login("reserveuser@reserve.com", "reserve");
+    service.setToken(data['data']['token']);*/
   });
 
   it('should return asset information', async() => {
