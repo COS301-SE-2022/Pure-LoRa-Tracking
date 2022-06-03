@@ -7,7 +7,7 @@ import { ReserveMapComponent } from './reserve-map.component';
 describe('ReserveMapComponent', () => {
   let component: ReserveMapComponent;
   let fixture: ComponentFixture<ReserveMapComponent>;
-  let demoreserve = {
+  const demoreserve = {
     code: 200,
     status: "success",
     explanation: "",
@@ -41,19 +41,20 @@ describe('ReserveMapComponent', () => {
       ]
     }
   }
-  let demomap = {
+  const demomap = {
     remove() {
+      console.log("filler method");
     },
     addLayer(){
-
+      console.log("filler method");
     }
   }
-  let demotiles={
+  const demotiles={
     remove(){
-
+      console.log("filler method");
     },
     addTo(varible:any){
-
+      console.log("filler method");
     }
   }
 

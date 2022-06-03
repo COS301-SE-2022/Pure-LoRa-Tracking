@@ -21,7 +21,7 @@ otherwise an array of deviceIDs will be given
 export interface MapApiHistorical {
     token: string,
     reserveID: string,
-    deviceID: string,
+    deviceID?: string[],
     startTime?: number,
     endTime?: number
 }
@@ -76,6 +76,8 @@ export interface MapApiHistoricalResponse {
     explanation: string,
     data?: MapApiHistoricalData
 }
+
+
 
 export interface MapApiHistoricalData {
     deviceID: string,
