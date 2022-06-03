@@ -22,7 +22,7 @@ export class ApiMapEndpointController {
   }
 
   @Post('historical')
-  HistoricalRepsonse(@Body() content : MapApiHistorical) : MapApiHistoricalResponse {
-    return this.apiMapEndpointService.HistoricalProcess(content); 
+  async HistoricalRepsonse(@Body() content : MapApiHistorical) : Promise<MapApiHistoricalResponse> {
+    return await this.apiMapEndpointService.HistoricalProcess(content); 
   }
 }

@@ -115,7 +115,9 @@ export class ThingsboardThingsboardClientService {
     if (verifyDevice == false) {
       return {
         status: 'fail',
-        explanation: 'deviceID',
+        explanation: 'device with ID not found for user token combination',
+        name : DeviceID,
+        data : []
       };
     }
 
@@ -128,6 +130,7 @@ export class ThingsboardThingsboardClientService {
     );
     return {
       status: 'ok',
+      name : DeviceID,
       explanation: 'call finished',
       data: resp,
     };
@@ -158,5 +161,6 @@ export class ThingsboardThingsboardClientService {
 export interface thingsboardResponse {
   status: string;
   explanation?: string;
+  name? : string,
   data?: any;
 }

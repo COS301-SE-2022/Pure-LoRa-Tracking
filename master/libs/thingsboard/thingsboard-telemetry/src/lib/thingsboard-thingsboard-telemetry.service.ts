@@ -67,7 +67,7 @@ export class ThingsboardThingsboardTelemetryService {
       TelList.push({
         longitude: items['longitude'][i]['value'],
         latitude: items['latitude'][i]['value'],
-        time: items['latitude'][i]['ts'],
+        timestamp : items['latitude'][i]['ts'],
       });
     }
     return TelList;
@@ -110,7 +110,7 @@ export class ThingsboardThingsboardTelemetryService {
 }
 
 export interface TelemetryResult {
-  time: number;
+  timestamp: number;
   latitude: number;
   longitude: number;
 }
