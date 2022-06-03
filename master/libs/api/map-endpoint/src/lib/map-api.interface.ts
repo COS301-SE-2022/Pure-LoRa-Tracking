@@ -43,7 +43,7 @@ export interface Device {
             latitude: string,
             longitude: string
         }
-    }
+    }[]
 }
 
 export interface MapApiReserveResponse {
