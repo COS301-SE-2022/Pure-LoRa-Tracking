@@ -39,4 +39,46 @@ export class ChirpstackChirpstackGatewayService {
     });
   }
 
+  async addGateway(
+    authtoken: string,
+    thingsBoardDeviceId: string,
+    gatewayName: string,
+    gatewayId: string,
+    gatewayDesc = 'General gateway',
+    networkServer = 1,
+    organisationId = 1
+  ) {
+    this.metadata.set('authorization', 'Bearer ' + authtoken);
+    const createGatewayRequest = new gatewayMessages.CreateGatewayRequest();
+    const gateway = new gatewayMessages.Gateway();
+    const location = new Location();
+    // location.setLatitude(0);
+    // location.setLongitude(0);
+    // location.setAccuracy(0)
+    // location.setAltitude(0)
+    // location.setSource(0)
+
+    gateway.setId(gatewayId);
+    gateway.setName(gatewayName);
+    gateway.setDescription(gatewayDesc);
+    gateway.setLocation(location);
+    gateway.setOrganizationId(organisationId);
+    gateway.setNetworkServerId(networkServer);
+
+    const gatewayTags = gateway.getTagsMap();
+    gatewayTags.set('thingsBoardDeviceId', thingsBoardDeviceId);
+
+    createGatewayRequest.setGateway(gateway);
+
+    return new Promise((res, rej) => {
+      this.gatewayServiceClient.create(
+        createGatewayRequest,
+        this.metadata,
+        (error, data) => {
+          if (data) res(data);
+          else rej(error);
+        }
+      );
+    });
+  }
 }

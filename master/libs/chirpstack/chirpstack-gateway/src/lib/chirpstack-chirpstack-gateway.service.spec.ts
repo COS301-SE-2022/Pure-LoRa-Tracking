@@ -21,7 +21,17 @@ describe('ChirpstackChirpstackGatewayService', () => {
   });
 
   describe('manage gateways', () => {
-
+    it('should add a gateway', async () => {
+      const data = await service.addGateway(
+        authtoken,
+        'test',
+        'gateway_1',
+        '353036203a001011'
+      );
+      console.log(data);
+      expect(data).toBeInstanceOf(Empty);
+    });
+    
     it('it should list gateways', async () => {
       const data = await service.listGateways(authtoken);
       console.log(data);
