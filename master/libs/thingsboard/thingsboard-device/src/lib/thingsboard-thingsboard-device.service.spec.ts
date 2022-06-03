@@ -146,7 +146,7 @@ describe('ThingsboardThingsboardDeviceService', () => {
     }
     jest.spyOn(httpService, 'delete').mockImplementationOnce(() => of(result));
     const deviceID = "fa0097e0-dfaa-11ec-b99c-f7477a3db362";
-    console.log(await service.removeDeviceFromCustomer(deviceID));
+    expect(await service.removeDeviceFromCustomer(deviceID)).toEqual(true);
     /*const data = await loginService.login(username, password);
     service.setToken(data['data']['token']);
     expect(await service.removeDeviceFromCustomer("fa0097e0-dfaa-11ec-b99c-f7477a3db362")).toEqual(true);*/
