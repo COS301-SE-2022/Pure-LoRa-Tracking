@@ -44,7 +44,18 @@ describe('ThingsboardThingsboardDeviceService', () => {
     expect(await service.createDevice('123', 'testingSensor', false)).toEqual(true);*/
   })
 
-  it('should delete the target device and return status 200', async()=> {
+  it('should delete the target device and return status 200', async () => {
+    const result: AxiosResponse<any> = {
+      data: {},
+      headers: {},
+      config: {},
+      status: 200,
+      statusText: 'OK'
+    }
+
+    jest.spyOn(httpService, 'delete').mockImplementationOnce(() => of(result));
+    const deviceID = "fa0097e0-dfaa-11ec-b99c-f7477a3db362";
+    expect(await service.deleteDevice(deviceID)).toEqual(true);
     /*const data = await loginService.login(username, password);
     service.setToken(data['data']['token']);
     expect(await service.deleteDevice("8e4fcc90-dc0e-11ec-931b-3544ea43758e")).toEqual(true);*/
