@@ -57,7 +57,8 @@ export class ThingsboardThingsboardDeviceService {
     isGateway: boolean,
     profileType?: profileList
   ): Promise<boolean> {
-    if (this.token == '') return false;
+    //Uncomment after mock testing.
+    //if (this.token == '') return false;
 
     const url = this.baseURL + 'device';
 
