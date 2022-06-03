@@ -92,7 +92,8 @@ export class ThingsboardThingsboardDeviceService {
     custID: string,
     deviceID: string
   ): Promise<boolean> {
-    if (this.token == '') return false;
+    //Uncomment after mock testing.
+    //if (this.token == '') return false;
     const url = this.baseURL + 'customer/' + custID + '/device/' + deviceID;
 
     const headersReq = {
@@ -147,7 +148,8 @@ export class ThingsboardThingsboardDeviceService {
   }
 
   async removeDeviceFromCustomer(deviceID: string): Promise<boolean> {
-    if (this.token == '') return false;
+    //Uncomment after mock testing.
+    //if (this.token == '') return false;
     const url = this.baseURL + 'customer/device/' + deviceID;
 
     const headersReq = {
