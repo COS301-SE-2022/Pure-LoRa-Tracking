@@ -37,17 +37,13 @@
   
   
 </div>
-<ul *ngIf="Latest" class="devices">
-  <li *ngFor="let i of Latest.data">
-    <div *ngIf="!HistoricalLoading">
-      <button *ngIf="!HistoricalView.includes(i.deviceID); else hidebutton" (click)="viewhistorical(i.deviceID)">View</button>
-      <ng-template #hidebutton><button (click)="hidehistorical(i.deviceID)">Hide</button></ng-template>
-    </div>
-    <div *ngIf="HistoricalLoading">
-      <i>Loading please wait</i>
-    </div>
-    
-    {{i.deviceID}}
-    
+<div *ngIf="LastestHistorical" class="devices">
+<ul>
+  <li *ngFor="let i of LastestHistorical">
+    <button type="button" (click)="ShowOnlyDevice(i.deviceID)">{{i.deviceName}}</button>
   </li>
 </ul>
+
+<button type="button">Reset</button>
+
+</div>

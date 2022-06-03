@@ -4,6 +4,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ReserveMapComponent } from '@master/client/leaflet-library';
 import { MapCallerService } from "@master/client/map-apicaller"
 import { MapApiHistoricalResponse, MapApiLatestResponse, MapApiReserveResponse, MapRender, ViewMapType } from "@master/shared-interfaces"
+import { Device } from 'libs/api/map-endpoint/src/lib/map-api.interface';
 @Component({
   selector: 'master-demo-map-page',
   templateUrl: './demo-map-page.component.html',
@@ -21,7 +22,7 @@ export class DemoMapPageComponent implements OnInit {
   ShowMarkers:boolean;
   ShowPolygon:boolean;
   HistoricalLoading:boolean;
-
+  LastestHistorical:Device[];
   constructor(private caller: MapCallerService) {
     //set default map options
     this.MapRenderInput = MapRender.ALL;
@@ -29,9 +30,14 @@ export class DemoMapPageComponent implements OnInit {
     this.ShowMarkers=true;
     this.ShowPolygon=true;
     this.HistoricalLoading=false;
+    this.LastestHistorical=[];
+
     //call the api
     caller.getReserve("sf", "sdf").then(val => this.Reserve = val);
-    caller.getLatest("sf", "sdf").then(val => this.Latest = val);
+    caller.getHistorical("ss","ss",["sens-11","sens-12","sens-13"]).then(val=>{
+      this.LastestHistorical=val.data
+      this.reservemap?.loadInnitial(this.LastestHistorical);
+    });
   }
 
   updateMapView(type: any):void {
@@ -56,12 +62,7 @@ export class DemoMapPageComponent implements OnInit {
     //we use historical loading to prevent another call
     //while we are waiting for the then
     this.HistoricalLoading=true;
-    this.caller.getHistorical("sd","sd",deviceID).then(val=>{
-      this.Historical=val
-      this.reservemap?.displayhistorical(val);
-      this.HistoricalView.push(deviceID);
-      this.HistoricalLoading=false;
-    });
+    this.reservemap?.showOnly(deviceID);
   }
 
   hidehistorical(deviceID:string):void{
@@ -70,7 +71,10 @@ export class DemoMapPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    
-
+      console.log("component loaded");
    }
+
+  ShowOnlyDevice(deviceID:string):void{
+      this.reservemap?.showOnly(deviceID);
+  }
 }
