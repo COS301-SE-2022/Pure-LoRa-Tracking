@@ -4,6 +4,7 @@ import { Device,MapApiHistoricalData, MapApiHistoricalResponse, MapApiLatestResp
 import * as L from 'leaflet';
 // This library does not declare a module type, we we need to ignore this
 // error for a successful import
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { antPath } from "leaflet-ant-path"
 
