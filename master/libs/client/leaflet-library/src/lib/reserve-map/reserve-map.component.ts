@@ -188,7 +188,7 @@ export class ReserveMapComponent implements OnInit, OnChanges {
         const length=historical.data.locations.length;
         historical.data.locations.forEach((val,i)=>{
           const temp=L.marker([parseFloat(val.latitude),parseFloat(val.longitude)],{icon:this.bluecirlceicon});
-          if(i==length-1)temp.bindTooltip(historical.data!.deviceID,{permanent:true,offset:[0,12]})
+          if(historical.data != undefined)if(i==length-1)temp.bindTooltip(historical.data.deviceID,{permanent:true,offset:[0,12]})
           markers.push(temp);
           temp.addTo(this.mainmap);
         })
