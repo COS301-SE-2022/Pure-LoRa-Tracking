@@ -53,39 +53,39 @@ describe('ThingsboardThingsboardDeviceService', () => {
   it('should assign the specified device to the specified customer and return status 200', async () => {
     const result: AxiosResponse<any> = {
       data: {
-        id: {
-          id: "784f394c-42b6-435a-983c-b7beff2784f9",
-          entityType: "DEVICE"
+        "id": {
+          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "entityType": "DEVICE"
         },
-        createdTime: 1609459200000,
-        tenantId: {
-          id: "784f394c-42b6-435a-983c-b7beff2784f9",
-          entityType: "TENANT"
+        "createdTime": 1609459200000,
+        "tenantId": {
+          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "entityType": "TENANT"
         },
-        customerId: {
-          id: "784f394c-42b6-435a-983c-b7beff2784f9",
-          entityType: "CUSTOMER"
+        "customerId": {
+          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "entityType": "CUSTOMER"
         },
-        name: "A4B72CCDFF33",
-        type: "Temperature Sensor",
-        label: "Room 234 Sensor",
-        deviceProfileId: {
-          id: "784f394c-42b6-435a-983c-b7beff2784f9",
-          entityType: "DEVICE_PROFILE"
+        "name": "A4B72CCDFF33",
+        "type": "Temperature Sensor",
+        "label": "Room 234 Sensor",
+        "deviceProfileId": {
+          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "entityType": "DEVICE_PROFILE"
         },
-        deviceData: {
-          configuration: {},
-          transportConfiguration: {}
+        "deviceData": {
+          "configuration": {},
+          "transportConfiguration": {}
         },
-        firmwareId: {
-          id: "784f394c-42b6-435a-983c-b7beff2784f9",
-          entityType: "OTA_PACKAGE"
+        "firmwareId": {
+          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "entityType": "OTA_PACKAGE"
         },
-        softwareId: {
-          id: "784f394c-42b6-435a-983c-b7beff2784f9",
-          entityType: "OTA_PACKAGE"
+        "softwareId": {
+          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "entityType": "OTA_PACKAGE"
         },
-        additionalInfo: {},
+        "additionalInfo": {}
       },
       headers: {},
       config: {},
@@ -96,13 +96,57 @@ describe('ThingsboardThingsboardDeviceService', () => {
     jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(result));
     const custID = "784f394c-42b6-435a-983c-b7beff2784f9";
     const deviceID = "fa0097e0-dfaa-11ec-b99c-f7477a3db362";
-    console.log(await service.assignDevicetoCustomer(custID, deviceID));
+    expect(await service.assignDevicetoCustomer(custID, deviceID)).toEqual(true);
     /*const data = await loginService.login(username, password);
     service.setToken(data['data']['token']);
     expect(await service.assignDevicetoCustomer("9fed2a30-dfa9-11ec-b99c-f7477a3db362", "fa0097e0-dfaa-11ec-b99c-f7477a3db362")).toEqual(true);*/
   })
 
   it('should unassign the specified device from the specified customer and return status 200', async () => {
+    const result: AxiosResponse<any> = {
+      data: {
+        "id": {
+          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "entityType": "DEVICE"
+        },
+        "createdTime": 1609459200000,
+        "tenantId": {
+          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "entityType": "TENANT"
+        },
+        "customerId": {
+          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "entityType": "CUSTOMER"
+        },
+        "name": "A4B72CCDFF33",
+        "type": "Temperature Sensor",
+        "label": "Room 234 Sensor",
+        "deviceProfileId": {
+          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "entityType": "DEVICE_PROFILE"
+        },
+        "deviceData": {
+          "configuration": {},
+          "transportConfiguration": {}
+        },
+        "firmwareId": {
+          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "entityType": "OTA_PACKAGE"
+        },
+        "softwareId": {
+          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "entityType": "OTA_PACKAGE"
+        },
+        "additionalInfo": {}
+      },
+      headers: {},
+      config: {},
+      status: 200,
+      statusText: 'OK'
+    }
+    jest.spyOn(httpService, 'delete').mockImplementationOnce(() => of(result));
+    const deviceID = "fa0097e0-dfaa-11ec-b99c-f7477a3db362";
+    console.log(await service.removeDeviceFromCustomer(deviceID));
     /*const data = await loginService.login(username, password);
     service.setToken(data['data']['token']);
     expect(await service.removeDeviceFromCustomer("fa0097e0-dfaa-11ec-b99c-f7477a3db362")).toEqual(true);*/
