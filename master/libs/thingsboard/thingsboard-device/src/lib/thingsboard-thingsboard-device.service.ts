@@ -15,7 +15,8 @@ export class ThingsboardThingsboardDeviceService {
   }
 
   async getCustomerDevices(page: number, pageSize: number, customerID: string) {
-    if (this.token == '') return null;
+    //Uncomment after mock tests.
+    //if (this.token == '') return null;
 
     const url =
       this.baseURL +
