@@ -195,7 +195,7 @@ export class ApiMapEndpointService {
         //     furtherExplain : furtherExplain
         // }
 
-        let toreturn: MapApiHistoricalResponse = {
+        const toreturn: MapApiHistoricalResponse = {
             code: 200,
             status: "success",
             explanation: "",
