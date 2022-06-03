@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, Input, OnChanges, SimpleChanges, } from '@angular/core';
-import { MapApiHistoricalResponse, MapApiLatestResponse, MapApiReserveResponse, MapHistoricalPoints, MapRender, MarkerView, ViewMapType, } from '@master/shared-interfaces';
+import { MapApiHistoricalData, MapApiHistoricalResponse, MapApiLatestResponse, MapApiReserveResponse, MapHistoricalPoints, MapRender, MarkerView, ViewMapType, } from '@master/shared-interfaces';
 import * as L from 'leaflet';
 @Component({
   selector: 'master-reserve-map',
@@ -11,14 +11,14 @@ export class ReserveMapComponent implements OnInit, OnChanges {
 
   // @Input() Latest: MapApiLatestResponse | null = null;
   @Input() Reserve: MapApiReserveResponse | null = null;
-  @Input() LatestData: MapApiHistoricalResponse|null = null;
+  @Input() LatestData: MapApiHistoricalData|null = null;
   @Input() MapRenderInput: MapRender;
   @Input() ViewMapTypeInput: ViewMapType;
   @Input() MarkerViewInput: MarkerView;
   @Input() ShowMarkers: boolean;
   @Input() ShowPolygon: boolean;
   @Input() HistoricalMode: boolean;
-  @Input() HistoricalDataID:number=-1;
+  @Input() HistoricalDataID:number;
   public mainmap: any = null;
   public maptiles: any = null;
   // private mapmarkers: Array<L.Marker<any>> = [];
@@ -38,6 +38,7 @@ export class ReserveMapComponent implements OnInit, OnChanges {
     this.ShowMarkers = true;
     this.ShowPolygon = true;
     this.HistoricalMode = false;
+    this.HistoricalDataID=-1;
   }
 
   ngOnInit(): void {
@@ -66,7 +67,7 @@ export class ReserveMapComponent implements OnInit, OnChanges {
         }
       }
       else if(Object.prototype.hasOwnProperty.call(changes,"HistoricalDataID")){
-        
+        console.log("change historical");
       }
     }
 
@@ -170,7 +171,7 @@ export class ReserveMapComponent implements OnInit, OnChanges {
   }
 
   public showOnly(deviceID:string):void{
-    
+    console.log("Show only")
   }
 
   public displayhistorical(historical: MapApiHistoricalResponse): void {
