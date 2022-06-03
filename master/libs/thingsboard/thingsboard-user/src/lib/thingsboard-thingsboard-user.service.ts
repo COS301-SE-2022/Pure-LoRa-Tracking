@@ -45,7 +45,7 @@ export class ThingsboardThingsboardUserService {
     });
   }
 
-  async userInfo(token: string): Promise<AxiosResponse> {
+  async userInfo(token: string): Promise<any> {
     const headersReq = {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + token,
@@ -56,12 +56,8 @@ export class ThingsboardThingsboardUserService {
       })
     ).catch((error) => {
       if (error.response == undefined) return null;
-      if (error.response.status >= 400)
-        return new Promise((resolve, reject) => {
-          return {
-            status: error.response.status,
-          };
-        });
+      if (error.response.status == 401)
+        return {status:401}
     });
   }
 

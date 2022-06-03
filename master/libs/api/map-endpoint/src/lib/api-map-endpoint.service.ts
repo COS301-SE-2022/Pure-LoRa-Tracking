@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { MapApiHistorical, MapApiHistoricalResponse, MapApiLatest, MapApiLatestResponse, MapApiReserve, MapApiReserveResponse } from './map-api.interface';
+import { Device, MapApiHistorical, MapApiHistoricalResponse, MapApiLatest, MapApiLatestResponse, MapApiReserve, MapApiReserveResponse } from './map-api.interface';
 import { ThingsboardThingsboardClientService } from '@lora/thingsboard-client';
 
 @Injectable()
@@ -87,8 +87,8 @@ export class ApiMapEndpointService {
             }  
 
         
-        this.thingsboardClient.setToken(content.token);
-        const data = await this.thingsboardClient.getReservePerimeter();
+        /*this.thingsboardClient.setToken(content.token);
+        const data = await this.thingsboardClient.getReservePerimeter();*/
         /*return {
             code : 200,
             status : "success",
@@ -135,7 +135,7 @@ export class ApiMapEndpointService {
         }
     }
     
-    HistoricalProcess(content : MapApiHistorical) : MapApiHistoricalResponse {
+    async HistoricalProcess(content : MapApiHistorical) : Promise<MapApiHistoricalResponse> {
     /* Validate Token and ReserveID */
         if(content.reserveID == undefined)
             return {
@@ -151,7 +151,51 @@ export class ApiMapEndpointService {
                 explanation : "Token missing"
             }  
 
-        if(content.deviceID=="sens-11") return {
+        this.thingsboardClient.setToken(content.token);
+        const awaitArray = Array<any>()
+        content.deviceID.forEach((device)=> {
+            awaitArray.push(this.thingsboardClient.getDeviceHistoricalData(device, content.startTime, content.endTime))
+        })
+
+        // purrrformance
+        for (let i = 0; i < awaitArray.length; i++) {
+            awaitArray[i] = await awaitArray[i];
+        }
+
+        let explanationOfCall = "";
+        let furtherExplain = "";
+
+        const data = Array<Device>();
+
+        awaitArray.forEach((item) => {
+            if(item['status']=='fail') {
+                explanationOfCall = "some devices are missing results";
+                furtherExplain = item['explanation'];
+                data.push({
+                    deviceID : item['name'],
+                    deviceName : "",
+                    type : "sensor",
+                    locationData : item['data']['data']
+                })
+            } else if(item['status']=='ok') {
+                data.push({
+                    deviceID : item['name'],
+                    deviceName : "",
+                    type : "sensor",
+                    locationData : item['data']
+                })
+            }
+        })
+
+        return {
+            code : 200,
+            status : "success",
+            explanation : explanationOfCall,
+            data: data,
+            furtherExplain : furtherExplain
+        }
+
+        /*if(content.deviceID=="sens-11") return {
             code : 200,
             status : "success",
             explanation : "",
@@ -225,6 +269,6 @@ export class ApiMapEndpointService {
             code : 401,
             status : "failure",
             explanation : "Could not find sensor"
-        }
+        }*/
     }
 }

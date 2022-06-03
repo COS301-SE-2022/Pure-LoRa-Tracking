@@ -15,7 +15,7 @@ export interface MapApiReserve {
 export interface MapApiHistorical {
     token: string,
     reserveID: string,
-    deviceID: string,
+    deviceID: string[],
     startTime?: number,
     endTime?: number
 }
@@ -29,10 +29,11 @@ export interface MapApiLatestResponse {
     code: number,
     status: string,
     explanation: string,
-    data?: Device[]
+    data?: Device[],
+    furtherExplain? : string
 }
 
-interface Device {
+export interface Device {
     deviceID: string,
     deviceName: string,
     type: string,
@@ -67,8 +68,10 @@ export interface MapApiReserveResponse {
 export interface MapApiHistoricalResponse {
     code: number,
     status: string,
+    furtherExplain? : string,
     explanation: string,
-    data?: MapApiHistoricalData
+    data?: Device[],
+    
 }
 
 export interface MapApiHistoricalData {
