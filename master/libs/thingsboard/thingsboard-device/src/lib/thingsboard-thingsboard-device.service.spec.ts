@@ -28,7 +28,62 @@ describe('ThingsboardThingsboardDeviceService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should get the device infos and print them...', async()=> {
+  it('should get the device infos and print them...', async () => {
+    const result: AxiosResponse<any> = {
+      data: {
+        "data": [
+          {
+            "id": {
+              "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+              "entityType": "DEVICE"
+            },
+            "createdTime": 1609459200000,
+            "tenantId": {
+              "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+              "entityType": "TENANT"
+            },
+            "customerId": {
+              "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+              "entityType": "CUSTOMER"
+            },
+            "name": "A4B72CCDFF33",
+            "type": "Temperature Sensor",
+            "label": "Room 234 Sensor",
+            "deviceProfileId": {
+              "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+              "entityType": "DEVICE_PROFILE"
+            },
+            "deviceData": {
+              "configuration": {},
+              "transportConfiguration": {}
+            },
+            "firmwareId": {
+              "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+              "entityType": "OTA_PACKAGE"
+            },
+            "softwareId": {
+              "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+              "entityType": "OTA_PACKAGE"
+            },
+            "additionalInfo": {},
+            "customerTitle": "string",
+            "customerIsPublic": false,
+            "deviceProfileName": "string"
+          }
+        ],
+        "totalPages": 0,
+        "totalElements": 0,
+        "hasNext": false
+      },
+      headers: {},
+      config: {},
+      status: 200,
+      statusText: 'OK'
+    }
+
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(result));
+    const custID = "784f394c-42b6-435a-983c-b7beff2784f9";
+    console.log(await service.getCustomerDevices(0,5,custID));
     /*const data = await loginService.login(username, password);
     service.setToken(data['data']['token']);
     const userinfo = await loginService.userInfo(data['data']['token']);
