@@ -113,7 +113,7 @@ export class ChirpstackChirpstackSensorService {
 
   async addDevice(
     authtoken: string,
-    thingsBoardDeviceToken: string,
+    thingsBoardDeviceId: string,
     devName: string,
     devEUI: string,
     deviceProfileId: string,
@@ -129,9 +129,10 @@ export class ChirpstackChirpstackSensorService {
     device.setDescription(deviceDesc);
     device.setDeviceProfileId(deviceProfileId);
     device.setApplicationId(deviceAppl);
-    // set thingsBoardDeviceToken as a variable on the chirpstack "device" to identify it when data is received
+    // set thingsBoardDeviceId as a variable on the chirpstack "device" to identify it when data is received
     const deviceVariables = device.getVariablesMap();
-    deviceVariables.set('ThingsBoardAccessToken', thingsBoardDeviceToken);
+    deviceVariables.set('thingsBoardDeviceId', thingsBoardDeviceId);
+
     createDeviceRequest.setDevice(device);
 
     return new Promise((res, rej) => {

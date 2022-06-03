@@ -23,7 +23,7 @@ describe('ChirpstackChirpstackSensorService', () => {
     expect(service).toBeTruthy();
   });
 
-  describe('list_devices', () =>{
+  describe('list_devices', () => {
     it('it should list devices', async() => {
       const data = await service.listDevices(authtoken);
       console.log(data);
