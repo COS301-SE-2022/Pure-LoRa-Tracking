@@ -34,7 +34,7 @@ describe('ThingsboardThingsboardClientService', () => {
   })
 
   it('should return the telemetry for the deviceID given', async()=> {
-    await service.loginUser("reserveuser@reserve.com", 'reserve');
-    console.log(await service.getDeviceHistoricalData("25c31a40-dfe9-11ec-bdb3-750ce7ed2451", 0, 1654072587463));
+    /*await service.loginUser("reserveuser@reserve.com", 'reserve');
+    console.log(await service.getDeviceHistoricalData("25c31a40-dfe9-11ec-bdb3-750ce7ed2451", 0, 1654072587463));*/
   })
 });
