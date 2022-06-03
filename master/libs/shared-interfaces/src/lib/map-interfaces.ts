@@ -38,7 +38,7 @@ export interface MapApiLatestResponse {
     data?: Device[]
 }
 
-interface Device {
+export interface Device {
     deviceID: string,
     deviceName: string,
     type: string,
@@ -48,7 +48,7 @@ interface Device {
             latitude: string,
             longitude: string
         }
-    }
+    }[]
 }
 
 export interface MapApiReserveResponse {
