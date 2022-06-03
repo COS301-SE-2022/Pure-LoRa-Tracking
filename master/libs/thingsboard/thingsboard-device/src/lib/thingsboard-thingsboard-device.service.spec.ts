@@ -38,7 +38,53 @@ describe('ThingsboardThingsboardDeviceService', () => {
     console.log(service.processDevices(DeviceData['data']['data']));*/
   })
 
-  it('should create a device and return status 200', async ()=> {
+  it('should create a device and return status 200', async () => {
+    const result: AxiosResponse<any> = {
+      data: {
+        "id": {
+          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "entityType": "DEVICE"
+        },
+        "createdTime": 1609459200000,
+        "tenantId": {
+          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "entityType": "TENANT"
+        },
+        "customerId": {
+          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "entityType": "CUSTOMER"
+        },
+        "name": "A4B72CCDFF33",
+        "type": "Temperature Sensor",
+        "label": "Room 234 Sensor",
+        "deviceProfileId": {
+          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "entityType": "DEVICE_PROFILE"
+        },
+        "deviceData": {
+          "configuration": {},
+          "transportConfiguration": {}
+        },
+        "firmwareId": {
+          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "entityType": "OTA_PACKAGE"
+        },
+        "softwareId": {
+          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "entityType": "OTA_PACKAGE"
+        },
+        "additionalInfo": {}
+      },
+      headers: {},
+      config: {},
+      status: 200,
+      statusText: 'OK'
+    }
+
+    jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(result));
+    const hardwareID = "123";
+    const deviceLabel = "testingSensor";
+    expect(await service.createDevice(hardwareID, deviceLabel, false)).toEqual(true);
     /*const data = await loginService.login(username, password);
     service.setToken(data['data']['token']);
     expect(await service.createDevice('123', 'testingSensor', false)).toEqual(true);*/
