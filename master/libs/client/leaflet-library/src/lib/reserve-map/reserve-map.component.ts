@@ -3,6 +3,11 @@ import { Component, OnInit, Input, OnChanges, SimpleChanges, } from '@angular/co
 import { MapApiHistoricalData, MapApiHistoricalResponse, MapApiLatestResponse, MapApiReserveResponse, MapHistoricalPoints, MapRender, MarkerView, ViewMapType, } from '@master/shared-interfaces';
 import * as L from 'leaflet';
 import { Device } from 'libs/api/map-endpoint/src/lib/map-api.interface';
+// This library does not declare a module type, we we need to ignore this
+// error for a successful import
+// @ts-ignore
+import {antPath} from "leaflet-ant-path"
+
 @Component({
   selector: 'master-reserve-map',
   templateUrl: './reserve-map.component.html',
@@ -173,8 +178,24 @@ export class ReserveMapComponent implements OnInit, OnChanges {
     }
   }
 
+  //load the antpath for one of the devices
   public showOnly(deviceID:string):void{
     console.log("Show only")
+    const path=antPath([[-25.756632,28.233760],[-25.755332,28.232264]], {
+      "delay": 400,
+      "dashArray": [
+        42,
+        48
+      ],
+      "weight": 5,
+      "color": "#0000FF",
+      "pulseColor": "#FFFFFF",
+      "paused": false,
+      "reverse": false,
+      "hardwareAccelerated": true
+    });
+    path.addTo(this.mainmap)
+
   }
 
   public reloadHistorical():void{
@@ -215,8 +236,10 @@ export class ReserveMapComponent implements OnInit, OnChanges {
     deviceIDs.forEach(val=>this.loadhistorical(val));
   }
   
+  //loop through and add all things back to map
   public resetData():void{
     this.HistoricalMode=false;
+    this.historicalpath.forEach(val=>this.addToMap(val))
   }
 
   public addToMap(mapdata:MapHistoricalPoints){
