@@ -2,6 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Component, OnInit, Input, OnChanges, SimpleChanges, } from '@angular/core';
 import { MapApiHistoricalData, MapApiHistoricalResponse, MapApiLatestResponse, MapApiReserveResponse, MapHistoricalPoints, MapRender, MarkerView, ViewMapType, } from '@master/shared-interfaces';
 import * as L from 'leaflet';
+import { Device } from 'libs/api/map-endpoint/src/lib/map-api.interface';
 @Component({
   selector: 'master-reserve-map',
   templateUrl: './reserve-map.component.html',
@@ -11,16 +12,17 @@ export class ReserveMapComponent implements OnInit, OnChanges {
 
   // @Input() Latest: MapApiLatestResponse | null = null;
   @Input() Reserve: MapApiReserveResponse | null = null;
-  @Input() LatestData: MapApiHistoricalData|null = null;
+  @Input() LatestData: Device[] = [];
   @Input() MapRenderInput: MapRender;
   @Input() ViewMapTypeInput: ViewMapType;
   @Input() MarkerViewInput: MarkerView;
   @Input() ShowMarkers: boolean;
   @Input() ShowPolygon: boolean;
   @Input() HistoricalMode: boolean;
-  @Input() HistoricalDataID:number;
+  // @Input() HistoricalDataID:number;
   public mainmap: any = null;
   public maptiles: any = null;
+  public currentHistoricalId:number;
   // private mapmarkers: Array<L.Marker<any>> = [];
   private mappolygons: L.Polygon | null = null;
   private historicalpath: Array<MapHistoricalPoints> = [];
@@ -38,7 +40,8 @@ export class ReserveMapComponent implements OnInit, OnChanges {
     this.ShowMarkers = true;
     this.ShowPolygon = true;
     this.HistoricalMode = false;
-    this.HistoricalDataID=-1;
+    // this.HistoricalDataID=-1;
+    this.currentHistoricalId=-1;
   }
 
   ngOnInit(): void {
@@ -174,33 +177,52 @@ export class ReserveMapComponent implements OnInit, OnChanges {
     console.log("Show only")
   }
 
-  public displayhistorical(historical: MapApiHistoricalResponse): void {
-    if (historical.data != null) {
-      // this.hidemarkers();
-      this.HistoricalMode = true;
+  public reloadHistorical():void{
+    
+  }
+
+  public hideHistorical():void{
+    
+  } 
+
+  public loadhistorical(historical: Device): void {
+    if (historical!= null) {
       //try just show one
-      if (historical.data != undefined && historical.data.locations!=null) {
+      if (historical!=null) {
         // console.log(historical.data)
-        const current = L.polyline(historical.data.locations.map(val =>
-           [parseFloat(val.latitude), parseFloat(val.longitude)]) as unknown as L.LatLngExpression[], 
+        const current = L.polyline(historical.locationData.map(val =>
+           [parseFloat(val.location.latitude), parseFloat(val.location.longitude)]) as unknown as L.LatLngExpression[], 
            { "smoothFactor": 0.1 });
         const markers:Array<L.Marker>=[];
-        const length=historical.data.locations.length;
-        historical.data.locations.forEach((val,i)=>{
-          const temp=L.marker([parseFloat(val.latitude),parseFloat(val.longitude)],{icon:this.bluecirlceicon});
-          if(historical.data != undefined)if(i==length-1)temp.bindTooltip(historical.data.deviceID,{permanent:true,offset:[0,12]})
+        const length=historical.locationData.length;
+        historical.locationData.forEach((val,i)=>{
+          const temp=L.marker([parseFloat(val.location.latitude),parseFloat(val.location.longitude)],{icon:this.bluecirlceicon});
+          if(i==length-1)temp.bindTooltip(historical.deviceName,{permanent:true,offset:[0,12]})
           markers.push(temp);
-          temp.addTo(this.mainmap);
         })
         const newpoint = {
-          deviceID: historical.data?.deviceID,
+          deviceID: historical.deviceID,
           polyline: current,
           markers: markers
         } as MapHistoricalPoints
         this.historicalpath.push(newpoint);
-        current.addTo(this.mainmap);
+        if(!this.HistoricalMode) this.addToMap(newpoint)
       }
     }
   }
 
+  public loadInnitial(deviceIDs:Device[]):void{
+    deviceIDs.forEach(val=>this.loadhistorical(val));
+  }
+  
+  public resetData():void{
+    this.HistoricalMode=false;
+  }
+
+  public addToMap(mapdata:MapHistoricalPoints){
+    if(this.mainmap!=null){
+      mapdata.polyline.addTo(this.mainmap)
+      mapdata.markers.forEach(val=>val.addTo(this.mainmap))
+    }
+  }
 }
