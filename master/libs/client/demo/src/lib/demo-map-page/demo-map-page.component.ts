@@ -3,8 +3,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ReserveMapComponent } from '@master/client/leaflet-library';
 import { MapCallerService } from "@master/client/map-apicaller"
-import { MapApiHistoricalResponse, MapApiLatestResponse, MapApiReserveResponse, MapRender, ViewMapType } from "@master/shared-interfaces"
-import { Device } from 'libs/api/map-endpoint/src/lib/map-api.interface';
+import { MapApiHistoricalResponse, MapApiLatestResponse, MapApiReserveResponse, MapRender, ViewMapType,Device } from "@master/shared-interfaces"
 @Component({
   selector: 'master-demo-map-page',
   templateUrl: './demo-map-page.component.html',
