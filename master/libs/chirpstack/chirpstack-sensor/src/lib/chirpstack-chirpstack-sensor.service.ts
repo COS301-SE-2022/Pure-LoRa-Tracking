@@ -9,8 +9,9 @@ import { DeviceServiceClient } from '@chirpstack/chirpstack-api/as/external/api/
 import * as deviceMessages from '@chirpstack/chirpstack-api/as/external/api/device_pb';
 
 import { DeviceProfileServiceClient } from '@chirpstack/chirpstack-api/as/external/api/deviceProfile_grpc_pb';
-import { ListDeviceProfileRequest,DeviceProfileListItem } from '@chirpstack/chirpstack-api/as/external/api/deviceProfile_pb';
-
+import { ListDeviceProfileRequest,GetDeviceProfileRequest } from '@chirpstack/chirpstack-api/as/external/api/deviceProfile_pb';
+import { } from '@chirpstack/chirpstack-api/ns/ns_pb'
+import { DeviceProfile } from '@chirpstack/chirpstack-api/as/external/api/profiles_pb';
 
 @Injectable()
 export class ChirpstackChirpstackSensorService {
@@ -64,7 +65,28 @@ export class ChirpstackChirpstackSensorService {
     });
   }
 
-  async getProfiles(authtoken: string): Promise<Record<string, string>> {
+  async getProfileDetail(
+    authtoken: string,
+    profileId: string
+  ): Promise<DeviceProfile> {
+    this.metadata.set('authorization', 'Bearer ' + authtoken);
+
+    const getDeviceProfileRequest = new GetDeviceProfileRequest();
+    getDeviceProfileRequest.setId(profileId);
+
+    return new Promise((res, rej) => {
+      this.deviceProfileServiceClient.get(
+        getDeviceProfileRequest,
+        this.metadata,
+        (error, data) => {
+          if (data) res(data.getDeviceProfile());
+          else rej(error);
+        }
+      );
+    });
+  }
+
+  async getProfiles(authtoken: string): Promise<DeviceProfile[]> {
     this.metadata.set('authorization', 'Bearer ' + authtoken);
 
     const listDeviceProfileRequest = new ListDeviceProfileRequest();
@@ -75,13 +97,13 @@ export class ChirpstackChirpstackSensorService {
       this.deviceProfileServiceClient.list(
         listDeviceProfileRequest,
         this.metadata,
-        (error, data) => {
+        async (error, data) => {
           if (data) {
-            const list = {};
+            const list = [];
             for (const item of data.getResultList()) {
-              list[item.getId()] = item.getName();
+              list.push(await this.getProfileDetail(authtoken, item.getId()));
             }
-            // res(data.getResultList());
+            
             res(list);
           } else rej(error);
         }

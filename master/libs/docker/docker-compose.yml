@@ -63,21 +63,21 @@ services:
 
   
   # Thingsboard
-  mytb:
-    restart: always
-    image: "thingsboard/tb-postgres"
-    ports:
-      - "9090:9090" # local:docker
-      - "1884:1883"
-      - "7070:7070"
-      - "5683-5688:5683-5688/udp"
-    environment:
-      TB_QUEUE_TYPE: in-memory # while-testing
-    volumes:
-      - ~/.mytb-data:/data
-      - ~/.mytb-logs:/var/log/thingsboard
-    networks:
-      - thingsboards
+  # mytb:
+  #   restart: always
+  #   image: "thingsboard/tb-postgres"
+  #   ports:
+  #     - "9090:9090" # local:docker
+  #     - "1884:1883"
+  #     - "7070:7070"
+  #     - "5683-5688:5683-5688/udp"
+  #   environment:
+  #     TB_QUEUE_TYPE: in-memory # while-testing
+  #   volumes:
+  #     - ~/.mytb-data:/data
+  #     - ~/.mytb-logs:/var/log/thingsboard
+  #   networks:
+  #     - thingsboards
 
   # GLOBAL
 
