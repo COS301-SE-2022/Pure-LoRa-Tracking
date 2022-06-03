@@ -73,18 +73,18 @@ export class ThingsboardThingsboardDeviceService {
       this.httpService.post(
         url,
         {
-          "name": hardwareID,
-          "type": deviceType,
-          "label": labelName,
+          name: hardwareID,
+          type: deviceType,
+          label: labelName,
         },
         { headers: headersReq }
-      )).catch((error)=> {
-        if(error.response == undefined)
-          return null;
-        if(error.response.status==400) {
-          return {status:400}   
-        }
-      })
+      )
+    ).catch((error) => {
+      if (error.response == undefined) return null;
+      if (error.response.status == 400) {
+        return { status: 400 };
+      }
+    });
     return resp.status == 200;
   }
 
@@ -93,28 +93,26 @@ export class ThingsboardThingsboardDeviceService {
     deviceID: string
   ): Promise<boolean> {
     if (this.token == '') return false;
-    const url = this.baseURL +
-      "customer/" +
-      custID +
-      "/device/" +
-      deviceID;
+    const url = this.baseURL + 'customer/' + custID + '/device/' + deviceID;
 
     const headersReq = {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + this.token,
     };
 
-    const resp = await lastValueFrom(this.httpService.post(url,
-      {
-        "customerId": "",
-        "deviceId": ""
-      },
-      { headers: headersReq }
-    )).catch((error) => {
-      if (error.response == undefined)
-        return null;
+    const resp = await lastValueFrom(
+      this.httpService.post(
+        url,
+        {
+          customerId: '',
+          deviceId: '',
+        },
+        { headers: headersReq }
+      )
+    ).catch((error) => {
+      if (error.response == undefined) return null;
       if (error.response.status == 400) {
-        return { status: 400 }
+        return { status: 400 };
       }
     });
 
@@ -135,42 +133,55 @@ export class ThingsboardThingsboardDeviceService {
       Authorization: 'Bearer ' + this.token,
     };
 
-    const url = this.baseURL+"device/"+deviceID;
+    const url = this.baseURL + 'device/' + deviceID;
 
-    const resp = await lastValueFrom(this.httpService.delete(
-      url, {headers:headersReq}
-    )).catch((error)=> {
-      if(error.response == undefined)
-        return null;
-      if(error.response.status==400) {
-        return {status:400}   
+    const resp = await lastValueFrom(
+      this.httpService.delete(url, { headers: headersReq })
+    ).catch((error) => {
+      if (error.response == undefined) return null;
+      if (error.response.status == 400) {
+        return { status: 400 };
       }
-    })
-  return resp.status == 200;
+    });
+    return resp.status == 200;
   }
-  
-  async removeDeviceFromCustomer(
-    deviceID: string
-  ): Promise<boolean> {
+
+  async removeDeviceFromCustomer(deviceID: string): Promise<boolean> {
     if (this.token == '') return false;
-    const url = this.baseURL +
-      "customer/device/" +
-      deviceID;
+    const url = this.baseURL + 'customer/device/' + deviceID;
 
     const headersReq = {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + this.token,
     };
 
-    const resp = await lastValueFrom(this.httpService.delete(url, { headers: headersReq })).catch((error) => {
-      if (error.response == undefined)
-        return null;
+    const resp = await lastValueFrom(
+      this.httpService.delete(url, { headers: headersReq })
+    ).catch((error) => {
+      if (error.response == undefined) return null;
       if (error.response.status == 400) {
-        return { status: 400 }
+        return { status: 400 };
       }
     });
 
     return resp.status == 200;
+  }
+
+  async getDevice(deviceID: string) {
+    if (this.token == '') return null;
+
+    const url = this.baseURL + 'device/' + deviceID;
+
+    const headersReq = {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + this.token,
+    };
+    return await lastValueFrom(
+      this.httpService.get(url, { headers: headersReq })
+    ).catch((error) => {
+      if (error.response == undefined) return null;
+      return {status : error.response.status}
+    });
   }
 }
 

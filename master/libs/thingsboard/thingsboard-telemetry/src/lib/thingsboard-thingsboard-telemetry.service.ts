@@ -49,12 +49,19 @@ export class ThingsboardThingsboardTelemetryService {
 
     const data = await lastValueFrom(
       this.httpService.get(url, { headers: headersReq })
-    );
+    ).catch((error) => {
+      if (error.response == undefined) return { status: 500 };
+      return { status: error.response.status };
+    });
 
-    return this.buildTelemetryResults(data['data']);
+    if (data['status'] != 200) 
+    return []
+    else return this.buildTelemetryResults(data['data']);
   }
 
   buildTelemetryResults(items: AxiosResponse): TelemetryResult[] {
+    if(items['longitude'] == undefined)
+      return [];
     const TelList: TelemetryResult[] = new Array<TelemetryResult>();
     for (let i = 0; i < items['longitude'].length; i++) {
       TelList.push({
@@ -92,14 +99,13 @@ export class ThingsboardThingsboardTelemetryService {
         },
         { headers: headersReq }
       )
-    ).catch((error)=> {
-      if(error.response == undefined)
-        return {status:400};
-      if(error.response.status==400) {
-        return {status:400}   
+    ).catch((error) => {
+      if (error.response == undefined) return { status: 400 };
+      if (error.response.status == 400) {
+        return { status: 400 };
       }
-    })
-  return resp.status == 200;
+    });
+    return resp.status == 200;
   }
 }
 

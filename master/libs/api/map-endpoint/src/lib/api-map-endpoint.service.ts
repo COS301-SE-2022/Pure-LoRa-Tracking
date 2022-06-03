@@ -87,8 +87,8 @@ export class ApiMapEndpointService {
             }  
 
         
-        this.thingsboardClient.setToken(content.token);
-        const data = await this.thingsboardClient.getReservePerimeter();
+        /*this.thingsboardClient.setToken(content.token);
+        const data = await this.thingsboardClient.getReservePerimeter();*/
         /*return {
             code : 200,
             status : "success",
