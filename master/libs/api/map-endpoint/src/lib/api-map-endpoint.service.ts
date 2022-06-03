@@ -151,7 +151,10 @@ export class ApiMapEndpointService {
                 explanation : "Token missing"
             }  
 
-        if(content.deviceID=="sens-11") return {
+        this.thingsboardClient.setToken(content.token);
+        for 
+
+        /*if(content.deviceID=="sens-11") return {
             code : 200,
             status : "success",
             explanation : "",
@@ -225,6 +228,6 @@ export class ApiMapEndpointService {
             code : 401,
             status : "failure",
             explanation : "Could not find sensor"
-        }
+        }*/
     }
 }

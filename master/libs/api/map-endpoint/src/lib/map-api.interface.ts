@@ -15,7 +15,7 @@ export interface MapApiReserve {
 export interface MapApiHistorical {
     token: string,
     reserveID: string,
-    deviceID: string,
+    deviceID: string[],
     startTime?: number,
     endTime?: number
 }
