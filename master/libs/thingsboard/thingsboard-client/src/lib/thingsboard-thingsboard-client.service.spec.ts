@@ -3,10 +3,16 @@ import { ThingsboardThingsboardDeviceModule } from '@lora/thingsboard-device';
 import { ThingsboardThingsboardTelemetryModule } from '@lora/thingsboard-telemetry';
 import { ThingsboardThingsboardUserModule } from '@lora/thingsboard-user';
 import { Test } from '@nestjs/testing';
+import { HttpModule, HttpService } from '@nestjs/axios';
 import { ThingsboardThingsboardClientService } from './thingsboard-thingsboard-client.service';
+import { AxiosResponse } from 'axios';
+import { of } from 'rxjs';
 
 describe('ThingsboardThingsboardClientService', () => {
   let service: ThingsboardThingsboardClientService;
+  let httpService: HttpService;
+  const username = "reserveAdmin@reserve.com";
+  const password = "reserve";
 
   beforeAll(async () => {
     const module = await Test.createTestingModule({
@@ -15,6 +21,7 @@ describe('ThingsboardThingsboardClientService', () => {
     }).compile();
 
     service = module.get(ThingsboardThingsboardClientService);
+    httpService = module.get(HttpService);
 
   });
 
@@ -22,9 +29,20 @@ describe('ThingsboardThingsboardClientService', () => {
     expect(service).toBeTruthy();
   });
 
-  it("should login, acquire userID and print device list from ID", async() => {
-    /*expect(await service.loginUser("reserveuser@reserve.com","reserve")).toEqual(true);
-    const resp = await service.getUserDevices();
+  it("should login, acquire userID and print device list from ID", async () => {
+    const result: AxiosResponse<any> = {
+      data: {
+        "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZW5hbnRAdGhpbmdzYm9hcmQub3JnIi...",
+        "refreshToken": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZW5hbnRAdGhpbmdzYm9hcmQub3JnIi..."
+      },
+      headers: {},
+      config: {},
+      status: 200,
+      statusText: 'OK'
+    }
+    jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(result));
+    expect(await service.loginUser(username, password)).toEqual(true);
+    /*const resp = await service.getUserDevices();
     console.log(resp['data']);*/
   });
 
