@@ -27,15 +27,14 @@ jobs:
     # sequence of tasks that will be executed as part of the job
     steps:
       - name: environment_status
-      - run: |
-          echo "PURELORABUILD: ${{PURELORABUILD}}" 
-
+        run: echo "PURELORABUILD=$PURELORABUILD"
+        
       #Check out to the develop branch
       - name: Checkout dev
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-
+ 
       # run docker
       - name: Start containers
         working-directory: ./master/
