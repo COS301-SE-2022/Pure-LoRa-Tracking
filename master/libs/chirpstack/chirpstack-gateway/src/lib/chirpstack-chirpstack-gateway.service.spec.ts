@@ -3,6 +3,8 @@ import { ChirpstackChirpstackGatewayService } from './chirpstack-chirpstack-gate
 import * as gatewayMessages from '@chirpstack/chirpstack-api/as/external/api/gateway_pb';
 import { Empty } from 'google-protobuf/google/protobuf/empty_pb';
 
+const describeLive = process.env.PURELORABUILD == 'DEV' ? describe : describe.skip;
+
 describe('ChirpstackChirpstackGatewayService', () => {
   let service: ChirpstackChirpstackGatewayService;
   let authtoken: string;
@@ -24,8 +26,8 @@ describe('ChirpstackChirpstackGatewayService', () => {
   describe('manage gateways', () => {
     it('should add a gateway', async () => {
       // Inputs
-      const gateway_name = 'gateway_1';
-      const gateway_id = '353036203a001011';
+      const gatewayName = 'gateway_1';
+      const gatewayId = '353036203a001011';
       // Output
       const response = new Empty();
       
@@ -34,8 +36,8 @@ describe('ChirpstackChirpstackGatewayService', () => {
         .spyOn(service.gatewayServiceClient, 'create')
         .mockImplementationOnce((createGatewayRequest, metadata, callback: any) => {
           expect(createGatewayRequest.getGateway()).toBeInstanceOf(gatewayMessages.Gateway);
-          expect(createGatewayRequest.getGateway().getId()).toBe(gateway_id);
-          expect(createGatewayRequest.getGateway().getName()).toBe(gateway_name);
+          expect(createGatewayRequest.getGateway().getId()).toBe(gatewayId);
+          expect(createGatewayRequest.getGateway().getName()).toBe(gatewayName);
           callback(null, response);
           return null;
         });
@@ -43,14 +45,14 @@ describe('ChirpstackChirpstackGatewayService', () => {
       const data = await service.addGateway(
         authtoken,
         'test',
-        gateway_name,
-        gateway_id
+        gatewayName,
+        gatewayId
       );
       
       expect(data).toBe(response);
     });
 
-    it('it should list gateways', async () => {
+    it('should list gateways', async () => {
       // Inputs
       // Output
       const response = new gatewayMessages.ListGatewayResponse();
@@ -69,9 +71,9 @@ describe('ChirpstackChirpstackGatewayService', () => {
       expect(data).toBeInstanceOf(gatewayMessages.ListGatewayResponse);
     });
 
-    it('it should delete a gateway', async () => {
+    it('should delete a gateway', async () => {
       // Inputs
-      const gateway_id = '353036203a001011';
+      const gatewayId = '353036203a001011';
       // Output
       const response = new Empty();
 
@@ -79,22 +81,22 @@ describe('ChirpstackChirpstackGatewayService', () => {
       jest
         .spyOn(service.gatewayServiceClient, 'delete')
         .mockImplementationOnce(
-          (listGatewayRequest, metadata, callback: any) => {
+          (deleteGatewayRequest, metadata, callback: any) => {
+            expect(deleteGatewayRequest.getId()).toBe(gatewayId);
             callback(null, response);
             return null;
           }
         );
 
-      const data = await service.removeGateway(authtoken, '');
+      const data = await service.removeGateway(authtoken, gatewayId);
       expect(data).toBe(response);
     });
 
   })
 
   // Live tests
-  describe('manage gateways live', () => {
-    
-    it('it should list gateways', async () => {
+  describeLive('manage gateways live', () => {
+    it('should list gateways', async () => {
       const data = await service.listGateways(authtoken);
       console.log(data);
       expect(data).toBeInstanceOf(gatewayMessages.ListGatewayResponse);
@@ -102,7 +104,9 @@ describe('ChirpstackChirpstackGatewayService', () => {
     });
 
     it('should add a gateway', async () => {
-      const gatewayCount = (await service.listGateways(authtoken)).getTotalCount();
+      const gatewayCount = (
+        await service.listGateways(authtoken)
+      ).getTotalCount();
 
       const data = await service.addGateway(
         authtoken,
@@ -112,14 +116,16 @@ describe('ChirpstackChirpstackGatewayService', () => {
       );
 
       expect(data).toBeInstanceOf(Empty);
-      const newGatewayCount = (await service.listGateways(authtoken)).getTotalCount();
+      const newGatewayCount = (
+        await service.listGateways(authtoken)
+      ).getTotalCount();
       expect(newGatewayCount).toBeGreaterThan(gatewayCount);
     });
-    
-    
 
     it('should delete a gateway', async () => {
-      const gatewayCount = (await service.listGateways(authtoken)).getTotalCount();
+      const gatewayCount = (
+        await service.listGateways(authtoken)
+      ).getTotalCount();
 
       const data = await service.removeGateway(
         authtoken,
@@ -127,7 +133,9 @@ describe('ChirpstackChirpstackGatewayService', () => {
       );
       // console.log(data);
       expect(data).toBeInstanceOf(Empty);
-      const newGatewayCount = (await service.listGateways(authtoken)).getTotalCount();
+      const newGatewayCount = (
+        await service.listGateways(authtoken)
+      ).getTotalCount();
       expect(newGatewayCount).toBeLessThan(gatewayCount);
     });
   });
