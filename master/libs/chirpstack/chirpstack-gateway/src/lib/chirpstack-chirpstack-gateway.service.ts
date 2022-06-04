@@ -16,6 +16,8 @@ export class ChirpstackChirpstackGatewayService {
       'localhost:8080',
       grpc.credentials.createInsecure()
     );
+
+    this.metadata = new grpc.Metadata();
   }
 
   async listGateways(
@@ -73,6 +75,24 @@ export class ChirpstackChirpstackGatewayService {
     return new Promise((res, rej) => {
       this.gatewayServiceClient.create(
         createGatewayRequest,
+        this.metadata,
+        (error, data) => {
+          if (data) res(data);
+          else rej(error);
+        }
+      );
+    });
+  }
+
+  async removeGateway(authtoken: string, gatewayId: string) {
+    this.metadata.set('authorization', 'Bearer ' + authtoken);
+
+    const deleteGatewayRequest = new gatewayMessages.DeleteGatewayRequest();
+    deleteGatewayRequest.setId(gatewayId);
+
+    return new Promise((res, rej) => {
+      this.gatewayServiceClient.delete(
+        deleteGatewayRequest,
         this.metadata,
         (error, data) => {
           if (data) res(data);
