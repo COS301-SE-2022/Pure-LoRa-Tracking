@@ -41,11 +41,27 @@ describe('ThingsboardThingsboardUserService', () => {
     expect(login['data']['token']).toBeDefined;
   });
 
-  it('should logout and return status 200 - OK', async() => {
-   /* const login = await service
-      .login('reserveAdmin@reserve.com', 'reserve');
+  it('should logout and return status 200 - OK', async () => {
+    const result: AxiosResponse<any> = {
+      data: {
+        "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZW5hbnRAdGhpbmdzYm9hcmQub3JnIi...",
+        "refreshToken": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZW5hbnRAdGhpbmdzYm9hcmQub3JnIi..."
+      },
+      headers: {},
+      config: {},
+      status: 200,
+      statusText: 'OK'
+    }
+    jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(result));
+    const login = await service.login(username, password);
+
+    result.data = {
+      "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZW5hbnRAdGhpbmdzYm9hcmQub3JnIi...",
+    }
+    
+    jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(result));
     const logout = await service.logout(login['data']['token']);
-    expect(logout['status']).toEqual(200);*/
+    expect(logout['status']).toEqual(200);
   });
 
   it("Should print user info", async()=> {
