@@ -9,10 +9,15 @@ on:
 
   # Allows running this workflow manually
   workflow_dispatch:
+    inputs:
+      test_live:
+        description: 'test live? (true|false)'     
+        required: false
+        default: 'false'
 
 env:
+  if: ${{ github.event.inputs.test_live == 'true' }}
   PURELORABUILD: DEV
-
 
 jobs:
   test:
