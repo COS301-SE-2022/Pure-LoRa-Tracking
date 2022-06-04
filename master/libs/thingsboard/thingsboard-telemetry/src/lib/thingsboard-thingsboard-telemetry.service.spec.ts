@@ -3,7 +3,6 @@ import { Test } from '@nestjs/testing';
 import { ThingsboardThingsboardTelemetryService } from './thingsboard-thingsboard-telemetry.service';
 import { ThingsboardThingsboardUserModule, ThingsboardThingsboardUserService } from '@lora/thingsboard-user';
 import { ThingsboardThingsboardDeviceModule, ThingsboardThingsboardDeviceService } from '@lora/thingsboard-device';
-import { off } from 'process';
 import { AxiosResponse } from 'axios';
 import { of } from 'rxjs';
 
