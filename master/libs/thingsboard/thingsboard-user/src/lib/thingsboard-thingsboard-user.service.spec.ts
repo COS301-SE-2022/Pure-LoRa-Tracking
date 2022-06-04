@@ -1,11 +1,15 @@
-import { HttpModule } from '@nestjs/axios';
+import { HttpModule, HttpService } from '@nestjs/axios';
 import { Test } from '@nestjs/testing';
 import { ThingsboardThingsboardUserService } from './thingsboard-thingsboard-user.service';
 import { AxiosResponse } from 'axios';
+import { of } from 'rxjs';
 
 
 describe('ThingsboardThingsboardUserService', () => {
   let service: ThingsboardThingsboardUserService;
+  let httpService: HttpService;
+  const username = "reserveAdmin@reserve.com";
+  const password = "reserve";
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
@@ -14,16 +18,27 @@ describe('ThingsboardThingsboardUserService', () => {
     }).compile();
 
     service = module.get(ThingsboardThingsboardUserService);
+    httpService = module.get(HttpService);
   });
 
   it('should be defined', () => {
     expect(service).toBeTruthy();
   });
 
-  it('valid login should return token and refreshToken', async() => {
-   /* const login = await service
-      .login('reserveAdmin@reserve.com', 'reserve');
-      expect(login['data']['token']).toBeDefined;*/
+  it('valid login should return token and refreshToken', async () => {
+    const result: AxiosResponse<any> = {
+      data: {
+        "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZW5hbnRAdGhpbmdzYm9hcmQub3JnIi...",
+        "refreshToken": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZW5hbnRAdGhpbmdzYm9hcmQub3JnIi..."
+      },
+      headers: {},
+      config: {},
+      status: 200,
+      statusText: 'OK'
+    }
+    jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(result));
+    const login = await service.login('reserveAdmin@reserve.com', 'reserve');
+    expect(login['data']['token']).toBeDefined;
   });
 
   it('should logout and return status 200 - OK', async() => {
