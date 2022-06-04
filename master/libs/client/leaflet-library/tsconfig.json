@@ -12,6 +12,8 @@
   ],
   "compilerOptions": {
     "forceConsistentCasingInFileNames": true,
+    "allowJs": true,
+    "checkJs": true,
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,

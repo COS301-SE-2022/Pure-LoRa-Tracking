@@ -25,10 +25,36 @@ describe('ThingsboardThingsboardDeviceService', () => {
   });
 
   it('should get the device infos and print them...', async()=> {
-    /*const data = await loginService.login(username, password);*/
-    /*service.setToken(data['data']['token']);
+    /*const data = await loginService.login(username, password);
+    service.setToken(data['data']['token']);
     const userinfo = await loginService.userInfo(data['data']['token']);
-    //console.log(userinfo['data']);
-    expect(userinfo).toBeDefined();*/
+    const custID = userinfo['data']['customerId']['id'];
+    expect(custID).toBeDefined();
+    const DeviceData = await service.getCustomerDevices(0, 5, custID);
+    console.log(service.processDevices(DeviceData['data']['data']));*/
+  })
+
+  it('should create a device and return status 200', async ()=> {
+    /*const data = await loginService.login(username, password);
+    service.setToken(data['data']['token']);
+    expect(await service.createDevice('123', 'testingSensor', false)).toEqual(true);*/
+  })
+
+  it('should delete the target device and return status 200', async()=> {
+    /*const data = await loginService.login(username, password);
+    service.setToken(data['data']['token']);
+    expect(await service.deleteDevice("8e4fcc90-dc0e-11ec-931b-3544ea43758e")).toEqual(true);*/
+  })
+
+  it('should assign the specified device to the specified customer and return status 200', async () => {
+    /*const data = await loginService.login(username, password);
+    service.setToken(data['data']['token']);
+    expect(await service.assignDevicetoCustomer("9fed2a30-dfa9-11ec-b99c-f7477a3db362", "fa0097e0-dfaa-11ec-b99c-f7477a3db362")).toEqual(true);*/
+  })
+
+  it('should unassign the specified device from the specified customer and return status 200', async () => {
+    /*const data = await loginService.login(username, password);
+    service.setToken(data['data']['token']);
+    expect(await service.removeDeviceFromCustomer("fa0097e0-dfaa-11ec-b99c-f7477a3db362")).toEqual(true);*/
   })
 });
