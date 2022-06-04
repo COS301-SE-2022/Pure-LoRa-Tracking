@@ -17,7 +17,7 @@ describe('ThingsboardThingsboardClientService', () => {
   beforeAll(async () => {
     const module = await Test.createTestingModule({
       providers: [ThingsboardThingsboardClientService],
-      imports : [ThingsboardThingsboardUserModule, ThingsboardThingsboardTelemetryModule, ThingsboardThingsboardDeviceModule, ThingsboardThingsboardAssetModule]
+      imports: [ThingsboardThingsboardUserModule, ThingsboardThingsboardTelemetryModule, ThingsboardThingsboardDeviceModule, ThingsboardThingsboardAssetModule]
     }).compile();
 
     service = module.get(ThingsboardThingsboardClientService);
@@ -46,9 +46,43 @@ describe('ThingsboardThingsboardClientService', () => {
     console.log(resp['data']);*/
   });
 
-  it('should return the reserve perimeter for the reserve user', async()=> {
-    /*await service.loginUser("reserveuser@reserve.com", 'reserve');
-    console.log(await service.getReservePerimeter());*/
+  it('should return the reserve perimeter for the reserve user', async () => {
+    const result: AxiosResponse<any> = {
+      data: {
+        "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZW5hbnRAdGhpbmdzYm9hcmQub3JnIi...",
+        "refreshToken": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZW5hbnRAdGhpbmdzYm9hcmQub3JnIi..."
+      },
+      headers: {},
+      config: {},
+      status: 200,
+      statusText: 'OK'
+    }
+    jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(result));
+    await service.loginUser(username, password);
+
+    result.data = {
+      "id": {
+        "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+        "entityType": "USER"
+      },
+      "createdTime": 1609459200000,
+      "tenantId": {
+        "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+        "entityType": "TENANT"
+      },
+      "customerId": {
+        "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+        "entityType": "CUSTOMER"
+      },
+      "email": "reserveuser@reserve.com",
+      "name": "reserveuser@reserve.com",
+      "authority": "TENANT_ADMIN",
+      "firstName": "John",
+      "lastName": "Doe",
+      "additionalInfo": {}
+    }
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(result));
+    expect(await service.getReservePerimeter()).toBeDefined();
   })
 
   it('should return the telemetry for the deviceID given', async()=> {
