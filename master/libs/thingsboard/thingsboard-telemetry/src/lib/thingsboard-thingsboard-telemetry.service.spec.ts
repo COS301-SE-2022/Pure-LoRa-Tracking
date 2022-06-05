@@ -58,7 +58,12 @@ describe('ThingsboardThingsboardTelemetryService', () => {
       const deviceID = "25c31a40-dfe9-11ec-bdb3-750ce7ed2451";
       const deviceType = "DEVICE";
 
-      console.log(await service.getTelemetry(deviceID, deviceType, 0, 1654072587463));
+      const resp = await service.getTelemetry(deviceID, deviceType, 0, 1654072587463);
+
+      expect(resp[0]['longitude']).toBeDefined();
+      expect(resp[0]['timestamp']).toBeDefined();
+      expect(resp[0]['latitude']).toBeDefined();
+
 
     //const data = await userService.login(username, password);
     //service.setToken(data['data']['token']);
@@ -82,13 +87,36 @@ describe('ThingsboardThingsboardTelemetryService', () => {
 
         
 
-      console.log(await service.sendTelemetry("acf22a00-ce06-11ec-b2d0-bd829ba84846", "DEVICE_PROFILE", 21.06, 21.0));
+      const resp = await service.sendTelemetry("acf22a00-ce06-11ec-b2d0-bd829ba84846", "DEVICE", 21.06, 21.0);
+      expect(resp).toEqual(true);
 
-    /*service.sendTelemetry("acf22a00-ce06-11ec-b2d0-bd829ba84846", "DEVICE_PROFILE", 21.06, 21.0).subscribe((resp)=> {
+    /*service.sendTelemetry("acf22a00-ce06-11ec-b2d0-bd829ba84846", "DEVICE", 21.06, 21.0).subscribe((resp)=> {
       //console.log(resp.status);
       expect(resp.status).toEqual(200)
     });*/
   })
+
+  it('should send the telemetry and respond with status 200 - OK', async()=> {
+    const result : AxiosResponse<any> = {
+      data : "",
+      headers: {},
+      config: {},
+      status: 200,
+      statusText: 'OK',
+    }
+
+    jest
+        .spyOn(httpService, 'post')
+        .mockImplementationOnce(() => of(result));
+
+        
+
+      const resp = await service.sendJsonTelemetry("acf22a00-ce06-11ec-b2d0-bd829ba84846", "DEVICE", {
+        "rssi" : 1000
+      });
+      expect(resp).toEqual(true);
+  });
+
 
 });
 
