@@ -13,7 +13,7 @@ describe('ThingsboardThingsboardDeviceService', () => {
   const password = "reserve";
   
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const module = await Test.createTestingModule({
       providers: [ThingsboardThingsboardDeviceService],
       imports: [HttpModule, ThingsboardThingsboardUserModule],
@@ -22,6 +22,7 @@ describe('ThingsboardThingsboardDeviceService', () => {
     service = module.get(ThingsboardThingsboardDeviceService);
     loginService = module.get(ThingsboardThingsboardUserService);
     httpService = module.get(HttpService);
+    service.setToken("token")
   });
 
   it('should be defined', () => {
