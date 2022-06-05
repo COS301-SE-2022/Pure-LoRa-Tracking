@@ -1,7 +1,13 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get, Post } from '@nestjs/common';
 import { ApiDeviceEndpointService } from './api-device-endpoint.service';
 
-@Controller('api-device-endpoint')
+@Controller('devices')
 export class ApiDeviceEndpointController {
   constructor(private apiDeviceEndpointService: ApiDeviceEndpointService) {}
+
+  @Get('')
+  test() {
+    return "device reachable"
+  }
+
 }
