@@ -4,6 +4,7 @@
     "-api-hardware-debug": "libs/api/hardware-debug",
     "api": "apps/api",
     "api-api-router": "libs/api/api-router",
+    "api-device-endpoint": "libs/api/device-endpoint",
     "api-interfaces": "libs/api-interfaces",
     "api-map-endpoint": "libs/api/map-endpoint",
     "chirpstack": "libs/chirpstack",
