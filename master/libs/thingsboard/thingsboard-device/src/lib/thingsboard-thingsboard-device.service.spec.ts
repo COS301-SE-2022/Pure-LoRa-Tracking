@@ -13,7 +13,7 @@ describe('ThingsboardThingsboardDeviceService', () => {
   const password = "reserve";
   
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const module = await Test.createTestingModule({
       providers: [ThingsboardThingsboardDeviceService],
       imports: [HttpModule, ThingsboardThingsboardUserModule],
@@ -22,6 +22,7 @@ describe('ThingsboardThingsboardDeviceService', () => {
     service = module.get(ThingsboardThingsboardDeviceService);
     loginService = module.get(ThingsboardThingsboardUserService);
     httpService = module.get(HttpService);
+    service.setToken("token")
   });
 
   it('should be defined', () => {
@@ -139,7 +140,7 @@ describe('ThingsboardThingsboardDeviceService', () => {
     jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(result));
     const hardwareID = "123";
     const deviceLabel = "testingSensor";
-    expect(await service.createDevice(hardwareID, deviceLabel, false)).toEqual(true);
+    expect(await service.createDevice(hardwareID, deviceLabel, false)).toEqual("784f394c-42b6-435a-983c-b7beff2784f9");
     /*const data = await loginService.login(username, password);
     service.setToken(data['data']['token']);
     expect(await service.createDevice('123', 'testingSensor', false)).toEqual(true);*/
@@ -262,5 +263,6 @@ describe('ThingsboardThingsboardDeviceService', () => {
     /*const data = await loginService.login(username, password);
     service.setToken(data['data']['token']);
     expect(await service.removeDeviceFromCustomer("fa0097e0-dfaa-11ec-b99c-f7477a3db362")).toEqual(true);*/
-  })
+  });
+
 });

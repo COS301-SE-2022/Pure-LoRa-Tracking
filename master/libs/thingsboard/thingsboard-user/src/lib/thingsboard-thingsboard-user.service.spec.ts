@@ -8,10 +8,11 @@ import { of } from 'rxjs';
 describe('ThingsboardThingsboardUserService', () => {
   let service: ThingsboardThingsboardUserService;
   let httpService: HttpService;
-  const username = "reserveAdmin@reserve.com";
+  const username = "reserveadmin@reserve.com";
   const password = "reserve";
+  const custID = "ef55ff40-dfe8-11ec-bdb3-750ce7ed2451";
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const module = await Test.createTestingModule({
       providers: [ThingsboardThingsboardUserService],
       imports: [HttpModule]
@@ -24,6 +25,8 @@ describe('ThingsboardThingsboardUserService', () => {
   it('should be defined', () => {
     expect(service).toBeTruthy();
   });
+
+  /////////////////////////////////////////////////////////////////
 
   it('valid login should return token and refreshToken', async () => {
     const result: AxiosResponse<any> = {
@@ -40,6 +43,8 @@ describe('ThingsboardThingsboardUserService', () => {
     const login = await service.login('reserveAdmin@reserve.com', 'reserve');
     expect(login['data']['token']).toBeDefined;
   });
+
+  /////////////////////////////////////////////////////////////////
 
   it('should logout and return status 200 - OK', async () => {
     const result: AxiosResponse<any> = {
@@ -63,6 +68,8 @@ describe('ThingsboardThingsboardUserService', () => {
     const logout = await service.logout(login['data']['token']);
     expect(logout['status']).toEqual(200);
   });
+
+  /////////////////////////////////////////////////////////////////
 
   it("Should print user info", async () => {
     const result: AxiosResponse<any> = {
@@ -104,4 +111,20 @@ describe('ThingsboardThingsboardUserService', () => {
     const userInfo = await service.userInfo(login['data']['token']);
     expect(userInfo['data']['customerId']['id']).toBeDefined();
   })
+
+  /////////////////////////////////////////////////////////////////
+
+  it("should return the customer info", async()=> {
+    //const Login = await service.login(username, password);
+    //console.log(await service.userInfoByCustID(Login['data']['token'], custID));
+  })
+
+  /////////////////////////////////////////////////////////////////
+
+  it("should return the User ID and privilege by token", async()=> {
+    /*const Login = await service.login(username, password);
+    console.log(await service.getUserID(Login['data']['token']));*/
+  })
+
+
 });

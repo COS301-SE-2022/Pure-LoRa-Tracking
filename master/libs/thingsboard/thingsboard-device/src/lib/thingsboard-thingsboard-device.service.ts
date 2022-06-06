@@ -16,7 +16,7 @@ export class ThingsboardThingsboardDeviceService {
 
   async getCustomerDevices(page: number, pageSize: number, customerID: string) {
     //Uncomment after mock tests.
-    //if (this.token == '') return null;
+    if (this.token == '') return null;
 
     const url =
       this.baseURL +
@@ -33,9 +33,10 @@ export class ThingsboardThingsboardDeviceService {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + this.token,
     };
-    return await lastValueFrom(
+    const resp = await lastValueFrom(
       this.httpService.get(url, { headers: headersReq })
     );
+    return this.processDevices(resp['data']['data']);
   }
 
   processDevices(devices): deviceList[] {
@@ -44,7 +45,8 @@ export class ThingsboardThingsboardDeviceService {
       list.push({
         deviceID: devices[i]['id']['id'],
         isGateway: devices[i]['additionalInfo']['gateway'],
-        name: devices[i]['name'],
+        deviceName: devices[i]['name'],
+        humanName: devices[i]['label'],
         profile: devices[i]['id']['entityType'],
       });
     }
@@ -56,10 +58,11 @@ export class ThingsboardThingsboardDeviceService {
     hardwareID: string,
     labelName: string,
     isGateway: boolean,
-    profileType?: profileList
-  ): Promise<boolean> {
+    profileType?: profileList,
+    extraParams?: any
+  ): Promise<string> {
     //Uncomment after mock testing.
-    //if (this.token == '') return false;
+    if (this.token == '') return 'token-fail';
 
     const url = this.baseURL + 'device';
 
@@ -87,7 +90,8 @@ export class ThingsboardThingsboardDeviceService {
         return { status: 400 };
       }
     });
-    return resp.status == 200;
+    if (resp.status != 200) return 'fail-server';
+    else return resp['data']['id']['id'];
   }
 
   async assignDevicetoCustomer(
@@ -95,7 +99,7 @@ export class ThingsboardThingsboardDeviceService {
     deviceID: string
   ): Promise<boolean> {
     //Uncomment after mock testing.
-    //if (this.token == '') return false;
+    if (this.token == '') return false;
     const url = this.baseURL + 'customer/' + custID + '/device/' + deviceID;
 
     const headersReq = {
@@ -151,7 +155,7 @@ export class ThingsboardThingsboardDeviceService {
 
   async removeDeviceFromCustomer(deviceID: string): Promise<boolean> {
     //Uncomment after mock testing.
-    //if (this.token == '') return false;
+    if (this.token == '') return false;
     const url = this.baseURL + 'customer/device/' + deviceID;
 
     const headersReq = {
@@ -184,7 +188,7 @@ export class ThingsboardThingsboardDeviceService {
       this.httpService.get(url, { headers: headersReq })
     ).catch((error) => {
       if (error.response == undefined) return null;
-      return {status : error.response.status}
+      return { status: error.response.status };
     });
   }
 }
@@ -192,11 +196,20 @@ export class ThingsboardThingsboardDeviceService {
 export class deviceList {
   deviceID: string;
   isGateway: boolean;
-  name: string;
+  deviceName: string;
+  humanName: string;
   profile: string;
 }
 
 export class profileList {
   profileID: string;
   profileName: string;
+}
+
+export interface deviceParameters {
+  hardwareID: string;
+  labelName: string;
+  isGateway: boolean;
+  profileType?: profileList;
+  extraParams?: any;
 }
