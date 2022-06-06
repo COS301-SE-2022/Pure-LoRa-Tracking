@@ -6,6 +6,8 @@ import { firstValueFrom } from 'rxjs';
 export class ThingsboardThingsboardUserService {
   constructor(private httpService: HttpService) {}
 
+  /////////////////////////////////////////////////////////
+
   async login(name: string, password: string): Promise<AxiosResponse> {
     return await firstValueFrom(
       this.httpService.post('http://localhost:8080/api/auth/login', {
@@ -22,6 +24,8 @@ export class ThingsboardThingsboardUserService {
         });
     });
   }
+
+  /////////////////////////////////////////////////////
 
   async logout(token: string): Promise<AxiosResponse> {
     const headersReq = {
@@ -45,6 +49,8 @@ export class ThingsboardThingsboardUserService {
     });
   }
 
+  //////////////////////////////////////////////////////
+
   async userInfo(token: string): Promise<any> {
     const headersReq = {
       'Content-Type': 'application/json',
@@ -56,12 +62,15 @@ export class ThingsboardThingsboardUserService {
       })
     ).catch((error) => {
       if (error.response == undefined) return null;
-      if (error.response.status == 401)
-        return {status:401}
+      if (error.response.status == 401) return { status: 401 };
     });
   }
 
-  async getUserID(token: string): Promise<{id?:string; type?:string;code:number}> {
+  ///////////////////////////////////////////////////////////
+
+  async getUserID(
+    token: string
+  ): Promise<{ id?: string; type?: string; code: number }> {
     const resp = await this.userInfo(token);
     if (resp.status != 200) {
       return {
@@ -77,32 +86,40 @@ export class ThingsboardThingsboardUserService {
 
     if (resp.data['authority'] == 'TENANT_ADMIN') {
       return {
-        code : 200,
+        code: 200,
         id: resp.data['tenantId']['id'],
         type: 'admin',
       };
     } else {
       return {
-        code : 200,
+        code: 200,
         id: resp.data['customerId']['id'],
         type: 'user',
       };
     }
   }
 
-  async userInfoByCustID(token:string, custID:string) : Promise<any> {
+  //////////////////////////////////////////////////////////////////////
+
+  async userInfoByCustID(token: string, custID: string): Promise<any> {
     const headersReq = {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + token,
     };
 
     return await firstValueFrom(
-      this.httpService.get('http://localhost:8080/api/customer/'+custID, {
+      this.httpService.get('http://localhost:8080/api/customer/' + custID, {
         headers: headersReq,
       })
     ).catch((error) => {
       if (error.response == undefined) return null;
-      return {status:error.response.status}
+      return { status: error.response.status };
     });
   }
+
+  /////////////////////////////////////////////////////////////////
+
+  
+
+
 }

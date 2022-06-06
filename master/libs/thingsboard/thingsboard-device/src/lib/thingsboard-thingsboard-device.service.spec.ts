@@ -263,5 +263,6 @@ describe('ThingsboardThingsboardDeviceService', () => {
     /*const data = await loginService.login(username, password);
     service.setToken(data['data']['token']);
     expect(await service.removeDeviceFromCustomer("fa0097e0-dfaa-11ec-b99c-f7477a3db362")).toEqual(true);*/
-  })
+  });
+
 });
