@@ -6,14 +6,16 @@ import { acknowledge } from './hardware-payload.interface';
 export class ApiHardwareDebugController {
   constructor(private apiHardwareDebugService: ApiHardwareDebugService) {}
 
-  // @Post('device-status')
-  // deviceStatusResponse(@Body() content: any): acknowledge {
-  //   return this.apiHardwareDebugService.deviceStatusProcess(content);
-  // }
-
   @Post('device-data')
-  deviceData(@Query() query: { event: string }, @Body() content: any): acknowledge {
+  deviceData(@Query() query: { event: string }, @Body() content: Uint8Array): acknowledge {
     console.log(query);
+    if (!(content instanceof Uint8Array))
+      return {
+        code: 400,
+        status: 'Wrong data format',
+        explanation: 'Server only accepts protobuf format',
+      };
+    
     switch (query.event) {
       case 'up':
         return this.apiHardwareDebugService.deviceUpProcess(content);
@@ -32,33 +34,6 @@ export class ApiHardwareDebugController {
 
     }
 
-
-    // if (query.event == 'up')
-    //   return this.apiHardwareDebugService.deviceUpProcess(content);
   }
 
-  // @Post('device-join')
-  // deviceJoinResponse(@Body() content: any): acknowledge {
-  //   return this.apiHardwareDebugService.deviceJoinrocess(content);
-  // }
-
-  // @Post('device-ack')
-  // deviceAckResponse(@Body() content: any): acknowledge {
-  //   return this.apiHardwareDebugService.deviceAckProcess(content);
-  // }
-
-  // @Post('device-error')
-  // deviceErrorResponse(@Body() content: any): acknowledge {
-  //   return this.apiHardwareDebugService.deviceErrorProcess(content);
-  // }
-
-  // @Post('device-location')
-  // deviceLocationResponse(@Body() content: any): acknowledge {
-  //   return this.apiHardwareDebugService.deviceLocationProcess(content);
-  // }
-
-  // @Post('device-txack')
-  // deviceTxackResponse(@Body() content: any): acknowledge {
-  //   return this.apiHardwareDebugService.deviceTxackProcess(content);
-  // }
 }
