@@ -140,7 +140,7 @@ describe('ThingsboardThingsboardDeviceService', () => {
     jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(result));
     const hardwareID = "123";
     const deviceLabel = "testingSensor";
-    expect(await service.createDevice(hardwareID, deviceLabel, false)).toEqual(true);
+    expect(await service.createDevice(hardwareID, deviceLabel, false)).toEqual("784f394c-42b6-435a-983c-b7beff2784f9");
     /*const data = await loginService.login(username, password);
     service.setToken(data['data']['token']);
     expect(await service.createDevice('123', 'testingSensor', false)).toEqual(true);*/
