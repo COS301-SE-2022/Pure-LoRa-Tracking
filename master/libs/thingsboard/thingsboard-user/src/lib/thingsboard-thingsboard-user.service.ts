@@ -139,12 +139,6 @@ export class ThingsboardThingsboardUserService {
 
   /////////////////////////////////////////////////////////////////
 
-  async createReserveGroup(): Promise<boolean> {
-    return null;
-  }
-
-  /////////////////////////////////////////////////////////////////
-
   async createReserveUser(
     token: string,
     custID: string,
@@ -152,7 +146,7 @@ export class ThingsboardThingsboardUserService {
     authority: 'TENANT_ADMIN' | 'CUSTOMER_USER',
     firstName: string,
     lastName: string
-  ): Promise<{ explanation: string; status: number }> {
+  ): Promise<UserResponse> {
     const headersReq = {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + token,
@@ -191,6 +185,10 @@ export class ThingsboardThingsboardUserService {
 
   /////////////////////////////////////////////////////////////////
 
+
+  /* 
+    possibly add a process method
+  */
   async GetUsersFromReserve(token: string, custID: string): Promise<any> {
     const headersReq = {
       'Content-Type': 'application/json',
@@ -215,8 +213,49 @@ export class ThingsboardThingsboardUserService {
   }
 
   /////////////////////////////////////////////////////////////////
+
+  async createReserveGroup(token : string, email: string, title: string): Promise<UserResponse> {
+    const headersReq = {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + token,
+    };
+
+    const resp = await firstValueFrom(
+      this.httpService.post(
+        'http://localhost:8080/api/customer',
+        {
+          email: email,
+          title : title,
+        },
+        {
+          headers: headersReq,
+        }
+      )
+    ).catch((error) => {
+      if (error.response == undefined) return null;
+      return {
+        status: error.response.status,
+        data: error.response.data.message,
+      };
+    });
+
+    return {
+      status: resp.status,
+      explanation: resp.data,
+    };
+    
+  }
+
+  /////////////////////////////////////////////////////////////////
+
+  async deleteReserveGroup(): Promise<boolean> {
+    return null;
+  }
+
   
+}
 
-
-
+export interface UserResponse {
+  explanation: string; 
+  status: number 
 }

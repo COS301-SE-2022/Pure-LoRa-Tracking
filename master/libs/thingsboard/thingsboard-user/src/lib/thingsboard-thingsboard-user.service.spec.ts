@@ -159,8 +159,15 @@ describe('ThingsboardThingsboardUserService', () => {
 
   /////////////////////////////////////////////////////////////////
 
-  /*it('should get users of reserve', async () => {
-    const Login = await service.login(username, password);
-    console.log();
-  });*/
+  it('should delete the user', async () => {
+    /*const Login = await service.login(username, password);
+    console.log(await service.deleteUser(Login['data']['token'], "f6c10a50-e5aa-11ec-a9e5-f30a5c07bcf3"));*/
+  });
+
+  /////////////////////////////////////////////////////////////////
+
+  it('should delete the user', async () => {
+    /*const Login = await service.login(username, password);
+    console.log(await service.createReserveGroup(Login["data"]["token"], "liamburgess299@gmail.com", "reserveb"));*/
+  });
 });
