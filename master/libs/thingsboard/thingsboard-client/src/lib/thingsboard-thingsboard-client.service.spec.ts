@@ -125,4 +125,10 @@ describe('ThingsboardThingsboardClientService', () => {
     //console.log(await service.getDeviceHistoricalData("25c31a40-dfe9-11ec-bdb3-750ce7ed2451", 0, 1654072587463));
     expect(await service.getDeviceHistoricalData("25c31a40-dfe9-11ec-bdb3-750ce7ed2451", 0, 1654072587463)).toBeDefined();
   })
+
+  /* TODO Mock test */
+  it("should return the customer devices by filter", async()=> {
+    /*expect(await service.loginUser("reserveuser@reserve.com", "reserve")).toBe(true);
+    console.log(await service.getDeviceInfos([{deviceID: '25c31a40-dfe9-11ec-bdb3-750ce7ed2451'}]));*/
+  })
 });

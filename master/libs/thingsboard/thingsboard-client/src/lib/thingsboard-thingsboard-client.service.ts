@@ -3,6 +3,7 @@ import { ThingsboardThingsboardUserService } from '@lora/thingsboard-user';
 import { ThingsboardThingsboardTelemetryService } from '@lora/thingsboard-telemetry';
 import {
   deviceList,
+  deviceParameters,
   ThingsboardThingsboardDeviceService,
 } from '@lora/thingsboard-device';
 import { ThingsboardThingsboardAssetService } from '@lora/thingsboard-asset';
@@ -42,7 +43,7 @@ export class ThingsboardThingsboardClientService {
       InfoResp = await this.loginService.userInfo(this.token);
       InfoResp = ['data']['customerId']['id'];
     } else {
-      const InfoResp = custID;
+      InfoResp = custID;
     }
 
     const DeviceResp = await this.deviceService.getCustomerDevices(
@@ -101,6 +102,8 @@ export class ThingsboardThingsboardClientService {
     };
   }
 
+  //////////////////////////////////////////////////////////
+
   /* 
         check token
         check device
@@ -144,9 +147,13 @@ export class ThingsboardThingsboardClientService {
     };
   }
 
+  ////////////////////////////////////////////////
+
   async getAllDevicesHistoricalData() {
     return null;
   }
+
+  ////////////////////////////////////////////////
 
   async validateToken(): Promise<boolean> {
     if (this.token == '') {
@@ -157,6 +164,8 @@ export class ThingsboardThingsboardClientService {
     if (resp['status'] == 401) return false;
     else return true;
   }
+
+  /////////////////////////////////////////////////////////
 
   async validateDevice(deviceID: string): Promise<boolean> {
     this.deviceService.setToken(this.token);
@@ -173,7 +182,9 @@ export class ThingsboardThingsboardClientService {
     filter 
     return
   */
-  async getDeviceInfos(filter:[{deviceID:string}]): Promise<thingsboardResponse> {
+  async getDeviceInfos(
+    filter?: [{ deviceID: string }]
+  ): Promise<thingsboardResponse> {
     const Login = await this.validateToken();
     if (Login == false)
       return {
@@ -182,13 +193,13 @@ export class ThingsboardThingsboardClientService {
       };
 
     const UserInfo = await this.userService.getUserID(this.token);
-    if(UserInfo.code != 200)
-    return {
-      status: 'fail',
-      explanation: 'user type unknown',
-    };
+    if (UserInfo.code != 200)
+      return {
+        status: 'fail',
+        explanation: 'user type unknown',
+      };
     let devices = [];
-    if(UserInfo.type == "admin") {
+    if (UserInfo.type == 'admin') {
       /* todo */
       devices = [];
     } else {
@@ -196,17 +207,101 @@ export class ThingsboardThingsboardClientService {
     }
 
     const data = new Array<deviceList>();
-    devices.forEach((device:deviceList) => {
-      filter.forEach((filterDevice)=> {
-        if(device.deviceID == filterDevice.deviceID)
-          data.push(device)
+    if (filter != undefined) {
+      devices.forEach((device: deviceList) => {
+        filter.forEach((filterDevice) => {
+          if (device.deviceID == filterDevice.deviceID) data.push(device);
+        });
       });
-    });
+      return {
+        status: 'ok',
+        explanation: 'call finished',
+        data: data,
+      };
+    } else
+      return {
+        status: 'ok',
+        explanation: 'call finished',
+        data: devices,
+      };
+  }
+
+  ///////////////////////////////////////////////////////////////////////
+  /*
+    get token
+    check admin token
+    check userID exists
+    create device
+    assign device
+  */
+  async addDeviceToReserve(
+    userID: string,
+    deviceDetails: deviceParameters
+  ): Promise<thingsboardResponse> {
+    const Login = await this.validateToken();
+    if (!Login)
+      return {
+        status: 'fail',
+        explanation: 'token invalid',
+      };
+
+    const UserInfo = await this.userService.getUserID(this.token);
+    if (UserInfo.type != 'admin') {
+      return {
+        status: 'fail',
+        explanation: 'wrong permissions',
+      };
+    }
+
+    const CustInfo = await this.userService.userInfoByCustID(
+      this.token,
+      userID
+    );
+    if (CustInfo.status != 200) {
+      return {
+        status: 'fail',
+        explanation: 'customer ID failed with ' + CustInfo.status,
+      };
+    }
+
+    this.deviceService.setToken(this.token);
+
+    const deviceCreate = await this.deviceService.createDevice(
+      deviceDetails.hardwareID,
+      deviceDetails.labelName,
+      deviceDetails.isGateway,
+      deviceDetails.profileType,
+      deviceDetails.extraParams
+    );
+    if (deviceCreate.includes("fail"))
+      return {
+        status: 'fail',
+        explanation: 'device creation failed with: '+deviceCreate,
+      };
+
+    const assignDevice = await this.deviceService.assignDevicetoCustomer(userID,deviceCreate);
+    if(assignDevice == false) {
+      this.deviceService.deleteDevice(deviceCreate);
+      return {
+        status : "fail",
+        explanation : "assign failed, device creation reversed"
+      }
+    }
     return {
       status : "ok",
-      explanation: "call finished",
-      data : data
-    }
+      explanation : "call finished"
+    };
+  }
+
+  ///////////////////////////////////////////////////////////////////////
+  /*
+    get token
+    check admin token
+    unassign device
+    delete device
+  */
+  async RemoveDeviceFromReserve(): Promise<thingsboardResponse> {
+    return null;
   }
 }
 

@@ -89,4 +89,20 @@ export class ThingsboardThingsboardUserService {
       };
     }
   }
+
+  async userInfoByCustID(token:string, custID:string) : Promise<any> {
+    const headersReq = {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + token,
+    };
+
+    return await firstValueFrom(
+      this.httpService.get('http://localhost:8080/api/customer/'+custID, {
+        headers: headersReq,
+      })
+    ).catch((error) => {
+      if (error.response == undefined) return null;
+      return {status:error.response.status}
+    });
+  }
 }

@@ -36,7 +36,7 @@ export class ThingsboardThingsboardDeviceService {
     const resp = await lastValueFrom(
       this.httpService.get(url, { headers: headersReq })
     );
-    return this.processDevices(resp['data']['data'])
+    return this.processDevices(resp['data']['data']);
   }
 
   processDevices(devices): deviceList[] {
@@ -58,10 +58,11 @@ export class ThingsboardThingsboardDeviceService {
     hardwareID: string,
     labelName: string,
     isGateway: boolean,
-    profileType?: profileList
-  ): Promise<boolean> {
+    profileType?: profileList,
+    extraParams?: any
+  ): Promise<string> {
     //Uncomment after mock testing.
-    if (this.token == '') return false;
+    if (this.token == '') return 'token-fail';
 
     const url = this.baseURL + 'device';
 
@@ -89,7 +90,8 @@ export class ThingsboardThingsboardDeviceService {
         return { status: 400 };
       }
     });
-    return resp.status == 200;
+    if (resp.status != 200) return 'fail-server';
+    else return resp['data']['id']['id'];
   }
 
   async assignDevicetoCustomer(
@@ -186,7 +188,7 @@ export class ThingsboardThingsboardDeviceService {
       this.httpService.get(url, { headers: headersReq })
     ).catch((error) => {
       if (error.response == undefined) return null;
-      return {status : error.response.status}
+      return { status: error.response.status };
     });
   }
 }
@@ -202,4 +204,12 @@ export class deviceList {
 export class profileList {
   profileID: string;
   profileName: string;
+}
+
+export interface deviceParameters {
+  hardwareID: string;
+  labelName: string;
+  isGateway: boolean;
+  profileType?: profileList;
+  extraParams?: any;
 }
