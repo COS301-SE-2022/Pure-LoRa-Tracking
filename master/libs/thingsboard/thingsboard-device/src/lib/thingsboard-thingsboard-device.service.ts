@@ -33,9 +33,10 @@ export class ThingsboardThingsboardDeviceService {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + this.token,
     };
-    return await lastValueFrom(
+    const resp = await lastValueFrom(
       this.httpService.get(url, { headers: headersReq })
     );
+    return this.processDevices(resp['data']['data'])
   }
 
   processDevices(devices): deviceList[] {

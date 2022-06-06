@@ -45,10 +45,6 @@ export class ThingsboardThingsboardClientService {
     this.token = token;
   }
 
-  /*async getDeviceTelemetry(DeviceID: string) : Promise<any> {
-        
-    }*/
-
   /*
         check token
         check customerID
