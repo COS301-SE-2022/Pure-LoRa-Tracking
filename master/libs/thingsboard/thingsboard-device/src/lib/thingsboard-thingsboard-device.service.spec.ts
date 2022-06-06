@@ -265,4 +265,12 @@ describe('ThingsboardThingsboardDeviceService', () => {
     expect(await service.removeDeviceFromCustomer("fa0097e0-dfaa-11ec-b99c-f7477a3db362")).toEqual(true);*/
   });
 
+  it('should get device profiles and return null, tentatively.', async () => {
+    expect(await service.getDeviceProfiles()).toEqual(null);
+  });
+
+  it('should process a list of device profiles and return null, tentatively.', async () => {
+    expect(await service.processDeviceProfiles([])).toEqual(null);
+  });
+
 });
