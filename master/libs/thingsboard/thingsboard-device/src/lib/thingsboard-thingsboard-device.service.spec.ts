@@ -84,7 +84,7 @@ describe('ThingsboardThingsboardDeviceService', () => {
 
     jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(result));
     const custID = "784f394c-42b6-435a-983c-b7beff2784f9";
-    console.log(await service.getCustomerDevices(0,5,custID));
+    expect(await service.getCustomerDevices(0,5,custID)).toBeDefined();
     /*const data = await loginService.login(username, password);
     service.setToken(data['data']['token']);
     const userinfo = await loginService.userInfo(data['data']['token']);
