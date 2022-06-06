@@ -17,12 +17,12 @@ export class ApiMapEndpointController {
   }
 
   @Post('reserve')
-  ReserveRepsonse(@Body() content : MapApiReserve) : MapApiReserveResponse {
-    return this.apiMapEndpointService.ReserveProcess(content);
+  async ReserveRepsonse(@Body() content : MapApiReserve) : Promise<MapApiReserveResponse> {
+    return await this.apiMapEndpointService.ReserveProcess(content);
   }
 
   @Post('historical')
-  HistoricalRepsonse(@Body() content : MapApiHistorical) : MapApiHistoricalResponse {
-    return this.apiMapEndpointService.HistoricalProcess(content); 
+  async HistoricalRepsonse(@Body() content : MapApiHistorical) : Promise<MapApiHistoricalResponse> {
+    return await this.apiMapEndpointService.HistoricalProcess(content); 
   }
 }

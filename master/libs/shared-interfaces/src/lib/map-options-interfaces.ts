@@ -5,3 +5,7 @@ export enum ViewMapType{
 export enum MapRender{
     ALL,WITH_POLYGON
 }
+
+export enum MarkerView{
+    NONE,DEFAULT_MARKER
+}
