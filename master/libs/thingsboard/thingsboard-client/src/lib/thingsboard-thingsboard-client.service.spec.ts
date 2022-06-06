@@ -158,7 +158,14 @@ describe('ThingsboardThingsboardClientService', () => {
         hardwareID: 'mc544',
         isGateway: false,
         labelName: 'Giraffe',
-      })
-    );*/
+      }))*/
   });
+
+  it('should create and assign the device', async () => {
+      /*expect(await service.loginUser('reserveadmin@reserve.com', 'reserve')).toBe(
+        true
+      );
+      console.log(await service.RemoveDeviceFromReserve("a7971100-e581-11ec-a9e5-f30a5c07bcf3"))*/
+  });
+
 });

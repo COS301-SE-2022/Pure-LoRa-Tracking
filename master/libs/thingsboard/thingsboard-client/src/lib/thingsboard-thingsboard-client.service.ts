@@ -297,11 +297,35 @@ export class ThingsboardThingsboardClientService {
   /*
     get token
     check admin token
-    unassign device
     delete device
   */
-  async RemoveDeviceFromReserve(): Promise<thingsboardResponse> {
-    return null;
+  async RemoveDeviceFromReserve(deviceID : string): Promise<thingsboardResponse> {
+    const Login = await this.validateToken();
+    if (!Login)
+      return {
+        status: 'fail',
+        explanation: 'token invalid',
+      };
+
+    const UserInfo = await this.userService.getUserID(this.token);
+    if (UserInfo.type != 'admin') {
+      return {
+        status: 'fail',
+        explanation: 'wrong permissions',
+      };
+    }
+
+    this.deviceService.setToken(this.token);
+    const Delete = await this.deviceService.deleteDevice(deviceID);
+    if(Delete)
+    return {
+      status : "ok",
+      explanation : "call finished"
+    }
+    else return {
+      status : "fail",
+      explanation : "device deletion failed"
+    }
   }
 }
 
