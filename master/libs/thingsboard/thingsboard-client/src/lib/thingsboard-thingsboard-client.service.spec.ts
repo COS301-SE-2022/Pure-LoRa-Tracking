@@ -193,8 +193,100 @@ describe('ThingsboardThingsboardClientService', () => {
 
   /* TODO Mock test */
   it('should return the customer devices by filter', async () => {
-    /*expect(await service.loginUser("reserveuser@reserve.com", "reserve")).toBe(true);
-    console.log(await service.getDeviceInfos([{deviceID: '25c31a40-dfe9-11ec-bdb3-750ce7ed2451'}]));*/
+    const result: AxiosResponse<any> = {
+      data: {
+        "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZW5hbnRAdGhpbmdzYm9hcmQub3JnIi...",
+        "refreshToken": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZW5hbnRAdGhpbmdzYm9hcmQub3JnIi..."
+      },
+      headers: {},
+      config: {},
+      status: 200,
+      statusText: 'OK'
+    }
+    jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(result));
+    expect(await service.loginUser(username, password)).toBe(true);
+
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(result));
+    result.data = {
+      "id": {
+        "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+        "entityType": "USER"
+      },
+      "createdTime": 1609459200000,
+      "tenantId": {
+        "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+        "entityType": "TENANT"
+      },
+      "customerId": {
+        "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+        "entityType": "CUSTOMER"
+      },
+      "email": "reserveuser@reserve.com",
+      "name": "reserveuser@reserve.com",
+      "authority": "TENANT_ADMIN",
+      "firstName": "John",
+      "lastName": "Doe",
+      "additionalInfo": {}
+    }
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(result));
+
+    const secondResult = {
+      data: {
+      "data": [
+        {
+          "id": {
+            "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+            "entityType": "DEVICE"
+          },
+          "createdTime": 1609459200000,
+          "tenantId": {
+            "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+            "entityType": "TENANT"
+          },
+          "customerId": {
+            "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+            "entityType": "CUSTOMER"
+          },
+          "name": "A4B72CCDFF33",
+          "type": "Temperature Sensor",
+          "label": "Room 234 Sensor",
+          "deviceProfileId": {
+            "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+            "entityType": "DEVICE_PROFILE"
+          },
+          "deviceData": {
+            "configuration": {},
+            "transportConfiguration": {}
+          },
+          "firmwareId": {
+            "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+            "entityType": "OTA_PACKAGE"
+          },
+          "softwareId": {
+            "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+            "entityType": "OTA_PACKAGE"
+          },
+          "additionalInfo": {},
+          "customerTitle": "string",
+          "customerIsPublic": false,
+          "deviceProfileName": "string"
+        }
+      ],
+      "totalPages": 0,
+      "totalElements": 0,
+      "hasNext": false
+    },
+      headers: {},
+      config: {},
+      status: 200,
+      statusText: 'OK',
+  }
+      
+
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(secondResult));
+    const deviceInfos = await service.getDeviceInfos(['25c31a40-dfe9-11ec-bdb3-750ce7ed2451']);
+    console.log(deviceInfos);
+    expect(deviceInfos).toBeDefined();
   });
 
   //////////////////////////////////////////////////////////////////////
