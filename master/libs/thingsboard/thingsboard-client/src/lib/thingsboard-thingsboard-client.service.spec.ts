@@ -7,6 +7,7 @@ import { HttpService } from '@nestjs/axios';
 import { ThingsboardThingsboardClientService } from './thingsboard-thingsboard-client.service';
 import { AxiosResponse } from 'axios';
 import { of } from 'rxjs';
+import exp = require('constants');
 
 describe('ThingsboardThingsboardClientService', () => {
   let service: ThingsboardThingsboardClientService;
@@ -291,15 +292,134 @@ describe('ThingsboardThingsboardClientService', () => {
 
   //////////////////////////////////////////////////////////////////////
   it('should create and assign the device', async () => {
-    /*expect(await service.loginUser('reserveadmin@reserve.com', 'reserve')).toBe(
+    const result: AxiosResponse<any> = {
+      data: {
+        "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZW5hbnRAdGhpbmdzYm9hcmQub3JnIi...",
+        "refreshToken": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZW5hbnRAdGhpbmdzYm9hcmQub3JnIi..."
+      },
+      headers: {},
+      config: {},
+      status: 200,
+      statusText: 'OK'
+    }
+
+    const secondResult: AxiosResponse<any> = {
+      data : {
+        "id": {
+          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "entityType": "USER"
+        },
+        "createdTime": 1609459200000,
+        "tenantId": {
+          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "entityType": "TENANT"
+        },
+        "customerId": {
+          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "entityType": "CUSTOMER"
+        },
+        "email": "user@example.com",
+        "name": "user@example.com",
+        "authority": "TENANT_ADMIN",
+        "firstName": "John",
+        "lastName": "Doe",
+        "additionalInfo": {}
+      },
+      headers: {},
+      config: {},
+      status: 200,
+      statusText: 'OK'
+    }
+
+    const thirdResult: AxiosResponse<any> = {
+      data: {
+        "id": {
+          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "entityType": "CUSTOMER"
+        },
+        "createdTime": 1609459200000,
+        "title": "Company A",
+        "name": "Company A",
+        "tenantId": {
+          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "entityType": "TENANT"
+        },
+        "country": "US",
+        "state": "NY",
+        "city": "New York",
+        "address": "42 Broadway Suite 12-400",
+        "address2": "string",
+        "zip": "10004",
+        "phone": "+1(415)777-7777",
+        "email": "example@company.com",
+        "additionalInfo": {}
+      },
+      headers: {},
+      config: {},
+      status: 200,
+      statusText: 'OK'
+    }
+    const fourthResult: AxiosResponse<any> = {
+      data: {
+        "id": {
+          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "entityType": "DEVICE"
+        },
+        "createdTime": 1609459200000,
+        "tenantId": {
+          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "entityType": "TENANT"
+        },
+        "customerId": {
+          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "entityType": "CUSTOMER"
+        },
+        "name": "mc544",
+        "type": "Temperature Sensor",
+        "label": "Giraffe",
+        "deviceProfileId": {
+          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "entityType": "DEVICE_PROFILE"
+        },
+        "deviceData": {
+          "configuration": {},
+          "transportConfiguration": {}
+        },
+        "firmwareId": {
+          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "entityType": "OTA_PACKAGE"
+        },
+        "softwareId": {
+          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "entityType": "OTA_PACKAGE"
+        },
+        "additionalInfo": {}
+      },
+      headers: {},
+      config: {},
+      status: 200,
+      statusText: 'OK'
+    }
+
+    jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(result));
+
+    expect(await service.loginUser(username, password)).toBe(
       true
     );
-    console.log(
-      await service.addDeviceToReserve('ef55ff40-dfe8-11ec-bdb3-750ce7ed2451', {
-        hardwareID: 'mc544',
-        isGateway: false,
-        labelName: 'Giraffe',
-      }))*/
+
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(result));
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(secondResult));
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(thirdResult));
+    jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(fourthResult));
+    jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(fourthResult));
+
+    const resp = await service.addDeviceToReserve('ef55ff40-dfe8-11ec-bdb3-750ce7ed2451', {
+      hardwareID: 'mc544',
+      isGateway: false,
+      labelName: 'Giraffe',
+    });
+    console.log(resp);
+    expect(resp).toEqual({ status: 'ok', explanation: 'call finished' })
   });
 
   it('should create and assign the device', async () => {
