@@ -192,7 +192,7 @@ describe('ThingsboardThingsboardClientService', () => {
     ).toBeDefined();
   });
 
-  /* TODO Mock test */
+  
   it('should return the customer devices by filter', async () => {
     const result: AxiosResponse<any> = {
       data: {
@@ -422,11 +422,67 @@ describe('ThingsboardThingsboardClientService', () => {
     expect(resp).toEqual({ status: 'ok', explanation: 'call finished' })
   });
 
-  it('should create and assign the device', async () => {
-      /*expect(await service.loginUser('reserveadmin@reserve.com', 'reserve')).toBe(
-        true
-      );
-      console.log(await service.RemoveDeviceFromReserve("a7971100-e581-11ec-a9e5-f30a5c07bcf3"))*/
+  it('should unassign a given device from the specified reserve', async () => {
+    const result: AxiosResponse<any> = {
+      data: {
+        "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZW5hbnRAdGhpbmdzYm9hcmQub3JnIi...",
+        "refreshToken": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZW5hbnRAdGhpbmdzYm9hcmQub3JnIi..."
+      },
+      headers: {},
+      config: {},
+      status: 200,
+      statusText: 'OK'
+    }
+
+    const secondResult: AxiosResponse<any> = {
+      data : {
+        "id": {
+          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "entityType": "USER"
+        },
+        "createdTime": 1609459200000,
+        "tenantId": {
+          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "entityType": "TENANT"
+        },
+        "customerId": {
+          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "entityType": "CUSTOMER"
+        },
+        "email": "user@example.com",
+        "name": "user@example.com",
+        "authority": "TENANT_ADMIN",
+        "firstName": "John",
+        "lastName": "Doe",
+        "additionalInfo": {}
+      },
+      headers: {},
+      config: {},
+      status: 200,
+      statusText: 'OK'
+    }
+
+    const thirdResult: AxiosResponse<any> = {
+      data: {},
+      headers: {},
+      config: {},
+      status: 200,
+      statusText: 'OK'
+    }
+
+    jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(result));
+
+    expect(await service.loginUser(username, password)).toBe(
+      true
+    );
+
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(result));
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(secondResult));
+    jest.spyOn(httpService, 'delete').mockImplementationOnce(() => of(thirdResult));
+
+    const resp = await service.RemoveDeviceFromReserve("a7971100-e581-11ec-a9e5-f30a5c07bcf3");
+    console.log(resp);      
+    expect(resp).toEqual({ status: 'ok', explanation: 'call finished' });
   });
 
 });
