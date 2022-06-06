@@ -62,13 +62,16 @@ export class ApiDeviceEndpointService {
       };
 
     this.thingsboardClient.setToken(body.token);
-    const resp = await this.thingsboardClient.addDeviceToReserve(body.customerID, {
-      hardwareID : body.hardwareName,
-      isGateway : false,
-      labelName : body.labelName,
-      extraParams : body.extraParams,
-      profileType : body.profileType
-    })
+    const resp = await this.thingsboardClient.addDeviceToReserve(
+      body.customerID,
+      {
+        hardwareID: body.hardwareName,
+        isGateway: false,
+        labelName: body.labelName,
+        extraParams: body.extraParams,
+        profileType: body.profileType,
+      }
+    );
 
     if (resp.status == 'fail')
       return {
@@ -86,10 +89,81 @@ export class ApiDeviceEndpointService {
   async processDeviceAddGateway(
     body: AddGatewayDevice
   ): Promise<deviceResponse> {
-    return null;
+    if (body.token == undefined || body.token == '')
+      return {
+        status: 401,
+        explanation: 'no token found',
+      };
+
+    if (body.customerID == undefined)
+      return {
+        status: 400,
+        explanation: 'no customer ID found',
+      };
+
+    if (body.hardwareName == undefined)
+      return {
+        status: 400,
+        explanation: 'no hardware name found',
+      };
+
+    if (body.labelName == undefined)
+      return {
+        status: 400,
+        explanation: 'no label name found',
+      };
+
+    this.thingsboardClient.setToken(body.token);
+    const resp = await this.thingsboardClient.addDeviceToReserve(
+      body.customerID,
+      {
+        hardwareID: body.hardwareName,
+        isGateway: true,
+        labelName: body.labelName,
+        extraParams: body.extraParams,
+        profileType: body.profileType,
+      }
+    );
+
+    if (resp.status == 'fail')
+      return {
+        status: 400,
+        explanation: resp.explanation,
+      };
+
+    return {
+      status: 200,
+      explanation: 'ok',
+      data: resp.data,
+    };
   }
 
   async processDeviceremove(body: RemoveDevice): Promise<deviceResponse> {
-    return null;
+    if (body.token == undefined || body.token == '')
+      return {
+        status: 401,
+        explanation: 'no token found',
+      };
+
+    if (body.deviceID == undefined)
+      return {
+        status: 400,
+        explanation: 'no device ID found',
+      };
+
+    this.thingsboardClient.setToken(body.token);
+
+    const resp = await this.thingsboardClient.RemoveDeviceFromReserve(body.deviceID);
+    if (resp.status == 'fail')
+      return {
+        status: 400,
+        explanation: resp.explanation,
+      };
+
+    return {
+      status: 200,
+      explanation: 'ok',
+      data: resp.data,
+    };
   }
 }
