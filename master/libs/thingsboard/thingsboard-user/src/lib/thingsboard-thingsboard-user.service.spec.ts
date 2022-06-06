@@ -177,4 +177,18 @@ describe('ThingsboardThingsboardUserService', () => {
     /*const Login = await service.login(username, password);
     console.log(await service.deleteReserveGroup(Login["data"]["token"], "573911a0-e5b2-11ec-a9e5-f30a5c07bcf3"));*/
   });
+
+  /////////////////////////////////////////////////////////////////
+
+  it('should disable the reserve user', async () => {
+    /*const Login = await service.login(username, password);
+    console.log(await service.DisableUser(Login["data"]["token"], "f96e60d0-dfe8-11ec-bdb3-750ce7ed2451"));*/
+  });
+
+  /////////////////////////////////////////////////////////////////
+
+  it('should disable the reserve user', async () => {
+    /*const Login = await service.login(username, password);
+    console.log(await service.EnableUser(Login["data"]["token"], "f96e60d0-dfe8-11ec-bdb3-750ce7ed2451"));*/
+  });
 });

@@ -185,7 +185,6 @@ export class ThingsboardThingsboardUserService {
 
   /////////////////////////////////////////////////////////////////
 
-
   /* 
     possibly add a process method
   */
@@ -214,7 +213,11 @@ export class ThingsboardThingsboardUserService {
 
   /////////////////////////////////////////////////////////////////
 
-  async createReserveGroup(token : string, email: string, title: string): Promise<UserResponse> {
+  async createReserveGroup(
+    token: string,
+    email: string,
+    title: string
+  ): Promise<UserResponse> {
     const headersReq = {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + token,
@@ -225,7 +228,7 @@ export class ThingsboardThingsboardUserService {
         'http://localhost:8080/api/customer',
         {
           email: email,
-          title : title,
+          title: title,
         },
         {
           headers: headersReq,
@@ -243,19 +246,89 @@ export class ThingsboardThingsboardUserService {
       status: resp.status,
       explanation: resp.data,
     };
-    
   }
 
   /////////////////////////////////////////////////////////////////
 
-  async deleteReserveGroup(): Promise<boolean> {
-    return null;
+  async deleteReserveGroup(token: string, custID: string): Promise<boolean> {
+    const headersReq = {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + token,
+    };
+
+    const resp = await firstValueFrom(
+      this.httpService.delete('http://localhost:8080/api/customer/' + custID, {
+        headers: headersReq,
+      })
+    ).catch((error) => {
+      if (error.response == undefined) return null;
+      return { status: error.response.status };
+    });
+
+    return resp.status == 200;
   }
 
-  
+  /////////////////////////////////////////////////////////////////
+
+  async DisableUser(token: string, userID: string): Promise<boolean> {
+    const headersReq = {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + token,
+    };
+
+    const resp = await firstValueFrom(
+      this.httpService.post(
+        'http://localhost:8080/api/user/' +
+          userID +
+          '/userCredentialsEnabled?userCredentialsEnabled=false',
+        {},
+        {
+          headers: headersReq,
+        }
+      )
+    ).catch((error) => {
+      if (error.response == undefined) return null;
+      return {
+        status: error.response.status,
+        data: error.response.data.message,
+      };
+    });
+
+    return resp.status == 200;
+  }
+
+  /////////////////////////////////////////////////////////////////
+
+  async EnableUser(token: string, userID: string): Promise<boolean> {
+    const headersReq = {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + token,
+    };
+
+    const resp = await firstValueFrom(
+      this.httpService.post(
+        'http://localhost:8080/api/user/' +
+          userID +
+          '/userCredentialsEnabled?userCredentialsEnabled=true',
+        {},
+        {
+          headers: headersReq,
+        }
+      )
+    ).catch((error) => {
+      if (error.response == undefined) return null;
+      return {
+        status: error.response.status,
+        data: error.response.data.message,
+      };
+    });
+
+    return resp.status == 200;
+
+  }
 }
 
 export interface UserResponse {
-  explanation: string; 
-  status: number 
+  explanation: string;
+  status: number;
 }
