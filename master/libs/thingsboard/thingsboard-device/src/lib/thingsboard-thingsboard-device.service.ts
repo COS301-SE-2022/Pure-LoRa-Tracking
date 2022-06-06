@@ -45,7 +45,8 @@ export class ThingsboardThingsboardDeviceService {
       list.push({
         deviceID: devices[i]['id']['id'],
         isGateway: devices[i]['additionalInfo']['gateway'],
-        name: devices[i]['name'],
+        deviceName: devices[i]['name'],
+        humanName: devices[i]['label'],
         profile: devices[i]['id']['entityType'],
       });
     }
@@ -193,7 +194,8 @@ export class ThingsboardThingsboardDeviceService {
 export class deviceList {
   deviceID: string;
   isGateway: boolean;
-  name: string;
+  deviceName: string;
+  humanName: string;
   profile: string;
 }
 

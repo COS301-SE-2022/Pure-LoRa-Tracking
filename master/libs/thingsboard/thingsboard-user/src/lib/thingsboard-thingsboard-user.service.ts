@@ -61,7 +61,7 @@ export class ThingsboardThingsboardUserService {
     });
   }
 
-  async getUserID(token: string): Promise<any> {
+  async getUserID(token: string): Promise<{id?:string; type?:string;code:number}> {
     const resp = await this.userInfo(token);
     if (resp.status != 200) {
       return {
@@ -77,11 +77,13 @@ export class ThingsboardThingsboardUserService {
 
     if (resp.data['authority'] == 'TENANT_ADMIN') {
       return {
+        code : 200,
         id: resp.data['tenantId']['id'],
         type: 'admin',
       };
     } else {
       return {
+        code : 200,
         id: resp.data['customerId']['id'],
         type: 'user',
       };

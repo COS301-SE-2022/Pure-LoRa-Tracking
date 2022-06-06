@@ -1,12 +1,16 @@
 import { Injectable, NotImplementedException } from '@nestjs/common';
 import { ThingsboardThingsboardUserService } from '@lora/thingsboard-user';
 import { ThingsboardThingsboardTelemetryService } from '@lora/thingsboard-telemetry';
-import { ThingsboardThingsboardDeviceService } from '@lora/thingsboard-device';
+import {
+  deviceList,
+  ThingsboardThingsboardDeviceService,
+} from '@lora/thingsboard-device';
 import { ThingsboardThingsboardAssetService } from '@lora/thingsboard-asset';
 import {
   MapApiReserveResponse,
   MapApiHistoricalResponse,
 } from '@master/shared-interfaces';
+import { userInfo } from 'os';
 @Injectable()
 export class ThingsboardThingsboardClientService {
   private token: string;
@@ -30,13 +34,21 @@ export class ThingsboardThingsboardClientService {
     return false;
   }
 
-  async getUserDevices(): Promise<any> {
-    const InfoResp = await this.loginService.userInfo(this.token);
+  async getCustomerDevices(custID?: string): Promise<deviceList[]> {
     this.deviceService.setToken(this.token);
+
+    let InfoResp = '';
+    if (custID == undefined) {
+      InfoResp = await this.loginService.userInfo(this.token);
+      InfoResp = ['data']['customerId']['id'];
+    } else {
+      const InfoResp = custID;
+    }
+
     const DeviceResp = await this.deviceService.getCustomerDevices(
       0,
       5,
-      InfoResp['data']['customerId']['id']
+      InfoResp
     );
     return DeviceResp;
   }
@@ -112,8 +124,8 @@ export class ThingsboardThingsboardClientService {
       return {
         status: 'fail',
         explanation: 'device with ID not found for user token combination',
-        name : DeviceID,
-        data : []
+        name: DeviceID,
+        data: [],
       };
     }
 
@@ -126,7 +138,7 @@ export class ThingsboardThingsboardClientService {
     );
     return {
       status: 'ok',
-      name : DeviceID,
+      name: DeviceID,
       explanation: 'call finished',
       data: resp,
     };
@@ -151,12 +163,44 @@ export class ThingsboardThingsboardClientService {
     const resp = await this.deviceService.getDevice(deviceID);
     return resp.status == 200;
   }
+
+  ///////////////////////////////////////////////////////////
+
+  /*
+    check token
+    if admin use admin call else customer call
+    get devices
+    filter 
+    return
+  */
+  async getDeviceInfos(filter): Promise<thingsboardResponse> {
+    const Login = await this.validateToken();
+    if (Login == false)
+      return {
+        status: 'fail',
+        explanation: 'token invalid',
+      };
+
+    const UserInfo = await this.userService.getUserID(this.token);
+    if(UserInfo.code != 200)
+    return {
+      status: 'fail',
+      explanation: 'user type unknown',
+    };
+    let devices = [];
+    if(UserInfo.type == "admin") {
+      /* todo */
+      devices = [];
+    } else {
+      devices = await this.getCustomerDevices(UserInfo.id);
+    }
+  }
 }
 
 /* data is required to be any due to the many possible response data types */
 export interface thingsboardResponse {
   status: string;
   explanation?: string;
-  name? : string,
+  name?: string;
   data?: any;
 }
