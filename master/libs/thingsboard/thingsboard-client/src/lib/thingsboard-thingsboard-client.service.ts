@@ -173,7 +173,7 @@ export class ThingsboardThingsboardClientService {
     filter 
     return
   */
-  async getDeviceInfos(filter): Promise<thingsboardResponse> {
+  async getDeviceInfos(filter:[{deviceID:string}]): Promise<thingsboardResponse> {
     const Login = await this.validateToken();
     if (Login == false)
       return {
@@ -193,6 +193,19 @@ export class ThingsboardThingsboardClientService {
       devices = [];
     } else {
       devices = await this.getCustomerDevices(UserInfo.id);
+    }
+
+    const data = new Array<deviceList>();
+    devices.forEach((device:deviceList) => {
+      filter.forEach((filterDevice)=> {
+        if(device.deviceID == filterDevice.deviceID)
+          data.push(device)
+      });
+    });
+    return {
+      status : "ok",
+      explanation: "call finished",
+      data : data
     }
   }
 }
