@@ -106,11 +106,11 @@ export class ThingsboardThingsboardTelemetryService {
     return resp.status == 200;
   }
 
-  // any is required due to telemetry being any type of JSON object
+  
   async sendJsonTelemetry(
     EntityID: string,
     DeviceType: string,
-    TelemetryJSON: any
+    TelemetryJSON: string
   ): Promise<boolean> {
     if (this.token == '') return;
 

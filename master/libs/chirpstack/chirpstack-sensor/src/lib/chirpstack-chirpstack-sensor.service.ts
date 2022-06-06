@@ -3,14 +3,14 @@ import { Injectable } from '@nestjs/common';
 import * as grpc from '@grpc/grpc-js';
 
 import { InternalServiceClient } from '@chirpstack/chirpstack-api/as/external/api/internal_grpc_pb';
-import * as internalMessages from '@chirpstack/chirpstack-api/as/external/api/internal_pb';
+// import * as internalMessages from '@chirpstack/chirpstack-api/as/external/api/internal_pb';
 
 import { DeviceServiceClient } from '@chirpstack/chirpstack-api/as/external/api/device_grpc_pb';
 import * as deviceMessages from '@chirpstack/chirpstack-api/as/external/api/device_pb';
 
 import { DeviceProfileServiceClient } from '@chirpstack/chirpstack-api/as/external/api/deviceProfile_grpc_pb';
 import { ListDeviceProfileRequest,GetDeviceProfileRequest } from '@chirpstack/chirpstack-api/as/external/api/deviceProfile_pb';
-import { } from '@chirpstack/chirpstack-api/ns/ns_pb'
+
 import { DeviceProfile } from '@chirpstack/chirpstack-api/as/external/api/profiles_pb';
 
 @Injectable()
