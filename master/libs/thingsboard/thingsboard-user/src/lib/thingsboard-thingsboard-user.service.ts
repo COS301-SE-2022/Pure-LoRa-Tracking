@@ -119,7 +119,104 @@ export class ThingsboardThingsboardUserService {
 
   /////////////////////////////////////////////////////////////////
 
+  async deleteUser(token: string, userID: string): Promise<boolean> {
+    const headersReq = {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + token,
+    };
+
+    const resp = await firstValueFrom(
+      this.httpService.delete('http://localhost:8080/api/user/' + userID, {
+        headers: headersReq,
+      })
+    ).catch((error) => {
+      if (error.response == undefined) return null;
+      return { status: error.response.status };
+    });
+
+    return resp.status == 200;
+  }
+
+  /////////////////////////////////////////////////////////////////
+
+  async createReserveGroup(): Promise<boolean> {
+    return null;
+  }
+
+  /////////////////////////////////////////////////////////////////
+
+  async createReserveUser(
+    token: string,
+    custID: string,
+    email: string,
+    authority: 'TENANT_ADMIN' | 'CUSTOMER_USER',
+    firstName: string,
+    lastName: string
+  ): Promise<{ explanation: string; status: number }> {
+    const headersReq = {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + token,
+    };
+
+    const resp = await firstValueFrom(
+      this.httpService.post(
+        'http://localhost:8080/api/user?sendActivationMail=false',
+        {
+          email: email,
+          customerId: {
+            id: custID,
+            entityType: 'CUSTOMER',
+          },
+          authority: authority,
+          firstName: firstName,
+          lastName: lastName,
+        },
+        {
+          headers: headersReq,
+        }
+      )
+    ).catch((error) => {
+      if (error.response == undefined) return null;
+      return {
+        status: error.response.status,
+        data: error.response.data.message,
+      };
+    });
+
+    return {
+      status: resp.status,
+      explanation: resp.data,
+    };
+  }
+
+  /////////////////////////////////////////////////////////////////
+
+  async GetUsersFromReserve(token: string, custID: string): Promise<any> {
+    const headersReq = {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + token,
+    };
+
+    const resp = await firstValueFrom(
+      this.httpService.get(
+        'http://localhost:8080/api/customer/' +
+          custID +
+          '/users?page=0&pageSize=100',
+        {
+          headers: headersReq,
+        }
+      )
+    ).catch((error) => {
+      if (error.response == undefined) return null;
+      return { status: error.response.status };
+    });
+
+    return resp['data'];
+  }
+
+  /////////////////////////////////////////////////////////////////
   
+
 
 
 }

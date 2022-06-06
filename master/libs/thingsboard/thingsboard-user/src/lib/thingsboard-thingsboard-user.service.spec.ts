@@ -4,18 +4,17 @@ import { ThingsboardThingsboardUserService } from './thingsboard-thingsboard-use
 import { AxiosResponse } from 'axios';
 import { of } from 'rxjs';
 
-
 describe('ThingsboardThingsboardUserService', () => {
   let service: ThingsboardThingsboardUserService;
   let httpService: HttpService;
-  const username = "reserveadmin@reserve.com";
-  const password = "reserve";
-  const custID = "ef55ff40-dfe8-11ec-bdb3-750ce7ed2451";
+  const username = 'reserveadmin@reserve.com';
+  const password = 'reserve';
+  const custID = 'ef55ff40-dfe8-11ec-bdb3-750ce7ed2451';
 
   beforeAll(async () => {
     const module = await Test.createTestingModule({
       providers: [ThingsboardThingsboardUserService],
-      imports: [HttpModule]
+      imports: [HttpModule],
     }).compile();
 
     service = module.get(ThingsboardThingsboardUserService);
@@ -31,14 +30,16 @@ describe('ThingsboardThingsboardUserService', () => {
   it('valid login should return token and refreshToken', async () => {
     const result: AxiosResponse<any> = {
       data: {
-        "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZW5hbnRAdGhpbmdzYm9hcmQub3JnIi...",
-        "refreshToken": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZW5hbnRAdGhpbmdzYm9hcmQub3JnIi..."
+        token:
+          'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZW5hbnRAdGhpbmdzYm9hcmQub3JnIi...',
+        refreshToken:
+          'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZW5hbnRAdGhpbmdzYm9hcmQub3JnIi...',
       },
       headers: {},
       config: {},
       status: 200,
-      statusText: 'OK'
-    }
+      statusText: 'OK',
+    };
     jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(result));
     const login = await service.login('reserveAdmin@reserve.com', 'reserve');
     expect(login['data']['token']).toBeDefined;
@@ -49,20 +50,23 @@ describe('ThingsboardThingsboardUserService', () => {
   it('should logout and return status 200 - OK', async () => {
     const result: AxiosResponse<any> = {
       data: {
-        "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZW5hbnRAdGhpbmdzYm9hcmQub3JnIi...",
-        "refreshToken": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZW5hbnRAdGhpbmdzYm9hcmQub3JnIi..."
+        token:
+          'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZW5hbnRAdGhpbmdzYm9hcmQub3JnIi...',
+        refreshToken:
+          'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZW5hbnRAdGhpbmdzYm9hcmQub3JnIi...',
       },
       headers: {},
       config: {},
       status: 200,
-      statusText: 'OK'
-    }
+      statusText: 'OK',
+    };
     jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(result));
     const login = await service.login(username, password);
 
     result.data = {
-      "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZW5hbnRAdGhpbmdzYm9hcmQub3JnIi...",
-    }
+      token:
+        'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZW5hbnRAdGhpbmdzYm9hcmQub3JnIi...',
+    };
 
     jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(result));
     const logout = await service.logout(login['data']['token']);
@@ -71,60 +75,92 @@ describe('ThingsboardThingsboardUserService', () => {
 
   /////////////////////////////////////////////////////////////////
 
-  it("Should print user info", async () => {
+  it('Should print user info', async () => {
     const result: AxiosResponse<any> = {
       data: {
-        "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZW5hbnRAdGhpbmdzYm9hcmQub3JnIi...",
-        "refreshToken": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZW5hbnRAdGhpbmdzYm9hcmQub3JnIi..."
+        token:
+          'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZW5hbnRAdGhpbmdzYm9hcmQub3JnIi...',
+        refreshToken:
+          'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZW5hbnRAdGhpbmdzYm9hcmQub3JnIi...',
       },
       headers: {},
       config: {},
       status: 200,
-      statusText: 'OK'
-    }
+      statusText: 'OK',
+    };
     jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(result));
-    const login = await service
-      .login(username, password);
-    
+    const login = await service.login(username, password);
+
     result.data = {
-      "id": {
-        "id": "784f394c-42b6-435a-983c-b7beff2784f9",
-        "entityType": "USER"
+      id: {
+        id: '784f394c-42b6-435a-983c-b7beff2784f9',
+        entityType: 'USER',
       },
-      "createdTime": 1609459200000,
-      "tenantId": {
-        "id": "784f394c-42b6-435a-983c-b7beff2784f9",
-        "entityType": "TENANT"
+      createdTime: 1609459200000,
+      tenantId: {
+        id: '784f394c-42b6-435a-983c-b7beff2784f9',
+        entityType: 'TENANT',
       },
-      "customerId": {
-        "id": "784f394c-42b6-435a-983c-b7beff2784f9",
-        "entityType": "CUSTOMER"
+      customerId: {
+        id: '784f394c-42b6-435a-983c-b7beff2784f9',
+        entityType: 'CUSTOMER',
       },
-      "email": "reserveuser@reserve.com",
-      "name": "reserveuser@reserve.com",
-      "authority": "TENANT_ADMIN",
-      "firstName": "John",
-      "lastName": "Doe",
-      "additionalInfo": {}
-    }
+      email: 'reserveuser@reserve.com',
+      name: 'reserveuser@reserve.com',
+      authority: 'TENANT_ADMIN',
+      firstName: 'John',
+      lastName: 'Doe',
+      additionalInfo: {},
+    };
     jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(result));
     const userInfo = await service.userInfo(login['data']['token']);
     expect(userInfo['data']['customerId']['id']).toBeDefined();
-  })
+  });
 
   /////////////////////////////////////////////////////////////////
 
-  it("should return the customer info", async()=> {
+  it('should return the customer info', async () => {
     //const Login = await service.login(username, password);
     //console.log(await service.userInfoByCustID(Login['data']['token'], custID));
-  })
+  });
 
   /////////////////////////////////////////////////////////////////
 
-  it("should return the User ID and privilege by token", async()=> {
+  it('should return the User ID and privilege by token', async () => {
     /*const Login = await service.login(username, password);
     console.log(await service.getUserID(Login['data']['token']));*/
-  })
+  });
 
+  /////////////////////////////////////////////////////////////////
 
+  it('should get users of reserve', async () => {
+    /*const Login = await service.login(username, password);
+    console.log(
+      await service.GetUsersFromReserve(Login['data']['token'], custID)
+    );*/
+  });
+
+  /////////////////////////////////////////////////////////////////
+
+  it('should create the user', async () => {
+    /*const Login = await service.login(username, password);
+    console.log(
+      await
+      service.createReserveUser(
+        Login['data']['token'],
+        custID,
+        'liamburgess299@gmail.com',
+        'CUSTOMER_USER',
+        'Liam',
+        'Burgess'
+      )
+    );*/
+  });
+
+  /////////////////////////////////////////////////////////////////
+
+  /*it('should get users of reserve', async () => {
+    const Login = await service.login(username, password);
+    console.log();
+  });*/
 });
