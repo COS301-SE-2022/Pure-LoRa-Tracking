@@ -34,6 +34,7 @@ describe('ThingsboardThingsboardClientService', () => {
   });
 
   it('should login, acquire userID and print device list from ID', async () => {
+    const custID = "784f394c-42b6-435a-983c-b7beff2784f9";
     const result: AxiosResponse<any> = {
       data: {
         token:
@@ -48,8 +49,56 @@ describe('ThingsboardThingsboardClientService', () => {
     };
     jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(result));
     expect(await service.loginUser(username, password)).toEqual(true);
-    /*const resp = await service.getUserDevices();
-    console.log(resp['data']);*/
+    result.data = {
+        "data": [
+          {
+            "id": {
+              "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+              "entityType": "DEVICE"
+            },
+            "createdTime": 1609459200000,
+            "tenantId": {
+              "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+              "entityType": "TENANT"
+            },
+            "customerId": {
+              "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+              "entityType": "CUSTOMER"
+            },
+            "name": "A4B72CCDFF33",
+            "type": "Temperature Sensor",
+            "label": "Room 234 Sensor",
+            "deviceProfileId": {
+              "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+              "entityType": "DEVICE_PROFILE"
+            },
+            "deviceData": {
+              "configuration": {},
+              "transportConfiguration": {}
+            },
+            "firmwareId": {
+              "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+              "entityType": "OTA_PACKAGE"
+            },
+            "softwareId": {
+              "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+              "entityType": "OTA_PACKAGE"
+            },
+            "additionalInfo": {},
+            "customerTitle": "string",
+            "customerIsPublic": false,
+            "deviceProfileName": "string"
+          }
+        ],
+        "totalPages": 0,
+        "totalElements": 0,
+        "hasNext": false
+      }
+
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(result));
+    const resp = await service.getCustomerDevices(custID);
+    console.log(resp);
+    expect(resp).toBeDefined();
   });
 
   it('should return the reserve perimeter for the reserve user', async () => {
