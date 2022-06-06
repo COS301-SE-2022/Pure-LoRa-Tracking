@@ -10,4 +10,6 @@ export class ApiDeviceEndpointController {
     return "device reachable"
   }
 
+  @Post("Infos")
+  PostDeviceInfosResponse(content) {return null;}
 }
