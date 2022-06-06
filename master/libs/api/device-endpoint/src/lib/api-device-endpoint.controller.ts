@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ApiDeviceEndpointService } from './api-device-endpoint.service';
 
-import { AddGatewayDevice, AddSensorDevice, deviceInfos, RemoveDevice } from './../api-device.interface'
+import { AddGatewayDevice, AddSensorDevice, deviceInfos, deviceResponse, RemoveDevice } from './../api-device.interface'
 
 @Controller('device')
 export class ApiDeviceEndpointController {
@@ -13,14 +13,14 @@ export class ApiDeviceEndpointController {
   }
 
   @Post("infos")
-  async PostDeviceInfosResponse(@Body() content : deviceInfos) {return this.apiDeviceEndpointService.processDeviceInfos(content);}
+  async PostDeviceInfosResponse(@Body() content : deviceInfos) : Promise<deviceResponse> {return await this.apiDeviceEndpointService.processDeviceInfos(content);}
 
   @Post("add/sensor")
-  async PostDeviceAddSensor(@Body() content : AddSensorDevice) {return this.apiDeviceEndpointService.processDeviceAddsensor(content);}
+  async PostDeviceAddSensor(@Body() content : AddSensorDevice) : Promise<deviceResponse> {return this.apiDeviceEndpointService.processDeviceAddsensor(content);}
 
   @Post("add/gateway")
-  async PostDeviceAddGateway(@Body() content : AddGatewayDevice) {return this.apiDeviceEndpointService.processDeviceAddGateway(content);}
+  async PostDeviceAddGateway(@Body() content : AddGatewayDevice) : Promise<deviceResponse> {return this.apiDeviceEndpointService.processDeviceAddGateway(content);}
 
   @Post("remove")
-  async PostDeviceRemove(@Body() content : RemoveDevice) {return this.apiDeviceEndpointService.processDeviceremove(content);}
+  async PostDeviceRemove(@Body() content : RemoveDevice) : Promise<deviceResponse> {return this.apiDeviceEndpointService.processDeviceremove(content);}
 }
