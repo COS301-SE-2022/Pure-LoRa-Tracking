@@ -119,5 +119,12 @@ describe('ThingsboardThingsboardUserService', () => {
     //console.log(await service.userInfoByCustID(Login['data']['token'], custID));
   })
 
+  /////////////////////////////////////////////////////////////////
+
+  it("should return the User ID and privilege by token", async()=> {
+    /*const Login = await service.login(username, password);
+    console.log(await service.getUserID(Login['data']['token']));*/
+  })
+
 
 });
