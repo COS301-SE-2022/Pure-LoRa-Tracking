@@ -1,8 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ViewMapType } from '@master/shared-interfaces';
+import { Device, ViewMapType } from '@master/shared-interfaces';
 import { LayerGroup } from 'leaflet';
 import { exitCode } from 'process';
-
+import * as L from 'leaflet';
+// This library does not declare a module type, we we need to ignore this
+// error for a successful import
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import { antPath } from "leaflet-ant-path"
 import { ReserveMapComponent } from './reserve-map.component';
 
 describe('ReserveMapComponent', () => {
@@ -213,34 +218,21 @@ describe('ReserveMapComponent', () => {
 
     it("Change map polygons when reserve has data", () => {
       component.Reserve = demoreserve;
-      component.mappolygons = null;
+      const temp=new L.Polygon([]);
+      component.mappolygons = temp;
       component.loadPolygons();
-      expect(component.mappolygons).not.toEqual(null);
+      expect(component.mappolygons).not.toEqual(temp);
     })
 
     it("Dont change map polygons when reserve has no data", () => {
-      component.mappolygons = null;
+      component.mappolygons = new L.Polygon([]);
+      const temp=new L.Polygon([]);
       component.loadPolygons();
-      expect(component.mappolygons).toEqual(null);
+      expect(component.mappolygons).toEqual(temp);
     })
 
   })
 
-
-  // describe("showPolygon",()=>{
-  //   it("Add polygons to map",()=>{
-  //     component.Reserve=demoreserve;
-  //     component.loadmap();
-  //     const temp=component.mainmap;
-  //     component.loadPolygons();
-  //     const demopolygons=require('leaflet')
-  //     const mock=h
-
-  //     // component.showpolygon();
-  //     //expect(temp).not.toEqual(component.mainmap)
-  //     // expect(component.mappolygons?.addTo).toHaveBeenCalled()
-  //   })
-  // })
 
   describe("loadHistorical", () => {
     it("Add it to the array", () => {
@@ -258,8 +250,83 @@ describe('ReserveMapComponent', () => {
       expect(component.historicalpath.at(0)?.polyline).toBeDefined()
       expect(component.historicalpath.at(0)?.deviceID).toEqual("sens-11")
     })
+
+    it("Should add to the map if histrical mode is true",()=>{
+      jest.spyOn(component,"addToMap").mockImplementation();
+      component.loadhistorical(demoDevice);
+      component.HistoricalMode=true;
+      expect(component.addToMap).toBeCalled();
+    })
+
+  })
+
+  //having issues with antpath and mocking addT0
+  // describe("Showonly",()=>{
+  //   it("Should reset data if not null",()=>{
+  //     component.Reserve=demoreserve;
+  //     jest.spyOn(component.mappolygons,"addTo").mockImplementation();
+  //     jest.spyOn(component,"addToMap").mockImplementation();
+  //     jest.spyOn(antPath,"addTo").mockImplementation();
+  //     component.loadmap();
+  //     component.loadhistorical(demoDevice);
+  //     const temp=jest.spyOn(component,"resetData");
+  //     component.showOnly("sens-11");
+  //     expect(temp).toBeCalled()
+
+  //   })
+  // })
+
+  describe("ShowPolygon",()=>{
+    it("Should call if there is data",()=>{
+      component.Reserve=demoreserve;
+      component.loadmap();
+      component.loadPolygons()
+      jest.spyOn(component.mappolygons,"addTo").mockImplementation();
+      component.showpolygon();
+      expect(component.mappolygons.addTo).toBeCalled()
+    })
+    it("Should not call if is no map",()=>{
+      component.Reserve=demoreserve;
+      component.loadPolygons()
+      jest.spyOn(component.mappolygons,"addTo").mockImplementation();
+      component.showpolygon();
+      expect(component.mappolygons.addTo).not.toBeCalled()
+    })
+    it("Should not call if is no polygon",()=>{
+      component.Reserve=demoreserve;
+      component.loadmap();
+      jest.spyOn(component.mappolygons,"addTo").mockImplementation();
+      component.showpolygon();
+      expect(component.mappolygons.addTo).not.toBeCalled()
+    })
+  })
+
+  describe("LoadInnitial",()=>{
+    it("Should load the innital based for 2 device ids",()=>{
+      //check for 2
+      const temp=[demoDevice,demoDevice2];
+      jest.spyOn(component,"loadhistorical").mockImplementation();
+      component.loadInnitial(temp);
+      expect(component.loadhistorical).toBeCalledTimes(2);
+    })
+
+    it("Should load the innital based on 1 device",()=>{
+      const temp=[demoDevice];
+      jest.spyOn(component,"loadhistorical").mockImplementation();
+      component.loadInnitial(temp);
+      expect(component.loadhistorical).toBeCalledTimes(1);
+    })
+
+    it("Should not call loadhistorical if there is nothing in the array",()=>{
+      const temp:Array<Device>=[];
+      jest.spyOn(component,"loadhistorical").mockImplementation();
+      component.loadInnitial(temp);
+      expect(component.loadhistorical).not.toBeCalled();
+    })
   })
 
 });
+
+
 
 
