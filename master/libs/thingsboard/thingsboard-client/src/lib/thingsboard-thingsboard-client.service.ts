@@ -201,7 +201,8 @@ export class ThingsboardThingsboardClientService {
     let devices = [];
     if (UserInfo.type == 'admin') {
       /* todo */
-      devices = [];
+      // Tentatively added this for testing.
+      devices = await this.getCustomerDevices(UserInfo.id);
     } else {
       devices = await this.getCustomerDevices(UserInfo.id);
     }
