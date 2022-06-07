@@ -6,5 +6,7 @@ export class ApiUserEndpointController {
   constructor(private apiUserEndpointService: ApiUserEndpointService) {}
 
   @Get()
-  upState() {return "reachable";}
+  upState() {
+    return "reachable";
+  }
 }
