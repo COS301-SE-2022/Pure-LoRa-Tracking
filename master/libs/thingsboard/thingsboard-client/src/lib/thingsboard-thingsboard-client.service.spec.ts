@@ -362,7 +362,7 @@ describe('ThingsboardThingsboardClientService', () => {
     const fourthResult: AxiosResponse<any> = {
       data: {
         "id": {
-          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "id": "ef55ff40-dfe8-11ec-bdb3-750ce7ed2451",
           "entityType": "DEVICE"
         },
         "createdTime": 1609459200000,
