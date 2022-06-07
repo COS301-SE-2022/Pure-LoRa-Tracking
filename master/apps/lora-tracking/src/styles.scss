@@ -87,6 +87,13 @@ $lora-tracking-theme: mat.define-light-theme((
 
 @include mat.all-component-themes($lora-tracking-theme);
 
+$header-font-level: mat.define-typography-level(
+  $font-family: Bai Jamjuree,
+  $font-weight: 400,
+  $font-size: 1rem,
+  $line-height: 1,
+  $letter-spacing: normal,
+);
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
