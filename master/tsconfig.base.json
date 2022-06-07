@@ -15,9 +15,16 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@chirpstack": ["libs/chirpstack/src/index.ts"],
+      "@chirpstack/gateway": [
+        "libs/chirpstack/chirpstack-gateway/src/index.ts"
+      ],
+      "@chirpstack/sensor": ["libs/chirpstack/chirpstack-sensor/src/index.ts"],
       "@lora/api/mapEndpoint": ["libs/api/map-endpoint/src/index.ts"],
+      "@lora/api/user-endpoint": ["libs/api/user-endpoint/src/index.ts"],
       "@lora/apiRouter": ["libs/api/api-router/src/index.ts"],
       "@lora/database": ["libs/database-proxy/src/index.ts"],
+      "@lora/device-endpoint": ["libs/api/device-endpoint/src/index.ts"],
       "@lora/hardware-debug": ["libs/api/hardware-debug/src/index.ts"],
       "@lora/thingsboard-asset": [
         "libs/thingsboard/thingsboard-asset/src/index.ts"
@@ -47,7 +54,13 @@
       "@master/client/map-apicaller": [
         "libs/client/map-apicaller/src/index.ts"
       ],
-      "@master/shared-interfaces": ["libs/shared-interfaces/src/index.ts"]
+      "@master/client/shared-ui/material-ui": [
+        "libs/client/shared-ui/material-ui/src/index.ts"
+      ],
+      "@master/shared-interfaces": ["libs/shared-interfaces/src/index.ts"],
+      "@thingsboard/provision-user": [
+        "libs/thingsboard/thingsboard-user/thingsboard-user-provision/src/index.ts"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]
