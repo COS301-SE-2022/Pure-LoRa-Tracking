@@ -53,7 +53,10 @@
       "@master/client/map-apicaller": [
         "libs/client/map-apicaller/src/index.ts"
       ],
-      "@master/shared-interfaces": ["libs/shared-interfaces/src/index.ts"]
+      "@master/shared-interfaces": ["libs/shared-interfaces/src/index.ts"],
+      "@thingsboard/provision-user": [
+        "libs/thingsboard/thingsboard-user/thingsboard-user-provision/src/index.ts"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]
