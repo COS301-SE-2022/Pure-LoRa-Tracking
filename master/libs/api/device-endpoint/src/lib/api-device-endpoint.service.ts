@@ -161,7 +161,6 @@ export class ApiDeviceEndpointService {
     return {
       status: 200,
       explanation: 'ok',
-      data: resp.data,
     };
   }
 }
