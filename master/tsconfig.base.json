@@ -21,6 +21,7 @@
       ],
       "@chirpstack/sensor": ["libs/chirpstack/chirpstack-sensor/src/index.ts"],
       "@lora/api/mapEndpoint": ["libs/api/map-endpoint/src/index.ts"],
+      "@lora/api/user-endpoint": ["libs/api/user-endpoint/src/index.ts"],
       "@lora/apiRouter": ["libs/api/api-router/src/index.ts"],
       "@lora/database": ["libs/database-proxy/src/index.ts"],
       "@lora/device-endpoint": ["libs/api/device-endpoint/src/index.ts"],

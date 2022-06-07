@@ -324,12 +324,13 @@ export class ThingsboardThingsboardUserService {
     });
 
     return resp.status == 200;
-
   }
+
+  /////////////////////////////////////////////////////////////////
+  
 }
 
 export interface UserResponse {
   explanation: string;
   status: number;
-  
 }
