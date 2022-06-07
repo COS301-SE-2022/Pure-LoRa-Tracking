@@ -34,7 +34,7 @@ export class ApiDeviceEndpointService {
       explanation: 'ok',
       data: resp.data,
     };
-  }
+  } 
 
   async processDeviceAddsensor(body: AddSensorDevice): Promise<deviceResponse> {
     if (body.token == undefined || body.token == '')
@@ -82,6 +82,7 @@ export class ApiDeviceEndpointService {
     return {
       status: 200,
       explanation: 'ok',
+      data : resp.data
     };
   }
 
@@ -133,6 +134,7 @@ export class ApiDeviceEndpointService {
     return {
       status: 200,
       explanation: 'ok',
+      data : resp.data
     };
   }
 
@@ -161,6 +163,7 @@ export class ApiDeviceEndpointService {
     return {
       status: 200,
       explanation: 'ok',
+      data : resp.data
     };
   }
 }
