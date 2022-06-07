@@ -166,8 +166,8 @@ describe('ApiDeviceEndpointService', () => {
           "id": "784f394c-42b6-435a-983c-b7beff2784f9",
           "entityType": "CUSTOMER"
         },
-        "email": "user@example.com",
-        "name": "user@example.com",
+        "email": "reserveAdmin@reserve.com",
+        "name": "reserveAdmin@reserve.com",
         "authority": "TENANT_ADMIN",
         "firstName": "John",
         "lastName": "Doe",
@@ -199,7 +199,7 @@ describe('ApiDeviceEndpointService', () => {
         "address2": "string",
         "zip": "10004",
         "phone": "+1(415)777-7777",
-        "email": "example@company.com",
+        "email": "reserveAdmin@reserve.com",
         "additionalInfo": {}
       },
       headers: {},
@@ -293,8 +293,8 @@ it('should process a gateway device, add it to a specified reserve, and return a
           "id": "784f394c-42b6-435a-983c-b7beff2784f9",
           "entityType": "CUSTOMER"
         },
-        "email": "user@example.com",
-        "name": "user@example.com",
+        "email": "reserveAdmin@reserve.com",
+        "name": "reserveAdmin@reserve.com",
         "authority": "TENANT_ADMIN",
         "firstName": "John",
         "lastName": "Doe",
@@ -326,7 +326,7 @@ it('should process a gateway device, add it to a specified reserve, and return a
         "address2": "string",
         "zip": "10004",
         "phone": "+1(415)777-7777",
-        "email": "example@company.com",
+        "email": "reserveAdmin@reserve.com",
         "additionalInfo": {}
       },
       headers: {},
@@ -385,6 +385,68 @@ it('should process a gateway device, add it to a specified reserve, and return a
     const response = await service.processDeviceAddsensor(bodyData);
     console.log(response);
     expect(response).toBeDefined();
+});
+  
+  it('should remove a given device from a specified reserve and return a specified message.', async () => {
+    const bodyData = {
+      token: "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZW5hbnRAdGhpbmdzYm9hcmQub3JnIi...",
+      deviceID: "784f394c-42b6-435a-983c-b7beff2784f9"
+    }
+
+    const result: AxiosResponse<any> = {
+      data: {
+        "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZW5hbnRAdGhpbmdzYm9hcmQub3JnIi...",
+        "refreshToken": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZW5hbnRAdGhpbmdzYm9hcmQub3JnIi..."
+      },
+      headers: {},
+      config: {},
+      status: 200,
+      statusText: 'OK'
+    }
+
+    const secondResult: AxiosResponse<any> = {
+      data : {
+        "id": {
+          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "entityType": "USER"
+        },
+        "createdTime": 1609459200000,
+        "tenantId": {
+          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "entityType": "TENANT"
+        },
+        "customerId": {
+          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "entityType": "CUSTOMER"
+        },
+        "email": "reserveAdmin@reserve.com",
+        "name": "reserveAdmin@reserve.com",
+        "authority": "TENANT_ADMIN",
+        "firstName": "John",
+        "lastName": "Doe",
+        "additionalInfo": {}
+      },
+      headers: {},
+      config: {},
+      status: 200,
+      statusText: 'OK'
+    }
+
+    const thirdResult: AxiosResponse<any> = {
+      data: {},
+      headers: {},
+      config: {},
+      status: 200,
+      statusText: 'OK'
+    }
+
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(result));
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(secondResult));
+    jest.spyOn(httpService, 'delete').mockImplementationOnce(() => of(thirdResult));
+
+    const resp = await service.processDeviceremove(bodyData);
+    console.log(resp);      
+    expect(resp).toEqual({ status: 200, explanation: 'ok' });
   });
 
 });
