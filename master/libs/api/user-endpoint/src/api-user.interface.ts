@@ -1,20 +1,36 @@
-export interface userAddInput {}
+export interface userAddInput {
+  token: string;
+  customerID : string;
+  userInfo: {
+    email: string;
+    firstName: string;
+    lastName: string;
+  };
+}
 
-export interface userRemoveInput {}
+export interface userRemoveInput {
+  token: string;
+  userID: string;
+}
 
-export interface userDisableInput {}
+export interface userDisableInput {
+  token: string;
+  userID: string;
+}
 
-export interface userEnableInput {}
+export interface userEnableInput {
+  token: string;
+  userID: string;
+}
 
-export interface userInfoInput {}
+export interface userInfoInput {
+  token: string;
+  customerID: string;
+}
 
-export interface userAddResponse {}
-
-export interface userRemoveResponse {}
-
-export interface userDisableResponse {}
-
-export interface userEnableResponse {}
-
-export interface userInfoResponse {}
-
+export interface userResponse {
+  status: number;
+  explain: string;
+  furtherExplain?: string;
+  data?: any;
+}

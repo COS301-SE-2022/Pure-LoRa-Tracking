@@ -327,7 +327,7 @@ export class ThingsboardThingsboardUserService {
   }
 
   /////////////////////////////////////////////////////////////////
-  
+
 }
 
 export interface UserResponse {

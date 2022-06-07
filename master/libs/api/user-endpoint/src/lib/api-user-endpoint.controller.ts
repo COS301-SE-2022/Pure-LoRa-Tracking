@@ -1,4 +1,5 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
+import { userAddInput, userDisableInput, userEnableInput, userInfoInput, userRemoveInput, userResponse } from '../api-user.interface';
 import { ApiUserEndpointService } from './api-user-endpoint.service';
 
 @Controller('user')
@@ -11,23 +12,28 @@ export class ApiUserEndpointController {
   }
 
   @Post('admin/add') 
-  AddUserEndpoint() {
-    return null;
+  async AddUserEndpoint(@Body() content : userAddInput) : Promise<userResponse> {
+    return this.apiUserEndpointService.AddUserProcess(content);
   }
 
   @Post('admin/remove') 
-  RemoveUserEndpoint() {
-    return null;
+  async RemoveUserEndpoint(@Body() content : userRemoveInput) : Promise<userResponse> {
+    return this.apiUserEndpointService.RemoveUserProcess(content);
   }
 
   @Post('admin/disable')
-  DisableUserEndpoint() {
-    return null;
+  async DisableUserEndpoint(@Body() content : userDisableInput) : Promise<userResponse> {
+    return this.apiUserEndpointService.DisableUserProcess(content);
+  }
+
+  @Post('admin/enable')
+  async EnableUserEndpoint(@Body() content : userEnableInput) : Promise<userResponse> {
+    return this.apiUserEndpointService.EnableUserProcess(content);
   }
 
   @Post('info')
-  UserInfoEndpoint() {
-    return null;
+  async UserInfoEndpoint(@Body() content : userInfoInput) : Promise<userResponse> {
+    return this.apiUserEndpointService.UserInfoProcess(content);
   }
 
 }
