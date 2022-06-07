@@ -331,4 +331,5 @@ export class ThingsboardThingsboardUserService {
 export interface UserResponse {
   explanation: string;
   status: number;
+  
 }

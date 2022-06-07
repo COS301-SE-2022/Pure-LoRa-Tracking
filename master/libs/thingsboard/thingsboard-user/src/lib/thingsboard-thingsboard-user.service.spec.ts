@@ -190,5 +190,6 @@ describe('ThingsboardThingsboardUserService', () => {
   it('should disable the reserve user', async () => {
     /*const Login = await service.login(username, password);
     console.log(await service.EnableUser(Login["data"]["token"], "f96e60d0-dfe8-11ec-bdb3-750ce7ed2451"));*/
+    
   });
 });
