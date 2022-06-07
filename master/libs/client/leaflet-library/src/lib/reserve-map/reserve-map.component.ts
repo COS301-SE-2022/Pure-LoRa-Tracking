@@ -30,8 +30,8 @@ export class ReserveMapComponent implements OnInit, OnChanges {
   public currentHistoricalId: number;
   public currentantpath: any = null;
   // private mapmarkers: Array<L.Marker<any>> = [];
-  private mappolygons: L.Polygon | null = null;
-  private historicalpath: Array<MapHistoricalPoints> = [];
+  public mappolygons: L.Polygon | null = null;
+  public historicalpath: Array<MapHistoricalPoints> = [];
   private bluecirlceicon: L.Icon = new L.Icon({
     iconUrl: "assets/MapIcons/BaseCircle.png",
     iconSize: [20, 20]
@@ -152,7 +152,7 @@ export class ReserveMapComponent implements OnInit, OnChanges {
   }
 
   public showpolygon(): void {
-    if (this.mappolygons != null) {
+    if (this.mappolygons != null && this.mainmap!=null) {
       this.mappolygons.addTo(this.mainmap);
     }
   }
@@ -203,7 +203,6 @@ export class ReserveMapComponent implements OnInit, OnChanges {
   }
 
   public loadhistorical(historical: Device): void {
-    if (historical != null) {
       //try just show one
       if (historical != null) {
         // console.log(historical.data)
@@ -224,7 +223,6 @@ export class ReserveMapComponent implements OnInit, OnChanges {
         } as MapHistoricalPoints
         this.historicalpath.push(newpoint);
         if (!this.HistoricalMode) this.addToMap(newpoint)
-      }
     }
   }
 
