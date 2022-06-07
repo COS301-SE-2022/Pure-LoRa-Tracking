@@ -54,6 +54,7 @@
       "@master/client/map-apicaller": [
         "libs/client/map-apicaller/src/index.ts"
       ],
+      "@master/client/reserve-view": ["libs/client/reserve-view/src/index.ts"],
       "@master/client/shared-ui/material-ui": [
         "libs/client/shared-ui/material-ui/src/index.ts"
       ],
