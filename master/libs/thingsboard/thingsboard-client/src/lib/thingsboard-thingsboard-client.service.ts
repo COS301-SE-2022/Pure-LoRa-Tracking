@@ -25,6 +25,8 @@ export class ThingsboardThingsboardClientService {
     private assetService: ThingsboardThingsboardAssetService
   ) {}
 
+  //////////////////////////////////////////////////////////
+
   async loginUser(username: string, password: string): Promise<boolean> {
     const resp = await this.loginService.login(username, password);
     if (resp['data']['token'] != undefined) {
@@ -34,6 +36,8 @@ export class ThingsboardThingsboardClientService {
     }
     return false;
   }
+
+  //////////////////////////////////////////////////////////
 
   async getCustomerDevices(custID?: string): Promise<deviceList[]> {
     this.deviceService.setToken(this.token);
@@ -54,9 +58,13 @@ export class ThingsboardThingsboardClientService {
     return DeviceResp;
   }
 
+  //////////////////////////////////////////////////////////
+
   setToken(token: string) {
     this.token = token;
   }
+
+  //////////////////////////////////////////////////////////
 
   /*
         check token
@@ -182,9 +190,7 @@ export class ThingsboardThingsboardClientService {
     filter 
     return
   */
-  async getDeviceInfos(
-    filter?: string[]
-  ): Promise<thingsboardResponse> {
+  async getDeviceInfos(filter?: string[]): Promise<thingsboardResponse> {
     const Login = await this.validateToken();
     if (Login == false)
       return {
@@ -273,23 +279,26 @@ export class ThingsboardThingsboardClientService {
       deviceDetails.profileType,
       deviceDetails.extraParams
     );
-    if (deviceCreate.includes("fail"))
+    if (deviceCreate.includes('fail'))
       return {
         status: 'fail',
-        explanation: 'device creation failed with: '+deviceCreate,
+        explanation: 'device creation failed with: ' + deviceCreate,
       };
 
-    const assignDevice = await this.deviceService.assignDevicetoCustomer(userID,deviceCreate);
-    if(assignDevice == false) {
+    const assignDevice = await this.deviceService.assignDevicetoCustomer(
+      userID,
+      deviceCreate
+    );
+    if (assignDevice == false) {
       this.deviceService.deleteDevice(deviceCreate);
       return {
-        status : "fail",
-        explanation : "assign failed, device creation reversed"
-      }
+        status: 'fail',
+        explanation: 'assign failed, device creation reversed',
+      };
     }
     return {
-      status : "ok",
-      explanation : "call finished"
+      status: 'ok',
+      explanation: 'call finished',
     };
   }
 
@@ -299,7 +308,9 @@ export class ThingsboardThingsboardClientService {
     check admin token
     delete device
   */
-  async RemoveDeviceFromReserve(deviceID : string): Promise<thingsboardResponse> {
+  async RemoveDeviceFromReserve(
+    deviceID: string
+  ): Promise<thingsboardResponse> {
     const Login = await this.validateToken();
     if (!Login)
       return {
@@ -317,14 +328,63 @@ export class ThingsboardThingsboardClientService {
 
     this.deviceService.setToken(this.token);
     const Delete = await this.deviceService.deleteDevice(deviceID);
-    if(Delete)
+    if (Delete)
+      return {
+        status: 'ok',
+        explanation: 'call finished',
+      };
+    else
+      return {
+        status: 'fail',
+        explanation: 'device deletion failed',
+      };
+  }
+
+  ///////////////////////////////////////////////////////////////////////
+  /*
+    check token
+    check admin
+    check user
+    add user
+  */
+  async addUserToReserve(
+    custID: string,
+    email: string,
+    firstName: string,
+    lastName: string
+  ) : Promise<thingsboardResponse> {
+    const login = await this.userService.getUserID(this.token);
+
+    if (login.code != 200)
+      return {
+        status: 'fail',
+        explanation: 'token invalid',
+      };
+
+    if (login.type != 'admin')
+      return {
+        status: 'fail',
+        explanation: 'user not admin',
+      };
+
+    const resp = await this.userService.createReserveUser(
+      this.token,
+      custID,
+      email,
+      'CUSTOMER_USER',
+      firstName,
+      lastName
+    );
+
+    if (resp.status != 200)
+      return {
+        status: 'fail',
+        explanation: resp.explanation,
+      };
+
     return {
       status : "ok",
-      explanation : "call finished"
-    }
-    else return {
-      status : "fail",
-      explanation : "device deletion failed"
+      explanation : resp.explanation
     }
   }
 }
