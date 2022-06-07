@@ -14,6 +14,8 @@ export class ThingsboardThingsboardDeviceService {
     this.token = token;
   }
 
+  ///////////////////////////////////////////////////////////////
+
   async getCustomerDevices(page: number, pageSize: number, customerID: string) {
     //Uncomment after mock tests.
     if (this.token == '') return null;
@@ -39,6 +41,8 @@ export class ThingsboardThingsboardDeviceService {
     return this.processDevices(resp['data']['data']);
   }
 
+  ///////////////////////////////////////////////////////////////
+
   processDevices(devices): deviceList[] {
     const list: deviceList[] = new Array<deviceList>();
     for (let i = 0; i < devices.length; i++) {
@@ -52,6 +56,8 @@ export class ThingsboardThingsboardDeviceService {
     }
     return list;
   }
+
+  ///////////////////////////////////////////////////////////////
 
   /* ToDo configure to allow a profile to also be added from the last parameter */
   async createDevice(
@@ -94,6 +100,8 @@ export class ThingsboardThingsboardDeviceService {
     else return resp['data']['id']['id'];
   }
 
+  ///////////////////////////////////////////////////////////////
+
   async assignDevicetoCustomer(
     custID: string,
     deviceID: string
@@ -126,13 +134,7 @@ export class ThingsboardThingsboardDeviceService {
     return resp.status == 200;
   }
 
-  async getDeviceProfiles() {
-    return null;
-  }
-
-  processDeviceProfiles(profiles: any): profileList[] {
-    return null;
-  }
+  ///////////////////////////////////////////////////////////////
 
   async deleteDevice(deviceID: string): Promise<boolean> {
     const headersReq = {
@@ -152,6 +154,8 @@ export class ThingsboardThingsboardDeviceService {
     });
     return resp.status == 200;
   }
+
+  ///////////////////////////////////////////////////////////////
 
   async removeDeviceFromCustomer(deviceID: string): Promise<boolean> {
     //Uncomment after mock testing.
@@ -175,6 +179,9 @@ export class ThingsboardThingsboardDeviceService {
     return resp.status == 200;
   }
 
+
+  ///////////////////////////////////////////////////////////////
+
   async getDevice(deviceID: string) {
     if (this.token == '') return null;
 
@@ -191,6 +198,38 @@ export class ThingsboardThingsboardDeviceService {
       return { status: error.response.status };
     });
   }
+
+  ///////////////////////////////////////////////////////////////
+
+  processDeviceProfiles(profiles: any): profileList[] {
+    return null;
+  }
+
+  ///////////////////////////////////////////////////////////////
+
+  async getDeviceProfiles() {
+    return null;
+  }
+
+  ///////////////////////////////////////////////////////////////
+
+  async getDeviceAccessToken(deviceID: string) {
+    if (this.token == '') return null;
+
+    const url = this.baseURL + 'device/' + deviceID + "/credentials";
+
+    const headersReq = {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + this.token,
+    };
+    return await lastValueFrom(
+      this.httpService.get(url, { headers: headersReq })
+    ).catch((error) => {
+      if (error.response == undefined) return null;
+      return { status: error.response.status };
+    });
+  }
+
 }
 
 export class deviceList {
