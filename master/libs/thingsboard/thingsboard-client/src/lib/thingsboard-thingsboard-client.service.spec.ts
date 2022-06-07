@@ -419,7 +419,7 @@ describe('ThingsboardThingsboardClientService', () => {
       labelName: 'Giraffe',
     });
     console.log(resp);
-    expect(resp).toEqual({ status: 'ok', explanation: 'call finished' })
+    expect(resp).toEqual({ status: 'ok', data: 'ef55ff40-dfe8-11ec-bdb3-750ce7ed2451' })
   });
 
 
