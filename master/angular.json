@@ -16,6 +16,7 @@
     "client-leaflet-library": "libs/client/leaflet-library",
     "client-map-apicaller": "libs/client/map-apicaller",
     "client-reserve-view": "libs/client/reserve-view",
+    "client-shared-ui-components-ui": "libs/client/shared-ui/components-ui",
     "client-shared-ui-material-ui": "libs/client/shared-ui/material-ui",
     "database-proxy": "libs/database-proxy",
     "lora-tracking": "apps/lora-tracking",
