@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ViewMapType } from '@master/shared-interfaces';
+import { LayerGroup } from 'leaflet';
 import { exitCode } from 'process';
 
 import { ReserveMapComponent } from './reserve-map.component';
@@ -45,17 +46,73 @@ describe('ReserveMapComponent', () => {
     remove() {
       console.log("filler method");
     },
-    addLayer(){
+    addLayer() {
       console.log("filler method");
     }
   }
-  const demotiles={
-    remove(){
+  const demotiles = {
+    remove() {
       console.log("filler method");
     },
-    addTo(varible:any){
+    addTo(varible: any) {
       console.log("filler method");
     }
+  }
+  const demoDevice = {
+    deviceID: "sens-11",
+    deviceName: "sens-11-test",
+    type: "sensor",
+    locationData: [
+      {
+        timeStamp: Date.now() - 6000,
+        location: {
+          latitude: "-25.755514",
+          longitude: "28.235419"
+        }
+      },
+      {
+        timeStamp: Date.now() - 6000,
+        location: {
+          latitude: "-25.754886",
+          longitude: "28.231909"
+        }
+      },
+      {
+        timeStamp: Date.now() - 6000,
+        location: {
+          latitude: "-25.755375",
+          longitude: "28.232314"
+        }
+      }
+    ]
+  }
+  const demoDevice2={
+    deviceID: "sens-2",
+    deviceName: "sens-2-test",
+    type: "sensor",
+    locationData: [
+      {
+        timeStamp: Date.now() - 6000,
+        location: {
+          latitude: "-21.755514",
+          longitude: "25.235419"
+        }
+      },
+      {
+        timeStamp: Date.now() - 6000,
+        location: {
+          latitude: "-25.454886",
+          longitude: "28.331909"
+        }
+      },
+      {
+        timeStamp: Date.now() - 6000,
+        location: {
+          latitude: "-25.555375",
+          longitude: "28.332314"
+        }
+      }
+    ]
   }
 
 
@@ -117,18 +174,18 @@ describe('ReserveMapComponent', () => {
       expect(component.maptiles).toEqual("TestString");
     })
 
-    it("Load MapTiles if mainmap has data and with Viewtype NORMAL_OPEN_STREET_VIEW",()=>{
+    it("Load MapTiles if mainmap has data and with Viewtype NORMAL_OPEN_STREET_VIEW", () => {
       component.Reserve = demoreserve;
       component.loadmap();
-      component.ViewMapTypeInput=ViewMapType.NORMAL_OPEN_STREET_VIEW;
+      component.ViewMapTypeInput = ViewMapType.NORMAL_OPEN_STREET_VIEW;
       component.loadmaptiles();
       expect(component.maptiles).not.toEqual(null);
     })
 
-    it("Load MapTiles if mainmap has data and with Viewtype SATELLITE_ESRI_1",()=>{
+    it("Load MapTiles if mainmap has data and with Viewtype SATELLITE_ESRI_1", () => {
       component.Reserve = demoreserve;
       component.loadmap();
-      component.ViewMapTypeInput=ViewMapType.SATELLITE_ESRI_1;
+      component.ViewMapTypeInput = ViewMapType.SATELLITE_ESRI_1;
       component.loadmaptiles();
       expect(component.maptiles).not.toEqual(null);
     })
@@ -137,7 +194,7 @@ describe('ReserveMapComponent', () => {
       component.Reserve = demoreserve;
       component.loadmap();
       component.maptiles = demotiles;
-      component.ViewMapTypeInput=ViewMapType.NORMAL_OPEN_STREET_VIEW;
+      component.ViewMapTypeInput = ViewMapType.NORMAL_OPEN_STREET_VIEW;
       component.loadmaptiles();
       expect(component.maptiles).not.toEqual(demotiles);
     })
@@ -146,16 +203,62 @@ describe('ReserveMapComponent', () => {
       component.Reserve = demoreserve;
       component.loadmap();
       component.maptiles = demotiles;
-      component.ViewMapTypeInput=ViewMapType.SATELLITE_ESRI_1;
+      component.ViewMapTypeInput = ViewMapType.SATELLITE_ESRI_1;
       component.loadmaptiles();
       expect(component.maptiles).not.toEqual(demotiles);
     })
+  })
 
-    
+  describe("LoadPolygons", () => {
+
+    it("Change map polygons when reserve has data", () => {
+      component.Reserve = demoreserve;
+      component.mappolygons = null;
+      component.loadPolygons();
+      expect(component.mappolygons).not.toEqual(null);
+    })
+
+    it("Dont change map polygons when reserve has no data", () => {
+      component.mappolygons = null;
+      component.loadPolygons();
+      expect(component.mappolygons).toEqual(null);
+    })
 
   })
 
 
+  // describe("showPolygon",()=>{
+  //   it("Add polygons to map",()=>{
+  //     component.Reserve=demoreserve;
+  //     component.loadmap();
+  //     const temp=component.mainmap;
+  //     component.loadPolygons();
+  //     const demopolygons=require('leaflet')
+  //     const mock=h
+
+  //     // component.showpolygon();
+  //     //expect(temp).not.toEqual(component.mainmap)
+  //     // expect(component.mappolygons?.addTo).toHaveBeenCalled()
+  //   })
+  // })
+
+  describe("loadHistorical", () => {
+    it("Add it to the array", () => {
+      expect(component.historicalpath.length).toEqual(0);
+      component.loadhistorical(demoDevice);
+      expect(component.historicalpath.length).toEqual(1);
+      component.loadhistorical(demoDevice2);
+      expect(component.historicalpath.length).toEqual(2);
+    })
+
+    it("Should load into the array correctly",()=>{
+      component.loadhistorical(demoDevice);
+      expect(component.historicalpath.length).toEqual(1);
+      expect(component.historicalpath.at(0)?.markers.length).toEqual(3)
+      expect(component.historicalpath.at(0)?.polyline).toBeDefined()
+      expect(component.historicalpath.at(0)?.deviceID).toEqual("sens-11")
+    })
+  })
 
 });
 
