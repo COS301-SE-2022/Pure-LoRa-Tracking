@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Post } from '@nestjs/common';
 import { ApiUserEndpointService } from './api-user-endpoint.service';
 
 @Controller('user')
@@ -7,7 +7,21 @@ export class ApiUserEndpointController {
 
   @Get()
   upState() {
-    return "reachable";
-  
+    return 'reachable';
+  }
+
+  @Post('admin/add') 
+  AddUserEndpoint() {
+    return null;
+  }
+
+  @Post('admin/remove') 
+  RemoveUserEndpoint() {
+    return null;
+  }
+
+  @Post('admin/disable')
+  DisableUserEndpoint() {
+    return null;
   }
 }
