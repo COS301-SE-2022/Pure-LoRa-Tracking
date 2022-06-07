@@ -130,8 +130,8 @@ export class ChirpstackChirpstackSensorService {
     device.setDeviceProfileId(deviceProfileId);
     device.setApplicationId(deviceAppl);
     // set thingsBoardDeviceId as a variable on the chirpstack "device" to identify it when data is received
-    const deviceVariables = device.getVariablesMap();
-    deviceVariables.set('thingsBoardDeviceId', thingsBoardDeviceId);
+    const deviceTags = device.getTagsMap();
+    deviceTags.set('thingsBoardDeviceId', thingsBoardDeviceId);
 
     createDeviceRequest.setDevice(device);
 
