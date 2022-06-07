@@ -1,3 +1,4 @@
+import { ThingsboardThingsboardClientModule } from '@lora/thingsboard-client';
 import { Module, Global } from '@nestjs/common';
 import { ApiLoginEndpointController } from './api-login-endpoint.controller';
 import { ApiLoginEndpointService } from './api-login-endpoint.service';
@@ -7,5 +8,6 @@ import { ApiLoginEndpointService } from './api-login-endpoint.service';
   controllers: [ApiLoginEndpointController],
   providers: [ApiLoginEndpointService],
   exports: [ApiLoginEndpointService],
+  imports: [ThingsboardThingsboardClientModule]
 })
 export class ApiLoginEndpointModule {}
