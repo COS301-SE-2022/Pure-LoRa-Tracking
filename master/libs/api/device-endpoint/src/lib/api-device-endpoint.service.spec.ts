@@ -257,7 +257,7 @@ describe('ApiDeviceEndpointService', () => {
 
     const response = await service.processDeviceAddsensor(bodyData);
     console.log(response);
-    expect(response).toEqual({ status: 200, explanation: 'ok' });
+    expect(response).toEqual({ status: 200, explanation: 'ok', data: '784f394c-42b6-435a-983c-b7beff2784f9' });
   });
 
 it('should process a gateway device, add it to a specified reserve, and return a confirmation message', async () =>{
@@ -384,7 +384,7 @@ it('should process a gateway device, add it to a specified reserve, and return a
 
     const response = await service.processDeviceAddsensor(bodyData);
     console.log(response);
-    expect(response).toEqual({ status: 200, explanation: 'ok' });
+    expect(response).toEqual({ status: 200, explanation: 'ok', data: '784f394c-42b6-435a-983c-b7beff2784f9' });
 });
   
   it('should remove a given device from a specified reserve and return a specified message.', async () => {
@@ -446,7 +446,7 @@ it('should process a gateway device, add it to a specified reserve, and return a
 
     const resp = await service.processDeviceremove(bodyData);
     console.log(resp);      
-    expect(resp).toEqual({ status: 200, explanation: 'ok' });
+    expect(resp).toEqual({ status: 200, explanation: 'ok', data: undefined});
   });
 
 });
