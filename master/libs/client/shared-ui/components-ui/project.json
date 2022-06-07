@@ -1,0 +1,41 @@
+{
+  "projectType": "library",
+  "sourceRoot": "libs/client/shared-ui/components-ui/src",
+  "prefix": "master",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:ng-packagr-lite",
+      "outputs": ["dist/libs/client/shared-ui/components-ui"],
+      "options": {
+        "project": "libs/client/shared-ui/components-ui/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/client/shared-ui/components-ui/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/client/shared-ui/components-ui/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/client/shared-ui/components-ui"],
+      "options": {
+        "jestConfig": "libs/client/shared-ui/components-ui/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/client/shared-ui/components-ui/**/*.ts",
+          "libs/client/shared-ui/components-ui/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}
