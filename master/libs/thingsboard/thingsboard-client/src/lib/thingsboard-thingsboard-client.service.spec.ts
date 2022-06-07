@@ -422,6 +422,7 @@ describe('ThingsboardThingsboardClientService', () => {
     expect(resp).toEqual({ status: 'ok', explanation: 'call finished' })
   });
 
+
   it('should unassign a given device from the specified reserve', async () => {
     const result: AxiosResponse<any> = {
       data: {
@@ -483,6 +484,35 @@ describe('ThingsboardThingsboardClientService', () => {
     const resp = await service.RemoveDeviceFromReserve("a7971100-e581-11ec-a9e5-f30a5c07bcf3");
     console.log(resp);      
     expect(resp).toEqual({ status: 'ok', explanation: 'call finished' });
+    
+  //////////////////////////////////////////////////////////////////////
+
+  //it('should create and assign the device', async () => {
+      /*expect(await service.loginUser('reserveadmin@reserve.com', 'reserve')).toBe(
+        true
+      );
+      console.log(await service.RemoveDeviceFromReserve("a7971100-e581-11ec-a9e5-f30a5c07bcf3"))*/
+
+  });
+
+  //////////////////////////////////////////////////////////////////////
+
+  it('should create and assign the user the user to the reserve', async () => {
+    /*expect(await service.loginUser('reserveadmin@reserve.com', 'reserve')).toBe(
+      true
+    );
+    console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451", "lb@g.com","l", "b"));*/
+    
+  });
+
+  //////////////////////////////////////////////////////////////////////
+
+  it('should create and assign the user the user to the reserve', async () => {
+    /*expect(await service.loginUser('reserveadmin@reserve.com', 'reserve')).toBe(
+      true
+    );
+    console.log(await service.removeReserveUser("cf0afc80-e63d-11ec-9a49-9105980e5c8a"));*/
+    
   });
 
 });

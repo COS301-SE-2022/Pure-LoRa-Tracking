@@ -7,6 +7,7 @@
     "api-device-endpoint": "libs/api/device-endpoint",
     "api-interfaces": "libs/api-interfaces",
     "api-map-endpoint": "libs/api/map-endpoint",
+    "api-user-endpoint": "libs/api/user-endpoint",
     "chirpstack": "libs/chirpstack",
     "chirpstack-chirpstack-gateway": "libs/chirpstack/chirpstack-gateway",
     "chirpstack-chirpstack-sensor": "libs/chirpstack/chirpstack-sensor",
@@ -14,6 +15,8 @@
     "client-demo": "libs/client/demo",
     "client-leaflet-library": "libs/client/leaflet-library",
     "client-map-apicaller": "libs/client/map-apicaller",
+    "client-shared-ui-components-ui": "libs/client/shared-ui/components-ui",
+    "client-shared-ui-material-ui": "libs/client/shared-ui/material-ui",
     "database-proxy": "libs/database-proxy",
     "lora-tracking": "apps/lora-tracking",
     "lora-tracking-e2e": "apps/lora-tracking-e2e",
@@ -22,6 +25,7 @@
     "thingsboard-thingsboard-client": "libs/thingsboard/thingsboard-client",
     "thingsboard-thingsboard-device": "libs/thingsboard/thingsboard-device",
     "thingsboard-thingsboard-telemetry": "libs/thingsboard/thingsboard-telemetry",
-    "thingsboard-thingsboard-user": "libs/thingsboard/thingsboard-user"
+    "thingsboard-thingsboard-user": "libs/thingsboard/thingsboard-user",
+    "thingsboard-thingsboard-user-thingsboard-user-provision": "libs/thingsboard/thingsboard-user/thingsboard-user-provision"
   }
 }
