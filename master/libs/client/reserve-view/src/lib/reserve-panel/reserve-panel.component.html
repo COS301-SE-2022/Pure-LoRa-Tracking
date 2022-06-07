@@ -1,0 +1,40 @@
+<mat-card>
+    <mat-card-header class="headerText">
+        <mat-card-title>
+            {{reserveName}}
+        </mat-card-title>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <mat-action-list>
+        <mat-form-field appearance="legacy">
+            <mat-label>Search</mat-label>
+            <input matInput placeholder="Search">
+            <mat-icon matSuffix>search</mat-icon>
+          </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Device Type</mat-label>
+            <mat-select [(value)]="deviceType">
+              <mat-option value="sensors">Sensors</mat-option>
+              <mat-option value="gateways">Gateways</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <button mat-button routerLink="add">Add<mat-icon>add</mat-icon></button>
+    </mat-action-list>
+    <mat-card-content>
+        <mat-selection-list #sensor [multiple]="false">
+            <mat-list-option *ngFor="let sensorItem of sensors" [value]="sensor">
+                <mat-icon mat-list-icon>bug_report</mat-icon>
+                <div class="listItemWrap">
+                    <div class="itemText">    
+                        <div mat-line>{{sensorItem.name}}</div>
+                        <div mat-line>id: {{sensorItem.id}} </div>
+                    </div>
+            
+                    <button mat-icon-button id="actionBtn">
+                        <mat-icon>chevron_right</mat-icon>
+                    </button>
+                </div>
+            </mat-list-option>
+        </mat-selection-list>
+    </mat-card-content>
+</mat-card>
