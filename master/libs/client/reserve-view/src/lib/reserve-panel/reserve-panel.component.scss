@@ -1,0 +1,40 @@
+@import 'apps/lora-tracking/src/styles.scss';
+
+mat-card {
+    border: 5%;
+    }
+
+mat-card-title {
+    font-weight: 500;
+}
+
+#actionBtn{
+    align-self: end;
+
+}
+
+.listItemWrap {
+    display: flex;
+    flex-direction: row;
+}
+
+.itemText {
+    flex: 1;
+}
+
+
+mat-card-header {
+    display: flex;
+    justify-content: center;
+    font-family: 'Bai Jamjuree', sans-serif;
+}
+
+mat-action-list {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+#addBtn {
+    background-color: map-get($map: $accent-palette, $key: 300);
+} 

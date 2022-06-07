@@ -9,7 +9,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatListModule} from '@angular/material/list';
-
+import {MatInputModule} from '@angular/material/input';
 export const clientSharedUiMaterialUiRoutes: Route[] = [];
 
 const materialComponentModules = [
@@ -20,7 +20,8 @@ const materialComponentModules = [
   MatFormFieldModule,
   MatSelectModule,
   MatDividerModule,
-  MatListModule
+  MatListModule,
+  MatInputModule
 ];
 
 @NgModule({
