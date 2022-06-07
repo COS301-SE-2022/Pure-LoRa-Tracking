@@ -54,20 +54,18 @@ export class ThingsboardThingsboardTelemetryService {
       return { status: error.response.status };
     });
 
-    if (data['status'] != 200) 
-    return []
+    if (data['status'] != 200) return [];
     else return this.buildTelemetryResults(data['data']);
   }
 
   buildTelemetryResults(items: AxiosResponse): TelemetryResult[] {
-    if(items['longitude'] == undefined)
-      return [];
+    if (items['longitude'] == undefined) return [];
     const TelList: TelemetryResult[] = new Array<TelemetryResult>();
     for (let i = 0; i < items['longitude'].length; i++) {
       TelList.push({
         longitude: items['longitude'][i]['value'],
         latitude: items['latitude'][i]['value'],
-        timestamp : items['latitude'][i]['ts'],
+        timestamp: items['latitude'][i]['ts'],
       });
     }
     return TelList;
@@ -96,6 +94,40 @@ export class ThingsboardThingsboardTelemetryService {
           timestamp: +new Date(),
           latitude: latitude,
           longitude: longitude,
+        },
+        { headers: headersReq }
+      )
+    ).catch((error) => {
+      if (error.response == undefined) return { status: 400 };
+      if (error.response.status == 400) {
+        return { status: 400 };
+      }
+    });
+    return resp.status == 200;
+  }
+
+  // any is required due to telemetry being any type of JSON object
+  async sendJsonTelemetry(
+    EntityID: string,
+    DeviceType: string,
+    TelemetryJSON: any
+  ): Promise<boolean> {
+    if (this.token == '') return;
+
+    const headersReq = {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + this.token,
+    };
+    const resp = await lastValueFrom(
+      this.httpService.post(
+        'http://localhost:8080/api/plugins/telemetry/' +
+          DeviceType +
+          '/' +
+          EntityID +
+          '/timeseries/any',
+        {
+          timestamp: +new Date(),
+          DeviceData : TelemetryJSON
         },
         { headers: headersReq }
       )
