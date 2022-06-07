@@ -24,4 +24,10 @@ export class ApiUserEndpointController {
   DisableUserEndpoint() {
     return null;
   }
+
+  @Post('info')
+  UserInfoEndpoint() {
+    return null;
+  }
+
 }

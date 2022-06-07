@@ -325,6 +325,9 @@ export class ThingsboardThingsboardUserService {
 
     return resp.status == 200;
   }
+
+  /////////////////////////////////////////////////////////////////
+  
 }
 
 export interface UserResponse {

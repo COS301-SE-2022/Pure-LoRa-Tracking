@@ -173,10 +173,21 @@ describe('ThingsboardThingsboardClientService', () => {
   //////////////////////////////////////////////////////////////////////
 
   it('should create and assign the user the user to the reserve', async () => {
-    expect(await service.loginUser('reserveadmin@reserve.com', 'reserve')).toBe(
+    /*expect(await service.loginUser('reserveadmin@reserve.com', 'reserve')).toBe(
       true
     );
-    console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451", "lb@g.com","l", "b"));
-});
+    console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451", "lb@g.com","l", "b"));*/
+    
+  });
+
+  //////////////////////////////////////////////////////////////////////
+
+  it('should create and assign the user the user to the reserve', async () => {
+    /*expect(await service.loginUser('reserveadmin@reserve.com', 'reserve')).toBe(
+      true
+    );
+    console.log(await service.removeReserveUser("cf0afc80-e63d-11ec-9a49-9105980e5c8a"));*/
+    
+  });
 
 });

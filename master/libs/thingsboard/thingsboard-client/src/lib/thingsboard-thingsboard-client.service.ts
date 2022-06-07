@@ -298,7 +298,7 @@ export class ThingsboardThingsboardClientService {
     }
     return {
       status: 'ok',
-      explanation: 'call finished',
+      data: deviceCreate,
     };
   }
 
@@ -344,7 +344,6 @@ export class ThingsboardThingsboardClientService {
   /*
     check token
     check admin
-    check user
     add user
   */
   async addUserToReserve(
@@ -352,7 +351,7 @@ export class ThingsboardThingsboardClientService {
     email: string,
     firstName: string,
     lastName: string
-  ) : Promise<thingsboardResponse> {
+  ): Promise<thingsboardResponse> {
     const login = await this.userService.getUserID(this.token);
 
     if (login.code != 200)
@@ -383,9 +382,109 @@ export class ThingsboardThingsboardClientService {
       };
 
     return {
-      status : "ok",
-      explanation : resp.explanation
-    }
+      status: 'ok',
+      explanation: resp.explanation,
+    };
+  }
+
+  ///////////////////////////////////////////////////////////////////////
+  /*
+    check token
+    check admin
+    delete user
+  */
+  async removeReserveUser(userID: string): Promise<thingsboardResponse> {
+    const login = await this.userService.getUserID(this.token);
+    if (login.code != 200)
+      return {
+        status: 'fail',
+        explanation: 'token invalid',
+      };
+
+    if (login.type != 'admin')
+      return {
+        status: 'fail',
+        explanation: 'user not admin',
+      };
+    const resp = await this.userService.deleteUser(this.token, userID);
+    if (resp)
+      return {
+        status: 'ok',
+        explanation: 'call finished',
+      };
+    else
+      return {
+        status: 'fail',
+        explanation: 'delete failed',
+      };
+  }
+
+  ///////////////////////////////////////////////////////////////////////
+  /*
+    check token
+    check admin
+    disable user
+  */
+  async disableUser(userID: string): Promise<thingsboardResponse> {
+    const login = await this.userService.getUserID(this.token);
+    if (login.code != 200)
+      return {
+        status: 'fail',
+        explanation: 'token invalid',
+      };
+
+    if (login.type != 'admin')
+      return {
+        status: 'fail',
+        explanation: 'user not admin',
+      };
+
+    const resp = await this.userService.DisableUser(this.token, userID);
+
+    if (resp)
+      return {
+        status: 'ok',
+        explanation: 'call finished',
+      };
+    else
+      return {
+        status: 'fail',
+        explanation: 'disable failed',
+      };
+  }
+
+  ///////////////////////////////////////////////////////////////////////
+  /*
+    check token
+    check admin
+    disable user
+  */
+  async enableUser(userID: string): Promise<thingsboardResponse> {
+    const login = await this.userService.getUserID(this.token);
+    if (login.code != 200)
+      return {
+        status: 'fail',
+        explanation: 'token invalid',
+      };
+
+    if (login.type != 'admin')
+      return {
+        status: 'fail',
+        explanation: 'user not admin',
+      };
+
+    const resp = await this.userService.EnableUser(this.token, userID);
+
+    if (resp)
+      return {
+        status: 'ok',
+        explanation: 'call finished',
+      };
+    else
+      return {
+        status: 'fail',
+        explanation: 'enable failed',
+      };
   }
 }
 
