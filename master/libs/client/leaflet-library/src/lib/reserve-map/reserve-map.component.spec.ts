@@ -194,6 +194,7 @@ describe('ReserveMapComponent', () => {
       component.loadmaptiles();
       expect(component.maptiles).not.toEqual(null);
     })
+    //nothing, on the phone just scrolling randomly
 
     it("Change MapTiles if mainmap is not null and with Viewtype NORMAL_OPEN_STREET_VIEW", () => {
       component.Reserve = demoreserve;

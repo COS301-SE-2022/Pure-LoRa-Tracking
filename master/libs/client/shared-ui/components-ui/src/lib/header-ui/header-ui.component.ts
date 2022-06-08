@@ -6,7 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./header-ui.component.scss'],
 })
 export class HeaderUiComponent{
-
-  logoLoc = "assets/Logos/navlogo.svg";
-
+  logoLoc = "assets/Logos/logo.svg";
 }
