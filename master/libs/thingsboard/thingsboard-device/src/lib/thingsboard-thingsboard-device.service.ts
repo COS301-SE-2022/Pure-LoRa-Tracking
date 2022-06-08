@@ -251,9 +251,7 @@ export class ThingsboardThingsboardDeviceService {
       this.httpService.get(url, { headers: headersReq })
     ).catch((error) => {
       if (error.response == undefined) return null;
-      if (error.response.status == 400) {
-        return { status: 400 };
-      }
+      return {status : error.response.status}
     });
 
     return {

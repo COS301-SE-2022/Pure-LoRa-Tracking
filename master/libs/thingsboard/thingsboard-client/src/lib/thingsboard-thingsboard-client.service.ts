@@ -556,10 +556,16 @@ export class ThingsboardThingsboardClientService {
       explanation : "call failed"
     }
 
+    let data = "";
+    resp.data.forEach(element => {
+      if(element.key == "location")
+        data = element.value;
+    });
+
     return {
       status : "ok",
       explanation : "call finished",
-      data : resp.data
+      data : data
     };
 
   }
