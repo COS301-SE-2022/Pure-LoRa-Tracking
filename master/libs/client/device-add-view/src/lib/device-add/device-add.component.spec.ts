@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DeviceAddComponent } from './device-add.component';
-
+import {ReactiveFormsModule} from '@angular/forms';
 describe('DeviceAddComponent', () => {
   let component: DeviceAddComponent;
   let fixture: ComponentFixture<DeviceAddComponent>;
@@ -9,6 +9,7 @@ describe('DeviceAddComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [DeviceAddComponent],
+      imports: [ReactiveFormsModule]
     }).compileComponents();
   });
 
