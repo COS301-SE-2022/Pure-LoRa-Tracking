@@ -225,6 +225,7 @@ export class ReserveMapComponent implements OnInit, OnChanges {
         this.historicalpath.push(newpoint);
         if (!this.HistoricalMode) this.addToMap(newpoint)
     }
+    console.log(this.historicalpath)
   }
 
   public loadInnitial(deviceIDs: Device[]): void {

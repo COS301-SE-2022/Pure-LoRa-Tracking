@@ -52,7 +52,7 @@ export class ThingsboardThingsboardClientService {
 
     const DeviceResp = await this.deviceService.getCustomerDevices(
       0,
-      5,
+      100,
       InfoResp
     );
     return DeviceResp;
@@ -131,7 +131,7 @@ export class ThingsboardThingsboardClientService {
     }
 
     const verifyDevice = await this.validateDevice(DeviceID);
-    if (verifyDevice == false) {
+    if (verifyDevice == undefined || verifyDevice == null) {
       return {
         status: 'fail',
         explanation: 'device with ID not found for user token combination',
@@ -147,10 +147,14 @@ export class ThingsboardThingsboardClientService {
       startTime,
       endTime
     );
+
+    
+    const labelName = verifyDevice["label"];
+
     return {
       status: 'ok',
       name: DeviceID,
-      explanation: 'call finished',
+      explanation: labelName,
       data: resp,
     };
   }
@@ -175,10 +179,10 @@ export class ThingsboardThingsboardClientService {
 
   /////////////////////////////////////////////////////////
 
-  async validateDevice(deviceID: string): Promise<boolean> {
+  async validateDevice(deviceID: string): Promise<any> {
     this.deviceService.setToken(this.token);
-    const resp = await this.deviceService.getDevice(deviceID);
-    return resp.status == 200;
+    const resp = await this.deviceService.getDeviceInfo(deviceID);
+    return resp['data'];
   }
 
   ///////////////////////////////////////////////////////////
@@ -486,6 +490,38 @@ export class ThingsboardThingsboardClientService {
         status: 'fail',
         explanation: 'enable failed',
       };
+  }
+
+  ///////////////////////////////////////////////////////////////////////
+
+  async getUserInfoFromToken() : Promise<thingsboardResponse> {
+    const Login = await this.validateToken();
+    if(!Login)
+      return {status:"fail", explanation : "token invalid"}
+    const resp = await this.userService.userInfo(this.token);
+    if(resp.status != 200)
+    return {
+      status : "fail",
+      explanation : "call failed"
+    }
+    return {
+      status : "ok",
+      explanation : "call finished",
+      data : resp['data']
+    }
+  }
+  
+  async v1SendTelemetry(accessToken:string, data : any) : Promise<{status:number; explanation:string;}> {
+    const resp = await this.telemetryService.V1sendJsonTelemetry(accessToken, data);
+    if(resp == 401)
+      return {
+        status : resp,
+        explanation : "access token invalid"
+      }
+    return {
+      status : 200,
+      explanation : "call finished"
+    }
   }
 }
 

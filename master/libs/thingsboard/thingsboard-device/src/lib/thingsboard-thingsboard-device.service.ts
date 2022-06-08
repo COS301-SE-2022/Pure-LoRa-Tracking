@@ -38,6 +38,8 @@ export class ThingsboardThingsboardDeviceService {
     return this.processDevices(resp['data']['data']);
   }
 
+//////////////////////////////////////////////////////////////////////////
+
   processDevices(devices): deviceList[] {
     const list: deviceList[] = new Array<deviceList>();
     for (let i = 0; i < devices.length; i++) {
@@ -51,6 +53,8 @@ export class ThingsboardThingsboardDeviceService {
     }
     return list;
   }
+
+//////////////////////////////////////////////////////////////////////////
 
   /* ToDo configure to allow a profile to also be added from the last parameter */
   async createDevice(
@@ -93,6 +97,8 @@ export class ThingsboardThingsboardDeviceService {
     else return resp['data']['id']['id'];
   }
 
+//////////////////////////////////////////////////////////////////////////
+
   async assignDevicetoCustomer(
     custID: string,
     deviceID: string
@@ -125,14 +131,18 @@ export class ThingsboardThingsboardDeviceService {
     return resp.status == 200;
   }
 
+//////////////////////////////////////////////////////////////////////////  
   async getDeviceProfiles() {
     return null;
   }
 
+//////////////////////////////////////////////////////////////////////////  
   processDeviceProfiles(profiles: any): profileList[] {
     return null;
   }
 
+
+//////////////////////////////////////////////////////////////////////////
   async deleteDevice(deviceID: string): Promise<boolean> {
     const headersReq = {
       'Content-Type': 'application/json',
@@ -152,6 +162,7 @@ export class ThingsboardThingsboardDeviceService {
     return resp.status == 200;
   }
 
+  //////////////////////////////////////////////////////////////////////////
   async removeDeviceFromCustomer(deviceID: string): Promise<boolean> {
 
     if (this.token == '') return false;
@@ -174,7 +185,8 @@ export class ThingsboardThingsboardDeviceService {
     return resp.status == 200;
   }
 
-  async getDevice(deviceID: string) {
+//////////////////////////////////////////////////////////////////////////
+  async getDeviceInfo(deviceID: string) {
     if (this.token == '') return null;
 
     const url = this.baseURL + 'device/' + deviceID;
@@ -191,6 +203,8 @@ export class ThingsboardThingsboardDeviceService {
     });
   }
 }
+
+//////////////////////////////////////////////////////////////////////////
 
 export class deviceList {
   deviceID: string;

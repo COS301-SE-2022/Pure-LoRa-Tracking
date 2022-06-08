@@ -8,6 +8,12 @@ import {MatStepperModule} from '@angular/material/stepper';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
+import { MatCardModule } from '@angular/material/card';
+import {MatDividerModule} from '@angular/material/divider';
+import {MatListModule} from '@angular/material/list';
+import {ScrollingModule} from '@angular/cdk/scrolling';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
 
 export const clientSharedUiMaterialUiRoutes: Route[] = [];
 
@@ -19,6 +25,12 @@ const materialComponentModules = [
   MatFormFieldModule,
   MatInputModule,
   MatSelectModule
+  MatCardModule,
+  MatDividerModule,
+  MatListModule,
+  ScrollingModule,
+  MatCheckboxModule,
+  MatButtonToggleModule
 ];
 
 @NgModule({

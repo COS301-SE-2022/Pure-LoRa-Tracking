@@ -25,7 +25,6 @@ export interface userEnableInput {
 
 export interface userInfoInput {
   token: string;
-  customerID: string;
 }
 
 export interface userResponse {

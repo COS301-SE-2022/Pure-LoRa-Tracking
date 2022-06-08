@@ -507,11 +507,36 @@ describe('ThingsboardThingsboardClientService', () => {
 
   //////////////////////////////////////////////////////////////////////
 
-  it('should create and assign the user the user to the reserve', async () => {
+  it('should remove the user from the reserve', async () => {
     /*expect(await service.loginUser('reserveadmin@reserve.com', 'reserve')).toBe(
       true
     );
     console.log(await service.removeReserveUser("cf0afc80-e63d-11ec-9a49-9105980e5c8a"));*/
+    
+  });
+
+  //////////////////////////////////////////////////////////////////////
+
+  it('should send the telemetry and receive an ok response', async () => {
+    /*expect(await service.loginUser('reserveadmin@reserve.com', 'reserve')).toBe(
+      true
+    );
+    console.log(await service.removeReserveUser("cf0afc80-e63d-11ec-9a49-9105980e5c8a"));*/
+
+    const result: AxiosResponse<any> = {
+      data: {
+        "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZW5hbnRAdGhpbmdzYm9hcmQub3JnIi...",
+        "refreshToken": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZW5hbnRAdGhpbmdzYm9hcmQub3JnIi..."
+      },
+      headers: {},
+      config: {},
+      status: 200,
+      statusText: 'OK'
+    }
+
+    jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(result));
+
+    expect(await service.v1SendTelemetry("sadfj-assen-12xed-esawf",{rssi:2000})).toEqual({status : 200, explanation : "call finished"})
     
   });
 
