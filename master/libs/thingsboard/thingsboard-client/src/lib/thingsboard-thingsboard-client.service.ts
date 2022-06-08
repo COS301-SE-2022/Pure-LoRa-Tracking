@@ -602,6 +602,38 @@ export class ThingsboardThingsboardClientService {
       explanation: 'call finished',
     };
   }
+
+  ///////////////////////////////////////////////////////////////////////
+  async AdminGetCustomers() : Promise<thingsboardResponse> {
+    const login = await this.userService.getUserID(this.token);
+    if (login.code != 200)
+      return {
+        status: 'fail',
+        explanation: 'token invalid',
+      };
+
+    if (login.type != 'admin')
+      return {
+        status: 'fail',
+        explanation: 'user not admin',
+      };
+
+    const resp = await this.userService.AdminGetCustomers(this.token);
+    if(resp.status!=200)
+    return {
+      status: 'fail',
+      explanation: resp.status.toString(),
+    }; 
+
+    return {
+      status:"ok",
+      explanation:"call finished",
+      data:resp.data.data
+    }
+    
+
+  }
+
 }
 
 /* data is required to be any due to the many possible response data types */

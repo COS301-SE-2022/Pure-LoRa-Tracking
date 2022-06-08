@@ -580,4 +580,13 @@ describe('ThingsboardThingsboardClientService', () => {
     );
     console.log(await service.getGatewayLocation("2fe67850-dfe9-11ec-bdb3-750ce7ed2451"));*/
   });
+
+  //////////////////////////////////////////////////////////////////////
+
+  it('should get the customers for the admin', async () => {
+    /*expect(await service.loginUser('reserveadmin@reserve.com', 'reserve')).toBe(
+      true
+    );
+    console.log(await service.AdminGetCustomers());*/
+  });
 });

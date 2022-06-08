@@ -327,6 +327,30 @@ export class ThingsboardThingsboardUserService {
   }
 
   /////////////////////////////////////////////////////////////////
+    async AdminGetCustomers(token: string): Promise<{data:any, status:number}> {
+      const headersReq = {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token,
+      };
+  
+      const resp = await firstValueFrom(
+        this.httpService.get(
+          'http://localhost:8080/api/customers?page=0&pageSize=100',
+          {
+            headers: headersReq,
+          }
+        )
+      ).catch((error) => {
+        if (error.response == undefined) return null;
+        return { status: error.response.status };
+      });
+  
+
+      return {
+        status : resp.status,
+        data : resp['data']
+      }
+    }
 
 }
 
