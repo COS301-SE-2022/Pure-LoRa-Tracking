@@ -1,8 +1,8 @@
 export interface deviceResponse {
-  status : number;
-  explanation : string;
-  furtherExplain? : string;
-  data? : any;
+  status: number;
+  explanation: string;
+  furtherExplain?: string;
+  data?: any;
 }
 
 export interface deviceInfos {
@@ -41,4 +41,17 @@ export interface GatewayProfile {
 export interface RemoveDevice {
   token: string;
   deviceID: string;
+}
+
+export interface GatewayLocationInfo {
+  token: string;
+  deviceIDs: string[];
+}
+export interface GatewayLocationAdd {
+  token: string;
+  deviceID: string;
+  locationParameters: {
+    latitude: number;
+    longitude: number;
+  }[];
 }
