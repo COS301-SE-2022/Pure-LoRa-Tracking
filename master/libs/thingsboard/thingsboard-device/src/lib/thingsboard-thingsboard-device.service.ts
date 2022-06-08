@@ -15,7 +15,6 @@ export class ThingsboardThingsboardDeviceService {
   }
 
   async getCustomerDevices(page: number, pageSize: number, customerID: string) {
-    //Uncomment after mock tests.
     if (this.token == '') return null;
 
     const url =
@@ -61,7 +60,7 @@ export class ThingsboardThingsboardDeviceService {
     profileType?: profileList,
     extraParams?: any
   ): Promise<string> {
-    //Uncomment after mock testing.
+
     if (this.token == '') return 'token-fail';
 
     const url = this.baseURL + 'device';
@@ -98,7 +97,7 @@ export class ThingsboardThingsboardDeviceService {
     custID: string,
     deviceID: string
   ): Promise<boolean> {
-    //Uncomment after mock testing.
+
     if (this.token == '') return false;
     const url = this.baseURL + 'customer/' + custID + '/device/' + deviceID;
 
@@ -154,7 +153,7 @@ export class ThingsboardThingsboardDeviceService {
   }
 
   async removeDeviceFromCustomer(deviceID: string): Promise<boolean> {
-    //Uncomment after mock testing.
+
     if (this.token == '') return false;
     const url = this.baseURL + 'customer/device/' + deviceID;
 

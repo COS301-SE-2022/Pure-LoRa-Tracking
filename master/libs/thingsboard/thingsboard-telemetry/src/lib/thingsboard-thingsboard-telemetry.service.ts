@@ -127,7 +127,7 @@ export class ThingsboardThingsboardTelemetryService {
           '/timeseries/any',
         {
           timestamp: +new Date(),
-          DeviceData : TelemetryJSON
+          DeviceData: TelemetryJSON,
         },
         { headers: headersReq }
       )
@@ -138,6 +138,33 @@ export class ThingsboardThingsboardTelemetryService {
       }
     });
     return resp.status == 200;
+  }
+
+  async V1sendJsonTelemetry(
+    accessToken: string,
+    TelemetryJSON: any
+  ): Promise<number> {
+    if (this.token == '') return;
+
+    const headersReq = {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + this.token,
+    };
+    const resp = await lastValueFrom(
+      this.httpService.post(
+        'http://localhost:8080/api/v1' + accessToken + '/telemetry',
+        {
+          timestamp: +new Date(),
+          DeviceData: TelemetryJSON,
+        },
+        { headers: headersReq }
+      )
+    ).catch((error) => {
+      if (error.response == undefined) return { status: 500 };
+      return {status : error.response.status}
+      
+    });
+    return resp.status;
   }
 }
 
