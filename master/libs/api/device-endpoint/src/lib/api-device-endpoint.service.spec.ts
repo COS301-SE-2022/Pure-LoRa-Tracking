@@ -498,12 +498,36 @@ describe('ApiDeviceEndpointService', () => {
 
   ///////////////////////////////////////////////////////////////////////////////
   it('should process the gateway list and return their locations', async() => {
-    const testInput = {
+    /*const testInput = {
       token:
         'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZlYWRtaW5AcmVzZXJ2ZS5jb20iLCJzY29wZXMiOlsiVEVOQU5UX0FETUlOIl0sInVzZXJJZCI6ImQ2MzcyZTMwLWRmZTgtMTFlYy1iZGIzLTc1MGNlN2VkMjQ1MSIsImVuYWJsZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiJjZDJkZjJiMC1kZmU4LTExZWMtYmRiMy03NTBjZTdlZDI0NTEiLCJjdXN0b21lcklkIjoiMTM4MTQwMDAtMWRkMi0xMWIyLTgwODAtODA4MDgwODA4MDgwIiwiaXNzIjoidGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE2NTQ3MDMyNzcsImV4cCI6MTY1NDcxMjI3N30.9PTeASiluMvW0NOi_FiAZiR17-dUMooWNqb_Xys5iiGBGtfHKWyOyGZiEF1Xj9ItkDY97ohQ13yCsAnzJ8c9-w',
       deviceIDs: ['2fe67850-dfe9-11ec-bdb3-750ce7ed2451'],
     };
 
-    console.log(await service.processGatewayGetLocationInfo(testInput));
+    console.log(await service.processGatewayGetLocationInfo(testInput));*/
+  });
+
+  ///////////////////////////////////////////////////////////////////////////////
+  it('should process the gateway list and return their locations', async() => {
+    const testInput = {
+    "token" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZlYWRtaW5AcmVzZXJ2ZS5jb20iLCJzY29wZXMiOlsiVEVOQU5UX0FETUlOIl0sInVzZXJJZCI6ImQ2MzcyZTMwLWRmZTgtMTFlYy1iZGIzLTc1MGNlN2VkMjQ1MSIsImVuYWJsZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiJjZDJkZjJiMC1kZmU4LTExZWMtYmRiMy03NTBjZTdlZDI0NTEiLCJjdXN0b21lcklkIjoiMTM4MTQwMDAtMWRkMi0xMWIyLTgwODAtODA4MDgwODA4MDgwIiwiaXNzIjoidGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE2NTQ3MDcxODgsImV4cCI6MTY1NDcxNjE4OH0.ANHDlH4zU3JG8743lMCCRD5N86pzSBOoQB0pxdq_KZgBmzacC5N0l91ZjKZZxi7f6r2BL-JXc5WWsArS-qe04Q",
+    "deviceID" : "2fe67850-dfe9-11ec-bdb3-750ce7ed2451",
+    "locationParameters" : [
+        {
+            "latitude" : 23,
+            "longitude" : 22
+        },
+        {
+            "latitude" : 21,
+            "longitude" : 22
+        },
+        {
+            "latitude" : 23.56,
+            "longitude" : 24.25
+        }
+    ]
+}
+
+    console.log(await service.processGatewaySetLocation(testInput));
   });
 });

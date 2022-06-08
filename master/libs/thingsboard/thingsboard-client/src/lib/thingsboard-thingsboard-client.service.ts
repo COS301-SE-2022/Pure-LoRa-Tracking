@@ -533,75 +533,74 @@ export class ThingsboardThingsboardClientService {
   ///////////////////////////////////////////////////////////////////////
 
   async getGatewayLocation(deviceID: string): Promise<thingsboardResponse> {
-    const Login = this.validateToken();
-    const Device = this.validateDevice(deviceID);
-    await Login;
-    await Device;
+    const Login = await this.validateToken();
+    const Device = await this.validateDevice(deviceID);
 
     if (!Login)
       return {
         status: 'fail',
         explanation: 'token invalid',
       };
-    if (!Device)
+    if (Device == undefined)
       return {
         status: 'fail',
         explanation: 'device not found',
       };
 
     const resp = await this.deviceService.GetGatewayLocation(deviceID);
-    if(resp.status != 200)
-    return {
-      status : "fail",
-      explanation : "call failed"
-    }
+    if (resp.status != 200)
+      return {
+        status: 'fail',
+        explanation: 'call failed',
+      };
 
-    let data = "";
-    resp.data.forEach(element => {
-      if(element.key == "location")
-        data = element.value;
+    let data = '';
+    resp.data.forEach((element) => {
+      if (element.key == 'location') data = element.value[0];
     });
 
     return {
-      status : "ok",
-      explanation : "call finished",
-      data : data
+      status: 'ok',
+      explanation: 'call finished',
+      data: data,
     };
-
   }
 
   ///////////////////////////////////////////////////////////////////////
 
-  async setGatewayLocation(deviceID: string, locationData: {latitude:number, longitude:number}[]): Promise<thingsboardResponse> {
-    const Login = this.validateToken();
-    const Device = this.validateDevice(deviceID);
-    await Login;
-    await Device;
+  async setGatewayLocation(
+    deviceID: string,
+    locationData: { latitude: number; longitude: number }[]
+  ): Promise<thingsboardResponse> {
+    const Login = await this.validateToken();
+    const Device = await this.validateDevice(deviceID);
 
     if (!Login)
       return {
         status: 'fail',
         explanation: 'token invalid',
       };
-    if (!Device)
+    if (Device == undefined)
       return {
         status: 'fail',
         explanation: 'device not found',
       };
 
-    const resp = await this.deviceService.setGatewayLocation(deviceID, locationData);
+    const resp = await this.deviceService.setGatewayLocation(
+      deviceID,
+      locationData
+    );
 
-    if(resp.status != 200)
-    return {
-      status : "fail",
-      explanation : resp.status.toString()
-    }
+    if (resp.status != 200)
+      return {
+        status: 'fail',
+        explanation: resp.status.toString(),
+      };
 
     return {
-      status : "ok",
-      explanation : "call finished",
+      status: 'ok',
+      explanation: 'call finished',
     };
-    
   }
 }
 

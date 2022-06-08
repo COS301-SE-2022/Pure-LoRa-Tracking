@@ -221,21 +221,34 @@ export class ApiDeviceEndpointService {
     for (let i = 0; i < AwaitResponses.length; i++) {
       const element = await AwaitResponses[i].data;
       Responses.push({
-        data : element,
-        deviceID : AwaitResponses[i].deviceID
-      })
+        data: element,
+        deviceID: AwaitResponses[i].deviceID,
+      });
     }
 
-
     let explain = 'ok';
+    let status = 200;
 
-    const data = new Array<{ deviceID: string; location?: any; explain?:string }>();
+    const data = new Array<{
+      deviceID: string;
+      location?: any;
+      explain?: string;
+    }>();
     Responses.forEach((response) => {
+      if(status != 200)
+      return;
+      if (
+        response.data.status == 'fail' &&
+        response.data.explanation.includes('token')
+      ) {
+        explain = response.data.explanation;
+        status = 401;
+      }
       if (response.data.status == 'fail') {
         data.push({
-          deviceID:response.deviceID,
-          explain:response.data.explanation
-        })
+          deviceID: response.deviceID,
+          explain: response.data.explanation,
+        });
         explain = 'some devices had errors';
       } else {
         data.push({
@@ -246,9 +259,9 @@ export class ApiDeviceEndpointService {
     });
 
     return {
-      status: 200,
-      explanation:explain,
-      data:data
+      status: status,
+      explanation: explain,
+      data: data,
     };
   }
 
@@ -268,5 +281,32 @@ export class ApiDeviceEndpointService {
         status: 400,
         explanation: 'no device ID found',
       };
+
+      if (body.locationParameters == undefined)
+      return {
+        status: 400,
+        explanation: 'no location parameters',
+      };
+
+  this.thingsboardClient.setToken(body.token);
+  const resp = await this.thingsboardClient.setGatewayLocation(body.deviceID, body.locationParameters);
+  if(resp.status == "fail" && resp.explanation.includes('token'))
+  return {
+    status : 401,
+    explanation : resp.explanation    
+  }
+
+  if(resp.status == "fail")
+  return {
+    status : 400,
+    explanation : resp.explanation    
+  }
+
+  return {
+    status: 200,
+    explanation : resp.explanation
+  }
+
+  
   }
 }
