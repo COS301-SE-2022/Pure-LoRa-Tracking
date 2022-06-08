@@ -178,7 +178,7 @@ export class ApiUserEndpointService {
     return {
       status: 200,
       explain: resp.explanation,
-      data: resp.data,
+      data: resp.data['id'],
     };
   }
 }
