@@ -273,13 +273,23 @@ describe('ThingsboardThingsboardDeviceService', () => {
     expect(await service.processDeviceProfiles([])).toEqual(null);
   });
 
+  ///////////////////////////////////////////////////////////////////////////////////////////
+
   it('should set the gateway location', async () => {
-    const data = await loginService.login(username, password);
+    /*const data = await loginService.login(username, password);
     service.setToken(data['data']['token']);
     console.log(await service.setGatewayLocation("2fe67850-dfe9-11ec-bdb3-750ce7ed2451", [
       {latitude : -25, longitude : 23},
       {latitude : -25.2, longitude : 21}
-    ]))
+    ]))*/
+  });
+
+  ///////////////////////////////////////////////////////////////////////////////////////////
+
+  it('should set the gateway location', async () => {
+    /*const data = await loginService.login(username, password);
+    service.setToken(data['data']['token']);
+    console.log(await service.GetGatewayLocation("2fe67850-dfe9-11ec-bdb3-750ce7ed2451"));*/
   });
 
 });

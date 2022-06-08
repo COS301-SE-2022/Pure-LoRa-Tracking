@@ -230,16 +230,36 @@ export class ThingsboardThingsboardDeviceService {
       }
     });
 
-    return resp;
+    return resp['data'];
     
   }
 
   //////////////////////////////////////////////////////////////////////////
   async GetGatewayLocation(
-    deviceID: string,
-    locationParamters: [{ latitude: number; longitude: number }]
-  ): Promise<{ status: number }> {
-    return null;
+    deviceID: string
+  ): Promise<any> {
+    if (this.token == '') return null;
+
+    const url =
+      this.baseURL + "plugins/telemetry/DEVICE/"+deviceID+"/values/attributes?keys=location"
+
+    const headersReq = {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + this.token,
+    };
+    const resp = await lastValueFrom(
+      this.httpService.get(url, { headers: headersReq })
+    ).catch((error) => {
+      if (error.response == undefined) return null;
+      if (error.response.status == 400) {
+        return { status: 400 };
+      }
+    });
+
+    return {
+      status : resp.status,
+      data : resp['data']
+    };
   }
 }
 
