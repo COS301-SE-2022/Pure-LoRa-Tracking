@@ -87,9 +87,9 @@ export class ApiMapEndpointService {
             }
 
 
-        /*this.thingsboardClient.setToken(content.token);
-        const data = await this.thingsboardClient.getReservePerimeter();*/
-        /*return {
+        this.thingsboardClient.setToken(content.token);
+        const data = await this.thingsboardClient.getReservePerimeter();
+        return {
             code : 200,
             status : "success",
             explanation : "",
@@ -98,41 +98,41 @@ export class ApiMapEndpointService {
                 center : data['value']['center'],
                 location : data['value']['location']
             }
-        }*/
-        return {
-            code: 200,
-            status: "success",
-            explanation: "",
-            data: {
-                reserveName: "UP",
-                center: {
-                    latitude: "-25.755123",
-                    longitude: "28.231999"
-                },
-                location: [
-                    {
-                        latitude: "-25.753785",
-                        longitude: "28.231703"
-                    },
-                    {
-                        latitude: "-25.755650",
-                        longitude: "28.230737"
-                    },
-                    {
-                        latitude: "-25.757089",
-                        longitude: "28.233456"
-                    },
-                    {
-                        latitude: "-25.756385",
-                        longitude: "28.236474"
-                    },
-                    {
-                        latitude: "-25.754765",
-                        longitude: "28.235663"
-                    }
-                ]
-            }
         }
+        // return {
+        //     code: 200,
+        //     status: "success",
+        //     explanation: "",
+        //     data: {
+        //         reserveName: "UP",
+        //         center: {
+        //             latitude: "-25.755123",
+        //             longitude: "28.231999"
+        //         },
+        //         location: [
+        //             {
+        //                 latitude: "-25.753785",
+        //                 longitude: "28.231703"
+        //             },
+        //             {
+        //                 latitude: "-25.755650",
+        //                 longitude: "28.230737"
+        //             },
+        //             {
+        //                 latitude: "-25.757089",
+        //                 longitude: "28.233456"
+        //             },
+        //             {
+        //                 latitude: "-25.756385",
+        //                 longitude: "28.236474"
+        //             },
+        //             {
+        //                 latitude: "-25.754765",
+        //                 longitude: "28.235663"
+        //             }
+        //         ]
+        //     }
+        // }
     }
 
     async HistoricalProcess(content: MapApiHistorical): Promise<MapApiHistoricalResponse> {
