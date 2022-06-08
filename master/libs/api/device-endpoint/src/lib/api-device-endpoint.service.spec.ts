@@ -528,6 +528,6 @@ describe('ApiDeviceEndpointService', () => {
     ]
 }
 
-    console.log(await service.processGatewaySetLocation(testInput));
+    //console.log(await service.processGatewaySetLocation(testInput));
   });
 });
