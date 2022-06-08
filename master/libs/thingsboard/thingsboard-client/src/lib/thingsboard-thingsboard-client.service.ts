@@ -574,7 +574,7 @@ export class ThingsboardThingsboardClientService {
 
   async setGatewayLocation(
     deviceID: string,
-    locationData: { latitude: number; longitude: number }[]
+    locationData: { latitude: number; longitude: number }
   ): Promise<thingsboardResponse> {
     const Login = await this.validateToken();
     const Device = await this.validateDevice(deviceID);

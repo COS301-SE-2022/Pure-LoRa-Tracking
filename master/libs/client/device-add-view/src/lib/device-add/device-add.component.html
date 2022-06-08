@@ -31,6 +31,13 @@
               <mat-label>Device Description</mat-label>
               <input matInput placeholder="Description" formControlName="desc" required>
             </mat-form-field>
+            <br>
+                <mat-form-field appearance="fill">
+                  <mat-label>Profile</mat-label>
+                  <mat-select formControlName="profilegroup">
+                      <mat-option *ngFor="let curr of profilelist" [value]="curr.deviceID">{{curr.name}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
             <div>
               <button mat-button matStepperPrevious>Back</button>
               <button mat-button matStepperNext [disabled]="descriptionGroup.invalid">Next</button>
@@ -53,31 +60,30 @@
                   <mat-label>Application Key</mat-label>
                   <input matInput placeholder="Application Key" formControlName="applicationkey" required>
                 </mat-form-field>
-                <br>
-                <mat-form-field appearance="fill">
-                  <mat-label>Profile</mat-label>
-                  <mat-select formControlName="profilegroup">
-                      <mat-option *ngFor="let curr of profilelist" [value]="curr.deviceID">{{curr.name}}</mat-option>
-                  </mat-select>
-                </mat-form-field>
+                
               </form>
             </div>
             <div *ngIf="deviceType === 'gateway';">
               <form [formGroup]="gatewayGroup">
                 <mat-form-field appearance="fill">
                   <mat-label>Gateway ID</mat-label>
-                  <input matInput placeholder="ID" formControlName="gatwayid" required>
+                  <input matInput placeholder="ID" formControlName="gatewayid" required>
                 </mat-form-field>
                 <br>
-                <mat-form-field appearance="fill">
+                <!-- <mat-form-field appearance="fill">
                   <mat-label>Network Server</mat-label>
-                  <input matInput placeholder="Server" formControlName="networkserver" required>
+                  <input matInput placeholder="Server" formControlName="networkserver" required [defaultValue]="one">
                 </mat-form-field>
-                <br>
+                <br> -->
                 <mat-form-field appearance="fill">
-                  <mat-label>Gateway Location</mat-label>
-                  <input matInput placeholder="Location" formControlName="location" optional>
+                  <mat-label>Gateway Latitude</mat-label>
+                  <input matInput placeholder="Location" formControlName="gatlang" optional>
                 </mat-form-field>
+                <mat-form-field appearance="fill">
+                  <mat-label>Gateway Longitude</mat-label>
+                  <input matInput placeholder="Location" formControlName="gatlong" optional>
+                </mat-form-field>
+                
               </form>
             </div>
                 
@@ -91,7 +97,7 @@
 
           <ng-template matStepLabel>Finish</ng-template>
           <div>
-            <button mat-button (click)="update()">Create</button>
+            <button mat-button (click)="create()">Create</button>
             <button mat-button matStepperPrevious>Back</button>
             <button mat-button (click)="stepper.reset()">Reset</button>
           </div>
