@@ -22,5 +22,5 @@ export class MapPanelComponent {
   updateViewType(newval:string){
     this.ViewType.emit(newval);
   }
-  ngOnInit(): void {}
+  // ngOnInit(): void {}
 }

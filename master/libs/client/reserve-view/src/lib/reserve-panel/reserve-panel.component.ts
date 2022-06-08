@@ -57,7 +57,7 @@ export class ReservePanelComponent implements OnInit {
   ];
 
   deviceType = "sensors";
-  selectedDeviceID: string="";
+  selectedDeviceID="";
   searchString = "";
   filteredGateways:GatewayProps[]|undefined=[];
 
