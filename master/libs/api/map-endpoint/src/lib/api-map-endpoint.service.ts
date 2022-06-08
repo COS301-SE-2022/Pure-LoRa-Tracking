@@ -154,10 +154,11 @@ export class ApiMapEndpointService {
         // this.thingsboardClient.setToken(content.token);
         // const awaitArray = Array<any>()
         // content.deviceID.forEach((device)=> {
+            /* await array -> telem results */
         //     awaitArray.push(this.thingsboardClient.getDeviceHistoricalData(device, content.startTime, content.endTime))
         // })
 
-        // // purrrformance
+        //
         // for (let i = 0; i < awaitArray.length; i++) {
         //     awaitArray[i] = await awaitArray[i];
         // }

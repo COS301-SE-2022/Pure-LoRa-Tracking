@@ -84,7 +84,7 @@ describe('ThingsboardThingsboardDeviceService', () => {
 
     jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(result));
     const custID = "784f394c-42b6-435a-983c-b7beff2784f9";
-    console.log(await service.getCustomerDevices(0,5,custID));
+    expect(await service.getCustomerDevices(0,5,custID)).toBeDefined();
     /*const data = await loginService.login(username, password);
     service.setToken(data['data']['token']);
     const userinfo = await loginService.userInfo(data['data']['token']);
@@ -263,6 +263,14 @@ describe('ThingsboardThingsboardDeviceService', () => {
     /*const data = await loginService.login(username, password);
     service.setToken(data['data']['token']);
     expect(await service.removeDeviceFromCustomer("fa0097e0-dfaa-11ec-b99c-f7477a3db362")).toEqual(true);*/
+  });
+
+  it('should get device profiles and return null, tentatively.', async () => {
+    expect(await service.getDeviceProfiles()).toEqual(null);
+  });
+
+  it('should process a list of device profiles and return null, tentatively.', async () => {
+    expect(await service.processDeviceProfiles([])).toEqual(null);
   });
 
 });
