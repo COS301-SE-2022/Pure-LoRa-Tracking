@@ -38,6 +38,8 @@ export class ThingsboardThingsboardDeviceService {
     return this.processDevices(resp['data']['data']);
   }
 
+  //////////////////////////////////////////////////////////////////////////
+
   processDevices(devices): deviceList[] {
     const list: deviceList[] = new Array<deviceList>();
     for (let i = 0; i < devices.length; i++) {
@@ -52,6 +54,8 @@ export class ThingsboardThingsboardDeviceService {
     return list;
   }
 
+  //////////////////////////////////////////////////////////////////////////
+
   /* ToDo configure to allow a profile to also be added from the last parameter */
   async createDevice(
     hardwareID: string,
@@ -60,7 +64,6 @@ export class ThingsboardThingsboardDeviceService {
     profileType?: profileList,
     extraParams?: any
   ): Promise<string> {
-
     if (this.token == '') return 'token-fail';
 
     const url = this.baseURL + 'device';
@@ -93,11 +96,12 @@ export class ThingsboardThingsboardDeviceService {
     else return resp['data']['id']['id'];
   }
 
+  //////////////////////////////////////////////////////////////////////////
+
   async assignDevicetoCustomer(
     custID: string,
     deviceID: string
   ): Promise<boolean> {
-
     if (this.token == '') return false;
     const url = this.baseURL + 'customer/' + custID + '/device/' + deviceID;
 
@@ -125,14 +129,17 @@ export class ThingsboardThingsboardDeviceService {
     return resp.status == 200;
   }
 
+  //////////////////////////////////////////////////////////////////////////
   async getDeviceProfiles() {
     return null;
   }
 
+  //////////////////////////////////////////////////////////////////////////
   processDeviceProfiles(profiles: any): profileList[] {
     return null;
   }
 
+  //////////////////////////////////////////////////////////////////////////
   async deleteDevice(deviceID: string): Promise<boolean> {
     const headersReq = {
       'Content-Type': 'application/json',
@@ -152,8 +159,8 @@ export class ThingsboardThingsboardDeviceService {
     return resp.status == 200;
   }
 
+  //////////////////////////////////////////////////////////////////////////
   async removeDeviceFromCustomer(deviceID: string): Promise<boolean> {
-
     if (this.token == '') return false;
     const url = this.baseURL + 'customer/device/' + deviceID;
 
@@ -174,7 +181,8 @@ export class ThingsboardThingsboardDeviceService {
     return resp.status == 200;
   }
 
-  async getDevice(deviceID: string) {
+  //////////////////////////////////////////////////////////////////////////
+  async getDeviceInfo(deviceID: string) {
     if (this.token == '') return null;
 
     const url = this.baseURL + 'device/' + deviceID;
@@ -190,7 +198,96 @@ export class ThingsboardThingsboardDeviceService {
       return { status: error.response.status };
     });
   }
+
+  //////////////////////////////////////////////////////////////////////////
+  async setGatewayLocation(
+    deviceID: string,
+    locationParamters: { latitude: number; longitude: number }[]
+  ): Promise<{ status: number }> {
+    if (this.token == '') return {
+      status : 401
+    };
+
+    const url = this.baseURL + 'plugins/telemetry/DEVICE/'+deviceID+'/attributes/SERVER_SCOPE';
+
+    const headersReq = {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + this.token,
+    };
+
+    const resp = await lastValueFrom(
+      this.httpService.post(
+        url,
+        {
+          location : locationParamters
+        },
+        { headers: headersReq }
+      )
+    ).catch((error) => {
+      if (error.response == undefined) return null;
+      if (error.response.status == 400) {
+        return { status: 400 };
+      }
+    });
+
+    return resp;
+    
+  }
+
+  //////////////////////////////////////////////////////////////////////////
+  async GetGatewayLocation(
+    deviceID: string
+  ): Promise<any> {
+    if (this.token == '') return null;
+
+    const url =
+      this.baseURL + "plugins/telemetry/DEVICE/"+deviceID+"/values/attributes?keys=location"
+
+    const headersReq = {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + this.token,
+    };
+    const resp = await lastValueFrom(
+      this.httpService.get(url, { headers: headersReq })
+    ).catch((error) => {
+      if (error.response == undefined) return null;
+      return {status : error.response.status}
+    });
+
+    return {
+      status : resp.status,
+      data : resp['data']
+    };
+  }
+
+  async GetAccessToken(
+    deviceID: string
+  ): Promise<{token:string, explain?:string}> {
+    if (this.token == '') return null;
+
+    const url =
+      this.baseURL + "device/"+deviceID+"/credentials"
+
+    const headersReq = {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + this.token,
+    };
+    const resp = await lastValueFrom(
+      this.httpService.get(url, { headers: headersReq })
+    ).catch((error) => {
+      if (error.response == undefined) return null;
+      return {status : error.response.status}
+    });
+
+    if(resp.status != 200)
+    return {token:"", explain:resp.status}
+
+    return {token:resp['data']['credentialsId']}
+
+  }
 }
+
+//////////////////////////////////////////////////////////////////////////
 
 export class deviceList {
   deviceID: string;

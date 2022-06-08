@@ -154,10 +154,11 @@ export class ApiMapEndpointService {
         // this.thingsboardClient.setToken(content.token);
         // const awaitArray = Array<any>()
         // content.deviceID.forEach((device)=> {
+            /* await array -> telem results */
         //     awaitArray.push(this.thingsboardClient.getDeviceHistoricalData(device, content.startTime, content.endTime))
         // })
 
-        // // purrrformance
+        //
         // for (let i = 0; i < awaitArray.length; i++) {
         //     awaitArray[i] = await awaitArray[i];
         // }
@@ -202,7 +203,7 @@ export class ApiMapEndpointService {
             data: []
         }
 
-        if (content.deviceID.includes("sens-11")) {
+        if (content.deviceID.includes("sens-11")||content.deviceID.length==0) {
             toreturn.data.push({
                 deviceID: "sens-11",
                 deviceName: "sens-11-test",
@@ -232,7 +233,7 @@ export class ApiMapEndpointService {
                 ]
             })
         }
-        if (content.deviceID.includes("sens-12")) {
+        if (content.deviceID.includes("sens-12")||content.deviceID.length==0) {
             toreturn.data.push({
                 deviceID: "sens-12",
                 deviceName: "sens-12-test",
@@ -262,7 +263,7 @@ export class ApiMapEndpointService {
                 ]
             })
         }
-        if (content.deviceID.includes("sens-13")) {
+        if (content.deviceID.includes("sens-13")||content.deviceID.length==0) {
             toreturn.data.push({
                 deviceID: "sens-13",
                 deviceName: "sens-13-test",

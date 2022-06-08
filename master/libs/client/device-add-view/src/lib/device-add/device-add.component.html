@@ -1,0 +1,87 @@
+<master-header-nav></master-header-nav>
+<div class="container">
+  <div class="wrapper">
+    <mat-stepper labelPosition="bottom" #stepper>
+        <mat-step [stepControl]="typeGroup">
+          <form [formGroup]="typeGroup">
+            <ng-template matStepLabel>Select Device Type</ng-template>
+            <mat-form-field appearance="fill">
+              <mat-label>Type</mat-label>
+              <mat-select [(value)]="deviceType">
+                <mat-option value="none">None</mat-option>
+                <mat-option value="sensor">Sensor</mat-option>
+                <mat-option value="gateway">Gateway</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <div>
+              <button mat-button matStepperNext>Next</button>
+            </div>
+          </form>
+        </mat-step>
+        <mat-step [stepControl]="descriptionGroup" >
+          <form [formGroup]="descriptionGroup">
+            <ng-template matStepLabel>Device Description</ng-template>
+            <mat-form-field appearance="fill">
+              <mat-label>Device Name</mat-label>
+              <input matInput placeholder="Name" formControlName="secondCtrl" required>
+              </mat-form-field>
+              <br>
+              <mat-form-field appearance="fill">
+                <mat-label>Device Description</mat-label>
+                <input matInput placeholder="Description" formControlName="secondCtrl" required>
+                </mat-form-field>
+            <div>
+              <button mat-button matStepperPrevious>Back</button>
+              <button mat-button matStepperNext>Next</button>
+            </div>
+          </form>
+        </mat-step>
+        <mat-step [stepControl]="infoGroup" >
+          <form [formGroup]="infoGroup">
+            <ng-template matStepLabel>Device Info</ng-template>
+              
+            <p *ngIf="deviceType === 'sensor';">
+            <mat-form-field appearance="fill">
+              <mat-label>EUI</mat-label>
+              <input matInput placeholder="EUI" formControlName="thirdCtrl" required>
+              </mat-form-field>
+              <br>
+              <mat-form-field appearance="fill">
+              <mat-label>Application Key</mat-label>
+              <input matInput placeholder="Application Key" formControlName="thirdCtrl" required>
+              </mat-form-field>
+            </p>
+            <p *ngIf="deviceType === 'gateway';">
+              <mat-form-field appearance="fill">
+                <mat-label>Gateway ID</mat-label>
+                <input matInput placeholder="ID" formControlName="thirdCtrl" required>
+                </mat-form-field>
+                <br>
+                <mat-form-field appearance="fill">
+                <mat-label>Network Server</mat-label>
+                <input matInput placeholder="Server" formControlName="thirdCtrl" required>
+                </mat-form-field>
+                <br>
+                <mat-form-field appearance="fill">
+                  <mat-label>Gateway Location</mat-label>
+                  <input matInput placeholder="Location" formControlName="thirdCtrl" optional>
+                  </mat-form-field>
+                
+                </p>
+            <div>
+              <button mat-button matStepperPrevious>Back</button>
+              <button mat-button matStepperNext>Next</button>
+            </div>
+          </form>
+        </mat-step>
+        <mat-step>
+          <ng-template matStepLabel>Done</ng-template>
+          <p>You are now done.</p>
+          <div>
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button (click)="stepper.reset()">Reset</button>
+          </div>
+        </mat-step>
+      </mat-stepper>
+    </div>
+</div>
