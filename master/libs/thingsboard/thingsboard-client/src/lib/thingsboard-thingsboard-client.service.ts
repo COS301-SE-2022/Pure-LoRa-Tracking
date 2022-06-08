@@ -486,6 +486,26 @@ export class ThingsboardThingsboardClientService {
         explanation: 'enable failed',
       };
   }
+
+  ///////////////////////////////////////////////////////////////////////
+  async getUserInfoFromToken() : Promise<thingsboardResponse> {
+    const Login = await this.validateToken();
+    if(!Login)
+      return {status:"fail", explanation : "token invalid"}
+    const resp = await this.userService.userInfo(this.token);
+    if(resp.status != 200)
+    return {
+      status : "fail",
+      explanation : "call failed"
+    }
+    return {
+      status : "ok",
+      explanation : "call finished",
+      data : resp['data']
+    }
+  }
+
+
 }
 
 /* data is required to be any due to the many possible response data types */
