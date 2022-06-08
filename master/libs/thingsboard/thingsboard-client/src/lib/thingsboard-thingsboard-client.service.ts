@@ -489,6 +489,23 @@ export class ThingsboardThingsboardClientService {
   }
 
   ///////////////////////////////////////////////////////////////////////
+
+  async getUserInfoFromToken() : Promise<thingsboardResponse> {
+    const Login = await this.validateToken();
+    if(!Login)
+      return {status:"fail", explanation : "token invalid"}
+    const resp = await this.userService.userInfo(this.token);
+    if(resp.status != 200)
+    return {
+      status : "fail",
+      explanation : "call failed"
+    }
+    return {
+      status : "ok",
+      explanation : "call finished",
+      data : resp['data']
+    }
+  }
   
   async v1SendTelemetry(accessToken:string, data : any) : Promise<{status:number; explanation:string;}> {
     const resp = await this.telemetryService.V1sendJsonTelemetry(accessToken, data);

@@ -162,6 +162,23 @@ export class ApiUserEndpointService {
   }
 
   async UserInfoProcess(content: userInfoInput): Promise<userResponse> {
-    return null;
+    if (content.token == undefined || content.token == '')
+      return {
+        status: 401,
+        explain: 'token missing',
+      };
+    this.thingsboardClient.setToken(content.token);
+    const resp = await this.thingsboardClient.getUserInfoFromToken();
+
+    if (resp.status == 'fail')
+      return {
+        status: 500,
+        explain: resp.explanation,
+      };
+    return {
+      status: 200,
+      explain: resp.explanation,
+      data: resp.data['id'],
+    };
   }
 }

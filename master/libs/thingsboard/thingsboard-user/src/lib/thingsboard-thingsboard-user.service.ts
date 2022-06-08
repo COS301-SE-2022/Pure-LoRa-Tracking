@@ -62,7 +62,7 @@ export class ThingsboardThingsboardUserService {
       })
     ).catch((error) => {
       if (error.response == undefined) return null;
-      if (error.response.status == 401) return { status: 401 };
+      return { status: error.response.status };
     });
   }
 
