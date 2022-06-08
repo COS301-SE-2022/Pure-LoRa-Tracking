@@ -24,7 +24,7 @@ export class DeviceAddComponent implements OnInit {
 
   ngOnInit(): void {
     this.typeGroup = this._formBuilder.group({
-      type: ['', Validators.required],
+      devtype: ['', Validators.required],
     });
     this.descriptionGroup = this._formBuilder.group({
       name: ['', Validators.required],
