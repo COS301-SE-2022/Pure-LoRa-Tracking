@@ -25,6 +25,8 @@ export class ThingsboardThingsboardClientService {
     private assetService: ThingsboardThingsboardAssetService
   ) {}
 
+  //////////////////////////////////////////////////////////
+
   async loginUser(username: string, password: string): Promise<boolean> {
     const resp = await this.loginService.login(username, password);
     if (resp['data']['token'] != undefined) {
@@ -34,6 +36,8 @@ export class ThingsboardThingsboardClientService {
     }
     return false;
   }
+
+  //////////////////////////////////////////////////////////
 
   async getCustomerDevices(custID?: string): Promise<deviceList[]> {
     this.deviceService.setToken(this.token);
@@ -48,15 +52,19 @@ export class ThingsboardThingsboardClientService {
 
     const DeviceResp = await this.deviceService.getCustomerDevices(
       0,
-      5,
+      100,
       InfoResp
     );
     return DeviceResp;
   }
 
+  //////////////////////////////////////////////////////////
+
   setToken(token: string) {
     this.token = token;
   }
+
+  //////////////////////////////////////////////////////////
 
   /*
         check token
@@ -123,7 +131,7 @@ export class ThingsboardThingsboardClientService {
     }
 
     const verifyDevice = await this.validateDevice(DeviceID);
-    if (verifyDevice == false) {
+    if (verifyDevice == undefined || verifyDevice == null) {
       return {
         status: 'fail',
         explanation: 'device with ID not found for user token combination',
@@ -139,10 +147,13 @@ export class ThingsboardThingsboardClientService {
       startTime,
       endTime
     );
+
+    const labelName = verifyDevice['label'];
+
     return {
       status: 'ok',
       name: DeviceID,
-      explanation: 'call finished',
+      explanation: labelName,
       data: resp,
     };
   }
@@ -167,10 +178,10 @@ export class ThingsboardThingsboardClientService {
 
   /////////////////////////////////////////////////////////
 
-  async validateDevice(deviceID: string): Promise<boolean> {
+  async validateDevice(deviceID: string): Promise<any> {
     this.deviceService.setToken(this.token);
-    const resp = await this.deviceService.getDevice(deviceID);
-    return resp.status == 200;
+    const resp = await this.deviceService.getDeviceInfo(deviceID);
+    return resp['data'];
   }
 
   ///////////////////////////////////////////////////////////
@@ -182,9 +193,7 @@ export class ThingsboardThingsboardClientService {
     filter 
     return
   */
-  async getDeviceInfos(
-    filter?: [{ deviceID: string }]
-  ): Promise<thingsboardResponse> {
+  async getDeviceInfos(filter?: string[]): Promise<thingsboardResponse> {
     const Login = await this.validateToken();
     if (Login == false)
       return {
@@ -201,7 +210,8 @@ export class ThingsboardThingsboardClientService {
     let devices = [];
     if (UserInfo.type == 'admin') {
       /* todo */
-      devices = [];
+      // Tentatively added this for testing.
+      devices = await this.getCustomerDevices(UserInfo.id);
     } else {
       devices = await this.getCustomerDevices(UserInfo.id);
     }
@@ -210,7 +220,7 @@ export class ThingsboardThingsboardClientService {
     if (filter != undefined) {
       devices.forEach((device: deviceList) => {
         filter.forEach((filterDevice) => {
-          if (device.deviceID == filterDevice.deviceID) data.push(device);
+          if (device.deviceID == filterDevice) data.push(device);
         });
       });
       return {
@@ -273,23 +283,30 @@ export class ThingsboardThingsboardClientService {
       deviceDetails.profileType,
       deviceDetails.extraParams
     );
-    if (deviceCreate.includes("fail"))
+    if (deviceCreate.includes('fail'))
       return {
         status: 'fail',
-        explanation: 'device creation failed with: '+deviceCreate,
+        explanation: 'device creation failed with: ' + deviceCreate,
       };
 
-    const assignDevice = await this.deviceService.assignDevicetoCustomer(userID,deviceCreate);
-    if(assignDevice == false) {
+    const assignDevice = await this.deviceService.assignDevicetoCustomer(
+      userID,
+      deviceCreate
+    );
+    if (assignDevice == false) {
       this.deviceService.deleteDevice(deviceCreate);
       return {
-        status : "fail",
-        explanation : "assign failed, device creation reversed"
-      }
+        status: 'fail',
+        explanation: 'assign failed, device creation reversed',
+      };
     }
+
+    const AccessToken = await this.deviceService.GetAccessToken(deviceCreate);
+
     return {
-      status : "ok",
-      explanation : "call finished"
+      status: 'ok',
+      data: deviceCreate,
+      explanation : AccessToken.token
     };
   }
 
@@ -299,7 +316,9 @@ export class ThingsboardThingsboardClientService {
     check admin token
     delete device
   */
-  async RemoveDeviceFromReserve(deviceID : string): Promise<thingsboardResponse> {
+  async RemoveDeviceFromReserve(
+    deviceID: string
+  ): Promise<thingsboardResponse> {
     const Login = await this.validateToken();
     if (!Login)
       return {
@@ -317,16 +336,308 @@ export class ThingsboardThingsboardClientService {
 
     this.deviceService.setToken(this.token);
     const Delete = await this.deviceService.deleteDevice(deviceID);
-    if(Delete)
-    return {
-      status : "ok",
-      explanation : "call finished"
-    }
-    else return {
-      status : "fail",
-      explanation : "device deletion failed"
-    }
+    if (Delete)
+      return {
+        status: 'ok',
+        explanation: 'call finished',
+      };
+    else
+      return {
+        status: 'fail',
+        explanation: 'device deletion failed',
+      };
   }
+
+  ///////////////////////////////////////////////////////////////////////
+  /*
+    check token
+    check admin
+    add user
+  */
+  async addUserToReserve(
+    custID: string,
+    email: string,
+    firstName: string,
+    lastName: string
+  ): Promise<thingsboardResponse> {
+    const login = await this.userService.getUserID(this.token);
+
+    if (login.code != 200)
+      return {
+        status: 'fail',
+        explanation: 'token invalid',
+      };
+
+    if (login.type != 'admin')
+      return {
+        status: 'fail',
+        explanation: 'user not admin',
+      };
+
+    const resp = await this.userService.createReserveUser(
+      this.token,
+      custID,
+      email,
+      'CUSTOMER_USER',
+      firstName,
+      lastName
+    );
+
+    if (resp.status != 200)
+      return {
+        status: 'fail',
+        explanation: resp.explanation,
+      };
+
+    return {
+      status: 'ok',
+      explanation: resp.explanation,
+    };
+  }
+
+  ///////////////////////////////////////////////////////////////////////
+  /*
+    check token
+    check admin
+    delete user
+  */
+  async removeReserveUser(userID: string): Promise<thingsboardResponse> {
+    const login = await this.userService.getUserID(this.token);
+    if (login.code != 200)
+      return {
+        status: 'fail',
+        explanation: 'token invalid',
+      };
+
+    if (login.type != 'admin')
+      return {
+        status: 'fail',
+        explanation: 'user not admin',
+      };
+    const resp = await this.userService.deleteUser(this.token, userID);
+    if (resp)
+      return {
+        status: 'ok',
+        explanation: 'call finished',
+      };
+    else
+      return {
+        status: 'fail',
+        explanation: 'delete failed',
+      };
+  }
+
+  ///////////////////////////////////////////////////////////////////////
+  /*
+    check token
+    check admin
+    disable user
+  */
+  async disableUser(userID: string): Promise<thingsboardResponse> {
+    const login = await this.userService.getUserID(this.token);
+    if (login.code != 200)
+      return {
+        status: 'fail',
+        explanation: 'token invalid',
+      };
+
+    if (login.type != 'admin')
+      return {
+        status: 'fail',
+        explanation: 'user not admin',
+      };
+
+    const resp = await this.userService.DisableUser(this.token, userID);
+
+    if (resp)
+      return {
+        status: 'ok',
+        explanation: 'call finished',
+      };
+    else
+      return {
+        status: 'fail',
+        explanation: 'disable failed',
+      };
+  }
+
+  ///////////////////////////////////////////////////////////////////////
+  /*
+    check token
+    check admin
+    disable user
+  */
+  async enableUser(userID: string): Promise<thingsboardResponse> {
+    const login = await this.userService.getUserID(this.token);
+    if (login.code != 200)
+      return {
+        status: 'fail',
+        explanation: 'token invalid',
+      };
+
+    if (login.type != 'admin')
+      return {
+        status: 'fail',
+        explanation: 'user not admin',
+      };
+
+    const resp = await this.userService.EnableUser(this.token, userID);
+
+    if (resp)
+      return {
+        status: 'ok',
+        explanation: 'call finished',
+      };
+    else
+      return {
+        status: 'fail',
+        explanation: 'enable failed',
+      };
+  }
+
+  ///////////////////////////////////////////////////////////////////////
+
+  async getUserInfoFromToken(): Promise<thingsboardResponse> {
+    const Login = await this.validateToken();
+    if (!Login) return { status: 'fail', explanation: 'token invalid' };
+    const resp = await this.userService.userInfo(this.token);
+    if (resp.status != 200)
+      return {
+        status: 'fail',
+        explanation: 'call failed',
+      };
+    return {
+      status: 'ok',
+      explanation: 'call finished',
+      data: resp['data'],
+    };
+  }
+
+  ///////////////////////////////////////////////////////////////////////
+
+  async v1SendTelemetry(
+    accessToken: string,
+    data: any
+  ): Promise<{ status: number; explanation: string }> {
+    const resp = await this.telemetryService.V1sendJsonTelemetry(
+      accessToken,
+      data
+    );
+    if (resp == 401)
+      return {
+        status: resp,
+        explanation: 'access token invalid',
+      };
+    return {
+      status: 200,
+      explanation: 'call finished',
+    };
+  }
+
+  ///////////////////////////////////////////////////////////////////////
+
+  async getGatewayLocation(deviceID: string): Promise<thingsboardResponse> {
+    const Login = await this.validateToken();
+    const Device = await this.validateDevice(deviceID);
+
+    if (!Login)
+      return {
+        status: 'fail',
+        explanation: 'token invalid',
+      };
+    if (Device == undefined)
+      return {
+        status: 'fail',
+        explanation: 'device not found',
+      };
+
+    const resp = await this.deviceService.GetGatewayLocation(deviceID);
+    if (resp.status != 200)
+      return {
+        status: 'fail',
+        explanation: 'call failed',
+      };
+
+    let data = '';
+    resp.data.forEach((element) => {
+      if (element.key == 'location') data = element.value[0];
+    });
+
+    return {
+      status: 'ok',
+      explanation: 'call finished',
+      data: data,
+    };
+  }
+
+  ///////////////////////////////////////////////////////////////////////
+
+  async setGatewayLocation(
+    deviceID: string,
+    locationData: { latitude: number; longitude: number }[]
+  ): Promise<thingsboardResponse> {
+    const Login = await this.validateToken();
+    const Device = await this.validateDevice(deviceID);
+
+    if (!Login)
+      return {
+        status: 'fail',
+        explanation: 'token invalid',
+      };
+    if (Device == undefined)
+      return {
+        status: 'fail',
+        explanation: 'device not found',
+      };
+
+    const resp = await this.deviceService.setGatewayLocation(
+      deviceID,
+      locationData
+    );
+
+    if (resp.status != 200)
+      return {
+        status: 'fail',
+        explanation: resp.status.toString(),
+      };
+
+    return {
+      status: 'ok',
+      explanation: 'call finished',
+    };
+  }
+
+  ///////////////////////////////////////////////////////////////////////
+  async AdminGetCustomers() : Promise<thingsboardResponse> {
+    const login = await this.userService.getUserID(this.token);
+    if (login.code != 200)
+      return {
+        status: 'fail',
+        explanation: 'token invalid',
+      };
+
+    if (login.type != 'admin')
+      return {
+        status: 'fail',
+        explanation: 'user not admin',
+      };
+
+    const resp = await this.userService.AdminGetCustomers(this.token);
+    if(resp.status!=200)
+    return {
+      status: 'fail',
+      explanation: resp.status.toString(),
+    }; 
+
+    return {
+      status:"ok",
+      explanation:"call finished",
+      data:resp.data.data
+    }
+    
+
+  }
+
 }
 
 /* data is required to be any due to the many possible response data types */

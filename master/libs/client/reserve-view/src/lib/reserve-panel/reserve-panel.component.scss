@@ -1,0 +1,60 @@
+@import "apps/lora-tracking/src/styles.scss";
+
+mat-card {
+    border: 5%;
+    }
+
+mat-card-title {
+    font-weight: 500;
+}
+
+#actionBtn{
+    align-self: end;
+
+}
+
+.listItemWrap {
+    display: flex;
+    flex-direction: row;
+}
+
+.itemText {
+    flex: 1;
+}
+
+
+mat-card-header {
+    display: flex;
+    justify-content: center;
+    font-family: 'Bai Jamjuree', sans-serif;
+}
+
+mat-action-list {
+    display: flex;
+    justify-content: space-around;
+    align-items: baseline;
+    align-content: center;
+    flex-wrap: wrap;
+}
+
+mat-action-list > mat-form-field {
+    margin-left: 1%;
+    margin-right: 1%;
+}
+
+
+
+::ng-deep .mat-list-option .mat-pseudo-checkbox{ 
+    display: none; 
+  }
+
+
+mat-list-option {
+    border-radius: 2rem;
+    margin-bottom: 0.5%;
+}
+
+
+cdk-virtual-scroll-viewport {
+    height: 40vh;
+}

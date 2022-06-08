@@ -117,6 +117,28 @@ describe('ThingsboardThingsboardTelemetryService', () => {
       expect(resp).toEqual(true);
   });
 
+  it('should return status ok 200', async()=> {
+    const result : AxiosResponse<any> = {
+      data : "",
+      headers: {},
+      config: {},
+      status: 200,
+      statusText: 'OK',
+    }
+
+    jest
+        .spyOn(httpService, 'post')
+        .mockImplementationOnce(() => of(result));
+
+        
+
+      const resp = await service.V1sendJsonTelemetry("acf22a00-ce06-11ec-b2d0-bd829ba84846", {
+        "rssi" : 1000
+      });
+      expect(resp).toEqual(200);
+
+  })
+
 
 });
 
