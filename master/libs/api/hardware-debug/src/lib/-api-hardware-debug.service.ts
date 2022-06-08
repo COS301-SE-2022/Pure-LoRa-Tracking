@@ -1,14 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { acknowledge } from './hardware-payload.interface';
 import { ThingsboardThingsboardTelemetryService } from '@lora/thingsboard-telemetry';
+import { LocationService } from '@lora/location';
 import * as eventMessages from '@chirpstack/chirpstack-api/as/integration/integration_pb';
 
 @Injectable()
 export class ApiHardwareDebugService {
-  constructor (private tbTelemetryService: ThingsboardThingsboardTelemetryService) {
+  constructor (
+    private tbTelemetryService: ThingsboardThingsboardTelemetryService,
+    private locationService: LocationService
+    ) {
     // Provisionally using ThingsboardThingsboardTelemetryService
     // TODO: move to ThingsboardThingsboardClientService
-    tbTelemetryService.setToken("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZldXNlckByZXNlcnZlLmNvbSIsInNjb3BlcyI6WyJDVVNUT01FUl9VU0VSIl0sInVzZXJJZCI6ImY5NmU2MGQwLWRmZTgtMTFlYy1iZGIzLTc1MGNlN2VkMjQ1MSIsImVuYWJsZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiJjZDJkZjJiMC1kZmU4LTExZWMtYmRiMy03NTBjZTdlZDI0NTEiLCJjdXN0b21lcklkIjoiZWY1NWZmNDAtZGZlOC0xMWVjLWJkYjMtNzUwY2U3ZWQyNDUxIiwiaXNzIjoidGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE2NTQ1NTg0NzQsImV4cCI6MTY1NDU2NzQ3NH0.LOzkaserGWNPRaKEYGmZOIW8XiPYahDfqLE0-MV6V1B7fSaisJQugK6QN6Ipxr2pltUBS09uHPaZPG4Vrle4Jg")
+    tbTelemetryService.setToken("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZldXNlckByZXNlcnZlLmNvbSIsInNjb3BlcyI6WyJDVVNUT01FUl9VU0VSIl0sInVzZXJJZCI6ImY5NmU2MGQwLWRmZTgtMTFlYy1iZGIzLTc1MGNlN2VkMjQ1MSIsImVuYWJsZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiJjZDJkZjJiMC1kZmU4LTExZWMtYmRiMy03NTBjZTdlZDI0NTEiLCJjdXN0b21lcklkIjoiZWY1NWZmNDAtZGZlOC0xMWVjLWJkYjMtNzUwY2U3ZWQyNDUxIiwiaXNzIjoidGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE2NTQ3MTgxODEsImV4cCI6MTY1NDcyNzE4MX0.G9InEz36rgVqMHqWAiq2my5mOUqcMs1Z_HIL-8j1LGfe3hGkX_zhMJrhU4vGFlIPGedotvq7de3G0ahBUNy9zg")
   }
   // curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"username":"reserveuser@reserve.com", "password":"reserve"}' 'http://127.0.0.1:9090/api/auth/login'
 
@@ -28,8 +32,9 @@ export class ApiHardwareDebugService {
   deviceUpProcess(content: Uint8Array) {
     const eventData = eventMessages.UplinkEvent.deserializeBinary(content);
 
-    // Raw gateway info that will be used for location
+    // Raw gateway info that will be used for location, data is not stripped as we might need other parts of the data in future
     const gateways = eventData.getRxInfoList();
+    this.locationService.calculateLocation(gateways);
 
     // Sensor data that will be sent to thingsboard handler
     let dataJSON = eventData.getObjectJson();
@@ -55,7 +60,7 @@ export class ApiHardwareDebugService {
   deviceJoinProcess(content: Uint8Array): acknowledge {
     const eventData = eventMessages.JoinEvent.deserializeBinary(content);
 
-    console.log(content);
+    console.log(eventData);
     return {
       code: 200,
       status: 'ACK',
@@ -66,7 +71,7 @@ export class ApiHardwareDebugService {
   deviceAckProcess(content: Uint8Array): acknowledge {
     const eventData = eventMessages.AckEvent.deserializeBinary(content);
 
-    console.log(content);
+    console.log(eventData);
     return {
       code: 200,
       status: 'ACK',
@@ -77,7 +82,7 @@ export class ApiHardwareDebugService {
   deviceErrorProcess(content: Uint8Array): acknowledge {
     const eventData = eventMessages.ErrorEvent.deserializeBinary(content);
 
-    console.log(content);
+    console.log(eventData);
     return {
       code: 200,
       status: 'ACK',
@@ -88,7 +93,7 @@ export class ApiHardwareDebugService {
   deviceLocationProcess(content: Uint8Array): acknowledge {
     const eventData = eventMessages.LocationEvent.deserializeBinary(content);
 
-    console.log(content);
+    console.log(eventData);
     return {
       code: 200,
       status: 'ACK',
@@ -99,7 +104,7 @@ export class ApiHardwareDebugService {
   deviceTxackProcess(content: Uint8Array): acknowledge {
     const eventData = eventMessages.TxAckEvent.deserializeBinary(content);
 
-    console.log(content);
+    console.log(eventData);
     return {
       code: 200,
       status: 'ACK',
