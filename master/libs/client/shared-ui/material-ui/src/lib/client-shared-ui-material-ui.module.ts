@@ -6,6 +6,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import {MatStepperModule} from '@angular/material/stepper';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {MatSelectModule} from '@angular/material/select';
 
 export const clientSharedUiMaterialUiRoutes: Route[] = [];
 
@@ -15,6 +17,8 @@ const materialComponentModules = [
   MatButtonModule,
   MatStepperModule,
   MatFormFieldModule,
+  MatInputModule,
+  MatSelectModule
 ];
 
 @NgModule({

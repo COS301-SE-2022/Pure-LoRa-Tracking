@@ -9,17 +9,23 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 })
 export class DeviceAddComponent implements OnInit {
   
-  firstFormGroup!: FormGroup;
-  secondFormGroup!: FormGroup;
+  typeGroup!: FormGroup;
+  descriptionGroup!: FormGroup;
+  infoGroup!: FormGroup;
+
+  deviceType = "";
 
   constructor(private _formBuilder: FormBuilder) {}
 
   ngOnInit(): void {
-    this.firstFormGroup = this._formBuilder.group({
+    this.typeGroup = this._formBuilder.group({
       firstCtrl: ['', Validators.required],
     });
-    this.secondFormGroup = this._formBuilder.group({
+    this.descriptionGroup = this._formBuilder.group({
       secondCtrl: ['', Validators.required],
+    });
+    this.infoGroup = this._formBuilder.group({
+      thirdCtrl: ['', Validators.required],
     });
   }
 }
