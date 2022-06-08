@@ -1,12 +1,15 @@
+import { ThingsboardThingsboardClientModule } from '@lora/thingsboard-client';
 import { Test } from '@nestjs/testing';
 import { ApiLoginEndpointController } from './api-login-endpoint.controller';
 import { ApiLoginEndpointService } from './api-login-endpoint.service';
+
 
 describe('ApiLoginEndpointController', () => {
   let controller: ApiLoginEndpointController;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
+      imports: [ThingsboardThingsboardClientModule],
       providers: [ApiLoginEndpointService],
       controllers: [ApiLoginEndpointController],
     }).compile();
