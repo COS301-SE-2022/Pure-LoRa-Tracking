@@ -14,6 +14,7 @@ import {MatListModule} from '@angular/material/list';
 import {ScrollingModule} from '@angular/cdk/scrolling';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {MatExpansionModule} from '@angular/material/expansion';
 
 export const clientSharedUiMaterialUiRoutes: Route[] = [];
 
@@ -30,7 +31,8 @@ const materialComponentModules = [
   MatListModule,
   ScrollingModule,
   MatCheckboxModule,
-  MatButtonToggleModule
+  MatButtonToggleModule,
+  MatExpansionModule,
 ];
 
 @NgModule({
