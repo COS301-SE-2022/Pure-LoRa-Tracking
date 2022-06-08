@@ -1,0 +1,41 @@
+{
+  "projectType": "library",
+  "sourceRoot": "libs/client/shared-ui/material-ui/src",
+  "prefix": "master",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:ng-packagr-lite",
+      "outputs": ["dist/libs/client/shared-ui/material-ui"],
+      "options": {
+        "project": "libs/client/shared-ui/material-ui/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/client/shared-ui/material-ui/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/client/shared-ui/material-ui/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/client/shared-ui/material-ui"],
+      "options": {
+        "jestConfig": "libs/client/shared-ui/material-ui/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/client/shared-ui/material-ui/**/*.ts",
+          "libs/client/shared-ui/material-ui/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}
