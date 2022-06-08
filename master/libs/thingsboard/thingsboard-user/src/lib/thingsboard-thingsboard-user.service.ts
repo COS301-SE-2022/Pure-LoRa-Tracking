@@ -49,6 +49,35 @@ export class ThingsboardThingsboardUserService {
     });
   }
 
+    async refreshToken(refreshTokenValue: string) {
+    if (refreshTokenValue == undefined || refreshTokenValue == "") {
+      return {
+        status: 400
+      }
+    }
+    const url = 'http://localhost:8080/api/auth/token'
+    const requestHeaders = {
+      'Content-type': 'application/json',
+    }
+    return await firstValueFrom(
+      this.httpService.post(
+        url,
+        { "refreshToken": refreshTokenValue },
+        { headers: requestHeaders }
+      )
+    ).catch((error) => {
+      if (error.response == undefined) return null;
+      else {
+        return new Promise((resolve, reject) => {
+          return {
+            status: error.response.status
+          };
+        });
+      };
+    });
+    
+  }
+
   //////////////////////////////////////////////////////
 
   async userInfo(token: string): Promise<any> {
