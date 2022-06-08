@@ -6,12 +6,23 @@ import { ClientSharedUiMaterialUiModule } from '@master/client/shared-ui/materia
 import { ReservePanelComponent } from './reserve-panel/reserve-panel.component';
 import { ReserveViewRoutingModule } from './reserve-view/reserve-view-routing.module';
 import { ClientSharedUiComponentsUiModule } from '@master/client/shared-ui/components-ui';
+import { MapPanelComponent } from './map-panel/map-panel.component';
 
 export const clientReserveViewRoutes: Route[] = [];
 
 @NgModule({
-  imports: [CommonModule, RouterModule,ClientSharedUiMaterialUiModule,ReserveViewRoutingModule,ClientSharedUiComponentsUiModule],
-  declarations: [ReserveViewComponent, ReservePanelComponent],
-  exports: [ReserveViewComponent, ReservePanelComponent],
+  imports: [
+    CommonModule,
+    RouterModule,
+    ClientSharedUiMaterialUiModule,
+    ReserveViewRoutingModule,
+    ClientSharedUiComponentsUiModule,
+  ],
+  declarations: [
+    ReserveViewComponent,
+    ReservePanelComponent,
+    MapPanelComponent,
+  ],
+  exports: [ReserveViewComponent, ReservePanelComponent, MapPanelComponent],
 })
 export class ClientReserveViewModule {}
