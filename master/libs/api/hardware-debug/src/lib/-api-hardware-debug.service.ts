@@ -21,7 +21,7 @@ export class ApiHardwareDebugService {
   deviceStatusProcess(content: Uint8Array): acknowledge {
     const eventData = eventMessages.StatusEvent.deserializeBinary(content);
 
-    console.log(content);
+    console.log(eventData);
     return {
       code: 200,
       status: 'ACK',
