@@ -292,4 +292,12 @@ describe('ThingsboardThingsboardDeviceService', () => {
     console.log(await service.GetGatewayLocation("2fe67850-dfe9-11ec-bdb3-750ce7ed2451"));*/
   });
 
+  ///////////////////////////////////////////////////////////////////////////////////////////
+
+  it('should get the device access token', async () => {
+    const data = await loginService.login(username, password);
+    service.setToken(data['data']['token']);
+    console.log(await service.GetAccessToken("2fe67850-dfe9-11ec-bdb3-750ce7ed2451"));
+  });
+
 });
