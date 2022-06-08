@@ -230,7 +230,7 @@ export class ThingsboardThingsboardDeviceService {
       }
     });
 
-    return resp['data'];
+    return resp;
     
   }
 

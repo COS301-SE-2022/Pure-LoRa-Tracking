@@ -148,8 +148,7 @@ export class ThingsboardThingsboardClientService {
       endTime
     );
 
-    
-    const labelName = verifyDevice["label"];
+    const labelName = verifyDevice['label'];
 
     return {
       status: 'ok',
@@ -494,34 +493,109 @@ export class ThingsboardThingsboardClientService {
 
   ///////////////////////////////////////////////////////////////////////
 
-  async getUserInfoFromToken() : Promise<thingsboardResponse> {
+  async getUserInfoFromToken(): Promise<thingsboardResponse> {
     const Login = await this.validateToken();
-    if(!Login)
-      return {status:"fail", explanation : "token invalid"}
+    if (!Login) return { status: 'fail', explanation: 'token invalid' };
     const resp = await this.userService.userInfo(this.token);
+    if (resp.status != 200)
+      return {
+        status: 'fail',
+        explanation: 'call failed',
+      };
+    return {
+      status: 'ok',
+      explanation: 'call finished',
+      data: resp['data'],
+    };
+  }
+
+  ///////////////////////////////////////////////////////////////////////
+
+  async v1SendTelemetry(
+    accessToken: string,
+    data: any
+  ): Promise<{ status: number; explanation: string }> {
+    const resp = await this.telemetryService.V1sendJsonTelemetry(
+      accessToken,
+      data
+    );
+    if (resp == 401)
+      return {
+        status: resp,
+        explanation: 'access token invalid',
+      };
+    return {
+      status: 200,
+      explanation: 'call finished',
+    };
+  }
+
+  ///////////////////////////////////////////////////////////////////////
+
+  async getGatewayLocation(deviceID: string): Promise<thingsboardResponse> {
+    const Login = this.validateToken();
+    const Device = this.validateDevice(deviceID);
+    await Login;
+    await Device;
+
+    if (!Login)
+      return {
+        status: 'fail',
+        explanation: 'token invalid',
+      };
+    if (!Device)
+      return {
+        status: 'fail',
+        explanation: 'device not found',
+      };
+
+    const resp = await this.deviceService.GetGatewayLocation(deviceID);
     if(resp.status != 200)
     return {
       status : "fail",
       explanation : "call failed"
     }
+
     return {
       status : "ok",
       explanation : "call finished",
-      data : resp['data']
-    }
+      data : resp.data
+    };
+
   }
-  
-  async v1SendTelemetry(accessToken:string, data : any) : Promise<{status:number; explanation:string;}> {
-    const resp = await this.telemetryService.V1sendJsonTelemetry(accessToken, data);
-    if(resp == 401)
+
+  ///////////////////////////////////////////////////////////////////////
+
+  async setGatewayLocation(deviceID: string, locationData: {latitude:number, longitude:number}[]): Promise<thingsboardResponse> {
+    const Login = this.validateToken();
+    const Device = this.validateDevice(deviceID);
+    await Login;
+    await Device;
+
+    if (!Login)
       return {
-        status : resp,
-        explanation : "access token invalid"
-      }
+        status: 'fail',
+        explanation: 'token invalid',
+      };
+    if (!Device)
+      return {
+        status: 'fail',
+        explanation: 'device not found',
+      };
+
+    const resp = await this.deviceService.setGatewayLocation(deviceID, locationData);
+
+    if(resp.status != 200)
     return {
-      status : 200,
-      explanation : "call finished"
+      status : "fail",
+      explanation : resp.status.toString()
     }
+
+    return {
+      status : "ok",
+      explanation : "call finished",
+    };
+    
   }
 }
 
