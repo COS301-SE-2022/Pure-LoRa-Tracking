@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { ReserveMapComponent } from '@master/client/leaflet-library';
 import { MapCallerService } from '@master/client/map-apicaller';
-import { Device, MapApiReserveResponse } from '@master/shared-interfaces';
+import { Device, MapApiReserveResponse, ViewMapType } from '@master/shared-interfaces';
 
 @Component({
   selector: 'master-reserve-view',
@@ -10,6 +10,7 @@ import { Device, MapApiReserveResponse } from '@master/shared-interfaces';
 })
 export class ReserveViewComponent {
   @ViewChild('reservemap') reservemap:ReserveMapComponent|null=null;
+  ViewMapTypeInput: ViewMapType;
   Reserve:MapApiReserveResponse|null=null;
   LastestHistorical:Device[];
   ShowPolygon:boolean;
@@ -19,6 +20,7 @@ export class ReserveViewComponent {
   constructor(private apicaller:MapCallerService) {
     this.LastestHistorical=[];
     this.ShowPolygon=true;
+    this.ViewMapTypeInput=ViewMapType.NORMAL_OPEN_STREET_VIEW;
   }
   
   ngOnInit(): void {
@@ -37,5 +39,10 @@ export class ReserveViewComponent {
     else{
       this.reservemap?.showOnly(idinput);
     }
+  }
+
+  updateViewMapType(newval:string){
+    if(newval=="norm") this.ViewMapTypeInput=ViewMapType.NORMAL_OPEN_STREET_VIEW;
+    else if(newval=="sat") this.ViewMapTypeInput=ViewMapType.SATELLITE_ESRI_1;
   }
 }

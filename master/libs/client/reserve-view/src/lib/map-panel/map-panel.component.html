@@ -7,24 +7,14 @@
                         Border
                     </mat-checkbox>
                 </li>
-                <li>
-                    <mat-checkbox color="primary">
-                        Gateways
-                    </mat-checkbox>
-                </li>
-                <li>
-                    <mat-checkbox color="primary">
-                        History
-                    </mat-checkbox>
-                </li>
             
             </ul>
         </section>
         <mat-button-toggle-group #group="matButtonToggleGroup">
-            <mat-button-toggle>
+            <mat-button-toggle value="sat" (change)="updateViewType($event.source.value)">
               Satellite
             </mat-button-toggle>
-            <mat-button-toggle>
+            <mat-button-toggle checked="true" value="norm" (change)="updateViewType($event.source.value)">
               Normal
             </mat-button-toggle>
           </mat-button-toggle-group>

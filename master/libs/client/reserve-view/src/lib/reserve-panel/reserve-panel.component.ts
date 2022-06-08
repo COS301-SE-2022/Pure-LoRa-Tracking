@@ -2,7 +2,7 @@ import { Input, Output } from '@angular/core';
 import { EventEmitter } from '@angular/core';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { MatSelectionList } from '@angular/material/list';
-import { Device } from '@master/shared-interfaces';
+import { Device, ViewMapType } from '@master/shared-interfaces';
 
 
 export interface GatewayProps {
@@ -19,6 +19,7 @@ export interface GatewayProps {
 })
 export class ReservePanelComponent implements OnInit {
   private _Devices:Device[];
+  private _ViewType:string;
   @Output() selectedSensorIDout=new EventEmitter<string>()
 
   @Input()
@@ -64,6 +65,7 @@ export class ReservePanelComponent implements OnInit {
 
   constructor() {
     this._Devices=[];
+    this._ViewType="norm"
   }
 
   getSelectedStyle(deviceId:string):string{
@@ -87,8 +89,8 @@ export class ReservePanelComponent implements OnInit {
   }
 
   selectedGateway(gatewayID:string){
-
-  }
+    console.log("Change gateway");
+  } 
 
   searchDevices():void{
      const searchLower = this.searchString.toLocaleLowerCase();

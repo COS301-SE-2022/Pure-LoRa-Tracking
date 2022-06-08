@@ -9,7 +9,8 @@ import { Component } from '@angular/core';
 })
 export class MapPanelComponent {
   @Output() ShowPolygon=new EventEmitter<boolean>();
-  
+  @Output() ViewType=new EventEmitter<string>();
+
   constructor() {
     this.ShowPolygon.emit(true);
   }
@@ -18,5 +19,8 @@ export class MapPanelComponent {
     this.ShowPolygon.emit(newval);
   }
 
+  updateViewType(newval:string){
+    this.ViewType.emit(newval);
+  }
   ngOnInit(): void {}
 }
