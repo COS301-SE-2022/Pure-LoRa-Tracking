@@ -7,6 +7,7 @@ import { ReservePanelComponent } from './reserve-panel/reserve-panel.component';
 import { ReserveViewRoutingModule } from './reserve-view/reserve-view-routing.module';
 import { ClientSharedUiComponentsUiModule } from '@master/client/shared-ui/components-ui';
 import { MapPanelComponent } from './map-panel/map-panel.component';
+import { ClientLeafletLibraryModule } from '@master/client/leaflet-library';
 
 export const clientReserveViewRoutes: Route[] = [];
 
@@ -17,6 +18,7 @@ export const clientReserveViewRoutes: Route[] = [];
     ClientSharedUiMaterialUiModule,
     ReserveViewRoutingModule,
     ClientSharedUiComponentsUiModule,
+    ClientLeafletLibraryModule,
   ],
   declarations: [
     ReserveViewComponent,

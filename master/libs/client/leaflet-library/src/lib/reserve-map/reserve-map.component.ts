@@ -77,7 +77,7 @@ export class ReserveMapComponent implements OnInit, OnChanges {
         }
       }
       else if (Object.prototype.hasOwnProperty.call(changes, "HistoricalDataID")) {
-        console.log("change historical");
+        console.log("change historical when moved to live");
       }
     }
 
@@ -225,7 +225,6 @@ export class ReserveMapComponent implements OnInit, OnChanges {
         this.historicalpath.push(newpoint);
         if (!this.HistoricalMode) this.addToMap(newpoint)
     }
-    console.log(this.historicalpath)
   }
 
   public loadInnitial(deviceIDs: Device[]): void {
