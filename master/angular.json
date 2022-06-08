@@ -13,6 +13,7 @@
     "chirpstack-chirpstack-sensor": "libs/chirpstack/chirpstack-sensor",
     "client-defaultpage": "libs/client/defaultpage",
     "client-demo": "libs/client/demo",
+    "client-device-add-view": "libs/client/device-add-view",
     "client-leaflet-library": "libs/client/leaflet-library",
     "client-map-apicaller": "libs/client/map-apicaller",
     "client-reserve-view": "libs/client/reserve-view",

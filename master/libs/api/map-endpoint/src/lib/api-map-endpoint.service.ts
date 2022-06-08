@@ -203,7 +203,7 @@ export class ApiMapEndpointService {
             data: []
         }
 
-        if (content.deviceID.includes("sens-11")) {
+        if (content.deviceID.includes("sens-11")||content.deviceID.length==0) {
             toreturn.data.push({
                 deviceID: "sens-11",
                 deviceName: "sens-11-test",
@@ -233,7 +233,7 @@ export class ApiMapEndpointService {
                 ]
             })
         }
-        if (content.deviceID.includes("sens-12")) {
+        if (content.deviceID.includes("sens-12")||content.deviceID.length==0) {
             toreturn.data.push({
                 deviceID: "sens-12",
                 deviceName: "sens-12-test",
@@ -263,7 +263,7 @@ export class ApiMapEndpointService {
                 ]
             })
         }
-        if (content.deviceID.includes("sens-13")) {
+        if (content.deviceID.includes("sens-13")||content.deviceID.length==0) {
             toreturn.data.push({
                 deviceID: "sens-13",
                 deviceName: "sens-13-test",

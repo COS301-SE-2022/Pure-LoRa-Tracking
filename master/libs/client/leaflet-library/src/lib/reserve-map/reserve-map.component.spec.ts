@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Device, ViewMapType } from '@master/shared-interfaces';
+import { Device, MapHistoricalPoints, ViewMapType } from '@master/shared-interfaces';
+import { SimpleChanges,SimpleChange } from '@angular/core';
 import { LayerGroup } from 'leaflet';
 import { exitCode } from 'process';
 import * as L from 'leaflet';
@@ -9,6 +10,7 @@ import * as L from 'leaflet';
 // @ts-ignore
 import { antPath } from "leaflet-ant-path"
 import { ReserveMapComponent } from './reserve-map.component';
+import exp = require('constants');
 
 describe('ReserveMapComponent', () => {
   let component: ReserveMapComponent;
@@ -118,6 +120,14 @@ describe('ReserveMapComponent', () => {
         }
       }
     ]
+  }
+  const demoHistoricalPoint:MapHistoricalPoints={
+    deviceID:"test",
+    markers:[
+      new L.Marker([12,12]),
+      new L.Marker([12,12]),
+    ],
+    polyline:new L.Polyline([])
   }
 
 
@@ -333,36 +343,101 @@ describe('ReserveMapComponent', () => {
     })
   })
 
+  describe("NgChanges",()=>{
+    it("Should call correct functions if reserve",()=>{
+      const change=new SimpleChange({placeholder:{}},{placeholder:{}},true);
+      const single:SimpleChanges={'Reserve':change};
+      jest.spyOn(component,"loadmap").mockImplementation();
+      jest.spyOn(component,"loadmaptiles").mockImplementation();
+      jest.spyOn(component,"loadPolygons").mockImplementation();
+      jest.spyOn(component,"showpolygon").mockImplementation();
+      component.ngOnChanges(single);
+      expect(component.loadmap).toBeCalled();
+      expect(component.loadmaptiles).toBeCalled();
+      expect(component.loadPolygons).toBeCalled();
+      expect(component.showpolygon).toBeCalled();
+    })
+    it("Should call correct functions if Viewmap type",()=>{
+      const change=new SimpleChange({placeholder:{}},{placeholder:{}},true);
+      const single:SimpleChanges={'ViewMapTypeInput':change};
+      jest.spyOn(component,"loadmaptiles").mockImplementation();
+      component.ngOnChanges(single);
+      expect(component.loadmaptiles).toBeCalled();
+    })
 
-  // describe("AddToMap",()=>{
-  //   it("Should add to map",()=>{
-  //     component.Reserve=demoreserve;
-  //     component.loadmap();
-  //     //mock addtomap so its not called
-  //     jest.spyOn(component,"addToMap").mockImplementation();
-  //     component.loadhistorical(demoDevice);
-  //     jest.clearAllMocks();
-  //     const temp=component.historicalpath.at(0);
-  //     if(temp!=null){
-  //       const marker1=temp.markers.at(0);
-  //       const marker2=temp.markers.at(1);
-  //       const marker3=temp.markers.at(2);
-  //       jest.spyOn(temp.polyline,"addTo").mockImplementation();
-  //       if(marker1!=undefined && marker2!=undefined && marker3!=undefined){
-  //          jest.spyOn(marker1,"addTo").mockImplementation();
-  //          jest.spyOn(marker2,"addTo").mockImplementation();
-  //          jest.spyOn(marker3,"addTo").mockImplementation();
-  //          component.addToMap(temp);
-  //          expect(temp.polyline.addTo).toBeCalled()
-  //          expect(marker1.addTo).toBeCalled()
-  //          expect(marker2.addTo).toBeCalled()
-  //          expect(marker3.addTo).toBeCalled()
-  //         }
-  //     }
+    it("Should call correct functions if ShowPolygon and showpolygon is true",()=>{
+      const change=new SimpleChange({placeholder:{}},{placeholder:{}},true);
+      const single:SimpleChanges={'ShowPolygon':change};
+      jest.spyOn(component,"showpolygon").mockImplementation();
+      jest.spyOn(component,"hidepolygon").mockImplementation();
+      component.ShowPolygon=true;
+      component.ngOnChanges(single);
+      expect(component.showpolygon).toBeCalled();
+      expect(component.hidepolygon).not.toBeCalled();
+    })
+
+    it("Should call correct functions if ShowPolygon and showpolygon is false",()=>{
+      const change=new SimpleChange({placeholder:{}},{placeholder:{}},true);
+      const single:SimpleChanges={'ShowPolygon':change};
+      jest.spyOn(component,"showpolygon").mockImplementation();
+      jest.spyOn(component,"hidepolygon").mockImplementation();
+      component.ShowPolygon=false;
+      component.ngOnChanges(single);
+      expect(component.showpolygon).not.toBeCalled();
+      expect(component.hidepolygon).toBeCalled();
+    })    
+
+  })
 
 
-  //   })
-  // })
+  describe("HideHistoricalExceptMarker",()=>{
+    it("Should run through the array and call the right removes",()=>{
+      component.historicalpath=[demoHistoricalPoint];
+      jest.spyOn(demoHistoricalPoint.polyline,"remove")
+      component.hideHistoricalExceptMarker("test")
+      expect(demoHistoricalPoint.polyline.remove).toBeCalled();
+      const first=demoHistoricalPoint.markers.at(0);
+      if(first!=null){
+        jest.spyOn(first,"remove")
+        expect(first.remove).not.toBeCalled()
+      }
+    })
+
+  })
+
+  describe("AddToMap",()=>{
+    it("Should add to map",()=>{
+      component.Reserve=demoreserve;
+      component.loadmap();
+      //mock addtomap so its not called
+      component.historicalpath=[demoHistoricalPoint];
+      const temp=demoHistoricalPoint;
+      if(temp!=null){
+        const marker1=demoHistoricalPoint.polyline;
+        jest.spyOn(temp.polyline,"addTo").mockImplementation();
+        jest.spyOn(demoHistoricalPoint.polyline,"addTo").mockImplementation();
+        component.addToMap(demoHistoricalPoint);
+        expect(temp.polyline.addTo).toBeCalled()
+        expect(marker1.addTo).toBeCalled()
+        }
+    })
+    it("Should add to multiple to the map",()=>{
+      component.Reserve=demoreserve;
+      component.loadmap();
+      //mock addtomap so its not called
+      component.historicalpath=[demoHistoricalPoint];
+      const temp=demoHistoricalPoint;
+      if(temp!=null){
+        const marker1=demoHistoricalPoint.polyline;
+        jest.spyOn(temp.polyline,"addTo").mockImplementation();
+        jest.spyOn(demoHistoricalPoint.polyline,"addTo").mockImplementation();
+        component.addToMap(demoHistoricalPoint);
+        expect(temp.polyline.addTo).toBeCalled()
+        expect(marker1.addTo).toBeCalled()
+        }
+    })
+
+  })
 
 });
 

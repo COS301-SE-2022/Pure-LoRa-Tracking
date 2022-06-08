@@ -1,7 +1,10 @@
 <master-header-nav></master-header-nav>
 <div id="layoutContainer">
     <div id="container">
-        <master-reserve-panel id="reservePanel" class="panel"></master-reserve-panel>
-        <master-map-panel class="panel"></master-map-panel>
+        <div *ngIf="Reserve">
+            <master-reserve-map #reservemap [Reserve]="Reserve" [ShowPolygon]="ShowPolygon" [LatestData]="LastestHistorical" [ViewMapTypeInput]="ViewMapTypeInput"></master-reserve-map>
+        </div>
+        <master-reserve-panel id="reservePanel" class="panel" [Devices]="LastestHistorical" (selectedSensorIDout)="updateSensor($event)"></master-reserve-panel>
+        <master-map-panel class="panel" (ShowPolygon)="ShowPolygon=$event" (ViewType)="updateViewMapType($event)"></master-map-panel>
     </div>
 </div>

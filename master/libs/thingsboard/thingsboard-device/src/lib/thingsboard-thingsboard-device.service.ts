@@ -260,7 +260,6 @@ export class ThingsboardThingsboardDeviceService {
     };
   }
 
-  //////////////////////////////////////////////////////////////////////////
   async GetAccessToken(
     deviceID: string
   ): Promise<{token:string, explain?:string}> {
@@ -286,9 +285,6 @@ export class ThingsboardThingsboardDeviceService {
     return {token:resp['data']['credentialsId']}
 
   }
-
-
-
 }
 
 //////////////////////////////////////////////////////////////////////////
