@@ -42,9 +42,7 @@ mat-action-list > mat-form-field {
     margin-right: 1%;
 }
 
-#addBtn {
-    background-color: map-get($map: $accent-palette, $key: 300);
-} 
+
 
 ::ng-deep .mat-list-option .mat-pseudo-checkbox{ 
     display: none; 
@@ -56,6 +54,7 @@ mat-list-option {
     margin-bottom: 0.5%;
 }
 
+
 cdk-virtual-scroll-viewport {
-    height: 60vh;
+    height: 40vh;
 }

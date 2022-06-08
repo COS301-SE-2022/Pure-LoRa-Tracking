@@ -1,1 +1,33 @@
-<p>map-panel works!</p>
+<mat-card>
+    <mat-card-content>
+        <section>
+            <ul>
+                <li>
+                    <mat-checkbox color="primary">
+                        Border
+                    </mat-checkbox>
+                </li>
+                <li>
+                    <mat-checkbox color="primary">
+                        Gateways
+                    </mat-checkbox>
+                </li>
+                <li>
+                    <mat-checkbox color="primary">
+                        History
+                    </mat-checkbox>
+                </li>
+            
+            </ul>
+        </section>
+        <mat-button-toggle-group #group="matButtonToggleGroup">
+            <mat-button-toggle>
+              Satellite
+            </mat-button-toggle>
+            <mat-button-toggle>
+              Normal
+            </mat-button-toggle>
+          </mat-button-toggle-group>
+    </mat-card-content>
+
+</mat-card>

@@ -1,13 +1,13 @@
 #container{
     display: flex;
-    height: 100%;
     flex-direction: column;
-    margin-top: 2.5%;
-    justify-content: flex-end;
+    height: 100%;
+    justify-content: space-around;
+    margin-right: 2%;
 }
 
-.panel {
-    margin-right: 5%;
-    margin-left: 5%;
-    margin-bottom: 5%;
+#layoutContainer{
+    display: flex;
+    justify-content: flex-end;
+    height: 90%;
 }

@@ -11,6 +11,8 @@ import {MatDividerModule} from '@angular/material/divider';
 import {MatListModule} from '@angular/material/list';
 import {MatInputModule} from '@angular/material/input';
 import {ScrollingModule} from '@angular/cdk/scrolling';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
 
 export const clientSharedUiMaterialUiRoutes: Route[] = [];
 
@@ -25,6 +27,9 @@ const materialComponentModules = [
   MatListModule,
   MatInputModule,
   ScrollingModule,
+  MatCheckboxModule,
+  MatButtonModule,
+  MatButtonToggleModule
 ];
 
 @NgModule({

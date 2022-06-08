@@ -77,7 +77,7 @@ export class ReservePanelComponent implements OnInit {
 
   getSelectedStyle(deviceId:string):string{
     if (this.selectedDevices.includes(deviceId)){
-      return "#deeffd";
+      return "#b8bdc7";
     }
     return "";
   }
