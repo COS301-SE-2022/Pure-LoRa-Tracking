@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import {
   userAddInput,
+  userAdminGroups,
   userDisableInput,
   userEnableInput,
   userInfoInput,
@@ -180,5 +181,29 @@ export class ApiUserEndpointService {
       explain: resp.explanation,
       data: resp.data['id'],
     };
+  }
+
+  async AdminGroupsProcess(content: userAdminGroups) : Promise<userResponse> {
+    if (content.token == undefined || content.token == '')
+      return {
+        status: 401,
+        explain: 'token missing',
+      };
+
+    this.thingsboardClient.setToken(content.token);
+    const response = await this.thingsboardClient.AdminGetCustomers();
+
+    if(response.status=="fail")
+    return {
+      status : 400,
+      explain : response.explanation,
+    }
+    return {
+      status:200,
+      explain : "call finished",
+      data : response.data
+    }
+
+    
   }
 }

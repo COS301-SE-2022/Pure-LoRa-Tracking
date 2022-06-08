@@ -27,6 +27,10 @@ export interface userInfoInput {
   token: string;
 }
 
+export interface userAdminGroups {
+  token: string;
+}
+
 export interface userResponse {
   status: number;
   explain: string;
