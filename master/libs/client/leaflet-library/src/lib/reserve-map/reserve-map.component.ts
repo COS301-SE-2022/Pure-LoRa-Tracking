@@ -77,7 +77,7 @@ export class ReserveMapComponent implements OnInit, OnChanges {
         }
       }
       else if (Object.prototype.hasOwnProperty.call(changes, "HistoricalDataID")) {
-        console.log("change historical");
+        console.log("change historical when moved to live");
       }
     }
 
