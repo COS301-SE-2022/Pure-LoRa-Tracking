@@ -175,6 +175,7 @@ export class ReserveMapComponent implements OnInit, OnChanges {
 
   //load the antpath for one of the devices
   public showOnly(deviceID: string): void {
+    console.log("called with "+deviceID);
     this.HistoricalMode=true;
     if(this.currentantpath!=null) this.resetData()
     const latlngs = this.historicalpath.find(val => val.deviceID == deviceID)

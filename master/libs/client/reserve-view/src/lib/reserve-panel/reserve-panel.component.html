@@ -24,13 +24,13 @@
     <mat-card-content >
         <cdk-virtual-scroll-viewport itemSize="0">
         <mat-selection-list dense #devicesList [multiple]="true" >
-            <p *ngIf="deviceType==='sensors' || deviceType==='all';">
-                <mat-list-option *ngFor="let sensorItem of filteredSensors" [value]="sensorItem.id" [style.background-color]="getSelectedStyle(sensorItem.id)" (click)="selectedDevice(devicesList)" >
+            <p *ngIf="deviceType==='sensors' || deviceType==='all' && Devices.length>0">
+                <mat-list-option *ngFor="let sensorItem of filteredSensors" [value]="sensorItem.deviceID" [style.background-color]="getSelectedStyle(sensorItem.deviceID)" (click)="selectedSensor(sensorItem.deviceID)" >
                     <mat-icon mat-list-icon>memory</mat-icon>
                     <div class="listItemWrap">
                         <div class="itemText">    
-                            <div mat-line>{{sensorItem.name}}</div>
-                            <div mat-line>id: {{sensorItem.id}} </div>
+                            <div mat-line>{{sensorItem.deviceName}}</div>
+                            <div mat-line>id: {{sensorItem.deviceID}} </div>
                         </div>
                 
                         <button mat-icon-button id="actionBtn">
@@ -39,8 +39,8 @@
                     </div>
                 </mat-list-option>
             </p>
-            <p *ngIf="deviceType==='gateways' || deviceType==='all';">
-                <mat-list-option *ngFor="let gatewayItem of filteredGateways" [value]="gatewayItem.id" [style.background-color]="getSelectedStyle(gatewayItem.id)" (click)="selectedDevice(devicesList)">
+            <p *ngIf="deviceType==='gateways' || deviceType==='all'">
+                <mat-list-option *ngFor="let gatewayItem of filteredGateways" [value]="gatewayItem.id" [style.background-color]="getSelectedStyle(gatewayItem.id)" (click)="selectedGateway(gatewayItem.id)">
                     <mat-icon mat-list-icon>cell_tower</mat-icon>
                     <div class="listItemWrap">
                         <div class="itemText">    

@@ -3,7 +3,7 @@
         <section>
             <ul>
                 <li>
-                    <mat-checkbox color="primary">
+                    <mat-checkbox color="primary" #border (change)="updateBorder(border.checked)" checked="true">
                         Border
                     </mat-checkbox>
                 </li>

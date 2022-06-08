@@ -1,3 +1,5 @@
+import { EventEmitter, Output } from '@angular/core';
+import { Input } from '@angular/core';
 import { Component } from '@angular/core';
 
 @Component({
@@ -6,7 +8,15 @@ import { Component } from '@angular/core';
   styleUrls: ['./map-panel.component.scss'],
 })
 export class MapPanelComponent {
-  // constructor() {}
+  @Output() ShowPolygon=new EventEmitter<boolean>();
+  
+  constructor() {
+    this.ShowPolygon.emit(true);
+  }
 
-  // ngOnInit(): void {}
+  updateBorder(newval:boolean){
+    this.ShowPolygon.emit(newval);
+  }
+
+  ngOnInit(): void {}
 }
