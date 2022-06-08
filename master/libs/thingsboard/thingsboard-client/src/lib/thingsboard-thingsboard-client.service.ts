@@ -610,6 +610,7 @@ export class ThingsboardThingsboardClientService {
   ///////////////////////////////////////////////////////////////////////
   async AdminGetCustomers() : Promise<thingsboardResponse> {
     const login = await this.userService.getUserID(this.token);
+    console.log(login);
     if (login.code != 200)
       return {
         status: 'fail',
