@@ -333,35 +333,35 @@ describe('ReserveMapComponent', () => {
   })
 
 
-  describe("AddToMap",()=>{
-    it("Should add to map",()=>{
-      component.Reserve=demoreserve;
-      component.loadmap();
-      //mock addtomap so its not called
-      jest.spyOn(component,"addToMap").mockImplementation();
-      component.loadhistorical(demoDevice);
-      jest.clearAllMocks();
-      const temp=component.historicalpath.at(0);
-      if(temp!=null){
-        const marker1=temp.markers.at(0);
-        const marker2=temp.markers.at(1);
-        const marker3=temp.markers.at(2);
-        jest.spyOn(temp.polyline,"addTo").mockImplementation();
-        if(marker1!=undefined && marker2!=undefined && marker3!=undefined){
-           jest.spyOn(marker1,"addTo").mockImplementation();
-           jest.spyOn(marker2,"addTo").mockImplementation();
-           jest.spyOn(marker3,"addTo").mockImplementation();
-           component.addToMap(temp);
-           expect(temp.polyline.addTo).toBeCalled()
-           expect(marker1.addTo).toBeCalled()
-           expect(marker2.addTo).toBeCalled()
-           expect(marker3.addTo).toBeCalled()
-          }
-      }
+  // describe("AddToMap",()=>{
+  //   it("Should add to map",()=>{
+  //     component.Reserve=demoreserve;
+  //     component.loadmap();
+  //     //mock addtomap so its not called
+  //     jest.spyOn(component,"addToMap").mockImplementation();
+  //     component.loadhistorical(demoDevice);
+  //     jest.clearAllMocks();
+  //     const temp=component.historicalpath.at(0);
+  //     if(temp!=null){
+  //       const marker1=temp.markers.at(0);
+  //       const marker2=temp.markers.at(1);
+  //       const marker3=temp.markers.at(2);
+  //       jest.spyOn(temp.polyline,"addTo").mockImplementation();
+  //       if(marker1!=undefined && marker2!=undefined && marker3!=undefined){
+  //          jest.spyOn(marker1,"addTo").mockImplementation();
+  //          jest.spyOn(marker2,"addTo").mockImplementation();
+  //          jest.spyOn(marker3,"addTo").mockImplementation();
+  //          component.addToMap(temp);
+  //          expect(temp.polyline.addTo).toBeCalled()
+  //          expect(marker1.addTo).toBeCalled()
+  //          expect(marker2.addTo).toBeCalled()
+  //          expect(marker3.addTo).toBeCalled()
+  //         }
+  //     }
 
 
-    })
-  })
+  //   })
+  // })
 
 });
 
