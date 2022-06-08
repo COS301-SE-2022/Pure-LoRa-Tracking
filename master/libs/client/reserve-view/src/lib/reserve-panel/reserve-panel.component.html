@@ -8,49 +8,53 @@
     <mat-action-list>
         <mat-form-field appearance="legacy">
             <mat-label>Search</mat-label>
-            <input matInput placeholder="Search">
+            <input matInput placeholder="Search" type="text" [value]="searchString" (input)='searchString=$any($event.target).value' (change)="searchDevices()">
             <mat-icon matSuffix>search</mat-icon>
           </mat-form-field>
         <mat-form-field appearance="legacy">
             <mat-label>Device Type</mat-label>
             <mat-select [(value)]="deviceType">
               <mat-option value="all">All</mat-option>
-              <mat-option value="sensors">Sensors</mat-option>
+              <mat-option value='sensors'>Sensors</mat-option>
               <mat-option value="gateways">Gateways</mat-option>
             </mat-select>
           </mat-form-field>
           <button id="addBtn" mat-raised-button routerLink="add">Add<mat-icon>add</mat-icon></button>
     </mat-action-list>
     <mat-card-content >
-        <mat-selection-list #sensor [multiple]="false" *ngIf="deviceType==='sensors' || deviceType==='all';">
-            <mat-list-option *ngFor="let sensorItem of sensors" [value]="sensor">
-                <mat-icon mat-list-icon>bug_report</mat-icon>
-                <div class="listItemWrap">
-                    <div class="itemText">    
-                        <div mat-line>{{sensorItem.name}}</div>
-                        <div mat-line>id: {{sensorItem.id}} </div>
+        <cdk-virtual-scroll-viewport itemSize="0">
+        <mat-selection-list dense #devicesList [multiple]="true" >
+            <p *ngIf="deviceType==='sensors' || deviceType==='all';">
+                <mat-list-option *ngFor="let sensorItem of filteredSensors" [value]="sensorItem.id" [style.background-color]="getSelectedStyle(sensorItem.id)" (click)="selectedDevice(devicesList)" >
+                    <mat-icon mat-list-icon>memory</mat-icon>
+                    <div class="listItemWrap">
+                        <div class="itemText">    
+                            <div mat-line>{{sensorItem.name}}</div>
+                            <div mat-line>id: {{sensorItem.id}} </div>
+                        </div>
+                
+                        <button mat-icon-button id="actionBtn">
+                            <mat-icon>chevron_right</mat-icon>
+                        </button>
                     </div>
-            
-                    <button mat-icon-button id="actionBtn">
-                        <mat-icon>chevron_right</mat-icon>
-                    </button>
-                </div>
-            </mat-list-option>
-        </mat-selection-list>
-        <mat-selection-list #gateway [multiple]="false" *ngIf="deviceType==='gateways' || deviceType==='all';">
-            <mat-list-option *ngFor="let gatewayItem of gateways" [value]="gateway">
-                <mat-icon mat-list-icon>cell_tower</mat-icon>
-                <div class="listItemWrap">
-                    <div class="itemText">    
-                        <div mat-line>{{gatewayItem.name}}</div>
-                        <div mat-line>id: {{gatewayItem.id}} </div>
+                </mat-list-option>
+            </p>
+            <p *ngIf="deviceType==='gateways' || deviceType==='all';">
+                <mat-list-option *ngFor="let gatewayItem of filteredGateways" [value]="gatewayItem.id" [style.background-color]="getSelectedStyle(gatewayItem.id)" (click)="selectedDevice(devicesList)">
+                    <mat-icon mat-list-icon>cell_tower</mat-icon>
+                    <div class="listItemWrap">
+                        <div class="itemText">    
+                            <div mat-line>{{gatewayItem.name}}</div>
+                            <div mat-line>id: {{gatewayItem.id}} </div>
+                        </div>
+                
+                        <button mat-icon-button id="actionBtn">
+                            <mat-icon>chevron_right</mat-icon>
+                        </button>
                     </div>
-            
-                    <button mat-icon-button id="actionBtn">
-                        <mat-icon>chevron_right</mat-icon>
-                    </button>
-                </div>
-            </mat-list-option>
+                </mat-list-option>
+            </p>
         </mat-selection-list>
+        </cdk-virtual-scroll-viewport>
     </mat-card-content>
 </mat-card>

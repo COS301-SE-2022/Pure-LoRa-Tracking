@@ -10,6 +10,8 @@ import { MatSelectModule } from '@angular/material/select';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatListModule} from '@angular/material/list';
 import {MatInputModule} from '@angular/material/input';
+import {ScrollingModule} from '@angular/cdk/scrolling';
+
 export const clientSharedUiMaterialUiRoutes: Route[] = [];
 
 const materialComponentModules = [
@@ -21,7 +23,8 @@ const materialComponentModules = [
   MatSelectModule,
   MatDividerModule,
   MatListModule,
-  MatInputModule
+  MatInputModule,
+  ScrollingModule,
 ];
 
 @NgModule({

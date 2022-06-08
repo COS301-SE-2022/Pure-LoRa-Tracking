@@ -32,9 +32,30 @@ mat-card-header {
 mat-action-list {
     display: flex;
     justify-content: space-around;
-    align-items: center;
+    align-items: baseline;
+    align-content: center;
+    flex-wrap: wrap;
+}
+
+mat-action-list > mat-form-field {
+    margin-left: 1%;
+    margin-right: 1%;
 }
 
 #addBtn {
     background-color: map-get($map: $accent-palette, $key: 300);
 } 
+
+::ng-deep .mat-list-option .mat-pseudo-checkbox{ 
+    display: none; 
+  }
+
+
+mat-list-option {
+    border-radius: 2rem;
+    margin-bottom: 0.5%;
+}
+
+cdk-virtual-scroll-viewport {
+    height: 60vh;
+}
