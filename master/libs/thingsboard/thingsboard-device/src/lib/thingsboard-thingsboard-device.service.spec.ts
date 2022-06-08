@@ -9,7 +9,7 @@ describe('ThingsboardThingsboardDeviceService', () => {
   let service: ThingsboardThingsboardDeviceService;
   let loginService: ThingsboardThingsboardUserService;
   let httpService: HttpService;
-  const username = "reserveAdmin@reserve.com";
+  const username = "reserveadmin@reserve.com";
   const password = "reserve";
   
 
@@ -271,6 +271,15 @@ describe('ThingsboardThingsboardDeviceService', () => {
 
   it('should process a list of device profiles and return null, tentatively.', async () => {
     expect(await service.processDeviceProfiles([])).toEqual(null);
+  });
+
+  it('should set the gateway location', async () => {
+    const data = await loginService.login(username, password);
+    service.setToken(data['data']['token']);
+    console.log(await service.setGatewayLocation("2fe67850-dfe9-11ec-bdb3-750ce7ed2451", [
+      {latitude : -25, longitude : 23},
+      {latitude : -25.2, longitude : 21}
+    ]))
   });
 
 });
