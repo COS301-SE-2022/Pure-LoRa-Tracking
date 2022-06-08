@@ -260,32 +260,31 @@ export class ThingsboardThingsboardDeviceService {
     };
   }
 
-    //////////////////////////////////////////////////////////////////////////
-    async GetAccessToken(
-      deviceID: string
-    ): Promise<{token:string, explain?:string}> {
-      if (this.token == '') return null;
-  
-      const url =
-        this.baseURL + "device/"+deviceID+"/credentials"
-  
-      const headersReq = {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + this.token,
-      };
-      const resp = await lastValueFrom(
-        this.httpService.get(url, { headers: headersReq })
-      ).catch((error) => {
-        if (error.response == undefined) return null;
-        return {status : error.response.status}
-      });
-  
-      if(resp.status != 200)
-      return {token:"", explain:resp.status}
-  
-      return {token:resp['data']['credentialsId']}
-  
-    }
+  async GetAccessToken(
+    deviceID: string
+  ): Promise<{token:string, explain?:string}> {
+    if (this.token == '') return null;
+
+    const url =
+      this.baseURL + "device/"+deviceID+"/credentials"
+
+    const headersReq = {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + this.token,
+    };
+    const resp = await lastValueFrom(
+      this.httpService.get(url, { headers: headersReq })
+    ).catch((error) => {
+      if (error.response == undefined) return null;
+      return {status : error.response.status}
+    });
+
+    if(resp.status != 200)
+    return {token:"", explain:resp.status}
+
+    return {token:resp['data']['credentialsId']}
+
+  }
 }
 
 //////////////////////////////////////////////////////////////////////////
