@@ -300,9 +300,13 @@ export class ThingsboardThingsboardClientService {
         explanation: 'assign failed, device creation reversed',
       };
     }
+
+    const AccessToken = await this.deviceService.GetAccessToken(deviceCreate);
+
     return {
       status: 'ok',
       data: deviceCreate,
+      explanation : AccessToken.token
     };
   }
 
