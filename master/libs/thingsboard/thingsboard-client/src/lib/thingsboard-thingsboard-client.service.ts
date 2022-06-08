@@ -487,6 +487,21 @@ export class ThingsboardThingsboardClientService {
         explanation: 'enable failed',
       };
   }
+
+  ///////////////////////////////////////////////////////////////////////
+  
+  async v1SendTelemetry(accessToken:string, data : any) : Promise<{status:number; explanation:string;}> {
+    const resp = await this.telemetryService.V1sendJsonTelemetry(accessToken, data);
+    if(resp == 401)
+      return {
+        status : resp,
+        explanation : "access token invalid"
+      }
+    return {
+      status : 200,
+      explanation : "call finished"
+    }
+  }
 }
 
 /* data is required to be any due to the many possible response data types */
