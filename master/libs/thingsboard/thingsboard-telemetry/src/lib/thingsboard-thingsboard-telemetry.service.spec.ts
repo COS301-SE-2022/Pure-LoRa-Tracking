@@ -12,8 +12,8 @@ describe('ThingsboardThingsboardTelemetryService', () => {
   let userService : ThingsboardThingsboardUserService;
   let httpService: HttpService;
 
-  const username = "reserveuser@reserve.com";
-  const password = "reserve";
+  const username = process.env.TB_PASSWORD;
+  const password = process.env.TB_USERNAME;
 
   beforeAll(async () => {
     const module = await Test.createTestingModule({
@@ -111,9 +111,9 @@ describe('ThingsboardThingsboardTelemetryService', () => {
 
         
 
-      const resp = await service.sendJsonTelemetry("acf22a00-ce06-11ec-b2d0-bd829ba84846", "DEVICE", {
+      const resp = await service.sendJsonTelemetry("acf22a00-ce06-11ec-b2d0-bd829ba84846", "DEVICE", JSON.stringify({
         "rssi" : 1000
-      });
+      }));
       expect(resp).toEqual(true);
   });
 
