@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import {HttpClientTestingModule} from "@angular/common/http/testing"
 import { DeviceAddComponent } from './device-add.component';
 import {ReactiveFormsModule} from '@angular/forms';
 describe('DeviceAddComponent', () => {
@@ -9,7 +9,7 @@ describe('DeviceAddComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [DeviceAddComponent],
-      imports: [ReactiveFormsModule]
+      imports: [ReactiveFormsModule,HttpClientTestingModule]
     }).compileComponents();
   });
 
