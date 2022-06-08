@@ -425,6 +425,10 @@ describe('ThingsboardThingsboardClientService', () => {
       .spyOn(httpService, 'post')
       .mockImplementationOnce(() => of(fourthResult));
 
+      jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() => of(fourthResult));
+
     const resp = await service.addDeviceToReserve(
       'ef55ff40-dfe8-11ec-bdb3-750ce7ed2451',
       {
@@ -437,6 +441,7 @@ describe('ThingsboardThingsboardClientService', () => {
     expect(resp).toEqual({
       status: 'ok',
       data: 'ef55ff40-dfe8-11ec-bdb3-750ce7ed2451',
+      explanation : undefined
     });
   });
 
