@@ -52,7 +52,7 @@ export class ThingsboardThingsboardClientService {
 
     const DeviceResp = await this.deviceService.getCustomerDevices(
       0,
-      5,
+      100,
       InfoResp
     );
     return DeviceResp;
@@ -131,7 +131,7 @@ export class ThingsboardThingsboardClientService {
     }
 
     const verifyDevice = await this.validateDevice(DeviceID);
-    if (verifyDevice == false) {
+    if (verifyDevice == undefined || verifyDevice == null) {
       return {
         status: 'fail',
         explanation: 'device with ID not found for user token combination',
@@ -147,10 +147,14 @@ export class ThingsboardThingsboardClientService {
       startTime,
       endTime
     );
+
+    
+    const labelName = verifyDevice["label"];
+
     return {
       status: 'ok',
       name: DeviceID,
-      explanation: 'call finished',
+      explanation: labelName,
       data: resp,
     };
   }
@@ -175,10 +179,10 @@ export class ThingsboardThingsboardClientService {
 
   /////////////////////////////////////////////////////////
 
-  async validateDevice(deviceID: string): Promise<boolean> {
+  async validateDevice(deviceID: string): Promise<any> {
     this.deviceService.setToken(this.token);
-    const resp = await this.deviceService.getDevice(deviceID);
-    return resp.status == 200;
+    const resp = await this.deviceService.getDeviceInfo(deviceID);
+    return resp['data'];
   }
 
   ///////////////////////////////////////////////////////////
