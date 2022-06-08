@@ -24,7 +24,7 @@ const materialComponentModules = [
   MatStepperModule,
   MatFormFieldModule,
   MatInputModule,
-  MatSelectModule
+  MatSelectModule,
   MatCardModule,
   MatDividerModule,
   MatListModule,
