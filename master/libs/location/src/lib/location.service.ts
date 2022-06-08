@@ -37,7 +37,7 @@ export class LocationService {
         // -25.82198978570606, 28.33657264709473
         // -25.822120162959596, 28.33628833293915
         // console.log('RSSI: '+gatewayData[0].getRssi()+'  '+gatewayData[0].getTime().toDate().toISOString());
-        console.log(gatewayData[0].getLocation());
+        // console.log(gatewayData[0].getLocation());
         // Only handle triangulatable data
         gatewayData = gatewayData.filter(gateway => 
             gateway.hasLocation() == true &&

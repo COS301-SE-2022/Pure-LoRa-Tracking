@@ -1,18 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { acknowledge } from './hardware-payload.interface';
-import { ThingsboardThingsboardTelemetryService } from '@lora/thingsboard-telemetry';
+import { ThingsboardThingsboardClientService } from '@lora/thingsboard-client';
 import { LocationService } from '@lora/location';
 import * as eventMessages from '@chirpstack/chirpstack-api/as/integration/integration_pb';
 
 @Injectable()
 export class ApiHardwareDebugService {
   constructor (
-    private tbTelemetryService: ThingsboardThingsboardTelemetryService,
+    private tbClientService: ThingsboardThingsboardClientService,
     private locationService: LocationService
     ) {
     // Provisionally using ThingsboardThingsboardTelemetryService
     // TODO: move to ThingsboardThingsboardClientService
-    tbTelemetryService.setToken("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZldXNlckByZXNlcnZlLmNvbSIsInNjb3BlcyI6WyJDVVNUT01FUl9VU0VSIl0sInVzZXJJZCI6ImY5NmU2MGQwLWRmZTgtMTFlYy1iZGIzLTc1MGNlN2VkMjQ1MSIsImVuYWJsZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiJjZDJkZjJiMC1kZmU4LTExZWMtYmRiMy03NTBjZTdlZDI0NTEiLCJjdXN0b21lcklkIjoiZWY1NWZmNDAtZGZlOC0xMWVjLWJkYjMtNzUwY2U3ZWQyNDUxIiwiaXNzIjoidGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE2NTQ3MTgxODEsImV4cCI6MTY1NDcyNzE4MX0.G9InEz36rgVqMHqWAiq2my5mOUqcMs1Z_HIL-8j1LGfe3hGkX_zhMJrhU4vGFlIPGedotvq7de3G0ahBUNy9zg")
+    
+    // tbTelemetryService.setToken("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZldXNlckByZXNlcnZlLmNvbSIsInNjb3BlcyI6WyJDVVNUT01FUl9VU0VSIl0sInVzZXJJZCI6ImY5NmU2MGQwLWRmZTgtMTFlYy1iZGIzLTc1MGNlN2VkMjQ1MSIsImVuYWJsZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiJjZDJkZjJiMC1kZmU4LTExZWMtYmRiMy03NTBjZTdlZDI0NTEiLCJjdXN0b21lcklkIjoiZWY1NWZmNDAtZGZlOC0xMWVjLWJkYjMtNzUwY2U3ZWQyNDUxIiwiaXNzIjoidGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE2NTQ3MTgxODEsImV4cCI6MTY1NDcyNzE4MX0.G9InEz36rgVqMHqWAiq2my5mOUqcMs1Z_HIL-8j1LGfe3hGkX_zhMJrhU4vGFlIPGedotvq7de3G0ahBUNy9zg")
   }
   // curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{"username":"reserveuser@reserve.com", "password":"reserve"}' 'http://127.0.0.1:9090/api/auth/login'
 
@@ -45,15 +46,15 @@ export class ApiHardwareDebugService {
     }
 
     const tags = eventData.getTagsMap();
-    const thingsBoardDeviceId = tags.get('thingsBoardDeviceId');
+    const thingsBoardDeviceToken = tags.get('thingsBoardDeviceToken');
 
-    if (thingsBoardDeviceId == undefined) {
+    if (thingsBoardDeviceToken == undefined) {
       throw 'Thingsboard device ID not set';
     }
 
-    console.log((new Date()).toISOString() ,"[hardware-endpoint] Uplink from:", eventData.getDeviceName(), '|', thingsBoardDeviceId);
+    console.log((new Date()).toISOString() ,"[hardware-endpoint] Uplink from:", eventData.getDeviceName(), '|', thingsBoardDeviceToken);
 
-    this.tbTelemetryService.sendJsonTelemetry(thingsBoardDeviceId, 'DEVICE', dataJSON);
+    this.tbClientService.v1SendTelemetry(thingsBoardDeviceToken, dataJSON);
 
   }
 
