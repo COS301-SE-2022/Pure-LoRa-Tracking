@@ -1,5 +1,6 @@
 <master-header-nav></master-header-nav>
-<div id="userContainer">
+<div id="main-container">
+<div id="userContainer" *ngIf="addUser === false">
     <!-- <mat-form-field appearance="legacy">
         <mat-label>Search</mat-label>
         <input matInput placeholder="Search" type="text">
@@ -61,4 +62,61 @@
         <tr mat-header-row *matHeaderRowDef="tableColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: tableColumns;"></tr>
     </table>
+</div>
+
+<div id="addUserForm" *ngIf="addUser === true">
+    <mat-stepper orientation="vertical" linear="true" #stepper>
+        <mat-step [stepControl]="nameGroup">
+    <form [formGroup]="nameGroup">
+      <ng-template matStepLabel>Provide name</ng-template>
+      <mat-form-field appearance="fill">
+        <mat-label>Name</mat-label>
+        <input matInput placeholder="First name" formControlName="nameControl" required>
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="surnameGroup">
+    <form [formGroup]="surnameGroup">
+      <ng-template matStepLabel>Provide surname</ng-template>
+      <mat-form-field appearance="fill">
+        <mat-label>Surname</mat-label>
+        <input matInput formControlName="surnameControl" placeholder="Surname"
+               required>
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="emailGroup">
+    <form [formGroup]="emailGroup">
+      <ng-template matStepLabel>Fill in user e-mail</ng-template>
+      <mat-form-field appearance="fill">
+        <mat-label>E-mail</mat-label>
+        <input type="email" matInput formControlName="emailControl" placeholder="Valid e-mail"
+               required>
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Confirm</ng-template>
+    <p>Please confirm to add the user:</p>
+    <div>
+        <button mat-button matStepperPrevious>Back</button>
+      
+      <button mat-button >Confirm</button>
+    </div>
+  </mat-step>
+    </mat-stepper>
+    <button mat-flat-button  id="cancelBtn" (click)="addUser = false" color="primary">Cancel</button>
+  
+</div>
 </div>

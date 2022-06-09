@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
+import { FormBuilder, FormGroup, Validators} from '@angular/forms';
 export interface userInfo{
   name: string,
   surname: string,
@@ -47,9 +48,24 @@ export class ReserveUsersViewComponent implements OnInit {
   tableColumns:string[] = ['id', 'surname', 'name','email',"status","delete"];
   sourceData = usersList;
   addUser= false;
-  constructor() {}
 
-  ngOnInit(): void {}
+  nameGroup!: FormGroup;
+  surnameGroup!: FormGroup;
+  emailGroup!: FormGroup;
+
+  constructor(private _formBuilder: FormBuilder) {}
+
+  ngOnInit(): void {
+    this.nameGroup = this._formBuilder.group({
+      nameControl: ['', Validators.required],
+    });
+    this.surnameGroup = this._formBuilder.group({
+      surnameControl: ['', Validators.required],
+    });
+    this.emailGroup = this._formBuilder.group({
+      emailControl: ['', Validators.required],
+    });
+  }
 
   removeUser(userId:string): void {
     console.log(userId);
@@ -61,7 +77,7 @@ export class ReserveUsersViewComponent implements OnInit {
   }
 
   openUserForm(): void {
-    this.addUser = true;
+    this.addUser = !this.addUser;
   }
 
 }

@@ -6,7 +6,7 @@ import { ClientSharedUiComponentsUiModule } from '@master/client/shared-ui/compo
 import { ClientSharedUiMaterialUiModule } from '@master/client/shared-ui/material-ui';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatTableModule} from '@angular/material/table';
-
+import { ReactiveFormsModule } from '@angular/forms';
 @NgModule({
   imports: [
     CommonModule,
@@ -14,6 +14,7 @@ import {MatTableModule} from '@angular/material/table';
     ClientSharedUiMaterialUiModule,
     MatSlideToggleModule,
     MatTableModule,
+    ReactiveFormsModule,
     RouterModule.forChild([
        {path: '', pathMatch: 'full', component: ReserveUsersViewComponent} 
     ]),
