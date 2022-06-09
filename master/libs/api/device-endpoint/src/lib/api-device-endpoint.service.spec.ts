@@ -8,6 +8,8 @@ import { ApiDeviceEndpointService } from './api-device-endpoint.service';
 import { AxiosResponse } from 'axios';
 import { of } from 'rxjs';
 import { deviceInfos } from '@master/shared-interfaces';
+import { ChirpstackChirpstackGatewayModule } from '@chirpstack/gateway';
+import { ChirpstackChirpstackSensorModule } from '@chirpstack/sensor';
 
 describe('ApiDeviceEndpointService', () => {
   let service: ApiDeviceEndpointService;
@@ -15,7 +17,7 @@ describe('ApiDeviceEndpointService', () => {
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      imports: [ThingsboardThingsboardClientModule],
+      imports: [ThingsboardThingsboardClientModule, ChirpstackChirpstackGatewayModule, ChirpstackChirpstackSensorModule],
       providers: [ApiDeviceEndpointService],
     }).compile();
 
