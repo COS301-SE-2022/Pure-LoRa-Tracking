@@ -31,6 +31,8 @@ export class ReservePanelComponent implements OnInit {
     this.filteredSensors = this.Devices.map(sensorItem => {return sensorItem;})
   }
 
+  openSensor=false;
+
 
   reserveName = "Reserve Name";
 

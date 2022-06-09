@@ -1,0 +1,55 @@
+<mat-card>
+    <mat-card-header class="headerText">
+        <button mat-icon-button (click)="closeSensor()"><mat-icon>arrow_back</mat-icon></button>
+        <mat-card-title >
+            {{sensorInformation.profileName}}
+        </mat-card-title>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+
+    <mat-card-content id="card-content">     
+        <div id="field-list">
+            <p>
+                <span>{{sensorInformation.profileID}}</span>
+                <br>
+                <span class="field-label">Device UEI</span>
+            </p>  
+            <p>
+                <span>Sensor</span>
+                <br>
+                <span class="field-label">Device Type</span>
+            </p>    
+            <p>
+                <span>{{aditionalInfo.lastPing}}</span>
+                <br>
+                <span class="field-label">Last Ping</span>
+            </p>
+            <p>
+                <span>{{aditionalInfo.park}}</span>
+                <br>
+                <span class="field-label">Reserve</span>
+            </p>
+            <p>
+                <span>{{aditionalInfo.animal}}</span>
+                <br>
+                <span class="field-label">Animal</span>
+            </p>
+            <p>
+                <span>{{aditionalInfo.signals}}</span>
+                <br>
+                <span class="field-label">Signals sent</span>
+            </p>
+            <p>
+                <span>{{aditionalInfo.activeSince}}</span>
+                <br>
+                <span class="field-label">Active Since</span>
+            </p>
+        </div>
+    </mat-card-content>
+    <mat-action-list>
+        <button class="actionButtons" mat-raised-button >Signals<mat-icon>import_export</mat-icon></button>
+        <button class="actionButtons" mat-raised-button >Activity <mat-icon>show_chart</mat-icon></button>
+        <button id="locateButton" mat-raised-button >Locate <mat-icon>my_location</mat-icon></button>
+        <button id="delete-button" mat-raised-button>Delete</button>
+    </mat-action-list>
+</mat-card>
