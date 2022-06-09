@@ -5,7 +5,7 @@ import { lastValueFrom } from 'rxjs';
 @Injectable()
 export class ThingsboardThingsboardDeviceService {
   private token: string;
-  private baseURL = 'http://localhost:8080/api/';
+  private baseURL = 'http://localhost:9090/api/';
   constructor(private httpService: HttpService) {
     this.token = '';
   }
@@ -83,6 +83,7 @@ export class ThingsboardThingsboardDeviceService {
           name: hardwareID,
           type: deviceType,
           label: labelName,
+          additionalInfo: { 'gateway': isGateway },
         },
         { headers: headersReq }
       )

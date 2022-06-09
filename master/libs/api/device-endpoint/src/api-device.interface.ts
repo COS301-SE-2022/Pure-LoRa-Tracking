@@ -42,6 +42,8 @@ export interface GatewayProfile {
 export interface RemoveDevice {
   token: string;
   deviceID: string;
+  isGateway: boolean;
+  devEUI: string;
 }
 
 export interface GatewayLocationInfo {
