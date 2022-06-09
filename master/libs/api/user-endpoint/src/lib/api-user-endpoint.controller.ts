@@ -7,6 +7,7 @@ import {
   userInfoInput,
   userRemoveInput,
   userResponse,
+  usersInfoInput,
 } from '../api-user.interface';
 import { ApiUserEndpointService } from './api-user-endpoint.service';
 
@@ -57,5 +58,12 @@ export class ApiUserEndpointController {
     @Body() content: userAdminGroups
   ): Promise<userResponse> {
     return this.apiUserEndpointService.AdminGroupsProcess(content);
+  }
+
+  @Post('admin/reserve/all')
+  async GetAllUsers(
+    @Body() content: usersInfoInput
+  ): Promise<userResponse> {
+    return this.apiUserEndpointService.AdminAllReserveUsersProcess(content);
   }
 }
