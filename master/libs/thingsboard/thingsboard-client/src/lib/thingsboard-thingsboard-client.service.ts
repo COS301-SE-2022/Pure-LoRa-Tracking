@@ -88,6 +88,7 @@ export class ThingsboardThingsboardClientService {
 
     this.assetService.setToken(this.token);
 
+    //TODO
     let ids = [];
     if (userInfo['type'] == 'user') {
       ids = await this.assetService.getAssetIDs(userInfo['id']);
