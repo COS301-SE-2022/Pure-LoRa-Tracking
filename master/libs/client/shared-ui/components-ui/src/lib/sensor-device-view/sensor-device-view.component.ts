@@ -1,6 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { OverlayReference } from '@angular/cdk/overlay/overlay-reference';
+import { Component, EventEmitter, OnInit, Output ,  Inject} from '@angular/core';
 import { SensorProfile } from '@master/shared-interfaces';
 
+
+export interface sensorInfo {
+  name: string,
+  id: string,
+}
 
 @Component({
   selector: 'master-sensor-device-view',
@@ -8,20 +14,31 @@ import { SensorProfile } from '@master/shared-interfaces';
   styleUrls: ['./sensor-device-view.component.scss'],
 })
 export class SensorDeviceViewComponent implements OnInit {
+  @Output() closeOverlay = new EventEmitter<void>();
   sensorInformation:SensorProfile = {
     profileID: "13456",
     profileName: "S-123",
   }
 
   aditionalInfo = {
-    lastPing: "01 Mayb 2022 10:22 AM",
-    park: "Nature Reserve",
-    animal: "Zebra",
-    signals: 22,
-    activeSince: "01 June 2021",
+    lastPing: "",
+    park: "",
+    animal: "",
+    signals: 0,
+    activeSince: "",
   }
+
+  isOpen = false;
   
-  constructor() {}
+  mydATA: sensorInfo;
+
+  constructor(@Inject("OVERLAY_DATA") public data: any) {
+    this.mydATA = data;
+  }
 
   ngOnInit(): void {}
+
+  closeSensor():void {
+    this.closeOverlay.emit();
+  }
 }

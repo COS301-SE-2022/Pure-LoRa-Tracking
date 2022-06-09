@@ -5,10 +5,10 @@ import { ReserveViewComponent } from './reserve-view/reserve-view.component';
 import { ClientSharedUiMaterialUiModule } from '@master/client/shared-ui/material-ui';
 import { ReservePanelComponent } from './reserve-panel/reserve-panel.component';
 import { ReserveViewRoutingModule } from './reserve-view/reserve-view-routing.module';
-import { ClientSharedUiComponentsUiModule } from '@master/client/shared-ui/components-ui';
+import { ClientSharedUiComponentsUiModule, SensorDeviceViewComponent } from '@master/client/shared-ui/components-ui';
 import { MapPanelComponent } from './map-panel/map-panel.component';
 import { ClientLeafletLibraryModule } from '@master/client/leaflet-library';
-
+import { OverlayModule } from '@angular/cdk/overlay';
 export const clientReserveViewRoutes: Route[] = [];
 
 @NgModule({
@@ -19,12 +19,14 @@ export const clientReserveViewRoutes: Route[] = [];
     ReserveViewRoutingModule,
     ClientSharedUiComponentsUiModule,
     ClientLeafletLibraryModule,
+    OverlayModule,
   ],
   declarations: [
     ReserveViewComponent,
     ReservePanelComponent,
     MapPanelComponent,
   ],
+  entryComponents:[SensorDeviceViewComponent],
   exports: [ReserveViewComponent, ReservePanelComponent, MapPanelComponent],
 })
 export class ClientReserveViewModule {}

@@ -1,4 +1,4 @@
-<mat-card>
+<mat-card cdkOverlayOrigin #trigger="cdkOverlayOrigin" >
     <mat-card-header class="headerText">
         <mat-card-title >
             {{reserveName}}
@@ -35,8 +35,9 @@
                 
                         <button mat-icon-button id="actionBtn">
                             <!-- <mat-icon>chevron_right</mat-icon> -->
-                            <button mat-button>Delete sensor</button>
+                            <button mat-button (click)="viewSensor()" type="button" >Delete sensor</button>
                         </button>
+                     
                     </div>
                 </mat-list-option>
             </p>
@@ -58,4 +59,10 @@
         </mat-selection-list>
         </cdk-virtual-scroll-viewport>
     </mat-card-content>
+    
 </mat-card>
+<ng-template cdkConnectedOverlay 
+[cdkConnectedOverlayOrigin]="trigger"
+[cdkConnectedOverlayOpen]="openSensor">
+<master-sensor-device-view></master-sensor-device-view>
+</ng-template>
