@@ -15,6 +15,7 @@ import {
   RemoveDevice,
 } from './../api-device.interface';
 import { Injectable } from '@nestjs/common';
+import { DeviceProfile } from '@chirpstack/chirpstack-api/as/external/api/profiles_pb';
 
 @Injectable()
 export class ApiDeviceEndpointService {
@@ -178,6 +179,28 @@ export class ApiDeviceEndpointService {
         explanation: resp.explanation,
       };
 
+    if (resp.explanation == undefined) {
+      /* delete the device as we do not want a half install */
+      this.thingsboardClient.RemoveDeviceFromReserve(resp.data);
+      return {
+        status : 400,
+        explanation : "access token failure"
+      }
+    }
+
+    await this.chirpstackGateway.addGateway(
+      process.env.CHIRPSTACK_API,
+      resp.explanation,
+      body.labelName,
+      body.hardwareName,
+    ).catch((_) => {
+      this.thingsboardClient.RemoveDeviceFromReserve(resp.data);
+      return {
+        status : 400,
+        explanation : "access token failure"
+      }
+    });
+
     return {
       status: 200,
       explanation: 'ok',
@@ -211,6 +234,30 @@ export class ApiDeviceEndpointService {
         explanation: resp.explanation,
       };
 
+    const isGateway = false;
+    const devID = '70b3d5000000000b';
+    if (isGateway) {
+      await this.chirpstackGateway.removeGateway(
+        process.env.CHIRPSTACK_API,
+        devID
+      ).catch((_) => {
+        return {
+          status : 400,
+          explanation : "Failed to remove device"
+        }
+      });
+    } else {
+      await this.chirpstackSensor.removeDevice(
+        process.env.CHIRPSTACK_API,
+        devID
+      ).catch((_) => {
+        return {
+          status : 400,
+          explanation : "Failed to remove device"
+        }
+      });
+    }
+  
     return {
       status: 200,
       explanation: 'ok',
@@ -324,25 +371,30 @@ export class ApiDeviceEndpointService {
         explanation: 'no location parameters',
       };
 
-  this.thingsboardClient.setToken(body.token);
-  const resp = await this.thingsboardClient.setGatewayLocation(body.deviceID, body.locationParameters);
-  if(resp.status == "fail" && resp.explanation.includes('token'))
-  return {
-    status : 401,
-    explanation : resp.explanation    
+    this.thingsboardClient.setToken(body.token);
+    const resp = await this.thingsboardClient.setGatewayLocation(body.deviceID, body.locationParameters);
+    if(resp.status == "fail" && resp.explanation.includes('token'))
+    return {
+      status : 401,
+      explanation : resp.explanation    
+    }
+
+    if(resp.status == "fail")
+    return {
+      status : 400,
+      explanation : resp.explanation    
+    }
+
+    return {
+      status: 200,
+      explanation : resp.explanation
+    }
   }
 
-  if(resp.status == "fail")
-  return {
-    status : 400,
-    explanation : resp.explanation    
+  ///////////////////////////////////////////////////////////////////////////
+  // TODO: Implement endpoint
+  async processGetDeviceProfiles(): Promise<DeviceProfile[]> {
+    return this.chirpstackSensor.getProfiles(process.env.CHIRPSTACK_API)
   }
 
-  return {
-    status: 200,
-    explanation : resp.explanation
-  }
-
-  
-  }
 }
