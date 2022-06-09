@@ -34,7 +34,7 @@ export class ReserveUsersViewComponent implements OnInit {
   sourceData:Array<userInfo>=[];
   currentid="";
   canadd=false;
-  token="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZlYWRtaW5AcmVzZXJ2ZS5jb20iLCJzY29wZXMiOlsiVEVOQU5UX0FETUlOIl0sInVzZXJJZCI6ImM1M2ZlNDAwLWU3NjMtMTFlYy04OTMxLTY5ODFiYTU4Yzg0YiIsImZpcnN0TmFtZSI6InJlc2VydmUiLCJsYXN0TmFtZSI6ImFkbWluIiwiZW5hYmxlZCI6dHJ1ZSwiaXNQdWJsaWMiOmZhbHNlLCJ0ZW5hbnRJZCI6ImIwMTNhOWUwLWU3NjMtMTFlYy04OTMxLTY5ODFiYTU4Yzg0YiIsImN1c3RvbWVySWQiOiIxMzgxNDAwMC0xZGQyLTExYjItODA4MC04MDgwODA4MDgwODAiLCJpc3MiOiJ0aGluZ3Nib2FyZC5pbyIsImlhdCI6MTY1NDgwMDc2NiwiZXhwIjoxNjU0ODA5NzY2fQ.J35LmjtyNZlydD5sYjHsThPr_Z1G-hz1PUwObeual8OMC1M9_fx3J_e1oFNh-iCXl0zblw3yJ6fcgqRwS25_Mw"
+  token="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZlYWRtaW5AcmVzZXJ2ZS5jb20iLCJzY29wZXMiOlsiVEVOQU5UX0FETUlOIl0sInVzZXJJZCI6ImQ2MzcyZTMwLWRmZTgtMTFlYy1iZGIzLTc1MGNlN2VkMjQ1MSIsImVuYWJsZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiJjZDJkZjJiMC1kZmU4LTExZWMtYmRiMy03NTBjZTdlZDI0NTEiLCJjdXN0b21lcklkIjoiMTM4MTQwMDAtMWRkMi0xMWIyLTgwODAtODA4MDgwODA4MDgwIiwiaXNzIjoidGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE2NTQ4MDU3NzUsImV4cCI6MTY1NDgxNDc3NX0.76eRuu1QDS4QLxUVuJNcawQkpyMoXezGuRfPiVMhLnDHxtxwUQqtIrnbEeLBMkVITbwjYhozU6zOyQaRiW2ajA"
   constructor(private _formBuilder: FormBuilder,private http:HttpClient,public confirmDialog: MatDialog) {
   }
 
@@ -124,44 +124,54 @@ export class ReserveUsersViewComponent implements OnInit {
     
   }
   confirmDelete(userId:string):void{
-    this.confirmDialog.open(DialogConfirmationComponent,{
+    const mydialog=this.confirmDialog.open(DialogConfirmationComponent,{
       data: {
         title: 'Confirm Delete',
         dialogMessage: 'Are you sure you want to delete user: '+userId+'?',
       },
-
     });
   
-    this.http.post("api/user/admin/remove",{
-      token:this.token,
-      userID:userId
-    }).subscribe(val=>{
-      console.log(val);
+    mydialog.afterClosed().subscribe(val=>{
+      if(val){
+        this.http.post("api/user/admin/remove",{
+          token:this.token,
+          userID:userId
+        }).subscribe((val:any)=>{
+          console.log(val);
+          if(val.explain=="ok") alert("User deleted");
+        })
+      }
     })
 
   }
 
   confirmSwitch(userId:string,currval:boolean):void{
-    this.confirmDialog.open(DialogConfirmationComponent,{ data: {
+    const mydialog=this.confirmDialog.open(DialogConfirmationComponent,{ data: {
       title: 'Confirm changing status.',
       dialogMessage: 'Are you sure you want to change the status of the user: '+userId+'?',
     }});
+    mydialog.afterClosed().subscribe(val=>{
+      if(val){
+        if(!currval){
+          this.http.post('api/user/admin/disable',{
+            token:this.token,
+            userID:userId
+          }).subscribe((val:any)=>{
+            console.log(val);
+            if(val.explain=="ok") alert("User disabled");
+          });
+        }else {
+          this.http.post('api/user/admin/enable',{
+            token:this.token,
+            userID:userId
+          }).subscribe((val:any)=>{
+            console.log(val);
+            if(val.explain=="ok") alert("User enabled");
+          });
+        }
+      }  
+    })
 
-    if(!currval){
-      this.http.post('api/user/admin/disable',{
-        token:this.token,
-        userID:userId
-      }).subscribe(val=>{
-        console.log(val);
-      });
-    }else {
-      this.http.post('api/user/admin/enable',{
-        token:this.token,
-        userID:userId
-      }).subscribe(val=>{
-        console.log(val);
-      });
-    }
 
   }
 
