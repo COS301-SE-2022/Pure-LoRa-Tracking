@@ -1,0 +1,41 @@
+{
+  "projectType": "library",
+  "sourceRoot": "libs/client/users-management-view/src",
+  "prefix": "master",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:ng-packagr-lite",
+      "outputs": ["dist/libs/client/users-management-view"],
+      "options": {
+        "project": "libs/client/users-management-view/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/client/users-management-view/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/client/users-management-view/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/client/users-management-view"],
+      "options": {
+        "jestConfig": "libs/client/users-management-view/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/client/users-management-view/**/*.ts",
+          "libs/client/users-management-view/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

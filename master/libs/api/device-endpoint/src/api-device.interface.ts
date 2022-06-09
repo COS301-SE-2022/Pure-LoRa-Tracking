@@ -56,5 +56,5 @@ export interface GatewayLocationAdd {
   locationParameters: {
     latitude: number;
     longitude: number;
-  }[];
+  };
 }

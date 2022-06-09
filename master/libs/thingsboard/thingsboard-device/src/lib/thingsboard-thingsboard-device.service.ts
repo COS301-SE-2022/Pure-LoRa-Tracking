@@ -204,7 +204,7 @@ export class ThingsboardThingsboardDeviceService {
   //////////////////////////////////////////////////////////////////////////
   async setGatewayLocation(
     deviceID: string,
-    locationParamters: { latitude: number; longitude: number }[]
+    locationParamters: { latitude: number; longitude: number }
   ): Promise<{ status: number }> {
     if (this.token == '') return {
       status : 401

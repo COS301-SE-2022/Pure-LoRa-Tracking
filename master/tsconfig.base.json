@@ -65,6 +65,9 @@
       "@master/client/shared-ui/material-ui": [
         "libs/client/shared-ui/material-ui/src/index.ts"
       ],
+      "@master/client/users-management-view": [
+        "libs/client/users-management-view/src/index.ts"
+      ],
       "@master/shared-interfaces": ["libs/shared-interfaces/src/index.ts"],
       "@thingsboard/provision-user": [
         "libs/thingsboard/thingsboard-user/thingsboard-user-provision/src/index.ts"
