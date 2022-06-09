@@ -37,6 +37,17 @@ export class ThingsboardThingsboardClientService {
     return false;
   }
 
+  async loginUserReturnToken(username: string, password: string): Promise<{ Token: string;
+    refreshToken: string; }> {
+    const resp = await this.loginService.login(username, password);
+    if (resp['data']['token'] != undefined) {
+      this.token = resp['data']['token'];
+      this.refreshToken = resp['data']['RefreshToken'];
+      return { Token : this.token, refreshToken: this.refreshToken };
+    }
+    return { Token : "", refreshToken: "" };
+  }
+
   //////////////////////////////////////////////////////////
 
   async getCustomerDevices(custID?: string): Promise<deviceList[]> {
@@ -639,6 +650,36 @@ export class ThingsboardThingsboardClientService {
     
 
   }
+
+  ///////////////////////////////////////////////////////////////////////
+  async AdminGetUsersFromReserve (customerID: string) {
+    const login = await this.userService.getUserID(this.token);
+    console.log(login);
+    if (login.code != 200)
+      return {
+        status: 'fail',
+        explanation: 'token invalid',
+      };
+
+    if (login.type != 'admin')
+      return {
+        status: 'fail',
+        explanation: 'user not admin',
+      };
+
+    const resp = await this.userService.GetUsersFromReserve(this.token, customerID);
+    if(resp.status != 200)
+    return {
+      status: 'fail',
+      explanation: resp.status.toString(),
+    };
+
+    return {
+      status : "ok",
+      explanation : "call finished",
+      data: resp.data
+    }
+  } 
 
 }
 

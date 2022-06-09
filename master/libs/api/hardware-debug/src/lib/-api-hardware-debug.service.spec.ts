@@ -1,17 +1,9 @@
 import { Test } from '@nestjs/testing';
 import { ApiHardwareDebugService } from './-api-hardware-debug.service';
-import {
-  acknowledge,
-  rxInfo,
-  txInfo,
-  device_status,
-  device_up,
-  device_join,
-  device_ack,
-  device_error,
-  device_location,
-  device_txack,
-} from './hardware-payload.interface';
+import * as eventMessages from '@chirpstack/chirpstack-api/as/integration/integration_pb';
+import { ThingsboardThingsboardClientModule, ThingsboardThingsboardClientService } from '@lora/thingsboard-client';
+import { LocationModule, LocationService } from '@lora/location';
+import { acknowledge } from './hardware-payload.interface';
 
 const result: acknowledge = {
   code: 200,
@@ -19,40 +11,20 @@ const result: acknowledge = {
   explanation: 'Data received...',
 };
 
-const rxInfoMock: rxInfo = {
-  gatewayID: 'NTA2IDoAEAA=',
-  time: '2022-05-11T19:46:00.071074Z',
-  timeSinceGPSEpoch: null,
-  rssi: -54,
-  loRaSNR: 9.25,
-  channel: 0,
-  rfChain: 1,
-  board: 0,
-  antenna: 0,
-  location: {
-    latitude: 13138.1538388,
-    longitude: 12138.1534338,
-    altitude: 10.2,
-  },
-  fineTimestampType: 'NONE',
-  context: 'YE9+KA==',
-  uplinkID: 'rOu9N+e5Q0WP4zaSC3EPtg==',
-};
-
-const txInfoMock: txInfo = {
-  frequency: BigInt(868100000),
-  modulation: 'LORA',
-};
-
 describe('ApiHardwareDebugService', () => {
   let service: ApiHardwareDebugService;
+  let locationService: LocationService;
+  let tbClientService: ThingsboardThingsboardClientService;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
+      imports : [ThingsboardThingsboardClientModule, LocationModule],
       providers: [ApiHardwareDebugService],
     }).compile();
 
     service = module.get(ApiHardwareDebugService);
+    locationService = module.get(LocationService);
+    tbClientService = module.get(ThingsboardThingsboardClientService);
   });
 
   it('should be defined', () => {
@@ -60,113 +32,113 @@ describe('ApiHardwareDebugService', () => {
   });
 
   // Tests are preliminary, once data handling is implemented tests are to be updated
-  describe('deviceStatusProcess', () => {
+  describe('ApiHardwareDebugService', () => {
     it('should return acknowledge interface', () => {
-      const device_data: device_status = {
-        devEUI: '',
-        deviceName: '',
-        applicationID: '',
-        applicationName: '',
-        margin: 6,
-        externalPowerSource: true,
-        batteryLevelUnavailable: true,
-        batteryLevel: 6,
-        tags: {},
-      };
+      const device_data = new eventMessages.StatusEvent();
+      //Inputs
+      const input = device_data.serializeBinary()
+      
+      jest.spyOn(eventMessages.StatusEvent, 'deserializeBinary').mockImplementation((content) => {
+        expect(content).toBe(input);
+        return device_data;
+      })
   
-      expect(service.deviceStatusProcess(device_data)).toStrictEqual(result);
+      expect(service.deviceStatusProcess(input)).toStrictEqual(result);
     })
   });
 
   describe('deviceUpProcess', () => {
-    it('should return acknowledge interface', () => {
-      const device_data: device_up = {
-        devEUI: '',
-        deviceName: '',
-        applicationID: '',
-        applicationName: '',
-        frequency: BigInt(5),
-        dr: 1,
-        adr: false,
-        fCnt: BigInt(4),
-        fPort: 1,
-        tags: {},
-        data: '',
-        rxInfo: rxInfoMock,
-        txInfo: txInfoMock,
-        objectJSON: null,
-      };
+    it('should return', () => {
+      const device_data = new eventMessages.UplinkEvent();
+      const deviceToken = 'sAcQ4Qj54v9wLWi40thD';
+      const jsonData = 'test_input';
+      //Inputs
+      device_data.setObjectJson(jsonData);
+      let input = device_data.serializeBinary();
+      
 
-      expect(service.deviceUpProcess(device_data)).toEqual(result);
+
+      jest.spyOn(eventMessages.UplinkEvent, 'deserializeBinary').mockImplementation((content) => {
+        expect(content).toBe(input);
+        return device_data;
+      });
+
+      const calcLocation = jest.spyOn(locationService, 'calculateLocation').mockImplementation();
+
+      jest.spyOn(tbClientService, 'v1SendTelemetry').mockImplementation(async (thingsBoardDeviceToken, dataJSON) => {
+        expect(thingsBoardDeviceToken).toBe(deviceToken);
+        expect(dataJSON).toBe(jsonData);
+        return {
+          status: 200,
+          explanation: 'call finished',
+        }        
+      }); 
+      expect(() => { service.deviceUpProcess(input)}).toThrow('Thingsboard device ID not set')
+      expect(calcLocation).toBeCalled();
+
+      device_data.getTagsMap().set('thingsBoardDeviceToken', deviceToken);
+      input = device_data.serializeBinary()
+      expect(service.deviceUpProcess(input)).toBe(undefined);
     });
   });
 
   describe('deviceJoinProcess', () => {
     it('should return acknowledge interface', () => {
-      const device_data: device_join = {
-        devEUI: '',
-        deviceName: '',
-        applicationID: '',
-        applicationName: '',
-        devAddr: '',
-        rxInfo: rxInfoMock,
-        txInfo: txInfoMock,
-        dr: 1,
-        tags: {},
-      };
+      const device_data = new eventMessages.JoinEvent();
+        //Inputs
+      const input = device_data.serializeBinary()
+      
+      jest.spyOn(eventMessages.JoinEvent, 'deserializeBinary').mockImplementation((content) => {
+        expect(content).toBe(input);
+        return device_data;
+      })
 
-      expect(service.deviceJoinProcess(device_data)).toEqual(result);
+      expect(service.deviceJoinProcess(input)).toEqual(result);
     });
   });
 
   describe('deviceAckProcess', () => {
     it('should return acknowledge interface', () => {
-      const device_data: device_ack = {
-        devEUI: '',
-        deviceName: '',
-        applicationID: '',
-        applicationName: '',
-        rxInfo: rxInfoMock,
-        txInfo: txInfoMock,
-        acknowledged: false,
-        fCnt: BigInt(12),
-        tags: {},
-      };
+      const device_data = new eventMessages.AckEvent();
+      //Inputs
+      const input = device_data.serializeBinary()
+      
+      jest.spyOn(eventMessages.AckEvent, 'deserializeBinary').mockImplementation((content) => {
+        expect(content).toBe(input);
+        return device_data;
+      })
 
-      expect(service.deviceAckProcess(device_data)).toEqual(result);
+      expect(service.deviceAckProcess(input)).toEqual(result);
     });
   });
 
   describe('deviceErrorProcess', () => {
     it('should return acknowledge interface', () => {
-      const device_data: device_error = {
-        devEUI: '',
-        deviceName: '',
-        applicationID: '',
-        applicationName: '',
-        type: '',
-        error: '',
-        tags: {},
-      };
+      const device_data = new eventMessages.ErrorEvent();
+      //Inputs
+      const input = device_data.serializeBinary()
+      
+      jest.spyOn(eventMessages.ErrorEvent, 'deserializeBinary').mockImplementation((content) => {
+        expect(content).toBe(input);
+        return device_data;
+      })
 
-      expect(service.deviceErrorProcess(device_data)).toEqual(result);
+      expect(service.deviceErrorProcess(input)).toEqual(result);
     });
   });
 
   describe('deviceTxackProcess', () => {
     it('should return acknowledge interface', () => {
-      const device_data: device_txack = {
-        devEUI: '',
-        deviceName: '',
-        applicationID: '',
-        applicationName: '',
-        gatewayID: '',
-        fCnt: BigInt(13),
-        tags: {},
-        txInfo: txInfoMock,
-      };
+      const device_data = new eventMessages.TxAckEvent();
+      //Inputs
+      const input = device_data.serializeBinary()
       
-      expect(service.deviceTxackProcess(device_data)).toEqual(result);
+      jest.spyOn(eventMessages.TxAckEvent, 'deserializeBinary').mockImplementation((content) => {
+        expect(content).toBe(input);
+        return device_data;
+      });
+      
+      expect(service.deviceTxackProcess(input)).toEqual(result);
     });
   });
 });

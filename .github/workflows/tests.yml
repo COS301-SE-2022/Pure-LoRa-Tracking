@@ -21,7 +21,7 @@ env:
 
 jobs:
   test:
-    timeout-minutes: 10
+    timeout-minutes: 20
     runs-on: ubuntu-latest
 
     # sequence of tasks that will be executed as part of the job

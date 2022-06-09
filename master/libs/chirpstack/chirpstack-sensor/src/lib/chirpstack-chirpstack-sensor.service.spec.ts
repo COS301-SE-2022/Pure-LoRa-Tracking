@@ -130,7 +130,7 @@ describe('ChirpstackChirpstackSensorService', () => {
         });
       const data = await service.addDevice(
         authtoken,
-        'test_token',
+        '25c31a40-dfe9-11ec-bdb3-750ce7ed2451',
         sensorName,
         sensorEUI,
         deviceProfId

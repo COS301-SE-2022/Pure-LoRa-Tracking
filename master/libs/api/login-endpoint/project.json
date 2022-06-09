@@ -1,0 +1,45 @@
+{
+  "sourceRoot": "libs/api/login-endpoint/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/api/login-endpoint",
+        "tsConfig": "libs/api/login-endpoint/tsconfig.lib.json",
+        "packageJson": "libs/api/login-endpoint/package.json",
+        "main": "libs/api/login-endpoint/src/index.ts",
+        "assets": ["libs/api/login-endpoint/*.md"]
+      }
+    },
+    "publish": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "node tools/scripts/publish.mjs api-login-endpoint {args.ver} {args.tag}"
+      },
+      "dependsOn": [
+        {
+          "projects": "self",
+          "target": "build"
+        }
+      ]
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/api/login-endpoint/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/api/login-endpoint"],
+      "options": {
+        "jestConfig": "libs/api/login-endpoint/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}
