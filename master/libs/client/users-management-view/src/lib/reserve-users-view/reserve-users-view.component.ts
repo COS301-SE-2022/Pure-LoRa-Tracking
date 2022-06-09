@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {HttpClient} from "@angular/common/http"
+import {MatDialog} from '@angular/material/dialog';
 import { FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { DialogConfirmationComponent } from '@master/client/shared-ui/components-ui';
+
 export interface userInfo{
   name: string,
   surname: string,
@@ -29,7 +32,7 @@ export class ReserveUsersViewComponent implements OnInit {
   groups:Array<SingleGroup>=[];
   sourceData:Array<userInfo>=[]
 
-  constructor(private _formBuilder: FormBuilder,private http:HttpClient) {}
+  constructor(private _formBuilder: FormBuilder,private http:HttpClient,public confirmDialog: MatDialog) {}
 
   ngOnInit(): void {
     this.nameGroup = this._formBuilder.group({
@@ -102,6 +105,21 @@ export class ReserveUsersViewComponent implements OnInit {
 
 
     }
+    
+  }
+  confirmDelete(userId:string):void{
+    this.confirmDialog.open(DialogConfirmationComponent,{
+      data: {
+        title: 'Confirm Delete',
+        dialogMessage: 'Are you sure you want to delete user: '+userId+'?',
+      }
+    });
   }
 
+  confirmSwitch(userId:string):void{
+    this.confirmDialog.open(DialogConfirmationComponent,{ data: {
+      title: 'Confirm changing status.',
+      dialogMessage: 'Are you sure you want to change the status of the user: '+userId+'?',
+    }});
+  }
 }

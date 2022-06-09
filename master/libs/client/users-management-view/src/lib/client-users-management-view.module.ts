@@ -7,6 +7,8 @@ import { ClientSharedUiMaterialUiModule } from '@master/client/shared-ui/materia
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatTableModule} from '@angular/material/table';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatDialogModule } from '@angular/material/dialog';
+import { DialogConfirmationComponent } from '@master/client/shared-ui/components-ui';
 @NgModule({
   imports: [
     CommonModule,
@@ -15,11 +17,13 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatSlideToggleModule,
     MatTableModule,
     ReactiveFormsModule,
+    MatDialogModule,
     RouterModule.forChild([
        {path: '', pathMatch: 'full', component: ReserveUsersViewComponent} 
     ]),
   ],
   declarations: [ReserveUsersViewComponent],
   exports: [ReserveUsersViewComponent],
+  entryComponents:[DialogConfirmationComponent]
 })
 export class ClientUsersManagementViewModule {}

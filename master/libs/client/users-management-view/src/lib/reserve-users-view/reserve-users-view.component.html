@@ -52,7 +52,7 @@
                 Status
             </th>
             <td mat-cell *matCellDef="let element">
-                <mat-slide-toggle color="primary" [checked]="element.status" (change)="changeUserStatus(element.id)"></mat-slide-toggle>
+                <mat-slide-toggle color="primary" [checked]="element.status" (change)="confirmSwitch(element.id)"></mat-slide-toggle>
             </td>
         </ng-container>
 
@@ -61,7 +61,7 @@
                 
             </th>
             <td mat-cell *matCellDef="let element">
-                <button mat-icon-button color="warn" (click)="removeUser(element.id)"><mat-icon>delete</mat-icon></button>
+                <button mat-icon-button color="warn" (click)="confirmDelete(element.id)"><mat-icon>delete</mat-icon></button>
             </td>
         </ng-container>
 
