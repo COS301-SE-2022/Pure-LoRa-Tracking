@@ -23,7 +23,7 @@ export class ThingsboardThingsboardTelemetryService {
     let url = '';
     if (timeStart != undefined) {
       url =
-        'http://localhost:8080/api/plugins/telemetry/' +
+        'http://localhost:9090/api/plugins/telemetry/' +
         DeviceProfile +
         '/' +
         DeviceID +
@@ -35,7 +35,7 @@ export class ThingsboardThingsboardTelemetryService {
         '&keys=ts,latitude,longitude';
     } else {
       url =
-        'http://localhost:8080/api/plugins/telemetry/' +
+        'http://localhost:9090/api/plugins/telemetry/' +
         DeviceProfile +
         '/' +
         DeviceID +
@@ -85,7 +85,7 @@ export class ThingsboardThingsboardTelemetryService {
     };
     const resp = await lastValueFrom(
       this.httpService.post(
-        'http://localhost:8080/api/plugins/telemetry/' +
+        'http://localhost:9090/api/plugins/telemetry/' +
           DeviceType +
           '/' +
           EntityID +
@@ -120,7 +120,7 @@ export class ThingsboardThingsboardTelemetryService {
     };
     const resp = await lastValueFrom(
       this.httpService.post(
-        'http://localhost:8080/api/plugins/telemetry/' +
+        'http://localhost:9090/api/plugins/telemetry/' +
           DeviceType +
           '/' +
           EntityID +
@@ -152,7 +152,7 @@ export class ThingsboardThingsboardTelemetryService {
     };
     const resp = await lastValueFrom(
       this.httpService.post(
-        'http://localhost:8080/api/v1' + accessToken + '/telemetry',
+        'http://localhost:9090/api/v1' + accessToken + '/telemetry',
         {
           timestamp: +new Date(),
           DeviceData: TelemetryJSON,

@@ -7,7 +7,7 @@ import { MapApiReserveResponse } from '@master/shared-interfaces';
 export class ThingsboardThingsboardAssetService {
   constructor(private httpService: HttpService) {}
 
-  private BaseUrl = 'http://localhost:8080/api/';
+  private BaseUrl = 'http://localhost:9090/api/';
   private headersReq = {};
 
   setToken(token: string) {

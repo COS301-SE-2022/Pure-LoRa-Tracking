@@ -169,6 +169,7 @@ export class ApiMapEndpointService {
             })
         } else {
             const devices = await this.thingsboardClient.getDeviceInfos();
+            console.log(devices)
             const other=devices.data.filter(val=>val.isGateway == false);
             console.log(other);
             other.forEach((device)=> {
