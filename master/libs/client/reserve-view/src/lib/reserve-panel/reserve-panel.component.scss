@@ -2,6 +2,7 @@
 
 mat-card {
     border: 5%;
+    height: 100%;
     }
 
 mat-card-title {
@@ -56,5 +57,9 @@ mat-list-option {
 
 
 cdk-virtual-scroll-viewport {
-    height: 40vh;
+    height: 100%;
+}
+
+#card-content {
+    height:70%
 }
