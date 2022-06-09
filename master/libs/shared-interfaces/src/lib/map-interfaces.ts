@@ -43,11 +43,9 @@ export interface Device {
     deviceName: string,
     type: string,
     locationData: {
-        timeStamp: number,
-        location: {
-            latitude: string,
-            longitude: string
-        }
+        longitude: string,
+        latitude: string,
+        timeStamp: number
     }[]
 }
 
