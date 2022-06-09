@@ -5,14 +5,12 @@ import { DialogConfirmationComponent } from './dialog-confirmation.component';
 describe('DialogConfirmationComponent', () => {
   let component: DialogConfirmationComponent;
   let fixture: ComponentFixture<DialogConfirmationComponent>;
-  const dialogMock = {
-    close: () => { }
-    };
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [DialogConfirmationComponent],
       // imports:[MatDialogModule],
-      providers:[{provide: MatDialogRef, useValue: dialogMock},{ provide: MAT_DIALOG_DATA, useValue: [] },]
+      providers:[{provide: MatDialogRef, useValue: {}},{ provide: MAT_DIALOG_DATA, useValue: [] },]
 
     }).compileComponents();
   });
