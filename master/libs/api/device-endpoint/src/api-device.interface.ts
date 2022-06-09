@@ -55,3 +55,8 @@ export interface GatewayLocationAdd {
     longitude: number;
   };
 }
+
+export interface GetGatewaysInput {
+  token : string;
+  customerID: string;
+}
