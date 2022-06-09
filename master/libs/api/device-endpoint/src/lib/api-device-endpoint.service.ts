@@ -9,6 +9,7 @@ import {
   deviceResponse,
   GatewayLocationAdd,
   GatewayLocationInfo,
+  GetGatewaysInput,
   RemoveDevice,
 } from './../api-device.interface';
 import { Injectable } from '@nestjs/common';
@@ -306,7 +307,30 @@ export class ApiDeviceEndpointService {
     status: 200,
     explanation : resp.explanation
   }
-
-  
   }
+
+  ///////////////////////////////////////////////////////////
+  async getGatewaysProcess(body : GetGatewaysInput) : Promise<deviceResponse> {
+    if (body.token == undefined || body.token == '')
+      return {
+        status: 401,
+        explanation: 'no token found',
+      };
+
+    if (body.customerID == undefined)
+      return {
+        status: 400,
+        explanation: 'no customer ID found',
+      };
+
+    this.thingsboardClient.setToken(body.token);
+
+    const response = await this.thingsboardClient.getCustomerDevices(body.customerID);
+    return {
+      status : 200,
+      explanation : "call finished",
+      data : response.filter(val=>val.isGateway==true)
+    }
+  }
+
 }
