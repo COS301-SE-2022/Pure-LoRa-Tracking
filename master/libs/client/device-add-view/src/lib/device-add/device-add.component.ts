@@ -19,7 +19,7 @@ export class DeviceAddComponent implements OnInit {
   sensorGroup!:FormGroup;
   profilelist:Array<deviceOptionList>=[];
   deviceType = "";
-  token="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZlYWRtaW5AcmVzZXJ2ZS5jb20iLCJzY29wZXMiOlsiVEVOQU5UX0FETUlOIl0sInVzZXJJZCI6ImM1M2ZlNDAwLWU3NjMtMTFlYy04OTMxLTY5ODFiYTU4Yzg0YiIsImZpcnN0TmFtZSI6InJlc2VydmUiLCJsYXN0TmFtZSI6ImFkbWluIiwiZW5hYmxlZCI6dHJ1ZSwiaXNQdWJsaWMiOmZhbHNlLCJ0ZW5hbnRJZCI6ImIwMTNhOWUwLWU3NjMtMTFlYy04OTMxLTY5ODFiYTU4Yzg0YiIsImN1c3RvbWVySWQiOiIxMzgxNDAwMC0xZGQyLTExYjItODA4MC04MDgwODA4MDgwODAiLCJpc3MiOiJ0aGluZ3Nib2FyZC5pbyIsImlhdCI6MTY1NDcyNzIyMSwiZXhwIjoxNjU0NzM2MjIxfQ.pE5VBT0heYdQOd7FIviP7jRbOZHAxmKqz83QROwepGxg9-jli9L2yiLvDLBdjW49d4jhjRdEB1FrBCV3m3h4iA"
+  token="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZlYWRtaW5AcmVzZXJ2ZS5jb20iLCJzY29wZXMiOlsiVEVOQU5UX0FETUlOIl0sInVzZXJJZCI6ImQ2MzcyZTMwLWRmZTgtMTFlYy1iZGIzLTc1MGNlN2VkMjQ1MSIsImVuYWJsZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiJjZDJkZjJiMC1kZmU4LTExZWMtYmRiMy03NTBjZTdlZDI0NTEiLCJjdXN0b21lcklkIjoiMTM4MTQwMDAtMWRkMi0xMWIyLTgwODAtODA4MDgwODA4MDgwIiwiaXNzIjoidGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE2NTQ4MTI2NzUsImV4cCI6MTY1NDgyMTY3NX0.fGPFRQBHK1d1gkmU-i_9LMUfKdergPCbcTLnxbg01TvUIbY6n4SuSoC0z8YOb0_qbad3r9-byQw5H40PHF_b5g"
   constructor(private _formBuilder: FormBuilder,private http:HttpClient) {}
 
   ngOnInit(): void {
@@ -66,7 +66,7 @@ export class DeviceAddComponent implements OnInit {
       } as AddSensorDevice
       this.http.post("api/device/add/sensor",{
         token:this.token,
-        customerID:this.sensorGroup.get("profilegroup")?.value,
+        customerID:this.descriptionGroup.get("profilegroup")?.value,
         hardwareName:this.sensorGroup.get("eui")?.value,
         labelName:this.descriptionGroup.get("name")?.value,
       }).subscribe(val=>{
