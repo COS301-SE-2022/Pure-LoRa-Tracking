@@ -594,4 +594,14 @@ describe('ThingsboardThingsboardClientService', () => {
     );
     console.log(await service.AdminGetCustomers());*/
   });
+
+  //////////////////////////////////////////////////////////////////////
+
+  it('device infos', async () => {
+    /*expect(await service.loginUser('reserveuser@reserve.com', 'reserve')).toBe(
+      true
+    );
+    console.log(await service.getDeviceInfos(["2fe67850-dfe9-11ec-bdb3-750ce7ed2451"]));*/
+  });
+
 });

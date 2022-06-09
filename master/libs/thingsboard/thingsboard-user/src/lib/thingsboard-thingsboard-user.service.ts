@@ -55,7 +55,7 @@ export class ThingsboardThingsboardUserService {
         status: 400
       }
     }
-    const url = 'http://localhost:8080/api/auth/token'
+    const url = 'http://localhost:9090/api/auth/token'
     const requestHeaders = {
       'Content-type': 'application/json',
     }

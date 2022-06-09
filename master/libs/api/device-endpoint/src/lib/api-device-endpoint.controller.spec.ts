@@ -1,3 +1,5 @@
+import { ChirpstackChirpstackGatewayModule } from '@lora/chirpstack-gateway';
+import { ChirpstackChirpstackSensorModule } from '@lora/chirpstack-sensor';
 import { ThingsboardThingsboardClientModule, ThingsboardThingsboardClientService } from '@lora/thingsboard-client';
 import { Test } from '@nestjs/testing';
 import { ApiDeviceEndpointController } from './api-device-endpoint.controller';
@@ -8,7 +10,7 @@ describe('ApiDeviceEndpointController', () => {
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      imports :[ThingsboardThingsboardClientModule],
+      imports :[ThingsboardThingsboardClientModule, ChirpstackChirpstackGatewayModule, ChirpstackChirpstackSensorModule],
       providers: [ApiDeviceEndpointService],
       controllers: [ApiDeviceEndpointController],
     }).compile();

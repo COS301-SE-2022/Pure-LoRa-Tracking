@@ -15,6 +15,7 @@ export interface AddSensorDevice {
   customerID: string;
   hardwareName: string;
   labelName: string;
+  deviceProfileId: string;
   profileType?: SensorProfile;
   extraParams?: any;
 }
@@ -41,6 +42,8 @@ export interface GatewayProfile {
 export interface RemoveDevice {
   token: string;
   deviceID: string;
+  isGateway: boolean;
+  devEUI: string;
 }
 
 export interface GatewayLocationInfo {
