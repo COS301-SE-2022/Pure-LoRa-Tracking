@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import {HttpClientTestingModule} from "@angular/common/http/testing"
 import { ReserveUsersViewComponent } from './reserve-users-view.component';
 
 import {ReactiveFormsModule} from '@angular/forms';
@@ -10,7 +10,7 @@ describe('ReserveUsersViewComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ReserveUsersViewComponent],
-      imports: [ReactiveFormsModule]
+      imports: [ReactiveFormsModule,HttpClientTestingModule]
     }).compileComponents();
   });
 

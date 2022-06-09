@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-
+import {HttpClient} from "@angular/common/http"
 import { FormBuilder, FormGroup, Validators} from '@angular/forms';
 export interface userInfo{
   name: string,
@@ -8,36 +8,11 @@ export interface userInfo{
   email: string,
   status: boolean,
 }
-const usersList:userInfo[] = [
-  {
-    name: "James",
-    surname: "Johnson",
-    email: "james@gmail.com",
-    id: "15454",
-    status: true,
-  },
-  {
-    name: "Piet",
-    surname: "Piet",
-    email: "james@gmail.com",
-    id: "454545646",
-    status: false,
-  },
-  {
-    name: "Kim",
-    surname: "Can",
-    email: "kim@gmail.com",
-    id: "74657456456",
-    status: true,
-  },
-  {
-    name: "Jack",
-    surname: "Man",
-    email: "jack@gmail.com",
-    id: "45456456456",
-    status: false,
-  }
-]
+
+export interface SingleGroup{
+  name:string,
+  customerid:string
+}
 @Component({
   selector: 'master-reserve-users-view',
   templateUrl: './reserve-users-view.component.html',
@@ -46,14 +21,15 @@ const usersList:userInfo[] = [
 export class ReserveUsersViewComponent implements OnInit {
     
   tableColumns:string[] = ['id', 'surname', 'name','email',"status","delete"];
-  sourceData = usersList;
   addUser= false;
-
+  
   nameGroup!: FormGroup;
   surnameGroup!: FormGroup;
   emailGroup!: FormGroup;
+  groups:Array<SingleGroup>=[];
+  sourceData:Array<userInfo>=[]
 
-  constructor(private _formBuilder: FormBuilder) {}
+  constructor(private _formBuilder: FormBuilder,private http:HttpClient) {}
 
   ngOnInit(): void {
     this.nameGroup = this._formBuilder.group({
@@ -63,8 +39,20 @@ export class ReserveUsersViewComponent implements OnInit {
       surnameControl: ['', Validators.required],
     });
     this.emailGroup = this._formBuilder.group({
-      emailControl: ['', Validators.required],
+      emailControl: ['', [Validators.required,Validators.email]],
     });
+
+    this.http.post("api/user/admin/groups",{
+      "token":"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZlYWRtaW5AcmVzZXJ2ZS5jb20iLCJzY29wZXMiOlsiVEVOQU5UX0FETUlOIl0sInVzZXJJZCI6ImM1M2ZlNDAwLWU3NjMtMTFlYy04OTMxLTY5ODFiYTU4Yzg0YiIsImZpcnN0TmFtZSI6InJlc2VydmUiLCJsYXN0TmFtZSI6ImFkbWluIiwiZW5hYmxlZCI6dHJ1ZSwiaXNQdWJsaWMiOmZhbHNlLCJ0ZW5hbnRJZCI6ImIwMTNhOWUwLWU3NjMtMTFlYy04OTMxLTY5ODFiYTU4Yzg0YiIsImN1c3RvbWVySWQiOiIxMzgxNDAwMC0xZGQyLTExYjItODA4MC04MDgwODA4MDgwODAiLCJpc3MiOiJ0aGluZ3Nib2FyZC5pbyIsImlhdCI6MTY1NDc4OTY4MCwiZXhwIjoxNjU0Nzk4NjgwfQ.MwlaH8vmDqSTmWY9y3I8J01pDbOwMuppzoGXIXNjLWCsJYLVLltxSSXmHeVyNJxeJltBaGwpnYoxGWHd5mTW5g"
+    }).subscribe((val:any)=>{
+      console.log(val);
+      if(val.data.length>0){
+        this.groups=val.data.map((curr:any)=>({
+          name:curr.title,
+          customerid:curr.id.id
+        } as SingleGroup)) as Array<SingleGroup>
+      }
+    })
   }
 
   removeUser(userId:string): void {
@@ -76,8 +64,44 @@ export class ReserveUsersViewComponent implements OnInit {
     
   }
 
+  changeGroup(userinput:string){
+    if(userinput!=""){
+      this.http.post("api/user/admin/reserve/all",{
+        "token":"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZlYWRtaW5AcmVzZXJ2ZS5jb20iLCJzY29wZXMiOlsiVEVOQU5UX0FETUlOIl0sInVzZXJJZCI6ImM1M2ZlNDAwLWU3NjMtMTFlYy04OTMxLTY5ODFiYTU4Yzg0YiIsImZpcnN0TmFtZSI6InJlc2VydmUiLCJsYXN0TmFtZSI6ImFkbWluIiwiZW5hYmxlZCI6dHJ1ZSwiaXNQdWJsaWMiOmZhbHNlLCJ0ZW5hbnRJZCI6ImIwMTNhOWUwLWU3NjMtMTFlYy04OTMxLTY5ODFiYTU4Yzg0YiIsImN1c3RvbWVySWQiOiIxMzgxNDAwMC0xZGQyLTExYjItODA4MC04MDgwODA4MDgwODAiLCJpc3MiOiJ0aGluZ3Nib2FyZC5pbyIsImlhdCI6MTY1NDc4OTY4MCwiZXhwIjoxNjU0Nzk4NjgwfQ.MwlaH8vmDqSTmWY9y3I8J01pDbOwMuppzoGXIXNjLWCsJYLVLltxSSXmHeVyNJxeJltBaGwpnYoxGWHd5mTW5g",
+        "customerID":userinput
+      }).subscribe((val:any)=>{
+        console.log(val)
+        this.sourceData=val.data.data.map((curr:any)=>({
+          email:curr.email,
+          id:curr.customerId.id,
+          name:curr.firstName,
+          surname:curr.lastName,
+          status:curr.additionalInfo.userCredentialsEnabled
+        } as userInfo)) as Array<userInfo>
+        console.log(this.sourceData)
+      })
+    }
+  }
+  
   openUserForm(): void {
     this.addUser = !this.addUser;
+  }
+
+  // export interface userAddInput {
+  //   token: string;
+  //   customerID : string;
+  //   userInfo: {
+  //     email: string;
+  //     firstName: string;
+  //     lastName: string;
+  //   };
+  // }
+  addUserToDB(){
+    if(this.nameGroup.valid&&this.emailGroup.valid&&this.surnameGroup.valid){
+      console.log(this.emailGroup.get("emailControl")?.value)
+
+
+    }
   }
 
 }
