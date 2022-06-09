@@ -89,6 +89,7 @@ export class ApiMapEndpointService {
 
         this.thingsboardClient.setToken(content.token);
         const data = await this.thingsboardClient.getReservePerimeter();
+        console.log(data);
         return {
             code : 200,
             status : "success",
@@ -137,156 +138,156 @@ export class ApiMapEndpointService {
 
     async HistoricalProcess(content: MapApiHistorical): Promise<MapApiHistoricalResponse> {
         /* Validate Token and ReserveID */
-        // if(content.reserveID == undefined)
-        //     return {
-        //         code : 401,
-        //         status : 'failure',
-        //         explanation : "ReserveID missing"
-        //     }
+        if(content.reserveID == undefined)
+            return {
+                code : 401,
+                status : 'failure',
+                explanation : "ReserveID missing"
+            }
 
-        // if(content.token == undefined)
-        //     return {
-        //         code : 401,
-        //         status : 'failure',
-        //         explanation : "Token missing"
-        //     }  
+        if(content.token == undefined)
+            return {
+                code : 401,
+                status : 'failure',
+                explanation : "Token missing"
+            }  
 
-        // this.thingsboardClient.setToken(content.token);
-        // const awaitArray = Array<any>()
-        // content.deviceID.forEach((device)=> {
+        this.thingsboardClient.setToken(content.token);
+        const awaitArray = Array<any>()
+        content.deviceID.forEach((device)=> {
             /* await array -> telem results */
-        //     awaitArray.push(this.thingsboardClient.getDeviceHistoricalData(device, content.startTime, content.endTime))
-        // })
+            awaitArray.push(this.thingsboardClient.getDeviceHistoricalData(device, content.startTime, content.endTime))
+        })
 
-        //
-        // for (let i = 0; i < awaitArray.length; i++) {
-        //     awaitArray[i] = await awaitArray[i];
+        
+        for (let i = 0; i < awaitArray.length; i++) {
+            awaitArray[i] = await awaitArray[i];
+        }
+
+        let explanationOfCall = "";
+        let furtherExplain = "";
+
+        const data = Array<Device>();
+
+        awaitArray.forEach((item) => {
+            if(item['status']=='fail') {
+                explanationOfCall = "some devices are missing results";
+                furtherExplain = item['explanation'];
+                data.push({
+                    deviceID : item['name'],
+                    deviceName : "",
+                    type : "sensor",
+                    locationData : item['data']['data']
+                })
+            } else if(item['status']=='ok') {
+                data.push({
+                    deviceID : item['name'],
+                    deviceName : "",
+                    type : "sensor",
+                    locationData : item['data']
+                })
+            }
+        })
+
+        return {
+            code : 200,
+            status : "success",
+            explanation : explanationOfCall,
+            data: data,
+            furtherExplain : furtherExplain
+        }
+
+        // const toreturn: MapApiHistoricalResponse = {
+        //     code: 200,
+        //     status: "success",
+        //     explanation: "",
+        //     data: []
         // }
 
-        // let explanationOfCall = "";
-        // let furtherExplain = "";
-
-        // const data = Array<Device>();
-
-        // awaitArray.forEach((item) => {
-        //     if(item['status']=='fail') {
-        //         explanationOfCall = "some devices are missing results";
-        //         furtherExplain = item['explanation'];
-        //         data.push({
-        //             deviceID : item['name'],
-        //             deviceName : "",
-        //             type : "sensor",
-        //             locationData : item['data']['data']
-        //         })
-        //     } else if(item['status']=='ok') {
-        //         data.push({
-        //             deviceID : item['name'],
-        //             deviceName : "",
-        //             type : "sensor",
-        //             locationData : item['data']
-        //         })
-        //     }
-        // })
-
-        // return {
-        //     code : 200,
-        //     status : "success",
-        //     explanation : explanationOfCall,
-        //     data: data,
-        //     furtherExplain : furtherExplain
+        // if (content.deviceID.includes("sens-11")||content.deviceID.length==0) {
+        //     toreturn.data.push({
+        //         deviceID: "sens-11",
+        //         deviceName: "sens-11-test",
+        //         type: "sensor",
+        //         locationData: [
+        //             {
+        //                 timeStamp: Date.now() - 6000,
+        //                 location: {
+        //                     latitude: "-25.755514",
+        //                     longitude: "28.235419"
+        //                 }
+        //             },
+        //             {
+        //                 timeStamp: Date.now() - 6000,
+        //                 location: {
+        //                     latitude: "-25.754886",
+        //                     longitude: "28.231909"
+        //                 }
+        //             },
+        //             {
+        //                 timeStamp: Date.now() - 6000,
+        //                 location: {
+        //                     latitude: "-25.755375",
+        //                     longitude: "28.232314"
+        //                 }
+        //             }
+        //         ]
+        //     })
         // }
+        // if (content.deviceID.includes("sens-12")||content.deviceID.length==0) {
+        //     toreturn.data.push({
+        //         deviceID: "sens-12",
+        //         deviceName: "sens-12-test",
+        //         type: "sensor",
+        //         locationData: [
+        //             {
+        //                 timeStamp: Date.now() - 6000,
+        //                 location: {
+        //                     latitude: "-25.755147",
+        //                     longitude: "28.233294"
+        //                 }
+        //             },
+        //             {
+        //                 timeStamp: Date.now() - 6000,
+        //                 location: {
+        //                     latitude: "-25.756124",
+        //                     longitude: "28.233701"
+        //                 }
+        //             },
+        //             {
+        //                 timeStamp: Date.now() - 6000,
+        //                 location: {
+        //                     latitude: "-25.755704",
+        //                     longitude: "28.233245"
+        //                 }
+        //             }
+        //         ]
+        //     })
+        // }
+        // if (content.deviceID.includes("sens-13")||content.deviceID.length==0) {
+        //     toreturn.data.push({
+        //         deviceID: "sens-13",
+        //         deviceName: "sens-13-test",
+        //         type: "sensor",
+        //         locationData: [
+        //             {
+        //                 timeStamp: Date.now() - 6000,
+        //                 location: {
+        //                     latitude: "-25.755332",
+        //                     longitude: "28.232264"
+        //                 }
 
-        const toreturn: MapApiHistoricalResponse = {
-            code: 200,
-            status: "success",
-            explanation: "",
-            data: []
-        }
-
-        if (content.deviceID.includes("sens-11")||content.deviceID.length==0) {
-            toreturn.data.push({
-                deviceID: "sens-11",
-                deviceName: "sens-11-test",
-                type: "sensor",
-                locationData: [
-                    {
-                        timeStamp: Date.now() - 6000,
-                        location: {
-                            latitude: "-25.755514",
-                            longitude: "28.235419"
-                        }
-                    },
-                    {
-                        timeStamp: Date.now() - 6000,
-                        location: {
-                            latitude: "-25.754886",
-                            longitude: "28.231909"
-                        }
-                    },
-                    {
-                        timeStamp: Date.now() - 6000,
-                        location: {
-                            latitude: "-25.755375",
-                            longitude: "28.232314"
-                        }
-                    }
-                ]
-            })
-        }
-        if (content.deviceID.includes("sens-12")||content.deviceID.length==0) {
-            toreturn.data.push({
-                deviceID: "sens-12",
-                deviceName: "sens-12-test",
-                type: "sensor",
-                locationData: [
-                    {
-                        timeStamp: Date.now() - 6000,
-                        location: {
-                            latitude: "-25.755147",
-                            longitude: "28.233294"
-                        }
-                    },
-                    {
-                        timeStamp: Date.now() - 6000,
-                        location: {
-                            latitude: "-25.756124",
-                            longitude: "28.233701"
-                        }
-                    },
-                    {
-                        timeStamp: Date.now() - 6000,
-                        location: {
-                            latitude: "-25.755704",
-                            longitude: "28.233245"
-                        }
-                    }
-                ]
-            })
-        }
-        if (content.deviceID.includes("sens-13")||content.deviceID.length==0) {
-            toreturn.data.push({
-                deviceID: "sens-13",
-                deviceName: "sens-13-test",
-                type: "sensor",
-                locationData: [
-                    {
-                        timeStamp: Date.now() - 6000,
-                        location: {
-                            latitude: "-25.755332",
-                            longitude: "28.232264"
-                        }
-
-                    },
-                    {
-                        timeStamp: Date.now() - 6000,
-                        location: {
-                            latitude: "-25.756632",
-                            longitude: "28.233760"
-                        }
-                    }
-                ]
-            });
-        }
-        return toreturn;
+        //             },
+        //             {
+        //                 timeStamp: Date.now() - 6000,
+        //                 location: {
+        //                     latitude: "-25.756632",
+        //                     longitude: "28.233760"
+        //                 }
+        //             }
+        //         ]
+        //     });
+        // }
+        // return toreturn;
     }
 }
