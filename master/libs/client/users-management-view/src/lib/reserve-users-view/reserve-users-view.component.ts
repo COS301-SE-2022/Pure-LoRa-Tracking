@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {HttpClient} from "@angular/common/http"
-import {MatDialog} from '@angular/material/dialog';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import { FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { DialogConfirmationComponent } from '@master/client/shared-ui/components-ui';
 
@@ -10,6 +10,7 @@ export interface userInfo{
   id: string,
   email: string,
   status: boolean,
+  accountEnabled:boolean
 }
 
 export interface SingleGroup{
@@ -30,9 +31,12 @@ export class ReserveUsersViewComponent implements OnInit {
   surnameGroup!: FormGroup;
   emailGroup!: FormGroup;
   groups:Array<SingleGroup>=[];
-  sourceData:Array<userInfo>=[]
-
-  constructor(private _formBuilder: FormBuilder,private http:HttpClient,public confirmDialog: MatDialog) {}
+  sourceData:Array<userInfo>=[];
+  currentid="";
+  canadd=false;
+  token="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZlYWRtaW5AcmVzZXJ2ZS5jb20iLCJzY29wZXMiOlsiVEVOQU5UX0FETUlOIl0sInVzZXJJZCI6ImM1M2ZlNDAwLWU3NjMtMTFlYy04OTMxLTY5ODFiYTU4Yzg0YiIsImZpcnN0TmFtZSI6InJlc2VydmUiLCJsYXN0TmFtZSI6ImFkbWluIiwiZW5hYmxlZCI6dHJ1ZSwiaXNQdWJsaWMiOmZhbHNlLCJ0ZW5hbnRJZCI6ImIwMTNhOWUwLWU3NjMtMTFlYy04OTMxLTY5ODFiYTU4Yzg0YiIsImN1c3RvbWVySWQiOiIxMzgxNDAwMC0xZGQyLTExYjItODA4MC04MDgwODA4MDgwODAiLCJpc3MiOiJ0aGluZ3Nib2FyZC5pbyIsImlhdCI6MTY1NDgwMDc2NiwiZXhwIjoxNjU0ODA5NzY2fQ.J35LmjtyNZlydD5sYjHsThPr_Z1G-hz1PUwObeual8OMC1M9_fx3J_e1oFNh-iCXl0zblw3yJ6fcgqRwS25_Mw"
+  constructor(private _formBuilder: FormBuilder,private http:HttpClient,public confirmDialog: MatDialog) {
+  }
 
   ngOnInit(): void {
     this.nameGroup = this._formBuilder.group({
@@ -46,7 +50,7 @@ export class ReserveUsersViewComponent implements OnInit {
     });
 
     this.http.post("api/user/admin/groups",{
-      "token":"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZlYWRtaW5AcmVzZXJ2ZS5jb20iLCJzY29wZXMiOlsiVEVOQU5UX0FETUlOIl0sInVzZXJJZCI6ImM1M2ZlNDAwLWU3NjMtMTFlYy04OTMxLTY5ODFiYTU4Yzg0YiIsImZpcnN0TmFtZSI6InJlc2VydmUiLCJsYXN0TmFtZSI6ImFkbWluIiwiZW5hYmxlZCI6dHJ1ZSwiaXNQdWJsaWMiOmZhbHNlLCJ0ZW5hbnRJZCI6ImIwMTNhOWUwLWU3NjMtMTFlYy04OTMxLTY5ODFiYTU4Yzg0YiIsImN1c3RvbWVySWQiOiIxMzgxNDAwMC0xZGQyLTExYjItODA4MC04MDgwODA4MDgwODAiLCJpc3MiOiJ0aGluZ3Nib2FyZC5pbyIsImlhdCI6MTY1NDc4OTY4MCwiZXhwIjoxNjU0Nzk4NjgwfQ.MwlaH8vmDqSTmWY9y3I8J01pDbOwMuppzoGXIXNjLWCsJYLVLltxSSXmHeVyNJxeJltBaGwpnYoxGWHd5mTW5g"
+      "token":this.token
     }).subscribe((val:any)=>{
       console.log(val);
       if(val.data.length>0){
@@ -70,18 +74,20 @@ export class ReserveUsersViewComponent implements OnInit {
   changeGroup(userinput:string){
     if(userinput!=""){
       this.http.post("api/user/admin/reserve/all",{
-        "token":"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZlYWRtaW5AcmVzZXJ2ZS5jb20iLCJzY29wZXMiOlsiVEVOQU5UX0FETUlOIl0sInVzZXJJZCI6ImM1M2ZlNDAwLWU3NjMtMTFlYy04OTMxLTY5ODFiYTU4Yzg0YiIsImZpcnN0TmFtZSI6InJlc2VydmUiLCJsYXN0TmFtZSI6ImFkbWluIiwiZW5hYmxlZCI6dHJ1ZSwiaXNQdWJsaWMiOmZhbHNlLCJ0ZW5hbnRJZCI6ImIwMTNhOWUwLWU3NjMtMTFlYy04OTMxLTY5ODFiYTU4Yzg0YiIsImN1c3RvbWVySWQiOiIxMzgxNDAwMC0xZGQyLTExYjItODA4MC04MDgwODA4MDgwODAiLCJpc3MiOiJ0aGluZ3Nib2FyZC5pbyIsImlhdCI6MTY1NDc4OTY4MCwiZXhwIjoxNjU0Nzk4NjgwfQ.MwlaH8vmDqSTmWY9y3I8J01pDbOwMuppzoGXIXNjLWCsJYLVLltxSSXmHeVyNJxeJltBaGwpnYoxGWHd5mTW5g",
+        "token":this.token,
         "customerID":userinput
       }).subscribe((val:any)=>{
         console.log(val)
         this.sourceData=val.data.data.map((curr:any)=>({
           email:curr.email,
-          id:curr.customerId.id,
+          id:curr.id.id,
           name:curr.firstName,
           surname:curr.lastName,
-          status:curr.additionalInfo.userCredentialsEnabled
+          status:curr.additionalInfo!=undefined?curr.additionalInfo.userCredentialsEnabled:false,
+          accountEnabled:curr.additionalInfo!=undefined
         } as userInfo)) as Array<userInfo>
-        console.log(this.sourceData)
+        this.currentid=userinput;
+        this.canadd=true;
       })
     }
   }
@@ -102,7 +108,17 @@ export class ReserveUsersViewComponent implements OnInit {
   addUserToDB(){
     if(this.nameGroup.valid&&this.emailGroup.valid&&this.surnameGroup.valid){
       console.log(this.emailGroup.get("emailControl")?.value)
-
+      this.http.post("api/user/admin/add",{
+        token:this.token,
+        customerID:this.currentid,
+        userInfo:{
+          email:this.emailGroup.get("emailControl")?.value,
+          firstName:this.nameGroup.get("nameControl")?.value,
+          lastName:this.surnameGroup.get("surnameControl")?.value
+        }
+      }).subscribe((curr)=>{
+        console.log(curr);
+      })
 
     }
     
@@ -112,14 +128,42 @@ export class ReserveUsersViewComponent implements OnInit {
       data: {
         title: 'Confirm Delete',
         dialogMessage: 'Are you sure you want to delete user: '+userId+'?',
-      }
+      },
+
     });
+  
+    this.http.post("api/user/admin/remove",{
+      token:this.token,
+      userID:userId
+    }).subscribe(val=>{
+      console.log(val);
+    })
+
   }
 
-  confirmSwitch(userId:string):void{
+  confirmSwitch(userId:string,currval:boolean):void{
     this.confirmDialog.open(DialogConfirmationComponent,{ data: {
       title: 'Confirm changing status.',
       dialogMessage: 'Are you sure you want to change the status of the user: '+userId+'?',
     }});
+
+    if(!currval){
+      this.http.post('api/user/admin/disable',{
+        token:this.token,
+        userID:userId
+      }).subscribe(val=>{
+        console.log(val);
+      });
+    }else {
+      this.http.post('api/user/admin/enable',{
+        token:this.token,
+        userID:userId
+      }).subscribe(val=>{
+        console.log(val);
+      });
+    }
+
   }
+
+
 }

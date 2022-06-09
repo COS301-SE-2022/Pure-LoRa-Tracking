@@ -326,6 +326,7 @@ export class ThingsboardThingsboardUserService {
         }
       )
     ).catch((error) => {
+      console.log(error);
       if (error.response == undefined) return null;
       return {
         status: error.response.status,
