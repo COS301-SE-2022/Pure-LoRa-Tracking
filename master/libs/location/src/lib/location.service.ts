@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common';
+import { ThingsboardThingsboardClientService } from '@lora/thingsboard-client';
 import { UplinkRXInfo } from '@chirpstack/chirpstack-api/gw/gw_pb';
 
 @Injectable()
 export class LocationService {
+    constructor (private tbClient: ThingsboardThingsboardClientService) {}
 
-    calculateLocation(gatewayData: UplinkRXInfo[]) {
+    calculateLocation(gatewayData: UplinkRXInfo[], thingsBoardDeviceToken: string) {
         
         
         // function degreesToRad(degrees: number) {
@@ -86,8 +88,8 @@ export class LocationService {
         console.log(y);
         console.log(y_);
 
-        
-
+        const location = { Latitude: x, Longitude: y };
+        this.tbClient.v1SendTelemetry(thingsBoardDeviceToken, location);
 
     }   
 
