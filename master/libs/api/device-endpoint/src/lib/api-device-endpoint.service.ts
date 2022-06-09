@@ -395,7 +395,7 @@ export class ApiDeviceEndpointService {
       explanation : resp.explanation
     }
   }
-  }
+  
 
   ///////////////////////////////////////////////////////////
   async getGatewaysProcess(body : GetGatewaysInput) : Promise<deviceResponse> {
