@@ -427,7 +427,7 @@ export class ApiDeviceEndpointService {
     return {
       status : 200,
       explanation : "call finished",
-      data : this.chirpstackSensor.getProfiles(process.env.CHIRPSTACK_API)
+      data : await this.chirpstackSensor.getProfiles(process.env.CHIRPSTACK_API)
       
     }
   }
