@@ -2,8 +2,8 @@ import {
   thingsboardResponse,
   ThingsboardThingsboardClientService,
 } from '@lora/thingsboard-client';
-import { ChirpstackChirpstackGatewayService } from '@chirpstack/gateway';
-import { ChirpstackChirpstackSensorService } from '@chirpstack/sensor';
+import { ChirpstackChirpstackGatewayService } from '@lora/chirpstack-gateway';
+import { ChirpstackChirpstackSensorService } from '@lora/chirpstack-sensor';
 
 import {
   AddGatewayDevice,

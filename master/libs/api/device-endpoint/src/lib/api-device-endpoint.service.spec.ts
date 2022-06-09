@@ -8,8 +8,8 @@ import { ApiDeviceEndpointService } from './api-device-endpoint.service';
 import { AxiosResponse } from 'axios';
 import { of } from 'rxjs';
 import { deviceInfos } from '@master/shared-interfaces';
-import { ChirpstackChirpstackGatewayModule } from '@chirpstack/gateway';
-import { ChirpstackChirpstackSensorModule } from '@chirpstack/sensor';
+import { ChirpstackChirpstackGatewayModule } from '@lora/chirpstack-gateway';
+import { ChirpstackChirpstackSensorModule } from '@lora/chirpstack-sensor';
 
 const describeLive = process.env.PURELORABUILD == 'DEV' ? describe : describe.skip;
 

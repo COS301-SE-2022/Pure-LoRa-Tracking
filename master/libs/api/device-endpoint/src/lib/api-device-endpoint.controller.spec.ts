@@ -1,5 +1,5 @@
-import { ChirpstackChirpstackGatewayModule } from '@chirpstack/gateway';
-import { ChirpstackChirpstackSensorModule } from '@chirpstack/sensor';
+import { ChirpstackChirpstackGatewayModule } from '@lora/chirpstack-gateway';
+import { ChirpstackChirpstackSensorModule } from '@lora/chirpstack-sensor';
 import { ThingsboardThingsboardClientModule, ThingsboardThingsboardClientService } from '@lora/thingsboard-client';
 import { Test } from '@nestjs/testing';
 import { ApiDeviceEndpointController } from './api-device-endpoint.controller';
