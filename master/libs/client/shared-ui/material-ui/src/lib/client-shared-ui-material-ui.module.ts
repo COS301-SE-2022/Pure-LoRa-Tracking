@@ -14,6 +14,8 @@ import {MatListModule} from '@angular/material/list';
 import {ScrollingModule} from '@angular/cdk/scrolling';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {MatDatepickerModule} from "@angular/material/datepicker";
+import { MatNativeDateModule } from '@angular/material/core';
 
 export const clientSharedUiMaterialUiRoutes: Route[] = [];
 
@@ -30,7 +32,9 @@ const materialComponentModules = [
   MatListModule,
   ScrollingModule,
   MatCheckboxModule,
-  MatButtonToggleModule
+  MatButtonToggleModule,
+  MatDatepickerModule,
+  MatNativeDateModule
 ];
 
 @NgModule({
