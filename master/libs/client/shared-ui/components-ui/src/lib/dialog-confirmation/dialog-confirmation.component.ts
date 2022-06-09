@@ -21,6 +21,7 @@ export class DialogConfirmationComponent implements OnInit {
   constructor(public dialogRefr: MatDialogRef<DialogConfirmationComponent>,@Inject(MAT_DIALOG_DATA) public data: DialogData) {
     this.title = data.title;
     this.message = data.dialogMessage;
+    this.dialogRefr.backdropClick().subscribe(()=> dialogRefr.close(false));
   }
 
 
