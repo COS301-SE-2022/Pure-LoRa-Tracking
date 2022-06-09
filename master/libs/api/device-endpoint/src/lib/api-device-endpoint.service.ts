@@ -397,8 +397,12 @@ export class ApiDeviceEndpointService {
 
   ///////////////////////////////////////////////////////////////////////////
   // TODO: Implement endpoint
-  async processGetDeviceProfiles(): Promise<DeviceProfile[]> {
-    return this.chirpstackSensor.getProfiles(process.env.CHIRPSTACK_API)
+  async processGetDeviceProfiles(): Promise<deviceResponse> {
+    return {
+      status : 200,
+      explanation : "call finished",
+      data : this.chirpstackSensor.getProfiles(process.env.CHIRPSTACK_API)
+    }
   }
 
 }

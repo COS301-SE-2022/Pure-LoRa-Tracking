@@ -30,4 +30,7 @@ export class ApiDeviceEndpointController {
   @Post("gateway/info/location/add")
   async PostGatewayAdd(@Body() content : GatewayLocationAdd) : Promise<deviceResponse> {return this.apiDeviceEndpointService.processGatewaySetLocation(content);}
 
+  @Post("gateway/info/profiles")
+  async PostGatewayProfiles() : Promise<deviceResponse> {return this.apiDeviceEndpointService.processGetDeviceProfiles();}
+
 }
