@@ -43,7 +43,7 @@ export class ChirpstackChirpstackGatewayService {
 
   async addGateway(
     authtoken: string,
-    thingsBoardDeviceId: string,
+    thingsBoardDeviceToken: string,
     gatewayName: string,
     gatewayId: string,
     gatewayDesc = 'General gateway',
@@ -68,7 +68,7 @@ export class ChirpstackChirpstackGatewayService {
     gateway.setNetworkServerId(networkServer);
 
     const gatewayTags = gateway.getTagsMap();
-    gatewayTags.set('thingsBoardDeviceId', thingsBoardDeviceId);
+    gatewayTags.set('thingsBoardDeviceToken', thingsBoardDeviceToken);
 
     createGatewayRequest.setGateway(gateway);
 

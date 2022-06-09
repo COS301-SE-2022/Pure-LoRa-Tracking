@@ -15,6 +15,7 @@ export interface AddSensorDevice {
   customerID: string;
   hardwareName: string;
   labelName: string;
+  deviceProfileId: string;
   profileType?: SensorProfile;
   extraParams?: any;
 }

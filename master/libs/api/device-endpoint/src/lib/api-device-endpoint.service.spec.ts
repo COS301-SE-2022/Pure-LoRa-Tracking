@@ -272,9 +272,6 @@ describe('ApiDeviceEndpointService', () => {
     jest
       .spyOn(httpService, 'post')
       .mockImplementationOnce(() => of(fourthResult));
-    jest
-      .spyOn(httpService, 'post')
-      .mockImplementationOnce(() => of(fourthResult));
 
     const response = await service.processDeviceAddsensor(bodyData);
     console.log(response);

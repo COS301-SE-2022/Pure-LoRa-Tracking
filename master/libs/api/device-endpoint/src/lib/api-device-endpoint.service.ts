@@ -2,6 +2,9 @@ import {
   thingsboardResponse,
   ThingsboardThingsboardClientService,
 } from '@lora/thingsboard-client';
+import { ChirpstackChirpstackGatewayService } from '@chirpstack/gateway';
+import { ChirpstackChirpstackSensorService } from '@chirpstack/sensor';
+
 import {
   AddGatewayDevice,
   AddSensorDevice,
@@ -15,7 +18,11 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class ApiDeviceEndpointService {
-  constructor(private thingsboardClient: ThingsboardThingsboardClientService) {}
+  constructor(
+    private thingsboardClient: ThingsboardThingsboardClientService,
+    private chirpstackGateway: ChirpstackChirpstackGatewayService,
+    private chirpstackSensor: ChirpstackChirpstackSensorService,
+  ) {}
 
   ///////////////////////////////////////////////////////////////////////////
 
@@ -69,7 +76,13 @@ export class ApiDeviceEndpointService {
         status: 400,
         explanation: 'no label name found',
       };
-
+    
+    if (body.deviceProfileId == undefined)
+      return {
+        status: 400,
+        explanation: 'no device Profile ID name found',
+      };
+    
     this.thingsboardClient.setToken(body.token);
     const resp = await this.thingsboardClient.addDeviceToReserve(
       body.customerID,
@@ -87,6 +100,29 @@ export class ApiDeviceEndpointService {
         status: 400,
         explanation: resp.explanation,
       };
+
+    if (resp.explanation == undefined) {
+      /* delete the device as we do not want a half install */
+      this.thingsboardClient.RemoveDeviceFromReserve(resp.data);
+      return {
+        status : 400,
+        explanation : "access token failure"
+      }
+    }
+    
+    const chirpPromise = await this.chirpstackSensor.addDevice(
+      process.env.CHIRPSTACK_API,
+      resp.explanation,
+      body.labelName,
+      body.hardwareName,
+      body.deviceProfileId
+    ).catch((err) => {
+      this.thingsboardClient.RemoveDeviceFromReserve(resp.data);
+      return {
+        status : 400,
+        explanation : "access token failure"
+      }
+    });
 
     return {
       status: 200,
