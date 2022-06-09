@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-
+import {MatDialog} from '@angular/material/dialog';
 import { FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { DialogConfirmationComponent } from '@master/client/shared-ui/components-ui';
+
 export interface userInfo{
   name: string,
   surname: string,
@@ -53,7 +55,7 @@ export class ReserveUsersViewComponent implements OnInit {
   surnameGroup!: FormGroup;
   emailGroup!: FormGroup;
 
-  constructor(private _formBuilder: FormBuilder) {}
+  constructor(private _formBuilder: FormBuilder, public confirmDialog: MatDialog) {}
 
   ngOnInit(): void {
     this.nameGroup = this._formBuilder.group({
@@ -78,6 +80,22 @@ export class ReserveUsersViewComponent implements OnInit {
 
   openUserForm(): void {
     this.addUser = !this.addUser;
+  }
+
+  confirmDelete(userId:string):void{
+    this.confirmDialog.open(DialogConfirmationComponent,{
+      data: {
+        title: 'Confirm Delete',
+        dialogMessage: 'Are you sure you want to delete user: '+userId+'?',
+      }
+    });
+  }
+
+  confirmSwitch(userId:string):void{
+    this.confirmDialog.open(DialogConfirmationComponent,{ data: {
+      title: 'Confirm changing status.',
+      dialogMessage: 'Are you sure you want to change the status of the user: '+userId+'?',
+    }});
   }
 
 }
