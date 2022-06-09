@@ -7,6 +7,7 @@ import {
   userInfoInput,
   userRemoveInput,
   userResponse,
+  usersInfoInput,
 } from '../api-user.interface';
 
 import { ThingsboardThingsboardClientService } from '@lora/thingsboard-client';
@@ -205,5 +206,30 @@ export class ApiUserEndpointService {
     }
 
     
+  }
+
+  async AdminAllReserveUsersProcess(content: usersInfoInput) : Promise<userResponse> {
+    if (content.token == undefined || content.token == '')
+      return {
+        status: 401,
+        explain: 'token missing',
+      };
+    if (content.customerID == undefined || content.customerID == '')
+      return {
+        status: 400,
+        explain: 'customerID not defined',
+      };
+
+    this.thingsboardClient.setToken(content.token);
+
+    const response = await this.thingsboardClient.AdminGetUsersFromReserve(content.customerID);
+    if(response.status == "fail")
+    return {status:400, explain:"Server failed with: "+response.explanation}
+
+    return {
+      status:200,
+      explain:"ok",
+      data:response.data
+    }
   }
 }

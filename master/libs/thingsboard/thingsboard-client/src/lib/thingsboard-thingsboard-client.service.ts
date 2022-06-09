@@ -650,6 +650,36 @@ export class ThingsboardThingsboardClientService {
 
   }
 
+  ///////////////////////////////////////////////////////////////////////
+  async AdminGetUsersFromReserve (customerID: string) {
+    const login = await this.userService.getUserID(this.token);
+    console.log(login);
+    if (login.code != 200)
+      return {
+        status: 'fail',
+        explanation: 'token invalid',
+      };
+
+    if (login.type != 'admin')
+      return {
+        status: 'fail',
+        explanation: 'user not admin',
+      };
+
+    const resp = await this.userService.GetUsersFromReserve(this.token, customerID);
+    if(resp.status != 200)
+    return {
+      status: 'fail',
+      explanation: resp.status.toString(),
+    };
+
+    return {
+      status : "ok",
+      explanation : "call finished",
+      data: resp.data
+    }
+  } 
+
 }
 
 /* data is required to be any due to the many possible response data types */

@@ -37,3 +37,8 @@ export interface userResponse {
   furtherExplain?: string;
   data?: any;
 }
+
+export interface usersInfoInput {
+  token : string;
+  customerID : string;
+}
