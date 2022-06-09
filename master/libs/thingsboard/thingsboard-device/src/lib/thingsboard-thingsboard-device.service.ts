@@ -156,6 +156,7 @@ export class ThingsboardThingsboardDeviceService {
       if (error.response.status == 400) {
         return { status: 400 };
       }
+      return { status: 400 };
     });
     return resp.status == 200;
   }

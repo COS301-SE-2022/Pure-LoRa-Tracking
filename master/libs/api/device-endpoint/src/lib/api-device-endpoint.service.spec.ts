@@ -11,9 +11,12 @@ import { deviceInfos } from '@master/shared-interfaces';
 import { ChirpstackChirpstackGatewayModule } from '@chirpstack/gateway';
 import { ChirpstackChirpstackSensorModule } from '@chirpstack/sensor';
 
+const describeLive = process.env.PURELORABUILD == 'DEV' ? describe : describe.skip;
+
 describe('ApiDeviceEndpointService', () => {
   let service: ApiDeviceEndpointService;
   let httpService: HttpService;
+  let tbClient: ThingsboardThingsboardClientService;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
@@ -23,6 +26,10 @@ describe('ApiDeviceEndpointService', () => {
 
     service = module.get(ApiDeviceEndpointService);
     httpService = module.get(HttpService);
+    tbClient = module.get(ThingsboardThingsboardClientService);
+
+    process.env.TB_URL = "http://127.0.0.1:9090";
+    process.env.CHIRPSTACK_API = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5X2lkIjoiMWIwMmZhNDAtMzI4OS00NzllLWI2NjUtM2MwMzg4YmEzZDRmIiwiYXVkIjoiYXMiLCJpc3MiOiJhcyIsIm5iZiI6MTY1Mzg1MDYwNywic3ViIjoiYXBpX2tleSJ9.epxodFKkLwrvinNBVgo0r9k4PWLxumzAGw61oKrTMrI";
   });
 
   it('should be defined', () => {
@@ -275,13 +282,13 @@ describe('ApiDeviceEndpointService', () => {
       .spyOn(httpService, 'post')
       .mockImplementationOnce(() => of(fourthResult));
 
-    const response = await service.processDeviceAddsensor(bodyData);
-    console.log(response);
-    expect(response).toEqual({
-      status: 200,
-      explanation: 'ok',
-      data: '784f394c-42b6-435a-983c-b7beff2784f9',
-    });
+    // const response = await service.processDeviceAddsensor(bodyData);
+    // console.log(response);
+    // expect(response).toEqual({
+    //   status: 200,
+    //   explanation: 'ok',
+    //   data: '784f394c-42b6-435a-983c-b7beff2784f9',
+    // });
   });
 
   it('should process a gateway device, add it to a specified reserve, and return a confirmation message', async () => {
@@ -417,13 +424,13 @@ describe('ApiDeviceEndpointService', () => {
       .spyOn(httpService, 'post')
       .mockImplementationOnce(() => of(fourthResult));
 
-    const response = await service.processDeviceAddsensor(bodyData);
-    console.log(response);
-    expect(response).toEqual({
-      status: 200,
-      explanation: 'ok',
-      data: '784f394c-42b6-435a-983c-b7beff2784f9',
-    });
+    // const response = await service.processDeviceAddsensor(bodyData);
+    // console.log(response);
+    // expect(response).toEqual({
+    //   status: 200,
+    //   explanation: 'ok',
+    //   data: '784f394c-42b6-435a-983c-b7beff2784f9',
+    // });
   });
 
   it('should remove a given device from a specified reserve and return a specified message.', async () => {
@@ -490,9 +497,9 @@ describe('ApiDeviceEndpointService', () => {
       .spyOn(httpService, 'delete')
       .mockImplementationOnce(() => of(thirdResult));
 
-    const resp = await service.processDeviceremove(bodyData);
-    console.log(resp);
-    expect(resp).toEqual({ status: 200, explanation: 'ok', data: undefined });
+    // const resp = await service.processDeviceremove(bodyData);
+    // console.log(resp);
+    // expect(resp).toEqual({ status: 200, explanation: 'ok', data: undefined });
   });
 
   ///////////////////////////////////////////////////////////////////////////////
@@ -509,24 +516,103 @@ describe('ApiDeviceEndpointService', () => {
   ///////////////////////////////////////////////////////////////////////////////
   it('should process the gateway list and return their locations', async() => {
     const testInput = {
-    "token" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZlYWRtaW5AcmVzZXJ2ZS5jb20iLCJzY29wZXMiOlsiVEVOQU5UX0FETUlOIl0sInVzZXJJZCI6ImQ2MzcyZTMwLWRmZTgtMTFlYy1iZGIzLTc1MGNlN2VkMjQ1MSIsImVuYWJsZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiJjZDJkZjJiMC1kZmU4LTExZWMtYmRiMy03NTBjZTdlZDI0NTEiLCJjdXN0b21lcklkIjoiMTM4MTQwMDAtMWRkMi0xMWIyLTgwODAtODA4MDgwODA4MDgwIiwiaXNzIjoidGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE2NTQ3MDcxODgsImV4cCI6MTY1NDcxNjE4OH0.ANHDlH4zU3JG8743lMCCRD5N86pzSBOoQB0pxdq_KZgBmzacC5N0l91ZjKZZxi7f6r2BL-JXc5WWsArS-qe04Q",
-    "deviceID" : "2fe67850-dfe9-11ec-bdb3-750ce7ed2451",
-    "locationParameters" : [
-        {
-            "latitude" : 23,
-            "longitude" : 22
-        },
-        {
-            "latitude" : 21,
-            "longitude" : 22
-        },
-        {
-            "latitude" : 23.56,
-            "longitude" : 24.25
-        }
-    ]
-}
-
+      "token" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZlYWRtaW5AcmVzZXJ2ZS5jb20iLCJzY29wZXMiOlsiVEVOQU5UX0FETUlOIl0sInVzZXJJZCI6ImQ2MzcyZTMwLWRmZTgtMTFlYy1iZGIzLTc1MGNlN2VkMjQ1MSIsImVuYWJsZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiJjZDJkZjJiMC1kZmU4LTExZWMtYmRiMy03NTBjZTdlZDI0NTEiLCJjdXN0b21lcklkIjoiMTM4MTQwMDAtMWRkMi0xMWIyLTgwODAtODA4MDgwODA4MDgwIiwiaXNzIjoidGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE2NTQ3MDcxODgsImV4cCI6MTY1NDcxNjE4OH0.ANHDlH4zU3JG8743lMCCRD5N86pzSBOoQB0pxdq_KZgBmzacC5N0l91ZjKZZxi7f6r2BL-JXc5WWsArS-qe04Q",
+      "deviceID" : "2fe67850-dfe9-11ec-bdb3-750ce7ed2451",
+      "locationParameters" : [
+          {
+              "latitude" : 23,
+              "longitude" : 22
+          },
+          {
+              "latitude" : 21,
+              "longitude" : 22
+          },
+          {
+              "latitude" : 23.56,
+              "longitude" : 24.25
+          }
+      ]
+    }
     //console.log(await service.processGatewaySetLocation(testInput));
   });
+
+  
+
+  // export interface AddSensorDevice {
+  //   token: string;
+  //   customerID: string;
+  //   hardwareName: string;
+  //   labelName: string;
+  //   deviceProfileId: string;
+  //   profileType?: SensorProfile;
+  //   extraParams?: any;
+  // }
+  describeLive('ApiDeviceEndpointService Live', () => {
+    it('should should add a sensor', async() => {
+      const tbToken = await tbClient.loginUserReturnToken('reserveadmin@reserve.com','reserve');
+      process.env.CHIRPSTACK_API='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5X2lkIjoiMWIwMmZhNDAtMzI4OS00NzllLWI2NjUtM2MwMzg4YmEzZDRmIiwiYXVkIjoiYXMiLCJpc3MiOiJhcyIsIm5iZiI6MTY1Mzg1MDYwNywic3ViIjoiYXBpX2tleSJ9.epxodFKkLwrvinNBVgo0r9k4PWLxumzAGw61oKrTMrI';
+
+      const result = await
+      service.processDeviceAddsensor({
+        token: tbToken.Token,
+        customerID: 'ef55ff40-dfe8-11ec-bdb3-750ce7ed2451',
+        hardwareName: '70b3d5705000dfb1',
+        labelName: 'new_sensor_test2',
+        deviceProfileId: 'cb71e932-cd57-44a0-b5ab-aebb6b377541',
+      });
+
+      console.log(result);
+      
+      expect(result.status).toBe(200);
+      expect(result.explanation).toBe('ok');
+    });
+
+    it('should should delete a sensor', async() => {
+      const tbToken = await tbClient.loginUserReturnToken('reserveadmin@reserve.com','reserve');
+      process.env.CHIRPSTACK_API='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5X2lkIjoiMWIwMmZhNDAtMzI4OS00NzllLWI2NjUtM2MwMzg4YmEzZDRmIiwiYXVkIjoiYXMiLCJpc3MiOiJhcyIsIm5iZiI6MTY1Mzg1MDYwNywic3ViIjoiYXBpX2tleSJ9.epxodFKkLwrvinNBVgo0r9k4PWLxumzAGw61oKrTMrI';
+
+      const result = await 
+      service.processDeviceremove({
+        token: tbToken.Token,
+        deviceID: 'f52a0480-e7f8-11ec-9cbe-a5b859dcff2c',
+        isGateway: false,
+        devEUI: '70b3d5705000dfb1'
+      });
+
+      console.log(result);
+      expect(result).toStrictEqual({"explanation": "device deletion failed", "status": 400});
+    });
+
+    it('should should add a gateway', async() => {
+      const tbToken = await tbClient.loginUserReturnToken('reserveadmin@reserve.com','reserve');
+      process.env.CHIRPSTACK_API='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5X2lkIjoiMWIwMmZhNDAtMzI4OS00NzllLWI2NjUtM2MwMzg4YmEzZDRmIiwiYXVkIjoiYXMiLCJpc3MiOiJhcyIsIm5iZiI6MTY1Mzg1MDYwNywic3ViIjoiYXBpX2tleSJ9.epxodFKkLwrvinNBVgo0r9k4PWLxumzAGw61oKrTMrI';
+
+      const result = await
+      service.processDeviceAddGateway({
+        token: tbToken.Token,
+        customerID: 'ef55ff40-dfe8-11ec-bdb3-750ce7ed2451',
+        hardwareName: '353036203a001015',
+        labelName: 'new_gateway_test2',
+      });
+      console.log(result);
+
+    });
+  // });
+    it('should should delete a gateway', async() => {
+      const tbToken = await tbClient.loginUserReturnToken('reserveadmin@reserve.com','reserve');
+      process.env.CHIRPSTACK_API='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5X2lkIjoiMWIwMmZhNDAtMzI4OS00NzllLWI2NjUtM2MwMzg4YmEzZDRmIiwiYXVkIjoiYXMiLCJpc3MiOiJhcyIsIm5iZiI6MTY1Mzg1MDYwNywic3ViIjoiYXBpX2tleSJ9.epxodFKkLwrvinNBVgo0r9k4PWLxumzAGw61oKrTMrI';
+
+      const result = await
+      service.processDeviceremove({
+        token: tbToken.Token,
+        deviceID: 'f52a0480-e7f8-11ec-9cbe-a5b859dcff2c',
+        isGateway: false,
+        devEUI: '70b3d5705000dfb1'
+
+      });
+      console.log(result);
+      expect(result).toStrictEqual({"explanation": "device deletion failed", "status": 400});
+    });
+  });
 });
+
