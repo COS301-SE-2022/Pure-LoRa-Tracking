@@ -210,6 +210,7 @@ export class ApiDeviceEndpointService {
 
   ///////////////////////////////////////////////////////////////////////////
 
+
   async processDeviceremove(body: RemoveDevice): Promise<deviceResponse> {
     if (body.token == undefined || body.token == '')
       return {
@@ -225,6 +226,9 @@ export class ApiDeviceEndpointService {
 
     this.thingsboardClient.setToken(body.token);
 
+    /* Get ID and whether the device is a gateway or not */
+    const deviceInfo = await this.thingsboardClient.getDeviceInfos([body.deviceID]);
+
     const resp = await this.thingsboardClient.RemoveDeviceFromReserve(
       body.deviceID
     );
@@ -234,8 +238,8 @@ export class ApiDeviceEndpointService {
         explanation: resp.explanation,
       };
 
-    const isGateway = false;
-    const devID = '70b3d5000000000b';
+    const isGateway = deviceInfo['data'][0]["isGateway"];
+    const devID = deviceInfo['data'][0]["deviceName"];
     if (isGateway) {
       await this.chirpstackGateway.removeGateway(
         process.env.CHIRPSTACK_API,
