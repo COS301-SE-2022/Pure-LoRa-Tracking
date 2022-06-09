@@ -5,7 +5,7 @@ import { lastValueFrom } from 'rxjs';
 @Injectable()
 export class ThingsboardThingsboardDeviceService {
   private token: string;
-  private baseURL = 'http://localhost:8080/api/';
+  private baseURL = 'http://localhost:9090/api/';
   constructor(private httpService: HttpService) {
     this.token = '';
   }
@@ -202,7 +202,7 @@ export class ThingsboardThingsboardDeviceService {
   //////////////////////////////////////////////////////////////////////////
   async setGatewayLocation(
     deviceID: string,
-    locationParamters: { latitude: number; longitude: number }[]
+    locationParamters: { latitude: number; longitude: number }
   ): Promise<{ status: number }> {
     if (this.token == '') return {
       status : 401
