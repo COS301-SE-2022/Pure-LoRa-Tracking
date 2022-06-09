@@ -10,7 +10,7 @@ export class ThingsboardThingsboardUserService {
 
   async login(name: string, password: string): Promise<AxiosResponse> {
     return await firstValueFrom(
-      this.httpService.post('http://localhost:8080/api/auth/login', {
+      this.httpService.post('http://localhost:9090/api/auth/login', {
         username: name,
         password: password,
       })
@@ -34,7 +34,7 @@ export class ThingsboardThingsboardUserService {
     };
     return await firstValueFrom(
       this.httpService.post(
-        'http://localhost:8080/api/auth/logout',
+        'http://localhost:9090/api/auth/logout',
         {},
         { headers: headersReq }
       )
@@ -55,7 +55,7 @@ export class ThingsboardThingsboardUserService {
         status: 400
       }
     }
-    const url = 'http://localhost:8080/api/auth/token'
+    const url = 'http://localhost:9090/api/auth/token'
     const requestHeaders = {
       'Content-type': 'application/json',
     }
@@ -86,7 +86,7 @@ export class ThingsboardThingsboardUserService {
       Authorization: 'Bearer ' + token,
     };
     return await firstValueFrom(
-      this.httpService.get('http://localhost:8080/api/auth/user', {
+      this.httpService.get('http://localhost:9090/api/auth/user', {
         headers: headersReq,
       })
     ).catch((error) => {
@@ -113,7 +113,14 @@ export class ThingsboardThingsboardUserService {
       };
     }
 
-    if (resp.data['authority'] == 'TENANT_ADMIN') {
+    if (resp.data['authority'] == 'SYS_ADMIN') {
+      return {
+        code: 200,
+        id: resp.data['tenantId']['id'],
+        type: 'sysAdmin',
+      } 
+    }
+    else if (resp.data['authority'] == 'TENANT_ADMIN') {
       return {
         code: 200,
         id: resp.data['tenantId']['id'],
@@ -137,7 +144,7 @@ export class ThingsboardThingsboardUserService {
     };
 
     return await firstValueFrom(
-      this.httpService.get('http://localhost:8080/api/customer/' + custID, {
+      this.httpService.get('http://localhost:9090/api/customer/' + custID, {
         headers: headersReq,
       })
     ).catch((error) => {
@@ -155,7 +162,7 @@ export class ThingsboardThingsboardUserService {
     };
 
     const resp = await firstValueFrom(
-      this.httpService.delete('http://localhost:8080/api/user/' + userID, {
+      this.httpService.delete('http://localhost:9090/api/user/' + userID, {
         headers: headersReq,
       })
     ).catch((error) => {
@@ -183,7 +190,7 @@ export class ThingsboardThingsboardUserService {
 
     const resp = await firstValueFrom(
       this.httpService.post(
-        'http://localhost:8080/api/user?sendActivationMail=false',
+        'http://localhost:9090/api/user?sendActivationMail=false',
         {
           email: email,
           customerId: {
@@ -225,7 +232,7 @@ export class ThingsboardThingsboardUserService {
 
     const resp = await firstValueFrom(
       this.httpService.get(
-        'http://localhost:8080/api/customer/' +
+        'http://localhost:9090/api/customer/' +
           custID +
           '/users?page=0&pageSize=100',
         {
@@ -237,7 +244,10 @@ export class ThingsboardThingsboardUserService {
       return { status: error.response.status };
     });
 
-    return resp['data'];
+    if(resp.status != 200)
+    return {status:resp.status, data:[]} 
+
+    return {status: 200, data:resp['data']};
   }
 
   /////////////////////////////////////////////////////////////////
@@ -254,7 +264,7 @@ export class ThingsboardThingsboardUserService {
 
     const resp = await firstValueFrom(
       this.httpService.post(
-        'http://localhost:8080/api/customer',
+        'http://localhost:9090/api/customer',
         {
           email: email,
           title: title,
@@ -286,7 +296,7 @@ export class ThingsboardThingsboardUserService {
     };
 
     const resp = await firstValueFrom(
-      this.httpService.delete('http://localhost:8080/api/customer/' + custID, {
+      this.httpService.delete('http://localhost:9090/api/customer/' + custID, {
         headers: headersReq,
       })
     ).catch((error) => {
@@ -307,7 +317,7 @@ export class ThingsboardThingsboardUserService {
 
     const resp = await firstValueFrom(
       this.httpService.post(
-        'http://localhost:8080/api/user/' +
+        'http://localhost:9090/api/user/' +
           userID +
           '/userCredentialsEnabled?userCredentialsEnabled=false',
         {},
@@ -316,6 +326,7 @@ export class ThingsboardThingsboardUserService {
         }
       )
     ).catch((error) => {
+      console.log(error);
       if (error.response == undefined) return null;
       return {
         status: error.response.status,
@@ -336,7 +347,7 @@ export class ThingsboardThingsboardUserService {
 
     const resp = await firstValueFrom(
       this.httpService.post(
-        'http://localhost:8080/api/user/' +
+        'http://localhost:9090/api/user/' +
           userID +
           '/userCredentialsEnabled?userCredentialsEnabled=true',
         {},
@@ -364,7 +375,7 @@ export class ThingsboardThingsboardUserService {
   
       const resp = await firstValueFrom(
         this.httpService.get(
-          'http://localhost:8080/api/customers?page=0&pageSize=100',
+          'http://localhost:9090/api/customers?page=0&pageSize=100',
           {
             headers: headersReq,
           }

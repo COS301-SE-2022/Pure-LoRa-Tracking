@@ -32,11 +32,7 @@ export class ApiHardwareDebugService {
   // Most important function, both sensor data and raw data needed for location are received here
   deviceUpProcess(content: Uint8Array) {
     const eventData = eventMessages.UplinkEvent.deserializeBinary(content);
-
-    // Raw gateway info that will be used for location, data is not stripped as we might need other parts of the data in future
-    const gateways = eventData.getRxInfoList();
-    this.locationService.calculateLocation(gateways);
-
+    
     // Sensor data that will be sent to thingsboard handler
     let dataJSON = eventData.getObjectJson();
     if (dataJSON.length == 0) {
@@ -51,6 +47,10 @@ export class ApiHardwareDebugService {
     if (thingsBoardDeviceToken == undefined) {
       throw 'Thingsboard device ID not set';
     }
+
+    // Raw gateway info that will be used for location, data is not stripped as we might need other parts of the data in future
+    const gateways = eventData.getRxInfoList();
+    this.locationService.calculateLocation(gateways,thingsBoardDeviceToken);
 
     console.log((new Date()).toISOString() ,"[hardware-endpoint] Uplink from:", eventData.getDeviceName(), '|', thingsBoardDeviceToken);
 
