@@ -1,5 +1,6 @@
 <master-header-nav></master-header-nav>
 <div id="layoutContainer">
+    <master-sensor-device-view></master-sensor-device-view>
     <div *ngIf="Reserve" class="mapContainer">
         <master-reserve-map #reservemap [Reserve]="Reserve" [ShowPolygon]="ShowPolygon" [LatestData]="LastestHistorical" [ViewMapTypeInput]="ViewMapTypeInput"></master-reserve-map>
     </div>

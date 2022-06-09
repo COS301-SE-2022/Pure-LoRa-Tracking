@@ -1,4 +1,4 @@
-<mat-card color='$primary'>
+<mat-card>
     <mat-card-header class="headerText">
         <mat-card-title >
             {{reserveName}}
@@ -25,8 +25,8 @@
         <cdk-virtual-scroll-viewport itemSize="0">
         <mat-selection-list dense #devicesList [multiple]="true" >
             <p *ngIf="deviceType==='sensors' || deviceType==='all' && Devices.length>0">
-                <mat-list-option *ngFor="let sensorItem of filteredSensors" [value]="sensorItem.deviceID" [style.background-color]="getSelectedStyle(sensorItem.deviceID)" (click)="selectedSensor(sensorItem.deviceID)" >
-                    <mat-icon mat-list-icon>memory</mat-icon>
+                <mat-list-option *ngFor="let sensorItem of filteredSensors" [value]="sensorItem.deviceID" (click)="selectedSensor(sensorItem.deviceID)" >
+                    <mat-icon mat-list-icon [style.background-color]="getSelectedStyle(sensorItem.deviceID)" >memory</mat-icon>
                     <div class="listItemWrap">
                         <div class="itemText">    
                             <div mat-line>{{sensorItem.deviceName}}</div>

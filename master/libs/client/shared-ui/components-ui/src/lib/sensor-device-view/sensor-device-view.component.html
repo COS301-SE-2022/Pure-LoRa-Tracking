@@ -1,0 +1,47 @@
+<mat-card>
+    <mat-card-header class="headerText">
+        <button mat-icon-button><mat-icon>arrow_back</mat-icon></button>
+        <mat-card-title >
+            {{sensorInformation.profileName}}
+        </mat-card-title>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+
+    <mat-card-content id="card-content">     
+        <p>
+            <span>{{sensorInformation.profileID}}</span>
+            <br>
+            <span>Device UEI</span>
+        </p>  
+        <p>
+            <span>Sensor</span>
+            <br>
+            <span>Device Type</span>
+        </p>    
+        <p>
+            <span>{{aditionalInfo.lastPing}}</span>
+            <br>
+            <span>Last Ping</span>
+        </p>
+        <p>
+            <span>{{aditionalInfo.park}}</span>
+            <br>
+            <span>Reserve</span>
+        </p>
+        <p>
+            <span>{{aditionalInfo.animal}}</span>
+            <br>
+            <span>Animal</span>
+        </p>
+        <p>
+            <span>{{aditionalInfo.signals}}</span>
+            <br>
+            <span>Signals sent</span>
+        </p>
+        <p>
+            <span>{{aditionalInfo.activeSince}}</span>
+            <br>
+            <span>Active Since</span>
+        </p>
+    </mat-card-content>
+</mat-card>
