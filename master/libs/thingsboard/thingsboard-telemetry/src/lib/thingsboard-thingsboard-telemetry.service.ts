@@ -152,7 +152,7 @@ export class ThingsboardThingsboardTelemetryService {
     };
     const resp = await lastValueFrom(
       this.httpService.post(
-        'http://localhost:9090/api/v1' + accessToken + '/telemetry',
+        'http://localhost:9090/api/v1/' + accessToken + '/telemetry',
         {
           timestamp: +new Date(),
           DeviceData: TelemetryJSON,

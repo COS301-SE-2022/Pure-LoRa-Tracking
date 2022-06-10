@@ -87,9 +87,10 @@ export class ApiMapEndpointService {
             }
 
 
-        /*this.thingsboardClient.setToken(content.token);
-        const data = await this.thingsboardClient.getReservePerimeter();*/
-        /*return {
+        this.thingsboardClient.setToken(content.token);
+        const data = await this.thingsboardClient.getReservePerimeter();
+        console.log(data);
+        return {
             code : 200,
             status : "success",
             explanation : "",
@@ -98,41 +99,41 @@ export class ApiMapEndpointService {
                 center : data['value']['center'],
                 location : data['value']['location']
             }
-        }*/
-        return {
-            code: 200,
-            status: "success",
-            explanation: "",
-            data: {
-                reserveName: "UP",
-                center: {
-                    latitude: "-25.755123",
-                    longitude: "28.231999"
-                },
-                location: [
-                    {
-                        latitude: "-25.753785",
-                        longitude: "28.231703"
-                    },
-                    {
-                        latitude: "-25.755650",
-                        longitude: "28.230737"
-                    },
-                    {
-                        latitude: "-25.757089",
-                        longitude: "28.233456"
-                    },
-                    {
-                        latitude: "-25.756385",
-                        longitude: "28.236474"
-                    },
-                    {
-                        latitude: "-25.754765",
-                        longitude: "28.235663"
-                    }
-                ]
-            }
         }
+        // return {
+        //     code: 200,
+        //     status: "success",
+        //     explanation: "",
+        //     data: {
+        //         reserveName: "UP",
+        //         center: {
+        //             latitude: "-25.755123",
+        //             longitude: "28.231999"
+        //         },
+        //         location: [
+        //             {
+        //                 latitude: "-25.753785",
+        //                 longitude: "28.231703"
+        //             },
+        //             {
+        //                 latitude: "-25.755650",
+        //                 longitude: "28.230737"
+        //             },
+        //             {
+        //                 latitude: "-25.757089",
+        //                 longitude: "28.233456"
+        //             },
+        //             {
+        //                 latitude: "-25.756385",
+        //                 longitude: "28.236474"
+        //             },
+        //             {
+        //                 latitude: "-25.754765",
+        //                 longitude: "28.235663"
+        //             }
+        //         ]
+        //     }
+        // }
     }
 
     async HistoricalProcess(content: MapApiHistorical): Promise<MapApiHistoricalResponse> {
@@ -217,97 +218,7 @@ export class ApiMapEndpointService {
             furtherExplain : furtherExplain
         }
 
-    //     const toreturn: MapApiHistoricalResponse = {
-    //         code: 200,
-    //         status: "success",
-    //         explanation: "",
-    //         data: []
-    //     }
-
-    //     if (content.deviceID.includes("sens-11")||content.deviceID.length==0) {
-    //         toreturn.data.push({
-    //             deviceID: "sens-11",
-    //             deviceName: "sens-11-test",
-    //             type: "sensor",
-    //             locationData: [
-    //                 {
-    //                     timeStamp: Date.now() - 6000,
-    //                     location: {
-    //                         latitude: "-25.755514",
-    //                         longitude: "28.235419"
-    //                     }
-    //                 },
-    //                 {
-    //                     timeStamp: Date.now() - 6000,
-    //                     location: {
-    //                         latitude: "-25.754886",
-    //                         longitude: "28.231909"
-    //                     }
-    //                 },
-    //                 {
-    //                     timeStamp: Date.now() - 6000,
-    //                     location: {
-    //                         latitude: "-25.755375",
-    //                         longitude: "28.232314"
-    //                     }
-    //                 }
-    //             ]
-    //         })
-    //     }
-    //     if (content.deviceID.includes("sens-12")||content.deviceID.length==0) {
-    //         toreturn.data.push({
-    //             deviceID: "sens-12",
-    //             deviceName: "sens-12-test",
-    //             type: "sensor",
-    //             locationData: [
-    //                 {
-    //                     timeStamp: Date.now() - 6000,
-    //                     location: {
-    //                         latitude: "-25.755147",
-    //                         longitude: "28.233294"
-    //                     }
-    //                 },
-    //                 {
-    //                     timeStamp: Date.now() - 6000,
-    //                     location: {
-    //                         latitude: "-25.756124",
-    //                         longitude: "28.233701"
-    //                     }
-    //                 },
-    //                 {
-    //                     timeStamp: Date.now() - 6000,
-    //                     location: {
-    //                         latitude: "-25.755704",
-    //                         longitude: "28.233245"
-    //                     }
-    //                 }
-    //             ]
-    //         })
-    //     }
-    //     if (content.deviceID.includes("sens-13")||content.deviceID.length==0) {
-    //         toreturn.data.push({
-    //             deviceID: "sens-13",
-    //             deviceName: "sens-13-test",
-    //             type: "sensor",
-    //             locationData: [
-    //                 {
-    //                     timeStamp: Date.now() - 6000,
-    //                     location: {
-    //                         latitude: "-25.755332",
-    //                         longitude: "28.232264"
-    //                     }
-
-    //                 },
-    //                 {
-    //                     timeStamp: Date.now() - 6000,
-    //                     location: {
-    //                         latitude: "-25.756632",
-    //                         longitude: "28.233760"
-    //                     }
-    //                 }
-    //             ]
-    //         });
-    //     }
+    
         // return toreturn;
     }
 }

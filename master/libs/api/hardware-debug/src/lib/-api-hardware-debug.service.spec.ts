@@ -74,11 +74,12 @@ describe('ApiHardwareDebugService', () => {
         }        
       }); 
       expect(() => { service.deviceUpProcess(input)}).toThrow('Thingsboard device ID not set')
-      expect(calcLocation).toBeCalled();
+      
 
       device_data.getTagsMap().set('thingsBoardDeviceToken', deviceToken);
       input = device_data.serializeBinary()
       expect(service.deviceUpProcess(input)).toBe(undefined);
+      expect(calcLocation).toBeCalled();
     });
   });
 

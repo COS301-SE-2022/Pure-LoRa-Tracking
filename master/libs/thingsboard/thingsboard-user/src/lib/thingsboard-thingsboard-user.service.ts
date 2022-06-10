@@ -113,7 +113,14 @@ export class ThingsboardThingsboardUserService {
       };
     }
 
-    if (resp.data['authority'] == 'TENANT_ADMIN') {
+    if (resp.data['authority'] == 'SYS_ADMIN') {
+      return {
+        code: 200,
+        id: resp.data['tenantId']['id'],
+        type: 'sysAdmin',
+      } 
+    }
+    else if (resp.data['authority'] == 'TENANT_ADMIN') {
       return {
         code: 200,
         id: resp.data['tenantId']['id'],
@@ -237,7 +244,10 @@ export class ThingsboardThingsboardUserService {
       return { status: error.response.status };
     });
 
-    return resp['data'];
+    if(resp.status != 200)
+    return {status:resp.status, data:[]} 
+
+    return {status: 200, data:resp['data']};
   }
 
   /////////////////////////////////////////////////////////////////
@@ -316,6 +326,7 @@ export class ThingsboardThingsboardUserService {
         }
       )
     ).catch((error) => {
+      console.log(error);
       if (error.response == undefined) return null;
       return {
         status: error.response.status,

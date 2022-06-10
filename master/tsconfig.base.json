@@ -16,14 +16,13 @@
     "baseUrl": ".",
     "paths": {
       "@chirpstack": ["libs/chirpstack/src/index.ts"],
-      "@chirpstack/gateway": [
-        "libs/chirpstack/chirpstack-gateway/src/index.ts"
-      ],
-      "@chirpstack/sensor": ["libs/chirpstack/chirpstack-sensor/src/index.ts"],
       "@lora/api/login": ["libs/api/login-endpoint/src/index.ts"],
       "@lora/api/mapEndpoint": ["libs/api/map-endpoint/src/index.ts"],
       "@lora/api/user-endpoint": ["libs/api/user-endpoint/src/index.ts"],
       "@lora/apiRouter": ["libs/api/api-router/src/index.ts"],
+      "@lora/chirpstack": ["libs/chirpstack/src/index.ts"],
+      "@lora/chirpstack-gateway": ["libs/chirpstack/chirpstack-gateway/src/index.ts"],
+      "@lora/chirpstack-sensor": ["libs/chirpstack/chirpstack-sensor/src/index.ts"],
       "@lora/database": ["libs/database-proxy/src/index.ts"],
       "@lora/device-endpoint": ["libs/api/device-endpoint/src/index.ts"],
       "@lora/hardware-debug": ["libs/api/hardware-debug/src/index.ts"],
@@ -65,6 +64,9 @@
       ],
       "@master/client/shared-ui/material-ui": [
         "libs/client/shared-ui/material-ui/src/index.ts"
+      ],
+      "@master/client/users-management-view": [
+        "libs/client/users-management-view/src/index.ts"
       ],
       "@master/shared-interfaces": ["libs/shared-interfaces/src/index.ts"],
       "@thingsboard/provision-user": [

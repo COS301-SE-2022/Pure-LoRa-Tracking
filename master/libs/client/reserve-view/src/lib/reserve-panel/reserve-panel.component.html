@@ -30,7 +30,7 @@
 
           <button id="addBtn" mat-raised-button routerLink="add">Add<mat-icon>add</mat-icon></button>
     </mat-action-list>
-    <mat-card-content >
+    <mat-card-content id="card-content">
         <cdk-virtual-scroll-viewport itemSize="0">
         <mat-selection-list dense #devicesList [multiple]="true" >
             <p *ngIf="deviceType==='sensors' || deviceType==='all' && Devices.length>0">
@@ -43,7 +43,8 @@
                         </div>
                 
                         <button mat-icon-button id="actionBtn">
-                            <mat-icon>chevron_right</mat-icon>
+                            <!-- <mat-icon>chevron_right</mat-icon> -->
+                            <button mat-button>Delete sensor</button>
                         </button>
                     </div>
                 </mat-list-option>

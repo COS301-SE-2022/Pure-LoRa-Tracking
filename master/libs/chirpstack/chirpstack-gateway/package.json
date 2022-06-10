@@ -1,5 +1,5 @@
 {
-  "name": "@chirpstack/gateway",
+  "name": "@lora/chirpstack-gateway",
   "version": "0.0.1",
   "type": "commonjs"
 }

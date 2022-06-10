@@ -187,9 +187,16 @@ describe('ThingsboardThingsboardUserService', () => {
 
   /////////////////////////////////////////////////////////////////
 
-  it('should disable the reserve user', async () => {
+  it('should enable the reserve user', async () => {
     /*const Login = await service.login(username, password);
     console.log(await service.EnableUser(Login["data"]["token"], "f96e60d0-dfe8-11ec-bdb3-750ce7ed2451"));*/
+    
+  });
+
+  /////////////////////////////////////////////////////////////////
+
+  it('should get the reserve users', async () => {
+    //console.log(await service.GetUsersFromReserve("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZlYWRtaW5AcmVzZXJ2ZS5jb20iLCJzY29wZXMiOlsiVEVOQU5UX0FETUlOIl0sInVzZXJJZCI6ImQ2MzcyZTMwLWRmZTgtMTFlYy1iZGIzLTc1MGNlN2VkMjQ1MSIsImVuYWJsZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiJjZDJkZjJiMC1kZmU4LTExZWMtYmRiMy03NTBjZTdlZDI0NTEiLCJjdXN0b21lcklkIjoiMTM4MTQwMDAtMWRkMi0xMWIyLTgwODAtODA4MDgwODA4MDgwIiwiaXNzIjoidGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE2NTQ3OTEwOTIsImV4cCI6MTY1NDgwMDA5Mn0.7J8AnYhPKPFUBoSe9WupzRTky5xaBFDZ5XHWdQ-wcLg8we8GKA06BOK9FuX8fDVrPVSeI654ZLD_7W1dASEHWA", "ef55ff40-dfe8-11ec-bdb3-750ce7ed2451"));
     
   });
 });

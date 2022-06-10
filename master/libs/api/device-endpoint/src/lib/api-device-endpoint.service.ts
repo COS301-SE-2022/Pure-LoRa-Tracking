@@ -2,8 +2,8 @@ import {
   thingsboardResponse,
   ThingsboardThingsboardClientService,
 } from '@lora/thingsboard-client';
-import { ChirpstackChirpstackGatewayService } from '@chirpstack/gateway';
-import { ChirpstackChirpstackSensorService } from '@chirpstack/sensor';
+import { ChirpstackChirpstackGatewayService } from '@lora/chirpstack-gateway';
+import { ChirpstackChirpstackSensorService } from '@lora/chirpstack-sensor';
 
 import {
   AddGatewayDevice,
@@ -12,6 +12,7 @@ import {
   deviceResponse,
   GatewayLocationAdd,
   GatewayLocationInfo,
+  GetGatewaysInput,
   RemoveDevice,
 } from './../api-device.interface';
 import { Injectable } from '@nestjs/common';
@@ -227,7 +228,7 @@ export class ApiDeviceEndpointService {
     this.thingsboardClient.setToken(body.token);
 
     /* Get ID and whether the device is a gateway or not */
-    const deviceInfo = await this.thingsboardClient.getDeviceInfos([body.deviceID]);
+    // const deviceInfo = await this.thingsboardClient.getDeviceInfos([body.deviceID]);
 
     const resp = await this.thingsboardClient.RemoveDeviceFromReserve(
       body.deviceID
@@ -238,8 +239,8 @@ export class ApiDeviceEndpointService {
         explanation: resp.explanation,
       };
 
-    const isGateway = deviceInfo['data'][0]["isGateway"];
-    const devID = deviceInfo['data'][0]["deviceName"];
+    const isGateway = body.isGateway;
+    const devID = body.devEUI;
     if (isGateway) {
       await this.chirpstackGateway.removeGateway(
         process.env.CHIRPSTACK_API,
@@ -394,11 +395,40 @@ export class ApiDeviceEndpointService {
       explanation : resp.explanation
     }
   }
+  
+
+  ///////////////////////////////////////////////////////////
+  async getGatewaysProcess(body : GetGatewaysInput) : Promise<deviceResponse> {
+    if (body.token == undefined || body.token == '')
+      return {
+        status: 401,
+        explanation: 'no token found',
+      };
+
+    if (body.customerID == undefined)
+      return {
+        status: 400,
+        explanation: 'no customer ID found',
+      };
+    
+    this.thingsboardClient.setToken(body.token);
+
+    const response = await this.thingsboardClient.getCustomerDevices(body.customerID);
+    return {
+      status : 200,
+      explanation : "call finished",
+      data : response.filter(val=>val.isGateway==true)
+    }
+  }
 
   ///////////////////////////////////////////////////////////////////////////
   // TODO: Implement endpoint
-  async processGetDeviceProfiles(): Promise<DeviceProfile[]> {
-    return this.chirpstackSensor.getProfiles(process.env.CHIRPSTACK_API)
+  async processGetDeviceProfiles(): Promise<deviceResponse> {
+    return {
+      status : 200,
+      explanation : "call finished",
+      data : this.chirpstackSensor.getProfiles(process.env.CHIRPSTACK_API)
+      
+    }
   }
-
 }

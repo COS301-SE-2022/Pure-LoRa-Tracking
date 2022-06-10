@@ -42,6 +42,8 @@ export interface GatewayProfile {
 export interface RemoveDevice {
   token: string;
   deviceID: string;
+  isGateway: boolean;
+  devEUI: string;
 }
 
 export interface GatewayLocationInfo {
@@ -54,5 +56,10 @@ export interface GatewayLocationAdd {
   locationParameters: {
     latitude: number;
     longitude: number;
-  }[];
+  };
+}
+
+export interface GetGatewaysInput {
+  token : string;
+  customerID: string;
 }

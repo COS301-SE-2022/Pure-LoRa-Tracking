@@ -99,6 +99,7 @@ export class ThingsboardThingsboardClientService {
 
     this.assetService.setToken(this.token);
 
+    //TODO
     let ids = [];
     if (userInfo['type'] == 'user') {
       ids = await this.assetService.getAssetIDs(userInfo['id']);
@@ -585,7 +586,7 @@ export class ThingsboardThingsboardClientService {
 
   async setGatewayLocation(
     deviceID: string,
-    locationData: { latitude: number; longitude: number }[]
+    locationData: { latitude: number; longitude: number }
   ): Promise<thingsboardResponse> {
     const Login = await this.validateToken();
     const Device = await this.validateDevice(deviceID);
@@ -621,6 +622,7 @@ export class ThingsboardThingsboardClientService {
   ///////////////////////////////////////////////////////////////////////
   async AdminGetCustomers() : Promise<thingsboardResponse> {
     const login = await this.userService.getUserID(this.token);
+    console.log(login);
     if (login.code != 200)
       return {
         status: 'fail',
@@ -648,6 +650,36 @@ export class ThingsboardThingsboardClientService {
     
 
   }
+
+  ///////////////////////////////////////////////////////////////////////
+  async AdminGetUsersFromReserve (customerID: string) {
+    const login = await this.userService.getUserID(this.token);
+    console.log(login);
+    if (login.code != 200)
+      return {
+        status: 'fail',
+        explanation: 'token invalid',
+      };
+
+    if (login.type != 'admin')
+      return {
+        status: 'fail',
+        explanation: 'user not admin',
+      };
+
+    const resp = await this.userService.GetUsersFromReserve(this.token, customerID);
+    if(resp.status != 200)
+    return {
+      status: 'fail',
+      explanation: resp.status.toString(),
+    };
+
+    return {
+      status : "ok",
+      explanation : "call finished",
+      data: resp.data
+    }
+  } 
 
 }
 
