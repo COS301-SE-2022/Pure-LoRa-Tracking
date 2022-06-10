@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Device, MapApiHistorical, MapApiHistoricalResponse, MapApiLatest, MapApiLatestResponse, MapApiReserve, MapApiReserveResponse } from './map-api.interface';
-import { ThingsboardThingsboardClientService } from '@lora/thingsboard-client';
+import { thingsboardResponse, ThingsboardThingsboardClientService } from '@lora/thingsboard-client';
 
 @Injectable()
 export class ApiMapEndpointService {
@@ -190,20 +190,20 @@ export class ApiMapEndpointService {
 
         const data = Array<Device>();
 
-        awaitArray.forEach((item) => {
+        awaitArray.forEach((item:thingsboardResponse) => {
             if(item['status']=='fail') {
                 explanationOfCall = "some devices are missing results";
                 furtherExplain = item['explanation'];
                 data.push({
                     deviceID : item['name'],
-                    deviceName : "",
+                    deviceName : item.furtherExplain,
                     type : "sensor",
                     locationData : item['data']['data']
                 })
             } else if(item['status']=='ok') {
                 data.push({
                     deviceID : item['name'],
-                    deviceName : "",
+                    deviceName : item.furtherExplain,
                     type : "sensor",
                     locationData : item['data']
                 })

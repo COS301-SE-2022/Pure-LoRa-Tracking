@@ -161,11 +161,13 @@ export class ThingsboardThingsboardClientService {
     );
 
     const labelName = verifyDevice['label'];
+    const deviceName = verifyDevice['name'];
 
     return {
       status: 'ok',
       name: DeviceID,
       explanation: labelName,
+      furtherExplain : deviceName,
       data: resp,
     };
   }
@@ -687,6 +689,7 @@ export class ThingsboardThingsboardClientService {
 export interface thingsboardResponse {
   status: string;
   explanation?: string;
+  furtherExplain? : string;
   name?: string;
   data?: any;
 }
