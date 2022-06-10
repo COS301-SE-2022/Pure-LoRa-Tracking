@@ -1,0 +1,26 @@
+.logoContainer {
+    height: inherit;
+    align-items: center;
+    display: flex;
+}
+
+#logoImage {
+    height: 55%;
+}
+
+.nav-btn {
+    line-height: normal;
+}
+
+#navspacer {
+    flex: 1 1 auto;
+}
+
+#logoutBtn {
+    margin-left: 1%;
+    margin-right: 1%;
+}
+
+.navText{
+    font-family: 'Bai Jamjuree', sans-serif;
+}

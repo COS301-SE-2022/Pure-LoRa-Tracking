@@ -1,0 +1,27 @@
+<mat-toolbar color="primary">
+    <div class="logoContainer">
+        <img id="logoImage" src={{logoLoc}} >
+    </div>
+
+    <span id="navspacer"></span>
+
+    <a mat-button class="nav-btn" routerLink='/reserve' routerLinkActive="active" >
+        <mat-icon >map</mat-icon>
+        <div class="navText">Reserve</div>
+    </a>
+        
+    <a mat-button class="nav-btn" routerLink='/staff' routerLinkActive="inactive">
+        <mat-icon>groups</mat-icon>
+        <div class="navText">Staff</div>
+    </a>
+
+    <a mat-button class="nav-btn" routerLink='/profile' routerLinkActive="inactive">
+        <mat-icon >face</mat-icon>
+        <div class="navText">Profile</div>
+    </a>
+
+    <a mat-mini-fab id="logoutBtn">
+        <mat-icon>logout</mat-icon>
+    </a>
+
+</mat-toolbar>

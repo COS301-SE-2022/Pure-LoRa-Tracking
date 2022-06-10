@@ -1,0 +1,45 @@
+{
+  "sourceRoot": "libs/chirpstack/chirpstack-gateway/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/chirpstack/chirpstack-gateway",
+        "tsConfig": "libs/chirpstack/chirpstack-gateway/tsconfig.lib.json",
+        "packageJson": "libs/chirpstack/chirpstack-gateway/package.json",
+        "main": "libs/chirpstack/chirpstack-gateway/src/index.ts",
+        "assets": ["libs/chirpstack/chirpstack-gateway/*.md"]
+      }
+    },
+    "publish": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "node tools/scripts/publish.mjs chirpstack-chirpstack-gateway {args.ver} {args.tag}"
+      },
+      "dependsOn": [
+        {
+          "projects": "self",
+          "target": "build"
+        }
+      ]
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/chirpstack/chirpstack-gateway/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/chirpstack/chirpstack-gateway"],
+      "options": {
+        "jestConfig": "libs/chirpstack/chirpstack-gateway/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

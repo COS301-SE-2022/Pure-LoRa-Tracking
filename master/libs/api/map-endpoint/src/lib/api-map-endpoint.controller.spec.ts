@@ -1,3 +1,4 @@
+import { ThingsboardThingsboardClientModule } from '@lora/thingsboard-client';
 import { Test } from '@nestjs/testing';
 import { ApiMapEndpointController } from './api-map-endpoint.controller';
 import { ApiMapEndpointService } from './api-map-endpoint.service';
@@ -7,6 +8,7 @@ describe('ApiMapEndpointController', () => {
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
+      imports : [ThingsboardThingsboardClientModule],
       providers: [ApiMapEndpointService],
       controllers: [ApiMapEndpointController],
     }).compile();

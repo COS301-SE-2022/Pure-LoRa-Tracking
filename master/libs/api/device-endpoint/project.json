@@ -1,0 +1,45 @@
+{
+  "sourceRoot": "libs/api/device-endpoint/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/api/device-endpoint",
+        "tsConfig": "libs/api/device-endpoint/tsconfig.lib.json",
+        "packageJson": "libs/api/device-endpoint/package.json",
+        "main": "libs/api/device-endpoint/src/index.ts",
+        "assets": ["libs/api/device-endpoint/*.md"]
+      }
+    },
+    "publish": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "node tools/scripts/publish.mjs api-device-endpoint {args.ver} {args.tag}"
+      },
+      "dependsOn": [
+        {
+          "projects": "self",
+          "target": "build"
+        }
+      ]
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/api/device-endpoint/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/api/device-endpoint"],
+      "options": {
+        "jestConfig": "libs/api/device-endpoint/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

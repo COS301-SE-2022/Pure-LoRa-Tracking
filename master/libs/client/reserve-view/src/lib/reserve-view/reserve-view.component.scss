@@ -1,0 +1,27 @@
+#container{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: space-between;
+    margin-right: 2%;
+    margin-left: 2%;
+    
+}
+
+#layoutContainer{
+    display: flex;
+    justify-content: flex-end;
+    height: 85%;
+    overflow: hidden;
+    margin-top: 1%;
+}
+
+.mapContainer {
+    margin-left: 2%;
+    flex: 1;
+}
+
+#reservePanel {
+    margin-bottom: 5%;
+    height: 78%;
+}

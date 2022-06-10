@@ -17,7 +17,10 @@
           "apps/lora-tracking/src/favicon.ico",
           "apps/lora-tracking/src/assets"
         ],
-        "styles": ["apps/lora-tracking/src/styles.scss"],
+        "styles": [
+          "apps/lora-tracking/src/styles.scss",
+          "./node_modules/leaflet/dist/leaflet.css"
+        ],
         "scripts": []
       },
       "configurations": {
@@ -31,7 +34,7 @@
             {
               "type": "anyComponentStyle",
               "maximumWarning": "2kb",
-              "maximumError": "4kb"
+              "maximumError": "100kb"
             }
           ],
           "fileReplacements": [

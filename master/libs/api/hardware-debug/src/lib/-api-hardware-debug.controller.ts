@@ -4,61 +4,93 @@ import { acknowledge } from './hardware-payload.interface';
 
 @Controller('hardware-debug')
 export class ApiHardwareDebugController {
+  resError: acknowledge = {
+    code: 400,
+    status: 'Invalid request',
+    explanation: 'Request format and/or request data is invalid',
+  };
+  resSuccess: acknowledge = {
+    code: 200,
+    status: 'OK',
+    explanation: 'Data successfully processed',
+  };
+
   constructor(private apiHardwareDebugService: ApiHardwareDebugService) {}
-
-  // @Post('device-status')
-  // deviceStatusResponse(@Body() content: any): acknowledge {
-  //   return this.apiHardwareDebugService.deviceStatusProcess(content);
-  // }
-
+  // TODO: Implement token authentication
   @Post('device-data')
-  deviceData(@Query() query: { event: string }, @Body() content: any): acknowledge {
+  deviceData(@Query() query: { event: string }, @Body() content: Uint8Array): acknowledge {
     console.log(query);
+    if (!(content instanceof Uint8Array)) {
+      console.error('\x1b[31m%s\x1b[0m','Server only accepts protobuf format for chirpstack integration');
+      return {
+        code: 400,
+        status: 'Wrong data format',
+        explanation: 'Server only accepts protobuf format',
+      };
+    }
+    
+    const errPrep = (new Date()).toISOString() +' [hardware-endpoint] ERROR: ';
+
     switch (query.event) {
       case 'up':
-        return this.apiHardwareDebugService.deviceUpProcess(content);
+        try {
+          this.apiHardwareDebugService.deviceUpProcess(content);  
+        } catch (error) {
+          console.log('\x1b[31m%s\x1b[0m ', errPrep  + error);
+          return this.resError;
+        }
+        return this.resSuccess;
       case 'status':
-        return this.apiHardwareDebugService.deviceStatusProcess(content);
+        try {
+          this.apiHardwareDebugService.deviceStatusProcess(content);
+        } catch (error) {
+          console.error('\x1b[31m%s\x1b[0m ', errPrep, error);
+          return this.resError;
+        }
+        return this.resSuccess;
       case 'join':
-        return this.apiHardwareDebugService.deviceJoinProcess(content);
+        try {
+          this.apiHardwareDebugService.deviceJoinProcess(content);
+        } catch (error) {
+          console.error('\x1b[31m%s\x1b[0m ', errPrep, error);
+          return this.resError;
+        }
+        return this.resSuccess;
       case 'ack':
-        return this.apiHardwareDebugService.deviceAckProcess(content);
+        try {
+          this.apiHardwareDebugService.deviceAckProcess(content);
+        } catch (error) {
+          console.error('\x1b[31m%s\x1b[0m ', errPrep, error);
+          return this.resError;
+        }
+        return this.resSuccess;
       case 'txack':
-        return this.apiHardwareDebugService.deviceTxackProcess(content);
+        try {
+          this.apiHardwareDebugService.deviceTxackProcess(content);
+        } catch (error) {
+          console.error('\x1b[31m%s\x1b[0m ', errPrep, error);
+          return this.resError;
+        }
+        return this.resSuccess;
       case 'error':
-        return this.apiHardwareDebugService.deviceErrorProcess(content);
+        try {
+          this.apiHardwareDebugService.deviceErrorProcess(content);
+        } catch (error) {
+          console.error('\x1b[31m%s\x1b[0m ', errPrep, error);
+          return this.resError;
+        }
+        return this.resSuccess;
       case 'location':
-        return this.apiHardwareDebugService.deviceLocationProcess(content);
+        try {
+          this.apiHardwareDebugService.deviceLocationProcess(content);
+        } catch (error) {
+          console.error('\x1b[31m%s\x1b[0m ', errPrep, error);
+          return this.resError;
+        }
+        return this.resSuccess;
 
     }
 
-
-    // if (query.event == 'up')
-    //   return this.apiHardwareDebugService.deviceUpProcess(content);
   }
 
-  // @Post('device-join')
-  // deviceJoinResponse(@Body() content: any): acknowledge {
-  //   return this.apiHardwareDebugService.deviceJoinrocess(content);
-  // }
-
-  // @Post('device-ack')
-  // deviceAckResponse(@Body() content: any): acknowledge {
-  //   return this.apiHardwareDebugService.deviceAckProcess(content);
-  // }
-
-  // @Post('device-error')
-  // deviceErrorResponse(@Body() content: any): acknowledge {
-  //   return this.apiHardwareDebugService.deviceErrorProcess(content);
-  // }
-
-  // @Post('device-location')
-  // deviceLocationResponse(@Body() content: any): acknowledge {
-  //   return this.apiHardwareDebugService.deviceLocationProcess(content);
-  // }
-
-  // @Post('device-txack')
-  // deviceTxackResponse(@Body() content: any): acknowledge {
-  //   return this.apiHardwareDebugService.deviceTxackProcess(content);
-  // }
 }

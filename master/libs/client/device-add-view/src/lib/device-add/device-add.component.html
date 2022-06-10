@@ -1,0 +1,114 @@
+<master-header-nav></master-header-nav>
+  <div class="container">
+    <div class="wrapper">
+      <mat-stepper labelPosition="bottom" #stepper>
+        <mat-step [stepControl]="typeGroup">
+          <form [formGroup]="typeGroup">
+            <ng-template matStepLabel>Select Device Type</ng-template>
+            <mat-form-field appearance="fill">
+              <mat-label>Type</mat-label>
+              <mat-select [(value)]="deviceType" formControlName="devtype">
+                <mat-option value="none">None</mat-option>
+                <mat-option value="sensor">Sensor</mat-option>
+                <mat-option value="gateway">Gateway</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <div>
+              <button mat-button matStepperNext [disabled]="typeGroup.invalid">Next</button>
+            </div>
+          </form>
+        </mat-step>
+
+        <mat-step [stepControl]="descriptionGroup" >
+          <form [formGroup]="descriptionGroup">
+            <ng-template matStepLabel>Device Description</ng-template>
+            <mat-form-field appearance="fill">
+              <mat-label>Device Name</mat-label>
+              <input matInput placeholder="Name" formControlName="name" required>
+            </mat-form-field>
+            <br>
+            <mat-form-field appearance="fill">
+              <mat-label>Device Description</mat-label>
+              <input matInput placeholder="Description" formControlName="desc" required>
+            </mat-form-field>
+            <br>
+                <mat-form-field appearance="fill">
+                  <mat-label>Profile</mat-label>
+                  <mat-select formControlName="profilegroup">
+                      <mat-option *ngFor="let curr of profilelist" [value]="curr.deviceID">{{curr.name}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+            <div>
+              <button mat-button matStepperPrevious>Back</button>
+              <button mat-button matStepperNext [disabled]="descriptionGroup.invalid">Next</button>
+            </div>
+          </form>
+        </mat-step>
+
+        <mat-step [stepControl]="infoGroup" >
+
+            <ng-template matStepLabel>Device Info</ng-template>
+            
+            <div *ngIf="deviceType === 'sensor';">
+              <form [formGroup]="sensorGroup">
+                <mat-form-field appearance="fill">
+                  <mat-label>EUI</mat-label>
+                  <input matInput placeholder="EUI" formControlName="eui" required>
+                </mat-form-field>
+                <br>
+                <mat-form-field appearance="fill">
+                  <mat-label>Application Key</mat-label>
+                  <input matInput placeholder="Application Key" formControlName="applicationkey" required>
+                </mat-form-field>
+                <br>
+                <mat-form-field appearance="fill">
+                  <mat-label>Device Profile</mat-label>
+                  <mat-select formControlName="deviceProfile">
+                    <mat-option *ngFor="let curr of deviceprofilelist" [value]="curr.id">{{curr.name}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+
+              </form>
+            </div>
+            <div *ngIf="deviceType === 'gateway';">
+              <form [formGroup]="gatewayGroup">
+                <mat-form-field appearance="fill">
+                  <mat-label>Gateway ID</mat-label>
+                  <input matInput placeholder="ID" formControlName="gatewayid" required>
+                </mat-form-field>
+                <br>
+                <!-- <mat-form-field appearance="fill">
+                  <mat-label>Network Server</mat-label>
+                  <input matInput placeholder="Server" formControlName="networkserver" required [defaultValue]="one">
+                </mat-form-field>
+                <br> -->
+                <mat-form-field appearance="fill">
+                  <mat-label>Gateway Latitude</mat-label>
+                  <input matInput placeholder="Location" formControlName="gatlang" optional>
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                  <mat-label>Gateway Longitude</mat-label>
+                  <input matInput placeholder="Location" formControlName="gatlong" optional>
+                </mat-form-field>
+                
+              </form>
+            </div>
+                
+            <div>
+              <button mat-button matStepperNext [disabled]="gatewayGroup.invalid&&sensorGroup.invalid">Next</button>
+              <button mat-button matStepperPrevious>Back</button>
+            </div>
+          
+        </mat-step>
+        <mat-step>
+
+          <ng-template matStepLabel>Finish</ng-template>
+          <div>
+            <button mat-button (click)="create()">Create</button>
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button (click)="stepper.reset()">Reset</button>
+          </div>
+        </mat-step>
+      </mat-stepper>
+    </div>
+  </div>
