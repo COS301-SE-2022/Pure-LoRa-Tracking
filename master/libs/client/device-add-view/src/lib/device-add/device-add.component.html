@@ -61,12 +61,12 @@
                   <input matInput placeholder="Application Key" formControlName="applicationkey" required>
                 </mat-form-field>
                 <br>
-                <!-- <mat-form-field appearance="fill">
+                <mat-form-field appearance="fill">
                   <mat-label>Device Profile</mat-label>
-                  <mat-select formControlName="profilegroup">
-                    <mat-option *ngFor="let curr of profilelist" [value]="curr.deviceID">{{curr.name}}</mat-option>
+                  <mat-select formControlName="deviceProfile">
+                    <mat-option *ngFor="let curr of deviceprofilelist" [value]="curr.id">{{curr.name}}</mat-option>
                   </mat-select>
-                </mat-form-field> -->
+                </mat-form-field>
 
               </form>
             </div>

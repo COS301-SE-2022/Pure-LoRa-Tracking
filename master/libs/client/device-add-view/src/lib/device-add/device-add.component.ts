@@ -41,6 +41,7 @@ export class DeviceAddComponent implements OnInit {
     this.sensorGroup=this._formBuilder.group({
       eui: ['', Validators.required],
       applicationkey: ['', Validators.required],
+      deviceProfile: ['', Validators.required],
     })
 
     this.http.post("/api/user/admin/groups",{
@@ -58,9 +59,7 @@ export class DeviceAddComponent implements OnInit {
     })
 
     this.http.post("api/device/sensor/info/profiles",{}).subscribe((val:any)=>{
-      const data = val.data as Array<{id: string, name: string}>;
-      
-      
+      this.deviceprofilelist = val.data as Array<{id: string, name: string}>;
     })
   }
 
@@ -76,6 +75,7 @@ export class DeviceAddComponent implements OnInit {
         customerID:this.descriptionGroup.get("profilegroup")?.value,
         hardwareName:this.sensorGroup.get("eui")?.value,
         labelName:this.descriptionGroup.get("name")?.value,
+        deviceProfileId:this.sensorGroup.get("deviceProfile")?.value,
       }).subscribe(val=>{
         console.log(val);
       })
