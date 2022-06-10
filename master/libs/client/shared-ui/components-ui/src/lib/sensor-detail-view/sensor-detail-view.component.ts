@@ -1,12 +1,12 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { SensorProfile, Device } from '@master/shared-interfaces';
+import { Component, EventEmitter, Input,  Output } from '@angular/core';
+import { SensorProfile,  } from '@master/shared-interfaces';
 
 @Component({
   selector: 'master-sensor-detail-view',
   templateUrl: './sensor-detail-view.component.html',
   styleUrls: ['./sensor-detail-view.component.scss'],
 })
-export class SensorDetailViewComponent implements OnInit {
+export class SensorDetailViewComponent {
 
   @Input() openView = false;
   @Input() sensorInfo = {
@@ -28,10 +28,6 @@ export class SensorDetailViewComponent implements OnInit {
     signals: 0,
     activeSince: "",
   }
- 
-  constructor() {}
-
-  ngOnInit(): void {}
 
   closeSensor():void {
     this.openView = false;
