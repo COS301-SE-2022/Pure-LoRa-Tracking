@@ -4,7 +4,6 @@ import { AddGatewayDevice, AddSensorDevice } from '@master/shared-interfaces';
 
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {deviceOptionList} from "@master/shared-interfaces"
-import { DeviceProfile } from '@chirpstack/chirpstack-api/as/external/api/profiles_pb';
 @Component({
   selector: 'master-add-device',
   templateUrl: './device-add.component.html',
@@ -19,7 +18,7 @@ export class DeviceAddComponent implements OnInit {
   gatewayGroup!:FormGroup;
   sensorGroup!:FormGroup;
   profilelist:Array<deviceOptionList>=[];
-  deviceprofilelist:Array<DeviceProfile>=[];
+  deviceprofilelist:Array<{id: string, name: string}>=[];
   deviceType = "";
   token="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZlYWRtaW5AcmVzZXJ2ZS5jb20iLCJzY29wZXMiOlsiVEVOQU5UX0FETUlOIl0sInVzZXJJZCI6ImQ2MzcyZTMwLWRmZTgtMTFlYy1iZGIzLTc1MGNlN2VkMjQ1MSIsImVuYWJsZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiJjZDJkZjJiMC1kZmU4LTExZWMtYmRiMy03NTBjZTdlZDI0NTEiLCJjdXN0b21lcklkIjoiMTM4MTQwMDAtMWRkMi0xMWIyLTgwODAtODA4MDgwODA4MDgwIiwiaXNzIjoidGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE2NTQ4MTI2NzUsImV4cCI6MTY1NDgyMTY3NX0.fGPFRQBHK1d1gkmU-i_9LMUfKdergPCbcTLnxbg01TvUIbY6n4SuSoC0z8YOb0_qbad3r9-byQw5H40PHF_b5g"
   constructor(private _formBuilder: FormBuilder,private http:HttpClient) {}
@@ -59,8 +58,9 @@ export class DeviceAddComponent implements OnInit {
     })
 
     this.http.post("api/device/sensor/info/profiles",{}).subscribe((val:any)=>{
-      const test=val.data as Array<DeviceProfile>;
-      console.log(test.at(0)?.getName());
+      const data = val.data as Array<{id: string, name: string}>;
+      
+      
     })
   }
 
