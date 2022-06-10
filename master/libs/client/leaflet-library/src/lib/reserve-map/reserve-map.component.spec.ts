@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MapHistoricalPoints, ViewMapType } from '@master/shared-interfaces';
-import { Device } from 'libs/api/map-endpoint/src/lib/map-api.interface';
+//import { Device } from 'libs/api/map-endpoint/src/lib/map-api.interface';
 import { SimpleChanges,SimpleChange } from '@angular/core';
 import { LayerGroup } from 'leaflet';
 import { exitCode } from 'process';
