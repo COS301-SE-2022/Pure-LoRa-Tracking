@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { SensorProfile } from '@master/shared-interfaces';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { SensorProfile, Device } from '@master/shared-interfaces';
 
 @Component({
   selector: 'master-sensor-detail-view',
@@ -7,6 +7,15 @@ import { SensorProfile } from '@master/shared-interfaces';
   styleUrls: ['./sensor-detail-view.component.scss'],
 })
 export class SensorDetailViewComponent implements OnInit {
+
+  @Input() openView = false;
+  @Input() sensorInfo = {
+    name: "",
+    id: "",
+  };
+
+  @Output() viewChange = new EventEmitter<boolean>();
+
   sensorInformation:SensorProfile = {
     profileID: "13456",
     profileName: "S-123",
@@ -25,6 +34,7 @@ export class SensorDetailViewComponent implements OnInit {
   ngOnInit(): void {}
 
   closeSensor():void {
-    console.log("Close");
+    this.openView = false;
+    this.viewChange.emit(this.openView);
   }
 }

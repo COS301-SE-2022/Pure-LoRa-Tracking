@@ -34,6 +34,11 @@ export class ReservePanelComponent implements OnInit {
   openSensor=false;
 
 
+  currentSensor = {
+    name:"",
+    id:"",
+  }
+
   reserveName = "Reserve Name";
 
   gateways: GatewayProps[] = [
@@ -105,5 +110,14 @@ export class ReservePanelComponent implements OnInit {
   ngOnInit(): void {
     this.filteredGateways = this.gateways.map(gatewayItem => {return gatewayItem;})
     this.filteredSensors = this.Devices.map(sensorItem => {return sensorItem;})
+  }
+
+  viewSensor(id:string,name: string):void{
+    this.currentSensor = {
+      name: name,
+      id: id,
+    }
+    this.openSensor = true;
+
   }
 }

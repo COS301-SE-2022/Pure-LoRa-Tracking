@@ -2,7 +2,7 @@
     <mat-card-header class="headerText">
         <button mat-icon-button (click)="closeSensor()"><mat-icon>arrow_back</mat-icon></button>
         <mat-card-title >
-            {{sensorInformation.profileName}}
+            {{sensorInfo.name}}
         </mat-card-title>
     </mat-card-header>
     <mat-divider></mat-divider>
@@ -10,7 +10,7 @@
     <mat-card-content id="card-content">     
         <div id="field-list">
             <p>
-                <span>{{sensorInformation.profileID}}</span>
+                <span>{{sensorInfo.id}}</span>
                 <br>
                 <span class="field-label">Device UEI</span>
             </p>  
@@ -30,19 +30,9 @@
                 <span class="field-label">Reserve</span>
             </p>
             <p>
-                <span>{{aditionalInfo.animal}}</span>
-                <br>
-                <span class="field-label">Animal</span>
-            </p>
-            <p>
                 <span>{{aditionalInfo.signals}}</span>
                 <br>
                 <span class="field-label">Signals sent</span>
-            </p>
-            <p>
-                <span>{{aditionalInfo.activeSince}}</span>
-                <br>
-                <span class="field-label">Active Since</span>
             </p>
         </div>
     </mat-card-content>
