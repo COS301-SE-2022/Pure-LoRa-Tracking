@@ -21,8 +21,8 @@ export class ReservePanelComponent implements OnInit {
   private _Devices:Device[];
   private _GateWays:Gateway[];
   private _ViewType:string;
-  @Output() selectedSensorIDout=new EventEmitter<string>()
-  @Output() deletedGatewayOut=new EventEmitter<{inputid:string,inputeui:string}>()
+  @Output() selectedSensorIDout=new EventEmitter<string>();
+  @Output() deleteddevice=new EventEmitter<{inputid:string,inputeui:string,isgateway:boolean}>();
 
   @Input()
   public get Devices(){
@@ -96,9 +96,16 @@ export class ReservePanelComponent implements OnInit {
   }
 
   deleteGateway(inputid:string,deviceeui:string){
-    this.deletedGatewayOut.emit({inputid:inputid,inputeui:deviceeui});
+    this.deleteddevice.emit({inputid:inputid,inputeui:deviceeui,isgateway:false});
     const temp=this.GateWays.filter(val=>val.id!=inputid);
     this.GateWays=temp;
     this.filteredGateways=temp;
+  }
+
+  deleteSensor(inputid:string,deviceeui:string){
+    this.deleteddevice.emit({inputid:inputid,inputeui:deviceeui,isgateway:true});
+    const temp=this.Devices.filter(val=>val.deviceID!=inputid);
+    this.Devices=temp;
+    this.filteredSensors=temp;
   }
 }

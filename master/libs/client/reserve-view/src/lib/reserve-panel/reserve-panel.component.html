@@ -44,7 +44,7 @@
                 
                         <button mat-icon-button id="actionBtn">
                             <!-- <mat-icon>chevron_right</mat-icon> -->
-                            <button mat-button>Delete sensor</button>
+                            <button mat-button (click)="deleteSensor(sensorItem.deviceID,sensorItem.deviceName)">Delete sensor</button>
                         </button>
                     </div>
                 </mat-list-option>
