@@ -18,6 +18,7 @@ export class DeviceAddComponent implements OnInit {
   gatewayGroup!:FormGroup;
   sensorGroup!:FormGroup;
   profilelist:Array<deviceOptionList>=[];
+  deviceprofilelist:Array<{id: string, name: string}>=[];
   deviceType = "";
   token="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZlYWRtaW5AcmVzZXJ2ZS5jb20iLCJzY29wZXMiOlsiVEVOQU5UX0FETUlOIl0sInVzZXJJZCI6ImQ2MzcyZTMwLWRmZTgtMTFlYy1iZGIzLTc1MGNlN2VkMjQ1MSIsImVuYWJsZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiJjZDJkZjJiMC1kZmU4LTExZWMtYmRiMy03NTBjZTdlZDI0NTEiLCJjdXN0b21lcklkIjoiMTM4MTQwMDAtMWRkMi0xMWIyLTgwODAtODA4MDgwODA4MDgwIiwiaXNzIjoidGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE2NTQ4MjM4MjAsImV4cCI6MTY1NDgzMjgyMH0.7znHjokdbaR-O77imOcuokkp5lJTN03QsowagHuUvVD7vE8gzVuaFSb62GnLIOJIK2UtbfuZ70h7El9jabs-Xw"
   constructor(private _formBuilder: FormBuilder,private http:HttpClient) {}
@@ -40,6 +41,7 @@ export class DeviceAddComponent implements OnInit {
     this.sensorGroup=this._formBuilder.group({
       eui: ['', Validators.required],
       applicationkey: ['', Validators.required],
+      deviceProfile: ['', Validators.required],
     })
 
     this.http.post("/api/user/admin/groups",{
@@ -55,6 +57,10 @@ export class DeviceAddComponent implements OnInit {
         })
       }
     })
+
+    this.http.post("api/device/sensor/info/profiles",{}).subscribe((val:any)=>{
+      this.deviceprofilelist = val.data as Array<{id: string, name: string}>;
+    })
   }
 
   create(){
@@ -69,6 +75,7 @@ export class DeviceAddComponent implements OnInit {
         customerID:this.descriptionGroup.get("profilegroup")?.value,
         hardwareName:this.sensorGroup.get("eui")?.value,
         labelName:this.descriptionGroup.get("name")?.value,
+        deviceProfileId:this.sensorGroup.get("deviceProfile")?.value,
       }).subscribe(val=>{
         console.log(val);
       })
