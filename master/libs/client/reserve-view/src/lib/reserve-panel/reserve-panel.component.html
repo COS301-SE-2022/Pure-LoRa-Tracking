@@ -33,7 +33,7 @@
     <mat-card-content id="card-content">
         <cdk-virtual-scroll-viewport itemSize="0">
         <mat-selection-list dense #devicesList [multiple]="true" >
-            <p *ngIf="deviceType==='sensors' || deviceType==='all' && Devices.length>0">
+            <div *ngIf="deviceType==='sensors' || deviceType==='all' && Devices.length>0">
                 <mat-list-option *ngFor="let sensorItem of filteredSensors" [value]="sensorItem.deviceID" [style.background-color]="getSelectedStyle(sensorItem.deviceID)" (click)="selectedSensor(sensorItem.deviceID)" >
                     <mat-icon mat-list-icon>memory</mat-icon>
                     <div class="listItemWrap">
@@ -48,8 +48,8 @@
                         </button>
                     </div>
                 </mat-list-option>
-            </p>
-            <p *ngIf="deviceType==='gateways' || deviceType==='all'">
+            </div>
+            <div *ngIf="deviceType==='gateways' || deviceType==='all' && GateWays.length>0" >
                 <mat-list-option *ngFor="let gatewayItem of filteredGateways" [value]="gatewayItem.id" [style.background-color]="getSelectedStyle(gatewayItem.id)" (click)="selectedGateway(gatewayItem.id)">
                     <mat-icon mat-list-icon>cell_tower</mat-icon>
                     <div class="listItemWrap">
@@ -59,11 +59,11 @@
                         </div>
                 
                         <button mat-icon-button id="actionBtn">
-                            <mat-icon>chevron_right</mat-icon>
+                            <button mat-button (click)="deleteGateway(gatewayItem.id,gatewayItem.eui)">Delete Gateway</button>
                         </button>
                     </div>
                 </mat-list-option>
-            </p>
+            </div>
         </mat-selection-list>
         </cdk-virtual-scroll-viewport>
     </mat-card-content>

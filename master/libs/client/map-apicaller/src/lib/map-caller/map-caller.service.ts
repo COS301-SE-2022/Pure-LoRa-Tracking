@@ -33,6 +33,26 @@ export class MapCallerService {
       });
     })
   }
+  
+  getGateways(token:string,custid:string):Promise<any>{
+    return new Promise((res,rej)=>{
+      this.http.post("/api/device/gateway/info",{"token":token,"customerID":custid}).subscribe(val=>{
+        res(val)  
+      });
+    })
+  }
 
+  removeGateway(token:string,inputid:string,inputeui:string):Promise<any>{
+    return new Promise((res,rej)=>{
+      this.http.post("/api/device/remove",{
+        token: token,
+        deviceID: inputid,
+        isGateway: true,
+        devEUI: inputeui
+      }).subscribe(val=>{
+        res(val);
+      })
+    })
+  }
 
 }

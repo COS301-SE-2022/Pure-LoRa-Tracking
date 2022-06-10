@@ -52,7 +52,7 @@ export class ThingsboardThingsboardClientService {
 
   async getCustomerDevices(custID?: string): Promise<deviceList[]> {
     this.deviceService.setToken(this.token);
-
+    // console.log("im here");
     let InfoResp = '';
     if (custID == undefined) {
       InfoResp = await this.loginService.userInfo(this.token);
