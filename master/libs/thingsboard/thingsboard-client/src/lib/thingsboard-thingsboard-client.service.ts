@@ -37,15 +37,19 @@ export class ThingsboardThingsboardClientService {
     return false;
   }
 
-  async loginUserReturnToken(username: string, password: string): Promise<{ Token: string;
-    refreshToken: string; }> {
+  ///////////////////////////////////////////////////////////
+
+  async loginUserReturnToken(
+    username: string,
+    password: string
+  ): Promise<{ Token: string; refreshToken: string }> {
     const resp = await this.loginService.login(username, password);
     if (resp['data']['token'] != undefined) {
       this.token = resp['data']['token'];
       this.refreshToken = resp['data']['RefreshToken'];
-      return { Token : this.token, refreshToken: this.refreshToken };
+      return { Token: this.token, refreshToken: this.refreshToken };
     }
-    return { Token : "", refreshToken: "" };
+    return { Token: '', refreshToken: '' };
   }
 
   //////////////////////////////////////////////////////////
@@ -167,7 +171,7 @@ export class ThingsboardThingsboardClientService {
       status: 'ok',
       name: DeviceID,
       explanation: labelName,
-      furtherExplain : deviceName,
+      furtherExplain: deviceName,
       data: resp,
     };
   }
@@ -320,7 +324,7 @@ export class ThingsboardThingsboardClientService {
     return {
       status: 'ok',
       data: deviceCreate,
-      explanation : AccessToken.token
+      explanation: AccessToken.token,
     };
   }
 
@@ -622,7 +626,7 @@ export class ThingsboardThingsboardClientService {
   }
 
   ///////////////////////////////////////////////////////////////////////
-  async AdminGetCustomers() : Promise<thingsboardResponse> {
+  async AdminGetCustomers(): Promise<thingsboardResponse> {
     const login = await this.userService.getUserID(this.token);
     console.log(login);
     if (login.code != 200)
@@ -638,23 +642,21 @@ export class ThingsboardThingsboardClientService {
       };
 
     const resp = await this.userService.AdminGetCustomers(this.token);
-    if(resp.status!=200)
-    return {
-      status: 'fail',
-      explanation: resp.status.toString(),
-    }; 
+    if (resp.status != 200)
+      return {
+        status: 'fail',
+        explanation: resp.status.toString(),
+      };
 
     return {
-      status:"ok",
-      explanation:"call finished",
-      data:resp.data.data
-    }
-    
-
+      status: 'ok',
+      explanation: 'call finished',
+      data: resp.data.data,
+    };
   }
 
   ///////////////////////////////////////////////////////////////////////
-  async AdminGetUsersFromReserve (customerID: string) {
+  async AdminGetUsersFromReserve(customerID: string) {
     const login = await this.userService.getUserID(this.token);
     console.log(login);
     if (login.code != 200)
@@ -669,27 +671,29 @@ export class ThingsboardThingsboardClientService {
         explanation: 'user not admin',
       };
 
-    const resp = await this.userService.GetUsersFromReserve(this.token, customerID);
-    if(resp.status != 200)
+    const resp = await this.userService.GetUsersFromReserve(
+      this.token,
+      customerID
+    );
+    if (resp.status != 200)
+      return {
+        status: 'fail',
+        explanation: resp.status.toString(),
+      };
+
     return {
-      status: 'fail',
-      explanation: resp.status.toString(),
+      status: 'ok',
+      explanation: 'call finished',
+      data: resp.data,
     };
-
-    return {
-      status : "ok",
-      explanation : "call finished",
-      data: resp.data
-    }
-  } 
-
+  }
 }
 
 /* data is required to be any due to the many possible response data types */
 export interface thingsboardResponse {
   status: string;
   explanation?: string;
-  furtherExplain? : string;
+  furtherExplain?: string;
   name?: string;
   data?: any;
 }

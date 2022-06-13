@@ -1,81 +1,130 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { AxiosResponse } from 'axios';
 import { firstValueFrom } from 'rxjs';
 @Injectable()
 export class ThingsboardThingsboardUserService {
+  private ThingsBoardURL = process.env.TB_URL || "http://localhost:8080/api";
   constructor(private httpService: HttpService) {}
 
   /////////////////////////////////////////////////////////
 
-  async login(name: string, password: string): Promise<AxiosResponse> {
-    return await firstValueFrom(
-      this.httpService.post('http://localhost:9090/api/auth/login', {
+  async login(name: string, password: string): Promise<UserResponse> {
+    const resp = await firstValueFrom(
+      this.httpService.post(this.ThingsBoardURL+'/auth/login', {
         username: name,
         password: password,
       })
     ).catch((error) => {
-      if (error.response == undefined) return null;
-      if (error.response.status == 401)
-        return new Promise((resolve, reject) => {
-          return {
-            status: error.response.status,
-          };
-        });
+      if (error.response == undefined) return error.code;
+        return error;
     });
+    if(resp == "ECONNREFUSED")
+    return {
+      status : 500,
+      explanation : resp,
+      data : null
+    } 
+    else if(resp.status != 200) {
+      return {
+      status : resp.response.status,
+      explanation : resp.response.data,
+      data : null
+      }
+    }
+    return {
+      status : resp.status,
+      explanation : "ok",
+      data : {
+        token : resp.data.token,
+        refreshToken : resp.data.refreshToken
+      }
+    }
   }
 
   /////////////////////////////////////////////////////
 
-  async logout(token: string): Promise<AxiosResponse> {
+  async logout(token: string): Promise<UserResponse> {
     const headersReq = {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + token,
     };
-    return await firstValueFrom(
+    const resp = await firstValueFrom(
       this.httpService.post(
-        'http://localhost:9090/api/auth/logout',
+        this.ThingsBoardURL+'/auth/logout',
         {},
         { headers: headersReq }
       )
     ).catch((error) => {
-      if (error.response == undefined) return null;
-      if (error.response.status == 401)
-        return new Promise((resolve, reject) => {
-          return {
-            status: error.response.status,
-          };
-        });
+      if (error.response == undefined) return error.code;
+        return error;
     });
-  }
-
-    async refreshToken(refreshTokenValue: string) {
-    if (refreshTokenValue == undefined || refreshTokenValue == "") {
+    if(resp == "ECONNREFUSED")
+    return {
+      status : 500,
+      explanation : resp,
+      data : null
+    } 
+    else if(resp.status != 200) {
       return {
-        status: 400
+      status : resp.response.status,
+      explanation : resp.response.data,
+      data : null
       }
     }
-    const url = 'http://localhost:9090/api/auth/token'
+    return {
+      status : resp.status,
+      explanation : "ok",
+      data : null
+    }
+  }
+
+  //////////////////////////////////////////////////////////////////////////
+
+    async refreshToken(refreshTokenValue: string) : Promise<UserResponse> {
+    if (refreshTokenValue == undefined || refreshTokenValue == "") {
+      return {
+        status: 400,
+        explanation : "token invalid"
+      }
+    }
+    const url = this.ThingsBoardURL+'/auth/token'
     const requestHeaders = {
       'Content-type': 'application/json',
     }
-    return await firstValueFrom(
+    const resp = await firstValueFrom(
       this.httpService.post(
         url,
         { "refreshToken": refreshTokenValue },
         { headers: requestHeaders }
       )
     ).catch((error) => {
-      if (error.response == undefined) return null;
-      else {
-        return new Promise((resolve, reject) => {
-          return {
-            status: error.response.status
-          };
-        });
-      };
+      if (error.response == undefined) return error.code;
+        return error;
     });
-    
+
+    if(resp == "ECONNREFUSED")
+    return {
+      status : 500,
+      explanation : resp,
+      data : null
+    } 
+    else if(resp.status != 200) {
+      return {
+      status : resp.response.status,
+      explanation : resp.response.data,
+      data : null
+      }
+    }
+    return {
+      status : resp.status,
+      explanation : "ok",
+      data : {
+        token : resp.data.token,
+        refreshToken : resp.data.refreshToken
+      }
+    }
   }
 
   //////////////////////////////////////////////////////
@@ -86,7 +135,7 @@ export class ThingsboardThingsboardUserService {
       Authorization: 'Bearer ' + token,
     };
     return await firstValueFrom(
-      this.httpService.get('http://localhost:9090/api/auth/user', {
+      this.httpService.get(this.ThingsBoardURL+'/auth/user', {
         headers: headersReq,
       })
     ).catch((error) => {
@@ -144,7 +193,7 @@ export class ThingsboardThingsboardUserService {
     };
 
     return await firstValueFrom(
-      this.httpService.get('http://localhost:9090/api/customer/' + custID, {
+      this.httpService.get(this.ThingsBoardURL+'/customer/' + custID, {
         headers: headersReq,
       })
     ).catch((error) => {
@@ -162,7 +211,7 @@ export class ThingsboardThingsboardUserService {
     };
 
     const resp = await firstValueFrom(
-      this.httpService.delete('http://localhost:9090/api/user/' + userID, {
+      this.httpService.delete(this.ThingsBoardURL+'/user/' + userID, {
         headers: headersReq,
       })
     ).catch((error) => {
@@ -190,7 +239,7 @@ export class ThingsboardThingsboardUserService {
 
     const resp = await firstValueFrom(
       this.httpService.post(
-        'http://localhost:9090/api/user?sendActivationMail=false',
+        this.ThingsBoardURL+'/user?sendActivationMail=false',
         {
           email: email,
           customerId: {
@@ -216,6 +265,7 @@ export class ThingsboardThingsboardUserService {
     return {
       status: resp.status,
       explanation: resp.data,
+      data:null
     };
   }
 
@@ -232,7 +282,7 @@ export class ThingsboardThingsboardUserService {
 
     const resp = await firstValueFrom(
       this.httpService.get(
-        'http://localhost:9090/api/customer/' +
+        this.ThingsBoardURL+'/customer/' +
           custID +
           '/users?page=0&pageSize=100',
         {
@@ -264,7 +314,7 @@ export class ThingsboardThingsboardUserService {
 
     const resp = await firstValueFrom(
       this.httpService.post(
-        'http://localhost:9090/api/customer',
+        this.ThingsBoardURL+'/customer',
         {
           email: email,
           title: title,
@@ -284,6 +334,7 @@ export class ThingsboardThingsboardUserService {
     return {
       status: resp.status,
       explanation: resp.data,
+      data:null
     };
   }
 
@@ -296,7 +347,7 @@ export class ThingsboardThingsboardUserService {
     };
 
     const resp = await firstValueFrom(
-      this.httpService.delete('http://localhost:9090/api/customer/' + custID, {
+      this.httpService.delete(this.ThingsBoardURL+'/customer/' + custID, {
         headers: headersReq,
       })
     ).catch((error) => {
@@ -317,7 +368,7 @@ export class ThingsboardThingsboardUserService {
 
     const resp = await firstValueFrom(
       this.httpService.post(
-        'http://localhost:9090/api/user/' +
+        this.ThingsBoardURL+'/user/' +
           userID +
           '/userCredentialsEnabled?userCredentialsEnabled=false',
         {},
@@ -347,7 +398,7 @@ export class ThingsboardThingsboardUserService {
 
     const resp = await firstValueFrom(
       this.httpService.post(
-        'http://localhost:9090/api/user/' +
+        this.ThingsBoardURL+'/user/' +
           userID +
           '/userCredentialsEnabled?userCredentialsEnabled=true',
         {},
@@ -375,7 +426,7 @@ export class ThingsboardThingsboardUserService {
   
       const resp = await firstValueFrom(
         this.httpService.get(
-          'http://localhost:9090/api/customers?page=0&pageSize=100',
+          this.ThingsBoardURL+'/customers?page=0&pageSize=100',
           {
             headers: headersReq,
           }
@@ -395,6 +446,10 @@ export class ThingsboardThingsboardUserService {
 }
 
 export interface UserResponse {
-  explanation: string;
   status: number;
+  explanation: string;
+  data? : {
+    token? : string;
+    refreshToken? : string;
+  }
 }
