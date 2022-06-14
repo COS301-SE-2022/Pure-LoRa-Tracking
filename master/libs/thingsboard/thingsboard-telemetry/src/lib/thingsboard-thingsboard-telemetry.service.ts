@@ -6,6 +6,7 @@ import { lastValueFrom, map, Observable, Timestamp } from 'rxjs';
 @Injectable()
 export class ThingsboardThingsboardTelemetryService {
   private token: string;
+  private ThingsBoardURL = process.env.TB_URL || "http://localhost:8080/api";
   constructor(private httpService: HttpService) {}
 
   setToken(token: string): void {
@@ -17,13 +18,16 @@ export class ThingsboardThingsboardTelemetryService {
     DeviceProfile: string,
     timeStart?: number,
     timeStop?: number
-  ): Promise<TelemetryResult[]> {
-    if (this.token == '') return [];
+  ): Promise<TelemetryResponse> {
+    if (this.token == '') return {
+      status : 401,
+      explanation : "no token"
+    };
 
     let url = '';
     if (timeStart != undefined) {
       url =
-        'http://localhost:9090/api/plugins/telemetry/' +
+        this.ThingsBoardURL+'plugins/telemetry/' +
         DeviceProfile +
         '/' +
         DeviceID +
@@ -35,7 +39,7 @@ export class ThingsboardThingsboardTelemetryService {
         '&keys=ts,latitude,longitude';
     } else {
       url =
-        'http://localhost:9090/api/plugins/telemetry/' +
+      this.ThingsBoardURL+'/plugins/telemetry/' +
         DeviceProfile +
         '/' +
         DeviceID +
@@ -47,16 +51,33 @@ export class ThingsboardThingsboardTelemetryService {
       Authorization: 'Bearer ' + this.token,
     };
 
-    const data = await lastValueFrom(
+    const resp = await lastValueFrom(
       this.httpService.get(url, { headers: headersReq })
     ).catch((error) => {
-      if (error.response == undefined) return { status: 500 };
-      return { status: error.response.status };
+      if (error.response == undefined) return error.code;
+        return error;
     });
-
-    if (data['status'] != 200) return [];
-    else return this.buildTelemetryResults(data['data']);
+    if(resp == "ECONNREFUSED")
+    return {
+      status : 500,
+      explanation : resp,
+    } 
+    else if(resp.status != 200) {
+      return {
+      status : resp.response.status,
+      explanation : resp.response.data.message,
+      }
+    }
+    return {
+      status : resp.status,
+      explanation : "ok",
+      data : {
+        telemetryResults : this.buildTelemetryResults(resp.data)
+      }
+    }
   }
+
+ //////////////////////////////////////////////////////////////////
 
   buildTelemetryResults(items: AxiosResponse): TelemetryResult[] {
     if (items['longitude'] == undefined) return [];
@@ -71,12 +92,14 @@ export class ThingsboardThingsboardTelemetryService {
     return TelList;
   }
 
+  //////////////////////////////////////////////////////////////////
+
   async sendTelemetry(
     EntityID: string,
     DeviceType: string,
     latitude: number,
     longitude: number
-  ): Promise<boolean> {
+  ): Promise<TelemetryResponse> {
     if (this.token == '') return;
 
     const headersReq = {
@@ -85,7 +108,7 @@ export class ThingsboardThingsboardTelemetryService {
     };
     const resp = await lastValueFrom(
       this.httpService.post(
-        'http://localhost:9090/api/plugins/telemetry/' +
+        this.ThingsBoardURL+'/plugins/telemetry/' +
           DeviceType +
           '/' +
           EntityID +
@@ -98,20 +121,34 @@ export class ThingsboardThingsboardTelemetryService {
         { headers: headersReq }
       )
     ).catch((error) => {
-      if (error.response == undefined) return { status: 400 };
-      if (error.response.status == 400) {
-        return { status: 400 };
-      }
+      if (error.response == undefined) return error.code;
+        return error;
     });
-    return resp.status == 200;
+
+    if(resp == "ECONNREFUSED")
+    return {
+      status : 500,
+      explanation : resp,
+    } 
+    else if(resp.status != 200) {
+      return {
+      status : resp.response.status,
+      explanation : resp.response.data.message,
+      }
+    }
+    return {
+      status : resp.status,
+      explanation : "ok",
+    }
   }
 
+ //////////////////////////////////////////////////////////////////
   
   async sendJsonTelemetry(
     EntityID: string,
     DeviceType: string,
     TelemetryJSON: string
-  ): Promise<boolean> {
+  ): Promise<TelemetryResponse> {
     if (this.token == '') return;
 
     const headersReq = {
@@ -120,7 +157,7 @@ export class ThingsboardThingsboardTelemetryService {
     };
     const resp = await lastValueFrom(
       this.httpService.post(
-        'http://localhost:9090/api/plugins/telemetry/' +
+        this.ThingsBoardURL+'/plugins/telemetry/' +
           DeviceType +
           '/' +
           EntityID +
@@ -132,13 +169,28 @@ export class ThingsboardThingsboardTelemetryService {
         { headers: headersReq }
       )
     ).catch((error) => {
-      if (error.response == undefined) return { status: 400 };
-      if (error.response.status == 400) {
-        return { status: 400 };
-      }
+      if (error.response == undefined) return error.code;
+        return error;
     });
-    return resp.status == 200;
+
+    if(resp == "ECONNREFUSED")
+    return {
+      status : 500,
+      explanation : resp,
+    } 
+    else if(resp.status != 200) {
+      return {
+      status : resp.response.status,
+      explanation : resp.response.data.message,
+      }
+    }
+    return {
+      status : resp.status,
+      explanation : "ok",
+    }
   }
+
+ //////////////////////////////////////////////////////////////////
 
   async V1sendJsonTelemetry(
     accessToken: string,
@@ -152,7 +204,7 @@ export class ThingsboardThingsboardTelemetryService {
     };
     const resp = await lastValueFrom(
       this.httpService.post(
-        'http://localhost:9090/api/v1/' + accessToken + '/telemetry',
+        this.ThingsBoardURL+'/v1/' + accessToken + '/telemetry',
         {
           timestamp: +new Date(),
           DeviceData: TelemetryJSON,
@@ -172,4 +224,12 @@ export interface TelemetryResult {
   timestamp: number;
   latitude: number;
   longitude: number;
+}
+
+export interface TelemetryResponse {
+  status : number,
+  explanation : string,
+  data? : {
+    telemetryResults? : TelemetryResult[],
+  }
 }
