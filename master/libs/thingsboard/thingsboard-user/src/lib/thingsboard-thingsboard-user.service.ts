@@ -24,13 +24,11 @@ export class ThingsboardThingsboardUserService {
     return {
       status : 500,
       explanation : resp,
-      data : null
     } 
     else if(resp.status != 200) {
       return {
       status : resp.response.status,
-      explanation : resp.response.data,
-      data : null
+      explanation : resp.response.data.message,
       }
     }
     return {
@@ -69,14 +67,12 @@ export class ThingsboardThingsboardUserService {
     else if(resp.status != 200) {
       return {
       status : resp.response.status,
-      explanation : resp.response.data,
-      data : null
+      explanation : resp.response.data.message,
       }
     }
     return {
       status : resp.status,
       explanation : "ok",
-      data : null
     }
   }
 
@@ -107,14 +103,12 @@ export class ThingsboardThingsboardUserService {
     if(resp == "ECONNREFUSED")
     return {
       status : 500,
-      explanation : resp,
-      data : null
+      explanation : resp
     } 
     else if(resp.status != 200) {
       return {
       status : resp.response.status,
-      explanation : resp.response.data,
-      data : null
+      explanation : resp.response.data.message
       }
     }
     return {
@@ -129,56 +123,78 @@ export class ThingsboardThingsboardUserService {
 
   //////////////////////////////////////////////////////
 
-  async userInfo(token: string): Promise<any> {
+  async userInfo(token: string): Promise<UserResponse> {
     const headersReq = {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + token,
     };
-    return await firstValueFrom(
+    const resp = await firstValueFrom(
       this.httpService.get(this.ThingsBoardURL+'/auth/user', {
         headers: headersReq,
       })
     ).catch((error) => {
-      if (error.response == undefined) return null;
-      return { status: error.response.status };
+      if (error.response == undefined) return error.code;
+        return error;
     });
+
+    if(resp == "ECONNREFUSED")
+    return {
+      status : 500,
+      explanation : resp,
+    } 
+    else if(resp.status != 200) {
+      return {
+      status : resp.response.status,
+      explanation : resp.response.data.message,
+      }
+    }
+    return {
+      status : resp.status,
+      explanation : "ok",
+      data : resp.data
+    }
   }
 
   ///////////////////////////////////////////////////////////
 
   async getUserID(
     token: string
-  ): Promise<{ id?: string; type?: string; code: number }> {
+  ): Promise<UserResponse> {
     const resp = await this.userInfo(token);
     if (resp.status != 200) {
       return {
-        code: resp.status,
+        explanation : resp.explanation,
+        status: resp.status,
       };
     }
 
     if (resp.data == undefined) {
       return {
-        code: 500,
+        explanation : resp.explanation,
+        status: resp.status,
       };
     }
 
-    if (resp.data['authority'] == 'SYS_ADMIN') {
+    if (resp.data.authority == 'SYS_ADMIN') {
       return {
-        code: 200,
-        id: resp.data['tenantId']['id'],
+        status: 200,
+        explanation : "ok",
+        userID: resp.data['tenantId']['id'],
         type: 'sysAdmin',
       } 
     }
     else if (resp.data['authority'] == 'TENANT_ADMIN') {
       return {
-        code: 200,
-        id: resp.data['tenantId']['id'],
+        status: 200,
+        explanation : "ok",
+        userID: resp.data['tenantId']['id'],
         type: 'admin',
       };
     } else {
       return {
-        code: 200,
-        id: resp.data['customerId']['id'],
+        status: 200,
+        explanation : "ok",
+        userID: resp.data['customerId']['id'],
         type: 'user',
       };
     }
@@ -186,25 +202,42 @@ export class ThingsboardThingsboardUserService {
 
   //////////////////////////////////////////////////////////////////////
 
-  async userInfoByCustID(token: string, custID: string): Promise<any> {
+  async userInfoByCustID(token: string, custID: string): Promise<UserResponse> {
     const headersReq = {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + token,
     };
 
-    return await firstValueFrom(
+    const resp = await firstValueFrom(
       this.httpService.get(this.ThingsBoardURL+'/customer/' + custID, {
         headers: headersReq,
       })
     ).catch((error) => {
-      if (error.response == undefined) return null;
-      return { status: error.response.status };
+      if (error.response == undefined) return error.code;
+        return error;
     });
+
+    if(resp == "ECONNREFUSED")
+    return {
+      status : 500,
+      explanation : resp,
+    } 
+    else if(resp.status != 200) {
+      return {
+      status : resp.response.status,
+      explanation : resp.response.data.message,
+      }
+    }
+    return {
+      status : resp.status,
+      explanation : "ok",
+      data : resp.data
+    }
   }
 
   /////////////////////////////////////////////////////////////////
 
-  async deleteUser(token: string, userID: string): Promise<boolean> {
+  async deleteUser(token: string, userID: string): Promise<UserResponse> {
     const headersReq = {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + token,
@@ -215,11 +248,25 @@ export class ThingsboardThingsboardUserService {
         headers: headersReq,
       })
     ).catch((error) => {
-      if (error.response == undefined) return null;
-      return { status: error.response.status };
+      if (error.response == undefined) return error.code;
+        return error;
     });
 
-    return resp.status == 200;
+    if(resp == "ECONNREFUSED")
+    return {
+      status : 500,
+      explanation : resp,
+    } 
+    else if(resp.status != 200) {
+      return {
+      status : resp.response.status,
+      explanation : resp.response.data.message,
+      }
+    }
+    return {
+      status : resp.status,
+      explanation : "ok",
+    }
   }
 
   /////////////////////////////////////////////////////////////////
@@ -255,18 +302,26 @@ export class ThingsboardThingsboardUserService {
         }
       )
     ).catch((error) => {
-      if (error.response == undefined) return null;
-      return {
-        status: error.response.status,
-        data: error.response.data.message,
-      };
+      if (error.response == undefined) return error.code;
+        return error;
     });
 
+    if(resp == "ECONNREFUSED")
     return {
-      status: resp.status,
-      explanation: resp.data,
-      data:null
-    };
+      status : 500,
+      explanation : resp,
+    } 
+    else if(resp.status != 200) {
+      return {
+      status : resp.response.status,
+      explanation : resp.response.data.message,
+      }
+    }
+    return {
+      status : resp.status,
+      explanation : "ok",
+      data : resp.data
+    }
   }
 
   /////////////////////////////////////////////////////////////////
@@ -274,7 +329,7 @@ export class ThingsboardThingsboardUserService {
   /* 
     possibly add a process method
   */
-  async GetUsersFromReserve(token: string, custID: string): Promise<any> {
+  async GetUsersFromReserve(token: string, custID: string): Promise<UserResponse> {
     const headersReq = {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + token,
@@ -290,14 +345,26 @@ export class ThingsboardThingsboardUserService {
         }
       )
     ).catch((error) => {
-      if (error.response == undefined) return null;
-      return { status: error.response.status };
+      if (error.response == undefined) return error.code;
+        return error;
     });
 
-    if(resp.status != 200)
-    return {status:resp.status, data:[]} 
-
-    return {status: 200, data:resp['data']};
+    if(resp == "ECONNREFUSED")
+    return {
+      status : 500,
+      explanation : resp,
+    } 
+    else if(resp.status != 200) {
+      return {
+      status : resp.response.status,
+      explanation : resp.response.data.message,
+      }
+    }
+    return {
+      status : resp.status,
+      explanation : "ok",
+      data : resp.data
+    }
   }
 
   /////////////////////////////////////////////////////////////////
@@ -324,23 +391,31 @@ export class ThingsboardThingsboardUserService {
         }
       )
     ).catch((error) => {
-      if (error.response == undefined) return null;
-      return {
-        status: error.response.status,
-        data: error.response.data.message,
-      };
+      if (error.response == undefined) return error.code;
+        return error;
     });
 
+    if(resp == "ECONNREFUSED")
     return {
-      status: resp.status,
-      explanation: resp.data,
-      data:null
-    };
+      status : 500,
+      explanation : resp,
+    } 
+    else if(resp.status != 200) {
+      return {
+      status : resp.response.status,
+      explanation : resp.response.data.message,
+      }
+    }
+    return {
+      status : resp.status,
+      explanation : "ok",
+      data : resp.data
+    }
   }
 
   /////////////////////////////////////////////////////////////////
 
-  async deleteReserveGroup(token: string, custID: string): Promise<boolean> {
+  async deleteReserveGroup(token: string, custID: string): Promise<UserResponse> {
     const headersReq = {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + token,
@@ -351,16 +426,30 @@ export class ThingsboardThingsboardUserService {
         headers: headersReq,
       })
     ).catch((error) => {
-      if (error.response == undefined) return null;
-      return { status: error.response.status };
+      if (error.response == undefined) return error.code;
+        return error;
     });
 
-    return resp.status == 200;
+    if(resp == "ECONNREFUSED")
+    return {
+      status : 500,
+      explanation : resp,
+    } 
+    else if(resp.status != 200) {
+      return {
+      status : resp.response.status,
+      explanation : resp.response.data.message,
+      }
+    }
+    return {
+      status : resp.status,
+      explanation : "ok",
+    }
   }
 
   /////////////////////////////////////////////////////////////////
 
-  async DisableUser(token: string, userID: string): Promise<boolean> {
+  async DisableUser(token: string, userID: string): Promise<UserResponse> {
     const headersReq = {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + token,
@@ -377,20 +466,30 @@ export class ThingsboardThingsboardUserService {
         }
       )
     ).catch((error) => {
-      console.log(error);
-      if (error.response == undefined) return null;
-      return {
-        status: error.response.status,
-        data: error.response.data.message,
-      };
+      if (error.response == undefined) return error.code;
+        return error;
     });
 
-    return resp.status == 200;
+    if(resp == "ECONNREFUSED")
+    return {
+      status : 500,
+      explanation : resp,
+    } 
+    else if(resp.status != 200) {
+      return {
+      status : resp.response.status,
+      explanation : resp.response.data.message,
+      }
+    }
+    return {
+      status : resp.status,
+      explanation : "ok",
+    }
   }
 
   /////////////////////////////////////////////////////////////////
 
-  async EnableUser(token: string, userID: string): Promise<boolean> {
+  async EnableUser(token: string, userID: string): Promise<UserResponse> {
     const headersReq = {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + token,
@@ -407,18 +506,29 @@ export class ThingsboardThingsboardUserService {
         }
       )
     ).catch((error) => {
-      if (error.response == undefined) return null;
-      return {
-        status: error.response.status,
-        data: error.response.data.message,
-      };
+      if (error.response == undefined) return error.code;
+        return error;
     });
 
-    return resp.status == 200;
+    if(resp == "ECONNREFUSED")
+    return {
+      status : 500,
+      explanation : resp,
+    } 
+    else if(resp.status != 200) {
+      return {
+      status : resp.response.status,
+      explanation : resp.response.data.message,
+      }
+    }
+    return {
+      status : resp.status,
+      explanation : "ok",
+    }
   }
 
   /////////////////////////////////////////////////////////////////
-    async AdminGetCustomers(token: string): Promise<{data:any, status:number}> {
+    async AdminGetCustomers(token: string): Promise<UserResponseCustomers> {
       const headersReq = {
         'Content-Type': 'application/json',
         Authorization: 'Bearer ' + token,
@@ -432,17 +542,27 @@ export class ThingsboardThingsboardUserService {
           }
         )
       ).catch((error) => {
-        if (error.response == undefined) return null;
-        return { status: error.response.status };
+        if (error.response == undefined) return error.code;
+          return error;
       });
   
-
+      if(resp == "ECONNREFUSED")
+      return {
+        status : 500,
+        explanation : resp,
+      } 
+      else if(resp.status != 200) {
+        return {
+        status : resp.response.status,
+        explanation : resp.response.data.message,
+        }
+      }
       return {
         status : resp.status,
-        data : resp['data']
+        explanation : "ok",
+        data : resp.data
       }
     }
-
 }
 
 export interface UserResponse {
@@ -451,5 +571,60 @@ export interface UserResponse {
   data? : {
     token? : string;
     refreshToken? : string;
+      "id"?: {
+        "id"?: string,
+        "entityType"?: string
+      },
+      "createdTime"?: number
+      "tenantId"?: {
+        "id"?: string,
+        "entityType"?: string
+      },
+      "customerId"?: {
+        "id"?: string,
+        "entityType"?: string
+      },
+      "email"?: string,
+      "name"?: string,
+      "authority"?: "SYS_ADMIN" | "TENANT_ADMIN" | "CUSTOMER_USER",
+      "firstName"?: string,
+      "lastName"?: string,
+      "additionalInfo"?:any
   }
+  type? : string;
+  userID? : string;
+}
+
+export interface UserResponseCustomers {
+  status: number,
+  explanation: string,
+    "data"?: [
+      {
+        "id"?: {
+          "id"?: string,
+          "entityType"?: string
+        },
+        "createdTime"?: number,
+        "title"?: string,
+        "name"?: string,
+        "tenantId"?: {
+          "id"?: string,
+          "entityType"?: string
+        },
+        "country"?: string,
+        "state"?: string,
+        "city"?: string,
+        "address"?: string,
+        "address2"?: string,
+        "zip"?: string,
+        "phone"?: string,
+        "email"?: string,
+        "additionalInfo"?: any
+      }
+    ],
+    "totalPages"?: 0,
+    "totalElements"?: 0,
+    "hasNext"?: false,
+  type? : string,
+  userID? : string,
 }
