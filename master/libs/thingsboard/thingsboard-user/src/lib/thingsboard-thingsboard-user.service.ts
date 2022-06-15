@@ -157,6 +157,11 @@ export class ThingsboardThingsboardUserService {
 
   ///////////////////////////////////////////////////////////
 
+  /*
+  TODO change this function to return userID for user
+  TODO make a new function to return customer id for a token
+  */
+
   async getUserID(
     token: string
   ): Promise<UserResponse> {

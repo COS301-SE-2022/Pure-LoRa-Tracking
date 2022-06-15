@@ -11,7 +11,6 @@ import {
   MapApiReserveResponse,
   MapApiHistoricalResponse,
 } from '@master/shared-interfaces';
-import { userInfo } from 'os';
 @Injectable()
 export class ThingsboardThingsboardClientService {
   private token: string;
@@ -53,24 +52,33 @@ export class ThingsboardThingsboardClientService {
   }
 
   //////////////////////////////////////////////////////////
+  /*
+    An admin wanting to see the customer's devices
+    should have the customer ID from another call
+  */
 
-  async getCustomerDevices(custID?: string): Promise<deviceList[]> {
+  async getCustomerDevices(custID: string): Promise<thingsboardResponse> {
     this.deviceService.setToken(this.token);
-    // console.log("im here");
-    let InfoResp = '';
-    if (custID == undefined) {
-      InfoResp = await this.loginService.userInfo(this.token);
-      InfoResp = ['data']['customerId']['id'];
-    } else {
-      InfoResp = custID;
-    }
 
-    const DeviceResp = await this.deviceService.getCustomerDevices(
+    const deviceResp = await this.deviceService.getCustomerDevices(
       0,
       100,
-      InfoResp
+      custID
     );
-    return DeviceResp;
+
+    if(deviceResp.status!=200){
+      return {
+        status : "fail",
+        explanation : deviceResp.explanation,
+        data : deviceResp.data.deviceList
+      }
+    }
+
+    return {
+      status : "ok",
+      explanation : deviceResp.explanation,
+      data : deviceResp.data.deviceList
+    }
   }
 
   //////////////////////////////////////////////////////////
@@ -82,6 +90,7 @@ export class ThingsboardThingsboardClientService {
   //////////////////////////////////////////////////////////
 
   /*
+  TODO
         check token
         check customerID
         get asset list
@@ -98,18 +107,11 @@ export class ThingsboardThingsboardClientService {
 
     const userInfo = await this.userService.getUserID(this.token);
     if (userInfo['code'] != undefined) {
-      /* fail */
+      /* TODO fail */
     }
 
     this.assetService.setToken(this.token);
-
-    //TODO
-    let ids = [];
-    if (userInfo['type'] == 'user') {
-      ids = await this.assetService.getAssetIDs(userInfo['id']);
-    } else {
-      return null;
-    }
+    const ids = (await this.assetService.getAssetIDs(userInfo['id'])).data.assets;
 
     //console.log(ids.length);
 
@@ -124,6 +126,14 @@ export class ThingsboardThingsboardClientService {
       status: 'not found',
       explanation: 'no reserve set',
     };
+  }
+
+  /////////////////////////////////////////////////////////
+
+  async validateDevice(deviceID: string): Promise<any> {
+    this.deviceService.setToken(this.token);
+    const resp = await this.deviceService.getDeviceInfo(deviceID);
+    return resp['data'];
   }
 
   //////////////////////////////////////////////////////////
@@ -192,14 +202,6 @@ export class ThingsboardThingsboardClientService {
     const resp = await this.userService.userInfo(this.token);
     if (resp['status'] == 401) return false;
     else return true;
-  }
-
-  /////////////////////////////////////////////////////////
-
-  async validateDevice(deviceID: string): Promise<any> {
-    this.deviceService.setToken(this.token);
-    const resp = await this.deviceService.getDeviceInfo(deviceID);
-    return resp['data'];
   }
 
   ///////////////////////////////////////////////////////////

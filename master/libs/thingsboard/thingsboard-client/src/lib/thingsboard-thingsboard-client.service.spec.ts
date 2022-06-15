@@ -604,4 +604,13 @@ describe('ThingsboardThingsboardClientService', () => {
     console.log(await service.getDeviceInfos(["2fe67850-dfe9-11ec-bdb3-750ce7ed2451"]));*/
   });
 
+  //////////////////////////////////////////////////////////////////////
+
+  it('customer devices', async () => {
+    /*expect(await service.loginUser('reserveadmin@reserve.com', 'reserve')).toBe(
+      true
+    );
+    console.log(await service.getCustomerDevices("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451"));
+  });*/
+
 });
