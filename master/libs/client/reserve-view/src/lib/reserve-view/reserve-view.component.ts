@@ -20,7 +20,7 @@ export class ReserveViewComponent {
   LastestHistorical:Device[];
   ShowPolygon:boolean;
   Gateways:GatewayInput[];
-  token="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZldXNlckByZXNlcnZlLmNvbSIsInNjb3BlcyI6WyJDVVNUT01FUl9VU0VSIl0sInVzZXJJZCI6ImY5NmU2MGQwLWRmZTgtMTFlYy1iZGIzLTc1MGNlN2VkMjQ1MSIsImVuYWJsZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiJjZDJkZjJiMC1kZmU4LTExZWMtYmRiMy03NTBjZTdlZDI0NTEiLCJjdXN0b21lcklkIjoiZWY1NWZmNDAtZGZlOC0xMWVjLWJkYjMtNzUwY2U3ZWQyNDUxIiwiaXNzIjoidGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE2NTQ4MjM0NDYsImV4cCI6MTY1NDgzMjQ0Nn0.xoZzxHTsM2ej27xRln1Q1Ly8-F_nY97-uPejn1QmWmyQ_ubKquJiGqciuo-jwOtzszVyCCHnfCjVp5AKNsVqdw";
+  token="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZldXNlckByZXNlcnZlLmNvbSIsInNjb3BlcyI6WyJDVVNUT01FUl9VU0VSIl0sInVzZXJJZCI6ImY5NmU2MGQwLWRmZTgtMTFlYy1iZGIzLTc1MGNlN2VkMjQ1MSIsImVuYWJsZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiJjZDJkZjJiMC1kZmU4LTExZWMtYmRiMy03NTBjZTdlZDI0NTEiLCJjdXN0b21lcklkIjoiZWY1NWZmNDAtZGZlOC0xMWVjLWJkYjMtNzUwY2U3ZWQyNDUxIiwiaXNzIjoidGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE2NTUzODk0NTQsImV4cCI6MTY1NTM5ODQ1NH0.sGrzmhQ2FMZaWHVcMKDo60jP86KFZQ4Dj5usrJLOHDo7PhvfCO7Ubfb5nyKh-68NEo8TotjQwtdpYMbid0Hc7Q";
 
   constructor(private apicaller:MapCallerService) {
     this.LastestHistorical=[];
@@ -31,9 +31,11 @@ export class ReserveViewComponent {
   
   ngOnInit(): void {
     //get the reserve
+    //TODO check for incorrect token response
     this.apicaller.getReserve(this.token, "123").then(val => this.Reserve = val);
     this.apicaller.getHistorical(this.token,"123",[]).then(val=>{
-      console.log(val)
+      // console.log(val+"thingdd")
+      console.log(val);
       this.LastestHistorical=val.data;
       this.reservemap?.loadInnitial(this.LastestHistorical);
     });

@@ -111,7 +111,8 @@ export class ThingsboardThingsboardClientService {
     }
 
     this.assetService.setToken(this.token);
-    const ids = (await this.assetService.getAssetIDs(userInfo['id'])).data.assets;
+    // console.log(await this.assetService.getAssetIDs(userInfo.userID))
+    const ids = (await this.assetService.getAssetIDs(userInfo.userID)).data.assets;
 
     //console.log(ids.length);
 
@@ -222,23 +223,24 @@ export class ThingsboardThingsboardClientService {
       };
 
     const UserInfo = await this.userService.getUserID(this.token);
-    if (UserInfo.code != 200)
+    if (UserInfo.status != 200)
       return {
         status: 'fail',
         explanation: 'user type unknown',
       };
-    let devices = [];
+    let devices:thingsboardResponse;
     if (UserInfo.type == 'admin') {
       /* todo */
       // Tentatively added this for testing.
-      devices = await this.getCustomerDevices(UserInfo.id);
+      devices = await this.getCustomerDevices(UserInfo.userID);
     } else {
-      devices = await this.getCustomerDevices(UserInfo.id);
+      devices = await this.getCustomerDevices(UserInfo.userID);
     }
 
     const data = new Array<deviceList>();
     if (filter != undefined) {
-      devices.forEach((device: deviceList) => {
+      //TODO check if i am looping over the correct thing
+      devices.data.forEach((device: deviceList) => {
         filter.forEach((filterDevice) => {
           if (device.deviceID == filterDevice) data.push(device);
         });
@@ -303,7 +305,8 @@ export class ThingsboardThingsboardClientService {
       deviceDetails.profileType,
       deviceDetails.extraParams
     );
-    if (deviceCreate.includes('fail'))
+    //TODO check that i checked the right thing for fail
+    if (deviceCreate.status!=200)
       return {
         status: 'fail',
         explanation: 'device creation failed with: ' + deviceCreate,
@@ -311,22 +314,22 @@ export class ThingsboardThingsboardClientService {
 
     const assignDevice = await this.deviceService.assignDevicetoCustomer(
       userID,
-      deviceCreate
+      deviceCreate.data.id.id
     );
-    if (assignDevice == false) {
-      this.deviceService.deleteDevice(deviceCreate);
+    if (assignDevice.status!=200) {
+      this.deviceService.deleteDevice(deviceCreate.data.id.id);
       return {
         status: 'fail',
         explanation: 'assign failed, device creation reversed',
       };
     }
 
-    const AccessToken = await this.deviceService.GetAccessToken(deviceCreate);
+    const AccessToken = await this.deviceService.GetAccessToken(deviceCreate.data.id.id);
 
     return {
       status: 'ok',
       data: deviceCreate,
-      explanation: AccessToken.token,
+      explanation: AccessToken.explanation,
     };
   }
 
@@ -382,7 +385,7 @@ export class ThingsboardThingsboardClientService {
   ): Promise<thingsboardResponse> {
     const login = await this.userService.getUserID(this.token);
 
-    if (login.code != 200)
+    if (login.status != 200)
       return {
         status: 'fail',
         explanation: 'token invalid',
@@ -423,7 +426,7 @@ export class ThingsboardThingsboardClientService {
   */
   async removeReserveUser(userID: string): Promise<thingsboardResponse> {
     const login = await this.userService.getUserID(this.token);
-    if (login.code != 200)
+    if (login.status != 200)
       return {
         status: 'fail',
         explanation: 'token invalid',
@@ -455,7 +458,7 @@ export class ThingsboardThingsboardClientService {
   */
   async disableUser(userID: string): Promise<thingsboardResponse> {
     const login = await this.userService.getUserID(this.token);
-    if (login.code != 200)
+    if (login.status != 200)
       return {
         status: 'fail',
         explanation: 'token invalid',
@@ -489,7 +492,7 @@ export class ThingsboardThingsboardClientService {
   */
   async enableUser(userID: string): Promise<thingsboardResponse> {
     const login = await this.userService.getUserID(this.token);
-    if (login.code != 200)
+    if (login.status != 200)
       return {
         status: 'fail',
         explanation: 'token invalid',
@@ -579,9 +582,10 @@ export class ThingsboardThingsboardClientService {
       };
 
     let data = '';
-    resp.data.forEach((element) => {
-      if (element.key == 'location') data = element.value[0];
-    });
+    //TODO return lat longs
+    // resp.data.deviceList.forEach((element) => {
+    //   if (element.key == 'location') data = element.value[0];
+    // });
 
     return {
       status: 'ok',
@@ -631,7 +635,7 @@ export class ThingsboardThingsboardClientService {
   async AdminGetCustomers(): Promise<thingsboardResponse> {
     const login = await this.userService.getUserID(this.token);
     console.log(login);
-    if (login.code != 200)
+    if (login.status != 200)
       return {
         status: 'fail',
         explanation: 'token invalid',
@@ -653,15 +657,16 @@ export class ThingsboardThingsboardClientService {
     return {
       status: 'ok',
       explanation: 'call finished',
-      data: resp.data.data,
+      data: resp.data,
     };
   }
 
   ///////////////////////////////////////////////////////////////////////
   async AdminGetUsersFromReserve(customerID: string) {
+    
     const login = await this.userService.getUserID(this.token);
     console.log(login);
-    if (login.code != 200)
+    if (login.status != 200)
       return {
         status: 'fail',
         explanation: 'token invalid',
@@ -692,6 +697,8 @@ export class ThingsboardThingsboardClientService {
 }
 
 /* data is required to be any due to the many possible response data types */
+
+
 export interface thingsboardResponse {
   status: string;
   explanation?: string;

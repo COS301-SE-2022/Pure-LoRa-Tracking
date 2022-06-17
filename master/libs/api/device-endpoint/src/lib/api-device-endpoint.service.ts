@@ -418,7 +418,7 @@ export class ApiDeviceEndpointService {
     return {
       status : 200,
       explanation : "call finished",
-      data : response.filter(val=>val.isGateway==true)
+      data : response.data.filter(val=>val.isGateway==true)
     }
   }
 
