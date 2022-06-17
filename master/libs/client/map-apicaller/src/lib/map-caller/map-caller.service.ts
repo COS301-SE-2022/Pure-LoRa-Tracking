@@ -29,7 +29,7 @@ export class MapCallerService {
   getHistorical(token:string,reserveID:string,deviceID:string[]):Promise<any>{
     return new Promise((res,rej)=>{
       this.http.post("/api/map/historical",{"token":token,"reserveID":reserveID,"deviceID":deviceID}).subscribe(val=>{
-        res(val)  
+        res(val);
       });
     })
   }
@@ -37,7 +37,7 @@ export class MapCallerService {
   getGateways(token:string,custid:string):Promise<any>{
     return new Promise((res,rej)=>{
       this.http.post("/api/device/gateway/info",{"token":token,"customerID":custid}).subscribe(val=>{
-        res(val)  
+        res(val);
       });
     })
   }
