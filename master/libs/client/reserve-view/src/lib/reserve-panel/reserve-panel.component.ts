@@ -4,7 +4,6 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { MatSelectionList } from '@angular/material/list';
 import { Device, ViewMapType } from '@master/shared-interfaces';
 
-
 export interface Gateway {
   name: string;
   id: string;
@@ -22,7 +21,6 @@ export class ReservePanelComponent implements OnInit {
   private _GateWays:Gateway[];
   private _ViewType:string;
   @Output() selectedSensorIDout=new EventEmitter<string>();
-  @Output() deleteddevice=new EventEmitter<{inputid:string,inputeui:string,isgateway:boolean}>();
 
   @Input()
   public get Devices(){
@@ -65,6 +63,7 @@ export class ReservePanelComponent implements OnInit {
     this._GateWays=[];
     this._ViewType="norm"
   }
+
 
   getSelectedStyle(deviceId:string):string{
     if (this.selectedDeviceID==deviceId){
@@ -110,5 +109,7 @@ export class ReservePanelComponent implements OnInit {
     }
     this.openSensor = true;
   }
+
+ 
   
 }

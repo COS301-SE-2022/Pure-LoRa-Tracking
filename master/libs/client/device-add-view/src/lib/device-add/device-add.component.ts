@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { AddGatewayDevice, AddSensorDevice } from '@master/shared-interfaces';
-
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {deviceOptionList} from "@master/shared-interfaces"
+import * as L from 'leaflet';
+
 @Component({
   selector: 'master-add-device',
   templateUrl: './device-add.component.html',
@@ -21,9 +22,44 @@ export class DeviceAddComponent implements OnInit {
   deviceprofilelist:Array<{id: string, name: string}>=[];
   deviceType = "";
   token="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZlYWRtaW5AcmVzZXJ2ZS5jb20iLCJzY29wZXMiOlsiVEVOQU5UX0FETUlOIl0sInVzZXJJZCI6ImQ2MzcyZTMwLWRmZTgtMTFlYy1iZGIzLTc1MGNlN2VkMjQ1MSIsImVuYWJsZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiJjZDJkZjJiMC1kZmU4LTExZWMtYmRiMy03NTBjZTdlZDI0NTEiLCJjdXN0b21lcklkIjoiMTM4MTQwMDAtMWRkMi0xMWIyLTgwODAtODA4MDgwODA4MDgwIiwiaXNzIjoidGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE2NTQ4MjM4MjAsImV4cCI6MTY1NDgzMjgyMH0.7znHjokdbaR-O77imOcuokkp5lJTN03QsowagHuUvVD7vE8gzVuaFSb62GnLIOJIK2UtbfuZ70h7El9jabs-Xw"
-  constructor(private _formBuilder: FormBuilder,private http:HttpClient) {}
+  gatewaymarker:L.Marker=L.marker([0,0],{
+    draggable:true
+  });
+  gatewaylat:number=0;
+  gatewaylng:number=0;
+
+  constructor(private _formBuilder: FormBuilder,private http:HttpClient) {
+    this.gatewaymarker.on("dragend",(e)=>{
+      this.gatewayGroup.get("gatlong")?.setValue(this.gatewaymarker.getLatLng().lng);
+      this.gatewayGroup.get("gatlat")?.setValue(this.gatewaymarker.getLatLng().lat);
+      this.gatewayGroup.get("gatlat")?.markAsDirty();
+      this.gatewayGroup.get("gatlong")?.markAsDirty();
+    })
+  }
+
+  options = {
+    layers: [
+      L.tileLayer(
+            'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+            {
+              maxZoom: 18,
+              minZoom: 2,
+              attribution:
+                'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+            }),
+            this.gatewaymarker
+     
+    ],
+    
+    zoom: 5,
+    center: L.latLng(46.879966, -121.726909)
+  };
+  
+
 
   ngOnInit(): void {
+    // this.loadmap();
+
     this.typeGroup = this._formBuilder.group({
       devtype: ['', Validators.required],
     });
@@ -35,8 +71,8 @@ export class DeviceAddComponent implements OnInit {
     this.gatewayGroup = this._formBuilder.group({
       gatewayid: ['', Validators.required],
       // networkserver: ['', Validators.required],
-      gatlang: ['', Validators.required],
-      gatlong: ['', Validators.required],
+      gatlat: ['', [Validators.required,Validators.pattern("-?[0-9]+\.?[0-9]+")]],
+      gatlong: ['', [Validators.required,Validators.pattern("-?[0-9]+\.?[0-9]+")]],
     });
     this.sensorGroup=this._formBuilder.group({
       eui: ['', Validators.required],
@@ -99,7 +135,7 @@ export class DeviceAddComponent implements OnInit {
             token:this.token,
             deviceID:val.data,
             locationParameters:{
-              latitude: this.gatewayGroup.get("gatlang")?.value,
+              latitude: this.gatewayGroup.get("gatlat")?.value,
               longitude: this.gatewayGroup.get("gatlong")?.value,
             }
           }).subscribe(curr=>{
@@ -112,5 +148,25 @@ export class DeviceAddComponent implements OnInit {
 
 
 
+  }
+
+  updatelat(e:string){
+    //check string is in correct form
+    if((/-?[0-9]+\.?[0-9]+/).test(e)){
+      this.gatewaymarker.setLatLng([
+        parseFloat(e),
+        this.gatewaymarker.getLatLng().lng,
+      ])
+    }
+  }
+  
+  updatelng(e:string){
+    //check string is in correct form
+    if((/-?[0-9]+\.?[0-9]+/).test(e)){
+      this.gatewaymarker.setLatLng([
+        this.gatewaymarker.getLatLng().lat,
+        parseFloat(e),
+      ])
+    }
   }
 }

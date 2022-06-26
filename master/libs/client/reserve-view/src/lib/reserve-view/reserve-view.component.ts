@@ -20,7 +20,7 @@ export class ReserveViewComponent {
   LastestHistorical:Device[];
   ShowPolygon:boolean;
   Gateways:GatewayInput[];
-  token="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZldXNlckByZXNlcnZlLmNvbSIsInNjb3BlcyI6WyJDVVNUT01FUl9VU0VSIl0sInVzZXJJZCI6ImY5NmU2MGQwLWRmZTgtMTFlYy1iZGIzLTc1MGNlN2VkMjQ1MSIsImVuYWJsZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiJjZDJkZjJiMC1kZmU4LTExZWMtYmRiMy03NTBjZTdlZDI0NTEiLCJjdXN0b21lcklkIjoiZWY1NWZmNDAtZGZlOC0xMWVjLWJkYjMtNzUwY2U3ZWQyNDUxIiwiaXNzIjoidGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE2NTQ4MjM0NDYsImV4cCI6MTY1NDgzMjQ0Nn0.xoZzxHTsM2ej27xRln1Q1Ly8-F_nY97-uPejn1QmWmyQ_ubKquJiGqciuo-jwOtzszVyCCHnfCjVp5AKNsVqdw";
+  token="eyJhbGciOiJIUzUxMiJ9.eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZldXNlckByZXNlcnZlLmNvbSIsInNjb3BlcyI6WyJDVVNUT01FUl9VU0VSIl0sInVzZXJJZCI6ImY5NmU2MGQwLWRmZTgtMTFlYy1iZGIzLTc1MGNlN2VkMjQ1MSIsImVuYWJsZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiJjZDJkZjJiMC1kZmU4LTExZWMtYmRiMy03NTBjZTdlZDI0NTEiLCJjdXN0b21lcklkIjoiZWY1NWZmNDAtZGZlOC0xMWVjLWJkYjMtNzUwY2U3ZWQyNDUxIiwiaXNzIjoidGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE2NTYyNTI1ODEsImV4cCI6MTY1NjI2MTU4MX0.8syU3F23EmrwNsOJoC7SqxH5glBZ1vG4YEaLi2DIcDL7HOl5G_cAIAONVEbW7brZ8DI9jQJsYJq44-0LVAD9nQ.xoZzxHTsM2ej27xRln1Q1Ly8-F_nY97-uPejn1QmWmyQ_ubKquJiGqciuo-jwOtzszVyCCHnfCjVp5AKNsVqdw";
 
   constructor(private apicaller:MapCallerService) {
     this.LastestHistorical=[];
@@ -58,16 +58,5 @@ export class ReserveViewComponent {
   }
 
   
-// export interface RemoveDevice {
-//   token: string;
-//   deviceID: string;
-//   isGateway: boolean;
-//   devEUI: string;
-// }
 
-  deletedevice(event:{inputid:string,inputeui:string,isgateway:boolean}){
-    this.apicaller.removeDevice("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZlYWRtaW5AcmVzZXJ2ZS5jb20iLCJzY29wZXMiOlsiVEVOQU5UX0FETUlOIl0sInVzZXJJZCI6ImQ2MzcyZTMwLWRmZTgtMTFlYy1iZGIzLTc1MGNlN2VkMjQ1MSIsImVuYWJsZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiJjZDJkZjJiMC1kZmU4LTExZWMtYmRiMy03NTBjZTdlZDI0NTEiLCJjdXN0b21lcklkIjoiMTM4MTQwMDAtMWRkMi0xMWIyLTgwODAtODA4MDgwODA4MDgwIiwiaXNzIjoidGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE2NTQ4MjY2NDEsImV4cCI6MTY1NDgzNTY0MX0.rqqGXx99CuHz0iPAem64ZQ1d9_vOUs3LZC-QZNQm7XJHk4R5JQZ-F55O4FeYi8xZxQjKjqW-bAj5zrIY2_Hpyg",event.inputid,event.inputeui,event.isgateway).then((val:any)=>{
-      if(val.explanation=="ok") alert("Device removed");
-    })
-  }
 }
