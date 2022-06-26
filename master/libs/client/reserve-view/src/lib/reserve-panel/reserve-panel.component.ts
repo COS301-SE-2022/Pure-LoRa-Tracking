@@ -9,7 +9,7 @@ export interface Gateway {
   name: string;
   id: string;
   eui:string;
-}4
+}
 
 @Component({
   selector: 'master-reserve-panel',
@@ -32,6 +32,13 @@ export class ReservePanelComponent implements OnInit {
     this._Devices=devicearr;
     this.filteredSensors = this.Devices.map(sensorItem => {return sensorItem;})
   }
+  openSensor=false;
+
+
+  currentSensor = {
+    name:"",
+    id:"",
+    }
   @Input()
   public get GateWays(){
     return this._GateWays;
@@ -41,6 +48,7 @@ export class ReservePanelComponent implements OnInit {
     console.log("changes");
     this.filteredGateways= this.GateWays.map(item=>item);
   }
+  
 
   reserveName = "Reserve Name";
   
@@ -95,17 +103,12 @@ export class ReservePanelComponent implements OnInit {
     this.filteredSensors = this.Devices.map(sensorItem => {return sensorItem;})
   }
 
-  deleteGateway(inputid:string,deviceeui:string){
-    this.deleteddevice.emit({inputid:inputid,inputeui:deviceeui,isgateway:false});
-    const temp=this.GateWays.filter(val=>val.id!=inputid);
-    this.GateWays=temp;
-    this.filteredGateways=temp;
+  viewSensor(id:string,name: string):void{
+    this.currentSensor = {
+      name: name,
+      id: id,
+    }
+    this.openSensor = true;
   }
-
-  deleteSensor(inputid:string,deviceeui:string){
-    this.deleteddevice.emit({inputid:inputid,inputeui:deviceeui,isgateway:true});
-    const temp=this.Devices.filter(val=>val.deviceID!=inputid);
-    this.Devices=temp;
-    this.filteredSensors=temp;
-  }
+  
 }

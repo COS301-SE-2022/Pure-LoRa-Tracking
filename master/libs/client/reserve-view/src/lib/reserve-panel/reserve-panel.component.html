@@ -1,4 +1,4 @@
-<mat-card color='$primary'>
+<mat-card color='$primary' *ngIf="openSensor === false">
     <mat-card-header class="headerText">
         <mat-card-title >
             {{reserveName}}
@@ -42,9 +42,9 @@
                             <div mat-line>id: {{sensorItem.deviceID}} </div>
                         </div>
                 
-                        <button mat-icon-button id="actionBtn">
-                            <!-- <mat-icon>chevron_right</mat-icon> -->
-                            <button mat-button (click)="deleteSensor(sensorItem.deviceID,sensorItem.deviceName)">Delete sensor</button>
+                        <button mat-icon-button id="actionBtn" (click)="viewSensor(sensorItem.deviceID,sensorItem.deviceName)">
+                            <mat-icon>chevron_right</mat-icon>
+                            <!-- <button mat-button>Delete sensor</button> -->
                         </button>
                     </div>
                 </mat-list-option>
@@ -59,7 +59,7 @@
                         </div>
                 
                         <button mat-icon-button id="actionBtn">
-                            <button mat-button (click)="deleteGateway(gatewayItem.id,gatewayItem.eui)">Delete Gateway</button>
+                            <mat-icon>chevron_right</mat-icon>
                         </button>
                     </div>
                 </mat-list-option>
@@ -68,3 +68,5 @@
         </cdk-virtual-scroll-viewport>
     </mat-card-content>
 </mat-card>
+<master-sensor-detail-view *ngIf="openSensor === true" [openView]="openSensor" (viewChange)="openSensor=$event" [sensorInfo]="currentSensor">
+</master-sensor-detail-view>
