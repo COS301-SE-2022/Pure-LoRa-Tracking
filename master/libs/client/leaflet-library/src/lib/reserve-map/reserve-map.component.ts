@@ -179,27 +179,32 @@ export class ReserveMapComponent implements OnInit, OnChanges {
     if(this.currentantpath!=null) this.resetData()
     const latlngs = this.historicalpath.find(val => val.deviceID == deviceID)
     if (latlngs != null) {
-      const path = antPath(latlngs.polyline.getLatLngs(), {
-        "delay": 400,
-        "dashArray": [
-          42,
-          48
-        ],
-        "weight": 4,
-        "color": "#0000FF",
-        "pulseColor": "#FFFFFF",
-        "paused": false,
-        "reverse": false,
-        "hardwareAccelerated": true
-      });
-      this.hideHistoricalExceptMarker(deviceID);
-      this.mainmap.fitBounds(latlngs.polyline.getBounds())
-      path.addTo(this.mainmap)
-      this.currentantpath = path;
+      if(!latlngs.polyline.getBounds().isValid()) {
+        alert("No location data found");
+      }
+      else{
+        const path = antPath(latlngs.polyline.getLatLngs(), {
+          "delay": 400,
+          "dashArray": [
+            42,
+            48
+          ],
+          "weight": 4,
+          "color": "#0000FF",
+          "pulseColor": "#FFFFFF",
+          "paused": false,
+          "reverse": false,
+          "hardwareAccelerated": true
+        });
+        this.hideHistoricalExceptMarker(deviceID);
+        this.mainmap.fitBounds(latlngs.polyline.getBounds())
+        path.addTo(this.mainmap)
+        this.currentantpath = path;
+      }
     }
-  }
-
-  // public reloadHistorical(): void {
+    }
+    
+    // public reloadHistorical(): void {
   //   console.log("reload historical");
   // }
 
@@ -208,12 +213,12 @@ export class ReserveMapComponent implements OnInit, OnChanges {
       if (historical != null) {
         // console.log(historical.data)
         const current = L.polyline(historical.locationData.map(val =>
-          [parseFloat(val.location.latitude), parseFloat(val.location.longitude)]) as unknown as L.LatLngExpression[],
+          [parseFloat(val.latitude), parseFloat(val.longitude)]) as unknown as L.LatLngExpression[],
           { "smoothFactor": 0.1 });
         const markers: Array<L.Marker> = [];
         const length = historical.locationData.length;
         historical.locationData.forEach((val, i) => {
-          const temp = L.marker([parseFloat(val.location.latitude), parseFloat(val.location.longitude)], { icon: this.bluecirlceicon });
+          const temp = L.marker([parseFloat(val.latitude), parseFloat(val.longitude)], { icon: this.bluecirlceicon });
           if (i == length - 1) temp.bindTooltip(historical.deviceName, { permanent: true, offset: [6,0] })
           markers.push(temp);
         })

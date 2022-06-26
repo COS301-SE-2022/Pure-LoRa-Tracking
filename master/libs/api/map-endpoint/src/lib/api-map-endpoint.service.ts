@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Device, MapApiHistorical, MapApiHistoricalResponse, MapApiLatest, MapApiLatestResponse, MapApiReserve, MapApiReserveResponse } from './map-api.interface';
-import { ThingsboardThingsboardClientService } from '@lora/thingsboard-client';
+import { thingsboardResponse, ThingsboardThingsboardClientService } from '@lora/thingsboard-client';
 
 @Injectable()
 export class ApiMapEndpointService {
@@ -152,37 +152,58 @@ export class ApiMapEndpointService {
                 explanation : "Token missing"
             }  
 
+        if(content.startTime == undefined && content.endTime == undefined) {
+            content.startTime = Date.now() - 24 * 60 * 60 * 1000;
+            content.endTime = Date.now();
+            console.log(content.startTime);
+            console.log(content.endTime);
+        }
+        
+
         this.thingsboardClient.setToken(content.token);
         const awaitArray = Array<any>()
-        content.deviceID.forEach((device)=> {
-            /* await array -> telem results */
-            awaitArray.push(this.thingsboardClient.getDeviceHistoricalData(device, content.startTime, content.endTime))
-        })
 
-        
-        for (let i = 0; i < awaitArray.length; i++) {
-            awaitArray[i] = await awaitArray[i];
+        if(content.deviceID != undefined && content.deviceID.length > 0) {
+            content.deviceID.forEach((device)=> {
+                /* await array -> telem results */
+                awaitArray.push(this.thingsboardClient.getDeviceHistoricalData(device, content.startTime, content.endTime))
+            })
+        } else {
+            const devices = await this.thingsboardClient.getDeviceInfos();
+            console.log(devices)
+            const other=devices.data.filter(val=>val.isGateway == false);
+            console.log(other);
+            other.forEach((device)=> {
+                /* await array -> telem results */
+                awaitArray.push(this.thingsboardClient.getDeviceHistoricalData(device.deviceID, content.startTime, content.endTime))
+            })
         }
+
+            
+            for (let i = 0; i < awaitArray.length; i++) {
+                awaitArray[i] = await awaitArray[i];
+            }
+        
 
         let explanationOfCall = "";
         let furtherExplain = "";
 
         const data = Array<Device>();
 
-        awaitArray.forEach((item) => {
+        awaitArray.forEach((item:thingsboardResponse) => {
             if(item['status']=='fail') {
                 explanationOfCall = "some devices are missing results";
                 furtherExplain = item['explanation'];
                 data.push({
                     deviceID : item['name'],
-                    deviceName : "",
+                    deviceName : item.furtherExplain,
                     type : "sensor",
                     locationData : item['data']['data']
                 })
             } else if(item['status']=='ok') {
                 data.push({
                     deviceID : item['name'],
-                    deviceName : "",
+                    deviceName : item.furtherExplain,
                     type : "sensor",
                     locationData : item['data']
                 })
@@ -197,97 +218,7 @@ export class ApiMapEndpointService {
             furtherExplain : furtherExplain
         }
 
-        // const toreturn: MapApiHistoricalResponse = {
-        //     code: 200,
-        //     status: "success",
-        //     explanation: "",
-        //     data: []
-        // }
-
-        // if (content.deviceID.includes("sens-11")||content.deviceID.length==0) {
-        //     toreturn.data.push({
-        //         deviceID: "sens-11",
-        //         deviceName: "sens-11-test",
-        //         type: "sensor",
-        //         locationData: [
-        //             {
-        //                 timeStamp: Date.now() - 6000,
-        //                 location: {
-        //                     latitude: "-25.755514",
-        //                     longitude: "28.235419"
-        //                 }
-        //             },
-        //             {
-        //                 timeStamp: Date.now() - 6000,
-        //                 location: {
-        //                     latitude: "-25.754886",
-        //                     longitude: "28.231909"
-        //                 }
-        //             },
-        //             {
-        //                 timeStamp: Date.now() - 6000,
-        //                 location: {
-        //                     latitude: "-25.755375",
-        //                     longitude: "28.232314"
-        //                 }
-        //             }
-        //         ]
-        //     })
-        // }
-        // if (content.deviceID.includes("sens-12")||content.deviceID.length==0) {
-        //     toreturn.data.push({
-        //         deviceID: "sens-12",
-        //         deviceName: "sens-12-test",
-        //         type: "sensor",
-        //         locationData: [
-        //             {
-        //                 timeStamp: Date.now() - 6000,
-        //                 location: {
-        //                     latitude: "-25.755147",
-        //                     longitude: "28.233294"
-        //                 }
-        //             },
-        //             {
-        //                 timeStamp: Date.now() - 6000,
-        //                 location: {
-        //                     latitude: "-25.756124",
-        //                     longitude: "28.233701"
-        //                 }
-        //             },
-        //             {
-        //                 timeStamp: Date.now() - 6000,
-        //                 location: {
-        //                     latitude: "-25.755704",
-        //                     longitude: "28.233245"
-        //                 }
-        //             }
-        //         ]
-        //     })
-        // }
-        // if (content.deviceID.includes("sens-13")||content.deviceID.length==0) {
-        //     toreturn.data.push({
-        //         deviceID: "sens-13",
-        //         deviceName: "sens-13-test",
-        //         type: "sensor",
-        //         locationData: [
-        //             {
-        //                 timeStamp: Date.now() - 6000,
-        //                 location: {
-        //                     latitude: "-25.755332",
-        //                     longitude: "28.232264"
-        //                 }
-
-        //             },
-        //             {
-        //                 timeStamp: Date.now() - 6000,
-        //                 location: {
-        //                     latitude: "-25.756632",
-        //                     longitude: "28.233760"
-        //                 }
-        //             }
-        //         ]
-        //     });
-        // }
+    
         // return toreturn;
     }
 }

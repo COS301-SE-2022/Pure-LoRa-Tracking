@@ -24,10 +24,22 @@ The stored data will be processed using the location of each tower to calculate 
 ## Recordings
 
 - :camera_flash: [Harbinger - Demo 1](https://drive.google.com/file/d/1zug-8h2NstFJNKIpBGP23iTfKXIWgtUo/view?usp=sharing)
+- :camera_flash: [Harbinger - Demo 2](https://drive.google.com/file/d/1Pe_EokRQlYhefhzOU6qfEsrA-hvo5QeV/view?usp=sharing)
 
 ## Documentation
+### Software Requirements Specification
 
 - :page_facing_up: [SRS](https://drive.google.com/file/d/1a1RQ9-xLiTGsoO_IeGYjuLcxdcRsmpWq/view?usp=sharing)
+- :page_facing_up: [SRSv2](https://docs.google.com/document/d/1iB8b3PwAmHHcAPs7BiSs-qX_pEkU6hwMHUP7TDdyNbw/edit?usp=sharing)
+
+### Architecture Document
+- :page_facing_up: [Architecture](https://docs.google.com/document/d/1yIKPLw0YxICpEz6G6eON0RUFVmHae7cDEOZKa30TSBE/edit?usp=sharing)
+
+### Code Standards
+- :page_facing_up: [Code Standards](https://docs.google.com/document/d/1G3QiqZOcYkADzISHjRgRgyD78xO2hYdl-uxM_Y1mKHc/edit?usp=sharing)
+
+### User Manual
+- :page_facing_up: [User Manual](https://drive.google.com/file/d/1tIHMw2GaSdJPM_yBbQfdWs-VHG6oBDFK/view?usp=sharing)
 
 ## Project Management
 

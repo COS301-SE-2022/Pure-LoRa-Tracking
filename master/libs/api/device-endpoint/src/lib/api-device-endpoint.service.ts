@@ -399,6 +399,7 @@ export class ApiDeviceEndpointService {
 
   ///////////////////////////////////////////////////////////
   async getGatewaysProcess(body : GetGatewaysInput) : Promise<deviceResponse> {
+    console.log("test");
     if (body.token == undefined || body.token == '')
       return {
         status: 401,
@@ -424,11 +425,15 @@ export class ApiDeviceEndpointService {
   ///////////////////////////////////////////////////////////////////////////
   // TODO: Implement endpoint
   async processGetDeviceProfiles(): Promise<deviceResponse> {
+
+    const result = await this.chirpstackSensor.getProfiles(process.env.CHIRPSTACK_API);
+    const resultData = result.map((item) => ({ 
+      id: item.getId(), name: item.getName()  
+    }));
     return {
       status : 200,
       explanation : "call finished",
-      data : this.chirpstackSensor.getProfiles(process.env.CHIRPSTACK_API)
-      
+      data : resultData
     }
   }
 }

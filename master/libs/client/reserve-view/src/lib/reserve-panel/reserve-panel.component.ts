@@ -5,10 +5,10 @@ import { MatSelectionList } from '@angular/material/list';
 import { Device, ViewMapType } from '@master/shared-interfaces';
 
 
-export interface GatewayProps {
+export interface Gateway {
   name: string;
   id: string;
-  last: Date;
+  eui:string;
 }
 
 @Component({
@@ -19,8 +19,10 @@ export interface GatewayProps {
 })
 export class ReservePanelComponent implements OnInit {
   private _Devices:Device[];
+  private _GateWays:Gateway[];
   private _ViewType:string;
-  @Output() selectedSensorIDout=new EventEmitter<string>()
+  @Output() selectedSensorIDout=new EventEmitter<string>();
+  @Output() deleteddevice=new EventEmitter<{inputid:string,inputeui:string,isgateway:boolean}>();
 
   @Input()
   public get Devices(){
@@ -30,48 +32,37 @@ export class ReservePanelComponent implements OnInit {
     this._Devices=devicearr;
     this.filteredSensors = this.Devices.map(sensorItem => {return sensorItem;})
   }
-
   openSensor=false;
 
 
   currentSensor = {
     name:"",
     id:"",
+    }
+  @Input()
+  public get GateWays(){
+    return this._GateWays;
   }
+  public set GateWays(userinput:Gateway[]){
+    this._GateWays=userinput;
+    console.log("changes");
+    this.filteredGateways= this.GateWays.map(item=>item);
+  }
+  
 
   reserveName = "Reserve Name";
-
-  gateways: GatewayProps[] = [
-    {
-      name: "Gateway A",
-      id: "45ad2334d",
-      last: new Date('1/1/16'),
-    },
-    {
-      name: "Gateway B",
-      id: "asda34",
-      last: new Date('2/1/16'),
-    },
-    {
-      name: "Gateway C",
-      id: "45agdas",
-      last: new Date('1/1/16'),
-    },{
-      name: "Gateway D",
-      id: "gfjggdfg",
-      last: new Date('3/1/16'),
-    }
-  ];
+  
 
   deviceType = "sensors";
   selectedDeviceID="";
   searchString = "";
-  filteredGateways:GatewayProps[]|undefined=[];
+  filteredGateways:Gateway[]|undefined=[];
 
   filteredSensors:Device[]|null=[];
 
   constructor() {
     this._Devices=[];
+    this._GateWays=[];
     this._ViewType="norm"
   }
 
@@ -101,14 +92,14 @@ export class ReservePanelComponent implements OnInit {
 
   searchDevices():void{
      const searchLower = this.searchString.toLocaleLowerCase();
-     this.filteredGateways = this.gateways.filter(gatewayItem => gatewayItem.id.toLocaleLowerCase().search(searchLower)>=0);
+     this.filteredGateways = this._GateWays.filter(gatewayItem => gatewayItem.id.toLocaleLowerCase().search(searchLower)>=0);
      this.filteredSensors = this.Devices.filter(sensorItem=> sensorItem.deviceID.toLocaleLowerCase().search(searchLower)>=0);
       console.log(this.filteredGateways);
     }
 
 
   ngOnInit(): void {
-    this.filteredGateways = this.gateways.map(gatewayItem => {return gatewayItem;})
+    this.filteredGateways = this._GateWays.map(gatewayItem => {return gatewayItem;})
     this.filteredSensors = this.Devices.map(sensorItem => {return sensorItem;})
   }
 
@@ -118,6 +109,6 @@ export class ReservePanelComponent implements OnInit {
       id: id,
     }
     this.openSensor = true;
-
   }
+  
 }
