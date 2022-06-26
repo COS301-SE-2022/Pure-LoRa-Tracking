@@ -43,7 +43,8 @@
                         </div>
                 
                         <button mat-icon-button id="actionBtn">
-                            <mat-icon>chevron_right</mat-icon>
+                            <!-- <mat-icon>chevron_right</mat-icon> -->
+                            <button mat-button (click)="deleteSensor(sensorItem.deviceID,sensorItem.deviceName)">Delete sensor</button>
                         </button>
                     </div>
                 </mat-list-option>
@@ -58,7 +59,7 @@
                         </div>
                 
                         <button mat-icon-button id="actionBtn">
-                            <mat-icon>chevron_right</mat-icon>
+                            <button mat-button (click)="deleteGateway(gatewayItem.id,gatewayItem.eui)">Delete Gateway</button>
                         </button>
                     </div>
                 </mat-list-option>
