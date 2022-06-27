@@ -175,10 +175,10 @@ export class ReserveMapComponent implements OnInit, OnChanges {
   }
 
   //load the antpath for one of the devices
-  public showOnly(deviceID: string): void {
+  public showOnly(deviceID: string): boolean {
     //check there is actually a device with that id
     const test=this.historicalpath.find(val=>val.deviceID==deviceID);
-    if(test==undefined) return;
+    if(test==undefined) return false;
     this.HistoricalMode=true;
     if(this.currentantpath!=null) this.resetData()
     const latlngs = this.historicalpath.find(val => val.deviceID == deviceID)
@@ -206,6 +206,7 @@ export class ReserveMapComponent implements OnInit, OnChanges {
         this.currentantpath = path;
       }
     }
+    return true;
     }
     
     // public reloadHistorical(): void {
@@ -246,7 +247,7 @@ export class ReserveMapComponent implements OnInit, OnChanges {
       val.polyline.remove();
     })
     this.historicalpath=[];
-    // this.loadInnitial(deviceIDs);
+    this.loadInnitial(deviceIDs);
   }
 
   //loop through and add all things back to map

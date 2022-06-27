@@ -57,7 +57,9 @@ export class ReserveViewComponent {
       this.reservemap?.resetData();
     }
     else{
-      this.reservemap?.showOnly(idinput);
+      if(!this.reservemap?.showOnly(idinput)){
+        alert("No location data found");
+      }
     }
   }
 
@@ -82,7 +84,6 @@ export class ReserveViewComponent {
 
   updateRange(event:{start:number,end:number}):void{
     this.apicaller.getHistoricalWithTime(this.token,"123",[],event.start,event.end).then(val=>{
-      this.LastestHistorical=val.data;
       this.reservemap?.reload(this.LastestHistorical);
     });
   }
