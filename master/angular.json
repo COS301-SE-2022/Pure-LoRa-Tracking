@@ -20,6 +20,7 @@
     "client-reserve-view": "libs/client/reserve-view",
     "client-shared-ui-components-ui": "libs/client/shared-ui/components-ui",
     "client-shared-ui-material-ui": "libs/client/shared-ui/material-ui",
+    "client-user-storage-controller": "libs/client/user-storage-controller",
     "client-users-management-view": "libs/client/users-management-view",
     "database-proxy": "libs/database-proxy",
     "location": "libs/location",
