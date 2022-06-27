@@ -111,9 +111,17 @@ export class ThingsboardThingsboardClientService {
     }
 
     this.assetService.setToken(this.token);
-    // console.log(await this.assetService.getAssetIDs(userInfo.userID))
-    const ids = (await this.assetService.getAssetIDs(userInfo.userID)).data.assets;
 
+    const response = (await this.assetService.getAssetIDs(userInfo.userID));
+    if(response.status==401){
+      return {
+        code: 401,
+        status: 'Authentication Failure',
+        explanation: 'Usernane/Password/Token Invalid',
+      }
+    }
+    console.log("here"+response.explanation);
+    const ids=response.data.assets;
     //console.log(ids.length);
 
     for (let i = 0; i < ids.length; i++) {

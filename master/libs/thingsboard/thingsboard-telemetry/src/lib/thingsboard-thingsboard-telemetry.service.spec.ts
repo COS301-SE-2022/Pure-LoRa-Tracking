@@ -59,10 +59,11 @@ describe('ThingsboardThingsboardTelemetryService', () => {
       const deviceType = "DEVICE";
 
       const resp = await service.getTelemetry(deviceID, deviceType, 0, 1654072587463);
+      console.log(resp.data)
 
-      expect(resp[0]['longitude']).toBeDefined();
-      expect(resp[0]['timestamp']).toBeDefined();
-      expect(resp[0]['latitude']).toBeDefined();
+      expect(resp.data.telemetryResults[0].longitude).toBeDefined();
+      expect(resp.data.telemetryResults[0].timestamp).toBeDefined();
+      expect(resp.data.telemetryResults[0].latitude).toBeDefined();
 
 
     //const data = await userService.login(username, password);
@@ -88,7 +89,7 @@ describe('ThingsboardThingsboardTelemetryService', () => {
         
 
       const resp = await service.sendTelemetry("acf22a00-ce06-11ec-b2d0-bd829ba84846", "DEVICE", 21.06, 21.0);
-      expect(resp).toEqual(true);
+      expect(resp).toEqual({"explanation": "ok", "status": 200});
 
     /*service.sendTelemetry("acf22a00-ce06-11ec-b2d0-bd829ba84846", "DEVICE", 21.06, 21.0).subscribe((resp)=> {
       //console.log(resp.status);
@@ -114,7 +115,7 @@ describe('ThingsboardThingsboardTelemetryService', () => {
       const resp = await service.sendJsonTelemetry("acf22a00-ce06-11ec-b2d0-bd829ba84846", "DEVICE", JSON.stringify({
         "rssi" : 1000
       }));
-      expect(resp).toEqual(true);
+      expect(resp).toEqual({"explanation": "ok", "status": 200});
   });
 
   it('should return status ok 200', async()=> {

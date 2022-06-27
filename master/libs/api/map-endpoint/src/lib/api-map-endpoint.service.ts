@@ -89,7 +89,22 @@ export class ApiMapEndpointService {
 
         this.thingsboardClient.setToken(content.token);
         const data = await this.thingsboardClient.getReservePerimeter();
+        if(data.code==401){
+            return {
+                code:401,
+                status:"failure",
+                explanation:"Username/Password/Token invalid"
+            }
+        }
+        else if(data.code==404){
+            return {
+                code:404,
+                status:"failure",
+                explanation:"Reserve not found"
+            }
+        }
         console.log(data);
+
         return {
             code : 200,
             status : "success",
