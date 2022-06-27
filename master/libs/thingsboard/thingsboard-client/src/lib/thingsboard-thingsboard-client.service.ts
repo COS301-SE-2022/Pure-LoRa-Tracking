@@ -589,7 +589,7 @@ export class ThingsboardThingsboardClientService {
         explanation: 'call failed',
       };
 
-    let data = '';
+    const data = '';
     //TODO return lat longs
     // resp.data.deviceList.forEach((element) => {
     //   if (element.key == 'location') data = element.value[0];
