@@ -140,7 +140,7 @@ describe('ThingsboardThingsboardDeviceService', () => {
     jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(result));
     const hardwareID = "123";
     const deviceLabel = "testingSensor";
-    expect(await service.createDevice(hardwareID, deviceLabel, false)).toEqual("784f394c-42b6-435a-983c-b7beff2784f9");
+    expect(await (await service.createDevice(hardwareID, deviceLabel, false)).data.customerId.id).toEqual("784f394c-42b6-435a-983c-b7beff2784f9");
     /*const data = await loginService.login(username, password);
     service.setToken(data['data']['token']);
     expect(await service.createDevice('123', 'testingSensor', false)).toEqual(true);*/
@@ -155,9 +155,11 @@ describe('ThingsboardThingsboardDeviceService', () => {
       statusText: 'OK'
     }
 
-    jest.spyOn(httpService, 'delete').mockImplementationOnce(() => of(result));
+    jest.spyOn(httpService, 'delete').mockImplementation(() => of(result));
     const deviceID = "fa0097e0-dfaa-11ec-b99c-f7477a3db362";
-    expect(await service.deleteDevice(deviceID)).toEqual(true);
+    const response=await service.deleteDevice(deviceID);
+    expect(response.status).toEqual(200);
+    expect(response.explanation).toEqual("ok");
     /*const data = await loginService.login(username, password);
     service.setToken(data['data']['token']);
     expect(await service.deleteDevice("8e4fcc90-dc0e-11ec-931b-3544ea43758e")).toEqual(true);*/
@@ -209,7 +211,9 @@ describe('ThingsboardThingsboardDeviceService', () => {
     jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(result));
     const custID = "784f394c-42b6-435a-983c-b7beff2784f9";
     const deviceID = "fa0097e0-dfaa-11ec-b99c-f7477a3db362";
-    expect(await service.assignDevicetoCustomer(custID, deviceID)).toEqual(true);
+    const response=await service.assignDevicetoCustomer(custID, deviceID);
+    expect(response.status).toEqual(200);
+    expect(response.explanation).toEqual("ok");
     /*const data = await loginService.login(username, password);
     service.setToken(data['data']['token']);
     expect(await service.assignDevicetoCustomer("9fed2a30-dfa9-11ec-b99c-f7477a3db362", "fa0097e0-dfaa-11ec-b99c-f7477a3db362")).toEqual(true);*/

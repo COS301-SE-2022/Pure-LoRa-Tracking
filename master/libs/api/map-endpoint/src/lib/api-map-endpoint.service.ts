@@ -89,7 +89,22 @@ export class ApiMapEndpointService {
 
         this.thingsboardClient.setToken(content.token);
         const data = await this.thingsboardClient.getReservePerimeter();
+        if(data.code==401){
+            return {
+                code:401,
+                status:"failure",
+                explanation:"Username/Password/Token invalid"
+            }
+        }
+        else if(data.code==404){
+            return {
+                code:404,
+                status:"failure",
+                explanation:"Reserve not found"
+            }
+        }
         console.log(data);
+
         return {
             code : 200,
             status : "success",
@@ -151,6 +166,7 @@ export class ApiMapEndpointService {
                 status : 'failure',
                 explanation : "Token missing"
             }  
+        
 
         if(content.startTime == undefined && content.endTime == undefined) {
             content.startTime = Date.now() - 24 * 60 * 60 * 1000;
@@ -161,8 +177,17 @@ export class ApiMapEndpointService {
         
 
         this.thingsboardClient.setToken(content.token);
-        const awaitArray = Array<any>()
+        const waiter=await this.thingsboardClient.validateToken();
 
+        if(waiter==false){
+            return {
+                code : 401,
+                status : 'failure',
+                explanation : "Token invalid"
+            }
+        }
+
+        const awaitArray = Array<any>()
         if(content.deviceID != undefined && content.deviceID.length > 0) {
             content.deviceID.forEach((device)=> {
                 /* await array -> telem results */
@@ -170,15 +195,15 @@ export class ApiMapEndpointService {
             })
         } else {
             const devices = await this.thingsboardClient.getDeviceInfos();
-            console.log(devices)
-            const other=devices.data.filter(val=>val.isGateway == false);
+
+            const other=devices.data.data.filter(val=>val.isGateway == false);
             console.log(other);
             other.forEach((device)=> {
                 /* await array -> telem results */
                 awaitArray.push(this.thingsboardClient.getDeviceHistoricalData(device.deviceID, content.startTime, content.endTime))
             })
         }
-
+        
             
             for (let i = 0; i < awaitArray.length; i++) {
                 awaitArray[i] = await awaitArray[i];
@@ -191,14 +216,15 @@ export class ApiMapEndpointService {
         const data = Array<Device>();
 
         awaitArray.forEach((item:thingsboardResponse) => {
-            if(item['status']=='fail') {
+            console.log(item);
+            if(item.status=='fail') {
                 explanationOfCall = "some devices are missing results";
-                furtherExplain = item['explanation'];
+                furtherExplain = item.explanation;
                 data.push({
-                    deviceID : item['name'],
+                    deviceID : item.name,
                     deviceName : item.furtherExplain,
                     type : "sensor",
-                    locationData : item['data']['data']
+                    locationData : item.data.data
                 })
             } else if(item['status']=='ok') {
                 data.push({
@@ -209,7 +235,7 @@ export class ApiMapEndpointService {
                 })
             }
         })
-
+        console.log("reached");
         return {
             code : 200,
             status : "success",
@@ -217,8 +243,5 @@ export class ApiMapEndpointService {
             data: data,
             furtherExplain : furtherExplain
         }
-
-    
-        // return toreturn;
     }
 }
