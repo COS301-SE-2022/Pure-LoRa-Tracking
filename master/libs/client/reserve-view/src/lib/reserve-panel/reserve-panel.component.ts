@@ -23,7 +23,7 @@ export class ReservePanelComponent implements OnInit {
   private _ViewType:string;
   @Output() selectedSensorIDout=new EventEmitter<string>();
   @Output() deleteddevice=new EventEmitter<{inputid:string,inputeui:string,isgateway:boolean}>();
-
+  @Input() reserveName="No Name Found";
   @Input()
   public get Devices(){
     return this._Devices;
@@ -49,10 +49,6 @@ export class ReservePanelComponent implements OnInit {
     this.filteredGateways= this.GateWays.map(item=>item);
   }
   
-
-  reserveName = "Reserve Name";
-  
-
   deviceType = "sensors";
   selectedDeviceID="";
   searchString = "";

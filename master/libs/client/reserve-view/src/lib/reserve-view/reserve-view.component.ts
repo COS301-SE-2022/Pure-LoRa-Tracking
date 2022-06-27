@@ -21,6 +21,7 @@ export class ReserveViewComponent {
   LastestHistorical:Device[];
   ShowPolygon:boolean;
   Gateways:GatewayInput[];
+  ReserveName="";
   token="";
 
   constructor(private apicaller:MapCallerService,private tokenmanager:TokenManagerService) {
@@ -34,7 +35,11 @@ export class ReserveViewComponent {
   ngOnInit(): void {
     //get the reserve
     //TODO check for incorrect token response
-    this.apicaller.getReserve(this.token, "123").then(val => this.Reserve = val);
+    this.apicaller.getReserve(this.token, "123").then(val =>{
+      this.Reserve = val;
+      if(this.Reserve?.data?.reserveName!=undefined)
+        this.ReserveName=this.Reserve?.data?.reserveName;
+      });
     this.apicaller.getHistorical(this.token,"123",[]).then(val=>{
       // console.log(val+"thingdd")
       console.log(val);
