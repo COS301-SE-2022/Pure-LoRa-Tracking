@@ -176,6 +176,9 @@ export class ReserveMapComponent implements OnInit, OnChanges {
 
   //load the antpath for one of the devices
   public showOnly(deviceID: string): void {
+    //check there is actually a device with that id
+    const test=this.historicalpath.find(val=>val.deviceID==deviceID);
+    if(test==undefined) return;
     this.HistoricalMode=true;
     if(this.currentantpath!=null) this.resetData()
     const latlngs = this.historicalpath.find(val => val.deviceID == deviceID)
@@ -235,6 +238,15 @@ export class ReserveMapComponent implements OnInit, OnChanges {
 
   public loadInnitial(deviceIDs: Device[]): void {
     deviceIDs.forEach(val => this.loadhistorical(val));
+  }
+
+  public reload(deviceIDs:Device[]):void{
+    this.historicalpath.forEach(val=>{
+      val.markers.forEach(val => val.remove())
+      val.polyline.remove();
+    })
+    this.historicalpath=[];
+    // this.loadInnitial(deviceIDs);
   }
 
   //loop through and add all things back to map

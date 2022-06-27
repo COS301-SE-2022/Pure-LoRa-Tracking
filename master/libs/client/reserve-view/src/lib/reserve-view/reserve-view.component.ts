@@ -79,4 +79,11 @@ export class ReserveViewComponent {
       if(val.explanation=="ok") alert("Device removed");
     })
   }
+
+  updateRange(event:{start:number,end:number}):void{
+    this.apicaller.getHistoricalWithTime(this.token,"123",[],event.start,event.end).then(val=>{
+      this.LastestHistorical=val.data;
+      this.reservemap?.reload(this.LastestHistorical);
+    });
+  }
 }

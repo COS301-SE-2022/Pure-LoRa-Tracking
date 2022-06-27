@@ -1,25 +1,31 @@
 import { EventEmitter, Output } from '@angular/core';
 import { Input } from '@angular/core';
 import { Component } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'master-map-panel',
   templateUrl: './map-panel.component.html',
   styleUrls: ['./map-panel.component.scss'],
 })
+
+
 export class MapPanelComponent {
   @Output() ShowPolygon=new EventEmitter<boolean>();
   @Output() ViewType=new EventEmitter<string>();
-  @Output() StartDateOutput=new EventEmitter<Date>();
-  @Output() EndDateOutput=new EventEmitter<Date>();
+  @Output() DateRange=new EventEmitter<{"start":number,"end":number}>();
   starttime="0";
   endtime="23";
-  startdate=new FormControl(new Date());
-  enddate=new FormControl(new Date());
+  
   constructor() {
     this.ShowPolygon.emit(true);
   }
+
+  daterange = new FormGroup({
+    startdateform: new FormControl(new Date(),[Validators.required]),
+    enddateform: new FormControl(new Date(),[Validators.required]),
+  });
+  
 
   updateBorder(newval:boolean){
     this.ShowPolygon.emit(newval);
@@ -35,13 +41,24 @@ export class MapPanelComponent {
   reset():void{
     this.starttime="0";
     this.endtime="23";
-    this.startdate=new FormControl(new Date());
-    this.enddate=new FormControl(new Date());
+    this.daterange.setValue({
+      startdateform: new Date(),
+      enddateform:new Date()
+    });
+    
     this.apply();//i think
   }
 
   apply():void{
-    //TODO emit event
+    if(this.daterange.get("startdateform")!=undefined&&this.daterange.get("enddateform")!=undefined){
+      const tempstart=(this.daterange.get("startdateform")?.value).setHours(parseInt(this.starttime));
+      const tempend=(this.daterange.get("enddateform")?.value).setHours(parseInt(this.endtime));
+      //TODO emit event
+      this.DateRange.emit({
+        start:tempstart,
+        end:tempend
+      })
+    }
   }
 
 }

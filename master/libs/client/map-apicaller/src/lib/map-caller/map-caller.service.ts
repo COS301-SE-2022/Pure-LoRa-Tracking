@@ -33,6 +33,14 @@ export class MapCallerService {
       });
     })
   }
+
+  getHistoricalWithTime(token:string,reserveID:string,deviceID:string[],startTime:number,endTime:number):Promise<any>{
+    return new Promise((res,rej)=>{
+      this.http.post("/api/map/historical",{"token":token,"reserveID":reserveID,"deviceID":deviceID,"startTime":startTime,"endTime":endTime}).subscribe(val=>{
+        res(val);
+      });
+    })
+  }
   
   getGateways(token:string,custid:string):Promise<any>{
     return new Promise((res,rej)=>{

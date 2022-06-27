@@ -25,9 +25,9 @@
         <!-- TODO fix formatting -->
         <mat-form-field appearance="fill">
           <mat-label>Please enter in the dates</mat-label>
-          <mat-date-range-input [rangePicker]="picker">
-            <input matInput matStartDate placeholder="Start date" [value]="startdate.value">
-            <input matEndDate placeholder="End date"  [value]="enddate.value">
+          <mat-date-range-input [rangePicker]="picker" [formGroup]="daterange">
+            <input matInput matStartDate placeholder="Start date"  formControlName="startdateform">
+            <input matEndDate placeholder="End date" formControlName="enddateform">
           </mat-date-range-input>
           <mat-hint>MM/DD/YYYY - MM/DD/YYYY</mat-hint>
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -61,6 +61,8 @@
             <mat-option value="21">21:00</mat-option>
             <mat-option value="22">22:00</mat-option>
             <mat-option value="23">23:00</mat-option>
+            <mat-option value="24">23:59</mat-option>
+            <!-- gives one minute of next day -->
           </mat-select>
         </mat-form-field>
         <mat-form-field appearance="legacy">
@@ -90,6 +92,8 @@
             <mat-option value="21">21:00</mat-option>
             <mat-option value="22">22:00</mat-option>
             <mat-option value="23">23:00</mat-option>
+            <mat-option value="24">23:59</mat-option>
+            <!-- gives one minute of next day -->
           </mat-select>
         </mat-form-field>
         <br>
