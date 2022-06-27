@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { ReserveMapComponent } from '@master/client/leaflet-library';
 import { MapCallerService } from '@master/client/map-apicaller';
+import { TokenManagerService } from '@master/client/user-storage-controller';
 import { Device, MapApiReserveResponse, ViewMapType } from '@master/shared-interfaces';
 export interface GatewayInput {
   name: string;
@@ -20,13 +21,14 @@ export class ReserveViewComponent {
   LastestHistorical:Device[];
   ShowPolygon:boolean;
   Gateways:GatewayInput[];
-  token="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZldXNlckByZXNlcnZlLmNvbSIsInNjb3BlcyI6WyJDVVNUT01FUl9VU0VSIl0sInVzZXJJZCI6ImY5NmU2MGQwLWRmZTgtMTFlYy1iZGIzLTc1MGNlN2VkMjQ1MSIsImVuYWJsZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiJjZDJkZjJiMC1kZmU4LTExZWMtYmRiMy03NTBjZTdlZDI0NTEiLCJjdXN0b21lcklkIjoiZWY1NWZmNDAtZGZlOC0xMWVjLWJkYjMtNzUwY2U3ZWQyNDUxIiwiaXNzIjoidGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE2NTUzODk0NTQsImV4cCI6MTY1NTM5ODQ1NH0.sGrzmhQ2FMZaWHVcMKDo60jP86KFZQ4Dj5usrJLOHDo7PhvfCO7Ubfb5nyKh-68NEo8TotjQwtdpYMbid0Hc7Q";
+  token="";
 
-  constructor(private apicaller:MapCallerService) {
+  constructor(private apicaller:MapCallerService,private tokenmanager:TokenManagerService) {
     this.LastestHistorical=[];
     this.Gateways=[];
     this.ShowPolygon=true;
     this.ViewMapTypeInput=ViewMapType.NORMAL_OPEN_STREET_VIEW;
+    this.token=this.tokenmanager.getToken();
   }
   
   ngOnInit(): void {

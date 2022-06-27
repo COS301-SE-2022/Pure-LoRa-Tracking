@@ -1,6 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, Input, OnChanges, SimpleChanges, } from '@angular/core';
-import { Device,MapApiHistoricalData, MapApiHistoricalResponse, MapApiLatestResponse, MapApiReserveResponse, MapHistoricalPoints, MapRender, MarkerView, ViewMapType, } from '@master/shared-interfaces';
+import { MapApiHistoricalData, MapApiHistoricalResponse, MapApiLatestResponse, MapApiReserveResponse, MapHistoricalPoints, MapRender, MarkerView, ViewMapType, } from '@master/shared-interfaces';
+import { Device } from 'libs/api/map-endpoint/src/lib/map-api.interface';
 import * as L from 'leaflet';
 // This library does not declare a module type, we we need to ignore this
 // error for a successful import
@@ -213,12 +214,12 @@ export class ReserveMapComponent implements OnInit, OnChanges {
       if (historical != null) {
         // console.log(historical.data)
         const current = L.polyline(historical.locationData.map(val =>
-          [parseFloat(val.latitude), parseFloat(val.longitude)]) as unknown as L.LatLngExpression[],
+          [parseFloat(val.location.latitude), parseFloat(val.location.longitude)]) as unknown as L.LatLngExpression[],
           { "smoothFactor": 0.1 });
         const markers: Array<L.Marker> = [];
         const length = historical.locationData.length;
         historical.locationData.forEach((val, i) => {
-          const temp = L.marker([parseFloat(val.latitude), parseFloat(val.longitude)], { icon: this.bluecirlceicon });
+          const temp = L.marker([parseFloat(val.location.latitude), parseFloat(val.location.longitude)], { icon: this.bluecirlceicon });
           if (i == length - 1) temp.bindTooltip(historical.deviceName, { permanent: true, offset: [6,0] })
           markers.push(temp);
         })
