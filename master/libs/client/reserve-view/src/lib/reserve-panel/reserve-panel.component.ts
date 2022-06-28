@@ -22,7 +22,6 @@ export class ReservePanelComponent implements OnInit {
   private _GateWays:Gateway[];
   private _ViewType:string;
   @Output() selectedSensorIDout=new EventEmitter<string>();
-  @Output() deleteddevice=new EventEmitter<{inputid:string,inputeui:string,isgateway:boolean}>();
   @Input() reserveName="No Name Found";
   @Input()
   public get Devices(){
@@ -105,6 +104,10 @@ export class ReservePanelComponent implements OnInit {
       id: id,
     }
     this.openSensor = true;
+  }
+
+  deviceDeleted(deletedDevice:string):void{
+    
   }
   
 }

@@ -39,7 +39,7 @@
     <mat-action-list>
         <button class="actionButtons" mat-raised-button >Signals<mat-icon>import_export</mat-icon></button>
         <button class="actionButtons" mat-raised-button >Activity <mat-icon>show_chart</mat-icon></button>
-        <button id="locateButton" mat-raised-button >Locate <mat-icon>my_location</mat-icon></button>
-        <button id="delete-button" mat-raised-button>Delete</button>
+        <button id="locateButton" mat-raised-button>Locate <mat-icon>my_location</mat-icon></button>
+        <button id="delete-button" mat-raised-button (click)="deleteSensor()">Delete</button>
     </mat-action-list>
 </mat-card>
