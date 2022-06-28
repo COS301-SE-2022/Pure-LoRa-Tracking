@@ -26,10 +26,10 @@ export class SensorDetailViewComponent {
     console.log("placeholder until no empty is diabled")
   }
 
-  sensorInformation:SensorProfile = {
-    profileID: "13456",
-    profileName: "S-123",
-  }
+  // sensorInformation:SensorProfile = {
+  //   profileID: "13456",
+  //   profileName: "S-123",
+  // }
 
   aditionalInfo = {
     lastPing: "",
@@ -45,7 +45,6 @@ export class SensorDetailViewComponent {
   }
 
   deleteSensor():void{
-    console.log("test");
     const mydialog=this.dialogcontroller.open(DialogConfirmationComponent,{
       data: {
         title: 'Confirm Delete',

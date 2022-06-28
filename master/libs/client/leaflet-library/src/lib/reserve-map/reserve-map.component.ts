@@ -58,7 +58,16 @@ export class ReserveMapComponent implements OnInit, OnChanges {
           obj.polyline.remove();
       }
       this.historicalpath=this.historicalpath.filter(curr=>curr.deviceID!=deletedid);
+    });
+    this.notifier.getlocatedSensor().subscribe(locatedid=>{
+      console.log("Showing only for "+locatedid);
+      this.showOnly(locatedid);
     })
+    this.notifier.getResetSensorView().subscribe(()=>{
+      console.log("Reset data");
+      this.resetData();
+    })
+
   }
 
   ngOnInit(): void {

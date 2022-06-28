@@ -57,35 +57,21 @@ export class ReserveViewComponent {
     })
   }
 
-  updateSensor(idinput:string){
-    if(idinput==""){
-      this.reservemap?.resetData();
-    }
-    else{
-      if(!this.reservemap?.showOnly(idinput)){
-        alert("No location data found");
-      }
-    }
-  }
+  // updateSensor(idinput:string){
+  //   if(idinput==""){
+  //     this.reservemap?.resetData();
+  //   }
+  //   else{
+  //     if(!this.reservemap?.showOnly(idinput)){
+  //       alert("No location data found");
+  //     }
+  //   }
+  // }
 
   updateViewMapType(newval:string){
     if(newval=="norm") this.ViewMapTypeInput=ViewMapType.NORMAL_OPEN_STREET_VIEW;
     else if(newval=="sat") this.ViewMapTypeInput=ViewMapType.SATELLITE_ESRI_1;
   }
-
-  
-// export interface RemoveDevice {
-//   token: string;
-//   deviceID: string;
-//   isGateway: boolean;
-//   devEUI: string;
-// }
-
-  // deletedevice(event:{inputid:string,inputeui:string,isgateway:boolean}){
-  //   this.apicaller.removeDevice("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZlYWRtaW5AcmVzZXJ2ZS5jb20iLCJzY29wZXMiOlsiVEVOQU5UX0FETUlOIl0sInVzZXJJZCI6ImQ2MzcyZTMwLWRmZTgtMTFlYy1iZGIzLTc1MGNlN2VkMjQ1MSIsImVuYWJsZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiJjZDJkZjJiMC1kZmU4LTExZWMtYmRiMy03NTBjZTdlZDI0NTEiLCJjdXN0b21lcklkIjoiMTM4MTQwMDAtMWRkMi0xMWIyLTgwODAtODA4MDgwODA4MDgwIiwiaXNzIjoidGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE2NTQ4MjY2NDEsImV4cCI6MTY1NDgzNTY0MX0.rqqGXx99CuHz0iPAem64ZQ1d9_vOUs3LZC-QZNQm7XJHk4R5JQZ-F55O4FeYi8xZxQjKjqW-bAj5zrIY2_Hpyg",event.inputid,event.inputeui,event.isgateway).then((val:any)=>{
-  //     if(val.explanation=="ok") alert("Device removed");
-  //   })
-  // }
 
   updateRange(event:{start:number,end:number}):void{
     this.apicaller.getHistoricalWithTime(this.token,"123",[],event.start,event.end).then(val=>{

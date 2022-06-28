@@ -22,7 +22,6 @@ export class ReservePanelComponent implements OnInit {
   private _Devices:Device[];
   private _GateWays:Gateway[];
   private _ViewType:string;
-  @Output() selectedSensorIDout=new EventEmitter<string>();
   @Input() reserveName="No Name Found";
   @Input()
   public get Devices(){
@@ -67,7 +66,6 @@ export class ReservePanelComponent implements OnInit {
     //TODO still needs testing
     this.notifier.getResetSensorView().subscribe(()=>{
       this.selectedDeviceID="";
-      this.selectedSensorIDout.emit("");
     })
     
   }
@@ -83,20 +81,19 @@ export class ReservePanelComponent implements OnInit {
     if(deviceID==this.selectedDeviceID){
       //reset
       this.selectedDeviceID="";
-      this.selectedSensorIDout.emit("");
     }
     else {
       //click on
       const device=this.Devices.find(val=>val.deviceID==deviceID);
-      if(device!=undefined&&device.locationData.length!=0){
+      if(device!=undefined){
         this.selectedDeviceID=deviceID;
-        this.selectedSensorIDout.emit(deviceID);
+        this.notifier.locateSensor(deviceID);//send through even if no data to get error popup if needed
+        //might have to change if we dont store the locations here anymore
+        if(device.locationData.length==0){
+          this.selectedDeviceID="";
+        }
       }
-      else {
-        //this might be changed if this part does not get location data anymore
-        //TODO change to proper pop up @brandon-c-k
-        alert("No location Data found");
-      }
+      
     }
   }
 
