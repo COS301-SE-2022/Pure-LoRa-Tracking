@@ -415,10 +415,10 @@ export class ApiDeviceEndpointService {
     this.thingsboardClient.setToken(body.token);
 
     const response = await this.thingsboardClient.getCustomerDevices(body.customerID);
-    
-    if(response.status!="200"){
+    console.log(response)
+    if(response.status!="ok"){
       return {
-        status : parseInt(response.status),
+        status : 500,
         explanation : response.explanation
       }  
     }

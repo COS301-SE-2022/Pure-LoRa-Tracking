@@ -47,6 +47,7 @@ export class ReserveViewComponent {
       this.reservemap?.loadInnitial(this.LastestHistorical);
     });
     this.apicaller.getGateways(this.token,"ef55ff40-dfe8-11ec-bdb3-750ce7ed2451").then((val:any)=>{
+      console.log(val)
       this.Gateways=val.data.map((curr:any)=>({id:curr.deviceID,name:curr.humanName,eui:curr.deviceName} as GatewayInput));
       console.log(this.Gateways)
     })
