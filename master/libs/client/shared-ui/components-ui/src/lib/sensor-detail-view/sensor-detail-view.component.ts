@@ -4,7 +4,7 @@ import { MapCallerService } from '@master/client/map-apicaller';
 import { TokenManagerService } from '@master/client/user-storage-controller';
 import { SensorProfile,  } from '@master/shared-interfaces';
 import { DialogConfirmationComponent } from '../dialog-confirmation/dialog-confirmation.component';
-
+import { DeviceNotifierService } from '@master/client/shared-services';
 @Component({
   selector: 'master-sensor-detail-view',
   templateUrl: './sensor-detail-view.component.html',
@@ -17,13 +17,12 @@ export class SensorDetailViewComponent {
     name: "",
     id: "",
   };
-
+  
   @Output() viewChange = new EventEmitter<boolean>();
-  @Output() deviceDeleted = new EventEmitter<string>();
 
   //we need the contructor for injection, does not matter if its empty
   //eslint-disable-next-line no-empty
-  constructor(private apicaller:MapCallerService,private tokenManager:TokenManagerService,private dialogcontroller:MatDialog){
+  constructor(private apicaller:MapCallerService,private tokenManager:TokenManagerService,private dialogcontroller:MatDialog,private notifier:DeviceNotifierService){
     console.log("placeholder until no empty is diabled")
   }
 
@@ -59,7 +58,6 @@ export class SensorDetailViewComponent {
           //TODO change alert to proper pop up @brandon-c-k
           if(curr.status==200&&curr.explanation=="ok"){
             alert("Device deleted");
-            this.deviceDeleted.emit(this.sensorInfo.id);
             this.closeSensor();
           }
           else {
@@ -68,6 +66,10 @@ export class SensorDetailViewComponent {
         });
       }
     })
+  }
+
+  locateSensor():void{
+    console.log("locate sensor called");
   }
 
 }

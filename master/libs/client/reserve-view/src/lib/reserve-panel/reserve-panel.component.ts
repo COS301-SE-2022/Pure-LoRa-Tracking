@@ -105,9 +105,5 @@ export class ReservePanelComponent implements OnInit {
     }
     this.openSensor = true;
   }
-
-  deviceDeleted(deletedDevice:string):void{
-    
-  }
   
 }

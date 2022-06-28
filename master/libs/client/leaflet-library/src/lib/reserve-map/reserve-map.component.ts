@@ -8,6 +8,7 @@ import * as L from 'leaflet';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { antPath } from "leaflet-ant-path"
+import { DeviceNotifierService } from '@master/client/shared-services';
 
 @Component({
   selector: 'master-reserve-map',
@@ -39,7 +40,7 @@ export class ReserveMapComponent implements OnInit, OnChanges {
   });
 
 
-  constructor() {
+  constructor(private notifier:DeviceNotifierService) {
     //set default map options
     this.MapRenderInput = MapRender.ALL;
     this.ViewMapTypeInput = ViewMapType.NORMAL_OPEN_STREET_VIEW;
@@ -50,6 +51,9 @@ export class ReserveMapComponent implements OnInit, OnChanges {
     // this.HistoricalDataID=-1;
     this.mappolygons=new L.Polygon([]);
     this.currentHistoricalId = -1;
+    this.notifier.getSensorDeleted().subscribe(val=>{
+      console.log("called with "+val);
+    })
   }
 
   ngOnInit(): void {
