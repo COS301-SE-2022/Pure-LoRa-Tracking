@@ -415,11 +415,20 @@ export class ApiDeviceEndpointService {
     this.thingsboardClient.setToken(body.token);
 
     const response = await this.thingsboardClient.getCustomerDevices(body.customerID);
+    
+    if(response.status!="200"){
+      return {
+        status : parseInt(response.status),
+        explanation : response.explanation
+      }  
+    }
+
     return {
       status : 200,
       explanation : "call finished",
       data : response.data.filter(val=>val.isGateway==true)
     }
+    
   }
 
   ///////////////////////////////////////////////////////////////////////////

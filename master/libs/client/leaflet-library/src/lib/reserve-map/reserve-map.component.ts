@@ -51,8 +51,14 @@ export class ReserveMapComponent implements OnInit, OnChanges {
     // this.HistoricalDataID=-1;
     this.mappolygons=new L.Polygon([]);
     this.currentHistoricalId = -1;
-    this.notifier.getSensorDeleted().subscribe(val=>{
-      console.log("called with "+val);
+    this.notifier.getSensorDeleted().subscribe(deletedid=>{
+      this.historicalpath.forEach(val=>{
+        if(val.deviceID==deletedid)
+        {
+        val.markers.forEach(val => val.remove())
+        val.polyline.remove();
+      }
+      })
     })
   }
 

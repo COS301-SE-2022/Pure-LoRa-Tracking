@@ -58,6 +58,7 @@ export class SensorDetailViewComponent {
           //TODO change alert to proper pop up @brandon-c-k
           if(curr.status==200&&curr.explanation=="ok"){
             alert("Device deleted");
+            this.notifier.deleteSensor(this.sensorInfo.id)
             this.closeSensor();
           }
           else {

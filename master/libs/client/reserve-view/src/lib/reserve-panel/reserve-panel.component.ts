@@ -2,6 +2,7 @@ import { Input, Output } from '@angular/core';
 import { EventEmitter } from '@angular/core';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { MatSelectionList } from '@angular/material/list';
+import { DeviceNotifierService } from '@master/client/shared-services';
 import { Device, ViewMapType } from '@master/shared-interfaces';
 
 
@@ -53,12 +54,16 @@ export class ReservePanelComponent implements OnInit {
   searchString = "";
   filteredGateways:Gateway[]|undefined=[];
 
-  filteredSensors:Device[]|null=[];
+  filteredSensors:Device[]=[];
 
-  constructor() {
+  constructor(private notifier:DeviceNotifierService) {
     this._Devices=[];
     this._GateWays=[];
     this._ViewType="norm"
+    this.notifier.getSensorDeleted().subscribe(val=>{
+      this.filteredSensors=this.filteredSensors.filter(curr=>curr.deviceID!=val);
+      this.Devices=this.Devices.filter(curr=>curr.deviceID!=val);
+    })
   }
 
   getSelectedStyle(deviceId:string):string{
@@ -70,14 +75,22 @@ export class ReservePanelComponent implements OnInit {
 
   selectedSensor(deviceID:string){
     if(deviceID==this.selectedDeviceID){
-      //click on
+      //reset
       this.selectedDeviceID="";
       this.selectedSensorIDout.emit("");
     }
     else {
-      //reset
-      this.selectedDeviceID=deviceID;
-      this.selectedSensorIDout.emit(deviceID);
+      //click on
+      const device=this.Devices.find(val=>val.deviceID==deviceID);
+      if(device!=undefined&&device.locationData.length!=0){
+        this.selectedDeviceID=deviceID;
+        this.selectedSensorIDout.emit(deviceID);
+      }
+      else {
+        //this might be changed if this part does not get location data anymore
+        //TODO change to proper pop up @brandon-c-k
+        alert("No location Data found");
+      }
     }
   }
 

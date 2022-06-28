@@ -66,6 +66,13 @@ export class ThingsboardThingsboardClientService {
       custID
     );
 
+    if(deviceResp.status==401){
+      return {
+        status : "fail",
+        explanation : deviceResp.explanation,
+      }
+    }
+
     if(deviceResp.status!=200){
       return {
         status : "fail",
@@ -104,6 +111,14 @@ export class ThingsboardThingsboardClientService {
         status: 'failure',
         explanation: 'no access token',
       };
+    const val=await this.validateToken();
+    if(val==false){
+      return {
+        code: 401,
+        status: 'failure',
+        explanation: 'Invalid access token',
+      };
+    }
 
     const userInfo = await this.userService.getUserID(this.token);
     if (userInfo['code'] != undefined) {
