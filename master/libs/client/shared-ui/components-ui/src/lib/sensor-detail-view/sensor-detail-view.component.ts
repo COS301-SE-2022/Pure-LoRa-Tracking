@@ -62,6 +62,7 @@ export class SensorDetailViewComponent {
             this.closeSensor();
           }
           else {
+            console.log(curr)
             alert("Something went wrong");
           }
         });
@@ -70,7 +71,7 @@ export class SensorDetailViewComponent {
   }
 
   locateSensor():void{
-    console.log("locate sensor called");
+    this.notifier.locateSensor(this.sensorInfo.id);
   }
 
 }

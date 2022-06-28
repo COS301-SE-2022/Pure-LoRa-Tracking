@@ -399,7 +399,7 @@ export class ApiDeviceEndpointService {
 
   ///////////////////////////////////////////////////////////
   async getGatewaysProcess(body : GetGatewaysInput) : Promise<deviceResponse> {
-    console.log("test");
+    // console.log("test");
     if (body.token == undefined || body.token == '')
       return {
         status: 401,

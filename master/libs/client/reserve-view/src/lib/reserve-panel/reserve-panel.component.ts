@@ -64,6 +64,12 @@ export class ReservePanelComponent implements OnInit {
       this.filteredSensors=this.filteredSensors.filter(curr=>curr.deviceID!=val);
       this.Devices=this.Devices.filter(curr=>curr.deviceID!=val);
     })
+    //TODO still needs testing
+    this.notifier.getResetSensorView().subscribe(()=>{
+      this.selectedDeviceID="";
+      this.selectedSensorIDout.emit("");
+    })
+    
   }
 
   getSelectedStyle(deviceId:string):string{

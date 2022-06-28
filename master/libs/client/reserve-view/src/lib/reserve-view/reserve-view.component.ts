@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { ReserveMapComponent } from '@master/client/leaflet-library';
 import { MapCallerService } from '@master/client/map-apicaller';
+import { DeviceNotifierService } from '@master/client/shared-services';
 import { TokenManagerService } from '@master/client/user-storage-controller';
 import { Device, MapApiReserveResponse, ViewMapType } from '@master/shared-interfaces';
 export interface GatewayInput {
@@ -24,12 +25,15 @@ export class ReserveViewComponent {
   ReserveName="";
   token="";
 
-  constructor(private apicaller:MapCallerService,private tokenmanager:TokenManagerService) {
+  constructor(private apicaller:MapCallerService,private tokenmanager:TokenManagerService,private notifier:DeviceNotifierService) {
     this.LastestHistorical=[];
     this.Gateways=[];
     this.ShowPolygon=true;
     this.ViewMapTypeInput=ViewMapType.NORMAL_OPEN_STREET_VIEW;
     this.token=this.tokenmanager.getToken();
+    this.notifier.getSensorDeleted().subscribe(val=>{
+      this.LastestHistorical=this.LastestHistorical.filter(curr=>curr.deviceID!=val);
+    })
   }
   
   ngOnInit(): void {
