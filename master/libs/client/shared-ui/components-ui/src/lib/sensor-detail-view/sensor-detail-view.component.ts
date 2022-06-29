@@ -73,4 +73,8 @@ export class SensorDetailViewComponent {
     this.notifier.locateSensor(this.sensorInfo.id);
   }
 
+  showActivity():void{
+    
+  }
+
 }

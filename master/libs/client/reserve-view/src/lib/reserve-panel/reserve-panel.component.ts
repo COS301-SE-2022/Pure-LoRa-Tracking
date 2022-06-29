@@ -102,11 +102,11 @@ export class ReservePanelComponent implements OnInit {
   } 
 
   searchDevices():void{
-     const searchLower = this.searchString.toLocaleLowerCase();
-     this.filteredGateways = this._GateWays.filter(gatewayItem => gatewayItem.id.toLocaleLowerCase().search(searchLower)>=0);
-     this.filteredSensors = this.Devices.filter(sensorItem=> sensorItem.deviceID.toLocaleLowerCase().search(searchLower)>=0);
-      console.log(this.filteredGateways);
-    }
+    const searchLower = this.searchString.toLocaleLowerCase();
+    this.filteredGateways = this._GateWays.filter(gatewayItem => gatewayItem.id.toLocaleLowerCase().search(searchLower)>=0);
+    this.filteredSensors = this.Devices.filter(sensorItem=> sensorItem.deviceID.toLocaleLowerCase().search(searchLower)>=0);
+    console.log(this.filteredGateways);
+  }
 
 
   ngOnInit(): void {
