@@ -216,7 +216,6 @@ export class ApiMapEndpointService {
         const data = Array<Device>();
 
         awaitArray.forEach((item:thingsboardResponse) => {
-            console.log(item);
             if(item.status=='fail') {
                 explanationOfCall = "some devices are missing results";
                 furtherExplain = item.explanation;
@@ -231,7 +230,7 @@ export class ApiMapEndpointService {
                     deviceID : item['name'],
                     deviceName : item.furtherExplain,
                     type : "sensor",
-                    locationData : item['data']
+                    locationData : item.data.data.telemetryResults
                 })
             }
         })

@@ -8,6 +8,7 @@ import { ReserveViewRoutingModule } from './reserve-view/reserve-view-routing.mo
 import { ClientSharedUiComponentsUiModule } from '@master/client/shared-ui/components-ui';
 import { MapPanelComponent } from './map-panel/map-panel.component';
 import { ClientLeafletLibraryModule } from '@master/client/leaflet-library';
+import { ReactiveFormsModule } from '@angular/forms';
 
 export const clientReserveViewRoutes: Route[] = [];
 
@@ -19,6 +20,7 @@ export const clientReserveViewRoutes: Route[] = [];
     ReserveViewRoutingModule,
     ClientSharedUiComponentsUiModule,
     ClientLeafletLibraryModule,
+    ReactiveFormsModule
   ],
   declarations: [
     ReserveViewComponent,

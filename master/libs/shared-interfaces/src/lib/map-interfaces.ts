@@ -38,14 +38,17 @@ export interface MapApiLatestResponse {
     data?: Device[]
 }
 
+
 export interface Device {
     deviceID: string,
     deviceName: string,
     type: string,
     locationData: {
-        longitude: string,
-        latitude: string,
-        timeStamp: number
+        timeStamp: number,
+        location: {
+            latitude: string,
+            longitude: string
+        }
     }[]
 }
 

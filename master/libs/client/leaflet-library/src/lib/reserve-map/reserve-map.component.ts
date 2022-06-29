@@ -1,12 +1,13 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, Input, OnChanges, SimpleChanges, } from '@angular/core';
-import { Device,MapApiHistoricalData, MapApiHistoricalResponse, MapApiLatestResponse, MapApiReserveResponse, MapHistoricalPoints, MapRender, MarkerView, ViewMapType, } from '@master/shared-interfaces';
+import { MapApiHistoricalData, MapApiHistoricalResponse, MapApiLatestResponse, MapApiReserveResponse, MapHistoricalPoints, MapRender, MarkerView, ViewMapType, Device} from '@master/shared-interfaces';
 import * as L from 'leaflet';
 // This library does not declare a module type, we we need to ignore this
 // error for a successful import
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { antPath } from "leaflet-ant-path"
+import { DeviceNotifierService } from '@master/client/shared-services';
 
 @Component({
   selector: 'master-reserve-map',
@@ -38,7 +39,7 @@ export class ReserveMapComponent implements OnInit, OnChanges {
   });
 
 
-  constructor() {
+  constructor(private notifier: DeviceNotifierService) {
     //set default map options
     this.MapRenderInput = MapRender.ALL;
     this.ViewMapTypeInput = ViewMapType.NORMAL_OPEN_STREET_VIEW;
@@ -47,8 +48,25 @@ export class ReserveMapComponent implements OnInit, OnChanges {
     this.ShowPolygon = true;
     this.HistoricalMode = false;
     // this.HistoricalDataID=-1;
-    this.mappolygons=new L.Polygon([]);
+    this.mappolygons = new L.Polygon([]);
     this.currentHistoricalId = -1;
+    this.notifier.getSensorDeleted().subscribe(deletedid => {
+      const obj=this.historicalpath.find(val => val.deviceID==deletedid);
+      if(obj!=undefined){
+          obj.markers.forEach(curr => curr.remove())
+          obj.polyline.remove();
+      }
+      this.historicalpath=this.historicalpath.filter(curr=>curr.deviceID!=deletedid);
+    });
+    this.notifier.getlocatedSensor().subscribe(locatedid=>{
+      console.log("Showing only for "+locatedid);
+      this.showOnly(locatedid);
+    })
+    this.notifier.getResetSensorView().subscribe(()=>{
+      console.log("Reset data");
+      this.resetData();
+    })
+
   }
 
   ngOnInit(): void {
@@ -153,7 +171,7 @@ export class ReserveMapComponent implements OnInit, OnChanges {
   }
 
   public showpolygon(): void {
-    if (!this.mappolygons.isEmpty()&&this.mainmap!=null) {
+    if (!this.mappolygons.isEmpty() && this.mainmap != null) {
       this.mappolygons.addTo(this.mainmap);
     }
   }
@@ -166,23 +184,26 @@ export class ReserveMapComponent implements OnInit, OnChanges {
 
 
 
-  public hideHistoricalExceptMarker(deviceID:string): void {
-    this.historicalpath.forEach(val=>{
-      if(val.deviceID!=deviceID) val.markers.forEach(val => val.remove())
+  public hideHistoricalExceptMarker(deviceID: string): void {
+    this.historicalpath.forEach(val => {
+      if (val.deviceID != deviceID) val.markers.forEach(curr => curr.remove())
       val.polyline.remove();
     })
   }
 
   //load the antpath for one of the devices
-  public showOnly(deviceID: string): void {
-    this.HistoricalMode=true;
-    if(this.currentantpath!=null) this.resetData()
+  public showOnly(deviceID: string): boolean {
+    //check there is actually a device with that id
+    const test = this.historicalpath.find(val => val.deviceID == deviceID);
+    if (test == undefined) return false;
+    this.HistoricalMode = true;
+    if (this.currentantpath != null) this.resetData()
     const latlngs = this.historicalpath.find(val => val.deviceID == deviceID)
     if (latlngs != null) {
-      if(!latlngs.polyline.getBounds().isValid()) {
+      if (!latlngs.polyline.getBounds().isValid()) {
         alert("No location data found");
       }
-      else{
+      else {
         const path = antPath(latlngs.polyline.getLatLngs(), {
           "delay": 400,
           "dashArray": [
@@ -202,38 +223,48 @@ export class ReserveMapComponent implements OnInit, OnChanges {
         this.currentantpath = path;
       }
     }
-    }
-    
-    // public reloadHistorical(): void {
+    return true;
+  }
+
+  // public reloadHistorical(): void {
   //   console.log("reload historical");
   // }
 
   public loadhistorical(historical: Device): void {
-      //try just show one
-      if (historical != null) {
-        // console.log(historical.data)
-        const current = L.polyline(historical.locationData.map(val =>
-          [parseFloat(val.latitude), parseFloat(val.longitude)]) as unknown as L.LatLngExpression[],
-          { "smoothFactor": 0.1 });
-        const markers: Array<L.Marker> = [];
-        const length = historical.locationData.length;
-        historical.locationData.forEach((val, i) => {
-          const temp = L.marker([parseFloat(val.latitude), parseFloat(val.longitude)], { icon: this.bluecirlceicon });
-          if (i == length - 1) temp.bindTooltip(historical.deviceName, { permanent: true, offset: [6,0] })
-          markers.push(temp);
-        })
-        const newpoint = {
-          deviceID: historical.deviceID,
-          polyline: current,
-          markers: markers
-        } as MapHistoricalPoints
-        this.historicalpath.push(newpoint);
-        if (!this.HistoricalMode) this.addToMap(newpoint)
+    //try just show one
+    if (historical != null) {
+      // console.log(historical.data)
+      const current = L.polyline(historical.locationData.map(val =>
+        [parseFloat(val.location.latitude), parseFloat(val.location.longitude)]) as unknown as L.LatLngExpression[],
+        { "smoothFactor": 0.1 });
+      const markers: Array<L.Marker> = [];
+      const length = historical.locationData.length;
+      historical.locationData.forEach((val, i) => {
+        const temp = L.marker([parseFloat(val.location.latitude), parseFloat(val.location.longitude)], { icon: this.bluecirlceicon });
+        if (i == length - 1) temp.bindTooltip(historical.deviceName, { permanent: true, offset: [6, 0] })
+        markers.push(temp);
+      })
+      const newpoint = {
+        deviceID: historical.deviceID,
+        polyline: current,
+        markers: markers
+      } as MapHistoricalPoints
+      this.historicalpath.push(newpoint);
+      if (!this.HistoricalMode) this.addToMap(newpoint)
     }
   }
 
   public loadInnitial(deviceIDs: Device[]): void {
     deviceIDs.forEach(val => this.loadhistorical(val));
+  }
+
+  public reload(deviceIDs: Device[]): void {
+    this.historicalpath.forEach(val => {
+      val.markers.forEach(curr => curr.remove())
+      val.polyline.remove();
+    })
+    this.historicalpath = [];
+    this.loadInnitial(deviceIDs);
   }
 
   //loop through and add all things back to map
@@ -243,7 +274,7 @@ export class ReserveMapComponent implements OnInit, OnChanges {
     if (this.currentantpath != null) {
       this.currentantpath.remove();
     }
-    if(this.mainmap!=null && this.mappolygons!=null) this.mainmap.fitBounds(this.mappolygons.getBounds())
+    if (this.mainmap != null && this.mappolygons != null) this.mainmap.fitBounds(this.mappolygons.getBounds())
   }
 
   public addToMap(mapdata: MapHistoricalPoints) {

@@ -1,0 +1,41 @@
+{
+  "projectType": "library",
+  "sourceRoot": "libs/client/user-storage-controller/src",
+  "prefix": "master",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:ng-packagr-lite",
+      "outputs": ["dist/libs/client/user-storage-controller"],
+      "options": {
+        "project": "libs/client/user-storage-controller/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/client/user-storage-controller/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/client/user-storage-controller/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/client/user-storage-controller"],
+      "options": {
+        "jestConfig": "libs/client/user-storage-controller/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/client/user-storage-controller/**/*.ts",
+          "libs/client/user-storage-controller/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

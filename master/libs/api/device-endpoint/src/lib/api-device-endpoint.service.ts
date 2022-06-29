@@ -399,7 +399,7 @@ export class ApiDeviceEndpointService {
 
   ///////////////////////////////////////////////////////////
   async getGatewaysProcess(body : GetGatewaysInput) : Promise<deviceResponse> {
-    console.log("test");
+    // console.log("test");
     if (body.token == undefined || body.token == '')
       return {
         status: 401,
@@ -415,11 +415,20 @@ export class ApiDeviceEndpointService {
     this.thingsboardClient.setToken(body.token);
 
     const response = await this.thingsboardClient.getCustomerDevices(body.customerID);
+    console.log(response)
+    if(response.status!="ok"){
+      return {
+        status : 500,
+        explanation : response.explanation
+      }  
+    }
+
     return {
       status : 200,
       explanation : "call finished",
       data : response.data.filter(val=>val.isGateway==true)
     }
+    
   }
 
   ///////////////////////////////////////////////////////////////////////////

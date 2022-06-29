@@ -18,6 +18,86 @@
               Normal
             </mat-button-toggle>
           </mat-button-toggle-group>
-    </mat-card-content>
+          
+        </mat-card-content>       
+        
+        
+        <!-- TODO fix formatting -->
+        <mat-form-field appearance="fill">
+          <mat-label>Please enter in the dates</mat-label>
+          <mat-date-range-input [rangePicker]="picker" [formGroup]="daterange">
+            <input matInput matStartDate placeholder="Start date"  formControlName="startdateform">
+            <input matEndDate placeholder="End date" formControlName="enddateform">
+          </mat-date-range-input>
+          <mat-hint>MM/DD/YYYY - MM/DD/YYYY</mat-hint>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-date-range-picker #picker></mat-date-range-picker>
+        </mat-form-field>
+        
+        <mat-form-field appearance="legacy">
+          <mat-label>Start Time</mat-label>
+          <mat-select [(value)]="starttime" >
+            <mat-option value="0">00:00</mat-option>
+            <mat-option value="1">01:00</mat-option>
+            <mat-option value="2">02:00</mat-option>
+            <mat-option value="3">03:00</mat-option>
+            <mat-option value="4">04:00</mat-option>
+            <mat-option value="5">05:00</mat-option>
+            <mat-option value="6">06:00</mat-option>
+            <mat-option value="7">07:00</mat-option>
+            <mat-option value="8">08:00</mat-option>
+            <mat-option value="9">09:00</mat-option>
+            <mat-option value="10">10:00</mat-option>
+            <mat-option value="11">11:00</mat-option>
+            <mat-option value="12">12:00</mat-option>
+            <mat-option value="13">13:00</mat-option>
+            <mat-option value="14">14:00</mat-option>
+            <mat-option value="15">15:00</mat-option>
+            <mat-option value="16">16:00</mat-option>
+            <mat-option value="17">17:00</mat-option>
+            <mat-option value="18">18:00</mat-option>
+            <mat-option value="19">19:00</mat-option>
+            <mat-option value="20">20:00</mat-option>
+            <mat-option value="21">21:00</mat-option>
+            <mat-option value="22">22:00</mat-option>
+            <mat-option value="23">23:00</mat-option>
+            <mat-option value="24">23:59</mat-option>
+            <!-- gives one minute of next day -->
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="legacy">
+          <mat-label>End Time</mat-label>
+          <mat-select [(value)]="endtime">
+            <mat-option value="0">00:00</mat-option>
+            <mat-option value="1">01:00</mat-option>
+            <mat-option value="2">02:00</mat-option>
+            <mat-option value="3">03:00</mat-option>
+            <mat-option value="4">04:00</mat-option>
+            <mat-option value="5">05:00</mat-option>
+            <mat-option value="6">06:00</mat-option>
+            <mat-option value="7">07:00</mat-option>
+            <mat-option value="8">08:00</mat-option>
+            <mat-option value="9">09:00</mat-option>
+            <mat-option value="10">10:00</mat-option>
+            <mat-option value="11">11:00</mat-option>
+            <mat-option value="12">12:00</mat-option>
+            <mat-option value="13">13:00</mat-option>
+            <mat-option value="14">14:00</mat-option>
+            <mat-option value="15">15:00</mat-option>
+            <mat-option value="16">16:00</mat-option>
+            <mat-option value="17">17:00</mat-option>
+            <mat-option value="18">18:00</mat-option>
+            <mat-option value="19">19:00</mat-option>
+            <mat-option value="20">20:00</mat-option>
+            <mat-option value="21">21:00</mat-option>
+            <mat-option value="22">22:00</mat-option>
+            <mat-option value="23">23:00</mat-option>
+            <mat-option value="24">23:59</mat-option>
+            <!-- gives one minute of next day -->
+          </mat-select>
+        </mat-form-field>
+        <br>
+        <button mat-button (click)="apply()">Apply</button>
+        <button mat-button (click)="reset()">Reset</button>
 
 </mat-card>
