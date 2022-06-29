@@ -8,9 +8,9 @@
                 </mat-form-field>
                 <mat-form-field>
                     <mat-label>Password</mat-label>
-                    <input matInput type="email" formControlName="password" placeholder="Password">
+                    <input matInput type="password" formControlName="password" placeholder="Password">
                 </mat-form-field>
-                <button mat-button>Login</button>
+                <button mat-button (click)="login()">Login</button>
             </form>
         </div>
     </div>

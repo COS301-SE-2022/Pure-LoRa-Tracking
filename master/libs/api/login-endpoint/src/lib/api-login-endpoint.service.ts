@@ -23,6 +23,7 @@ export class ApiLoginEndpointService {
             });
         if (loginResponse.Token != "" && loginResponse.refreshToken != "") {
             this.thingsboardClient.setToken(loginResponse.Token)
+            console.log("test")
             return {
                 status: 200,
                 explain: 'Login successful.',
