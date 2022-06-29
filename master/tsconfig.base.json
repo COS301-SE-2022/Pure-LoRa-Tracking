@@ -31,6 +31,7 @@
       "@lora/device-endpoint": ["libs/api/device-endpoint/src/index.ts"],
       "@lora/hardware-debug": ["libs/api/hardware-debug/src/index.ts"],
       "@lora/location": ["libs/location/src/index.ts"],
+      "@lora/middleware/logger": ["libs/middleware/http-logger/src/index.ts"],
       "@lora/thingsboard-asset": [
         "libs/thingsboard/thingsboard-asset/src/index.ts"
       ],
