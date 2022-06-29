@@ -74,7 +74,7 @@ export class SensorDetailViewComponent {
   }
 
   showActivity():void{
-    
+    console.log("placeholder");
   }
 
 }
