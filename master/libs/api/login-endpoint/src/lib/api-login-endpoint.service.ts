@@ -52,7 +52,6 @@ export class ApiLoginEndpointService {
         }
         else if(resp.status=="ok"){
             this.thingsboardClient.setToken(resp.data.token)
-            console.log(resp);
             return {
                 status: 200,
                 explain: 'Login successful.',
