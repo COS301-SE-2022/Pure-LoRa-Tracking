@@ -8,12 +8,13 @@ import { NestFactory } from '@nestjs/core';
 
 import { AppModule } from './app/app.module';
 import { raw } from 'body-parser';
+import { CookieManagementInterceptor } from '@master/middleware/cookie-management';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
-
+  app.useGlobalInterceptors(new CookieManagementInterceptor())
   app.use(raw());
   
   const port = process.env.PORT || 3333;

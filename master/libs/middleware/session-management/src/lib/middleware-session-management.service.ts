@@ -8,7 +8,8 @@ export class MiddlewareSessionManagementService implements NestMiddleware {
     use(req: Request, res: ServerResponse, next: (error?: any) => void) {
         if(req.body['token'] == undefined)
            return res.end()
-        else
-            next();
+        else{
+            res.addTrailers({"test":"test"});
+            next();}
     }
 }
