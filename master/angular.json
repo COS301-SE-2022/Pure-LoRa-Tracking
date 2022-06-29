@@ -28,6 +28,7 @@
     "lora-tracking": "apps/lora-tracking",
     "lora-tracking-e2e": "apps/lora-tracking-e2e",
     "middleware-http-logger": "libs/middleware/http-logger",
+    "middleware-session-management": "libs/middleware/session-management",
     "shared-interfaces": "libs/shared-interfaces",
     "thingsboard-thingsboard-asset": "libs/thingsboard/thingsboard-asset",
     "thingsboard-thingsboard-client": "libs/thingsboard/thingsboard-client",
