@@ -51,8 +51,10 @@ export class MapPanelComponent {
 
   apply():void{
     if(this.daterange.get("startdateform")!=undefined&&this.daterange.get("enddateform")!=undefined){
-      const tempstart=(this.daterange.get("startdateform")?.value).setHours(parseInt(this.starttime));
-      const tempend=(this.daterange.get("enddateform")?.value).setHours(parseInt(this.endtime));
+      const tempstart=(this.daterange.get("startdateform")?.value);
+      if(tempstart!=undefined)tempstart.setHours(parseInt(this.starttime));
+      const tempend=(this.daterange.get("enddateform")?.value);
+      tempend.setHours(parseInt(this.endtime));
       //TODO emit event
       this.DateRange.emit({
         start:tempstart,
