@@ -1,10 +1,10 @@
 import { async, TestBed } from '@angular/core/testing';
-import { ClientDemoModule } from './client-demo.module';
+import { ClientUsersViewModule } from './client-users-view.module';
 
-describe('ClientMapsModule', () => {
+describe('ClientUsersViewModule', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [ClientDemoModule],
+      imports: [ClientUsersViewModule],
     }).compileComponents();
   }));
 
@@ -13,6 +13,6 @@ describe('ClientMapsModule', () => {
   // NB: This particular test does not do anything useful.
   //     It does NOT check for correct instantiation of the module.
   it('should have a module definition', () => {
-    expect(ClientDemoModule).toBeDefined();
+    expect(ClientUsersViewModule).toBeDefined();
   });
 });

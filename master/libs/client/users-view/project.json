@@ -1,29 +1,29 @@
 {
   "projectType": "library",
-  "sourceRoot": "libs/client/demo/src",
+  "sourceRoot": "libs/client/users-view/src",
   "prefix": "master",
   "targets": {
     "build": {
       "executor": "@nrwl/angular:ng-packagr-lite",
-      "outputs": ["dist/libs/client/demo"],
+      "outputs": ["dist/libs/client/users-view"],
       "options": {
-        "project": "libs/client/demo/ng-package.json"
+        "project": "libs/client/users-view/ng-package.json"
       },
       "configurations": {
         "production": {
-          "tsConfig": "libs/client/demo/tsconfig.lib.prod.json"
+          "tsConfig": "libs/client/users-view/tsconfig.lib.prod.json"
         },
         "development": {
-          "tsConfig": "libs/client/demo/tsconfig.lib.json"
+          "tsConfig": "libs/client/users-view/tsconfig.lib.json"
         }
       },
       "defaultConfiguration": "production"
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/client/demo"],
+      "outputs": ["coverage/libs/client/users-view"],
       "options": {
-        "jestConfig": "libs/client/demo/jest.config.ts",
+        "jestConfig": "libs/client/users-view/jest.config.ts",
         "passWithNoTests": true
       }
     },
@@ -31,8 +31,8 @@
       "executor": "@nrwl/linter:eslint",
       "options": {
         "lintFilePatterns": [
-          "libs/client/demo/**/*.ts",
-          "libs/client/demo/**/*.html"
+          "libs/client/users-view/**/*.ts",
+          "libs/client/users-view/**/*.html"
         ]
       }
     }

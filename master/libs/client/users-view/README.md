@@ -1,7 +1,7 @@
-# client-demo
+# client-users-view
 
 This library was generated with [Nx](https://nx.dev).
 
 ## Running unit tests
 
-Run `nx test client-demo` to execute the unit tests.
+Run `nx test client-users-view` to execute the unit tests.

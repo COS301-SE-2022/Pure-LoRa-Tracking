@@ -9,3 +9,7 @@ export interface userLoginResponse {
     token?: string,
     refreshToken?: string
 }
+
+export interface refreshTokenLogin{
+    refreshToken:string
+}

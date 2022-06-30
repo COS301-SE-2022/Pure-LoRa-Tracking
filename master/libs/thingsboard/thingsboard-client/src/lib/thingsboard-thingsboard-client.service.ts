@@ -43,13 +43,42 @@ export class ThingsboardThingsboardClientService {
     password: string
   ): Promise<{ Token: string; refreshToken: string }> {
     const resp = await this.loginService.login(username, password);
-    if (resp['data']['token'] != undefined) {
-      this.token = resp['data']['token'];
-      this.refreshToken = resp['data']['RefreshToken'];
+    if (resp.data.token != undefined) {
+      this.token = resp.data.token;
+      this.refreshToken = resp.data.refreshToken;
       return { Token: this.token, refreshToken: this.refreshToken };
     }
     return { Token: '', refreshToken: '' };
   }
+
+  //////////////////////////////////////////////////////////
+
+  async loginFromRefreshToken(refreshToken:string): Promise<thingsboardResponse> {
+    const resp = await this.loginService.refreshToken(refreshToken);
+    if (resp.status != 200) {
+      return {
+        status: "fail",
+        explanation: resp.explanation
+      }
+    }
+    if (resp.data.token != undefined) {
+      this.token = resp.data.token;
+      this.refreshToken = resp.data.refreshToken;
+      return {
+        status:"ok",
+        explanation:"ok",
+        data:{
+          token: this.token,
+          refreshToken: this.refreshToken
+        }
+      };
+    }
+    return {
+      status: "fail",
+      explanation: "Something went wrong"
+    };
+  }
+
 
   //////////////////////////////////////////////////////////
   /*
