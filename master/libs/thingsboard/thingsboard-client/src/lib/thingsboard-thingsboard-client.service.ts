@@ -228,6 +228,16 @@ export class ThingsboardThingsboardClientService {
     else return true;
   }
 
+  /////////////////////////////////////////////////
+  async validateTokenParam(token:string): Promise<boolean> {
+    if (this.token == '') {
+      return false;
+    }
+
+    const resp = await this.userService.userInfo(token);
+    if (resp['status'] == 401) return false;
+    else return true;
+  }
   ///////////////////////////////////////////////////////////
 
   /*
