@@ -23,7 +23,7 @@ export class MiddlewareSessionManagementService implements NestMiddleware {
         //get the cookies
         const tokenCookieName="PURELORA_TOKEN";
         const refreshtokenCookieName="PURELORA_REFRESHTOKEN";
-        let cookies=req.headers["cookie"].split(";");
+        const cookies=req.headers["cookie"].split(";");
         let cookietoken=cookies.find(val=>val.trimStart().trimEnd().startsWith(tokenCookieName)).trimStart().trimEnd()
         let cookierefreshtoken=cookies.find(val=>val.trimStart().trimEnd().startsWith(refreshtokenCookieName)).trimStart().trimEnd()
         
