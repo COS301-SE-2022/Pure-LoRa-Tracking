@@ -112,7 +112,7 @@ export class ThingsboardThingsboardUserService {
       }
     }
     return {
-      status : resp.status,
+      status : 200,
       explanation : "ok",
       data : {
         token : resp.data.token,
