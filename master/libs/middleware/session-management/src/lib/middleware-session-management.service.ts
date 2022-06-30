@@ -7,10 +7,12 @@ export class MiddlewareSessionManagementService implements NestMiddleware {
     constructor(private TBClient: ThingsboardThingsboardClientService) { }
     async use(req: Request, res: ServerResponse, next: (error?: any) => void) {
         
+        console.log(req.url)
         //login has a pass through this middleware, cause it has more checks later
-        if (req.url.startsWith("url/login")) {
+        if (req.url.startsWith("/login")) {
             //check if this has a issue with security
-            next();
+            //this MUST be a return
+            return next();
         }
         
         
@@ -22,9 +24,9 @@ export class MiddlewareSessionManagementService implements NestMiddleware {
         const tokenCookieName="PURELORA_TOKEN";
         const refreshtokenCookieName="PURELORA_REFRESHTOKEN";
         let cookies=req.headers["cookie"].split(";");
-        let cookietoken=cookies.find(val=>val.trimStart().trimEnd().startsWith(tokenCookieName))
-        let cookierefreshtoken=cookies.find(val=>val.trimStart().trimEnd().startsWith(refreshtokenCookieName))
-
+        let cookietoken=cookies.find(val=>val.trimStart().trimEnd().startsWith(tokenCookieName)).trimStart().trimEnd()
+        let cookierefreshtoken=cookies.find(val=>val.trimStart().trimEnd().startsWith(refreshtokenCookieName)).trimStart().trimEnd()
+        
         //check for valid cookies
         if(cookietoken==undefined)
             return this.failedrequest(res,"Token cookie not found",400);
@@ -42,7 +44,7 @@ export class MiddlewareSessionManagementService implements NestMiddleware {
             return this.failedrequest(res,"Refresh Token cookie not found",400);
 
         const valid=await this.TBClient.validateTokenParam(cookietoken);
-        console.log(cookierefreshtoken)
+        console.log(cookietoken)
         //maybe change to only refresh if token is expired
 
         if(!valid){
@@ -58,37 +60,17 @@ export class MiddlewareSessionManagementService implements NestMiddleware {
 
             if(refreshresp.status=="ok"){
                 //reset the tokens and set headers
-                console.log("asdf");
+                // console.log("asdf");
                 req.body["token"]=refreshresp.token;
-                console.log(refreshtokenCookieName)
-                // res.setHeader("Set-Cookie",`${refreshtokenCookieName}=${refreshresp.refreshToken}; 'thing'='that'; Max-Age=1209600; Path=/;`);
-                // res.setHeader("Set-Cookie",`${tokenCookieName}=${refreshresp.token}; Max-Age=1209600;Path=/;`);
-                res.setHeader("Set-Cookie",`${refreshtokenCookieName}=${refreshresp.refreshToken}; Max-Age=1209600; Path=/;`);
-                
+                res.setHeader("Set-Cookie",[`${refreshtokenCookieName}=${refreshresp.refreshToken}; Max-Age=1209600; Path=/;`,`${tokenCookieName}=${refreshresp.token}; Max-Age=1209600; Path=/;`]);
             }
         }
         else{
             req.body["token"]=cookietoken;
         }
-
+        
+        //carry on with the request
         next();
-        // console.log(req.headers["cookie"]);
-        // //check if its login
-        // if (req.url.startsWith("url/login")) {
-
-        // }
-        // else {
-        //     if (req.body['token'] == undefined || req.body['refreshToken'] == undefined) {
-        //         return this.failedrequest(res,"Token or refresh token not provided",400)
-        //     }
-        //     else {
-        //         // res.addTrailers({"test":"test"});
-        //         console.log(await this.TBClient.validateTokenParam(req.body["token"]))
-        //         console.log("original request " + req.body['token']);
-        //         req.body["token"] = "test";
-        //         next();
-        //     }
-        // }
     }
 
     failedrequest(res:ServerResponse,msg:string,code:number):ServerResponse{
