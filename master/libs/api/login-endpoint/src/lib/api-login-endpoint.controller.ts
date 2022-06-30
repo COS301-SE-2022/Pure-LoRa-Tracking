@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ApiLoginEndpointService } from './api-login-endpoint.service';
-import { userLoginData, userLoginResponse } from '../api-login.interface';
+import { refreshTokenLogin, userLoginData, userLoginResponse } from '../api-login.interface';
 
 @Controller('login')
 export class ApiLoginEndpointController {
@@ -14,5 +14,10 @@ export class ApiLoginEndpointController {
   @Post('user')
   async userLogin(@Body() content: userLoginData): Promise<userLoginResponse>{
     return await this.apiLoginEndpointService.doLogin(content);
+  }
+
+  @Post('refreshTokenLogin')
+  async refreshTokenLogin(@Body() content:refreshTokenLogin):Promise<userLoginResponse>{
+    return await this.apiLoginEndpointService.doRefreshTokenLogin(content);
   }
 }

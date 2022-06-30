@@ -22,7 +22,7 @@ export class ThingsboardThingsboardClientService {
     private loginService: ThingsboardThingsboardUserService,
     private deviceService: ThingsboardThingsboardDeviceService,
     private assetService: ThingsboardThingsboardAssetService
-  ) {}
+  ) { }
 
   //////////////////////////////////////////////////////////
 
@@ -43,13 +43,42 @@ export class ThingsboardThingsboardClientService {
     password: string
   ): Promise<{ Token: string; refreshToken: string }> {
     const resp = await this.loginService.login(username, password);
-    if (resp['data']['token'] != undefined) {
-      this.token = resp['data']['token'];
-      this.refreshToken = resp['data']['RefreshToken'];
+    if (resp.data.token != undefined) {
+      this.token = resp.data.token;
+      this.refreshToken = resp.data.refreshToken;
       return { Token: this.token, refreshToken: this.refreshToken };
     }
     return { Token: '', refreshToken: '' };
   }
+
+  //////////////////////////////////////////////////////////
+
+  async loginFromRefreshToken(refreshToken:string): Promise<thingsboardResponse> {
+    const resp = await this.loginService.refreshToken(refreshToken);
+    if (resp.status != 200) {
+      return {
+        status: "fail",
+        explanation: resp.explanation
+      }
+    }
+    if (resp.data.token != undefined) {
+      this.token = resp.data.token;
+      this.refreshToken = resp.data.refreshToken;
+      return {
+        status:"ok",
+        explanation:"ok",
+        data:{
+          token: this.token,
+          refreshToken: this.refreshToken
+        }
+      };
+    }
+    return {
+      status: "fail",
+      explanation: "Something went wrong"
+    };
+  }
+
 
   //////////////////////////////////////////////////////////
   /*
@@ -66,25 +95,25 @@ export class ThingsboardThingsboardClientService {
       custID
     );
 
-    if(deviceResp.status==401){
+    if (deviceResp.status == 401) {
       return {
-        status : "fail",
-        explanation : deviceResp.explanation,
+        status: "fail",
+        explanation: deviceResp.explanation,
       }
     }
 
-    if(deviceResp.status!=200){
+    if (deviceResp.status != 200) {
       return {
-        status : "fail",
-        explanation : deviceResp.explanation,
-        data : deviceResp.data.deviceList
+        status: "fail",
+        explanation: deviceResp.explanation,
+        data: deviceResp.data.deviceList
       }
     }
 
     return {
-      status : "ok",
-      explanation : deviceResp.explanation,
-      data : deviceResp.data.deviceList
+      status: "ok",
+      explanation: deviceResp.explanation,
+      data: deviceResp.data.deviceList
     }
   }
 
@@ -111,8 +140,8 @@ export class ThingsboardThingsboardClientService {
         status: 'failure',
         explanation: 'no access token',
       };
-    const val=await this.validateToken();
-    if(val==false){
+    const val = await this.validateToken();
+    if (val == false) {
       return {
         code: 401,
         status: 'failure',
@@ -128,15 +157,15 @@ export class ThingsboardThingsboardClientService {
     this.assetService.setToken(this.token);
 
     const response = (await this.assetService.getAssetIDs(userInfo.userID));
-    if(response.status==401){
+    if (response.status == 401) {
       return {
         code: 401,
         status: 'Authentication Failure',
         explanation: 'Usernane/Password/Token Invalid',
       }
     }
-    console.log("here"+response.explanation);
-    const ids=response.data.assets;
+    console.log("here" + response.explanation);
+    const ids = response.data.assets;
     //console.log(ids.length);
 
     for (let i = 0; i < ids.length; i++) {
@@ -217,6 +246,24 @@ export class ThingsboardThingsboardClientService {
   }
 
   ////////////////////////////////////////////////
+  async refresh(token: string): Promise<refreshResponse> {
+    const resp = await this.userService.refreshToken(token);
+    if (resp.status == 200 && resp.explanation == "ok") {
+      return {
+        status:"ok",
+        token:resp.data.token,
+        refreshToken:resp.data.refreshToken
+      }
+    }
+    //maybe extend it later to show more errors
+    return {
+      status: "fail",
+      token: "",
+      refreshToken: ""
+    }
+  }
+
+  ////////////////////////////////////////////////
 
   async validateToken(): Promise<boolean> {
     if (this.token == '') {
@@ -228,6 +275,17 @@ export class ThingsboardThingsboardClientService {
     else return true;
   }
 
+  /////////////////////////////////////////////////
+  async validateTokenParam(token: string): Promise<boolean> {
+    if (this.token == '') {
+      return false;
+    }
+
+    const resp = await this.userService.userInfo(token);
+    console.log(resp);
+    if (resp['status'] == 401) return false;
+    else return true;
+  }
   ///////////////////////////////////////////////////////////
 
   /*
@@ -251,7 +309,7 @@ export class ThingsboardThingsboardClientService {
         status: 'fail',
         explanation: 'user type unknown',
       };
-    let devices:thingsboardResponse;
+    let devices: thingsboardResponse;
     if (UserInfo.type == 'admin') {
       /* todo */
       // Tentatively added this for testing.
@@ -329,7 +387,7 @@ export class ThingsboardThingsboardClientService {
       deviceDetails.extraParams
     );
     //TODO check that i checked the right thing for fail
-    if (deviceCreate.status!=200)
+    if (deviceCreate.status != 200)
       return {
         status: 'fail',
         explanation: 'device creation failed with: ' + deviceCreate,
@@ -339,7 +397,7 @@ export class ThingsboardThingsboardClientService {
       userID,
       deviceCreate.data.id.id
     );
-    if (assignDevice.status!=200) {
+    if (assignDevice.status != 200) {
       this.deviceService.deleteDevice(deviceCreate.data.id.id);
       return {
         status: 'fail',
@@ -686,7 +744,7 @@ export class ThingsboardThingsboardClientService {
 
   ///////////////////////////////////////////////////////////////////////
   async AdminGetUsersFromReserve(customerID: string) {
-    
+
     const login = await this.userService.getUserID(this.token);
     console.log(login);
     if (login.status != 200)
@@ -728,4 +786,10 @@ export interface thingsboardResponse {
   furtherExplain?: string;
   name?: string;
   data?: any;
+}
+
+export interface refreshResponse {
+  "status": "ok" | "fail";
+  "token": string; 
+  "refreshToken": string
 }

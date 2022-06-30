@@ -1,16 +1,20 @@
 import { Injectable } from '@angular/core';
+import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TokenManagerService {
 
-  // constructor() { 
+  constructor(private cookieservice:CookieService) { 
 
-  // }
+  }
 
   getToken(){
-    return "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZldXNlckByZXNlcnZlLmNvbSIsInNjb3BlcyI6WyJDVVNUT01FUl9VU0VSIl0sInVzZXJJZCI6ImY5NmU2MGQwLWRmZTgtMTFlYy1iZGIzLTc1MGNlN2VkMjQ1MSIsImVuYWJsZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiJjZDJkZjJiMC1kZmU4LTExZWMtYmRiMy03NTBjZTdlZDI0NTEiLCJjdXN0b21lcklkIjoiZWY1NWZmNDAtZGZlOC0xMWVjLWJkYjMtNzUwY2U3ZWQyNDUxIiwiaXNzIjoidGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE2NTY0OTI2MTEsImV4cCI6MTY1NjUwMTYxMX0.yTaYWyCvD1Tgv4erCd4XF1OVxjnWuZQNL84TjwEoBQXscckbSfPRG3_EExto4QPL8axJS_FDgihJv-C-u0lJ0A";
+    if(this.cookieservice.check("PURELORA_TOKEN")){
+      return this.cookieservice.get("PURELORA_TOKEN");
+    }
+    return "";
   }
 
   getAdminToken(){
