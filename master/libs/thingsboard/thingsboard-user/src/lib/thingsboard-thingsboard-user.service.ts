@@ -704,7 +704,7 @@ export interface UserResponse {
       "firstName"?: string,
       "lastName"?: string,
       "additionalInfo"?: {
-        "reserve"?: string[]
+        "reserves"?: string[]
       }
   }
   type? : string;
