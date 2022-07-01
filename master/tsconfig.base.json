@@ -35,6 +35,9 @@
       "@lora/middleware/session-management": [
         "libs/middleware/session-management/src/index.ts"
       ],
+      "@lora/processing/api/router": [
+        "libs/processing-api/router/src/index.ts"
+      ],
       "@lora/thingsboard-asset": [
         "libs/thingsboard/thingsboard-asset/src/index.ts"
       ],

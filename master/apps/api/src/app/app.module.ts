@@ -6,9 +6,7 @@ import { MiddlewareHttpLoggerService } from '@lora/middleware/logger';
 import { MiddlewareSessionManagementService } from '@lora/middleware/session-management';
 
 @Module({
-  imports: [ApiApiRouterModule,ConfigModule.forRoot(),
-    DatabaseProxyModule
-    ],
+  imports: [ApiApiRouterModule,ConfigModule.forRoot()],
 })
 export class AppModule implements NestModule{
   configure(consumer: MiddlewareConsumer) {

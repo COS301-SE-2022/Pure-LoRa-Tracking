@@ -1,11 +1,11 @@
+import { DatabaseProxyModule } from '@lora/database';
 import { Module } from '@nestjs/common';
-
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { ConfigModule } from '@nestjs/config';
+import { ProcessingApiRouterModule } from 'libs/processing-api/router/src';
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [ProcessingApiRouterModule,
+    ConfigModule.forRoot(),
+    DatabaseProxyModule]
 })
 export class AppModule {}
