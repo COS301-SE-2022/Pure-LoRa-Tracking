@@ -43,3 +43,10 @@ export interface usersInfoInput {
   token : string;
   customerID : string;
 }
+
+export interface UserChangeReserveInput {
+  token : string;
+  reserveID : string;
+}
+
+

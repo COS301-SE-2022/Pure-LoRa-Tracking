@@ -521,7 +521,7 @@ export class ThingsboardThingsboardClientService {
 
     const UserInfo = await this.userService.userInfo(this.token);
 
-    if(!(custID in UserInfo.data.additionalInfo.reserve))
+    if(UserInfo.data.additionalInfo.reserve == undefined || !(custID in UserInfo.data.additionalInfo.reserve))
     return {
       status: 'fail',
       explanation: 'user not in reserve',
