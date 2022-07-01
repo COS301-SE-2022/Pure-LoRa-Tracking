@@ -30,6 +30,7 @@
     "middleware-cookie-management": "libs/middleware/cookie-management",
     "middleware-http-logger": "libs/middleware/http-logger",
     "middleware-session-management": "libs/middleware/session-management",
+    "processing-tier": "apps/processing-tier",
     "shared-interfaces": "libs/shared-interfaces",
     "thingsboard-thingsboard-asset": "libs/thingsboard/thingsboard-asset",
     "thingsboard-thingsboard-client": "libs/thingsboard/thingsboard-client",
