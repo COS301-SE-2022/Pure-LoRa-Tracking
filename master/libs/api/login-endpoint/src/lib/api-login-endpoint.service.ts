@@ -11,23 +11,21 @@ export class ApiLoginEndpointService {
         if (body.username == undefined || body.password == undefined) {
             return {
                 status: 400,
-                explain: 'Username and password required.'
+                explain: 'username and password required.'
             }
         }
         const loginResponse = await this.thingsboardClient.loginUserReturnToken(body.username, body.password)
-            .catch(() => {
-                return {
-                    Token: "",
-                    refreshToken: "",
-                }
-            });
+
         if (loginResponse.Token != "" && loginResponse.refreshToken != "") {
             this.thingsboardClient.setToken(loginResponse.Token)
+            const userInfo = await this.thingsboardClient.getUserInfoFromToken();
             return {
                 status: 200,
                 explain: 'Login successful.',
                 token: loginResponse.Token,
-                refreshToken: loginResponse.refreshToken
+                refreshToken: loginResponse.refreshToken,
+               // userID : userInfo.data.id.id,
+               // reserveID : userInfo.data.customerId.id
             }
         }
         return {

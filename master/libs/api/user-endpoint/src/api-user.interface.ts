@@ -6,6 +6,7 @@ export interface userAddInput {
     firstName: string;
     lastName: string;
   };
+  reserves : string[];
 }
 
 export interface userRemoveInput {
@@ -42,3 +43,10 @@ export interface usersInfoInput {
   token : string;
   customerID : string;
 }
+
+export interface UserChangeReserveInput {
+  token : string;
+  reserveID : string;
+}
+
+

@@ -1,7 +1,5 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { AxiosResponse } from 'axios';
 import { firstValueFrom } from 'rxjs';
 @Injectable()
 export class ThingsboardThingsboardUserService {
@@ -155,6 +153,40 @@ export class ThingsboardThingsboardUserService {
     }
   }
 
+//////////////////////////////////////////////////////
+
+  async userInfoByUserID(token : string, userID: string): Promise<UserResponse> {
+    const headersReq = {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + token,
+    };
+    const resp = await firstValueFrom(
+      this.httpService.get(this.ThingsBoardURL+'/auth/user/'+userID, {
+        headers: headersReq,
+      })
+    ).catch((error) => {
+      if (error.response == undefined) return error.code;
+        return error;
+    });
+
+    if(resp == "ECONNREFUSED")
+    return {
+      status : 500,
+      explanation : resp,
+    } 
+    else if(resp.status != 200) {
+      return {
+      status : resp.response.status,
+      explanation : resp.response.data.message,
+      }
+    }
+    return {
+      status : resp.status,
+      explanation : "ok",
+      data : resp.data
+    }
+  }
+
   ///////////////////////////////////////////////////////////
 
   /*
@@ -207,7 +239,7 @@ export class ThingsboardThingsboardUserService {
 
   //////////////////////////////////////////////////////////////////////
 
-  async userInfoByCustID(token: string, custID: string): Promise<UserResponse> {
+  async CustomerInfo(token: string, custID: string): Promise<UserResponse> {
     const headersReq = {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + token,
@@ -282,7 +314,8 @@ export class ThingsboardThingsboardUserService {
     email: string,
     authority: 'TENANT_ADMIN' | 'CUSTOMER_USER',
     firstName: string,
-    lastName: string
+    lastName: string,
+    reserves: string[]
   ): Promise<UserResponse> {
     const headersReq = {
       'Content-Type': 'application/json',
@@ -301,6 +334,79 @@ export class ThingsboardThingsboardUserService {
           authority: authority,
           firstName: firstName,
           lastName: lastName,
+          additionalInfo : {
+            reserves : reserves
+          }
+        },
+        {
+          headers: headersReq,
+        }
+      )
+    ).catch((error) => {
+      if (error.response == undefined) return error.code;
+        return error;
+    });
+
+    if(resp == "ECONNREFUSED")
+    return {
+      status : 500,
+      explanation : resp,
+    } 
+    else if(resp.status != 200) {
+      return {
+      status : resp.response.status,
+      explanation : resp.response.data.message,
+      }
+    }
+    return {
+      status : resp.status,
+      explanation : "ok",
+      data : resp.data
+    }
+  }
+
+  /////////////////////////////////////////////////////////////////
+
+  async changeReserveForUser(
+    token: string,
+    tenantID : string,
+    entityID : string,
+    custID: string,
+    email: string,
+    firstName: string,
+    lastName: string,
+    reserves : string[]
+  ): Promise<UserResponse> {
+    const headersReq = {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + token,
+    };
+
+    const authority = 'CUSTOMER_USER'
+
+    const resp = await firstValueFrom(
+      this.httpService.post(
+        this.ThingsBoardURL+'/user?sendActivationMail=false',
+        {
+          id : {
+            id : entityID,
+            entityType : "USER"
+          },
+          customerId: {
+            id: custID,
+            entityType: 'CUSTOMER',
+          },
+          tenantId : {
+            id : tenantID,
+            entityType : "TENANT"
+          },
+          authority: authority,
+          email : email,
+          firstName : firstName,
+          lastName : lastName,
+          additionalInfo : {
+            reserves : reserves
+          }
         },
         {
           headers: headersReq,
@@ -594,7 +700,9 @@ export interface UserResponse {
       "authority"?: "SYS_ADMIN" | "TENANT_ADMIN" | "CUSTOMER_USER",
       "firstName"?: string,
       "lastName"?: string,
-      "additionalInfo"?:any
+      "additionalInfo"?: {
+        "reserves"?: string[]
+      }
   }
   type? : string;
   userID? : string;
@@ -624,7 +732,9 @@ export interface UserResponseCustomers {
         "zip"?: string,
         "phone"?: string,
         "email"?: string,
-        "additionalInfo"?: any
+        "additionalInfo"?: {
+          "reserve"?: string[]
+        }
       }
     ],
     "totalPages"?: 0,

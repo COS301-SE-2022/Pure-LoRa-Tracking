@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import {
   userAddInput,
   userAdminGroups,
+  UserChangeReserveInput,
   userDisableInput,
   userEnableInput,
   userInfoInput,
@@ -56,6 +57,15 @@ export class ApiUserEndpointService {
           status: 400,
           explain: 'no last name found',
         };
+
+        if (
+          content.reserves == undefined ||
+          content.reserves == []
+        )
+          return {
+            status: 400,
+            explain: 'no reserves found, there must at least be one',
+          };        
     }
 
     this.thingsboardClient.setToken(content.token);
@@ -64,7 +74,8 @@ export class ApiUserEndpointService {
       content.customerID,
       content.userInfo.email,
       content.userInfo.firstName,
-      content.userInfo.lastName
+      content.userInfo.lastName, 
+      content.reserves
     );
 
     if (resp.status == 'fail')
@@ -231,5 +242,31 @@ export class ApiUserEndpointService {
       explain:"ok",
       data:response.data
     }
+  }
+
+  async UserChangeReserveProcess(content: UserChangeReserveInput) : Promise<userResponse> {
+    if (content.token == undefined || content.token == '')
+      return {
+        status: 401,
+        explain: 'token missing',
+      };
+    if (content.reserveID == undefined || content.reserveID == '')
+      return {
+        status: 400,
+        explain: 'reserveID not defined',
+      };
+
+      this.thingsboardClient.setToken(content.token);
+
+      const response = await this.thingsboardClient.changeReserveForUser(content.reserveID);
+      if(response.status == "fail")
+      return {status:400, explain:"Server failed with: "+response.explanation}
+  
+      return {
+        status:200,
+        explain:"ok",
+        furtherExplain: "refresh the page",
+        data:response.data
+      }
   }
 }

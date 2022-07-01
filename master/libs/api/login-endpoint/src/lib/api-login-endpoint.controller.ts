@@ -11,7 +11,7 @@ export class ApiLoginEndpointController {
     return 'Login reachable';
   }
 
-  @Post('user')
+  @Post('')
   async userLogin(@Body() content: userLoginData): Promise<userLoginResponse>{
     return await this.apiLoginEndpointService.doLogin(content);
   }

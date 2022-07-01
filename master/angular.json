@@ -35,7 +35,6 @@
     "thingsboard-thingsboard-client": "libs/thingsboard/thingsboard-client",
     "thingsboard-thingsboard-device": "libs/thingsboard/thingsboard-device",
     "thingsboard-thingsboard-telemetry": "libs/thingsboard/thingsboard-telemetry",
-    "thingsboard-thingsboard-user": "libs/thingsboard/thingsboard-user",
-    "thingsboard-thingsboard-user-thingsboard-user-provision": "libs/thingsboard/thingsboard-user/thingsboard-user-provision"
+    "thingsboard-thingsboard-user": "libs/thingsboard/thingsboard-user"
   }
 }

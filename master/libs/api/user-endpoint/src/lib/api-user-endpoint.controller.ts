@@ -2,6 +2,7 @@ import { Body, Controller, Get, Post } from '@nestjs/common';
 import {
   userAddInput,
   userAdminGroups,
+  UserChangeReserveInput,
   userDisableInput,
   userEnableInput,
   userInfoInput,
@@ -18,6 +19,11 @@ export class ApiUserEndpointController {
   @Get()
   upState() {
     return 'reachable';
+  }
+
+  @Post('reserve/change')
+  async changeReserveEndpoint(@Body() content: UserChangeReserveInput): Promise<userResponse> {
+    return this.apiUserEndpointService.UserChangeReserveProcess(content);
   }
 
   @Post('admin/add')
