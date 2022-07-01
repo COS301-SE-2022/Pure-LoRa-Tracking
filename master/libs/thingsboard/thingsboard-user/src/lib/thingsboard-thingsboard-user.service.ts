@@ -2,6 +2,7 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AxiosResponse } from 'axios';
+import { userResponse } from 'libs/api/user-endpoint/src/api-user.interface';
 import { firstValueFrom } from 'rxjs';
 @Injectable()
 export class ThingsboardThingsboardUserService {
@@ -328,6 +329,80 @@ export class ThingsboardThingsboardUserService {
       data : resp.data
     }
   }
+
+  /////////////////////////////////////////////////////////////////
+
+  async changeReserveForUser(
+    token: string,
+    tenantID : string,
+    entityID : string,
+    custID: string,
+    email: string,
+    firstName: string,
+    lastName: string
+  ): Promise<UserResponse> {
+    const headersReq = {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + token,
+    };
+
+    const authority = 'CUSTOMER_USER'
+
+    const resp = await firstValueFrom(
+      this.httpService.post(
+        this.ThingsBoardURL+'/user?sendActivationMail=false',
+        {
+          id : {
+            id : entityID,
+            entityType : "USER"
+          },
+          customerId: {
+            id: custID,
+            entityType: 'CUSTOMER',
+          },
+          tenantId : {
+            id : tenantID,
+            entityType : "TENANT"
+          },
+          authority: authority,
+          email : email,
+          firstName : firstName,
+          lastName : lastName
+        },
+        {
+          headers: headersReq,
+        }
+      )
+    ).catch((error) => {
+      if (error.response == undefined) return error.code;
+        return error;
+    });
+
+    if(resp == "ECONNREFUSED")
+    return {
+      status : 500,
+      explanation : resp,
+    } 
+    else if(resp.status != 200) {
+      return {
+      status : resp.response.status,
+      explanation : resp.response.data.message,
+      }
+    }
+    return {
+      status : resp.status,
+      explanation : "ok",
+      data : resp.data
+    }
+  }
+
+  /////////////////////////////////////////////////////////////////
+
+  async getUserAttribute(attrbute:string, userID : string) : Promise<userResponse> {
+
+    return null;
+  }
+
 
   /////////////////////////////////////////////////////////////////
 
