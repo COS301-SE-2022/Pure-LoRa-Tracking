@@ -156,6 +156,40 @@ export class ThingsboardThingsboardUserService {
     }
   }
 
+//////////////////////////////////////////////////////
+
+  async userInfoByUserID(token : string, userID: string): Promise<UserResponse> {
+    const headersReq = {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + token,
+    };
+    const resp = await firstValueFrom(
+      this.httpService.get(this.ThingsBoardURL+'/auth/user/'+userID, {
+        headers: headersReq,
+      })
+    ).catch((error) => {
+      if (error.response == undefined) return error.code;
+        return error;
+    });
+
+    if(resp == "ECONNREFUSED")
+    return {
+      status : 500,
+      explanation : resp,
+    } 
+    else if(resp.status != 200) {
+      return {
+      status : resp.response.status,
+      explanation : resp.response.data.message,
+      }
+    }
+    return {
+      status : resp.status,
+      explanation : "ok",
+      data : resp.data
+    }
+  }
+
   ///////////////////////////////////////////////////////////
 
   /*
@@ -208,7 +242,7 @@ export class ThingsboardThingsboardUserService {
 
   //////////////////////////////////////////////////////////////////////
 
-  async userInfoByCustID(token: string, custID: string): Promise<UserResponse> {
+  async CustomerInfo(token: string, custID: string): Promise<UserResponse> {
     const headersReq = {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + token,
@@ -283,7 +317,8 @@ export class ThingsboardThingsboardUserService {
     email: string,
     authority: 'TENANT_ADMIN' | 'CUSTOMER_USER',
     firstName: string,
-    lastName: string
+    lastName: string,
+    reserves: string[]
   ): Promise<UserResponse> {
     const headersReq = {
       'Content-Type': 'application/json',
@@ -302,6 +337,9 @@ export class ThingsboardThingsboardUserService {
           authority: authority,
           firstName: firstName,
           lastName: lastName,
+          additionalInfo : {
+            reserves : reserves
+          }
         },
         {
           headers: headersReq,
@@ -339,7 +377,8 @@ export class ThingsboardThingsboardUserService {
     custID: string,
     email: string,
     firstName: string,
-    lastName: string
+    lastName: string,
+    reserves : string[]
   ): Promise<UserResponse> {
     const headersReq = {
       'Content-Type': 'application/json',
@@ -367,7 +406,10 @@ export class ThingsboardThingsboardUserService {
           authority: authority,
           email : email,
           firstName : firstName,
-          lastName : lastName
+          lastName : lastName,
+          additionalInfo : {
+            reserves : reserves
+          }
         },
         {
           headers: headersReq,
@@ -395,14 +437,6 @@ export class ThingsboardThingsboardUserService {
       data : resp.data
     }
   }
-
-  /////////////////////////////////////////////////////////////////
-
-  async getUserAttribute(attrbute:string, userID : string) : Promise<userResponse> {
-
-    return null;
-  }
-
 
   /////////////////////////////////////////////////////////////////
 
@@ -669,7 +703,9 @@ export interface UserResponse {
       "authority"?: "SYS_ADMIN" | "TENANT_ADMIN" | "CUSTOMER_USER",
       "firstName"?: string,
       "lastName"?: string,
-      "additionalInfo"?:any
+      "additionalInfo"?: {
+        "reserve"?: string[]
+      }
   }
   type? : string;
   userID? : string;
@@ -699,7 +735,9 @@ export interface UserResponseCustomers {
         "zip"?: string,
         "phone"?: string,
         "email"?: string,
-        "additionalInfo"?: any
+        "additionalInfo"?: {
+          "reserve"?: string[]
+        }
       }
     ],
     "totalPages"?: 0,

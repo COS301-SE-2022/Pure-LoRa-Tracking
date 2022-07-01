@@ -53,7 +53,7 @@ export class ThingsboardThingsboardClientService {
 
   //////////////////////////////////////////////////////////
 
-  async loginFromRefreshToken(refreshToken:string): Promise<thingsboardResponse> {
+  async loginFromRefreshToken(refreshToken: string): Promise<thingsboardResponse> {
     const resp = await this.loginService.refreshToken(refreshToken);
     if (resp.status != 200) {
       return {
@@ -65,9 +65,9 @@ export class ThingsboardThingsboardClientService {
       this.token = resp.data.token;
       this.refreshToken = resp.data.refreshToken;
       return {
-        status:"ok",
-        explanation:"ok",
-        data:{
+        status: "ok",
+        explanation: "ok",
+        data: {
           token: this.token,
           refreshToken: this.refreshToken
         }
@@ -250,9 +250,9 @@ export class ThingsboardThingsboardClientService {
     const resp = await this.userService.refreshToken(token);
     if (resp.status == 200 && resp.explanation == "ok") {
       return {
-        status:"ok",
-        token:resp.data.token,
-        refreshToken:resp.data.refreshToken
+        status: "ok",
+        token: resp.data.token,
+        refreshToken: resp.data.refreshToken
       }
     }
     //maybe extend it later to show more errors
@@ -366,7 +366,7 @@ export class ThingsboardThingsboardClientService {
       };
     }
 
-    const CustInfo = await this.userService.userInfoByCustID(
+    const CustInfo = await this.userService.CustomerInfo(
       this.token,
       userID
     );
@@ -462,7 +462,8 @@ export class ThingsboardThingsboardClientService {
     custID: string,
     email: string,
     firstName: string,
-    lastName: string
+    lastName: string,
+    reserves : string[]
   ): Promise<thingsboardResponse> {
     const login = await this.userService.getUserID(this.token);
 
@@ -484,7 +485,8 @@ export class ThingsboardThingsboardClientService {
       email,
       'CUSTOMER_USER',
       firstName,
-      lastName
+      lastName,
+      reserves
     );
 
     if (resp.status != 200)
@@ -498,6 +500,101 @@ export class ThingsboardThingsboardClientService {
       explanation: resp.explanation,
     };
   }
+
+  ///////////////////////////////////////////////////////////////////////
+  /*
+    check token
+    check user is in reserve
+    get user info
+    move user
+  */
+  async changeReserveForUser(
+    custID: string
+  ): Promise<thingsboardResponse> {
+    const login = await this.userService.getUserID(this.token);
+
+    if (login.status != 200)
+      return {
+        status: 'fail',
+        explanation: 'token invalid',
+      };
+
+    const UserInfo = await this.userService.userInfo(this.token);
+
+    if(!(custID in UserInfo.data.additionalInfo.reserve))
+    return {
+      status: 'fail',
+      explanation: 'user not in reserve',
+    };
+
+    if (UserInfo.status != 200)
+      return {
+        status: 'fail',
+        explanation: UserInfo.explanation,
+      };
+
+    const resp = await this.userService.changeReserveForUser(this.token, UserInfo.data.tenantId.id, UserInfo.data.id.id, custID, UserInfo.data.email, UserInfo.data.firstName, UserInfo.data.lastName, UserInfo.data.additionalInfo.reserve);
+
+    if (resp.status != 200)
+      return {
+        status: 'fail',
+        explanation: resp.explanation,
+      };
+
+    return {
+      status: 'ok',
+      explanation: resp.explanation,
+    };
+  }
+
+  ///////////////////////////////////////////////////////////////////////
+  /*
+    check token
+    check user is admin
+    get user info
+    move user
+  */
+    async changeReservesAvailableforUser(
+      userID : string,
+      reserves : string[]
+    ): Promise<thingsboardResponse> {
+      const login = await this.userService.getUserID(this.token);
+  
+      if (login.status != 200)
+        return {
+          status: 'fail',
+          explanation: 'token invalid',
+        };
+
+        if (login.type != 'admin')
+      return {
+        status: 'fail',
+        explanation: 'user not admin',
+      };
+        
+  
+      const UserInfo = await this.userService.userInfoByUserID(this.token, userID);
+  
+      if (UserInfo.status != 200)
+        return {
+          status: 'fail',
+          explanation: UserInfo.explanation,
+        };
+  
+      const resp = await this.userService.changeReserveForUser(this.token, UserInfo.data.tenantId.id, UserInfo.data.id.id, UserInfo.data.customerId.id, UserInfo.data.email, UserInfo.data.firstName, UserInfo.data.lastName, reserves);
+  
+      if (resp.status != 200)
+        return {
+          status: 'fail',
+          explanation: resp.explanation,
+        };
+  
+      return {
+        status: 'ok',
+        explanation: resp.explanation,
+      };
+    }
+  
 
   ///////////////////////////////////////////////////////////////////////
   /*
@@ -790,6 +887,6 @@ export interface thingsboardResponse {
 
 export interface refreshResponse {
   "status": "ok" | "fail";
-  "token": string; 
+  "token": string;
   "refreshToken": string
 }
