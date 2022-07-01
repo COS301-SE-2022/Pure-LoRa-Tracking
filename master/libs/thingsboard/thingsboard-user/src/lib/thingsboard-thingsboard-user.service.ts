@@ -1,8 +1,5 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { AxiosResponse } from 'axios';
-import { userResponse } from 'libs/api/user-endpoint/src/api-user.interface';
 import { firstValueFrom } from 'rxjs';
 @Injectable()
 export class ThingsboardThingsboardUserService {
