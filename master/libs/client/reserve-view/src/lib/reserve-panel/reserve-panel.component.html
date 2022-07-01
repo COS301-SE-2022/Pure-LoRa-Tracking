@@ -1,7 +1,13 @@
 <mat-card color='$primary' *ngIf="openSensor === false">
     <mat-card-header class="headerText">
         <mat-card-title >
-            {{reserveName}}
+
+            <!-- temp hard coded -->
+            <mat-select #reserve (valueChange)="reserveChange(reserve.value)">
+                <mat-option *ngFor="let curr of CurrentReserveNames" [value]="curr.id">{{curr.name}}</mat-option>
+            </mat-select>
+
+            
         </mat-card-title>
     </mat-card-header>
     <mat-divider></mat-divider>

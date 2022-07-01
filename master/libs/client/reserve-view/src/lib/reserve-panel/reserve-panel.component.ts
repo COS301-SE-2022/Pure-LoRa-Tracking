@@ -22,7 +22,23 @@ export class ReservePanelComponent implements OnInit {
   private _Devices:Device[];
   private _GateWays:Gateway[];
   private _ViewType:string;
-  @Input() reserveName="No Name Found";
+  currentReserveName="No Name Found";
+  @Input() 
+  public set reserveName(name:string){
+    this.currentReserveName=name;
+  }
+  public get reserveName(){
+    return this.currentReserveName;
+  }
+
+  @Input() CurrentReserveNames=[] as Array<{id:string,name:string}>;
+  public set reserveNames(names:Array<{id:string,name:string}>){
+    this.CurrentReserveNames=names;
+  }
+  public get reserveNames(){
+    return this.CurrentReserveNames;
+  }
+
   @Input()
   public get Devices(){
     return this._Devices;
@@ -122,4 +138,8 @@ export class ReservePanelComponent implements OnInit {
     this.openSensor = true;
   }
   
+  reserveChange(value:string):void{
+    console.log(value);
+  }
+
 }

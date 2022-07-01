@@ -56,8 +56,11 @@ export interface MapApiReserveResponse {
     code: number,
     status: string,
     explanation: string,
-    data?: {
-        reserveName: string,
+    data?: ReserveData
+}
+
+export interface ReserveData{
+     reserveName: string,
         center: {
             latitude: string,
             longitude: string
@@ -67,7 +70,6 @@ export interface MapApiReserveResponse {
             latitude: string,
             longitude: string
         }[]
-    }
 }
 
 
