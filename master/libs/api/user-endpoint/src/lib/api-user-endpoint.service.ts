@@ -64,7 +64,8 @@ export class ApiUserEndpointService {
       content.customerID,
       content.userInfo.email,
       content.userInfo.firstName,
-      content.userInfo.lastName
+      content.userInfo.lastName, 
+      content.reserves
     );
 
     if (resp.status == 'fail')
