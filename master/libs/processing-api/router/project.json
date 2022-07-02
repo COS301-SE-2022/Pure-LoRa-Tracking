@@ -1,0 +1,45 @@
+{
+  "sourceRoot": "libs/processing-api/router/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/processing-api/router",
+        "tsConfig": "libs/processing-api/router/tsconfig.lib.json",
+        "packageJson": "libs/processing-api/router/package.json",
+        "main": "libs/processing-api/router/src/index.ts",
+        "assets": ["libs/processing-api/router/*.md"]
+      }
+    },
+    "publish": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "node tools/scripts/publish.mjs processing-api-router {args.ver} {args.tag}"
+      },
+      "dependsOn": [
+        {
+          "projects": "self",
+          "target": "build"
+        }
+      ]
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/processing-api/router/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/processing-api/router"],
+      "options": {
+        "jestConfig": "libs/processing-api/router/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}
