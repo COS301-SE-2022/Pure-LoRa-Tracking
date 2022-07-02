@@ -157,11 +157,6 @@ export class ThingsboardThingsboardUserService {
 
   ///////////////////////////////////////////////////////////
 
-  /*
-  TODO change this function to return userID for user
-  TODO make a new function to return customer id for a token
-  */
-
   async getUserID(
     token: string
   ): Promise<UserResponse> {
@@ -184,7 +179,7 @@ export class ThingsboardThingsboardUserService {
       return {
         status: 200,
         explanation : "ok",
-        userID: resp.data['tenantId']['id'],
+        //userID: resp.data['tenantId']['id'],
         type: 'sysAdmin',
       } 
     }
@@ -192,14 +187,14 @@ export class ThingsboardThingsboardUserService {
       return {
         status: 200,
         explanation : "ok",
-        userID: resp.data['tenantId']['id'],
+        //userID: resp.data['tenantId']['id'],
         type: 'admin',
       };
     } else {
       return {
         status: 200,
         explanation : "ok",
-        userID: resp.data['customerId']['id'],
+        //userID: resp.data['customerId']['id'],
         type: 'user',
       };
     }
