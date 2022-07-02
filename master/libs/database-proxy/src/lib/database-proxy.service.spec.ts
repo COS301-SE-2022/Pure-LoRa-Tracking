@@ -21,6 +21,6 @@ describe('DatabaseProxyService', () => {
   });
 
   it("should insert the location to the mongodb", () => {
-    service.insertLocation({FirstPoint:2, SecondPoint:2, ThirdPoint:3, gateway:"a", latitude:-23.43, longitude:22.2})
+    //service.insertLocation({FirstPoint:2, SecondPoint:2, ThirdPoint:3, gateway:"a", latitude:-23.43, longitude:22.2})
   })
 });
