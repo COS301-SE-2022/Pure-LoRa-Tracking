@@ -621,12 +621,5 @@ describe('ThingsboardThingsboardClientService', () => {
   });*/
 
   });
-
-  //////////////////////////////////////////////////////////////////////
-
-  it('should return the customer devices', async()=> {
-    await service.loginUser("reserveuser@reserve.com", "reserve");
-    console.log(await service.getReservePerimeter())
-  })
 })
 

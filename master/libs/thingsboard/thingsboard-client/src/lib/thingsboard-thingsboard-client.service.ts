@@ -244,12 +244,6 @@ export class ThingsboardThingsboardClientService {
   }
 
   ////////////////////////////////////////////////
-
-  async getAllDevicesHistoricalData() {
-    return null;
-  }
-
-  ////////////////////////////////////////////////
   async refresh(token: string): Promise<refreshResponse> {
     const resp = await this.userService.refreshToken(token);
     if (resp.status == 200 && resp.explanation == "ok") {
@@ -286,7 +280,7 @@ export class ThingsboardThingsboardClientService {
     }
 
     const resp = await this.userService.userInfo(token);
-    console.log(resp);
+    //console.log(resp);
     if (resp['status'] == 401) return false;
     else return true;
   }
@@ -816,7 +810,7 @@ export class ThingsboardThingsboardClientService {
   ///////////////////////////////////////////////////////////////////////
   async AdminGetCustomers(): Promise<thingsboardResponse> {
     const login = await this.userService.userInfo(this.token);
-    console.log(login);
+    //console.log(login);
     if (login.status != 200)
       return {
         status: 'fail',
@@ -847,7 +841,7 @@ export class ThingsboardThingsboardClientService {
   async AdminGetUsersFromReserve(customerID: string) {
 
     const login = await this.userService.userInfo(this.token);
-    console.log(login);
+    //console.log(login);
     if (login.status != 200)
       return {
         status: 'fail',
