@@ -103,7 +103,7 @@ export class ApiMapEndpointService {
                 explanation:"Reserve not found"
             }
         }
-        console.log(data);
+        //console.log(data);
 
         return {
             code : 200,
@@ -174,18 +174,23 @@ export class ApiMapEndpointService {
             console.log(content.startTime);
             console.log(content.endTime);
         }
-        
 
         this.thingsboardClient.setToken(content.token);
-        const waiter=await this.thingsboardClient.validateToken();
+        // const waiter=await this.thingsboardClient.validateToken();
 
-        if(waiter==false){
-            return {
-                code : 401,
-                status : 'failure',
-                explanation : "Token invalid"
-            }
-        }
+        // if(waiter==false){
+        //     return {
+        //         code : 401,
+        //         status : 'failure',
+        //         explanation : "Token invalid"
+        //     }
+        // }
+
+        if(content.startTime != undefined)
+            content.startTime = new Date(content.startTime).getTime()
+
+        if(content.endTime != undefined)
+            content.endTime = new Date(content.endTime).getTime()
 
         const awaitArray = Array<any>()
         if(content.deviceID != undefined && content.deviceID.length > 0) {
@@ -195,9 +200,7 @@ export class ApiMapEndpointService {
             })
         } else {
             const devices = await this.thingsboardClient.getDeviceInfos();
-
             const other=devices.data.data.filter(val=>val.isGateway == false);
-            console.log(other);
             other.forEach((device)=> {
                 /* await array -> telem results */
                 awaitArray.push(this.thingsboardClient.getDeviceHistoricalData(device.deviceID, content.startTime, content.endTime))
@@ -214,8 +217,11 @@ export class ApiMapEndpointService {
         let furtherExplain = "";
 
         const data = Array<Device>();
-
+        //console.log("\n\n\n\nreached");
         awaitArray.forEach((item:thingsboardResponse) => {
+            if(item.data.data.telemetryResults == undefined)
+                item.data.data.telemetryResults = [];
+
             if(item.status=='fail') {
                 explanationOfCall = "some devices are missing results";
                 furtherExplain = item.explanation;
@@ -234,7 +240,6 @@ export class ApiMapEndpointService {
                 })
             }
         })
-        console.log("reached");
         return {
             code : 200,
             status : "success",
