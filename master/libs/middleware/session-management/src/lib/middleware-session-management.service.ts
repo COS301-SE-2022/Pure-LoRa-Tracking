@@ -7,7 +7,7 @@ export class MiddlewareSessionManagementService implements NestMiddleware {
     constructor(private TBClient: ThingsboardThingsboardClientService) { }
     async use(req: Request, res: ServerResponse, next: (error?: any) => void) {
         
-        console.log(req.url)
+        //console.log(req.url)
         //login has a pass through this middleware, cause it has more checks later
         if (req.url.startsWith("/login")) {
             //check if this has a issue with security
@@ -19,7 +19,7 @@ export class MiddlewareSessionManagementService implements NestMiddleware {
         //check for no cookie at all
         if(req.headers["cookie"]==undefined)
         return this.failedrequest(res,"Token cookie or refresh token cookie not provided",400);
-        console.log(req.headers["cookie"])
+        //console.log(req.headers["cookie"])
         //get the cookies
         const tokenCookieName="PURELORA_TOKEN";
         const refreshtokenCookieName="PURELORA_REFRESHTOKEN";
@@ -44,7 +44,7 @@ export class MiddlewareSessionManagementService implements NestMiddleware {
             return this.failedrequest(res,"Refresh Token cookie not found",400);
 
         const valid=await this.TBClient.validateTokenParam(cookietoken);
-        console.log(cookietoken)
+        //console.log(cookietoken)
         //maybe change to only refresh if token is expired
 
         if(!valid){
