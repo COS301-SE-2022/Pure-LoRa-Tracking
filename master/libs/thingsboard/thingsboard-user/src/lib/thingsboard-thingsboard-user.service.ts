@@ -187,51 +187,6 @@ export class ThingsboardThingsboardUserService {
     }
   }
 
-  ///////////////////////////////////////////////////////////
-
-  async getUserID(
-    token: string
-  ): Promise<UserResponse> {
-    const resp = await this.userInfo(token);
-    if (resp.status != 200) {
-      return {
-        explanation : resp.explanation,
-        status: resp.status,
-      };
-    }
-
-    if (resp.data == undefined) {
-      return {
-        explanation : resp.explanation,
-        status: resp.status,
-      };
-    }
-
-    if (resp.data.authority == 'SYS_ADMIN') {
-      return {
-        status: 200,
-        explanation : "ok",
-        //userID: resp.data['tenantId']['id'],
-        type: 'sysAdmin',
-      } 
-    }
-    else if (resp.data['authority'] == 'TENANT_ADMIN') {
-      return {
-        status: 200,
-        explanation : "ok",
-        //userID: resp.data['tenantId']['id'],
-        type: 'admin',
-      };
-    } else {
-      return {
-        status: 200,
-        explanation : "ok",
-        //userID: resp.data['customerId']['id'],
-        type: 'user',
-      };
-    }
-  }
-
   //////////////////////////////////////////////////////////////////////
 
   async CustomerInfo(token: string, custID: string): Promise<UserResponse> {
@@ -700,7 +655,6 @@ export interface UserResponse {
       }
   }
   type? : string;
-  userID? : string;
 }
 
 export interface UserResponseCustomers {
