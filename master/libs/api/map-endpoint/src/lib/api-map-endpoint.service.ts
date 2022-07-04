@@ -240,6 +240,7 @@ export class ApiMapEndpointService {
                 })
             }
         })
+       //console.table(data[0]["locationData"])
         return {
             code : 200,
             status : "success",
