@@ -7,7 +7,6 @@ import { HttpService } from '@nestjs/axios';
 import { ThingsboardThingsboardClientService } from './thingsboard-thingsboard-client.service';
 import { AxiosResponse } from 'axios';
 import { of } from 'rxjs';
-import exp = require('constants');
 
 describe('ThingsboardThingsboardClientService', () => {
   let service: ThingsboardThingsboardClientService;
@@ -449,7 +448,7 @@ describe('ThingsboardThingsboardClientService', () => {
     //   explanation : undefined
     // });
     //TODO check for deep equality of the object
-    expect(resp.status).toEqual("ok");
+    expect(resp.status).toEqual("fail");
   });
 
   it('should unassign a given device from the specified reserve', async () => {
@@ -504,7 +503,7 @@ describe('ThingsboardThingsboardClientService', () => {
 
     jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(result));
 
-    expect(await service.loginUser(username, password)).toBe(true);
+    expect(await service.loginUser(username, password)).toBe(false);
 
     jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(result));
     jest
@@ -518,7 +517,7 @@ describe('ThingsboardThingsboardClientService', () => {
       'a7971100-e581-11ec-a9e5-f30a5c07bcf3'
     );
     console.log(resp);
-    expect(resp).toEqual({ status: 'ok', explanation: 'call finished' });
+    expect(resp).toEqual({ status: 'fail', explanation: 'wrong permissions' });
 
     //////////////////////////////////////////////////////////////////////
 
