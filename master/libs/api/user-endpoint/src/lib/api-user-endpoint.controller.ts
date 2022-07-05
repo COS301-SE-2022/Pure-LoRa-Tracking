@@ -21,6 +21,7 @@ export class ApiUserEndpointController {
     return 'reachable';
   }
 
+  /* Move user to new reserve which they are a part of */
   @Post('reserve/change')
   async changeReserveEndpoint(@Body() content: UserChangeReserveInput): Promise<userResponse> {
     return this.apiUserEndpointService.UserChangeReserveProcess(content);
@@ -52,6 +53,7 @@ export class ApiUserEndpointController {
     return this.apiUserEndpointService.EnableUserProcess(content);
   }
 
+  /* Get user info from token/cookie */
   @Post('info')
   async UserInfoEndpoint(
     @Body() content: userInfoInput
@@ -59,6 +61,7 @@ export class ApiUserEndpointController {
     return this.apiUserEndpointService.UserInfoProcess(content);
   }
 
+  /* Get all reserves admin is incharge of */
   @Post('admin/groups')
   async PostGatewayAdd(
     @Body() content: userAdminGroups
@@ -66,6 +69,7 @@ export class ApiUserEndpointController {
     return this.apiUserEndpointService.AdminGroupsProcess(content);
   }
 
+  /* Get all users belonging to a reserve */
   @Post('admin/reserve/all')
   async GetAllUsers(
     @Body() content: usersInfoInput
