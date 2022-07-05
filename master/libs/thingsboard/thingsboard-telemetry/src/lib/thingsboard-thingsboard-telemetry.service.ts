@@ -27,7 +27,7 @@ export class ThingsboardThingsboardTelemetryService {
     let url = '';
     if (timeStart != undefined) {
       url =
-        this.ThingsBoardURL+'plugins/telemetry/' +
+        this.ThingsBoardURL+'/plugins/telemetry/' +
         DeviceProfile +
         '/' +
         DeviceID +

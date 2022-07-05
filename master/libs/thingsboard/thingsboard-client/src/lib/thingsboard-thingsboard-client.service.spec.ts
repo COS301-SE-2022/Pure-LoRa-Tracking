@@ -1,7 +1,7 @@
 import { ThingsboardThingsboardAssetModule } from '@lora/thingsboard-asset';
 import { ThingsboardThingsboardDeviceModule } from '@lora/thingsboard-device';
 import { ThingsboardThingsboardTelemetryModule } from '@lora/thingsboard-telemetry';
-import { ThingsboardThingsboardUserModule } from '@lora/thingsboard-user';
+import { ThingsboardThingsboardUserModule, ThingsboardThingsboardUserService } from '@lora/thingsboard-user';
 import { Test } from '@nestjs/testing';
 import { HttpService } from '@nestjs/axios';
 import { ThingsboardThingsboardClientService } from './thingsboard-thingsboard-client.service';

@@ -233,14 +233,14 @@ export class ReserveMapComponent implements OnInit, OnChanges {
   public loadhistorical(historical: Device): void {
     //try just show one
     if (historical != null) {
-      // console.log(historical.data)
+       //console.log(historical)
       const current = L.polyline(historical.locationData.map(val =>
-        [parseFloat(val.location.latitude), parseFloat(val.location.longitude)]) as unknown as L.LatLngExpression[],
+        [parseFloat(val.latitude), parseFloat(val.longitude)]) as unknown as L.LatLngExpression[],
         { "smoothFactor": 0.1 });
       const markers: Array<L.Marker> = [];
       const length = historical.locationData.length;
       historical.locationData.forEach((val, i) => {
-        const temp = L.marker([parseFloat(val.location.latitude), parseFloat(val.location.longitude)], { icon: this.bluecirlceicon });
+        const temp = L.marker([parseFloat(val.latitude), parseFloat(val.longitude)], { icon: this.bluecirlceicon });
         if (i == length - 1) temp.bindTooltip(historical.deviceName, { permanent: true, offset: [6, 0] })
         markers.push(temp);
       })

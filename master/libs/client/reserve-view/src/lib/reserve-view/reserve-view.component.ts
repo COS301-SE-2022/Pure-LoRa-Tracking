@@ -46,7 +46,7 @@ export class ReserveViewComponent {
       });
     this.apicaller.getHistorical(this.token,"123",[]).then(val=>{
       // console.log(val+"thingdd")
-      console.log(val);
+      //console.log(val);
       this.LastestHistorical=val.data;
       this.reservemap?.loadInnitial(this.LastestHistorical);
     });
@@ -75,7 +75,8 @@ export class ReserveViewComponent {
 
   updateRange(event:{start:number,end:number}):void{
     this.apicaller.getHistoricalWithTime(this.token,"123",[],event.start,event.end).then(val=>{
-      this.reservemap?.reload(this.LastestHistorical);
+      //console.table(val['data'])
+      this.reservemap?.reload(val['data']);
     });
   }
 }

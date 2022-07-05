@@ -22,7 +22,7 @@ export class ThingsboardThingsboardAssetService {
   async getAssetIDs(customerID: string): Promise<assetResponse> {
     const resp = await firstValueFrom(
       this.httpService.get(
-        this.ThingsBoardURL + '/customer/' + customerID + '/assets?pageSize=30&page=0',
+        this.ThingsBoardURL + '/customer/' + customerID + '/assets?pageSize=100&page=0',
         {
           headers: this.headersReq,
         }
