@@ -41,14 +41,23 @@ export class ThingsboardThingsboardClientService {
   async loginUserReturnToken(
     username: string,
     password: string
-  ): Promise<{ Token: string; refreshToken: string }> {
+  ): Promise<thingsboardLoginResponse> {
     const resp = await this.loginService.login(username, password);
-    if (resp.data.token != undefined) {
+    if (resp.status == 200) {
       this.token = resp.data.token;
       this.refreshToken = resp.data.refreshToken;
-      return { Token: this.token, refreshToken: this.refreshToken };
+      return { 
+        status : "ok",
+        Token: this.token, 
+        refreshToken: this.refreshToken 
+      };
     }
-    return { Token: '', refreshToken: '' };
+    return { 
+      status : "fail",
+      explanation : resp.explanation,
+      Token: '', 
+      refreshToken: '' 
+    };
   }
 
   //////////////////////////////////////////////////////////
@@ -900,6 +909,14 @@ export interface thingsboardResponse {
   furtherExplain?: string;
   name?: string;
   data?: any;
+}
+
+export interface thingsboardLoginResponse {
+  status: string;
+  explanation?: string;
+  furtherExplain?: string;
+  Token : string;
+  refreshToken : string;
 }
 
 export interface refreshResponse {
