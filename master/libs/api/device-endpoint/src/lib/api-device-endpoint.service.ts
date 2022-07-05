@@ -37,7 +37,7 @@ export class ApiDeviceEndpointService {
 
     this.thingsboardClient.setToken(body.token);
 
-    const resp = await this.thingsboardClient.getDeviceInfos(body.deviceIDs);
+    const resp = await this.thingsboardClient.getDeviceInfos(body.deviceIDs, body.customerID);
 
     if (resp.status == 'fail')
       return {

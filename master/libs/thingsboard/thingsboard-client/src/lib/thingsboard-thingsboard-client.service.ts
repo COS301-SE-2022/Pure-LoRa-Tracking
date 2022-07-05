@@ -102,11 +102,13 @@ export class ThingsboardThingsboardClientService {
       }
     }
 
+    console.table(deviceResp)
+
     if (deviceResp.status != 200) {
       return {
         status: "fail",
         explanation: deviceResp.explanation,
-        data: deviceResp.data.deviceList
+        data: []
       }
     }
 
@@ -293,7 +295,7 @@ export class ThingsboardThingsboardClientService {
     filter 
     return
   */
-  async getDeviceInfos(filter?: string[]): Promise<thingsboardResponse> {
+  async getDeviceInfos(filter?: string[], AdminCustomerID? : string): Promise<thingsboardResponse> {
     const Login = await this.validateToken();
     if (Login == false)
       return {
@@ -309,9 +311,12 @@ export class ThingsboardThingsboardClientService {
       };
     let devices: thingsboardResponse;
     if (UserInfo.data.authority == 'TENANT_ADMIN') {
-      /* TODO */
-      // Tentatively added this for testing.
-      devices = await this.getCustomerDevices(UserInfo.data.customerId.id);
+      if(AdminCustomerID == undefined)
+        return {
+          status: 'fail',
+          explanation: 'an Admin requires a reserve ID',
+        };
+      devices = await this.getCustomerDevices(AdminCustomerID);
     } else {
       devices = await this.getCustomerDevices(UserInfo.data.customerId.id);
     }

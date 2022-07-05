@@ -7,6 +7,7 @@ export interface deviceResponse {
 
 export interface deviceInfos {
   token: string;
+  customerID? : string;
   deviceIDs: string[];
 }
 
