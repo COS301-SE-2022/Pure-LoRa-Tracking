@@ -64,4 +64,17 @@ export class ApiLoginEndpointService {
         }
         
     }
+
+    async processLogout(content : {token : string}) : Promise<userLoginResponse> {
+        const logout = await this.thingsboardClient.logout(content.token);
+        if(logout.status != "ok")
+            return {
+                status : 500,
+                explain : logout.explanation
+            }
+        return {
+            status : 200,
+            explain : "logout successful"
+        }
+    }
 }

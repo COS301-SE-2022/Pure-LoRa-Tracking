@@ -21,3 +21,12 @@ export class ApiLoginEndpointController {
     return await this.apiLoginEndpointService.doRefreshTokenLogin(content);
   }
 }
+
+@Controller('logout')
+export class ApiLogoutEndpointController {
+  constructor(private apiLoginEndpointService: ApiLoginEndpointService) { }
+  @Post('')
+  async logout(@Body() content:{token:string}) : Promise<userLoginResponse> {
+    return await this.apiLoginEndpointService.processLogout(content);
+  }
+}

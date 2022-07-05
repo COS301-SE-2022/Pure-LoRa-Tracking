@@ -79,6 +79,20 @@ export class ThingsboardThingsboardClientService {
     };
   }
 
+  //////////////////////////////////////////////////////////
+
+  async logout(token: string) : Promise<thingsboardResponse> {
+    const logout = await this.userService.logout(token);
+    if(logout.status != 200)
+      return {
+        status : "fail",
+        explanation : logout.explanation
+      }
+    else return {
+      status : "ok"
+    }
+  }
+
 
   //////////////////////////////////////////////////////////
   /*
