@@ -233,7 +233,7 @@ export class ReserveMapComponent implements OnInit, OnChanges {
   public loadhistorical(historical: Device): void {
     //try just show one
     if (historical != null) {
-      // console.log(historical.data)
+       //console.log(historical)
       const current = L.polyline(historical.locationData.map(val =>
         [parseFloat(val.latitude), parseFloat(val.longitude)]) as unknown as L.LatLngExpression[],
         { "smoothFactor": 0.1 });
