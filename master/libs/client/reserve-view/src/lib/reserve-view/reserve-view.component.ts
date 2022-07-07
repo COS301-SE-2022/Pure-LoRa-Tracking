@@ -49,7 +49,7 @@ export class ReserveViewComponent {
   }
   
   ngOnInit(): void {
-    // get reserves user belongs to
+    //TODO get reserves a user belongs to
     this.http.post("api/user/info",{
       "token":"f96e60d0-dfe8-11ec-bdb3-750ce7ed2451"
     }).subscribe((val:any)=>{
@@ -122,8 +122,6 @@ export class ReserveViewComponent {
         this.ReserveName=this.Reserve?.data?.reserveName;
       });
     this.apicaller.getHistorical(this.token,this.selectedReserveId,[]).then(val=>{
-      console.log(this.selectedReserveId);
-      console.log(val);
       this.LastestHistorical=val.data;
       this.reservemap?.loadInnitial(this.LastestHistorical);
     });

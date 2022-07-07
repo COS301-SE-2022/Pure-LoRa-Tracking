@@ -25,7 +25,6 @@ export class ReservePanelComponent implements OnInit {
   private _ViewType:string;
   @Input() selectedReserve = "";
   @Input() reserveList: ReserveInfo[];
-  @Input() reserveName="No Name Found";
   @Input()
   public get Devices(){
     return this._Devices;
