@@ -113,6 +113,21 @@
       </div>
     </form>
   </mat-step>
+  <mat-step [stepControl]="reserveGroup">
+    <form [formGroup]="reserveGroup">
+      <ng-template matStepLabel>Select reserve(s)</ng-template>
+      <mat-form-field appearance="fill">
+        <mat-label>Reserves</mat-label>
+        <mat-select formControlName="reserveControl" placeholder="Reserve" multiple required>
+            <mat-option *ngFor="let reserveOpt of groups" [value]="reserveOpt.customerid">{{reserveOpt.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
   <mat-step>
     <ng-template matStepLabel>Confirm</ng-template>
     <p>Please confirm to add the user:</p>

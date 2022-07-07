@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {HttpClient} from "@angular/common/http"
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
-import { FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import { DialogConfirmationComponent } from '@master/client/shared-ui/components-ui';
 
 export interface userInfo{
@@ -30,12 +30,16 @@ export class ReserveUsersViewComponent implements OnInit {
   nameGroup!: FormGroup;
   surnameGroup!: FormGroup;
   emailGroup!: FormGroup;
+  reserveGroup!: FormGroup;
   groups:Array<SingleGroup>=[];
   sourceData:Array<userInfo>=[];
   currentid="";
   canadd=false;
   token="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZlYWRtaW5AcmVzZXJ2ZS5jb20iLCJzY29wZXMiOlsiVEVOQU5UX0FETUlOIl0sInVzZXJJZCI6ImQ2MzcyZTMwLWRmZTgtMTFlYy1iZGIzLTc1MGNlN2VkMjQ1MSIsImVuYWJsZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiJjZDJkZjJiMC1kZmU4LTExZWMtYmRiMy03NTBjZTdlZDI0NTEiLCJjdXN0b21lcklkIjoiMTM4MTQwMDAtMWRkMi0xMWIyLTgwODAtODA4MDgwODA4MDgwIiwiaXNzIjoidGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE2NTQ4MDU3NzUsImV4cCI6MTY1NDgxNDc3NX0.76eRuu1QDS4QLxUVuJNcawQkpyMoXezGuRfPiVMhLnDHxtxwUQqtIrnbEeLBMkVITbwjYhozU6zOyQaRiW2ajA"
+  assignedReserves= new FormControl();
+  
   constructor(private _formBuilder: FormBuilder,private http:HttpClient,public confirmDialog: MatDialog) {
+   
   }
 
   ngOnInit(): void {
@@ -48,13 +52,16 @@ export class ReserveUsersViewComponent implements OnInit {
     this.emailGroup = this._formBuilder.group({
       emailControl: ['', [Validators.required,Validators.email]],
     });
+    this.reserveGroup = this._formBuilder.group({
+      reserveControl: ['',Validators.required],
+    })
 
     this.http.post("api/user/admin/groups",{
       "token":this.token
     }).subscribe((val:any)=>{
       console.log(val);
-      if(val.data.length>0){
-        this.groups=val.data.map((curr:any)=>({
+      if(val.data.data.length>0){
+        this.groups=val.data.data.map((curr:any)=>({
           name:curr.title,
           customerid:curr.id.id
         } as SingleGroup)) as Array<SingleGroup>
@@ -115,7 +122,8 @@ export class ReserveUsersViewComponent implements OnInit {
           email:this.emailGroup.get("emailControl")?.value,
           firstName:this.nameGroup.get("nameControl")?.value,
           lastName:this.surnameGroup.get("surnameControl")?.value
-        }
+        },
+        reserves: this.reserveGroup.get("reserveControl")?.value,
       }).subscribe((curr)=>{
         console.log(curr);
       })
