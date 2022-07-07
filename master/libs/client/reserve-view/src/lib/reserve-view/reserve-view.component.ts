@@ -4,10 +4,18 @@ import { MapCallerService } from '@master/client/map-apicaller';
 import { DeviceNotifierService } from '@master/client/shared-services';
 import { TokenManagerService } from '@master/client/user-storage-controller';
 import { Device, MapApiReserveResponse, ViewMapType } from '@master/shared-interfaces';
+import {HttpClient} from "@angular/common/http"
+
 export interface GatewayInput {
   name: string;
   id: string;
   eui:string;
+}
+
+
+export interface ReserveInfo {
+  name:string;
+  id:string;
 }
 
 @Component({
@@ -25,7 +33,10 @@ export class ReserveViewComponent {
   ReserveName="";
   token="";
 
-  constructor(private apicaller:MapCallerService,private tokenmanager:TokenManagerService,private notifier:DeviceNotifierService) {
+  reservesList:ReserveInfo[];
+  selectedReserveId="";
+
+  constructor(private apicaller:MapCallerService,private tokenmanager:TokenManagerService,private notifier:DeviceNotifierService,private http:HttpClient) {
     this.LastestHistorical=[];
     this.Gateways=[];
     this.ShowPolygon=true;
@@ -34,27 +45,49 @@ export class ReserveViewComponent {
     this.notifier.getSensorDeleted().subscribe(val=>{
       this.LastestHistorical=this.LastestHistorical.filter(curr=>curr.deviceID!=val);
     })
+    this.reservesList = [];
   }
   
   ngOnInit(): void {
+    // get reserves user belongs to
+    this.http.post("api/user/info",{
+      "token":"f96e60d0-dfe8-11ec-bdb3-750ce7ed2451"
+    }).subscribe((val:any)=>{
+      this.reservesList = [
+        {
+          id:"ef55ff40-dfe8-11ec-bdb3-750ce7ed2451",
+          name:"reserve user group",
+        },
+        {
+          id:"4bcece40-e1d9-11ec-a9b6-bbb9bad3df39",
+          name:"reserve c",
+        },
+        {
+          id:"123",
+          name:"UP",
+        }
+      ]
+      this.selectedReserveId = this.reservesList[0].id;
+    })
+    this.updateReserve(this.selectedReserveId);
     //get the reserve
     //TODO check for incorrect token response
-    this.apicaller.getReserve(this.token, "123").then(val =>{
-      this.Reserve = val;
-      if(this.Reserve?.data?.reserveName!=undefined)
-        this.ReserveName=this.Reserve?.data?.reserveName;
-      });
-    this.apicaller.getHistorical(this.token,"123",[]).then(val=>{
-      // console.log(val+"thingdd")
-      //console.log(val);
-      this.LastestHistorical=val.data;
-      this.reservemap?.loadInnitial(this.LastestHistorical);
-    });
-    this.apicaller.getGateways(this.token,"ef55ff40-dfe8-11ec-bdb3-750ce7ed2451").then((val:any)=>{
-      console.log(val)
-      this.Gateways=val.data.map((curr:any)=>({id:curr.deviceID,name:curr.humanName,eui:curr.deviceName} as GatewayInput));
-      console.log(this.Gateways)
-    })
+    // this.apicaller.getReserve(this.token,this.selectedReserveId).then(val =>{
+    //   this.Reserve = val;
+    //   if(this.Reserve?.data?.reserveName!=undefined)
+    //     this.ReserveName=this.Reserve?.data?.reserveName;
+    //   });
+    // this.apicaller.getHistorical(this.token,this.selectedReserveId,[]).then(val=>{
+    //   // console.log(val+"thingdd")
+    //   //console.log(val);
+    //   this.LastestHistorical=val.data;
+    //   this.reservemap?.loadInnitial(this.LastestHistorical);
+    // });
+    // this.apicaller.getGateways(this.token,"ef55ff40-dfe8-11ec-bdb3-750ce7ed2451").then((val:any)=>{
+    //   console.log(val)
+    //   this.Gateways=val.data.map((curr:any)=>({id:curr.deviceID,name:curr.humanName,eui:curr.deviceName} as GatewayInput));
+    //   console.log(this.Gateways)
+    // })
   }
 
   // updateSensor(idinput:string){
@@ -78,5 +111,26 @@ export class ReserveViewComponent {
       //console.table(val['data'])
       this.reservemap?.reload(val['data']);
     });
+  }
+
+  updateReserve(newReserveId:string){
+    this.selectedReserveId = newReserveId;
+    console.log("changed reserve");
+    this.apicaller.getReserve(this.token,this.selectedReserveId).then(val =>{
+      this.Reserve = val;
+      if(this.Reserve?.data?.reserveName!=undefined)
+        this.ReserveName=this.Reserve?.data?.reserveName;
+      });
+    this.apicaller.getHistorical(this.token,this.selectedReserveId,[]).then(val=>{
+      console.log(this.selectedReserveId);
+      console.log(val);
+      this.LastestHistorical=val.data;
+      this.reservemap?.loadInnitial(this.LastestHistorical);
+    });
+    this.apicaller.getGateways(this.token,"ef55ff40-dfe8-11ec-bdb3-750ce7ed2451").then((val:any)=>{
+      console.log(val)
+      this.Gateways=val.data.map((curr:any)=>({id:curr.deviceID,name:curr.humanName,eui:curr.deviceName} as GatewayInput));
+      console.log(this.Gateways)
+    })
   }
 }
