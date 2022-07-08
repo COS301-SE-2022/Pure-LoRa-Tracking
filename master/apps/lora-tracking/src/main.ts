@@ -9,5 +9,6 @@ if (environment.production) {
 }
 
 platformBrowserDynamic()
+  /* TODO */
   .bootstrapModule(AppModule)
   .catch((err) => console.error(err));
