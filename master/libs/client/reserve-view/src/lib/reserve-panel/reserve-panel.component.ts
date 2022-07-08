@@ -4,6 +4,7 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { MatSelectionList } from '@angular/material/list';
 import { DeviceNotifierService } from '@master/client/shared-services';
 import { Device, ViewMapType } from '@master/shared-interfaces';
+import { ReserveInfo } from '../reserve-view/reserve-view.component';
 
 
 export interface Gateway {
@@ -22,7 +23,8 @@ export class ReservePanelComponent implements OnInit {
   private _Devices:Device[];
   private _GateWays:Gateway[];
   private _ViewType:string;
-  @Input() reserveName="No Name Found";
+  @Input() selectedReserve = "";
+  @Input() reserveList: ReserveInfo[];
   @Input()
   public get Devices(){
     return this._Devices;
@@ -33,6 +35,7 @@ export class ReservePanelComponent implements OnInit {
   }
   openSensor=false;
 
+  @Output() selectedReserveChange = new EventEmitter<string>();
 
   currentSensor = {
     name:"",
@@ -67,7 +70,7 @@ export class ReservePanelComponent implements OnInit {
     this.notifier.getResetSensorView().subscribe(()=>{
       this.selectedDeviceID="";
     })
-    
+    this.reserveList = [];
   }
 
   getSelectedStyle(deviceId:string):string{
@@ -122,4 +125,10 @@ export class ReservePanelComponent implements OnInit {
     this.openSensor = true;
   }
   
+
+  reserveChanged():void{
+    this.selectedReserveChange.emit(this.selectedReserve);
+    console.log("changed");
+  }
+
 }
