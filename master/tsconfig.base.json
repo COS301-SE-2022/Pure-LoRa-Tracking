@@ -56,6 +56,9 @@
       "@lora/thingsboard-user": [
         "libs/thingsboard/thingsboard-user/src/index.ts"
       ],
+      "@lora/thingsboard/admin": [
+        "libs/thingsboard/thingsboard-admin/src/index.ts"
+      ],
       "@lora/thingsboard/reserve": [
         "libs/thingsboard/thingsboard-reserve/src/index.ts"
       ],
