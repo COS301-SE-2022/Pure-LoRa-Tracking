@@ -6,7 +6,6 @@ export class ThingsboardThingsboardReserveService {
   private ThingsBoardURL = process.env.TB_URL || 'http://localhost:8080/api';
   constructor(private httpService: HttpService) {}
 
-  /////////////////////////////////////////////////////////////////
   async createReserveGroup(
     token: string,
     email: string,
@@ -51,8 +50,6 @@ export class ThingsboardThingsboardReserveService {
     };
   }
 
-  /////////////////////////////////////////////////////////////////
-
   async deleteReserveGroup(
     token: string,
     custID: string
@@ -87,8 +84,6 @@ export class ThingsboardThingsboardReserveService {
       explanation: 'ok',
     };
   }
-
-  /////////////////////////////////////////////////////////////////
 }
 
 export interface UserResponse {
