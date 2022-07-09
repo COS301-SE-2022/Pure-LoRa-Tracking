@@ -32,6 +32,23 @@ export class ThingsboardThingsboardAdminService {
       if (error.response == undefined) return error.code;
       return error;
     });
+
+    if (resp == 'ECONNREFUSED')
+      return {
+        status: 500,
+        explanation: resp,
+      };
+    else if (resp.status != 200) {
+      return {
+        status: resp.response.status,
+        explanation: resp.response.data.message,
+      };
+    }
+    return {
+      status: resp.status,
+      explanation: 'ok',
+      data: resp.data,
+    };
   }
 }
 
