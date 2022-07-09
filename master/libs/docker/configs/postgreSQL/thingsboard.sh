@@ -11,7 +11,9 @@ if [ ! -f ${firstlaunch} ] && [ "$PURELORABUILD" == "DEV" ]; then
     start-db.sh
     
     echo "*** [DEV] Populating db ***"
-    psql -U thingsboard -f '/dev_db/thingsboard' thingsboard
+    export PGPASSWORD=root
+    psql -h postgresql -U thingsboard -f '/dev_db/thingsboard' thingsboard
+    exit
     touch ${firstlaunch}
     echo "*** [DEV] db populated, starting thingsboard ***"
 fi

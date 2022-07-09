@@ -25,6 +25,8 @@ services:
       - ./configs/dev_db:/dev_db
       - ./configs/postgreSQL/chirpstack.sh:/docker-entrypoint-initdb.d/chirpstack.sh # configs scripts for setup
       - postgresqldata:/var/lib/postgresql/data # persistence
+    #ports:
+    #  - "5432:5432"
 
   redis:
     image: redis:5-alpine
@@ -82,12 +84,13 @@ services:
       - "1884:1883"
       - "7070:7070"
       - "5683-5688:5683-5688/udp"
+      #- "5432:5432"
     environment:
       TB_QUEUE_TYPE: in-memory # while-testing
       PURELORABUILD: ${PURELORABUILD-''}
-      # SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/thingsboard
-      # SPRING_DATASOURCE_PASSWORD: postgres
-      # SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql:5432/thingsboard
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: root
     volumes:
       - thingsboard_data:/data
       - ~/.mytb-logs:/var/log/thingsboard
@@ -96,6 +99,8 @@ services:
     command: /thingsboard.sh # hijack entrypoint
 #    networks:
 #      - thingsboards
+    depends_on:
+      - postgresql
 
   # GLOBAL
 
