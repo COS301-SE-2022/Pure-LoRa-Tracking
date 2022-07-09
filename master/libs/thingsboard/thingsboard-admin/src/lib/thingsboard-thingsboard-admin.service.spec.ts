@@ -15,4 +15,9 @@ describe('ThingsboardThingsboardAdminService', () => {
   it('should be defined', () => {
     expect(service).toBeTruthy();
   });
+
+  it('should retrieve a list of customers that are owned by the tenant', async () => {
+    //const Login = await service.login(username, password);
+    //console.log(await service.getCustomersOfTenant('', 5, 0));
+  });
 });
