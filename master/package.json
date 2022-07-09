@@ -10,7 +10,7 @@
     "test": "nx test",
     "docker:start": "export PURELORABUILD=DEV;docker compose -f 'libs/docker/docker-compose.yml' up",
     "docker:stop": "docker compose -f 'libs/docker/docker-compose.yml' stop",
-    "docker:reset": "docker compose -f 'libs/docker/docker-compose.yml' down;docker volume rm docker_redisdata docker_postgresqldata thingsboard"
+    "docker:reset": "docker compose -f libs/docker/docker-compose.yml down; docker volume rm docker_redisdata docker_postgresqldata docker_thingsboard_data"
   },
   "private": true,
   "dependencies": {
