@@ -1,6 +1,6 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
-
+import { firstValueFrom } from 'rxjs';
 @Injectable()
 export class ThingsboardThingsboardReserveService {
   private ThingsBoardURL = process.env.TB_URL || 'http://localhost:8080/api';
@@ -89,4 +89,35 @@ export class ThingsboardThingsboardReserveService {
   }
 
   /////////////////////////////////////////////////////////////////
+}
+
+export interface UserResponse {
+  status: number;
+  explanation: string;
+  data?: {
+    token?: string;
+    refreshToken?: string;
+    id?: {
+      id?: string;
+      entityType?: string;
+    };
+    createdTime?: number;
+    tenantId?: {
+      id?: string;
+      entityType?: string;
+    };
+    customerId?: {
+      id?: string;
+      entityType?: string;
+    };
+    email?: string;
+    name?: string;
+    authority?: 'SYS_ADMIN' | 'TENANT_ADMIN' | 'CUSTOMER_USER';
+    firstName?: string;
+    lastName?: string;
+    additionalInfo?: {
+      reserves?: string[];
+    };
+  };
+  type?: string;
 }
