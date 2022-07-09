@@ -20,4 +20,9 @@ describe('ThingsboardThingsboardAdminService', () => {
     //const Login = await service.login(username, password);
     //console.log(await service.getCustomersOfTenant('', 5, 0));
   });
+
+  it('should retrieve a list of tenants', async () => {
+    //const Login = await service.login(username, password);
+    //console.log(await service.getCustomersOfTenant('', 5, 0));
+  });
 });
