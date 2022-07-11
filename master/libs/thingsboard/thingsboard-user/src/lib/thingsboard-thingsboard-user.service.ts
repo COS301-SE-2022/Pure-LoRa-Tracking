@@ -432,6 +432,8 @@ export class ThingsboardThingsboardUserService {
     };
   }
 
+  /////////////////////////////////////////////////////////////////
+
   async DisableUser(token: string, userID: string): Promise<UserResponse> {
     const headersReq = {
       'Content-Type': 'application/json',
@@ -513,6 +515,7 @@ export class ThingsboardThingsboardUserService {
   }
 
   /////////////////////////////////////////////////////////////////
+
   async AdminGetCustomers(token: string): Promise<UserResponseCustomers> {
     const headersReq = {
       'Content-Type': 'application/json',
@@ -548,7 +551,76 @@ export class ThingsboardThingsboardUserService {
       data: resp.data,
     };
   }
+
+  /////////////////////////////////////////////////////////////////
+
+  async UpdateUserInfo(
+    token: string,
+    userID: string,
+    tenantID: string,
+    customerID: string,
+    email: string,
+    authority: string,
+    firstname: string,
+    lastname: string,
+    additionalInfo: any
+  ): Promise<UserResponse> {
+    const headersReq = {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + token,
+    };
+
+    const resp = await firstValueFrom(
+      this.httpService.post(
+        this.ThingsBoardURL + "/user?sendActivationEmail=false",
+        {
+          id: {
+            id: userID,
+            entityType: 'USER',
+          },
+          customerId: {
+            id: customerID,
+            entityType: 'CUSTOMER',
+          },
+          tenantId: {
+            id: tenantID,
+            entityType: 'TENANT',
+          },
+          authority: authority,
+          email: email,
+          firstName: firstname,
+          lastName: lastname,
+          additionalInfo: additionalInfo,
+        },
+        {
+          headers: headersReq,
+        }
+      )
+    ).catch((error) => {
+      if (error.response == undefined) return error.code;
+      return error;
+    });
+
+    if (resp == 'ECONNREFUSED')
+      return {
+        status: 500,
+        explanation: resp,
+      };
+    else if (resp.status != 200) {
+      return {
+        status: resp.response.status,
+        explanation: resp.response.data.message,
+      };
+    }
+    return {
+      status: resp.status,
+      explanation: 'ok',
+      data: resp.data,
+    };
+  }
 }
+
+/////////////////////////////////////////////////////////////////
 
 export interface UserResponse {
   status: number;
