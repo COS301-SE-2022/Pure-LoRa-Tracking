@@ -1,3 +1,4 @@
+import { HttpModule } from '@nestjs/axios';
 import { Test } from '@nestjs/testing';
 import { ThingsboardThingsboardReserveService } from './thingsboard-thingsboard-reserve.service';
 
@@ -7,6 +8,7 @@ describe('ThingsboardThingsboardReserveService', () => {
   beforeEach(async () => {
     const module = await Test.createTestingModule({
       providers: [ThingsboardThingsboardReserveService],
+      imports : [HttpModule],
     }).compile();
 
     service = module.get(ThingsboardThingsboardReserveService);
