@@ -24,7 +24,7 @@ export class ThingsboardThingsboardAdminService {
     textSearch?: string,
     sortProperty?: string,
     sortOrder?: string
-  ): Promise<UserResponse> {
+  ): Promise<AdminResponse> {
 
     const args: string = 'pageSize=' + pageSize + '&' + 'page=' + page;
     //args += textSearch ? '&textSearch=' + textSearch : '';
@@ -54,7 +54,7 @@ export class ThingsboardThingsboardAdminService {
     return {
       status: resp.status,
       explanation: 'ok',
-      data: resp.data,
+      data: resp.data.data,
     };
   }
 
@@ -64,7 +64,7 @@ export class ThingsboardThingsboardAdminService {
     textSearch?: string,
     sortProperty?: string,
     sortOrder?: string
-  ): Promise<UserResponse> {
+  ): Promise<AdminResponse> {
 
     const args: string = 'pageSize=' + pageSize + '&' + 'page=' + page;
     //args += textSearch ? '&textSearch=' + textSearch : '';
@@ -94,12 +94,12 @@ export class ThingsboardThingsboardAdminService {
     return {
       status: resp.status,
       explanation: 'ok',
-      data: resp.data,
+      data: resp.data.data,
     };
   }
 }
 
-export interface UserResponse {
+export interface AdminResponse {
   status: number;
   explanation: string;
   data?: {
@@ -126,6 +126,6 @@ export interface UserResponse {
     additionalInfo?: {
       reserves?: string[];
     };
-  };
+  }[];
   type?: string;
 }

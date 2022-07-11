@@ -24,12 +24,12 @@ describe('ThingsboardThingsboardAdminService', () => {
   it('should retrieve a list of customers that are owned by the tenant', async () => {
     const Login = await clientService.loginUserReturnToken("reserveadmin@reserve.com", "reserve");
     service.setToken(Login.Token);
-    console.log((await service.getCustomersOfTenant(100,0)).data);
+    console.table((await service.getCustomersOfTenant(100,0)).data);
   });
 
   it('should retrieve a list of tenants', async () => {
     const Login = await clientService.loginUserReturnToken("server@thingsboard.org", "thingsboardserveraccountissecure");
     service.setToken(Login.Token);
-    console.log((await service.getTenants(100,0)).data);
+    console.table((await service.getTenants(100,0)).data[0]);
   });
 });

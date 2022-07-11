@@ -11,6 +11,7 @@ import {
   MapApiReserveResponse,
   MapApiHistoricalResponse,
 } from '@master/shared-interfaces';
+import { AdminResponse, ThingsboardThingsboardAdminService } from '@lora/thingsboard/admin';
 @Injectable()
 export class ThingsboardThingsboardClientService {
   private token: string;
@@ -21,7 +22,8 @@ export class ThingsboardThingsboardClientService {
     private telemetryService: ThingsboardThingsboardTelemetryService,
     private loginService: ThingsboardThingsboardUserService,
     private deviceService: ThingsboardThingsboardDeviceService,
-    private assetService: ThingsboardThingsboardAssetService
+    private assetService: ThingsboardThingsboardAssetService,
+    private adminService : ThingsboardThingsboardAdminService
   ) { }
 
   //////////////////////////////////////////////////////////
@@ -869,7 +871,6 @@ export class ThingsboardThingsboardClientService {
   async AdminGetUsersFromReserve(customerID: string) {
 
     const login = await this.userService.userInfo(this.token);
-    //console.log(login);
     if (login.status != 200)
       return {
         status: 'fail',
@@ -898,6 +899,85 @@ export class ThingsboardThingsboardClientService {
       data: resp.data,
     };
   }
+
+  /////////////////////////////////////////////////////////////////
+  /*
+    check sysadmin
+    get tenants
+    get customers
+    build list 
+  */
+    async generateReserveList_SystemAdmin() : Promise<thingsboardResponse> {
+      const login = await this.userService.userInfo(this.token);
+      if (login.status != 200)
+      return {
+        status: 'fail',
+        explanation: 'token invalid',
+      };
+
+    if (login.data.authority != 'SYS_ADMIN')
+      return {
+        status: 'fail',
+        explanation: 'user not system admin',
+      };
+
+      const tenants = await this.adminService.getTenants(1000, 0);
+
+      if(tenants.status != 200) {
+        return {
+          status : 'fail',
+          explanation : tenants.explanation
+        }
+      }
+
+      // TODO
+      tenants.data.forEach((item)=> {
+        return null;
+      })
+    }
+
+  /////////////////////////////////////////////////////////////////
+  /*
+    get and check tenant account
+    get customers
+    build list 
+    update tenant account
+  */
+    async generateReserveList_ReserveAdmin() : Promise<thingsboardResponse> {
+      const login = await this.userService.userInfo(this.token);
+      if (login.status != 200)
+      return {
+        status: 'fail',
+        explanation: 'token invalid',
+      };
+
+    if (login.data.authority != 'TENANT_ADMIN')
+      return {
+        status: 'fail',
+        explanation: 'user not reserve admin',
+      };
+
+      const reserves = await this.adminService.getCustomersOfTenant(1000, 0);
+
+      if(reserves.status != 200) {
+        return {
+          status : 'fail',
+          explanation : reserves.explanation
+        }
+      }
+
+      const reserveList = new Array<{reserveID:string;ReserveName:string;}>();
+
+      reserves.data.forEach((item)=> {
+        reserveList.push({
+          reserveID : item.customerId.id,
+          ReserveName : item.name
+        })
+      })
+
+      //TODO
+      
+    }
 }
 
 /* data is required to be any due to the many possible response data types */
