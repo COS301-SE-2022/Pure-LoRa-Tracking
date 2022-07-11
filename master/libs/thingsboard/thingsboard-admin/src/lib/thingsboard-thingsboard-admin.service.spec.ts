@@ -1,15 +1,20 @@
+import { ThingsboardThingsboardClientModule, ThingsboardThingsboardClientService } from '@lora/thingsboard-client';
+import { HttpModule } from '@nestjs/axios';
 import { Test } from '@nestjs/testing';
 import { ThingsboardThingsboardAdminService } from './thingsboard-thingsboard-admin.service';
 
 describe('ThingsboardThingsboardAdminService', () => {
   let service: ThingsboardThingsboardAdminService;
+  let clientService : ThingsboardThingsboardClientService;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const module = await Test.createTestingModule({
       providers: [ThingsboardThingsboardAdminService],
+      imports : [HttpModule, ThingsboardThingsboardClientModule]
     }).compile();
 
     service = module.get(ThingsboardThingsboardAdminService);
+    clientService = module.get(ThingsboardThingsboardClientService);
   });
 
   it('should be defined', () => {
@@ -17,12 +22,14 @@ describe('ThingsboardThingsboardAdminService', () => {
   });
 
   it('should retrieve a list of customers that are owned by the tenant', async () => {
-    //const Login = await service.login(username, password);
-    //console.log(await service.getCustomersOfTenant('', 5, 0));
+    const Login = await clientService.loginUserReturnToken("reserveadmin@reserve.com", "reserve");
+    service.setToken(Login.Token);
+    console.log((await service.getCustomersOfTenant(100,0)).data);
   });
 
   it('should retrieve a list of tenants', async () => {
-    //const Login = await service.login(username, password);
-    //console.log(await service.getCustomersOfTenant('', 5, 0));
+    const Login = await clientService.loginUserReturnToken("server@thingsboard.org", "thingsboardserveraccountissecure");
+    service.setToken(Login.Token);
+    console.log((await service.getTenants(100,0)).data);
   });
 });

@@ -1,3 +1,4 @@
+import { HttpModule } from '@nestjs/axios';
 import { Module, Global } from '@nestjs/common';
 import { ThingsboardThingsboardAdminService } from './thingsboard-thingsboard-admin.service';
 
@@ -6,5 +7,6 @@ import { ThingsboardThingsboardAdminService } from './thingsboard-thingsboard-ad
   controllers: [],
   providers: [ThingsboardThingsboardAdminService],
   exports: [ThingsboardThingsboardAdminService],
+  imports : [HttpModule]
 })
 export class ThingsboardThingsboardAdminModule {}
