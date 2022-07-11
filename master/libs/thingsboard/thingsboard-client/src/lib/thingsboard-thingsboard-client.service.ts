@@ -956,7 +956,7 @@ export class ThingsboardThingsboardClientService {
       };
 
     this.adminService.setToken(this.token);
-    const tenants = await this.adminService.getTenants(1000, 0);
+    const tenants = await this.adminService.getTenantInfos(1000, 0);
 
     if (tenants.status != 200) {
       return {
@@ -981,6 +981,9 @@ export class ThingsboardThingsboardClientService {
       });
     });
 
+    if(login.data.additionalInfo.reserves != null)
+    delete login.data.additionalInfo.reserves;
+
     const resp = await this.userService.UpdateUserInfo(
       this.token,
       login.data.id.id,
@@ -990,9 +993,7 @@ export class ThingsboardThingsboardClientService {
       login.data.authority,
       login.data.firstName,
       login.data.lastName,
-      {
-        reserves: reserveList,
-      }
+      Object.assign(login.data.additionalInfo, {reserves : reserveList})
     );
 
     if (resp.status != 200)

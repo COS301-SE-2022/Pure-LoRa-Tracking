@@ -59,7 +59,7 @@ export class ThingsboardThingsboardAdminService {
 
   //////////////////////////////////////////////////////////////////
 
-  async getTenants(
+  async getTenantInfos(
     pageSize: number,
     page: number,
     textSearch?: string,
@@ -72,7 +72,7 @@ export class ThingsboardThingsboardAdminService {
     //args += sortOrder ? '&sortProperty=' + sortOrder : '';
 
     const resp = await firstValueFrom(
-      this.httpService.get(this.ThingsBoardURL + '/tenants?' + args, {
+      this.httpService.get(this.ThingsBoardURL + '/tenantInfos?' + args, {
         headers: this.headersReq,
       })
     ).catch((error) => {

@@ -20,7 +20,7 @@ describe('ThingsboardThingsboardAdminService', () => {
   it('should be defined', () => {
     expect(service).toBeTruthy();
   });
-
+/*
   it('should retrieve a list of customers that are owned by the tenant', async () => {
     const Login = await clientService.loginUserReturnToken("reserveadmin@reserve.com", "reserve");
     service.setToken(Login.Token);
@@ -30,6 +30,12 @@ describe('ThingsboardThingsboardAdminService', () => {
   it('should retrieve a list of tenants', async () => {
     const Login = await clientService.loginUserReturnToken("server@thingsboard.org", "thingsboardserveraccountissecure");
     service.setToken(Login.Token);
-    console.table((await service.getTenants(100,0)).data[0]);
+    console.table((await service.getTenantInfos(100,0)).data[0]);
   });
+
+  it('should retrieve tenant group info', async () => {
+    const Login = await clientService.loginUserReturnToken("server@thingsboard.org", "thingsboardserveraccountissecure");
+    service.setToken(Login.Token);
+    console.table((await service.getTenantGroupInfo("7d4c0eb0-ffb6-11ec-971b-3fcc7eafec15")).data.additionalInfo);
+  });*/
 });
