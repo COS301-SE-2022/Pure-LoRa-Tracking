@@ -97,6 +97,13 @@ export class ThingsboardThingsboardClientService {
 
   //////////////////////////////////////////////////////////
 
+  /* internal to this client and to not to be used externally */
+  async getToken(username: string, password: string) {
+    return await this.userService.login(username, password);
+  }
+
+  //////////////////////////////////////////////////////////
+
   async logout(token: string): Promise<thingsboardResponse> {
     const logout = await this.userService.logout(token);
     if (logout.status != 200)
@@ -948,6 +955,7 @@ export class ThingsboardThingsboardClientService {
         explanation: 'user not system admin',
       };
 
+    this.adminService.setToken(this.token);
     const tenants = await this.adminService.getTenants(1000, 0);
 
     if (tenants.status != 200) {
@@ -957,10 +965,46 @@ export class ThingsboardThingsboardClientService {
       };
     }
 
-    // TODO
-    tenants.data.forEach((item) => {
-      return null;
+    const reserveList = new Array<{
+      tenantID: string;
+      reserveID: string;
+      reserveName: string;
+    }>();
+
+    tenants.data.forEach((tenant) => {
+      tenant.additionalInfo.reserves.forEach((reserve) => {
+        reserveList.push({
+          tenantID: tenant.id.id,
+          reserveID: reserve.reserveID,
+          reserveName: reserve.reserveName,
+        });
+      });
     });
+
+    const resp = await this.userService.UpdateUserInfo(
+      this.token,
+      login.data.id.id,
+      login.data.tenantId.id,
+      login.data.customerId.id,
+      login.data.email,
+      login.data.authority,
+      login.data.firstName,
+      login.data.lastName,
+      {
+        reserves: reserveList,
+      }
+    );
+
+    if (resp.status != 200)
+      return {
+        status: 'fail',
+        explanation: resp.explanation,
+      };
+
+    return {
+      status: 'ok',
+      explanation: 'call finished',
+    };
   }
 
   /////////////////////////////////////////////////////////////////
@@ -994,39 +1038,52 @@ export class ThingsboardThingsboardClientService {
       };
     }
 
-    const reserveList = new Array<{ reserveID: string; ReserveName: string }>();
+    const reserveList = new Array<{ reserveID: string; reserveName: string }>();
 
     reserves.data.forEach((item) => {
       reserveList.push({
         reserveID: item.id.id,
-        ReserveName: item.name,
+        reserveName: item.name,
       });
     });
 
-    const resp = await this.userService.UpdateUserInfo(
-      this.token,
-      login.data.id.id,
-      login.data.tenantId.id,
-      login.data.customerId.id,
-      login.data.email,
-      login.data.authority,
-      login.data.firstName,
-      login.data.lastName,
-      {
-        reserves : reserveList
-      }
-    )
+    const TenantGroup = await this.adminService.getTenantGroupInfo(
+      login.data.tenantId.id
+    );
 
-    if(resp.status != 200) 
-    return {
-      status : "fail",
-      explanation : resp.explanation
-    }
+    const sysadmin = await this.getToken('server@thingsboard.org', 'thingsboardserveraccountissecure');
+    this.adminService.setToken(sysadmin.data.token);
+
+    if(TenantGroup.data.additionalInfo.reserves != null)
+    delete TenantGroup.data.additionalInfo.reserves;
+
+    const resp = await this.adminService.updateTenant(
+      TenantGroup.data.id.id,
+      TenantGroup.data.title,
+      TenantGroup.data.region,
+      TenantGroup.data.tenantProfileId.id,
+      TenantGroup.data.country,
+      TenantGroup.data.city,
+      TenantGroup.data.address,
+      TenantGroup.data.address2,
+      TenantGroup.data.zip,
+      TenantGroup.data.phone,
+      TenantGroup.data.phone,
+      Object.assign(TenantGroup.data.additionalInfo, {reserves : reserveList})
+    );
+
+    this.userService.logout(sysadmin.data.token);
+
+    if (resp.status != 200)
+      return {
+        status: 'fail',
+        explanation: resp.explanation,
+      };
 
     return {
-      status : 'ok',
-      explanation : 'call finished'
-    }
+      status: 'ok',
+      explanation: 'call finished',
+    };
   }
 }
 

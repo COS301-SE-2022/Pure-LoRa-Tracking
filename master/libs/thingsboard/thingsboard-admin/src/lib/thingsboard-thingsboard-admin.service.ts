@@ -127,15 +127,15 @@ export class ThingsboardThingsboardAdminService {
               id : tenantProfileID,
               entityType : "TENANT_PROFILE"
             },
-            country,
-            title,
-            region,
-            city,
-            address,
-            address2,
-            zip,
-            phone,
-            email,
+            country: country,
+            title: title,
+            region : region,
+            city : city,
+            address : address,
+            address2 : address2,
+            zip : zip,
+            phone : phone,
+            email : email,
             additionalInfo: additionalInfo,
           },
           {
@@ -166,7 +166,7 @@ export class ThingsboardThingsboardAdminService {
   }
   //////////////////////////////////////////////////////////////////
 
-  async getTenantGroupInfo(tenantID : string) : Promise<AdminResponse> {
+  async getTenantGroupInfo(tenantID : string) : Promise<AdminTenantResponse> {
     const resp = await firstValueFrom(
       this.httpService.get(this.ThingsBoardURL + '/tenant/' + tenantID, {
         headers: this.headersReq,
@@ -190,7 +190,7 @@ export class ThingsboardThingsboardAdminService {
     return {
       status: resp.status,
       explanation: 'ok',
-      data: resp.data.data,
+      data: resp.data,
     };
   }
 }
@@ -227,4 +227,37 @@ export interface AdminResponse {
     };
   }[];
   type?: string;
+}
+
+export interface AdminTenantResponse {
+  status: number;
+  explanation: string;
+  data?: {
+    "id": {
+      "id": string,
+      "entityType": "TENANT"
+    },
+    "createdTime": number,
+    "title": string,
+    "name": string,
+    "region": string,
+    "tenantProfileId": {
+      "id": string,
+      "entityType": "TENANT_PROFILE"
+    },
+    "country": string,
+    "state": string,
+    "city": string,
+    "address": string,
+    "address2": string,
+    "zip": string,
+    "phone": string,
+    "email": string,
+    "additionalInfo": {
+      reserves: {
+        reserveID: string;
+        reserveName: string;
+      }[];
+    }
+  }
 }
