@@ -6,12 +6,12 @@ export class ThingsboardThingsboardAdminService {
   private ThingsBoardURL = process.env.TB_URL || 'http://localhost:8080/api';
   constructor(private httpService: HttpService) {}
 
-  private headersReq : {
-    'Content-Type':string,
-    Authorization : string;
+  private headersReq: {
+    'Content-Type': string;
+    Authorization: string;
   };
 
-  setToken(token: string) : void {
+  setToken(token: string): void {
     this.headersReq = {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + token,
@@ -25,7 +25,6 @@ export class ThingsboardThingsboardAdminService {
     sortProperty?: string,
     sortOrder?: string
   ): Promise<AdminResponse> {
-
     const args: string = 'pageSize=' + pageSize + '&' + 'page=' + page;
     //args += textSearch ? '&textSearch=' + textSearch : '';
     //args += sortProperty ? '&sortProperty=' + sortProperty : '';
@@ -58,6 +57,8 @@ export class ThingsboardThingsboardAdminService {
     };
   }
 
+  //////////////////////////////////////////////////////////////////
+
   async getTenants(
     pageSize: number,
     page: number,
@@ -65,7 +66,6 @@ export class ThingsboardThingsboardAdminService {
     sortProperty?: string,
     sortOrder?: string
   ): Promise<AdminResponse> {
-
     const args: string = 'pageSize=' + pageSize + '&' + 'page=' + page;
     //args += textSearch ? '&textSearch=' + textSearch : '';
     //args += sortProperty ? '&sortProperty=' + sortProperty : '';
@@ -73,6 +73,102 @@ export class ThingsboardThingsboardAdminService {
 
     const resp = await firstValueFrom(
       this.httpService.get(this.ThingsBoardURL + '/tenants?' + args, {
+        headers: this.headersReq,
+      })
+    ).catch((error) => {
+      if (error.response == undefined) return error.code;
+      return error;
+    });
+
+    if (resp == 'ECONNREFUSED')
+      return {
+        status: 500,
+        explanation: resp,
+      };
+    else if (resp.status != 200) {
+      return {
+        status: resp.response.status,
+        explanation: resp.response.data.message,
+      };
+    }
+    return {
+      status: resp.status,
+      explanation: 'ok',
+      data: resp.data.data,
+    };
+  }
+
+  //////////////////////////////////////////////////////////////////
+
+  async updateTenant(
+    id: string,
+    title: string,
+    region: string,
+    tenantProfileID: string,
+    country: string,
+    city: string,
+    address: string,
+    address2: string,
+    zip: string,
+    phone: string,
+    email: string,
+    additionalInfo: any
+  ): Promise<AdminResponse> {
+      
+      const resp = await firstValueFrom(
+        this.httpService.post(
+          this.ThingsBoardURL + "/tenant",
+          {
+            id: {
+              id: id,
+              entityType: 'TENANT',
+            },
+            tenantProfileId : {
+              id : tenantProfileID,
+              entityType : "TENANT_PROFILE"
+            },
+            country,
+            title,
+            region,
+            city,
+            address,
+            address2,
+            zip,
+            phone,
+            email,
+            additionalInfo: additionalInfo,
+          },
+          {
+            headers: this.headersReq,
+          }
+        )
+      ).catch((error) => {
+        if (error.response == undefined) return error.code;
+        return error;
+      });
+  
+      if (resp == 'ECONNREFUSED')
+        return {
+          status: 500,
+          explanation: resp,
+        };
+      else if (resp.status != 200) {
+        return {
+          status: resp.response.status,
+          explanation: resp.response.data.message,
+        };
+      }
+      return {
+        status: resp.status,
+        explanation: 'ok',
+        data: resp.data,
+      };
+  }
+  //////////////////////////////////////////////////////////////////
+
+  async getTenantGroupInfo(tenantID : string) : Promise<AdminResponse> {
+    const resp = await firstValueFrom(
+      this.httpService.get(this.ThingsBoardURL + '/tenant/' + tenantID, {
         headers: this.headersReq,
       })
     ).catch((error) => {
@@ -124,7 +220,10 @@ export interface AdminResponse {
     firstName?: string;
     lastName?: string;
     additionalInfo?: {
-      reserves?: string[];
+      reserves: {
+        reserveID: string;
+        reserveName: string;
+      }[];
     };
   }[];
   type?: string;
