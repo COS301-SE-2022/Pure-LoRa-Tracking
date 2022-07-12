@@ -7,6 +7,7 @@ import { HttpService } from '@nestjs/axios';
 import { ThingsboardThingsboardClientService } from './thingsboard-thingsboard-client.service';
 import { AxiosResponse } from 'axios';
 import { of } from 'rxjs';
+import { ThingsboardThingsboardAdminModule } from '@lora/thingsboard/admin';
 
 describe('ThingsboardThingsboardClientService', () => {
   let service: ThingsboardThingsboardClientService;
@@ -22,6 +23,7 @@ describe('ThingsboardThingsboardClientService', () => {
         ThingsboardThingsboardTelemetryModule,
         ThingsboardThingsboardDeviceModule,
         ThingsboardThingsboardAssetModule,
+        ThingsboardThingsboardAdminModule
       ],
     }).compile();
 
@@ -619,6 +621,63 @@ describe('ThingsboardThingsboardClientService', () => {
     console.log(await service.getCustomerDevices("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451"));
   });*/
 
+  });
+
+  //////////////////////////////////////////////////////////////////////
+
+  it('build reserve list -> not system admin', async () => {
+   /* await service.loginUser('reserve@thingsboard.org', 'thingsboardserveraccountissecure')
+
+    expect(await service.generateReserveList_SystemAdmin()).toMatchObject({
+     status : 'fail',
+     explanation: 'user not system admin'
+    })*/
+
+  });
+
+  //////////////////////////////////////////////////////////////////////
+
+  it('build reserve list -> not system admin', async () => {
+    /*await service.loginUser('serv@thingsboard.org', 'thingsboardserveraccountissecure')
+
+    expect(await service.generateReserveList_SystemAdmin()).toMatchObject({
+     status : 'ok',
+     explanation: 'call finished'
+    })*/
+
+  });
+
+  //////////////////////////////////////////////////////////////////////
+
+  it('build reserve list -> build system admin list', async () => {
+    /*await service.loginUser('server@thingsboard.org', 'thingsboardserveraccountissecure')
+
+    expect(await service.generateReserveList_SystemAdmin()).toMatchObject({
+     status : 'ok',
+     explanation: 'call finished'
+    })*/
+
+  });
+
+  //////////////////////////////////////////////////////////////////////
+
+  it('build reserve list -> not reserve admin', async () => {
+    /*expect(await service.loginUser('reserveuser@reserve.com', 'reserve')).toEqual(true);
+
+    expect(await service.generateReserveList_ReserveAdmin()).toMatchObject({
+     status : 'fail',
+     explanation: 'user not reserve admin'
+    })*/
+  });
+  //////////////////////////////////////////////////////////////////////
+
+  it('build reserve list -> build reserve admin list', async () => {
+   /* expect(await service.loginUser('reserveadmin@reserve.com', 'reserve')).toEqual(true);
+
+    expect(await service.generateReserveList_ReserveAdmin()).toMatchObject({
+     status : 'ok',
+     explanation: 'call finished'
+    })*/
   });
 })
 

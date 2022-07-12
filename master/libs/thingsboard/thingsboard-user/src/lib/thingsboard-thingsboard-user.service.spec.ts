@@ -166,20 +166,6 @@ describe('ThingsboardThingsboardUserService', () => {
 
   /////////////////////////////////////////////////////////////////
 
-  it('should create the reserve group', async () => {
-    /*const Login = await service.login(username, password);
-    console.log(await service.createReserveGroup(Login["data"]["token"], "liamburgess299@gmail.com", "reserveb"));*/
-  });
-
-  /////////////////////////////////////////////////////////////////
-
-  it('should delete the reserve group', async () => {
-    /*const Login = await service.login(username, password);
-    console.log(await service.deleteReserveGroup(Login["data"]["token"], "573911a0-e5b2-11ec-a9e5-f30a5c07bcf3"));*/
-  });
-
-  /////////////////////////////////////////////////////////////////
-
   it('should disable the reserve user', async () => {
     /*const Login = await service.login(username, password);
     console.log(await service.DisableUser(Login["data"]["token"], "f96e60d0-dfe8-11ec-bdb3-750ce7ed2451"));*/
@@ -190,7 +176,6 @@ describe('ThingsboardThingsboardUserService', () => {
   it('should enable the reserve user', async () => {
     /*const Login = await service.login(username, password);
     console.log(await service.EnableUser(Login["data"]["token"], "f96e60d0-dfe8-11ec-bdb3-750ce7ed2451"));*/
-    
   });
 
   /////////////////////////////////////////////////////////////////
@@ -200,7 +185,7 @@ describe('ThingsboardThingsboardUserService', () => {
     //console.log(await service.refreshToken("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZlYWRtaW5AcmVzZXJ2ZS5jb20iLCJzY29wZXMiOlsiVEVOQU5UX0FETUlOIl0sInVzZXJJZCI6ImQ2MzcyZTMwLWRmZTgtMTFlYy1iZGIzLTc1MGNlN2VkMjQ1MSIsImVuYWJsZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiJjZDJkZjJiMC1kZmU4LTExZWMtYmRiMy03NTBjZTdlZDI0NTEiLCJjdXN0b21lcklkIjoiMTM4MTQwMDAtMWRkMi0xMWIyLTgwODAtODA4MDgwODA4MDgwIiwiaXNzIjoidGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE2NTUxMjcxMjksImV4cCI6MTY1NTEzNjEyOX0.bnlLAsb6BHA0_2wl5VQrsTf3el1rsdZdyylcpZG-97GJ3g0e5Bom8BNzvAtrIPoQkzYApg7UrbHTWCG715v3Gg"));
   });
 
-  it("should create the user with the reserve set given", async() => {
+  it('should create the user with the reserve set given', async () => {
     return true;
-  })
+  });
 });
