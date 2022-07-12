@@ -6,16 +6,20 @@ export class ThingsboardThingsboardReserveService {
   private ThingsBoardURL = process.env.TB_URL || 'http://localhost:8080/api';
   constructor(private httpService: HttpService) {}
 
+  private headersReq: { 'Content-Type': string; Authorization: string; };
+
+  setToken(token : string) : void {
+    this.headersReq = {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + token,
+    };
+  }
+
   async createReserveGroup(
     token: string,
     email: string,
     title: string
-  ): Promise<UserResponse> {
-    const headersReq = {
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + token,
-    };
-
+  ): Promise<reserveResponse> {
     const resp = await firstValueFrom(
       this.httpService.post(
         this.ThingsBoardURL + '/customer',
@@ -24,7 +28,7 @@ export class ThingsboardThingsboardReserveService {
           title: title,
         },
         {
-          headers: headersReq,
+          headers: this.headersReq,
         }
       )
     ).catch((error) => {
@@ -50,18 +54,15 @@ export class ThingsboardThingsboardReserveService {
     };
   }
 
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
   async deleteReserveGroup(
     token: string,
     custID: string
-  ): Promise<UserResponse> {
-    const headersReq = {
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + token,
-    };
-
+  ): Promise<reserveResponse> {
     const resp = await firstValueFrom(
       this.httpService.delete(this.ThingsBoardURL + '/customer/' + custID, {
-        headers: headersReq,
+        headers: this.headersReq,
       })
     ).catch((error) => {
       if (error.response == undefined) return error.code;
@@ -84,9 +85,20 @@ export class ThingsboardThingsboardReserveService {
       explanation: 'ok',
     };
   }
+
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  async setReservePerimeter() : Promise<reserveResponse> {
+    // TODO
+    return null;
+  }
+
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
-export interface UserResponse {
+export interface reserveResponse {
   status: number;
   explanation: string;
   data?: {

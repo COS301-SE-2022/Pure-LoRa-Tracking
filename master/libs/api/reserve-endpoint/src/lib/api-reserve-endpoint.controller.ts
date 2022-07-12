@@ -8,7 +8,7 @@ export class ApiReserveEndpointController {
 
   @Get('')
   test() {
-    return "reserve reachable"
+    return "reachable"
   }
 
   @Post("create")
