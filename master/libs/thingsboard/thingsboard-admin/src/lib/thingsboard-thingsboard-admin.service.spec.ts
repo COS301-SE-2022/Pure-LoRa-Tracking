@@ -1,20 +1,20 @@
-import { ThingsboardThingsboardClientModule, ThingsboardThingsboardClientService } from '@lora/thingsboard-client';
+//import { ThingsboardThingsboardClientModule, ThingsboardThingsboardClientService } from '@lora/thingsboard-client';
 import { HttpModule } from '@nestjs/axios';
 import { Test } from '@nestjs/testing';
 import { ThingsboardThingsboardAdminService } from './thingsboard-thingsboard-admin.service';
 
 describe('ThingsboardThingsboardAdminService', () => {
   let service: ThingsboardThingsboardAdminService;
-  let clientService : ThingsboardThingsboardClientService;
+  //let clientService : ThingsboardThingsboardClientService;
 
   beforeAll(async () => {
     const module = await Test.createTestingModule({
       providers: [ThingsboardThingsboardAdminService],
-      imports : [HttpModule, ThingsboardThingsboardClientModule]
+      imports : [HttpModule, /*ThingsboardThingsboardClientModule*/]
     }).compile();
 
     service = module.get(ThingsboardThingsboardAdminService);
-    clientService = module.get(ThingsboardThingsboardClientService);
+    //clientService = module.get(ThingsboardThingsboardClientService);
   });
 
   it('should be defined', () => {
