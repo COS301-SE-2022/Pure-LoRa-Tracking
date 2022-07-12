@@ -8,6 +8,7 @@
     "api-interfaces": "libs/api-interfaces",
     "api-login-endpoint": "libs/api/login-endpoint",
     "api-map-endpoint": "libs/api/map-endpoint",
+    "api-reserve-endpoint": "libs/api/reserve-endpoint",
     "api-user-endpoint": "libs/api/user-endpoint",
     "chirpstack": "libs/chirpstack",
     "chirpstack-chirpstack-gateway": "libs/chirpstack/chirpstack-gateway",
