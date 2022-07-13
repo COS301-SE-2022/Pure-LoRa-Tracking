@@ -15,17 +15,28 @@ export class ThingsboardThingsboardReserveService {
     };
   }
 
+  // TODO extend for all fields in customer group info
   async createReserveGroup(
-    token: string,
     email: string,
-    title: string
-  ): Promise<reserveResponse> {
+    title: string,
+    location? : {
+      coordinates : {
+          latitude : number;
+          longitude : number;
+      } [];
+      center : {
+          latitude : number;
+          longitude : number;
+      }
+  }
+  ): Promise<CustomerInfoResponse> {
     const resp = await firstValueFrom(
       this.httpService.post(
         this.ThingsBoardURL + '/customer',
         {
           email: email,
           title: title,
+          additionalInfo : {location}
         },
         {
           headers: this.headersReq,
@@ -127,4 +138,37 @@ export interface reserveResponse {
     };
   };
   type?: string;
+}
+
+export interface CustomerInfoResponse {
+  status: number;
+  explanation: string;
+  data?: {
+    "id": {
+      "id": string,
+      "entityType": "TENANT"
+    },
+    "createdTime": number,
+    "title": string,
+    "name": string,
+    "region": string,
+    "tenantProfileId": {
+      "id": string,
+      "entityType": "TENANT_PROFILE"
+    },
+    "country": string,
+    "state": string,
+    "city": string,
+    "address": string,
+    "address2": string,
+    "zip": string,
+    "phone": string,
+    "email": string,
+    "additionalInfo": {
+      reserves: {
+        reserveID: string;
+        reserveName: string;
+      };
+    }
+  }
 }

@@ -8,6 +8,7 @@ import { ThingsboardThingsboardClientService } from './thingsboard-thingsboard-c
 import { AxiosResponse } from 'axios';
 import { of } from 'rxjs';
 import { ThingsboardThingsboardAdminModule } from '@lora/thingsboard/admin';
+import { ThingsboardThingsboardReserveModule } from '@lora/thingsboard/reserve';
 
 describe('ThingsboardThingsboardClientService', () => {
   let service: ThingsboardThingsboardClientService;
@@ -23,7 +24,8 @@ describe('ThingsboardThingsboardClientService', () => {
         ThingsboardThingsboardTelemetryModule,
         ThingsboardThingsboardDeviceModule,
         ThingsboardThingsboardAssetModule,
-        ThingsboardThingsboardAdminModule
+        ThingsboardThingsboardAdminModule,
+        ThingsboardThingsboardReserveModule
       ],
     }).compile();
 
@@ -678,6 +680,31 @@ describe('ThingsboardThingsboardClientService', () => {
      status : 'ok',
      explanation: 'call finished'
     })*/
+  });
+
+  //////////////////////////////////////////////////////////////////////
+
+  it('create reserve group -> not admin', async () => {
+    expect(await service.loginUser('reserveuser@reserve.com', 'reserve')).toEqual(true);
+
+    expect(await service.createReserve("liamburgesss299@gmail.com", "reserve b")).toMatchObject({
+     status : 'fail',
+     explanation: 'user is not an admin'
+    })
+  });
+
+  //////////////////////////////////////////////////////////////////////
+
+  it('create reserve group -> create group and fail attempt to recreate', async () => {
+    /*expect(await service.loginUser('reserveadmin@reserve.com', 'reserve')).toEqual(true);
+
+    expect(await service.createReserve("liamburgesss299@gmail.com", "reserve b")).toMatchObject({
+     status : 'ok',
+    })
+
+    expect(await service.createReserve("liamburgesss299@gmail.com", "reserve b")).toMatchObject({
+      status : 'fail',
+     })*/
   });
 })
 
