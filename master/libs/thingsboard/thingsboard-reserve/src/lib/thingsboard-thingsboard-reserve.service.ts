@@ -6,25 +6,40 @@ export class ThingsboardThingsboardReserveService {
   private ThingsBoardURL = process.env.TB_URL || 'http://localhost:8080/api';
   constructor(private httpService: HttpService) {}
 
-  async createReserveGroup(
-    token: string,
-    email: string,
-    title: string
-  ): Promise<UserResponse> {
-    const headersReq = {
+  private headersReq: { 'Content-Type': string; Authorization: string };
+
+  setToken(token: string): void {
+    this.headersReq = {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + token,
     };
+  }
 
+  // TODO extend for all fields in customer group info
+  async createReserveGroup(
+    email: string,
+    title: string,
+    location?: {
+      location: {
+        latitude: number;
+        longitude: number;
+      }[];
+      center: {
+        latitude: number;
+        longitude: number;
+      };
+    }
+  ): Promise<CustomerInfoResponse> {
     const resp = await firstValueFrom(
       this.httpService.post(
         this.ThingsBoardURL + '/customer',
         {
           email: email,
           title: title,
+          additionalInfo: { location },
         },
         {
-          headers: headersReq,
+          headers: this.headersReq,
         }
       )
     ).catch((error) => {
@@ -50,18 +65,14 @@ export class ThingsboardThingsboardReserveService {
     };
   }
 
-  async deleteReserveGroup(
-    token: string,
-    custID: string
-  ): Promise<UserResponse> {
-    const headersReq = {
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + token,
-    };
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+  async deleteReserveGroup(
+    reserveID: string
+  ): Promise<reserveResponse> {
     const resp = await firstValueFrom(
-      this.httpService.delete(this.ThingsBoardURL + '/customer/' + custID, {
-        headers: headersReq,
+      this.httpService.delete(this.ThingsBoardURL + '/customer/' + reserveID, {
+        headers: this.headersReq,
       })
     ).catch((error) => {
       if (error.response == undefined) return error.code;
@@ -84,9 +95,117 @@ export class ThingsboardThingsboardReserveService {
       explanation: 'ok',
     };
   }
+
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  /*
+  get group
+  update details
+  */
+  async setReservePerimeter(
+    exID : string,
+    id: string,
+    title: string,
+    region: string,
+    tenantID: string,
+    country: string,
+    city: string,
+    address: string,
+    address2: string,
+    zip: string,
+    phone: string,
+    email: string,
+    additionalInfo: any
+  ): Promise<reserveResponse> {
+      
+      const resp = await firstValueFrom(
+        this.httpService.post(
+          this.ThingsBoardURL + "/customer",
+          {
+            externalId: {
+              id : exID,
+              entityType: 'CUSTOMER'
+            },
+            id: {
+              id: id,
+              entityType: 'CUSTOMER',
+            },
+            tenantId : {
+              id : tenantID,
+              entityType : "TENANT"
+            },
+            country: country,
+            title: title,
+            region : region,
+            city : city,
+            address : address,
+            address2 : address2,
+            zip : zip,
+            phone : phone,
+            email : email,
+            additionalInfo: additionalInfo,
+          },
+          {
+            headers: this.headersReq,
+          }
+        )
+      ).catch((error) => {
+        if (error.response == undefined) return error.code;
+        return error;
+      });
+  
+      if (resp == 'ECONNREFUSED')
+        return {
+          status: 500,
+          explanation: resp,
+        };
+      else if (resp.status != 200) {
+        return {
+          status: resp.response.status,
+          explanation: resp.response.data.message,
+        };
+      }
+      return {
+        status: resp.status,
+        explanation: 'ok',
+        data: resp.data,
+      };
+  }
+
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  async CustomerInfo(custID: string): Promise<CustomerInfoResponse> {
+    const resp = await firstValueFrom(
+      this.httpService.get(this.ThingsBoardURL + '/customer/' + custID, {
+        headers: this.headersReq,
+      })
+    ).catch((error) => {
+      if (error.response == undefined) return error.code;
+      return error;
+    });
+
+    if (resp == 'ECONNREFUSED')
+      return {
+        status: 500,
+        explanation: resp,
+      };
+    else if (resp.status != 200) {
+      return {
+        status: resp.response.status,
+        explanation: resp.response.data.message,
+      };
+    }
+    return {
+      status: resp.status,
+      explanation: 'ok',
+      data: resp.data,
+    };
+  }
+
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
-export interface UserResponse {
+export interface reserveResponse {
   status: number;
   explanation: string;
   data?: {
@@ -115,4 +234,51 @@ export interface UserResponse {
     };
   };
   type?: string;
+}
+
+export interface CustomerInfoResponse {
+  status: number;
+  explanation: string;
+  data?: {
+    externalId: {
+      id : string;
+      entityType: 'CUSTOMER'
+    },
+    id: {
+      id: string;
+      entityType: 'CUSTOMER';
+    };
+    tenantId: {
+      id: string;
+      entityType:'TENANT';
+    },
+    createdTime: number;
+    title: string;
+    name: string;
+    region: string;
+    country: string;
+    state: string;
+    city: string;
+    address: string;
+    address2: string;
+    zip: string;
+    phone: string;
+    email: string;
+    additionalInfo: {
+      reserves: {
+        reserveID: string;
+        reserveName: string;
+      };
+      location: {
+        location: {
+          latitude: number;
+          longitude: number;
+        }[];
+        center: {
+          latitude: number;
+          longitude: number;
+        };
+      }
+    };
+  };
 }

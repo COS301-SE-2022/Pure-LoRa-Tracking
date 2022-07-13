@@ -1,4 +1,4 @@
-import { Injectable, NotImplementedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ThingsboardThingsboardUserService } from '@lora/thingsboard-user';
 import { ThingsboardThingsboardTelemetryService } from '@lora/thingsboard-telemetry';
 import {
@@ -9,12 +9,11 @@ import {
 import { ThingsboardThingsboardAssetService } from '@lora/thingsboard-asset';
 import {
   MapApiReserveResponse,
-  MapApiHistoricalResponse,
 } from '@master/shared-interfaces';
 import {
-  AdminResponse,
   ThingsboardThingsboardAdminService,
 } from '@lora/thingsboard/admin';
+import { ThingsboardThingsboardReserveService } from '@lora/thingsboard/reserve';
 @Injectable()
 export class ThingsboardThingsboardClientService {
   private token: string;
@@ -26,14 +25,15 @@ export class ThingsboardThingsboardClientService {
     private loginService: ThingsboardThingsboardUserService,
     private deviceService: ThingsboardThingsboardDeviceService,
     private assetService: ThingsboardThingsboardAssetService,
-    private adminService: ThingsboardThingsboardAdminService
+    private adminService: ThingsboardThingsboardAdminService,
+    private reserveService: ThingsboardThingsboardReserveService
   ) {}
 
   //////////////////////////////////////////////////////////
 
   async loginUser(username: string, password: string): Promise<boolean> {
     const resp = await this.loginService.login(username, password);
-    if (resp['data']['token'] != undefined) {
+    if (resp.status == 200) {
       this.token = resp['data']['token'];
       this.refreshToken = resp['data']['RefreshToken'];
       return true;
@@ -160,6 +160,61 @@ export class ThingsboardThingsboardClientService {
 
   setToken(token: string) {
     this.token = token;
+  }
+
+  //////////////////////////////////////////////////////////
+
+  /*
+  check permission
+  check group exists
+  create group
+  add location if exists
+  */
+  async createReserve(
+    email: string,
+    name: string,
+    location?: {
+      location: {
+        latitude: number;
+        longitude: number;
+      }[];
+      center: {
+        latitude: number;
+        longitude: number;
+      };
+    }
+  ): Promise<thingsboardResponse> {
+    if (this.token == undefined)
+      return {
+        status: 'fail',
+        explanation: 'no access token',
+      };
+
+    const user = await this.userService.userInfo(this.token);
+    if (
+      user.data.authority == undefined ||
+      user.data.authority == 'CUSTOMER_USER'
+    )
+      return {
+        status: 'fail',
+        explanation: 'user is not an admin',
+      };
+
+    this.reserveService.setToken(this.token);
+    const response = await this.reserveService.createReserveGroup(
+      email,
+      name,
+      location
+    );
+    if (response.status != 200)
+      return {
+        status: 'fail',
+        explanation: response.explanation,
+      };
+    return {
+      status: 'ok',
+      explanation: 'call finished',
+    };
   }
 
   //////////////////////////////////////////////////////////
@@ -410,7 +465,8 @@ export class ThingsboardThingsboardClientService {
       };
     }
 
-    const CustInfo = await this.userService.CustomerInfo(this.token, userID);
+    this.reserveService.setToken(this.token);
+    const CustInfo = await this.reserveService.CustomerInfo(userID);
     if (CustInfo.status != 200) {
       return {
         status: 'fail',
@@ -935,6 +991,62 @@ export class ThingsboardThingsboardClientService {
   }
 
   /////////////////////////////////////////////////////////////////
+  
+  /*
+  check admin
+  */
+  async updateReservePerimeter(
+    reserveID: string,
+    location: {
+      location: {
+        latitude: number;
+        longitude: number;
+      }[];
+      center: {
+        latitude: number;
+        longitude: number;
+      };
+    }
+  ): Promise<thingsboardResponse> {
+    const user = await this.userService.userInfo(this.token);
+    
+    if(user.data.authority != 'TENANT_ADMIN')
+    return {
+      status:'fail',
+      explanation:'wrong permissions'
+    }
+
+    this.reserveService.setToken(this.token);
+    const info = await this.reserveService.CustomerInfo(reserveID);
+
+    if(info.status != 200)
+    return {
+      status: 'fail',
+      explanation: info.explanation
+    }
+
+    if(info.data.additionalInfo.location!= undefined)
+    delete info.data.additionalInfo.location;
+
+    const response = await this.reserveService.setReservePerimeter(
+      info.data.externalId?.id, info.data.id.id, info.data.title, info.data.region, info.data.tenantId.id, info.data.country,
+      info.data.city, info.data.address, info.data.address2, info.data.zip, info.data.phone, info.data.email, 
+      Object.assign(info.data.additionalInfo, { location: location })
+    )
+
+    if(response.status!=200)
+    return {
+      status:'fail',
+      explanation:response.explanation
+    }
+
+    return{
+      status:'ok',
+      explanation:'call finished'
+    }
+  }
+
+  /////////////////////////////////////////////////////////////////
   /*
     check sysadmin
     get tenants
@@ -981,8 +1093,8 @@ export class ThingsboardThingsboardClientService {
       });
     });
 
-    if(login.data.additionalInfo.reserves != null)
-    delete login.data.additionalInfo.reserves;
+    if (login.data.additionalInfo.reserves != null)
+      delete login.data.additionalInfo.reserves;
 
     const resp = await this.userService.UpdateUserInfo(
       this.token,
@@ -993,7 +1105,7 @@ export class ThingsboardThingsboardClientService {
       login.data.authority,
       login.data.firstName,
       login.data.lastName,
-      Object.assign(login.data.additionalInfo, {reserves : reserveList})
+      Object.assign(login.data.additionalInfo, { reserves: reserveList })
     );
 
     if (resp.status != 200)
@@ -1052,11 +1164,14 @@ export class ThingsboardThingsboardClientService {
       login.data.tenantId.id
     );
 
-    const sysadmin = await this.getToken('server@thingsboard.org', 'thingsboardserveraccountissecure');
+    const sysadmin = await this.getToken(
+      'server@thingsboard.org',
+      'thingsboardserveraccountissecure'
+    );
     this.adminService.setToken(sysadmin.data.token);
 
-    if(TenantGroup.data.additionalInfo.reserves != null)
-    delete TenantGroup.data.additionalInfo.reserves;
+    if (TenantGroup.data.additionalInfo.reserves != null)
+      delete TenantGroup.data.additionalInfo.reserves;
 
     const resp = await this.adminService.updateTenant(
       TenantGroup.data.id.id,
@@ -1070,7 +1185,7 @@ export class ThingsboardThingsboardClientService {
       TenantGroup.data.zip,
       TenantGroup.data.phone,
       TenantGroup.data.phone,
-      Object.assign(TenantGroup.data.additionalInfo, {reserves : reserveList})
+      Object.assign(TenantGroup.data.additionalInfo, { reserves: reserveList })
     );
 
     this.userService.logout(sysadmin.data.token);
@@ -1086,12 +1201,44 @@ export class ThingsboardThingsboardClientService {
       explanation: 'call finished',
     };
   }
+  /////////////////////////////////////////////////////////////////
+
+  /* TODO check the user is an admin or higher */
+  async CustomerInfo(reserveID: string) : Promise<thingsboardResponse> {
+    this.reserveService.setToken(this.token);
+    const resp = await this.reserveService.CustomerInfo(reserveID);
+    if(resp.status != 200)
+    return {
+      status:'fail',
+      explanation: resp.explanation
+    }
+    return {
+      status:'ok',
+      explanation:'call finished',
+      data:resp.data
+    }
+  }
+
+  /////////////////////////////////////////////////////////////////
+  async removeReserve(reserveID: string) : Promise<thingsboardResponse> {
+    this.reserveService.setToken(this.token);
+    const resp = await this.reserveService.deleteReserveGroup(reserveID);
+    if(resp.status != 200)
+    return {
+      status:'fail',
+      explanation: resp.explanation
+    }
+    return {
+      status:'ok',
+      explanation:'call finished',
+    }
+  }
 }
 
 /* data is required to be any due to the many possible response data types */
 
 export interface thingsboardResponse {
-  status: string;
+  status: 'ok' | 'fail';
   explanation?: string;
   furtherExplain?: string;
   name?: string;
@@ -1099,7 +1246,7 @@ export interface thingsboardResponse {
 }
 
 export interface thingsboardLoginResponse {
-  status: string;
+  status: 'ok' | 'fail';
   explanation?: string;
   furtherExplain?: string;
   Token: string;

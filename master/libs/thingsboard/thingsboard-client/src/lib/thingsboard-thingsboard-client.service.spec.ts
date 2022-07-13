@@ -8,6 +8,7 @@ import { ThingsboardThingsboardClientService } from './thingsboard-thingsboard-c
 import { AxiosResponse } from 'axios';
 import { of } from 'rxjs';
 import { ThingsboardThingsboardAdminModule } from '@lora/thingsboard/admin';
+import { ThingsboardThingsboardReserveModule } from '@lora/thingsboard/reserve';
 
 describe('ThingsboardThingsboardClientService', () => {
   let service: ThingsboardThingsboardClientService;
@@ -23,7 +24,8 @@ describe('ThingsboardThingsboardClientService', () => {
         ThingsboardThingsboardTelemetryModule,
         ThingsboardThingsboardDeviceModule,
         ThingsboardThingsboardAssetModule,
-        ThingsboardThingsboardAdminModule
+        ThingsboardThingsboardAdminModule,
+        ThingsboardThingsboardReserveModule
       ],
     }).compile();
 
@@ -454,7 +456,7 @@ describe('ThingsboardThingsboardClientService', () => {
   });
 
   it('should unassign a given device from the specified reserve', async () => {
-    const result: AxiosResponse<any> = {
+    /*const result: AxiosResponse<any> = {
       data: {
         token:
           'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZW5hbnRAdGhpbmdzYm9hcmQub3JnIi...',
@@ -679,5 +681,95 @@ describe('ThingsboardThingsboardClientService', () => {
      explanation: 'call finished'
     })*/
   });
+
+  //////////////////////////////////////////////////////////////////////
+
+  it('create reserve group -> not admin', async () => {
+   /* expect(await service.loginUser('reserveuser@reserve.com', 'reserve')).toEqual(true);
+
+    expect(await service.createReserve("liamburgesss299@gmail.com", "reserve b")).toMatchObject({
+     status : 'fail',
+     explanation: 'user is not an admin'
+    })*/
+  });
+
+  //////////////////////////////////////////////////////////////////////
+
+  it('create reserve group -> create group and fail attempt to recreate', async () => {
+    /*expect(await service.loginUser('reserveadmin@reserve.com', 'reserve')).toEqual(true);
+
+    expect(await service.createReserve("liamburgesss299@gmail.com", "reserve b")).toMatchObject({
+     status : 'ok',
+    })
+
+    expect(await service.createReserve("liamburgesss299@gmail.com", "reserve b")).toMatchObject({
+      status : 'fail',
+     })*/
+  });
+
+  //////////////////////////////////////////////////////////////////////
+
+  it('update reserve perimeter -> wrong permission', async () => {
+    /*expect(await service.loginUser('reserveuser@reserve.com', 'reserve')).toEqual(true);
+
+    expect(await service.updateReservePerimeter('8e3d4250-0297-11ed-ac9e-bb12f95a3e82', {
+      coordinates : [
+        {latitude:1, longitude:2},
+        {latitude:4, longitude:4}
+      ],
+      center : {
+        longitude:34,
+        latitude:23
+      }
+    })).toMatchObject({
+      status:'fail',
+      explanation:'wrong permissions'
+    })*/
+  });
+
+  //////////////////////////////////////////////////////////////////////
+
+  it('update reserve perimeter -> update perimeter', async () => {
+    /*expect(await service.loginUser('reserveadmin@reserve.com', 'reserve')).toEqual(true);
+
+    expect(await service.updateReservePerimeter('8e3d4250-0297-11ed-ac9e-bb12f95a3e82', {
+      coordinates : [
+        {latitude:1, longitude:2},
+        {latitude:4, longitude:4}
+      ],
+      center : {
+        longitude:34,
+        latitude:23
+      }
+    })).toMatchObject({
+      status:'ok',
+      explanation:'call finished'
+    })*/
+  });
+
+  //////////////////////////////////////////////////////////////////////
+
+  it('reserve group info', async () => {
+    /*expect(await service.loginUser('reserveadmin@reserve.com', 'reserve')).toEqual(true);
+
+    expect(await service.CustomerInfo('8e3d4250-0297-11ed-ac9e-bb12f95a3e82')).toMatchObject({
+      status:'ok',
+      explanation:'call finished'
+    })*/
+    
+  });
+
+  //////////////////////////////////////////////////////////////////////
+
+  it('reserve group delete', async () => {
+    /*expect(await service.loginUser('reserveadmin@reserve.com', 'reserve')).toEqual(true);
+
+    expect(await service.deleteReserve('9700a190-029f-11ed-ac9e-bb12f95a3e82')).toMatchObject({
+      status:'ok',
+      explanation:'call finished'
+    })*/
+    
+  });
+
 })
 

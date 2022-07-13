@@ -18,6 +18,7 @@
       "@chirpstack": ["libs/chirpstack/src/index.ts"],
       "@lora/api/login": ["libs/api/login-endpoint/src/index.ts"],
       "@lora/api/mapEndpoint": ["libs/api/map-endpoint/src/index.ts"],
+      "@lora/api/reserve": ["libs/api/reserve-endpoint/src/index.ts"],
       "@lora/api/user-endpoint": ["libs/api/user-endpoint/src/index.ts"],
       "@lora/apiRouter": ["libs/api/api-router/src/index.ts"],
       "@lora/chirpstack": ["libs/chirpstack/src/index.ts"],
@@ -94,10 +95,7 @@
       "@master/middleware/cookie-management": [
         "libs/middleware/cookie-management/src/index.ts"
       ],
-      "@master/shared-interfaces": ["libs/shared-interfaces/src/index.ts"],
-      "@thingsboard/provision-user": [
-        "libs/thingsboard/thingsboard-user/thingsboard-user-provision/src/index.ts"
-      ]
+      "@master/shared-interfaces": ["libs/shared-interfaces/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -4,6 +4,7 @@ import { ApiHardwareDebugModule } from '@lora/hardware-debug';
 import { ApiDeviceEndpointModule } from '@lora/device-endpoint';
 import { ApiUserEndpointModule } from '@lora/api/user-endpoint';
 import { ApiLoginEndpointModule } from '@lora/api/login';
+import { ApiReserveEndpointModule } from '@lora/api/reserve';
 
 @Module({
   imports : [
@@ -11,7 +12,8 @@ import { ApiLoginEndpointModule } from '@lora/api/login';
     ApiHardwareDebugModule,
     ApiDeviceEndpointModule,
     ApiUserEndpointModule,
-    ApiLoginEndpointModule
+    ApiLoginEndpointModule,
+    ApiReserveEndpointModule
   ]
 })
 export class ApiApiRouterModule {}
