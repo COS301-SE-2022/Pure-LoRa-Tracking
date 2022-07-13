@@ -8,7 +8,7 @@ export interface ReserveCreateEndpoint {
     NameOfReserve : string;
     email : string;
     location? : {
-        coordinates : {
+        location : {
             latitude : number;
             longitude : number;
         } [];
@@ -23,7 +23,7 @@ export interface ReserveSetEndpoint {
     token : string;
     reserveID : string;
     location : {
-        coordinates : {
+        location : {
             latitude : number;
             longitude : number;
         } [];

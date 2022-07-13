@@ -1201,12 +1201,44 @@ export class ThingsboardThingsboardClientService {
       explanation: 'call finished',
     };
   }
+  /////////////////////////////////////////////////////////////////
+
+  /* TODO check the user is an admin or higher */
+  async CustomerInfo(reserveID: string) : Promise<thingsboardResponse> {
+    this.reserveService.setToken(this.token);
+    const resp = await this.reserveService.CustomerInfo(reserveID);
+    if(resp.status != 200)
+    return {
+      status:'fail',
+      explanation: resp.explanation
+    }
+    return {
+      status:'ok',
+      explanation:'call finished',
+      data:resp.data
+    }
+  }
+
+  /////////////////////////////////////////////////////////////////
+  async removeReserve(reserveID: string) : Promise<thingsboardResponse> {
+    this.reserveService.setToken(this.token);
+    const resp = await this.reserveService.deleteReserveGroup(reserveID);
+    if(resp.status != 200)
+    return {
+      status:'fail',
+      explanation: resp.explanation
+    }
+    return {
+      status:'ok',
+      explanation:'call finished',
+    }
+  }
 }
 
 /* data is required to be any due to the many possible response data types */
 
 export interface thingsboardResponse {
-  status: string;
+  status: 'ok' | 'fail';
   explanation?: string;
   furtherExplain?: string;
   name?: string;
@@ -1214,7 +1246,7 @@ export interface thingsboardResponse {
 }
 
 export interface thingsboardLoginResponse {
-  status: string;
+  status: 'ok' | 'fail';
   explanation?: string;
   furtherExplain?: string;
   Token: string;

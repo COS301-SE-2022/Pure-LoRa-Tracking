@@ -32,19 +32,35 @@ export class ApiReserveEndpointService {
                     explanation: 'reserve center missing',
                 };
             }
-            if(body.location.coordinates == undefined) {
+            if(body.location.location == undefined) {
                 return {
                     status: 401,
                     explanation: 'reserve border co-ordinates missing',
                 };
             }
-            if(body.location.coordinates.length < 3) 
+            if(body.location.location.length < 3) 
                 return {
                     status : 403,
-                    explanation: 'not enough co-ordinates given: '+body.location.coordinates.length
+                    explanation: 'not enough co-ordinates given: '+body.location.location.length
                 }
         }
+
+        this.thingsboardClient.setToken(body.token);
+        const response = await this.thingsboardClient.createReserve(body.email, body.NameOfReserve, body.location);
+        
+        if(response.status == 'fail')
+        return {
+            status : 500,
+            explanation : response.explanation
+        }
+
+        return {
+            status : 200,
+            explanation : 'reserve created'
+        }
     }
+
+    //////////////////////////////////////////////////////////////////////////////////
 
     async processReserveRemove(body : ReserveEndpoint) : Promise<ReserveResponse> {
         if (body.token == undefined || body.token == '')
@@ -58,7 +74,24 @@ export class ApiReserveEndpointService {
             status: 401,
             explanation: 'Reserve ID missing',
         };
+
+        this.thingsboardClient.setToken(body.token);
+        const response = await this.thingsboardClient.removeReserve(body.reserveID);
+        
+        if(response.status == 'fail')
+        return {
+            status : 500,
+            explanation : response.explanation
+        }
+
+        return {
+            status : 200,
+            explanation : 'reserve removed'
+        }
+
     }
+
+    //////////////////////////////////////////////////////////////////////////////////
 
     async processReserveSet(body : ReserveSetEndpoint) : Promise<ReserveResponse> {
         if (body.token == undefined || body.token == '')
@@ -80,23 +113,41 @@ export class ApiReserveEndpointService {
                     explanation: 'reserve center missing',
                 };
             }
-            if(body.location.coordinates == undefined) {
+            if(body.location.location == undefined) {
                 return {
                     status: 401,
                     explanation: 'reserve border co-ordinates missing',
                 };
             }
-            if(body.location.coordinates.length < 3) 
+            if(body.location.location.length < 3) 
                 return {
                     status : 403,
-                    explanation: 'not enough co-ordinates given: '+body.location.coordinates.length
+                    explanation: 'not enough co-ordinates given: '+body.location.location.length
                 }
         } else if(body.location == undefined)
             return {
                 status : 401,
                 explanation : 'no location co-ordinates given'
             }
+
+        this.thingsboardClient.setToken(body.token);
+        const response = await this.thingsboardClient.updateReservePerimeter(body.reserveID, body.location);
+
+        if(response.status == 'fail')
+        return {
+            status : 500,
+            explanation : response.explanation
+        }
+
+        return {
+            status : 200,
+            explanation : 'reserve updated'
+        }
+
+
     }
+
+    //////////////////////////////////////////////////////////////////////////////////
 
     async processReserveInfo(body : ReserveEndpoint) : Promise<ReserveResponse> {
         if (body.token == undefined || body.token == '')
@@ -110,5 +161,20 @@ export class ApiReserveEndpointService {
             status: 401,
             explanation: 'Reserve ID missing',
         };
+        this.thingsboardClient.setToken(body.token);
+        const resp = await this.thingsboardClient.CustomerInfo(body.reserveID);
+
+        if(resp.status=='fail')
+        return {
+            status:500,
+            explanation:resp.explanation,
+        }
+
+        return {
+            status : 200,
+            explanation : resp.explanation,
+            data : resp.data
+        }
+
     }
 }

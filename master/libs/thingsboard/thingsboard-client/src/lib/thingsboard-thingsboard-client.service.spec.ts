@@ -747,5 +747,29 @@ describe('ThingsboardThingsboardClientService', () => {
     })*/
   });
 
+  //////////////////////////////////////////////////////////////////////
+
+  it('reserve group info', async () => {
+    /*expect(await service.loginUser('reserveadmin@reserve.com', 'reserve')).toEqual(true);
+
+    expect(await service.CustomerInfo('8e3d4250-0297-11ed-ac9e-bb12f95a3e82')).toMatchObject({
+      status:'ok',
+      explanation:'call finished'
+    })*/
+    
+  });
+
+  //////////////////////////////////////////////////////////////////////
+
+  it('reserve group delete', async () => {
+    /*expect(await service.loginUser('reserveadmin@reserve.com', 'reserve')).toEqual(true);
+
+    expect(await service.deleteReserve('9700a190-029f-11ed-ac9e-bb12f95a3e82')).toMatchObject({
+      status:'ok',
+      explanation:'call finished'
+    })*/
+    
+  });
+
 })
 

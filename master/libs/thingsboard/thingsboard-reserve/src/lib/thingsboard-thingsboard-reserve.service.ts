@@ -68,11 +68,10 @@ export class ThingsboardThingsboardReserveService {
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   async deleteReserveGroup(
-    token: string,
-    custID: string
+    reserveID: string
   ): Promise<reserveResponse> {
     const resp = await firstValueFrom(
-      this.httpService.delete(this.ThingsBoardURL + '/customer/' + custID, {
+      this.httpService.delete(this.ThingsBoardURL + '/customer/' + reserveID, {
         headers: this.headersReq,
       })
     ).catch((error) => {
