@@ -29,6 +29,7 @@
         </mat-action-list>
         
     <mat-card-content id="card-content">
+        <master-device-list-item deviceName="Abc" deviceId="123" deviceType="sensor"></master-device-list-item>
         <cdk-virtual-scroll-viewport itemSize="0">
         <mat-selection-list dense #devicesList [multiple]="true" >
             <div *ngIf="deviceType==='sensors' || deviceType==='all' && Devices.length>0">
