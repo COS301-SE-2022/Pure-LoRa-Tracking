@@ -6,9 +6,9 @@ export class ThingsboardThingsboardReserveService {
   private ThingsBoardURL = process.env.TB_URL || 'http://localhost:8080/api';
   constructor(private httpService: HttpService) {}
 
-  private headersReq: { 'Content-Type': string; Authorization: string; };
+  private headersReq: { 'Content-Type': string; Authorization: string };
 
-  setToken(token : string) : void {
+  setToken(token: string): void {
     this.headersReq = {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + token,
@@ -19,16 +19,16 @@ export class ThingsboardThingsboardReserveService {
   async createReserveGroup(
     email: string,
     title: string,
-    location? : {
-      coordinates : {
-          latitude : number;
-          longitude : number;
-      } [];
-      center : {
-          latitude : number;
-          longitude : number;
-      }
-  }
+    location?: {
+      location: {
+        latitude: number;
+        longitude: number;
+      }[];
+      center: {
+        latitude: number;
+        longitude: number;
+      };
+    }
   ): Promise<CustomerInfoResponse> {
     const resp = await firstValueFrom(
       this.httpService.post(
@@ -36,7 +36,7 @@ export class ThingsboardThingsboardReserveService {
         {
           email: email,
           title: title,
-          additionalInfo : {location}
+          additionalInfo: { location },
         },
         {
           headers: this.headersReq,
@@ -99,12 +99,109 @@ export class ThingsboardThingsboardReserveService {
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  async setReservePerimeter() : Promise<reserveResponse> {
-    // TODO
-    return null;
+  /*
+  get group
+  update details
+  */
+  async setReservePerimeter(
+    exID : string,
+    id: string,
+    title: string,
+    region: string,
+    tenantID: string,
+    country: string,
+    city: string,
+    address: string,
+    address2: string,
+    zip: string,
+    phone: string,
+    email: string,
+    additionalInfo: any
+  ): Promise<reserveResponse> {
+      
+      const resp = await firstValueFrom(
+        this.httpService.post(
+          this.ThingsBoardURL + "/customer",
+          {
+            externalId: {
+              id : exID,
+              entityType: 'CUSTOMER'
+            },
+            id: {
+              id: id,
+              entityType: 'CUSTOMER',
+            },
+            tenantId : {
+              id : tenantID,
+              entityType : "TENANT"
+            },
+            country: country,
+            title: title,
+            region : region,
+            city : city,
+            address : address,
+            address2 : address2,
+            zip : zip,
+            phone : phone,
+            email : email,
+            additionalInfo: additionalInfo,
+          },
+          {
+            headers: this.headersReq,
+          }
+        )
+      ).catch((error) => {
+        if (error.response == undefined) return error.code;
+        return error;
+      });
+  
+      if (resp == 'ECONNREFUSED')
+        return {
+          status: 500,
+          explanation: resp,
+        };
+      else if (resp.status != 200) {
+        return {
+          status: resp.response.status,
+          explanation: resp.response.data.message,
+        };
+      }
+      return {
+        status: resp.status,
+        explanation: 'ok',
+        data: resp.data,
+      };
   }
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  async CustomerInfo(custID: string): Promise<CustomerInfoResponse> {
+    const resp = await firstValueFrom(
+      this.httpService.get(this.ThingsBoardURL + '/customer/' + custID, {
+        headers: this.headersReq,
+      })
+    ).catch((error) => {
+      if (error.response == undefined) return error.code;
+      return error;
+    });
+
+    if (resp == 'ECONNREFUSED')
+      return {
+        status: 500,
+        explanation: resp,
+      };
+    else if (resp.status != 200) {
+      return {
+        status: resp.response.status,
+        explanation: resp.response.data.message,
+      };
+    }
+    return {
+      status: resp.status,
+      explanation: 'ok',
+      data: resp.data,
+    };
+  }
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }
@@ -144,31 +241,45 @@ export interface CustomerInfoResponse {
   status: number;
   explanation: string;
   data?: {
-    "id": {
-      "id": string,
-      "entityType": "TENANT"
+    externalId: {
+      id : string;
+      entityType: 'CUSTOMER'
     },
-    "createdTime": number,
-    "title": string,
-    "name": string,
-    "region": string,
-    "tenantProfileId": {
-      "id": string,
-      "entityType": "TENANT_PROFILE"
+    id: {
+      id: string;
+      entityType: 'CUSTOMER';
+    };
+    tenantId: {
+      id: string;
+      entityType:'TENANT';
     },
-    "country": string,
-    "state": string,
-    "city": string,
-    "address": string,
-    "address2": string,
-    "zip": string,
-    "phone": string,
-    "email": string,
-    "additionalInfo": {
+    createdTime: number;
+    title: string;
+    name: string;
+    region: string;
+    country: string;
+    state: string;
+    city: string;
+    address: string;
+    address2: string;
+    zip: string;
+    phone: string;
+    email: string;
+    additionalInfo: {
       reserves: {
         reserveID: string;
         reserveName: string;
       };
-    }
-  }
+      location: {
+        location: {
+          latitude: number;
+          longitude: number;
+        }[];
+        center: {
+          latitude: number;
+          longitude: number;
+        };
+      }
+    };
+  };
 }

@@ -706,5 +706,46 @@ describe('ThingsboardThingsboardClientService', () => {
       status : 'fail',
      })*/
   });
+
+  //////////////////////////////////////////////////////////////////////
+
+  it('update reserve perimeter -> wrong permission', async () => {
+    /*expect(await service.loginUser('reserveuser@reserve.com', 'reserve')).toEqual(true);
+
+    expect(await service.updateReservePerimeter('8e3d4250-0297-11ed-ac9e-bb12f95a3e82', {
+      coordinates : [
+        {latitude:1, longitude:2},
+        {latitude:4, longitude:4}
+      ],
+      center : {
+        longitude:34,
+        latitude:23
+      }
+    })).toMatchObject({
+      status:'fail',
+      explanation:'wrong permissions'
+    })*/
+  });
+
+  //////////////////////////////////////////////////////////////////////
+
+  it('update reserve perimeter -> update perimeter', async () => {
+    /*expect(await service.loginUser('reserveadmin@reserve.com', 'reserve')).toEqual(true);
+
+    expect(await service.updateReservePerimeter('8e3d4250-0297-11ed-ac9e-bb12f95a3e82', {
+      coordinates : [
+        {latitude:1, longitude:2},
+        {latitude:4, longitude:4}
+      ],
+      center : {
+        longitude:34,
+        latitude:23
+      }
+    })).toMatchObject({
+      status:'ok',
+      explanation:'call finished'
+    })*/
+  });
+
 })
 

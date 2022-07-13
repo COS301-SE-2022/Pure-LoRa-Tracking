@@ -9,10 +9,8 @@ import {
 import { ThingsboardThingsboardAssetService } from '@lora/thingsboard-asset';
 import {
   MapApiReserveResponse,
-  MapApiHistoricalResponse,
 } from '@master/shared-interfaces';
 import {
-  AdminResponse,
   ThingsboardThingsboardAdminService,
 } from '@lora/thingsboard/admin';
 import { ThingsboardThingsboardReserveService } from '@lora/thingsboard/reserve';
@@ -175,16 +173,16 @@ export class ThingsboardThingsboardClientService {
   async createReserve(
     email: string,
     name: string,
-    location? : {
-      coordinates : {
-          latitude : number;
-          longitude : number;
-      } [];
-      center : {
-          latitude : number;
-          longitude : number;
-      }
-  }
+    location?: {
+      location: {
+        latitude: number;
+        longitude: number;
+      }[];
+      center: {
+        latitude: number;
+        longitude: number;
+      };
+    }
   ): Promise<thingsboardResponse> {
     if (this.token == undefined)
       return {
@@ -193,23 +191,30 @@ export class ThingsboardThingsboardClientService {
       };
 
     const user = await this.userService.userInfo(this.token);
-    if (user.data.authority == undefined || user.data.authority == 'CUSTOMER_USER')
+    if (
+      user.data.authority == undefined ||
+      user.data.authority == 'CUSTOMER_USER'
+    )
       return {
         status: 'fail',
         explanation: 'user is not an admin',
       };
 
     this.reserveService.setToken(this.token);
-    const response = await this.reserveService.createReserveGroup(email, name, location);
-    if(response.status != 200)
-    return {
-      status : "fail",
-      explanation : response.explanation
-    }
+    const response = await this.reserveService.createReserveGroup(
+      email,
+      name,
+      location
+    );
+    if (response.status != 200)
+      return {
+        status: 'fail',
+        explanation: response.explanation,
+      };
     return {
       status: 'ok',
-      explanation: 'call finished'
-    }
+      explanation: 'call finished',
+    };
   }
 
   //////////////////////////////////////////////////////////
@@ -460,7 +465,8 @@ export class ThingsboardThingsboardClientService {
       };
     }
 
-    const CustInfo = await this.userService.CustomerInfo(this.token, userID);
+    this.reserveService.setToken(this.token);
+    const CustInfo = await this.reserveService.CustomerInfo(userID);
     if (CustInfo.status != 200) {
       return {
         status: 'fail',
@@ -982,6 +988,62 @@ export class ThingsboardThingsboardClientService {
       explanation: 'call finished',
       data: resp.data,
     };
+  }
+
+  /////////////////////////////////////////////////////////////////
+  
+  /*
+  check admin
+  */
+  async updateReservePerimeter(
+    reserveID: string,
+    location: {
+      location: {
+        latitude: number;
+        longitude: number;
+      }[];
+      center: {
+        latitude: number;
+        longitude: number;
+      };
+    }
+  ): Promise<thingsboardResponse> {
+    const user = await this.userService.userInfo(this.token);
+    
+    if(user.data.authority != 'TENANT_ADMIN')
+    return {
+      status:'fail',
+      explanation:'wrong permissions'
+    }
+
+    this.reserveService.setToken(this.token);
+    const info = await this.reserveService.CustomerInfo(reserveID);
+
+    if(info.status != 200)
+    return {
+      status: 'fail',
+      explanation: info.explanation
+    }
+
+    if(info.data.additionalInfo.location!= undefined)
+    delete info.data.additionalInfo.location;
+
+    const response = await this.reserveService.setReservePerimeter(
+      info.data.externalId?.id, info.data.id.id, info.data.title, info.data.region, info.data.tenantId.id, info.data.country,
+      info.data.city, info.data.address, info.data.address2, info.data.zip, info.data.phone, info.data.email, 
+      Object.assign(info.data.additionalInfo, { location: location })
+    )
+
+    if(response.status!=200)
+    return {
+      status:'fail',
+      explanation:response.explanation
+    }
+
+    return{
+      status:'ok',
+      explanation:'call finished'
+    }
   }
 
   /////////////////////////////////////////////////////////////////
