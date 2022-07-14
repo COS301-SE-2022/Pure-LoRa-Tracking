@@ -188,4 +188,8 @@ describe('ThingsboardThingsboardUserService', () => {
   it('should create the user with the reserve set given', async () => {
     return true;
   });
+
+  it("should reset the user's password", async () => {
+    return true;
+  });
 });
