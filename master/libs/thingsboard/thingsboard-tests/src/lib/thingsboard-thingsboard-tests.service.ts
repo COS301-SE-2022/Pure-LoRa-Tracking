@@ -283,6 +283,11 @@ export class ThingsboardThingsboardTestsService {
     "hasNext": false
   }
 
+  TelemetryResultExample = {
+      longitude : [{value:1, ts:22}, {value:2, ts:22}],
+      latitude : [{value:3, ts:22}, {value:4, ts:22}],
+  }
+
   DeviceAttributeExample = {
     "result": {latitude:-22,longitude:-23},
     "setOrExpired": true
@@ -299,6 +304,14 @@ export class ThingsboardThingsboardTestsService {
     status: 200,
     statusText: 'OK',
     data : this.DeviceAttributeExample
+  }
+
+  axiosTelemetrySuccessExample = {
+    headers: {},
+    config: {},
+    status: 200,
+    statusText: 'OK',
+    data : this.TelemetryResultExample
   }
 
   axiosDeviceSuccessExample = {
