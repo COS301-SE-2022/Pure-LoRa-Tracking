@@ -4,6 +4,37 @@ import { Injectable } from '@nestjs/common';
 export class ThingsboardThingsboardTestsService {
     constructor() {"tests"}
 
+  sysAdmin = 'sysadmin@thingsboard.org';
+  sysAdminPassword = 'sysadmin';
+
+  admin = 'reserveadmin@reserve.com';
+  adminPassword = 'reserve'
+
+  user = 'reserveuser@reserve.com'
+  userPassword = 'reserve'
+
+  UserExample = {
+    "id": {
+      "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+      "entityType": "USER"
+    },
+    "createdTime": 1609459200000,
+    "tenantId": {
+      "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+      "entityType": "TENANT"
+    },
+    "customerId": {
+      "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+      "entityType": "CUSTOMER"
+    },
+    "email": "user@example.com",
+    "name": "user@example.com",
+    "authority": "SYS_ADMIN, TENANT_ADMIN or CUSTOMER_USER",
+    "firstName": "John",
+    "lastName": "Doe",
+    "additionalInfo": {}
+  }
+
   CustomerExample = {
     externalId: {
       id: '784f394c-42b6-435a-983c-b7beff2784f9',
@@ -126,6 +157,14 @@ export class ThingsboardThingsboardTestsService {
     token: 'we12nklJQW',
     refreshToken: 'w3hjkqlbdwejkdn89',
   };
+
+  axiosUserSuccessExample = {
+    headers: {},
+    config: {},
+    status: 200,
+    statusText: 'OK',
+    data : this.UserExample
+  }
 
   axiosTenantSuccessExample = {
     headers: {},
