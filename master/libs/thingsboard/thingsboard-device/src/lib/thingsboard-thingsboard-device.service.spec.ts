@@ -3,25 +3,25 @@ import { HttpModule, HttpService } from '@nestjs/axios';
 import { Test } from '@nestjs/testing';
 import { ThingsboardThingsboardDeviceService } from './thingsboard-thingsboard-device.service';
 import { AxiosResponse } from 'axios';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
+import { ThingsboardThingsboardTestsModule, ThingsboardThingsboardTestsService } from '@lora/thingsboard/tests';
 
 describe('ThingsboardThingsboardDeviceService', () => {
   let service: ThingsboardThingsboardDeviceService;
   let loginService: ThingsboardThingsboardUserService;
   let httpService: HttpService;
-  const username = "reserveadmin@reserve.com";
-  const password = "reserve";
-  
+  let tests: ThingsboardThingsboardTestsService;
 
   beforeAll(async () => {
     const module = await Test.createTestingModule({
       providers: [ThingsboardThingsboardDeviceService],
-      imports: [HttpModule, ThingsboardThingsboardUserModule],
+      imports: [HttpModule, ThingsboardThingsboardUserModule, ThingsboardThingsboardTestsModule],
     }).compile();
 
     service = module.get(ThingsboardThingsboardDeviceService);
     loginService = module.get(ThingsboardThingsboardUserService);
     httpService = module.get(HttpService);
+    tests = module.get(ThingsboardThingsboardTestsService);
     service.setToken("token")
   });
 
@@ -269,39 +269,80 @@ describe('ThingsboardThingsboardDeviceService', () => {
     expect(await service.removeDeviceFromCustomer("fa0097e0-dfaa-11ec-b99c-f7477a3db362")).toEqual(true);*/
   });
 
-  it('should get device profiles and return null, tentatively.', async () => {
-    expect(await service.getDeviceProfiles()).toEqual(null);
+  ///////////////////////////////////////////////////////////////////////////////////////////
+
+  it('set gateway location -> return info', async () => {
+    //const data = await loginService.login(tests.user, tests.userPassword);
+    //service.setToken(data.token);
+    jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
+    expect(await service.setGatewayLocation("2fe67850-dfe9-11ec-bdb3-750ce7ed2451", 
+      {latitude : -25, longitude : 23}
+    )).toMatchObject(tests.SuccessResponse);
   });
 
-  it('should process a list of device profiles and return null, tentatively.', async () => {
-    expect(await service.processDeviceProfiles([])).toEqual(null);
+  it('set gateway location -> ECONNREFUSED', async () => {
+    //const data = await loginService.login(tests.user, tests.userPassword);
+    //service.setToken(data.token);
+    jest.spyOn(httpService, 'post').mockImplementationOnce(() => throwError(() => tests.axiosECONNFailureExample));
+    expect(await service.setGatewayLocation("2fe67850-dfe9-11ec-bdb3-750ce7ed2451", 
+    {latitude : -25, longitude : 23}
+  )).toMatchObject(tests.ECONNResponse);
+  });
+
+  it('set gateway location -> HTTP ERROR', async () => {
+    //const data = await loginService.login(tests.user, tests.userPassword);
+    //service.setToken(data.token);
+    jest.spyOn(httpService, 'post').mockImplementationOnce(() => throwError(() => tests.axiosFailureExample));
+    expect(await service.setGatewayLocation("2fe67850-dfe9-11ec-bdb3-750ce7ed2451", 
+    {latitude : -25, longitude : 23}
+  )).toMatchObject(tests.FailResponse);
+  });
+
+
+  ///////////////////////////////////////////////////////////////////////////////////////////
+
+  it('get gateway location -> return info', async () => {
+    //const data = await loginService.login(tests.user, tests.userPassword);
+    //service.setToken(data.token);
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosDeviceAttributeSuccessExample));
+    expect(await service.GetGatewayLocation("2fe67850-dfe9-11ec-bdb3-750ce7ed2451")).toMatchObject(tests.SuccessResponse);
+  });
+
+  it('get gateway location -> ECONNREFUSED', async () => {
+    //const data = await loginService.login(tests.user, tests.userPassword);
+    //service.setToken(data.token);
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => throwError(() => tests.axiosECONNFailureExample));
+    expect(await service.GetGatewayLocation("2fe67850-dfe9-11ec-bdb3-750ce7ed2451")).toMatchObject(tests.ECONNResponse);
+  });
+
+  it('get gateway location -> HTTP ERROR', async () => {
+    //const data = await loginService.login(tests.user, tests.userPassword);
+    //service.setToken(data.token);
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => throwError(() => tests.axiosFailureExample));
+    expect(await service.GetGatewayLocation("2fe67850-dfe9-11ec-bdb3-750ce7ed2451")).toMatchObject(tests.FailResponse);
   });
 
   ///////////////////////////////////////////////////////////////////////////////////////////
 
-  it('should set the gateway location', async () => {
-    /*const data = await loginService.login(username, password);
-    service.setToken(data['data']['token']);
-    console.log(await service.setGatewayLocation("2fe67850-dfe9-11ec-bdb3-750ce7ed2451", [
-      {latitude : -25, longitude : 23},
-      {latitude : -25.2, longitude : 21}
-    ]))*/
+  it('device access token -> return info', async () => {
+    //const data = await loginService.login(tests.user, tests.userPassword);
+    //service.setToken(data.token);
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosDeviceCredentialSuccessExample));
+    expect(await service.GetAccessToken("2fe67850-dfe9-11ec-bdb3-750ce7ed2451")).toMatchObject(tests.SuccessResponse);
   });
 
-  ///////////////////////////////////////////////////////////////////////////////////////////
-
-  it('should set the gateway location', async () => {
-    /*const data = await loginService.login(username, password);
-    service.setToken(data['data']['token']);
-    console.log(await service.GetGatewayLocation("2fe67850-dfe9-11ec-bdb3-750ce7ed2451"));*/
+  it('device access token -> ECONNREFUSED', async () => {
+    //const data = await loginService.login(tests.user, tests.userPassword);
+    //service.setToken(data.token);
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => throwError(() => tests.axiosECONNFailureExample));
+    expect(await service.GetAccessToken("2fe67850-dfe9-11ec-bdb3-750ce7ed2451")).toMatchObject(tests.ECONNResponse);
   });
 
-  ///////////////////////////////////////////////////////////////////////////////////////////
-
-  it('should get the device access token', async () => {
-   /* const data = await loginService.login(username, password);
-    service.setToken(data['data']['token']);
-    console.log(await service.GetAccessToken("2fe67850-dfe9-11ec-bdb3-750ce7ed2451"));*/
+  it('device access token -> HTTP ERROR', async () => {
+    //const data = await loginService.login(tests.user, tests.userPassword);
+    //service.setToken(data.token);
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => throwError(() => tests.axiosFailureExample));
+    expect(await service.GetAccessToken("2fe67850-dfe9-11ec-bdb3-750ce7ed2451")).toMatchObject(tests.FailResponse);
   });
 
 });
