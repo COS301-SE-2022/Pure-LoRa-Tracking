@@ -215,11 +215,11 @@ describe('ThingsboardThingsboardUserService', () => {
 
     jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(result));
 
-    const pResetResponse = await service.changeUserPassword(
+    const pChangeResponse = await service.changeUserPassword(
       login['data']['token'],
       '01dp455w0rd',
       '$newStr0ng3rPas5W0rd#'
     );
-    expect(pResetResponse.status).toEqual(200);
+    expect(pChangeResponse.status).toEqual(200);
   });
 });
