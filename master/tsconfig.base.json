@@ -63,6 +63,9 @@
       "@lora/thingsboard/reserve": [
         "libs/thingsboard/thingsboard-reserve/src/index.ts"
       ],
+      "@lora/thingsboard/tests": [
+        "libs/thingsboard/thingsboard-tests/src/index.ts"
+      ],
       "@master/api-interfaces": ["libs/api-interfaces/src/index.ts"],
       "@master/client/apiservice": ["libs/client/apiservice/src/index.ts"],
       "@master/client/defaultpage": ["libs/client/defaultpage/src/index.ts"],

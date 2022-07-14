@@ -40,6 +40,7 @@
     "thingsboard-thingsboard-device": "libs/thingsboard/thingsboard-device",
     "thingsboard-thingsboard-reserve": "libs/thingsboard/thingsboard-reserve",
     "thingsboard-thingsboard-telemetry": "libs/thingsboard/thingsboard-telemetry",
+    "thingsboard-thingsboard-tests": "libs/thingsboard/thingsboard-tests",
     "thingsboard-thingsboard-user": "libs/thingsboard/thingsboard-user"
   }
 }
