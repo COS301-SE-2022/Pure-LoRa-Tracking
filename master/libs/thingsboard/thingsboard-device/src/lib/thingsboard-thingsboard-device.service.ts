@@ -419,17 +419,8 @@ export class ThingsboardThingsboardDeviceService {
     return {
       status: resp.status,
       explanation: 'ok',
+      data : resp.data
     };
-  }
-
-  //////////////////////////////////////////////////////////////////////////
-  async getDeviceProfiles() {
-    return null;
-  }
-
-  //////////////////////////////////////////////////////////////////////////
-  processDeviceProfiles(profiles: any): profileList[] {
-    return null;
   }
 }
 

@@ -125,6 +125,20 @@ export class ThingsboardThingsboardTestsService {
     hasNext: false,
   };
 
+  DeviceCredentialsExample = {
+    "id": {
+      "id": "784f394c-42b6-435a-983c-b7beff2784f9"
+    },
+    "createdTime": 1609459200000,
+    "deviceId": {
+      "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+      "entityType": "DEVICE"
+    },
+    "credentialsType": "ACCESS_TOKEN",
+    "credentialsId": "Access token or other value that depends on the credentials type",
+    "credentialsValue": "Null in case of ACCESS_TOKEN. See model definition."
+  }
+
   TenantsExample = {
     data: [
       {
@@ -182,10 +196,134 @@ export class ThingsboardThingsboardTestsService {
     tenantProfileName: 'Default',
   };
 
+  DeviceExample = {
+    "externalId": {
+      "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+      "entityType": "DEVICE"
+    },
+    "id": {
+      "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+      "entityType": "DEVICE"
+    },
+    "createdTime": 1609459200000,
+    "tenantId": {
+      "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+      "entityType": "TENANT"
+    },
+    "customerId": {
+      "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+      "entityType": "CUSTOMER"
+    },
+    "name": "A4B72CCDFF33",
+    "type": "Temperature Sensor",
+    "label": "Room 234 Sensor",
+    "deviceProfileId": {
+      "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+      "entityType": "DEVICE_PROFILE"
+    },
+    "deviceData": {
+      "configuration": {},
+      "transportConfiguration": {}
+    },
+    "firmwareId": {
+      "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+      "entityType": "OTA_PACKAGE"
+    },
+    "softwareId": {
+      "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+      "entityType": "OTA_PACKAGE"
+    },
+    "additionalInfo": {}
+  }
+
+  DevicesExample = {
+    "data": [
+      {
+        "externalId": {
+          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "entityType": "DEVICE"
+        },
+        "id": {
+          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "entityType": "DEVICE"
+        },
+        "createdTime": 1609459200000,
+        "tenantId": {
+          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "entityType": "TENANT"
+        },
+        "customerId": {
+          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "entityType": "CUSTOMER"
+        },
+        "name": "A4B72CCDFF33",
+        "type": "Temperature Sensor",
+        "label": "Room 234 Sensor",
+        "deviceProfileId": {
+          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "entityType": "DEVICE_PROFILE"
+        },
+        "deviceData": {
+          "configuration": {},
+          "transportConfiguration": {}
+        },
+        "firmwareId": {
+          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "entityType": "OTA_PACKAGE"
+        },
+        "softwareId": {
+          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "entityType": "OTA_PACKAGE"
+        },
+        "additionalInfo": {}
+      }
+    ],
+    "totalPages": 0,
+    "totalElements": 0,
+    "hasNext": false
+  }
+
+  DeviceAttributeExample = {
+    "result": {latitude:-22,longitude:-23},
+    "setOrExpired": true
+  }
+
   tokenExample = {
     token: 'we12nklJQW',
     refreshToken: 'w3hjkqlbdwejkdn89',
   };
+
+  axiosDeviceAttributeSuccessExample = {
+    headers: {},
+    config: {},
+    status: 200,
+    statusText: 'OK',
+    data : this.DeviceAttributeExample
+  }
+
+  axiosDeviceSuccessExample = {
+    headers: {},
+    config: {},
+    status: 200,
+    statusText: 'OK',
+    data : this.DeviceExample
+  }
+
+  axiosDevicesSuccessExample = {
+    headers: {},
+    config: {},
+    status: 200,
+    statusText: 'OK',
+    data : this.DevicesExample
+  }
+
+  axiosDeviceCredentialSuccessExample = {
+    headers: {},
+    config: {},
+    status: 200,
+    statusText: 'OK',
+    data : this.DeviceCredentialsExample
+  }
 
   axiosUserSuccessExample = {
     headers: {},
