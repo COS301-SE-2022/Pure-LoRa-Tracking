@@ -189,7 +189,7 @@ describe('ThingsboardThingsboardUserService', () => {
     return true;
   });
 
-  it('should reset the user\'s password', async () => {
+  it("should change the user's password", async () => {
     const result: AxiosResponse<any> = {
       data: {
         token:
@@ -215,9 +215,9 @@ describe('ThingsboardThingsboardUserService', () => {
 
     jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(result));
 
-    const pResetResponse = await service.resetUserPassword(
+    const pResetResponse = await service.changeUserPassword(
       login['data']['token'],
-      login['data']['token'],
+      '01dp455w0rd',
       '$newStr0ng3rPas5W0rd#'
     );
     expect(pResetResponse.status).toEqual(200);
