@@ -189,7 +189,7 @@ describe('ThingsboardThingsboardUserService', () => {
     return true;
   });
 
-  it("should reset the user's password", async () => {
+  it('should reset the user\'s password', async () => {
     const result: AxiosResponse<any> = {
       data: {
         token:
