@@ -1,0 +1,29 @@
+.mat-expansion-panel-header-title,
+.mat-expansion-panel-header-description {
+  flex-basis: 0;
+}
+
+.mat-expansion-panel-header-description {
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .mat-expansion-panel:not([class*='mat-elevation-z']) {
+    box-shadow: none;
+}
+
+.mat-expansion-panel.mat-expanded {
+    background: rgba(123, 97, 255,0.12);
+}
+
+.mat-expansion-panel-header.mat-expanded:focus{
+    background: none;
+}
+
+.mat-expansion-panel-header.mat-expanded:hover{
+    background: none;
+}
+
+.device-icon{
+    margin-right:2%
+}
