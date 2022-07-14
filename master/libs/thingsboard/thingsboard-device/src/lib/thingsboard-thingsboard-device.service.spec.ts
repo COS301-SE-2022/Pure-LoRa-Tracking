@@ -64,6 +64,14 @@ describe('ThingsboardThingsboardDeviceService', () => {
     expect(await service.createDevice('hardwareID', 'deviceLabel', false)).toMatchObject(tests.SuccessResponse);
   });
 
+  it('create device -> return info', async () => {
+    //const data = await loginService.login(tests.user, tests.userPassword);
+    //service.setToken(data.token);
+    service.setToken('token')
+    jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(tests.axiosDeviceSuccessExample));
+    expect(await service.createDevice('hardwareID', 'deviceLabel', true)).toMatchObject(tests.SuccessResponse);
+  });
+
   it('create device -> ECONNREFUSED', async () => {
     //const data = await loginService.login(tests.user, tests.userPassword);
     //service.setToken(data.token);

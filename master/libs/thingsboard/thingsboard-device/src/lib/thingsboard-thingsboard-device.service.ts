@@ -5,7 +5,7 @@ import { lastValueFrom } from 'rxjs';
 @Injectable()
 export class ThingsboardThingsboardDeviceService {
   private token: string;
-  private ThingsBoardURL = process.env.TB_URL || 'http://localhost:8080/api';
+  private ThingsBoardURL : string = process.env.TB_URL || 'http://localhost:8080/api';
   constructor(private httpService: HttpService) {
     this.token = '';
   }
@@ -23,12 +23,6 @@ export class ThingsboardThingsboardDeviceService {
     pageSize: number,
     customerID: string
   ): Promise<deviceResponse> {
-    if (this.token == '')
-      return {
-        status: 401,
-        explanation: 'no token',
-      };
-
     const url =
       this.ThingsBoardURL +
       '/customer/' +
@@ -98,11 +92,6 @@ export class ThingsboardThingsboardDeviceService {
     profileType?: profileList,
     extraParams?: any
   ): Promise<deviceResponse> {
-    if (this.token == '')
-      return {
-        status: 401,
-        explanation: 'no token',
-      };
 
     const url = this.ThingsBoardURL + '/device';
 
@@ -153,12 +142,6 @@ export class ThingsboardThingsboardDeviceService {
     custID: string,
     deviceID: string
   ): Promise<deviceResponse> {
-    if (this.token == '')
-      return {
-        status: 401,
-        explanation: 'no token',
-      };
-
     const url =
       this.ThingsBoardURL + '/customer/' + custID + '/device/' + deviceID;
 
@@ -200,12 +183,6 @@ export class ThingsboardThingsboardDeviceService {
 
   //////////////////////////////////////////////////////////////////////////
   async deleteDevice(deviceID: string): Promise<deviceResponse> {
-    if (this.token == '')
-      return {
-        status: 401,
-        explanation: 'no token',
-      };
-
     const headersReq = {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + this.token,
@@ -239,7 +216,6 @@ export class ThingsboardThingsboardDeviceService {
   //////////////////////////////////////////////////////////////////////////
   /* TODO change to response */
   async removeDeviceFromCustomer(deviceID: string): Promise<boolean> {
-    if (this.token == '') return false;
     const url = this.ThingsBoardURL + '/customer/device/' + deviceID;
 
     const headersReq = {
@@ -261,12 +237,6 @@ export class ThingsboardThingsboardDeviceService {
 
   //////////////////////////////////////////////////////////////////////////
   async getDeviceInfo(deviceID: string): Promise<deviceResponse> {
-    if (this.token == '')
-      return {
-        status: 401,
-        explanation: 'no token',
-      };
-
     const url = this.ThingsBoardURL + '/device/' + deviceID;
 
     const headersReq = {
@@ -302,12 +272,6 @@ export class ThingsboardThingsboardDeviceService {
     deviceID: string,
     locationParamters: { latitude: number; longitude: number }
   ): Promise<deviceResponse> {
-    if (this.token == '')
-      return {
-        status: 401,
-        explanation: 'no token',
-      };
-
     const url =
       this.ThingsBoardURL +
       '/plugins/telemetry/DEVICE/' +
@@ -350,11 +314,6 @@ export class ThingsboardThingsboardDeviceService {
 
   //////////////////////////////////////////////////////////////////////////
   async GetGatewayLocation(deviceID: string): Promise<deviceResponse> {
-    if (this.token == '')
-      return {
-        status: 401,
-        explanation: 'no token',
-      };
 
     const url =
       this.ThingsBoardURL +
@@ -394,12 +353,6 @@ export class ThingsboardThingsboardDeviceService {
   /////////////////////////////////////////////////////////////////////////////
 
   async GetAccessToken(deviceID: string): Promise<deviceResponse> {
-    if (this.token == '')
-      return {
-        status: 401,
-        explanation: 'no token',
-      };
-
     const url = this.ThingsBoardURL + '/device/' + deviceID + '/credentials';
 
     const headersReq = {
