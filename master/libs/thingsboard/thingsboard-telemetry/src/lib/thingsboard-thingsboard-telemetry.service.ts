@@ -1,7 +1,7 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { AxiosResponse } from 'axios';
-import { lastValueFrom, map, Observable, Timestamp } from 'rxjs';
+import { lastValueFrom } from 'rxjs';
 
 @Injectable()
 export class ThingsboardThingsboardTelemetryService {
@@ -79,7 +79,7 @@ export class ThingsboardThingsboardTelemetryService {
 
  //////////////////////////////////////////////////////////////////
 
-  buildTelemetryResults(items: AxiosResponse): TelemetryResult[] {
+  buildTelemetryResults(items): TelemetryResult[] {
     if (items['longitude'] == undefined) return [];
     const TelList: TelemetryResult[] = new Array<TelemetryResult>();
     for (let i = 0; i < items['longitude'].length; i++) {

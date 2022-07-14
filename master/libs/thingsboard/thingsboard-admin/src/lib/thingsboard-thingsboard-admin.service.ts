@@ -197,6 +197,8 @@ export class ThingsboardThingsboardAdminService {
       data: resp.data,
     };
   }
+  //////////////////////////////////////////////////////////////////
+  
 }
 
 export interface AdminResponse {
