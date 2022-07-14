@@ -190,6 +190,36 @@ describe('ThingsboardThingsboardUserService', () => {
   });
 
   it("should reset the user's password", async () => {
-    return true;
+    const result: AxiosResponse<any> = {
+      data: {
+        token:
+          'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZW5hbnRAdGhpbmdzYm9hcmQub3JnIi...',
+        refreshToken:
+          'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZW5hbnRAdGhpbmdzYm9hcmQub3JnIi...',
+      },
+      headers: {},
+      config: {},
+      status: 200,
+      statusText: 'OK',
+    };
+
+    jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(result));
+    const login = await service.login(username, password);
+    result.data = {
+      scope: 'CUSTOMER_USER',
+      refreshToken:
+        'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZW5hbnRAdGhpbmdzYm9hcmQub3JnIi...',
+      token:
+        'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZW5hbnRAdGhpbmdzYm9hcmQub3JnIi...',
+    };
+
+    jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(result));
+
+    const pResetResponse = await service.resetUserPassword(
+      login['data']['token'],
+      login['data']['token'],
+      '$newStr0ng3rPas5W0rd#'
+    );
+    expect(pResetResponse.status).toEqual(200);
   });
 });
