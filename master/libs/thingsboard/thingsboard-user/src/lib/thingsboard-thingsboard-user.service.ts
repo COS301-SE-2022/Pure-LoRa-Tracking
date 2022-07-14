@@ -537,7 +537,7 @@ export class ThingsboardThingsboardUserService {
 
     const resp = await firstValueFrom(
       this.httpService.post(
-        this.ThingsBoardURL + "/user?sendActivationEmail=false",
+        this.ThingsBoardURL + '/user?sendActivationEmail=false',
         {
           id: {
             id: userID,
@@ -561,6 +561,45 @@ export class ThingsboardThingsboardUserService {
           headers: headersReq,
         }
       )
+    ).catch((error) => {
+      if (error.response == undefined) return error.code;
+      return error;
+    });
+
+    if (resp == 'ECONNREFUSED')
+      return {
+        status: 500,
+        explanation: resp,
+      };
+    else if (resp.status != 200) {
+      return {
+        status: resp.response.status,
+        explanation: resp.response.data.message,
+      };
+    }
+    return {
+      status: resp.status,
+      explanation: 'ok',
+      data: resp.data,
+    };
+  }
+
+  /////////////////////////////////////////////////////////////////
+
+  async resetUserPassword(
+    token: string,
+    resetToken: string,
+    newPassword: string
+  ): Promise<UserResponse> {
+    const headersReq = {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + token,
+    };
+
+    const resp = await firstValueFrom(
+      this.httpService.post(this.ThingsBoardURL + '/api/noauth/resetPassword', {
+        headers: headersReq,
+      })
     ).catch((error) => {
       if (error.response == undefined) return error.code;
       return error;
