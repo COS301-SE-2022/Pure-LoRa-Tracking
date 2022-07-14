@@ -586,9 +586,9 @@ export class ThingsboardThingsboardUserService {
 
   /////////////////////////////////////////////////////////////////
 
-  async resetUserPassword(
+  async changeUserPassword(
     token: string,
-    resetToken: string,
+    currentPassword: string,
     newPassword: string
   ): Promise<UserResponse> {
     const headersReq = {
@@ -597,9 +597,16 @@ export class ThingsboardThingsboardUserService {
     };
 
     const resp = await firstValueFrom(
-      this.httpService.post(this.ThingsBoardURL + '/api/noauth/resetPassword', {
-        headers: headersReq,
-      })
+      this.httpService.post(
+        this.ThingsBoardURL + '/api/auth/changePassword',
+        {
+          currentPassword: currentPassword,
+          newPassword: newPassword,
+        },
+        {
+          headers: headersReq,
+        }
+      )
     ).catch((error) => {
       if (error.response == undefined) return error.code;
       return error;
