@@ -1,7 +1,10 @@
 import { ThingsboardThingsboardAssetModule } from '@lora/thingsboard-asset';
 import { ThingsboardThingsboardDeviceModule } from '@lora/thingsboard-device';
 import { ThingsboardThingsboardTelemetryModule } from '@lora/thingsboard-telemetry';
-import { ThingsboardThingsboardUserModule, ThingsboardThingsboardUserService } from '@lora/thingsboard-user';
+import {
+  ThingsboardThingsboardUserModule,
+  ThingsboardThingsboardUserService,
+} from '@lora/thingsboard-user';
 import { Test } from '@nestjs/testing';
 import { HttpService } from '@nestjs/axios';
 import { ThingsboardThingsboardClientService } from './thingsboard-thingsboard-client.service';
@@ -25,7 +28,7 @@ describe('ThingsboardThingsboardClientService', () => {
         ThingsboardThingsboardDeviceModule,
         ThingsboardThingsboardAssetModule,
         ThingsboardThingsboardAdminModule,
-        ThingsboardThingsboardReserveModule
+        ThingsboardThingsboardReserveModule,
       ],
     }).compile();
 
@@ -433,7 +436,7 @@ describe('ThingsboardThingsboardClientService', () => {
       .spyOn(httpService, 'post')
       .mockImplementationOnce(() => of(fourthResult));
 
-      jest
+    jest
       .spyOn(httpService, 'get')
       .mockImplementationOnce(() => of(fourthResult));
 
@@ -452,7 +455,7 @@ describe('ThingsboardThingsboardClientService', () => {
     //   explanation : undefined
     // });
     //TODO check for deep equality of the object
-    expect(resp.status).toEqual("fail");
+    expect(resp.status).toEqual('fail');
   });
 
   it('should unassign a given device from the specified reserve', async () => {
@@ -622,19 +625,17 @@ describe('ThingsboardThingsboardClientService', () => {
     );
     console.log(await service.getCustomerDevices("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451"));
   });*/
-
   });
 
   //////////////////////////////////////////////////////////////////////
 
   it('build reserve list -> not system admin', async () => {
-   /* await service.loginUser('reserve@thingsboard.org', 'thingsboardserveraccountissecure')
+    /* await service.loginUser('reserve@thingsboard.org', 'thingsboardserveraccountissecure')
 
     expect(await service.generateReserveList_SystemAdmin()).toMatchObject({
      status : 'fail',
      explanation: 'user not system admin'
     })*/
-
   });
 
   //////////////////////////////////////////////////////////////////////
@@ -646,7 +647,6 @@ describe('ThingsboardThingsboardClientService', () => {
      status : 'ok',
      explanation: 'call finished'
     })*/
-
   });
 
   //////////////////////////////////////////////////////////////////////
@@ -658,7 +658,6 @@ describe('ThingsboardThingsboardClientService', () => {
      status : 'ok',
      explanation: 'call finished'
     })*/
-
   });
 
   //////////////////////////////////////////////////////////////////////
@@ -674,7 +673,7 @@ describe('ThingsboardThingsboardClientService', () => {
   //////////////////////////////////////////////////////////////////////
 
   it('build reserve list -> build reserve admin list', async () => {
-   /* expect(await service.loginUser('reserveadmin@reserve.com', 'reserve')).toEqual(true);
+    /* expect(await service.loginUser('reserveadmin@reserve.com', 'reserve')).toEqual(true);
 
     expect(await service.generateReserveList_ReserveAdmin()).toMatchObject({
      status : 'ok',
@@ -685,7 +684,7 @@ describe('ThingsboardThingsboardClientService', () => {
   //////////////////////////////////////////////////////////////////////
 
   it('create reserve group -> not admin', async () => {
-   /* expect(await service.loginUser('reserveuser@reserve.com', 'reserve')).toEqual(true);
+    /* expect(await service.loginUser('reserveuser@reserve.com', 'reserve')).toEqual(true);
 
     expect(await service.createReserve("liamburgesss299@gmail.com", "reserve b")).toMatchObject({
      status : 'fail',
@@ -756,7 +755,6 @@ describe('ThingsboardThingsboardClientService', () => {
       status:'ok',
       explanation:'call finished'
     })*/
-    
   });
 
   //////////////////////////////////////////////////////////////////////
@@ -768,8 +766,29 @@ describe('ThingsboardThingsboardClientService', () => {
       status:'ok',
       explanation:'call finished'
     })*/
-    
   });
 
-})
+  it("change the user's password", async () => {
+    const result: AxiosResponse<any> = {
+      data: {
+        scope: 'CUSTOMER_USER',
+        refreshToken:
+          'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZW5hbnRAdGhpbmdzYm9hcmQub3JnIi...',
+        token:
+          'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZW5hbnRAdGhpbmdzYm9hcmQub3JnIi...',
+      },
+      headers: {},
+      config: {},
+      status: 200,
+      statusText: 'OK',
+    };
 
+    jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(result));
+
+    const pChangeResponse = await service.changePassword(
+      '01dp455w0rd',
+      '$newStr0ng3rPas5W0rd#'
+    );
+    expect(pChangeResponse.status).toEqual(200);
+  });
+});
