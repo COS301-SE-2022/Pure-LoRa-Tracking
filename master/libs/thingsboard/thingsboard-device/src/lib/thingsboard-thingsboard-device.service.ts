@@ -10,9 +10,13 @@ export class ThingsboardThingsboardDeviceService {
     this.token = '';
   }
 
+  ///////////////////////////////////////////////////////////////////////////////////////////
+
   setToken(token: string): void {
     this.token = token;
   }
+
+  ///////////////////////////////////////////////////////////////////////////////////////////
 
   async getCustomerDevices(
     page: number,
@@ -69,6 +73,8 @@ export class ThingsboardThingsboardDeviceService {
   //////////////////////////////////////////////////////////////////////////
 
   processDevices(devices): deviceList[] {
+    if(devices == null)
+    return []
     const list: deviceList[] = new Array<deviceList>();
     for (let i = 0; i < devices.length; i++) {
       list.push({
@@ -231,6 +237,7 @@ export class ThingsboardThingsboardDeviceService {
   }
 
   //////////////////////////////////////////////////////////////////////////
+  /* TODO change to response */
   async removeDeviceFromCustomer(deviceID: string): Promise<boolean> {
     if (this.token == '') return false;
     const url = this.ThingsBoardURL + '/customer/device/' + deviceID;
@@ -243,7 +250,7 @@ export class ThingsboardThingsboardDeviceService {
     const resp = await lastValueFrom(
       this.httpService.delete(url, { headers: headersReq })
     ).catch((error) => {
-      if (error.response == undefined) return null;
+      if (error.response == undefined) return error;
       if (error.response.status == 400) {
         return { status: 400 };
       }
