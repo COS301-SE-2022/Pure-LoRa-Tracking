@@ -35,6 +35,35 @@ export class ThingsboardThingsboardTestsService {
     "additionalInfo": {}
   }
 
+  UsersExample = {
+    "data": [
+      {
+        "id": {
+          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "entityType": "USER"
+        },
+        "createdTime": 1609459200000,
+        "tenantId": {
+          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "entityType": "TENANT"
+        },
+        "customerId": {
+          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "entityType": "CUSTOMER"
+        },
+        "email": "user@example.com",
+        "name": "user@example.com",
+        "authority": "SYS_ADMIN, TENANT_ADMIN or CUSTOMER_USER",
+        "firstName": "John",
+        "lastName": "Doe",
+        "additionalInfo": {}
+      }
+    ],
+    "totalPages": 0,
+    "totalElements": 0,
+    "hasNext": false
+  }
+
   CustomerExample = {
     externalId: {
       id: '784f394c-42b6-435a-983c-b7beff2784f9',
@@ -164,6 +193,14 @@ export class ThingsboardThingsboardTestsService {
     status: 200,
     statusText: 'OK',
     data : this.UserExample
+  }
+
+  axiosUsersSuccessExample = {
+    headers: {},
+    config: {},
+    status: 200,
+    statusText: 'OK',
+    data : this.UsersExample
   }
 
   axiosTenantSuccessExample = {

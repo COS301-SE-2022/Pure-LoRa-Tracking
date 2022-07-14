@@ -95,7 +95,7 @@ export class ThingsboardThingsboardUserService {
       )
     ).catch((error) => {
       if (error.response == undefined) return error.code;
-      return error.response.data;
+      return error;
     });
 
     if (resp == 'ECONNREFUSED')
@@ -105,17 +105,14 @@ export class ThingsboardThingsboardUserService {
       };
     else if (resp.status != 200) {
       return {
-        status: resp.status,
-        explanation: resp.message,
+        status: resp.response.status,
+        explanation: resp.response.data.message,
       };
     }
     return {
-      status: 200,
+      status: resp.status,
       explanation: 'ok',
-      data: {
-        token: resp.data.token,
-        refreshToken: resp.data.refreshToken,
-      },
+      data: resp.data,
     };
   }
 
