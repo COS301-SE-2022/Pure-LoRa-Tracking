@@ -7,12 +7,8 @@ import {
   ThingsboardThingsboardDeviceService,
 } from '@lora/thingsboard-device';
 import { ThingsboardThingsboardAssetService } from '@lora/thingsboard-asset';
-import {
-  MapApiReserveResponse,
-} from '@master/shared-interfaces';
-import {
-  ThingsboardThingsboardAdminService,
-} from '@lora/thingsboard/admin';
+import { MapApiReserveResponse } from '@master/shared-interfaces';
+import { ThingsboardThingsboardAdminService } from '@lora/thingsboard/admin';
 import { ThingsboardThingsboardReserveService } from '@lora/thingsboard/reserve';
 @Injectable()
 export class ThingsboardThingsboardClientService {
@@ -991,7 +987,7 @@ export class ThingsboardThingsboardClientService {
   }
 
   /////////////////////////////////////////////////////////////////
-  
+
   /*
   check admin
   */
@@ -1009,41 +1005,51 @@ export class ThingsboardThingsboardClientService {
     }
   ): Promise<thingsboardResponse> {
     const user = await this.userService.userInfo(this.token);
-    
-    if(user.data.authority != 'TENANT_ADMIN')
-    return {
-      status:'fail',
-      explanation:'wrong permissions'
-    }
+
+    if (user.data.authority != 'TENANT_ADMIN')
+      return {
+        status: 'fail',
+        explanation: 'wrong permissions',
+      };
 
     this.reserveService.setToken(this.token);
     const info = await this.reserveService.CustomerInfo(reserveID);
 
-    if(info.status != 200)
-    return {
-      status: 'fail',
-      explanation: info.explanation
-    }
+    if (info.status != 200)
+      return {
+        status: 'fail',
+        explanation: info.explanation,
+      };
 
-    if(info.data.additionalInfo.location!= undefined)
-    delete info.data.additionalInfo.location;
+    if (info.data.additionalInfo.location != undefined)
+      delete info.data.additionalInfo.location;
 
     const response = await this.reserveService.setReservePerimeter(
-      info.data.externalId?.id, info.data.id.id, info.data.title, info.data.region, info.data.tenantId.id, info.data.country,
-      info.data.city, info.data.address, info.data.address2, info.data.zip, info.data.phone, info.data.email, 
+      info.data.externalId?.id,
+      info.data.id.id,
+      info.data.title,
+      info.data.region,
+      info.data.tenantId.id,
+      info.data.country,
+      info.data.city,
+      info.data.address,
+      info.data.address2,
+      info.data.zip,
+      info.data.phone,
+      info.data.email,
       Object.assign(info.data.additionalInfo, { location: location })
-    )
+    );
 
-    if(response.status!=200)
+    if (response.status != 200)
+      return {
+        status: 'fail',
+        explanation: response.explanation,
+      };
+
     return {
-      status:'fail',
-      explanation:response.explanation
-    }
-
-    return{
-      status:'ok',
-      explanation:'call finished'
-    }
+      status: 'ok',
+      explanation: 'call finished',
+    };
   }
 
   /////////////////////////////////////////////////////////////////
@@ -1204,34 +1210,56 @@ export class ThingsboardThingsboardClientService {
   /////////////////////////////////////////////////////////////////
 
   /* TODO check the user is an admin or higher */
-  async CustomerInfo(reserveID: string) : Promise<thingsboardResponse> {
+  async CustomerInfo(reserveID: string): Promise<thingsboardResponse> {
     this.reserveService.setToken(this.token);
     const resp = await this.reserveService.CustomerInfo(reserveID);
-    if(resp.status != 200)
+    if (resp.status != 200)
+      return {
+        status: 'fail',
+        explanation: resp.explanation,
+      };
     return {
-      status:'fail',
-      explanation: resp.explanation
-    }
-    return {
-      status:'ok',
-      explanation:'call finished',
-      data:resp.data
-    }
+      status: 'ok',
+      explanation: 'call finished',
+      data: resp.data,
+    };
   }
 
   /////////////////////////////////////////////////////////////////
-  async removeReserve(reserveID: string) : Promise<thingsboardResponse> {
+  async removeReserve(reserveID: string): Promise<thingsboardResponse> {
     this.reserveService.setToken(this.token);
     const resp = await this.reserveService.deleteReserveGroup(reserveID);
-    if(resp.status != 200)
+    if (resp.status != 200)
+      return {
+        status: 'fail',
+        explanation: resp.explanation,
+      };
     return {
-      status:'fail',
-      explanation: resp.explanation
-    }
+      status: 'ok',
+      explanation: 'call finished',
+    };
+  }
+
+  /////////////////////////////////////////////////////////////////
+  async changePassword(
+    currentPassword: string,
+    newPassword: string
+  ): Promise<thingsboardResponse> {
+    this.reserveService.setToken(this.token);
+    const resp = await this.loginService.changeUserPassword(
+      this.token,
+      currentPassword,
+      newPassword
+    );
+    if (resp.status != 200)
+      return {
+        status: 'fail',
+        explanation: resp.explanation,
+      };
     return {
-      status:'ok',
-      explanation:'call finished',
-    }
+      status: 'ok',
+      explanation: 'call finished',
+    };
   }
 }
 
