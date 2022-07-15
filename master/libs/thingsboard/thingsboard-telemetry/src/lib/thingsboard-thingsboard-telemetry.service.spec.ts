@@ -3,8 +3,7 @@ import { Test } from '@nestjs/testing';
 import { ThingsboardThingsboardTelemetryService } from './thingsboard-thingsboard-telemetry.service';
 import { ThingsboardThingsboardUserModule, ThingsboardThingsboardUserService } from '@lora/thingsboard-user';
 import { ThingsboardThingsboardDeviceModule, ThingsboardThingsboardDeviceService } from '@lora/thingsboard-device';
-import { AxiosResponse } from 'axios';
-import { ignoreElements, of, throwError } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { ThingsboardThingsboardTestsModule, ThingsboardThingsboardTestsService } from '@lora/thingsboard/tests';
 
 describe('ThingsboardThingsboardTelemetryService', () => {
@@ -44,6 +43,17 @@ describe('ThingsboardThingsboardTelemetryService', () => {
     expect(service.buildTelemetryResults(tests.axiosTelemetrySuccessExample.data)).toMatchObject([
       { longitude: 1, latitude: 3, timestamp: 22 },
       { longitude: 2, latitude: 4, timestamp: 22 }
+    ]);
+  });
+
+  it('get telemetry -> return info, no time start', async () => {
+    //const data = await loginService.login(tests.user, tests.userPassword);
+    //service.setToken(data.token);
+    service.setToken('token')
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosTelemetrySuccessExample));
+    expect(await service.getTelemetry('deviceID', 'deviceType')).toMatchObject(tests.SuccessResponse);
+
+    expect(service.buildTelemetryResults({})).toMatchObject([
     ]);
   });
 

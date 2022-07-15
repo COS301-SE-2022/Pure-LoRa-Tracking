@@ -283,6 +283,80 @@ export class ThingsboardThingsboardTestsService {
     "hasNext": false
   }
 
+  AssetExample = {
+    "externalId": {
+      "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+      "entityType": "ASSET"
+    },
+    "id": {
+      "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+      "entityType": "ASSET"
+    },
+    "createdTime": 1609459200000,
+    "tenantId": {
+      "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+      "entityType": "TENANT"
+    },
+    "customerId": {
+      "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+      "entityType": "CUSTOMER"
+    },
+    "name": "Empire State Building",
+    "type": "Building",
+    "label": "NY Building",
+    "additionalInfo": {}
+  }
+
+  AssetsExample = {
+    "data": [
+      {
+        "externalId": {
+          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "entityType": "ASSET"
+        },
+        "id": {
+          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "entityType": "ASSET"
+        },
+        "createdTime": 1609459200000,
+        "tenantId": {
+          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "entityType": "TENANT"
+        },
+        "customerId": {
+          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "entityType": "CUSTOMER"
+        },
+        "name": "Empire State Building",
+        "type": "Building",
+        "label": "NY Building",
+        "additionalInfo": {},
+        "customerTitle": "string",
+        "customerIsPublic": false
+      }
+    ],
+    "totalPages": 0,
+    "totalElements": 0,
+    "hasNext": false
+  }
+
+  axiosAssetSuccessExample = {
+    headers: {},
+    config: {},
+    status: 200,
+    statusText: 'OK',
+    data : this.AssetExample
+  }
+
+  axiosAssetsSuccessExample = {
+    headers: {},
+    config: {},
+    status: 200,
+    statusText: 'OK',
+    data : this.AssetsExample
+  }
+  
+
   TelemetryResultExample = {
       longitude : [{value:1, ts:22}, {value:2, ts:22}],
       latitude : [{value:3, ts:22}, {value:4, ts:22}],
@@ -393,6 +467,24 @@ export class ThingsboardThingsboardTestsService {
         message : "Not Authorized"
       },
       status : 400,
+    }
+  }
+
+  axios401FailureExample = {
+    response : {
+      data : {
+        message : "Not Authorized"
+      },
+      status : 401,
+    }
+  }
+
+  axios404FailureExample = {
+    response : {
+      data : {
+        message : "Not found"
+      },
+      status : 404,
     }
   }
 

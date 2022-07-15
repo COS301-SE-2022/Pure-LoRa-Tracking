@@ -54,6 +54,7 @@ export class ThingsboardThingsboardAssetService {
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   processAssetIDS(data): assetID[] {
+    if(data == null || data == undefined) return []
     const ret = new Array<assetID>();
     data['data'].forEach((element) => {
       ret.push({
@@ -80,7 +81,7 @@ export class ThingsboardThingsboardAssetService {
       )
     ).catch((error) => {
       if (error.response == undefined) return error.code;
-        return error;
+        return error.response;
     });
 
     if(resp == "ECONNREFUSED")
@@ -101,24 +102,27 @@ export class ThingsboardThingsboardAssetService {
         status: 'permissions',
         explanation: 'credentials not correct for this action',
       };
-    } else {
-      let ret = {
+    } else if(resp.status == 404) {
+      return {
         code: 404,
         status: 'not found',
         explanation: 'no reserve set',
       };
-      resp['data'].forEach((element) => {
-        if (element['key'] == 'reservePerimeter') ret = element;
-      });
-      return ret;
     }
+    else {
+      let ret = {
+        code: 200,
+        status: 'found',
+        explanation: 'reserve set',
+      };
+        resp['data'].forEach((element) => {
+          if (element['key'] == 'reservePerimeter') ret = element;
+        });
+        return ret;
+      }
   }
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-  async addReserve() : Promise<assetResponse> {
-    return null;
-  }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
