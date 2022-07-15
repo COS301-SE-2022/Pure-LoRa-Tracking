@@ -114,7 +114,7 @@ it('get token-> return token', async () => {
 
   it('get user devices -> HTTP ERROR', async () => {
     jest.spyOn(httpService, 'get').mockImplementationOnce(() => throwError(() => tests.axiosECONNFailureExample));
-    expect((await service.getCustomerDevices("1"))).toMatchObject(Object.assign(tests.TBFailureResponse,{data:[]}));
+    expect((await service.getCustomerDevices("1"))).toMatchObject({...tests.TBFailureResponse,...{data:[]}});
   });
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -138,6 +138,7 @@ it('logout -> HTTP ERROR', async () => {
 //////////////////////////////////////////////////////////////////////////////////////////
 
 it('create reserve -> no token', async () => {
+  service.setToken(null);
   expect((await service.createReserve(tests.user, tests.userPassword))).toMatchObject({...tests.TBFailureResponse, ...{explanation: 'no access token'}});
 });
 
