@@ -73,7 +73,8 @@ it('login -> fail', async () => {
 //////////////////////////////////////////////////////////////////////////////////////////
 it('login user -> return token', async () => {
   jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
-  expect((await service.loginUserReturnToken(tests.user, tests.userPassword))).toMatchObject(Object.assign(tests.TBSuccessResponse, {Token:"we12nklJQW", refreshToken:"w3hjkqlbdwejkdn89"}));
+  expect((await service.loginUserReturnToken(tests.user, tests.userPassword))).toMatchObject({...tests.TBSuccessResponse, ...{Token:"we12nklJQW", refreshToken:"w3hjkqlbdwejkdn89"}});
+  
 });
 
 it('login user -> HTTP ERROR', async () => {
@@ -85,7 +86,7 @@ it('login user -> HTTP ERROR', async () => {
 
 it('refresh token login -> return token', async () => {
   jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
-  const obj = Object.assign(tests.TBSuccessResponse, {data:{token:"we12nklJQW", refreshToken:"w3hjkqlbdwejkdn89"}})
+  const obj = Object.assign({...tests.TBSuccessResponse, ...{data:{token:"we12nklJQW", refreshToken:"w3hjkqlbdwejkdn89"}}})
   expect((await service.loginFromRefreshToken("1"))).toMatchObject(obj);
 });
 
@@ -97,18 +98,18 @@ it('refresh token login -> HTTP ERROR', async () => {
 //////////////////////////////////////////////////////////////////////////////////////////
 it('get token-> return token', async () => {
   jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
-  expect((await service.getToken(tests.user, tests.userPassword))).toMatchObject(Object.assign({status:200}, {data:{token:"we12nklJQW", refreshToken:"w3hjkqlbdwejkdn89"}}));
+  expect((await service.getToken(tests.user, tests.userPassword))).toMatchObject({...{status:200}, ...{data:{token:"we12nklJQW", refreshToken:"w3hjkqlbdwejkdn89"}}});
 });
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
   it('get user devices -> return info', async () => {
     jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosDevicesSuccessExample));
-    expect((await service.getCustomerDevices("1"))).toMatchObject(Object.assign(tests.TBSuccessResponse, {data:[{"deviceID": "784f394c-42b6-435a-983c-b7beff2784f9",
+    expect((await service.getCustomerDevices("1"))).toMatchObject({...tests.TBSuccessResponse, ...{data:[{"deviceID": "784f394c-42b6-435a-983c-b7beff2784f9",
            "deviceName": "A4B72CCDFF33",
            "humanName": "Room 234 Sensor",
            "isGateway": undefined,
-          "profile": "DEVICE"}]}));
+          "profile": "DEVICE"}]}});
   });
 
   it('get user devices -> HTTP ERROR', async () => {
@@ -121,6 +122,18 @@ it('test token setter -> value set', async () => {
   service.setToken("123");
   expect(service.getPrivateToken()).toEqual("123")
 });
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+/*it('create reserve -> no token', async () => {
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosCustomersSuccessExample));
+  expect((await service.createReserve(tests.user, tests.userPassword))).toMatchObject({...tests.TBSuccessResponse, ...{}});
+});
+*/
+/*it(' -> ECONNREFUSED', async () => {
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => throwError(() => tests.axiosECONNFailureExample));
+  expect((await service.())).toMatchObject(tests.TBFailureResponse);
+});*/
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
