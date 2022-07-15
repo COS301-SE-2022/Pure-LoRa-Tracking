@@ -104,6 +104,12 @@ export class ThingsboardThingsboardClientService {
 
   //////////////////////////////////////////////////////////
 
+  getPrivateToken(): string {
+    return this.token;
+  }
+
+  //////////////////////////////////////////////////////////
+
   async logout(token: string): Promise<thingsboardResponse> {
     const logout = await this.userService.logout(token);
     if (logout.status != 200)
@@ -132,14 +138,7 @@ export class ThingsboardThingsboardClientService {
       custID
     );
 
-    if (deviceResp.status == 401) {
-      return {
-        status: 'fail',
-        explanation: deviceResp.explanation,
-      };
-    }
-
-    console.table(deviceResp);
+    //console.table(deviceResp);
 
     if (deviceResp.status != 200) {
       return {
