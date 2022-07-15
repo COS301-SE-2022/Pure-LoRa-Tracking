@@ -44,7 +44,7 @@ describe('ThingsboardThingsboardClientService', () => {
 /*
 it(' -> ', async () => {
   jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosCustomersSuccessExample));
-  expect((await service.())).toMatchObject(Object.assign(tests.TBSuccessResponse, {Token:"we12nklJQW", refreshToken:"w3hjkqlbdwejkdn89"}));
+  expect((await service.())).toMatchObject({...tests.TBSuccessResponse, ...{}});
 });
 
 it(' -> ECONNREFUSED', async () => {
@@ -124,64 +124,86 @@ it('test token setter -> value set', async () => {
 });
 
 //////////////////////////////////////////////////////////////////////////////////////////
-
-/*it('create reserve -> no token', async () => {
-  jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosCustomersSuccessExample));
-  expect((await service.createReserve(tests.user, tests.userPassword))).toMatchObject({...tests.TBSuccessResponse, ...{}});
+it('logout -> return', async () => {
+  jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(tests.axiosCustomersSuccessExample));
+  expect((await service.logout("token"))).toMatchObject({...tests.TBSuccessResponse, ...{}});
 });
-*/
-/*it(' -> ECONNREFUSED', async () => {
-  jest.spyOn(httpService, 'get').mockImplementationOnce(() => throwError(() => tests.axiosECONNFailureExample));
-  expect((await service.())).toMatchObject(tests.TBFailureResponse);
-});*/
+
+it('logout -> HTTP ERROR', async () => {
+  jest.spyOn(httpService, 'post').mockImplementationOnce(() => throwError(() => tests.axiosECONNFailureExample));
+  expect((await service.logout("token"))).toMatchObject({...tests.TBFailureResponse, ...{explanation:'ECONNREFUSED'}});
+});
+
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-  it('should return the reserve perimeter for the reserve user', async () => {
-    const result: AxiosResponse<any> = {
-      data: {
-        token:
-          'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZW5hbnRAdGhpbmdzYm9hcmQub3JnIi...',
-        refreshToken:
-          'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZW5hbnRAdGhpbmdzYm9hcmQub3JnIi...',
-      },
-      headers: {},
-      config: {},
-      status: 200,
-      statusText: 'OK',
-    };
-    jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(result));
-    await service.loginUser('username', 'password');
+it('create reserve -> no token', async () => {
+  expect((await service.createReserve(tests.user, tests.userPassword))).toMatchObject({...tests.TBFailureResponse, ...{explanation: 'no access token'}});
+});
 
-    result.data = {
-      id: {
-        id: '784f394c-42b6-435a-983c-b7beff2784f9',
-        entityType: 'USER',
-      },
-      createdTime: 1609459200000,
-      tenantId: {
-        id: '784f394c-42b6-435a-983c-b7beff2784f9',
-        entityType: 'TENANT',
-      },
-      customerId: {
-        id: '784f394c-42b6-435a-983c-b7beff2784f9',
-        entityType: 'CUSTOMER',
-      },
-      email: 'reserveuser@reserve.com',
-      name: 'reserveuser@reserve.com',
-      authority: 'TENANT_ADMIN',
-      firstName: 'John',
-      lastName: 'Doe',
-      additionalInfo: {},
-    };
-    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(result));
-    /*
-      TODO
-      Fix test,
-      somewhere along the line it actually tries to connect to thingsboard
-    */
-    // expect(await service.getReservePerimeter()).toBeDefined();
-  });
+it('create reserve -> check admin', async () => {
+  service.setToken('token');
+
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => throwError(() => tests.axiosECONNFailureExample));
+  expect((await service.createReserve(tests.user, tests.userPassword))).toMatchObject({...tests.TBFailureResponse, ...{explanation:'ECONNREFUSED'}});
+
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosUserSuccessExample));
+  expect((await service.createReserve(tests.user, tests.userPassword))).toMatchObject({...tests.TBFailureResponse, ...{explanation:'user is not an admin'}});
+
+  const obj = tests.axiosUserSuccessExample;
+  delete obj.data.authority;
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(obj));
+  expect((await service.createReserve(tests.user, tests.userPassword))).toMatchObject({...tests.TBFailureResponse, ...{explanation:'user is not an admin'}});
+});
+
+it('create reserve -> create fail', async () => {
+  service.setToken('token');
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
+  jest.spyOn(httpService, 'post').mockImplementationOnce(() => throwError(() => tests.axiosECONNFailureExample));
+  expect((await service.createReserve(tests.user, tests.userPassword))).toMatchObject({...tests.TBFailureResponse, ...{explanation:'ECONNREFUSED'}});
+});
+
+it('create reserve -> create pass', async () => {
+  service.setToken('token');
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
+  jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(tests.axiosCustomerSuccessExample));
+  expect((await service.createReserve(tests.user, tests.userPassword))).toMatchObject({...tests.TBSuccessResponse, ...{explanation:'call finished'}});
+});
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+it('reserve perimeter -> no user', async () => {
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => throwError(() => tests.axiosECONNFailureExample));
+  expect((await service.getReservePerimeter())).toMatchObject({...tests.TBFailureResponse, ...{explanation: 'ECONNREFUSED'}});
+});
+
+it('reserve perimeter -> no asset', async () => {
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosUserSuccessExample));
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => throwError(() => tests.axiosECONNFailureExample));
+  expect((await service.getReservePerimeter())).toMatchObject({...tests.TBFailureResponse, ...{explanation: 'ECONNREFUSED'}});
+});
+
+it('reserve perimeter -> no reserve found in asset', async () => {
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosUserSuccessExample));
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosAssetsSuccessExample));
+  expect((await service.getReservePerimeter())).toMatchObject({...tests.TBFailureResponse, ...{explanation: 'no reserve set'}});
+});
+
+it('reserve perimeter -> return asset', async () => {
+  const result : AxiosResponse<any> = {
+    data:[mockReservePerimeterCall], 
+    headers: {},
+    config: {},
+    status: 200,
+    statusText: 'OK',
+  }
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosUserSuccessExample));
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosAssetsReserveSuccessExample));
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(result));
+  expect((await service.getReservePerimeter())).toMatchObject({...{}, ...mockReservePerimeterCall});
+});
+//////////////////////////////////////////////////////////////////////////////////////////
 
   it('should return the telemetry for the deviceID given', async () => {
     const result: AxiosResponse<any> = {
@@ -804,4 +826,40 @@ it('test token setter -> value set', async () => {
   });
 
 })
+
+
+
+const mockReservePerimeterCall = {
+  "lastUpdateTs": 1654150471642,
+  "key": "reservePerimeter",
+  "value": {
+      "reserveName": "UP",
+      "center": {
+          "latitude": "-25.755123",
+          "longitude": "28.231999"
+      },
+      "location": [
+          {
+              "latitude": "-25.753785",
+              "longitude": "28.231703"
+          },
+          {
+              "latitude": "-25.755650",
+              "longitude": "28.230737"
+          },
+          {
+              "latitude": "-25.757089",
+              "longitude": "28.233456"
+          },
+          {
+              "latitude": "-25.756385",
+              "longitude": "28.236474"
+          },
+          {
+              "latitude": "-25.754765",
+              "longitude": "28.235663"
+          }
+      ]
+  }
+}
 
