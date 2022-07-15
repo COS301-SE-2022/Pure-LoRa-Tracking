@@ -515,4 +515,12 @@ export class ThingsboardThingsboardTestsService {
     data : this.tokenExample
   }
 
+  TBSuccessResponse = {
+    status : 'ok'
+  }
+
+  TBFailureResponse = {
+    status : 'fail'
+  }
+
 }

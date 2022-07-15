@@ -6,15 +6,15 @@ import { Test } from '@nestjs/testing';
 import { HttpService } from '@nestjs/axios';
 import { ThingsboardThingsboardClientService } from './thingsboard-thingsboard-client.service';
 import { AxiosResponse } from 'axios';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { ThingsboardThingsboardAdminModule } from '@lora/thingsboard/admin';
 import { ThingsboardThingsboardReserveModule } from '@lora/thingsboard/reserve';
+import { ThingsboardThingsboardTestsModule, ThingsboardThingsboardTestsService } from '@lora/thingsboard/tests';
 
 describe('ThingsboardThingsboardClientService', () => {
   let service: ThingsboardThingsboardClientService;
   let httpService: HttpService;
-  const username = 'reserveAdmin@reserve.com';
-  const password = 'reserve';
+  let tests: ThingsboardThingsboardTestsService;
 
   beforeAll(async () => {
     const module = await Test.createTestingModule({
@@ -25,17 +25,81 @@ describe('ThingsboardThingsboardClientService', () => {
         ThingsboardThingsboardDeviceModule,
         ThingsboardThingsboardAssetModule,
         ThingsboardThingsboardAdminModule,
-        ThingsboardThingsboardReserveModule
+        ThingsboardThingsboardReserveModule,
+        ThingsboardThingsboardTestsModule
       ],
     }).compile();
 
     service = module.get(ThingsboardThingsboardClientService);
     httpService = module.get(HttpService);
+    tests = module.get(ThingsboardThingsboardTestsService);
   });
 
   it('should be defined', () => {
     expect(service).toBeTruthy();
   });
+
+//////////////////////////////////////////////////////////////////////////////////////////
+/*
+it(' -> ', async () => {
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosCustomersSuccessExample));
+  expect((await service.())).toMatchObject(Object.assign(tests.TBSuccessResponse, {Token:"we12nklJQW", refreshToken:"w3hjkqlbdwejkdn89"}));
+});
+
+it(' -> ECONNREFUSED', async () => {
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => throwError(() => tests.axiosECONNFailureExample));
+  expect((await service.())).toMatchObject(tests.TBFailureResponse);
+});
+
+it(' -> HTTP ERROR', async () => {
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => throwError(() => tests.axiosECONNFailureExample));
+  expect((await service.())).toMatchObject(tests.TBFailureResponse);
+});
+
+*/
+
+//////////////////////////////////////////////////////////////////////////////////////////
+it('login -> pass', async () => {
+  jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
+  expect((await service.loginUser(tests.user, tests.userPassword))).toEqual(true);
+});
+
+it('login -> fail', async () => {
+  jest.spyOn(httpService, 'post').mockImplementationOnce(() => throwError(() => tests.axiosECONNFailureExample));
+  expect((await service.loginUser(tests.user, tests.userPassword))).toEqual(false);
+});
+
+//////////////////////////////////////////////////////////////////////////////////////////
+it('login user -> return token', async () => {
+  jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
+  expect((await service.loginUserReturnToken(tests.user, tests.userPassword))).toMatchObject(Object.assign(tests.TBSuccessResponse, {Token:"we12nklJQW", refreshToken:"w3hjkqlbdwejkdn89"}));
+});
+
+it('login user -> HTTP ERROR', async () => {
+  jest.spyOn(httpService, 'post').mockImplementationOnce(() => throwError(() => tests.axiosECONNFailureExample));
+  expect((await service.loginUserReturnToken(tests.user, tests.userPassword))).toMatchObject(tests.TBFailureResponse);
+});
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+it('refresh token login -> return token', async () => {
+  jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
+  expect((await service.loginFromRefreshToken("1"))).toMatchObject(Object.assign(tests.TBSuccessResponse, {data:{token:"we12nklJQW", refreshToken:"w3hjkqlbdwejkdn89"}}));
+});
+
+it('refresh token login -> HTTP ERROR', async () => {
+  jest.spyOn(httpService, 'post').mockImplementationOnce(() => throwError(() => tests.axiosECONNFailureExample));
+  expect((await service.loginFromRefreshToken("1"))).toMatchObject(tests.TBFailureResponse);
+});
+
+//////////////////////////////////////////////////////////////////////////////////////////
+it('get token-> return token', async () => {
+  jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
+  expect((await service.getToken(tests.user, tests.userPassword))).toMatchObject(Object.assign({status:200}, {data:{token:"we12nklJQW", refreshToken:"w3hjkqlbdwejkdn89"}}));
+});
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
 
   it('should login, acquire userID and print device list from ID', async () => {
     const custID = '784f394c-42b6-435a-983c-b7beff2784f9';
@@ -52,7 +116,7 @@ describe('ThingsboardThingsboardClientService', () => {
       statusText: 'OK',
     };
     jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(result));
-    expect(await service.loginUser(username, password)).toEqual(true);
+    expect(await service.loginUser('username', 'password')).toEqual(true);
     result.data = {
       data: [
         {
@@ -119,7 +183,7 @@ describe('ThingsboardThingsboardClientService', () => {
       statusText: 'OK',
     };
     jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(result));
-    await service.loginUser(username, password);
+    await service.loginUser('username', 'password');
 
     result.data = {
       id: {
@@ -165,7 +229,7 @@ describe('ThingsboardThingsboardClientService', () => {
       statusText: 'OK',
     };
     jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(result));
-    await service.loginUser(username, password);
+    await service.loginUser('username', 'password');
 
     result.data = {
       id: {
@@ -214,7 +278,7 @@ describe('ThingsboardThingsboardClientService', () => {
       statusText: 'OK',
     };
     jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(result));
-    expect(await service.loginUser(username, password)).toBe(true);
+    expect(await service.loginUser('username', 'password')).toBe(true);
 
     jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(result));
     result.data = {
@@ -417,7 +481,7 @@ describe('ThingsboardThingsboardClientService', () => {
 
     jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(result));
 
-    expect(await service.loginUser(username, password)).toBe(true);
+    expect(await service.loginUser('username', 'password')).toBe(true);
 
     jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(result));
     jest
