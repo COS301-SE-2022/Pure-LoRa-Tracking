@@ -29,7 +29,51 @@ export class ThingsboardThingsboardTestsService {
     },
     "email": "user@example.com",
     "name": "user@example.com",
-    "authority": "SYS_ADMIN, TENANT_ADMIN or CUSTOMER_USER",
+    "authority": "CUSTOMER_USER",
+    "firstName": "John",
+    "lastName": "Doe",
+    "additionalInfo": {}
+  }
+
+  UserAdminExample = {
+    "id": {
+      "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+      "entityType": "USER"
+    },
+    "createdTime": 1609459200000,
+    "tenantId": {
+      "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+      "entityType": "TENANT"
+    },
+    "customerId": {
+      "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+      "entityType": "CUSTOMER"
+    },
+    "email": "user@example.com",
+    "name": "user@example.com",
+    "authority": "TENANT_ADMIN",
+    "firstName": "John",
+    "lastName": "Doe",
+    "additionalInfo": {}
+  }
+
+  UserSysAdminExample = {
+    "id": {
+      "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+      "entityType": "USER"
+    },
+    "createdTime": 1609459200000,
+    "tenantId": {
+      "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+      "entityType": "TENANT"
+    },
+    "customerId": {
+      "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+      "entityType": "CUSTOMER"
+    },
+    "email": "user@example.com",
+    "name": "user@example.com",
+    "authority": "SYS_ADMIN",
     "firstName": "John",
     "lastName": "Doe",
     "additionalInfo": {}
@@ -340,6 +384,55 @@ export class ThingsboardThingsboardTestsService {
     "hasNext": false
   }
 
+  AssetsReserveExample = {
+    "data": [
+      {
+        "externalId": {
+          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "entityType": "ASSET"
+        },
+        "id": {
+          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "entityType": "ASSET"
+        },
+        "createdTime": 1609459200000,
+        "tenantId": {
+          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "entityType": "TENANT"
+        },
+        "customerId": {
+          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "entityType": "CUSTOMER"
+        },
+        "name": "Empire State Building",
+        "type": "Reserve",
+        "label": "NY Building",
+        "additionalInfo": {},
+        "customerTitle": "string",
+        "customerIsPublic": false
+      }
+    ],
+    "totalPages": 0,
+    "totalElements": 0,
+    "hasNext": false
+  }
+
+  axiosAdminSuccessExample = {
+    headers: {},
+    config: {},
+    status: 200,
+    statusText: 'OK',
+    data : this.UserAdminExample
+  }
+
+  axiosSysAdminSuccessExample = {
+    headers: {},
+    config: {},
+    status: 200,
+    statusText: 'OK',
+    data : this.UserSysAdminExample
+  }
+
   axiosAssetSuccessExample = {
     headers: {},
     config: {},
@@ -354,6 +447,14 @@ export class ThingsboardThingsboardTestsService {
     status: 200,
     statusText: 'OK',
     data : this.AssetsExample
+  }
+
+  axiosAssetsReserveSuccessExample = {
+    headers: {},
+    config: {},
+    status: 200,
+    statusText: 'OK',
+    data : this.AssetsReserveExample
   }
   
 

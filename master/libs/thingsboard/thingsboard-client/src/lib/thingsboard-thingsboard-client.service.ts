@@ -190,6 +190,11 @@ export class ThingsboardThingsboardClientService {
       };
 
     const user = await this.userService.userInfo(this.token);
+    if(user.status != 200)
+    return {
+      status : 'fail',
+      explanation : user.explanation
+    }
     if (
       user.data.authority == undefined ||
       user.data.authority == 'CUSTOMER_USER'
@@ -226,30 +231,14 @@ export class ThingsboardThingsboardClientService {
         this may be multiple if admin
     */
   async getReservePerimeter(): Promise<MapApiReserveResponse> {
-    if (this.token == undefined)
-      return {
-        code: 401,
-        status: 'failure',
-        explanation: 'no access token',
-      };
-    const val = await this.validateToken();
-    if (val == false) {
-      return {
-        code: 401,
-        status: 'failure',
-        explanation: 'Invalid access token',
-      };
-    }
-
     const userInfo = await this.userService.userInfo(this.token);
-    if (userInfo['code'] != undefined || userInfo.status != 200) {
-      return {
-        code: 500,
-        status: 'failure',
-        explanation: 'user information unavailable',
-      };
+    if(userInfo.status != 200)
+    return {
+      status : 'fail',
+      code : 400,
+      explanation : userInfo.explanation
     }
-
+    
     this.assetService.setToken(this.token);
 
     const response = await this.assetService.getAssetIDs(
@@ -257,9 +246,9 @@ export class ThingsboardThingsboardClientService {
     );
     if (response.status != 200) {
       return {
-        code: 401,
-        status: 'Authentication Failure',
-        explanation: 'Username/Password/Token Invalid',
+        code: 400,
+        status: 'fail',
+        explanation: response.explanation,
       };
     }
 
@@ -274,7 +263,7 @@ export class ThingsboardThingsboardClientService {
 
     return {
       code: 404,
-      status: 'not found',
+      status: 'fail',
       explanation: 'no reserve set',
     };
   }
@@ -363,7 +352,7 @@ export class ThingsboardThingsboardClientService {
     }
 
     const resp = await this.userService.userInfo(this.token);
-    if (resp['status'] == 401) return false;
+    if (resp.status != 200) return false;
     else return true;
   }
 
