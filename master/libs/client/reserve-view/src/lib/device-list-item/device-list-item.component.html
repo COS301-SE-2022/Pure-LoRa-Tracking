@@ -1,22 +1,19 @@
-<mat-expansion-panel #itemExpand>
+<mat-expansion-panel class="remove-expand-body-padding">
     <mat-expansion-panel-header >
         <mat-panel-title>
             <mat-icon class="device-icon">
                 {{deviceType === 'sensor' ? "memory" :"cell_tower" }}
-                
             </mat-icon>
             {{deviceName}}
-            <br>
-            UEI: {{deviceId}}
         </mat-panel-title>
-        <!--<mat-panel-description>{{deviceType}}</mat-panel-description>-->
     </mat-expansion-panel-header>
     <div>
-        <p>Last Signal:&Tab;</p>
+        <p>UEI: {{deviceId}}</p>
+        <p>Last Signal:</p>
         <p>Animal:</p>
     </div>
     <mat-action-row>
-        <button mat-raised-button>Locate<mat-icon>my_location</mat-icon></button>
-        <button mat-raised-button>Details<mat-icon>arrow_forward</mat-icon></button>
+        <button mat-stroked-button class="action-buttons" color="accent"><span class="button-text-icon">Locate<mat-icon class="inner-icon">my_location</mat-icon></span></button>
+        <button mat-stroked-button class="action-buttons" color="accent"><span class="button-text-icon">Details<mat-icon class="inner-icon">arrow_forward</mat-icon></span></button>
     </mat-action-row>
 </mat-expansion-panel>
