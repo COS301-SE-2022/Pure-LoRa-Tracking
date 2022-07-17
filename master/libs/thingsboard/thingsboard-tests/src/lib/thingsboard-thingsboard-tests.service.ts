@@ -32,7 +32,9 @@ export class ThingsboardThingsboardTestsService {
     "authority": "CUSTOMER_USER",
     "firstName": "John",
     "lastName": "Doe",
-    "additionalInfo": {}
+    "additionalInfo": {
+      "reserves":["1"]
+    }
   }
 
   UserAdminExample = {
