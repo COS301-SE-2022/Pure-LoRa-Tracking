@@ -825,7 +825,7 @@ export class ThingsboardThingsboardClientService {
 
   ///////////////////////////////////////////////////////////////////////
 
-  /*async getUserInfoFromToken(): Promise<thingsboardResponse> {
+  async getUserInfoFromToken(): Promise<thingsboardResponse> {
     const Login = await this.validateToken();
     if (!Login) return { status: 'fail', explanation: 'token invalid' };
     const resp = await this.userService.userInfo(this.token);
@@ -839,7 +839,7 @@ export class ThingsboardThingsboardClientService {
       explanation: 'call finished',
       data: resp['data'],
     };
-  }*/
+  }
 
   ///////////////////////////////////////////////////////////////////////
 
