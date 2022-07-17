@@ -279,7 +279,12 @@ export class ThingsboardThingsboardTestsService {
       "id": "784f394c-42b6-435a-983c-b7beff2784f9",
       "entityType": "OTA_PACKAGE"
     },
-    "additionalInfo": {}
+    "additionalInfo": {
+      location : {
+        latitude : 1,
+        longitude : 2
+      }
+    }
   }
 
   DevicesExample = {
