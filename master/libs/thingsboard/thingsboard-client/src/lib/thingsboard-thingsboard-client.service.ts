@@ -385,7 +385,7 @@ export class ThingsboardThingsboardClientService {
     return
   */
   async getDeviceInfos(
-    filter?: string[],
+    filter = [],
     AdminCustomerID?: string
   ): Promise<thingsboardResponse> {
     const Login = await this.validateToken();
@@ -400,6 +400,7 @@ export class ThingsboardThingsboardClientService {
       return {
         status: 'fail',
         explanation: 'user type unknown',
+        furtherExplain: UserInfo.explanation
       };
     let devices: thingsboardResponse;
     if (UserInfo.data.authority == 'TENANT_ADMIN') {
@@ -414,7 +415,7 @@ export class ThingsboardThingsboardClientService {
     }
 
     const data = new Array<deviceList>();
-    if (filter != undefined) {
+    if (filter != [] || filter != undefined) {
       //TODO check if i am looping over the correct thing
       devices.data.forEach((device: deviceList) => {
         filter.forEach((filterDevice) => {
@@ -430,7 +431,7 @@ export class ThingsboardThingsboardClientService {
       return {
         status: 'ok',
         explanation: 'call finished',
-        data: devices,
+        data: devices.data,
       };
   }
 

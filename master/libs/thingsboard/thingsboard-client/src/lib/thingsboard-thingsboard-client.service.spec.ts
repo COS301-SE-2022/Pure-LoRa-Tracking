@@ -289,9 +289,50 @@ it('validate token param -> HTTP ERROR', async () => {
   expect((await service.validateTokenParam('1'))).toEqual(false);
 });
 //////////////////////////////////////////////////////////////////////////////////////////
-  /*it('should create and assign the device', async () => {
-   
-  });*/
+  it('device info -> login fail', async () => {
+    expect((await service.getDeviceInfos())).toMatchObject({
+      status: 'fail',
+      explanation: 'token invalid',
+    });
+  });
+
+  it('device info -> user fail', async () => {
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => throwError(() => tests.axiosECONNFailureExample));
+    expect((await service.getDeviceInfos())).toMatchObject({
+      status: 'fail',
+      explanation: 'user type unknown',
+    });
+  });
+
+  it('device info -> no reserve id for tenant admin', async () => {
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
+    expect((await service.getDeviceInfos())).toMatchObject({
+      status: 'fail',
+      explanation: 'an Admin requires a reserve ID',
+    });
+  });
+
+  it('device info -> no reserve id for tenant admin', async () => {
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
+    expect((await service.getDeviceInfos())).toMatchObject({
+      status: 'fail',
+      explanation: 'an Admin requires a reserve ID',
+    });
+  });
+
+  it('device info -> device infos for admin, no filter', async () => {
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosDevicesSuccessExample));
+    expect((await service.getDeviceInfos([],'1'))).toMatchObject({
+      status: 'ok',
+      explanation: 'call finished',
+      data: '',
+    });
+  });
 //////////////////////////////////////////////////////////////////////////////////////////
   it('should unassign a given device from the specified reserve', async () => {
     /*const result: AxiosResponse<any> = {
