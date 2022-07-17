@@ -366,7 +366,7 @@ export class ThingsboardThingsboardClientService {
 
   /////////////////////////////////////////////////
   async validateTokenParam(token: string): Promise<boolean> {
-    if (this.token == '') {
+    if (token == '') {
       return false;
     }
 
@@ -618,17 +618,16 @@ export class ThingsboardThingsboardClientService {
     check user is in reserve
     get user info
     move user
+    TODO server does change on behalf
   */
   async changeReserveForUser(custID: string): Promise<thingsboardResponse> {
-    const login = await this.userService.userInfo(this.token);
-
-    if (login.status != 200)
-      return {
-        status: 'fail',
-        explanation: 'token invalid',
-      };
-
     const UserInfo = await this.userService.userInfo(this.token);
+    if (UserInfo.status != 200)
+    return {
+      status: 'fail',
+      explanation: 'token invalid',
+      furtherExplain: UserInfo.explanation
+    };
 
     if (
       UserInfo.data.additionalInfo.reserves == undefined ||
@@ -637,12 +636,6 @@ export class ThingsboardThingsboardClientService {
       return {
         status: 'fail',
         explanation: 'user not in reserve',
-      };
-
-    if (UserInfo.status != 200)
-      return {
-        status: 'fail',
-        explanation: UserInfo.explanation,
       };
 
     const resp = await this.userService.changeReserveForUser(

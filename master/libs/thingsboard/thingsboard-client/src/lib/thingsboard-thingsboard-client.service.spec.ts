@@ -263,6 +263,7 @@ it('validate token -> return tokens', async () => {
 });
 
 it('validate token -> No token', async () => {
+  service.setToken("");
   expect((await service.validateToken())).toEqual(false);
 });
 
@@ -513,11 +514,77 @@ it('delete device -> delete pass', async () => {
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-  it('should create and assign the user the user to the reserve', async () => {
-    /*expect(await service.loginUser('reserveadmin@reserve.com', 'reserve')).toBe(
+it('add user to reserve -> login fail', async () => {
+  expect((await service.addUserToReserve("1", "", "", "", []))).toMatchObject({
+    status: 'fail',
+    explanation: 'token invalid',
+  });
+});
+
+it('add user to reserve -> user not admin', async () => {
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosUserSuccessExample));
+  expect((await service.addUserToReserve("1", "", "", "", []))).toMatchObject({
+    status: 'fail',
+    explanation: 'user not admin',
+  });
+});
+
+it('add user to reserve -> user create failed', async () => {
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
+  jest.spyOn(httpService, 'post').mockImplementationOnce(() => throwError(() => tests.axiosECONNFailureExample));
+  expect((await service.addUserToReserve("1", "", "", "", []))).toMatchObject({
+    status: 'fail',
+    explanation: 'ECONNREFUSED',
+  });
+});
+
+it('add user to reserve -> user create pass', async () => {
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
+  jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
+  expect((await service.addUserToReserve("1", "", "", "", []))).toMatchObject({
+    status: 'ok',
+    explanation: 'ok',
+  });
+});
+//////////////////////////////////////////////////////////////////////////////////////////
+
+  it('change reserve user -> login fail', async () => {
+        /*expect(await service.loginUser('reserveadmin@reserve.com', 'reserve')).toBe(
       true
     );
     console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451", "lb@g.com","l", "b"));*/
+    expect((await service.changeReserveForUser("1"))).toMatchObject({
+      status: 'fail',
+      explanation: 'token invalid',
+    });
+  });
+  
+  it('change reserve user -> user not in reserve', async () => {
+    service.setToken("1");
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosUserSuccessExample));
+    expect((await service.changeReserveForUser(""))).toMatchObject({
+      status: 'fail',
+      explanation: 'user not in reserve',
+    });
+  });
+
+  it('change reserve user -> change fail', async () => {
+    service.setToken("1");
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosUserSuccessExample));
+    jest.spyOn(httpService, 'post').mockImplementationOnce(() => throwError(() => tests.axiosECONNFailureExample));
+    expect((await service.changeReserveForUser("1"))).toMatchObject({
+      status: 'fail',
+      explanation: 'ECONNREFUSED',
+    });
+  });
+
+  it('change reserve user -> change pass', async () => {
+    service.setToken("1");
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosUserSuccessExample));
+    jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(tests.axiosCustomerSuccessExample));
+    expect((await service.changeReserveForUser("1"))).toMatchObject({
+      status: 'ok',
+    });
   });
 
   //////////////////////////////////////////////////////////////////////
