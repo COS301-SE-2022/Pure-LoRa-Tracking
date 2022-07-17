@@ -1018,6 +1018,12 @@ export class ThingsboardThingsboardClientService {
   ): Promise<thingsboardResponse> {
     const user = await this.userService.userInfo(this.token);
     
+    if(user.status != 200)
+    return {
+      status : 'fail',
+      explanation : 'token invalid'
+    }
+
     if(user.data.authority != 'TENANT_ADMIN')
     return {
       status:'fail',
@@ -1081,7 +1087,8 @@ export class ThingsboardThingsboardClientService {
     if (tenants.status != 200) {
       return {
         status: 'fail',
-        explanation: tenants.explanation,
+        explanation : 'tenant info',
+        furtherExplain: tenants.explanation,
       };
     }
 
@@ -1172,13 +1179,28 @@ export class ThingsboardThingsboardClientService {
       login.data.tenantId.id
     );
 
+    if(TenantGroup.status != 200)
+      return {
+        status : 'fail',
+        explanation : 'tenant group fail',
+        furtherExplain : TenantGroup.explanation
+      }
+
     const sysadmin = await this.getToken(
       'server@thingsboard.org',
       'thingsboardserveraccountissecure'
     );
+
+    if(sysadmin.status != 200)
+      return {
+        status : 'fail',
+        explanation : 'server token fail',
+        furtherExplain : TenantGroup.explanation
+      }
+
     this.adminService.setToken(sysadmin.data.token);
 
-    if (TenantGroup.data.additionalInfo.reserves != null)
+    if (TenantGroup.data.additionalInfo.reserves != undefined)
       delete TenantGroup.data.additionalInfo.reserves;
 
     const resp = await this.adminService.updateTenant(

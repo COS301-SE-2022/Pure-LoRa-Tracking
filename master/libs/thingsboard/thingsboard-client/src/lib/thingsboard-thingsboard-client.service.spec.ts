@@ -1,10 +1,7 @@
 import { ThingsboardThingsboardAssetModule } from '@lora/thingsboard-asset';
 import { ThingsboardThingsboardDeviceModule } from '@lora/thingsboard-device';
 import { ThingsboardThingsboardTelemetryModule } from '@lora/thingsboard-telemetry';
-import {
-  ThingsboardThingsboardUserModule,
-  ThingsboardThingsboardUserService,
-} from '@lora/thingsboard-user';
+import { ThingsboardThingsboardUserModule } from '@lora/thingsboard-user';
 import { Test } from '@nestjs/testing';
 import { HttpService } from '@nestjs/axios';
 import { ThingsboardThingsboardClientService } from './thingsboard-thingsboard-client.service';
@@ -1484,7 +1481,7 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
     expect(await service.AdminGetCustomers()).toMatchObject({
       status: 'ok',
       explanation: 'call finished',
-      data:tests.CustomersExample
+      data: tests.CustomersExample,
     });
   });
 
@@ -1495,7 +1492,7 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
       true
     );
     console.log(await service.removeReserveUser("cf0afc80-e63d-11ec-9a49-9105980e5c8a"));*/ expect(
-      await service.AdminGetUsersFromReserve("1")
+      await service.AdminGetUsersFromReserve('1')
     ).toMatchObject({
       status: 'fail',
       explanation: 'token invalid',
@@ -1507,7 +1504,7 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
     jest
       .spyOn(httpService, 'get')
       .mockImplementationOnce(() => of(tests.axiosUserSuccessExample));
-    expect(await service.AdminGetUsersFromReserve("1")).toMatchObject({
+    expect(await service.AdminGetUsersFromReserve('1')).toMatchObject({
       status: 'fail',
       explanation: 'user not admin',
     });
@@ -1523,7 +1520,7 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
       .mockImplementationOnce(() =>
         throwError(() => tests.axiosECONNFailureExample)
       );
-    expect(await service.AdminGetUsersFromReserve("1")).toMatchObject({
+    expect(await service.AdminGetUsersFromReserve('1')).toMatchObject({
       status: 'fail',
       explanation: '500',
     });
@@ -1537,203 +1534,424 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
     jest
       .spyOn(httpService, 'get')
       .mockImplementationOnce(() => of(tests.axiosCustomersSuccessExample));
-    expect(await service.AdminGetUsersFromReserve("1")).toMatchObject({
+    expect(await service.AdminGetUsersFromReserve('1')).toMatchObject({
       status: 'ok',
       explanation: 'call finished',
-      data:tests.CustomersExample
+      data: tests.CustomersExample,
     });
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////
 
-
-  //////////////////////////////////////////////////////////////////////
-
-  it('should set the gateway location', async () => {
+  it('update reserve perimeter -> login fail', async () => {
     /*expect(await service.loginUser('reserveadmin@reserve.com', 'reserve')).toBe(
       true
     );
-    console.log(await service.setGatewayLocation("2fe67850-dfe9-11ec-bdb3-750ce7ed2451", [{latitude:22,longitude:24}]));*/
+    console.log(await service.removeReserveUser("cf0afc80-e63d-11ec-9a49-9105980e5c8a"));*/ expect(
+      await service.updateReservePerimeter('1', {
+        center: {
+          latitude: 1,
+          longitude: 1,
+        },
+        location: [
+          { latitude: 1, longitude: 1 },
+          { latitude: 2, longitude: 2 },
+        ],
+      })
+    ).toMatchObject({
+      status: 'fail',
+      explanation: 'token invalid',
+    });
+  });
+
+  it('update reserve perimeter -> user not admin', async () => {
+    service.setToken('1');
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() => of(tests.axiosUserSuccessExample));
+    expect(
+      await service.updateReservePerimeter('1', {
+        center: {
+          latitude: 1,
+          longitude: 1,
+        },
+        location: [
+          { latitude: 1, longitude: 1 },
+          { latitude: 2, longitude: 2 },
+        ],
+      })
+    ).toMatchObject({
+      status: 'fail',
+      explanation: 'wrong permissions',
+    });
+  });
+
+  it('update reserve perimeter -> reserve info fail', async () => {
+    service.setToken('1');
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() =>
+        throwError(() => tests.axiosECONNFailureExample)
+      );
+    expect(
+      await service.updateReservePerimeter('1', {
+        center: {
+          latitude: 1,
+          longitude: 1,
+        },
+        location: [
+          { latitude: 1, longitude: 1 },
+          { latitude: 2, longitude: 2 },
+        ],
+      })
+    ).toMatchObject({
+      status: 'fail',
+      explanation: 'ECONNREFUSED',
+    });
+  });
+
+  it('update reserve perimeter -> reserve update fail', async () => {
+    service.setToken('1');
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() => of(tests.axiosCustomerSuccessExample));
+    jest
+      .spyOn(httpService, 'post')
+      .mockImplementationOnce(() =>
+        throwError(() => tests.axiosECONNFailureExample)
+      );
+    expect(
+      await service.updateReservePerimeter('1', {
+        center: {
+          latitude: 1,
+          longitude: 1,
+        },
+        location: [
+          { latitude: 1, longitude: 1 },
+          { latitude: 2, longitude: 2 },
+        ],
+      })
+    ).toMatchObject({
+      status: 'fail',
+      explanation: 'ECONNREFUSED',
+    });
+
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
+    delete tests.axiosCustomerSuccessExample.data.additionalInfo.location;
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() => of(tests.axiosCustomerSuccessExample));
+    jest
+      .spyOn(httpService, 'post')
+      .mockImplementationOnce(() =>
+        throwError(() => tests.axiosECONNFailureExample)
+      );
+    expect(
+      await service.updateReservePerimeter('1', {
+        center: {
+          latitude: 1,
+          longitude: 1,
+        },
+        location: [
+          { latitude: 1, longitude: 1 },
+          { latitude: 2, longitude: 2 },
+        ],
+      })
+    ).toMatchObject({
+      status: 'fail',
+      explanation: 'ECONNREFUSED',
+    });
+  });
+
+  it('update reserve perimeter -> reserve update', async () => {
+    service.setToken('1');
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() => of(tests.axiosCustomerSuccessExample));
+    jest
+      .spyOn(httpService, 'post')
+      .mockImplementationOnce(() => of(tests.axiosCustomerSuccessExample));
+    expect(
+      await service.updateReservePerimeter('1', {
+        center: {
+          latitude: 1,
+          longitude: 1,
+        },
+        location: [
+          { latitude: 1, longitude: 1 },
+          { latitude: 2, longitude: 2 },
+        ],
+      })
+    ).toMatchObject({
+      status: 'ok',
+      explanation: 'call finished',
+    });
   });
 
   //////////////////////////////////////////////////////////////////////
 
-  it('should get the gateway location', async () => {
-    /*expect(await service.loginUser('reserveadmin@reserve.com', 'reserve')).toBe(
-      true
-    );
-    console.log(await service.getGatewayLocation("2fe67850-dfe9-11ec-bdb3-750ce7ed2451"));*/
-  });
-
-  //////////////////////////////////////////////////////////////////////
-
-  it('should get the customers for the admin', async () => {
-    /*expect(await service.loginUser('reserveadmin@reserve.com', 'reserve')).toBe(
-      true
-    );
-    console.log(await service.AdminGetCustomers());*/
-  });
-
-  //////////////////////////////////////////////////////////////////////
-
-  it('device infos', async () => {
-    /*expect(await service.loginUser('reserveuser@reserve.com', 'reserve')).toBe(
-      true
-    );
-    console.log(await service.getDeviceInfos(["2fe67850-dfe9-11ec-bdb3-750ce7ed2451"]));*/
-  });
-
-  //////////////////////////////////////////////////////////////////////
-
-  it('customer devices', async () => {
-    /*expect(await service.loginUser('reserveadmin@reserve.com', 'reserve')).toBe(
-      true
-    );
-    console.log(await service.getCustomerDevices("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451"));
-  });*/
-  });
-
-  //////////////////////////////////////////////////////////////////////
-
-  it('build reserve list -> not system admin', async () => {
-    /* await service.loginUser('reserve@thingsboard.org', 'thingsboardserveraccountissecure')
-
-    expect(await service.generateReserveList_SystemAdmin()).toMatchObject({
-     status : 'fail',
-     explanation: 'user not system admin'
-    })*/
-  });
-
-  //////////////////////////////////////////////////////////////////////
-
-  it('build reserve list -> not system admin', async () => {
-    /*await service.loginUser('serv@thingsboard.org', 'thingsboardserveraccountissecure')
-
-    expect(await service.generateReserveList_SystemAdmin()).toMatchObject({
-     status : 'ok',
-     explanation: 'call finished'
-    })*/
-  });
-
-  //////////////////////////////////////////////////////////////////////
-
-  it('build reserve list -> build system admin list', async () => {
+  it('generate reserve list -> login fail', async () => {
     /*await service.loginUser('server@thingsboard.org', 'thingsboardserveraccountissecure')
 
     expect(await service.generateReserveList_SystemAdmin()).toMatchObject({
      status : 'ok',
      explanation: 'call finished'
     })*/
+    expect(await service.generateReserveList_ReserveAdmin()).toMatchObject({
+      status: 'fail',
+      explanation: 'token invalid',
+    });
+  });
+
+  it('generate reserve list -> not admin', async () => {
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() => of(tests.axiosUserSuccessExample));
+    expect(await service.generateReserveList_ReserveAdmin()).toMatchObject({
+      status: 'fail',
+      explanation: 'user not reserve admin',
+    });
+  });
+
+  it('generate reserve list -> customer info fail', async () => {
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() => of(tests.axiosCustomersSuccessExample));
+    expect(await service.generateReserveList_ReserveAdmin()).toMatchObject({
+      status: 'fail',
+      explanation: 'tenant group fail',
+    });
+  });
+
+  it('generate reserve list -> tenant group info fail', async () => {
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() => of(tests.axiosCustomersSuccessExample));
+    /*jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() => of(tests.axiosTenantSuccessExample));*/
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() =>
+        throwError(() => tests.axiosECONNFailureExample)
+      );
+    expect(await service.generateReserveList_ReserveAdmin()).toMatchObject({
+      status: 'fail',
+      explanation: 'tenant group fail',
+    });
+  });
+
+  it('generate reserve list -> sys admin login fail', async () => {
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() => of(tests.axiosCustomersSuccessExample));
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() => of(tests.axiosTenantSuccessExample));
+    jest
+      .spyOn(httpService, 'post')
+      .mockImplementationOnce(() =>
+        throwError(() => tests.axiosECONNFailureExample)
+      );
+    expect(await service.generateReserveList_ReserveAdmin()).toMatchObject({
+      status: 'fail',
+      explanation: 'server token fail',
+    });
+  });
+
+  it('generate reserve list -> update fail', async () => {
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() => of(tests.axiosCustomersSuccessExample));
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() => of(tests.axiosTenantSuccessExample));
+    jest
+      .spyOn(httpService, 'post')
+      .mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
+    jest
+      .spyOn(httpService, 'post')
+      .mockImplementationOnce(() =>
+        throwError(() => tests.axiosECONNFailureExample)
+      );
+    expect(await service.generateReserveList_ReserveAdmin()).toMatchObject({
+      status: 'fail',
+      explanation: 'ECONNREFUSED',
+    });
+  });
+
+  it('generate reserve list -> update pass', async () => {
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() => of(tests.axiosCustomersSuccessExample));
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() => of(tests.axiosTenantSuccessExample));
+    jest
+      .spyOn(httpService, 'post')
+      .mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
+    jest
+      .spyOn(httpService, 'post')
+      .mockImplementationOnce(() => of(tests.axiosTenantSuccessExample));
+    expect(await service.generateReserveList_ReserveAdmin()).toMatchObject({
+      status: 'ok',
+      explanation: 'call finished',
+    });
   });
 
   //////////////////////////////////////////////////////////////////////
 
-  it('build reserve list -> not reserve admin', async () => {
-    /*expect(await service.loginUser('reserveuser@reserve.com', 'reserve')).toEqual(true);
+  it('generate reserve list sys admin -> login fail', async () => {
+    /*await service.loginUser('server@thingsboard.org', 'thingsboardserveraccountissecure')
 
-    expect(await service.generateReserveList_ReserveAdmin()).toMatchObject({
-     status : 'fail',
-     explanation: 'user not reserve admin'
-    })*/
-  });
-  //////////////////////////////////////////////////////////////////////
-
-  it('build reserve list -> build reserve admin list', async () => {
-    /* expect(await service.loginUser('reserveadmin@reserve.com', 'reserve')).toEqual(true);
-
-    expect(await service.generateReserveList_ReserveAdmin()).toMatchObject({
+    expect(await service.generateReserveList_SystemAdmin()).toMatchObject({
      status : 'ok',
      explanation: 'call finished'
     })*/
+    expect(await service.generateReserveList_SystemAdmin()).toMatchObject({
+      status: 'fail',
+      explanation: 'token invalid',
+    });
+  });
+
+  it('generate reserve list sys admin -> not admin', async () => {
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
+    expect(await service.generateReserveList_SystemAdmin()).toMatchObject({
+      status: 'fail',
+      explanation: 'user not system admin',
+    });
+  });
+
+  it('generate reserve list sys admin -> tenant info fail', async () => {
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() => of(tests.axiosSysAdminSuccessExample));
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() =>
+        throwError(() => tests.axiosECONNFailureExample)
+      );
+    expect(await service.generateReserveList_SystemAdmin()).toMatchObject({
+      status: 'fail',
+      explanation: 'tenant info',
+      furtherExplain: 'ECONNREFUSED',
+    });
+  });
+
+  it('generate reserve list sys admin -> update fail', async () => {
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() => of(tests.axiosSysAdminSuccessExample));
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() => of(tests.axiosTenantsSuccessExample));
+    jest
+      .spyOn(httpService, 'post')
+      .mockImplementationOnce(() =>
+        throwError(() => tests.axiosECONNFailureExample)
+      );
+    expect(await service.generateReserveList_SystemAdmin()).toMatchObject({
+      status: 'fail',
+      explanation: "ECONNREFUSED"
+    });
+  });
+
+  it('generate reserve list sys admin -> update fail', async () => {
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() => of(tests.axiosSysAdminSuccessExample));
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() => of(tests.axiosTenantsSuccessExample));
+      jest
+      .spyOn(httpService, 'post')
+      .mockImplementationOnce(() => of(tests.axiosUserSuccessExample));
+    expect(await service.generateReserveList_SystemAdmin()).toMatchObject({
+      status: 'ok',
+      explanation: "call finished"
+    });
   });
 
   //////////////////////////////////////////////////////////////////////
 
-  it('create reserve group -> not admin', async () => {
-    /* expect(await service.loginUser('reserveuser@reserve.com', 'reserve')).toEqual(true);
-
-    expect(await service.createReserve("liamburgesss299@gmail.com", "reserve b")).toMatchObject({
-     status : 'fail',
-     explanation: 'user is not an admin'
-    })*/
+  it('customer info -> pass', async () => {
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
+    expect(await service.CustomerInfo("1")).toMatchObject({
+      status: 'ok',
+      explanation: 'call finished',
+    });
   });
 
-  //////////////////////////////////////////////////////////////////////
-
-  it('create reserve group -> create group and fail attempt to recreate', async () => {
-    /*expect(await service.loginUser('reserveadmin@reserve.com', 'reserve')).toEqual(true);
-
-    expect(await service.createReserve("liamburgesss299@gmail.com", "reserve b")).toMatchObject({
-     status : 'ok',
-    })
-
-    expect(await service.createReserve("liamburgesss299@gmail.com", "reserve b")).toMatchObject({
-      status : 'fail',
-     })*/
-  });
-
-  //////////////////////////////////////////////////////////////////////
-
-  it('update reserve perimeter -> wrong permission', async () => {
-    /*expect(await service.loginUser('reserveuser@reserve.com', 'reserve')).toEqual(true);
-
-    expect(await service.updateReservePerimeter('8e3d4250-0297-11ed-ac9e-bb12f95a3e82', {
-      coordinates : [
-        {latitude:1, longitude:2},
-        {latitude:4, longitude:4}
-      ],
-      center : {
-        longitude:34,
-        latitude:23
-      }
-    })).toMatchObject({
+  it('customer info -> pass', async () => {
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() =>
+        throwError(() => tests.axiosECONNFailureExample)
+      );
+    expect(await service.CustomerInfo("1")).toMatchObject({
       status:'fail',
-      explanation:'wrong permissions'
-    })*/
+      explanation: "ECONNREFUSED"
+    });
   });
 
   //////////////////////////////////////////////////////////////////////
 
-  it('update reserve perimeter -> update perimeter', async () => {
-    /*expect(await service.loginUser('reserveadmin@reserve.com', 'reserve')).toEqual(true);
-
-    expect(await service.updateReservePerimeter('8e3d4250-0297-11ed-ac9e-bb12f95a3e82', {
-      coordinates : [
-        {latitude:1, longitude:2},
-        {latitude:4, longitude:4}
-      ],
-      center : {
-        longitude:34,
-        latitude:23
-      }
-    })).toMatchObject({
-      status:'ok',
-      explanation:'call finished'
-    })*/
+  it('remove reserve -> pass', async () => {
+    jest
+      .spyOn(httpService, 'delete')
+      .mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
+    expect(await service.removeReserve("1")).toMatchObject({
+      status: 'ok',
+      explanation: 'call finished',
+    });
   });
 
-  //////////////////////////////////////////////////////////////////////
-
-  it('reserve group info', async () => {
-    /*expect(await service.loginUser('reserveadmin@reserve.com', 'reserve')).toEqual(true);
-
-    expect(await service.CustomerInfo('8e3d4250-0297-11ed-ac9e-bb12f95a3e82')).toMatchObject({
-      status:'ok',
-      explanation:'call finished'
-    })*/
+  it('remove reserve -> pass', async () => {
+    jest
+      .spyOn(httpService, 'delete')
+      .mockImplementationOnce(() =>
+        throwError(() => tests.axiosECONNFailureExample)
+      );
+    expect(await service.removeReserve("1")).toMatchObject({
+      status:'fail',
+      explanation: "ECONNREFUSED"
+    });
   });
 
-  //////////////////////////////////////////////////////////////////////
-
-  it('reserve group delete', async () => {
-    /*expect(await service.loginUser('reserveadmin@reserve.com', 'reserve')).toEqual(true);
-
-    expect(await service.deleteReserve('9700a190-029f-11ed-ac9e-bb12f95a3e82')).toMatchObject({
-      status:'ok',
-      explanation:'call finished'
-    })*/
-  });
 });
+
+  //////////////////////////////////////////////////////////////////////
+
 
 const mockReservePerimeterCall = {
   lastUpdateTs: 1654150471642,
