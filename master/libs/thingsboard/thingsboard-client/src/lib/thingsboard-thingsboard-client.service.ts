@@ -819,6 +819,7 @@ export class ThingsboardThingsboardClientService {
       return {
         status: 'fail',
         explanation: 'enable failed',
+        furtherExplain: resp.explanation
       };
   }
 

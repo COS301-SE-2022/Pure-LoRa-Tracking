@@ -1434,8 +1434,118 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
     });
   });
   //////////////////////////////////////////////////////////////////////////////////////////
+  it('admin get customers -> login fail', async () => {
+    /*expect(await service.loginUser('reserveadmin@reserve.com', 'reserve')).toBe(
+      true
+    );
+    console.log(await service.removeReserveUser("cf0afc80-e63d-11ec-9a49-9105980e5c8a"));*/ expect(
+      await service.AdminGetCustomers()
+    ).toMatchObject({
+      status: 'fail',
+      explanation: 'token invalid',
+    });
+  });
+
+  it('admin get customers -> user not admin', async () => {
+    service.setToken('1');
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() => of(tests.axiosUserSuccessExample));
+    expect(await service.AdminGetCustomers()).toMatchObject({
+      status: 'fail',
+      explanation: 'user not admin',
+    });
+  });
+
+  it('admin get customers -> get customers fail', async () => {
+    service.setToken('1');
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() =>
+        throwError(() => tests.axiosECONNFailureExample)
+      );
+    expect(await service.AdminGetCustomers()).toMatchObject({
+      status: 'fail',
+      explanation: '500',
+    });
+  });
+
+  it('admin get customers -> get customers fail', async () => {
+    service.setToken('1');
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() => of(tests.axiosCustomersSuccessExample));
+    expect(await service.AdminGetCustomers()).toMatchObject({
+      status: 'ok',
+      explanation: 'call finished',
+      data:tests.CustomersExample
+    });
+  });
 
   //////////////////////////////////////////////////////////////////////////////////////////
+
+  it('admin get users -> login fail', async () => {
+    /*expect(await service.loginUser('reserveadmin@reserve.com', 'reserve')).toBe(
+      true
+    );
+    console.log(await service.removeReserveUser("cf0afc80-e63d-11ec-9a49-9105980e5c8a"));*/ expect(
+      await service.AdminGetUsersFromReserve("1")
+    ).toMatchObject({
+      status: 'fail',
+      explanation: 'token invalid',
+    });
+  });
+
+  it('admin get users -> user not admin', async () => {
+    service.setToken('1');
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() => of(tests.axiosUserSuccessExample));
+    expect(await service.AdminGetUsersFromReserve("1")).toMatchObject({
+      status: 'fail',
+      explanation: 'user not admin',
+    });
+  });
+
+  it('admin get users -> get users fail', async () => {
+    service.setToken('1');
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() =>
+        throwError(() => tests.axiosECONNFailureExample)
+      );
+    expect(await service.AdminGetUsersFromReserve("1")).toMatchObject({
+      status: 'fail',
+      explanation: '500',
+    });
+  });
+
+  it('admin get users -> get users fail', async () => {
+    service.setToken('1');
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() => of(tests.axiosCustomersSuccessExample));
+    expect(await service.AdminGetUsersFromReserve("1")).toMatchObject({
+      status: 'ok',
+      explanation: 'call finished',
+      data:tests.CustomersExample
+    });
+  });
+
+  //////////////////////////////////////////////////////////////////////////////////////////
+
 
   //////////////////////////////////////////////////////////////////////
 
