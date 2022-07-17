@@ -694,7 +694,8 @@ export class ThingsboardThingsboardClientService {
     if (UserInfo.status != 200)
       return {
         status: 'fail',
-        explanation: UserInfo.explanation,
+        explanation: 'user is not available',
+        furtherExplain: UserInfo.explanation
       };
 
     const resp = await this.userService.changeReserveForUser(
@@ -740,7 +741,7 @@ export class ThingsboardThingsboardClientService {
         explanation: 'user not admin',
       };
     const resp = await this.userService.deleteUser(this.token, userID);
-    if (resp)
+    if (resp.status == 200)
       return {
         status: 'ok',
         explanation: 'call finished',
