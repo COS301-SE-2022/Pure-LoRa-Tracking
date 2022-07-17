@@ -542,15 +542,38 @@ describe('ReserveMapComponent', () => {
     })
   })
 
-  // describe("reload",()=>{
-  //   it("Should reload the historical path",()=>{
-  //     component.loadInnitial([demoDevice,demoDevice2]);
-  //     jest.spyOn(component.historicalpath,"forEach")
-      
-  //     component.reload([demoDevice,demoDevice2]);
+  describe("reload",()=>{
+    const tempmarker=L.marker([0,0]);
+    const templine=L.polyline([[0,0]])
+    const temppoints=
+    {
+      deviceID:"sens-11",
+      markers:[tempmarker],
+      polyline:templine
+    } as MapHistoricalPoints
+    it("Should reload the historical path",()=>{
+      jest.spyOn(tempmarker,"remove").mockImplementation();
+      jest.spyOn(templine,"remove").mockImplementation();
+      component.historicalpath=[temppoints];
+      component.reload([demoDevice]);
+      expect(tempmarker.remove).toBeCalled();
+      expect(templine.remove).toBeCalled();
+      expect(component.historicalpath).toEqual([]);
+    })
+    it("Should call the load innitial",()=>{
+      jest.spyOn(tempmarker,"remove").mockImplementation();
+      jest.spyOn(templine,"remove").mockImplementation();
+      jest.spyOn(component,"loadInnitial").mockImplementation();
+      component.historicalpath=[temppoints];
+      const caller=[demoDevice];
+      component.reload(caller);
+      expect(component.loadInnitial).toBeCalledWith(caller);
 
-  //   })
-  // })
+      
+    })
+    
+
+  })
 
 });
 
