@@ -289,88 +289,229 @@ it('validate token param -> HTTP ERROR', async () => {
   expect((await service.validateTokenParam('1'))).toEqual(false);
 });
 //////////////////////////////////////////////////////////////////////////////////////////
-  /*it('should create and assign the device', async () => {
-   
-  });*/
-//////////////////////////////////////////////////////////////////////////////////////////
-  it('should unassign a given device from the specified reserve', async () => {
-    /*const result: AxiosResponse<any> = {
-      data: {
-        token:
-          'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZW5hbnRAdGhpbmdzYm9hcmQub3JnIi...',
-        refreshToken:
-          'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZW5hbnRAdGhpbmdzYm9hcmQub3JnIi...',
-      },
-      headers: {},
-      config: {},
-      status: 200,
-      statusText: 'OK',
-    };
-
-    const secondResult: AxiosResponse<any> = {
-      data: {
-        id: {
-          id: '784f394c-42b6-435a-983c-b7beff2784f9',
-          entityType: 'USER',
-        },
-        createdTime: 1609459200000,
-        tenantId: {
-          id: '784f394c-42b6-435a-983c-b7beff2784f9',
-          entityType: 'TENANT',
-        },
-        customerId: {
-          id: '784f394c-42b6-435a-983c-b7beff2784f9',
-          entityType: 'CUSTOMER',
-        },
-        email: 'user@example.com',
-        name: 'user@example.com',
-        authority: 'TENANT_ADMIN',
-        firstName: 'John',
-        lastName: 'Doe',
-        additionalInfo: {},
-      },
-      headers: {},
-      config: {},
-      status: 200,
-      statusText: 'OK',
-    };
-
-    const thirdResult: AxiosResponse<any> = {
-      data: {},
-      headers: {},
-      config: {},
-      status: 200,
-      statusText: 'OK',
-    };
-
-    jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(result));
-
-    expect(await service.loginUser(username, password)).toBe(false);
-
-    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(result));
-    jest
-      .spyOn(httpService, 'get')
-      .mockImplementationOnce(() => of(secondResult));
-    jest
-      .spyOn(httpService, 'delete')
-      .mockImplementationOnce(() => of(thirdResult));
-
-    const resp = await service.RemoveDeviceFromReserve(
-      'a7971100-e581-11ec-a9e5-f30a5c07bcf3'
-    );
-    console.log(resp);
-    expect(resp).toEqual({ status: 'fail', explanation: 'wrong permissions' });
-
-    //////////////////////////////////////////////////////////////////////
-
-    //it('should create and assign the device', async () => {
-    /*expect(await service.loginUser('reserveadmin@reserve.com', 'reserve')).toBe(
-        true
-      );
-      console.log(await service.RemoveDeviceFromReserve("a7971100-e581-11ec-a9e5-f30a5c07bcf3"))*/
+  it('device info -> login fail', async () => {
+    expect((await service.getDeviceInfos())).toMatchObject({
+      status: 'fail',
+      explanation: 'token invalid',
+    });
   });
 
-  //////////////////////////////////////////////////////////////////////
+  it('device info -> user fail', async () => {
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => throwError(() => tests.axiosECONNFailureExample));
+    expect((await service.getDeviceInfos())).toMatchObject({
+      status: 'fail',
+      explanation: 'user type unknown',
+    });
+  });
+
+  it('device info -> no reserve id for tenant admin', async () => {
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
+    expect((await service.getDeviceInfos())).toMatchObject({
+      status: 'fail',
+      explanation: 'an Admin requires a reserve ID',
+    });
+  });
+
+  it('device info -> no reserve id for tenant admin', async () => {
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
+    expect((await service.getDeviceInfos())).toMatchObject({
+      status: 'fail',
+      explanation: 'an Admin requires a reserve ID',
+    });
+  });
+
+  it('device info -> device infos for admin, no filter', async () => {
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosDevicesSuccessExample));
+    expect((await service.getDeviceInfos([],'1'))).toMatchObject({
+      status: 'ok',
+      explanation: 'call finished',
+      data: [{
+        deviceID: "784f394c-42b6-435a-983c-b7beff2784f9",
+        isGateway: undefined,
+        deviceName: "A4B72CCDFF33",
+        humanName: "Room 234 Sensor",
+        profile: "DEVICE",
+      }],
+    });
+  });
+
+  it('device info -> device infos for admin, with filter', async () => {
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosDevicesSuccessExample));
+    expect((await service.getDeviceInfos(["784f394c-42b6-435a-983c-b7beff2784f9"],'1'))).toMatchObject({
+      status: 'ok',
+      explanation: 'call finished',
+      data: [{
+        deviceID: "784f394c-42b6-435a-983c-b7beff2784f9",
+        isGateway: undefined,
+        deviceName: "A4B72CCDFF33",
+        humanName: "Room 234 Sensor",
+        profile: "DEVICE",
+      }],
+    });
+  });
+
+  it('device info -> device infos for user, no filter', async () => {
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosUserSuccessExample));
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosDevicesSuccessExample));
+    expect((await service.getDeviceInfos([],'1'))).toMatchObject({
+      status: 'ok',
+      explanation: 'call finished',
+      data: [{
+        deviceID: "784f394c-42b6-435a-983c-b7beff2784f9",
+        isGateway: undefined,
+        deviceName: "A4B72CCDFF33",
+        humanName: "Room 234 Sensor",
+        profile: "DEVICE",
+      }],
+    });
+  });
+
+  it('device info -> device infos for user, with filter', async () => {
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosUserSuccessExample));
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosDevicesSuccessExample));
+    expect((await service.getDeviceInfos(["784f394c-42b6-435a-983c-b7beff2784f9"],'1'))).toMatchObject({
+      status: 'ok',
+      explanation: 'call finished',
+      data: [{
+        deviceID: "784f394c-42b6-435a-983c-b7beff2784f9",
+        isGateway: undefined,
+        deviceName: "A4B72CCDFF33",
+        humanName: "Room 234 Sensor",
+        profile: "DEVICE",
+      }],
+    });
+  });
+
+//////////////////////////////////////////////////////////////////////////////////////////
+it('create device -> login fail', async () => {
+  expect((await service.addDeviceToReserve("",{hardwareID:"", isGateway:true, labelName:""}))).toMatchObject({
+    status: 'fail',
+    explanation: 'token invalid',
+  });
+});
+
+it('create device -> user fail', async () => {
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => throwError(() => tests.axiosECONNFailureExample));
+  expect((await service.addDeviceToReserve("",{hardwareID:"", isGateway:true, labelName:""}))).toMatchObject({
+    status: 'fail',
+    explanation: 'ECONNREFUSED',
+  });
+});
+
+it('create device -> not admin', async () => {
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosUserSuccessExample));
+  expect((await service.addDeviceToReserve("",{hardwareID:"", isGateway:true, labelName:""}))).toMatchObject({
+    status: 'fail',
+    explanation: 'wrong permissions',
+  });
+});
+
+it('create device -> get reserve fail', async () => {
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => throwError(() => tests.axiosECONNFailureExample));
+  expect((await service.addDeviceToReserve("",{hardwareID:"", isGateway:true, labelName:""}))).toMatchObject({
+    status: 'fail',
+    explanation: 'customer ID failed with 500',
+  });
+});
+
+it('create device -> create device fail', async () => {
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosCustomerSuccessExample));
+  jest.spyOn(httpService, 'post').mockImplementationOnce(() => throwError(() => tests.axiosECONNFailureExample));
+  expect((await service.addDeviceToReserve("",{hardwareID:"", isGateway:true, labelName:""}))).toMatchObject({
+    status: 'fail',
+    explanation: 'device creation failed with: ECONNREFUSED',
+  });
+});
+
+it('create device -> assign device fail', async () => {
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosCustomerSuccessExample));
+  jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(tests.axiosDeviceSuccessExample));
+  jest.spyOn(httpService, 'post').mockImplementationOnce(() => throwError(() => tests.axiosECONNFailureExample));
+  //jest.spyOn(httpService, 'delete').mockImplementationOnce(() => throwError(() => tests.axiosDeviceSuccessExample));
+  expect((await service.addDeviceToReserve("",{hardwareID:"", isGateway:true, labelName:""}))).toMatchObject({
+    status: 'fail',
+    explanation: 'assign failed, device creation reversed',
+  });
+});
+
+it('create device -> assign device and return', async () => {
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosCustomerSuccessExample));
+  jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(tests.axiosDeviceSuccessExample));
+  jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(tests.axiosDeviceSuccessExample));
+  //jest.spyOn(httpService, 'delete').mockImplementationOnce(() => throwError(() => tests.axiosDeviceSuccessExample));
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
+  expect((await service.addDeviceToReserve("",{hardwareID:"", isGateway:true, labelName:""}))).toMatchObject({
+    status: 'ok',
+    explanation: 'ok',
+  });
+});
+
+//////////////////////////////////////////////////////////////////////////////////////////
+it('delete device -> login fail', async () => {
+  expect((await service.RemoveDeviceFromReserve("1"))).toMatchObject({
+    status: 'fail',
+    explanation: 'token invalid',
+  });
+});
+
+it('delete device -> user fail', async () => {
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => throwError(() => tests.axiosECONNFailureExample));
+  expect((await service.RemoveDeviceFromReserve("1"))).toMatchObject({
+    status: 'fail',
+    explanation: 'ECONNREFUSED',
+  });
+});
+
+it('delete device -> not admin', async () => {
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosUserSuccessExample));
+  expect((await service.RemoveDeviceFromReserve("1"))).toMatchObject({
+    status: 'fail',
+    explanation: 'wrong permissions',
+  });
+});
+
+it('delete device -> delete fail', async () => {
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
+  jest.spyOn(httpService, 'delete').mockImplementationOnce(() => throwError(() => tests.axiosECONNFailureExample));
+  expect((await service.RemoveDeviceFromReserve("1"))).toMatchObject({
+    status: 'fail',
+    explanation: 'device deletion failed',
+  });
+});
+
+it('delete device -> delete pass', async () => {
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
+  jest.spyOn(httpService, 'delete').mockImplementationOnce(() => of(tests.axiosUserSuccessExample));
+  expect((await service.RemoveDeviceFromReserve("1"))).toMatchObject({
+    status: 'ok',
+    explanation: 'call finished',
+  });
+});
+
+//////////////////////////////////////////////////////////////////////////////////////////
 
   it('should create and assign the user the user to the reserve', async () => {
     /*expect(await service.loginUser('reserveadmin@reserve.com', 'reserve')).toBe(
