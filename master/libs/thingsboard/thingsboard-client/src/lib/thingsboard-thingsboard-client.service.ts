@@ -775,7 +775,7 @@ export class ThingsboardThingsboardClientService {
 
     const resp = await this.userService.DisableUser(this.token, userID);
 
-    if (resp)
+    if (resp.status == 200)
       return {
         status: 'ok',
         explanation: 'call finished',
@@ -784,6 +784,7 @@ export class ThingsboardThingsboardClientService {
       return {
         status: 'fail',
         explanation: 'disable failed',
+        furtherExplain: resp.explanation
       };
   }
 
@@ -809,7 +810,7 @@ export class ThingsboardThingsboardClientService {
 
     const resp = await this.userService.EnableUser(this.token, userID);
 
-    if (resp)
+    if (resp.status == 200)
       return {
         status: 'ok',
         explanation: 'call finished',
@@ -818,6 +819,7 @@ export class ThingsboardThingsboardClientService {
       return {
         status: 'fail',
         explanation: 'enable failed',
+        furtherExplain: resp.explanation
       };
   }
 
@@ -849,10 +851,10 @@ export class ThingsboardThingsboardClientService {
       accessToken,
       data
     );
-    if (resp == 401)
+    if (resp != 200)
       return {
         status: resp,
-        explanation: 'access token invalid',
+        explanation: 'send telemetry failed',
       };
     return {
       status: 200,
@@ -884,7 +886,7 @@ export class ThingsboardThingsboardClientService {
         explanation: 'call failed',
       };
 
-    const data = '';
+    //const data = '';
     //TODO return lat longs
     // resp.data.deviceList.forEach((element) => {
     //   if (element.key == 'location') data = element.value[0];
@@ -893,7 +895,7 @@ export class ThingsboardThingsboardClientService {
     return {
       status: 'ok',
       explanation: 'call finished',
-      data: data,
+      data: resp.data,
     };
   }
 
