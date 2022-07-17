@@ -314,6 +314,12 @@ export class ThingsboardThingsboardClientService {
       endTime
     );
 
+    if(resp.status != 200)
+    return {
+      status: 'fail',
+      explanation: resp.explanation,
+    }
+
     const labelName = verifyDevice['label'];
     const deviceName = verifyDevice['name'];
 
@@ -329,18 +335,20 @@ export class ThingsboardThingsboardClientService {
   ////////////////////////////////////////////////
   async refresh(token: string): Promise<refreshResponse> {
     const resp = await this.userService.refreshToken(token);
-    if (resp.status == 200 && resp.explanation == 'ok') {
+    if (resp.status == 200) {
       return {
         status: 'ok',
+        explanation: 'call finished',
         token: resp.data.token,
         refreshToken: resp.data.refreshToken,
       };
     }
-    //maybe extend it later to show more errors
+    else
     return {
       status: 'fail',
-      token: '',
-      refreshToken: '',
+      explanation: resp.explanation,
+      token:'',
+      refreshToken:''
     };
   }
 
@@ -364,7 +372,7 @@ export class ThingsboardThingsboardClientService {
 
     const resp = await this.userService.userInfo(token);
     //console.log(resp);
-    if (resp['status'] == 401) return false;
+    if (resp['status'] != 200) return false;
     else return true;
   }
   ///////////////////////////////////////////////////////////
@@ -1243,6 +1251,7 @@ export interface thingsboardLoginResponse {
 
 export interface refreshResponse {
   status: 'ok' | 'fail';
+  explanation: string;
   token: string;
   refreshToken: string;
 }

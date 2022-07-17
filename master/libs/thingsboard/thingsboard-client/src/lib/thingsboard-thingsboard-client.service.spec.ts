@@ -10,14 +10,13 @@ import { of, throwError } from 'rxjs';
 import { ThingsboardThingsboardAdminModule } from '@lora/thingsboard/admin';
 import { ThingsboardThingsboardReserveModule } from '@lora/thingsboard/reserve';
 import { ThingsboardThingsboardTestsModule, ThingsboardThingsboardTestsService } from '@lora/thingsboard/tests';
-import { ThingsboardThingsboardClientModule } from './thingsboard-thingsboard-client.module';
 
 describe('ThingsboardThingsboardClientService', () => {
   let service: ThingsboardThingsboardClientService;
   let httpService: HttpService;
   let tests: ThingsboardThingsboardTestsService;
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     const module = await Test.createTestingModule({
       providers: [ThingsboardThingsboardClientService],
       imports: [
@@ -206,310 +205,94 @@ it('reserve perimeter -> return asset', async () => {
 });
 //////////////////////////////////////////////////////////////////////////////////////////
 
-  it('should return the telemetry for the deviceID given', async () => {
-    const result: AxiosResponse<any> = {
-      data: {
-        token:
-          'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZW5hbnRAdGhpbmdzYm9hcmQub3JnIi...',
-        refreshToken:
-          'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZW5hbnRAdGhpbmdzYm9hcmQub3JnIi...',
-      },
-      headers: {},
-      config: {},
-      status: 200,
-      statusText: 'OK',
-    };
-    jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(result));
-    await service.loginUser('username', 'password');
 
-    result.data = {
-      id: {
-        id: '784f394c-42b6-435a-983c-b7beff2784f9',
-        entityType: 'USER',
-      },
-      createdTime: 1609459200000,
-      tenantId: {
-        id: '784f394c-42b6-435a-983c-b7beff2784f9',
-        entityType: 'TENANT',
-      },
-      customerId: {
-        id: '784f394c-42b6-435a-983c-b7beff2784f9',
-        entityType: 'CUSTOMER',
-      },
-      email: 'reserveuser@reserve.com',
-      name: 'reserveuser@reserve.com',
-      authority: 'TENANT_ADMIN',
-      firstName: 'John',
-      lastName: 'Doe',
-      additionalInfo: {},
-    };
-    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(result));
-    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(result));
-    //console.log(await service.getDeviceHistoricalData("25c31a40-dfe9-11ec-bdb3-750ce7ed2451", 0, 1654072587463));
-    expect(
-      await service.getDeviceHistoricalData(
-        '25c31a40-dfe9-11ec-bdb3-750ce7ed2451',
-        0,
-        1654072587463
-      )
-    ).toBeDefined();
-  });
+it('Historical Data -> no token', async () => {
+  expect((await service.getDeviceHistoricalData('1',2,3))).toMatchObject({...tests.TBFailureResponse, ...{explanation: 'token'}});
+});
 
-  it('should return the customer devices by filter', async () => {
-    const result: AxiosResponse<any> = {
-      data: {
-        token:
-          'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZW5hbnRAdGhpbmdzYm9hcmQub3JnIi...',
-        refreshToken:
-          'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZW5hbnRAdGhpbmdzYm9hcmQub3JnIi...',
-      },
-      headers: {},
-      config: {},
-      status: 200,
-      statusText: 'OK',
-    };
-    jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(result));
-    expect(await service.loginUser('username', 'password')).toBe(true);
+it('Historical Data -> HTTP ERROR', async () => {
+  service.setToken('123');
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => throwError(() => tests.axiosECONNFailureExample));
+  expect((await service.getDeviceHistoricalData('1',2,3))).toMatchObject({...tests.TBFailureResponse, ...{explanation: 'device with ID not found for user token combination'}});
 
-    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(result));
-    result.data = {
-      id: {
-        id: '784f394c-42b6-435a-983c-b7beff2784f9',
-        entityType: 'USER',
-      },
-      createdTime: 1609459200000,
-      tenantId: {
-        id: '784f394c-42b6-435a-983c-b7beff2784f9',
-        entityType: 'TENANT',
-      },
-      customerId: {
-        id: '784f394c-42b6-435a-983c-b7beff2784f9',
-        entityType: 'CUSTOMER',
-      },
-      email: 'reserveuser@reserve.com',
-      name: 'reserveuser@reserve.com',
-      authority: 'TENANT_ADMIN',
-      firstName: 'John',
-      lastName: 'Doe',
-      additionalInfo: {},
-    };
-    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(result));
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
+  const obj = Object.assign(tests.axiosTokenSuccessExample)
+  obj.data = null
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
+  expect((await service.getDeviceHistoricalData('1',2,3))).toMatchObject({...tests.TBFailureResponse, ...{explanation: 'device with ID not found for user token combination'}});
+});
 
-    const secondResult = {
-      data: {
-        data: [
-          {
-            id: {
-              id: '784f394c-42b6-435a-983c-b7beff2784f9',
-              entityType: 'DEVICE',
-            },
-            createdTime: 1609459200000,
-            tenantId: {
-              id: '784f394c-42b6-435a-983c-b7beff2784f9',
-              entityType: 'TENANT',
-            },
-            customerId: {
-              id: '784f394c-42b6-435a-983c-b7beff2784f9',
-              entityType: 'CUSTOMER',
-            },
-            name: 'A4B72CCDFF33',
-            type: 'Temperature Sensor',
-            label: 'Room 234 Sensor',
-            deviceProfileId: {
-              id: '784f394c-42b6-435a-983c-b7beff2784f9',
-              entityType: 'DEVICE_PROFILE',
-            },
-            deviceData: {
-              configuration: {},
-              transportConfiguration: {},
-            },
-            firmwareId: {
-              id: '784f394c-42b6-435a-983c-b7beff2784f9',
-              entityType: 'OTA_PACKAGE',
-            },
-            softwareId: {
-              id: '784f394c-42b6-435a-983c-b7beff2784f9',
-              entityType: 'OTA_PACKAGE',
-            },
-            additionalInfo: {},
-            customerTitle: 'string',
-            customerIsPublic: false,
-            deviceProfileName: 'string',
-          },
-        ],
-        totalPages: 0,
-        totalElements: 0,
-        hasNext: false,
-      },
-      headers: {},
-      config: {},
-      status: 200,
-      statusText: 'OK',
-    };
+it('Historical Data -> telemetry fail', async () => {
+  service.setToken('123');
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosDeviceSuccessExample));
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => throwError(() => tests.axiosECONNFailureExample));
+  expect((await service.getDeviceHistoricalData('1',2,3))).toMatchObject({...tests.TBFailureResponse, ...{explanation: 'ECONNREFUSED'}});
+});
 
-    jest
-      .spyOn(httpService, 'get')
-      .mockImplementationOnce(() => of(secondResult));
-    const deviceInfos = await service.getDeviceInfos([
-      '25c31a40-dfe9-11ec-bdb3-750ce7ed2451',
-    ]);
-    console.log(deviceInfos);
-    expect(deviceInfos).toBeDefined();
-  });
+it('Historical Data -> result', async () => {
+  service.setToken('123');
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosDeviceSuccessExample));
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosTelemetrySuccessExample));
+  expect((await service.getDeviceHistoricalData('1',2,3))).toMatchObject({status: 'ok',
+  name: '1',
+  explanation: 'Room 234 Sensor',
+  furtherExplain: 'A4B72CCDFF33'});
+});
 
-  //////////////////////////////////////////////////////////////////////
-  it('should create and assign the device', async () => {
-    const result: AxiosResponse<any> = {
-      data: {
-        token:
-          'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZW5hbnRAdGhpbmdzYm9hcmQub3JnIi...',
-        refreshToken:
-          'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZW5hbnRAdGhpbmdzYm9hcmQub3JnIi...',
-      },
-      headers: {},
-      config: {},
-      status: 200,
-      statusText: 'OK',
-    };
+//////////////////////////////////////////////////////////////////////////////////////////
+it('refresh -> return tokens', async () => {
+  service.setToken('123');
+  jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
+  expect((await service.refresh('1'))).toMatchObject({...tests.TBSuccessResponse, ...{token: 'we12nklJQW',
+  refreshToken: 'w3hjkqlbdwejkdn89'}});
+});
 
-    const secondResult: AxiosResponse<any> = {
-      data: {
-        id: {
-          id: '784f394c-42b6-435a-983c-b7beff2784f9',
-          entityType: 'USER',
-        },
-        createdTime: 1609459200000,
-        tenantId: {
-          id: '784f394c-42b6-435a-983c-b7beff2784f9',
-          entityType: 'TENANT',
-        },
-        customerId: {
-          id: '784f394c-42b6-435a-983c-b7beff2784f9',
-          entityType: 'CUSTOMER',
-        },
-        email: 'user@example.com',
-        name: 'user@example.com',
-        authority: 'TENANT_ADMIN',
-        firstName: 'John',
-        lastName: 'Doe',
-        additionalInfo: {},
-      },
-      headers: {},
-      config: {},
-      status: 200,
-      statusText: 'OK',
-    };
+it('refresh -> HTTP ERROR', async () => {
+  service.setToken('123');
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => throwError(() => tests.axiosECONNFailureExample));
+  expect((await service.refresh('1'))).toMatchObject(tests.TBFailureResponse);
+});
+//////////////////////////////////////////////////////////////////////////////////////////
+it('validate token -> return tokens', async () => {
+  service.setToken('123');
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosUserSuccessExample));
+  expect((await service.validateToken())).toEqual(true);
+});
 
-    const thirdResult: AxiosResponse<any> = {
-      data: {
-        id: {
-          id: '784f394c-42b6-435a-983c-b7beff2784f9',
-          entityType: 'CUSTOMER',
-        },
-        createdTime: 1609459200000,
-        title: 'Company A',
-        name: 'Company A',
-        tenantId: {
-          id: '784f394c-42b6-435a-983c-b7beff2784f9',
-          entityType: 'TENANT',
-        },
-        country: 'US',
-        state: 'NY',
-        city: 'New York',
-        address: '42 Broadway Suite 12-400',
-        address2: 'string',
-        zip: '10004',
-        phone: '+1(415)777-7777',
-        email: 'example@company.com',
-        additionalInfo: {},
-      },
-      headers: {},
-      config: {},
-      status: 200,
-      statusText: 'OK',
-    };
-    const fourthResult: AxiosResponse<any> = {
-      data: {
-        id: {
-          id: 'ef55ff40-dfe8-11ec-bdb3-750ce7ed2451',
-          entityType: 'DEVICE',
-        },
-        createdTime: 1609459200000,
-        tenantId: {
-          id: '784f394c-42b6-435a-983c-b7beff2784f9',
-          entityType: 'TENANT',
-        },
-        customerId: {
-          id: '784f394c-42b6-435a-983c-b7beff2784f9',
-          entityType: 'CUSTOMER',
-        },
-        name: 'mc544',
-        type: 'Temperature Sensor',
-        label: 'Giraffe',
-        deviceProfileId: {
-          id: '784f394c-42b6-435a-983c-b7beff2784f9',
-          entityType: 'DEVICE_PROFILE',
-        },
-        deviceData: {
-          configuration: {},
-          transportConfiguration: {},
-        },
-        firmwareId: {
-          id: '784f394c-42b6-435a-983c-b7beff2784f9',
-          entityType: 'OTA_PACKAGE',
-        },
-        softwareId: {
-          id: '784f394c-42b6-435a-983c-b7beff2784f9',
-          entityType: 'OTA_PACKAGE',
-        },
-        additionalInfo: {},
-      },
-      headers: {},
-      config: {},
-      status: 200,
-      statusText: 'OK',
-    };
+it('validate token -> No token', async () => {
+  expect((await service.validateToken())).toEqual(false);
+});
 
-    jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(result));
+it('validate token -> HTTP ERROR', async () => {
+  service.setToken('123');
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => throwError(() => tests.axiosECONNFailureExample));
+  expect((await service.validateToken())).toEqual(false);
+});
 
-    expect(await service.loginUser('username', 'password')).toBe(true);
+//////////////////////////////////////////////////////////////////////////////////////////
+it('validate token param -> return tokens', async () => {
+  service.setToken('123');
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosUserSuccessExample));
+  expect((await service.validateTokenParam('1'))).toEqual(true);
+});
 
-    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(result));
-    jest
-      .spyOn(httpService, 'get')
-      .mockImplementationOnce(() => of(secondResult));
-    jest
-      .spyOn(httpService, 'get')
-      .mockImplementationOnce(() => of(thirdResult));
-    jest
-      .spyOn(httpService, 'post')
-      .mockImplementationOnce(() => of(fourthResult));
-    jest
-      .spyOn(httpService, 'post')
-      .mockImplementationOnce(() => of(fourthResult));
+it('validate token param -> No token', async () => {
+  expect((await service.validateTokenParam(''))).toEqual(false);
+});
 
-      jest
-      .spyOn(httpService, 'get')
-      .mockImplementationOnce(() => of(fourthResult));
-
-    const resp = await service.addDeviceToReserve(
-      'ef55ff40-dfe8-11ec-bdb3-750ce7ed2451',
-      {
-        hardwareID: 'mc544',
-        isGateway: false,
-        labelName: 'Giraffe',
-      }
-    );
-    console.log(resp);
-    // expect(resp).toEqual({
-    //   status: 'ok',
-    //   data: 'ef55ff40-dfe8-11ec-bdb3-750ce7ed2451',
-    //   explanation : undefined
-    // });
-    //TODO check for deep equality of the object
-    expect(resp.status).toEqual("fail");
-  });
-
+it('validate token param -> HTTP ERROR', async () => {
+  service.setToken('123');
+  jest.spyOn(httpService, 'get').mockImplementationOnce(() => throwError(() => tests.axiosECONNFailureExample));
+  expect((await service.validateTokenParam('1'))).toEqual(false);
+});
+//////////////////////////////////////////////////////////////////////////////////////////
+  /*it('should create and assign the device', async () => {
+   
+  });*/
+//////////////////////////////////////////////////////////////////////////////////////////
   it('should unassign a given device from the specified reserve', async () => {
     /*const result: AxiosResponse<any> = {
       data: {
