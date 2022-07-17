@@ -134,7 +134,7 @@ export class ThingsboardThingsboardTestsService {
     zip: '10004',
     phone: '+1(415)777-7777',
     email: 'example@company.com',
-    additionalInfo: {},
+    additionalInfo: {location:[]},
   };
 
   CustomersExample = {
@@ -208,7 +208,7 @@ export class ThingsboardThingsboardTestsService {
         zip: '10004',
         phone: '+1(415)777-7777',
         email: 'example@company.com',
-        additionalInfo: {},
+        additionalInfo: {reserves:[]},
         tenantProfileName: 'Default',
       },
     ],
@@ -238,7 +238,7 @@ export class ThingsboardThingsboardTestsService {
     zip: '10004',
     phone: '+1(415)777-7777',
     email: 'example@company.com',
-    additionalInfo: {},
+    additionalInfo: {reserves:[]},
     tenantProfileName: 'Default',
   };
 
