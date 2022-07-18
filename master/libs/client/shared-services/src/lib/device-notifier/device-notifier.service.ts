@@ -10,9 +10,9 @@ export class DeviceNotifierService {
 
   // }
 
-  private SensorDeleted:Subject<string>=new Subject<string>();
-  private LocatedSensor:Subject<string>=new Subject<string>();
-  private ResetSensor:EventEmitter<void>=new EventEmitter();
+  public SensorDeleted:Subject<string>=new Subject<string>();
+  public LocatedSensor:Subject<string>=new Subject<string>();
+  public ResetSensor:EventEmitter<void>=new EventEmitter();
 
   getSensorDeleted():Observable<string>{
     return this.SensorDeleted.asObservable();
