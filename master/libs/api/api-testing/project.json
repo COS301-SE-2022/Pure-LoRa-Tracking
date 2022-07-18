@@ -1,0 +1,45 @@
+{
+  "sourceRoot": "libs/api/api-testing/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/api/api-testing",
+        "tsConfig": "libs/api/api-testing/tsconfig.lib.json",
+        "packageJson": "libs/api/api-testing/package.json",
+        "main": "libs/api/api-testing/src/index.ts",
+        "assets": ["libs/api/api-testing/*.md"]
+      }
+    },
+    "publish": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "node tools/scripts/publish.mjs api-api-testing {args.ver} {args.tag}"
+      },
+      "dependsOn": [
+        {
+          "projects": "self",
+          "target": "build"
+        }
+      ]
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/api/api-testing/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/api/api-testing"],
+      "options": {
+        "jestConfig": "libs/api/api-testing/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}
