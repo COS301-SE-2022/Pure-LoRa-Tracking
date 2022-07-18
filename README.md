@@ -31,6 +31,7 @@ The stored data will be processed using the location of each tower to calculate 
 
 - :page_facing_up: [SRS](https://drive.google.com/file/d/1a1RQ9-xLiTGsoO_IeGYjuLcxdcRsmpWq/view?usp=sharing)
 - :page_facing_up: [SRSv2](https://docs.google.com/document/d/1iB8b3PwAmHHcAPs7BiSs-qX_pEkU6hwMHUP7TDdyNbw/edit?usp=sharing)
+- :page_facing_up: [SRSv3](https://docs.google.com/document/d/15dGFRXU--YrdW5iTKfGhxVrCDs4SI2uyBP4ti5icebU/edit?usp=sharing)
 
 ### Architecture Document
 - :page_facing_up: [Architecture](https://docs.google.com/document/d/1yIKPLw0YxICpEz6G6eON0RUFVmHae7cDEOZKa30TSBE/edit?usp=sharing)
@@ -40,6 +41,9 @@ The stored data will be processed using the location of each tower to calculate 
 
 ### User Manual
 - :page_facing_up: [User Manual](https://drive.google.com/file/d/1tIHMw2GaSdJPM_yBbQfdWs-VHG6oBDFK/view?usp=sharing)
+
+### Technical Installation Manual
+- :page_facing_up: [Technical Installation Manual](https://docs.google.com/document/d/1C9NbFtZF1AaECv-r9lJ2Hz2xMDL-6hCEVVsvSA1ZF-w/edit?usp=sharing)
 
 ## Project Management
 
