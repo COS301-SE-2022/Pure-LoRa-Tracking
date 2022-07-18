@@ -558,7 +558,6 @@ describe('ReserveMapComponent', () => {
       component.reload([demoDevice]);
       expect(tempmarker.remove).toBeCalled();
       expect(templine.remove).toBeCalled();
-      expect(component.historicalpath).toEqual([]);
     })
     it("Should call the load innitial",()=>{
       jest.spyOn(tempmarker,"remove").mockImplementation();
