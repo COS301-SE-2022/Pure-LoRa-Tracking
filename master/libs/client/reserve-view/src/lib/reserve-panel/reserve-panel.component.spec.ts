@@ -61,7 +61,7 @@ describe('ReservePanelComponent', () => {
 
   const demogateway1={
     eui:"lkdsaf1",
-    id:"djdje12",
+    id:"gatesdfd2",
     name:"gateway1"
   }
 
@@ -174,14 +174,17 @@ describe('ReservePanelComponent', () => {
 
   })
 
-  // describe("search devices", () => {
-  //   it("Should filter the sensors and gateways", () => {
-  //     component.Devices=[demoDevice,demoDevice2,demoDevice3];
-  //     component.GateWays=[demogateway1,demogateway2];
-
-  //   });
+  describe("search devices", () => {
+    it("Should filter the sensors and gateways", () => {
+      component.Devices=[demoDevice,demoDevice2,demoDevice3];
+      component.GateWays=[demogateway1,demogateway2];
+      component.searchString="2";
+      component.searchDevices();
+      expect(component.filteredGateways).toEqual([demogateway1]);
+      expect(component.filteredSensors).toEqual([demoDevice2,demoDevice3]);
+    });
     
-  // });
+  });
 
 
 
