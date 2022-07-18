@@ -117,10 +117,10 @@ export class ReservePanelComponent implements OnInit {
     this.filteredSensors = this.Devices.map(sensorItem => {return sensorItem;})
   }
 
-  viewSensor(id:string,name: string):void{
+  viewSensor(event:{id:string,name: string}):void{
     this.currentSensor = {
-      name: name,
-      id: id,
+      name: event.name,
+      id: event.id,
     }
     this.openSensor = true;
   }

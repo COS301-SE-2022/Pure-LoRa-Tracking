@@ -1,4 +1,4 @@
-$radius-size: 1.3rem;
+$radius-size: 1.5rem;
 
 .mat-expansion-panel-header-title,
 .mat-expansion-panel-header-description {
@@ -43,7 +43,7 @@ $radius-size: 1.3rem;
 }
 
 .action-buttons{
-    border: 1px solid #0058FF;
+   // border: 1px solid var(--color-bright-accent);
 } 
 
 
