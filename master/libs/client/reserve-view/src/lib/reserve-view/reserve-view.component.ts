@@ -90,6 +90,7 @@ export class ReserveViewComponent {
     console.log("changed reserve");
     this.apicaller.getReserve(this.token,this.selectedReserveId).then(val =>{
       this.Reserve = val;
+      console.log(this.Reserve);
       if(this.Reserve?.data?.reserveName!=undefined)
         this.ReserveName=this.Reserve?.data?.reserveName;
       });
