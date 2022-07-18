@@ -6,7 +6,7 @@ import { CookieService } from 'ngx-cookie-service';
 })
 export class TokenManagerService {
 
-  constructor(private cookieservice:CookieService) { 
+  constructor(public cookieservice:CookieService) { 
 
   }
 

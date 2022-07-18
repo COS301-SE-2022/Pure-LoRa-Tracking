@@ -36,7 +36,7 @@ export class ReserveViewComponent {
   reservesList:ReserveInfo[];
   selectedReserveId="";
 
-  constructor(private apicaller:MapCallerService,private tokenmanager:TokenManagerService,private notifier:DeviceNotifierService,private http:HttpClient) {
+  constructor(public apicaller:MapCallerService,private tokenmanager:TokenManagerService,private notifier:DeviceNotifierService,private http:HttpClient) {
     this.LastestHistorical=[];
     this.Gateways=[];
     this.ShowPolygon=true;
@@ -70,36 +70,8 @@ export class ReserveViewComponent {
       this.selectedReserveId = this.reservesList[0].id;
     })
     this.updateReserve(this.selectedReserveId);
-    //get the reserve
-    //TODO check for incorrect token response
-    // this.apicaller.getReserve(this.token,this.selectedReserveId).then(val =>{
-    //   this.Reserve = val;
-    //   if(this.Reserve?.data?.reserveName!=undefined)
-    //     this.ReserveName=this.Reserve?.data?.reserveName;
-    //   });
-    // this.apicaller.getHistorical(this.token,this.selectedReserveId,[]).then(val=>{
-    //   // console.log(val+"thingdd")
-    //   //console.log(val);
-    //   this.LastestHistorical=val.data;
-    //   this.reservemap?.loadInnitial(this.LastestHistorical);
-    // });
-    // this.apicaller.getGateways(this.token,"ef55ff40-dfe8-11ec-bdb3-750ce7ed2451").then((val:any)=>{
-    //   console.log(val)
-    //   this.Gateways=val.data.map((curr:any)=>({id:curr.deviceID,name:curr.humanName,eui:curr.deviceName} as GatewayInput));
-    //   console.log(this.Gateways)
-    // })
+    
   }
-
-  // updateSensor(idinput:string){
-  //   if(idinput==""){
-  //     this.reservemap?.resetData();
-  //   }
-  //   else{
-  //     if(!this.reservemap?.showOnly(idinput)){
-  //       alert("No location data found");
-  //     }
-  //   }
-  // }
 
   updateViewMapType(newval:string){
     if(newval=="norm") this.ViewMapTypeInput=ViewMapType.NORMAL_OPEN_STREET_VIEW;
@@ -118,6 +90,7 @@ export class ReserveViewComponent {
     console.log("changed reserve");
     this.apicaller.getReserve(this.token,this.selectedReserveId).then(val =>{
       this.Reserve = val;
+      console.log(this.Reserve);
       if(this.Reserve?.data?.reserveName!=undefined)
         this.ReserveName=this.Reserve?.data?.reserveName;
       });

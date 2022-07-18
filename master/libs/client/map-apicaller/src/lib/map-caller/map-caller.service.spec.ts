@@ -41,6 +41,27 @@ describe('MapCallerService', () => {
       expect(await service.getHistorical("sd","sd",[])).toEqual(true);
     })
   })
+  
+  describe("getHistoricalWithTime", ()=>{
+    it("Should return a promise with the correct value",async ()=>{
+      jest.spyOn(client,"post").mockImplementation(()=>of(true))
+      expect(await service.getHistoricalWithTime("sd","sd",[],0,0)).toEqual(true);
+    })
+  })
+
+  describe("getGateways", ()=>{
+    it("Should return a promise with the correct value",async ()=>{
+      jest.spyOn(client,"post").mockImplementation(()=>of(true))
+      expect(await service.getGateways("sd","sd")).toEqual(true);
+    })
+  })
+
+  describe("removeDevice", ()=>{
+    it("Should return a promise with the correct value",async ()=>{
+      jest.spyOn(client,"post").mockImplementation(()=>of(true))
+      expect(await service.removeDevice("sd","sd","sd",true)).toEqual(true);
+    })
+  })
 
 
 });
