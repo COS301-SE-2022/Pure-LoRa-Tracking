@@ -51,8 +51,8 @@ describe('MapPanelComponent', () => {
     })
   })
 
-  describe("Apply",()=>{
-    
-  })
+  // describe("Apply",()=>{
+
+  // })
 
 });
