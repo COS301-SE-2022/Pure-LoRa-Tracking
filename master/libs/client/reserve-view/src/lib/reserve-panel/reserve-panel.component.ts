@@ -3,15 +3,9 @@ import { EventEmitter } from '@angular/core';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { MatSelectionList } from '@angular/material/list';
 import { DeviceNotifierService } from '@master/client/shared-services';
-import { Device, ViewMapType } from '@master/shared-interfaces';
+import { Device, ViewMapType,Gateway } from '@master/shared-interfaces';
 import { ReserveInfo } from '../reserve-view/reserve-view.component';
 
-
-export interface Gateway {
-  name: string;
-  id: string;
-  eui:string;
-}
 
 @Component({
   selector: 'master-reserve-panel',
@@ -31,7 +25,7 @@ export class ReservePanelComponent implements OnInit {
   }
   public set Devices(devicearr:Device[]){
     this._Devices=devicearr;
-    this.filteredSensors = this.Devices.map(sensorItem => {return sensorItem;})
+    this.filteredSensors = this.Devices;
   }
   openSensor=false;
 
@@ -48,7 +42,7 @@ export class ReservePanelComponent implements OnInit {
   public set GateWays(userinput:Gateway[]){
     this._GateWays=userinput;
     console.log("changes");
-    this.filteredGateways= this.GateWays.map(item=>item);
+    this.filteredGateways= this.GateWays;
   }
   
   deviceType = "sensors";
@@ -58,7 +52,7 @@ export class ReservePanelComponent implements OnInit {
 
   filteredSensors:Device[]=[];
 
-  constructor(private notifier:DeviceNotifierService) {
+  constructor(public notifier:DeviceNotifierService) {
     this._Devices=[];
     this._GateWays=[];
     this._ViewType="norm"

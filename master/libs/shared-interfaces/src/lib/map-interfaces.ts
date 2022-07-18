@@ -50,6 +50,13 @@ export interface Device {
     }[]
 }
 
+export interface Gateway {
+    name: string;
+    id: string;
+    eui:string;
+  }
+
+
 export interface MapApiReserveResponse {
     code: number,
     status: string,
