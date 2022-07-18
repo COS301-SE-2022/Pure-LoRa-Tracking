@@ -13,7 +13,7 @@ describe('ReserveViewComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ReserveViewComponent],
-      imports:[HttpClientTestingModule,ClientMapApicallerModule,ClientSharedServicesModule]
+      imports: [HttpClientTestingModule, ClientMapApicallerModule, ClientSharedServicesModule]
     }).compileComponents();
   });
 
@@ -27,62 +27,50 @@ describe('ReserveViewComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  // describe("Update Sensor",()=>{
-  //   beforeEach(()=>{
-  //     component.reservemap=new ReserveMapComponent(new DeviceNotifierService);
-  //     if(component.reservemap!=null) {
-  //     jest.spyOn(component.reservemap,"resetData").getMockImplementation();
-  //     jest.spyOn(component.reservemap,"showOnly").getMockImplementation();
-  //     }
-  //   })
 
-  //   it("Should call reset and not showonly if input is null",()=>{
-  //     component.updateSensor("");
-  //     expect(component.reservemap?.resetData).toBeCalled();
-  //     expect(component.reservemap?.showOnly).not.toBeCalled();
-  //   })
 
-  //   it("Should call showonly and not reset if input is not null",()=>{
-  //     component.updateSensor("test");
-  //     expect(component.reservemap?.resetData).not.toBeCalled();
-  //     expect(component.reservemap?.showOnly).toBeCalled();
-  //   })
+  describe("UpdateViewMapType", () => {
+    it("Changes to the right type, norm to sat", () => {
+      component.ViewMapTypeInput = ViewMapType.NORMAL_OPEN_STREET_VIEW;
+      component.updateViewMapType("sat");
+      expect(component.ViewMapTypeInput).toEqual(ViewMapType.SATELLITE_ESRI_1)
+    })
+
+    it("Changes to the right type, sat to norm", () => {
+      component.ViewMapTypeInput = ViewMapType.SATELLITE_ESRI_1;
+      component.updateViewMapType("norm");
+      expect(component.ViewMapTypeInput).toEqual(ViewMapType.NORMAL_OPEN_STREET_VIEW)
+    })
+
+    it("Does not change sat to sat", () => {
+      component.ViewMapTypeInput = ViewMapType.SATELLITE_ESRI_1;
+      component.updateViewMapType("sat");
+      expect(component.ViewMapTypeInput).toEqual(ViewMapType.SATELLITE_ESRI_1)
+    })
+
+    it("Does not change norm to norm", () => {
+      component.ViewMapTypeInput = ViewMapType.NORMAL_OPEN_STREET_VIEW;
+      component.updateViewMapType("norm");
+      expect(component.ViewMapTypeInput).toEqual(ViewMapType.NORMAL_OPEN_STREET_VIEW)
+    })
+  })
+
+  // describe("NgOnInit",()=>{
+
+
+
   // })
 
-  describe("UpdateViewMapType",()=>{
-    it("Changes to the right type, norm to sat",()=>{
-      component.ViewMapTypeInput=ViewMapType.NORMAL_OPEN_STREET_VIEW;
-      component.updateViewMapType("sat");
-      expect(component.ViewMapTypeInput).toEqual(ViewMapType.SATELLITE_ESRI_1)
-    })
+  describe("Update Range", () => {
+    it("Should update the range", () => {
+      jest.spyOn(component.apicaller, "getHistoricalWithTime").mockReturnValue(Promise.resolve({ data: "test" }));
+      if (component.reservemap != null) jest.spyOn(component.reservemap, "reload").mockImplementation();
+      component.updateRange({start:0,end:0});
+      expect(component.apicaller.getHistoricalWithTime).toBeCalled();
+      if (component.reservemap != null) expect(component.reservemap.reload).toBeCalled();
 
-    it("Changes to the right type, sat to norm",()=>{
-      component.ViewMapTypeInput=ViewMapType.SATELLITE_ESRI_1;
-      component.updateViewMapType("norm");
-      expect(component.ViewMapTypeInput).toEqual(ViewMapType.NORMAL_OPEN_STREET_VIEW)
-    })
 
-    it("Does not change sat to sat",()=>{
-      component.ViewMapTypeInput=ViewMapType.SATELLITE_ESRI_1;
-      component.updateViewMapType("sat");
-      expect(component.ViewMapTypeInput).toEqual(ViewMapType.SATELLITE_ESRI_1)
     })
+  });
 
-    it("Does not change norm to norm",()=>{
-      component.ViewMapTypeInput=ViewMapType.NORMAL_OPEN_STREET_VIEW;
-      component.updateViewMapType("norm");
-      expect(component.ViewMapTypeInput).toEqual(ViewMapType.NORMAL_OPEN_STREET_VIEW)
-    })
-  })
-
-  describe("NgOnInit",()=>{
-    it("Calls the service functions",()=>{
-      // jest.spyOn(service,"getReserve").mockImplementation();
-      // jest.spyOn(service,"getHistorical").mockImplementation();
-      // component.ngOnInit();
-      // expect(service.getReserve).toBeCalled();
-      // expect(service.getHistorical).toBeCalled();
-    })
-
-  })
 });
