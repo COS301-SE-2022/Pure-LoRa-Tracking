@@ -32,7 +32,9 @@ export class ThingsboardThingsboardTestsService {
     "authority": "CUSTOMER_USER",
     "firstName": "John",
     "lastName": "Doe",
-    "additionalInfo": {}
+    "additionalInfo": {
+      "reserves":["1"]
+    }
   }
 
   UserAdminExample = {
@@ -132,7 +134,7 @@ export class ThingsboardThingsboardTestsService {
     zip: '10004',
     phone: '+1(415)777-7777',
     email: 'example@company.com',
-    additionalInfo: {},
+    additionalInfo: {location:[]},
   };
 
   CustomersExample = {
@@ -206,7 +208,7 @@ export class ThingsboardThingsboardTestsService {
         zip: '10004',
         phone: '+1(415)777-7777',
         email: 'example@company.com',
-        additionalInfo: {},
+        additionalInfo: {reserves:[]},
         tenantProfileName: 'Default',
       },
     ],
@@ -236,7 +238,7 @@ export class ThingsboardThingsboardTestsService {
     zip: '10004',
     phone: '+1(415)777-7777',
     email: 'example@company.com',
-    additionalInfo: {},
+    additionalInfo: {reserves:[]},
     tenantProfileName: 'Default',
   };
 
@@ -277,7 +279,12 @@ export class ThingsboardThingsboardTestsService {
       "id": "784f394c-42b6-435a-983c-b7beff2784f9",
       "entityType": "OTA_PACKAGE"
     },
-    "additionalInfo": {}
+    "additionalInfo": {
+      location : {
+        latitude : 1,
+        longitude : 2
+      }
+    }
   }
 
   DevicesExample = {
