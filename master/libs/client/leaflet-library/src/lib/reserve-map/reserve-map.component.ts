@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, Input, OnChanges, SimpleChanges, } from '@angular/core';
-import { MapApiHistoricalData, MapApiHistoricalResponse, MapApiLatestResponse, MapApiReserveResponse, MapHistoricalPoints, MapRender, MarkerView, ViewMapType, Device} from '@master/shared-interfaces';
+import { MapApiHistoricalData, MapApiHistoricalResponse, MapApiLatestResponse, MapApiReserveResponse, MapHistoricalPoints, MapRender, MarkerView, ViewMapType, Device, Gateway} from '@master/shared-interfaces';
 import * as L from 'leaflet';
 // This library does not declare a module type, we we need to ignore this
 // error for a successful import
@@ -33,6 +33,7 @@ export class ReserveMapComponent implements OnInit, OnChanges {
   // private mapmarkers: Array<L.Marker<any>> = [];
   public mappolygons: L.Polygon;
   public historicalpath: Array<MapHistoricalPoints> = [];
+  public gatewayMarkers:Array<Gateway>=[];
   private bluecirlceicon: L.Icon = new L.Icon({
     iconUrl: "assets/MapIcons/BaseCircle.png",
     iconSize: [20, 20]
@@ -255,6 +256,7 @@ export class ReserveMapComponent implements OnInit, OnChanges {
   }
 
   public loadInnitial(deviceIDs: Device[]): void {
+    console.log("Hit the road jack");
     deviceIDs.forEach(val => this.loadhistorical(val));
   }
 
@@ -284,8 +286,19 @@ export class ReserveMapComponent implements OnInit, OnChanges {
     }
   }
 
-  // public changeReserve(reserve:MapApiReserveResponse){
+  public loadGateways(Gateways:Gateway[]){
+    
+  }
 
-  // }
+  //reset all data
+  public changeReserve(){
+    this.mappolygons.remove();
+    this.mappolygons=L.polygon([]);
+    this.historicalpath.forEach(val => {
+      val.markers.forEach(curr => curr.remove())
+      val.polyline.remove();
+    })
+    this.historicalpath=[];
+  }
 
 }
