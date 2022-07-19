@@ -325,6 +325,8 @@ export class ReserveMapComponent implements OnInit, OnChanges {
       val.polyline.remove();
     })
     this.historicalpath=[];
+    this.gatewayMarkers.forEach(curr=>curr.marker.remove());
+    this.gatewayMarkers=[];
   }
 
 }
