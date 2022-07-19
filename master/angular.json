@@ -17,6 +17,7 @@
     "client-defaultpage": "libs/client/defaultpage",
     "client-device-add-view": "libs/client/device-add-view",
     "client-leaflet-library": "libs/client/leaflet-library",
+    "client-manage-view": "libs/client/manage-view",
     "client-map-apicaller": "libs/client/map-apicaller",
     "client-reserve-view": "libs/client/reserve-view",
     "client-shared-services": "libs/client/shared-services",

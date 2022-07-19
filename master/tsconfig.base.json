@@ -76,6 +76,7 @@
       "@master/client/leaflet-library": [
         "libs/client/leaflet-library/src/index.ts"
       ],
+      "@master/client/manage-view": ["libs/client/manage-view/src/index.ts"],
       "@master/client/map-apicaller": [
         "libs/client/map-apicaller/src/index.ts"
       ],
