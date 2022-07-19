@@ -78,6 +78,7 @@ export class ReservePanelComponent implements OnInit {
     if(deviceID==this.selectedDeviceID){
       //reset
       this.selectedDeviceID="";
+      this.notifier.resetSensorView()
     }
     else {
       //click on
@@ -88,6 +89,7 @@ export class ReservePanelComponent implements OnInit {
         //might have to change if we dont store the locations here anymore
         if(device.locationData.length==0){
           this.selectedDeviceID="";
+          this.notifier.resetSensorView()
         }
       }
       

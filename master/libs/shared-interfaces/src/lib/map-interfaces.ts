@@ -54,6 +54,10 @@ export interface Gateway {
     name: string;
     id: string;
     eui:string;
+    location?:{
+        latitude:number,
+        longitude:number
+    }
   }
 
 

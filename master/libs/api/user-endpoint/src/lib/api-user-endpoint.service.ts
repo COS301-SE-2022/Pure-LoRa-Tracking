@@ -182,7 +182,6 @@ export class ApiUserEndpointService {
       };
     this.thingsboardClient.setToken(content.token);
     const resp = await this.thingsboardClient.getUserInfoFromToken();
-
     if (resp.status == 'fail')
       return {
         status: 500,
