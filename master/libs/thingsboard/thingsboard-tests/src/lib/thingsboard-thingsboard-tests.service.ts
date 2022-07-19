@@ -33,7 +33,7 @@ export class ThingsboardThingsboardTestsService {
     "firstName": "John",
     "lastName": "Doe",
     "additionalInfo": {
-      "reserves":["1"]
+      "reserves":[{"reserveName":"reserve","reserveID":"1"}]
     }
   }
 

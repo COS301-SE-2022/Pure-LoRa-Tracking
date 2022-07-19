@@ -575,7 +575,7 @@ export class ThingsboardThingsboardClientService {
     email: string,
     firstName: string,
     lastName: string,
-    reserves: string[]
+    reserves: {reserveName:string, reserveID:string}[]
   ): Promise<thingsboardResponse> {
     const login = await this.userService.userInfo(this.token);
 
@@ -630,9 +630,16 @@ export class ThingsboardThingsboardClientService {
       furtherExplain: UserInfo.explanation
     };
 
+    let exists = false;
+    for (let i = 0; i < UserInfo.data.additionalInfo.reserves.length && exists == false; i++) {
+      const element = UserInfo.data.additionalInfo.reserves[i];
+      if(element.reserveID == custID)
+        exists = true;      
+    }
+
     if (
       UserInfo.data.additionalInfo.reserves == undefined ||
-      UserInfo.data.additionalInfo.reserves.includes(custID) == false
+      exists == false
     )
       return {
         status: 'fail',
@@ -671,7 +678,7 @@ export class ThingsboardThingsboardClientService {
   */
   async changeReservesAvailableforUser(
     userID: string,
-    reserves: string[]
+    reserves: {reserveName:string, reserveID:string}[]
   ): Promise<thingsboardResponse> {
     const login = await this.userService.userInfo(this.token);
 
@@ -834,6 +841,7 @@ export class ThingsboardThingsboardClientService {
       return {
         status: 'fail',
         explanation: 'call failed',
+        furtherExplain: resp.explanation
       };
     return {
       status: 'ok',
@@ -1262,6 +1270,44 @@ export class ThingsboardThingsboardClientService {
     return {
       status:'ok',
       explanation:'call finished',
+    }
+  }
+
+  /////////////////////////////////////////////////////////////////
+  /* TODO */
+  async getReserveList() : Promise<thingsboardResponse> {
+    const userInfo = await this.getUserInfoFromToken();
+    if(userInfo.status == 'fail')
+    return {
+      status : 'fail',
+      explanation : userInfo.furtherExplain
+    }
+
+    if(userInfo.data.authority == "CUSTOMER_USER" )
+    return {
+      status : 'fail',
+      explanation : 'request not made by an admin'
+    }
+
+
+    const serverLogin = await this.loginUser('server@thingsboard.org', process.env.DEFAULT_SERVER_PASSWORD)
+    if(serverLogin == false)
+    return {
+      status: 'fail',
+      explanation: 'server fail'
+    }
+    const serverUser = await this.userService.userInfo(this.token) 
+    
+    if(serverUser.status != 200)
+    return {
+      status : 'fail',
+      explanation : serverUser.explanation
+    }
+
+    return {
+      status : 'ok',
+      explanation : 'call finished',
+      data : serverUser.data.additionalInfo.reserves
     }
   }
 }
