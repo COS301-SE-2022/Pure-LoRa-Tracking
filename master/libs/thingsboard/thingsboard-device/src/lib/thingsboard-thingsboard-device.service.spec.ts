@@ -284,5 +284,13 @@ describe('ThingsboardThingsboardDeviceService', () => {
     expect(await service.getDeviceInfo("2fe67850-dfe9-11ec-bdb3-750ce7ed2451")).toMatchObject(tests.FailResponse);
   });
 
+  ///////////////////////////////////////////////////////////////////////////////////////////
+
+  /*it('device create -> Mock device', async () => {
+    const data = await loginService.login(tests.admin, tests.adminPassword);
+    service.setToken(data.data.token);
+    expect(await service.createDevice("device2", "rietvlei gateway", true)).toMatchObject(tests.FailResponse);
+  });*/
+
 
 });
