@@ -20,6 +20,6 @@ describe('ApiLoginEndpointService', () => {
   });
 
   it('login and get info', async() => {
-    console.log(await service.doLogin({username:'reserveuser@reserve.com', password:'reserve'}))
+    //console.log(await service.doLogin({username:'reserveusertwo@reserve.com', password:'reserve'}))
   });
 });
