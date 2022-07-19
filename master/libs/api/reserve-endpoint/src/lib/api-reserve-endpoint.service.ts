@@ -1,6 +1,6 @@
 import { ThingsboardThingsboardClientService } from '@lora/thingsboard-client';
 import { Injectable } from '@nestjs/common';
-import { ReserveCreateEndpoint, ReserveEndpoint, ReserveResponse, ReserveSetEndpoint } from '../reserve-endpoint.interface';
+import { ReserveCreateEndpoint, ReserveEndpoint, ReserveEndpointNoToken, ReserveResponse, ReserveSetEndpoint } from '../reserve-endpoint.interface';
 
 @Injectable()
 export class ApiReserveEndpointService {
@@ -176,5 +176,30 @@ export class ApiReserveEndpointService {
             data : resp.data
         }
 
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////
+
+    async processReserveList(body : ReserveEndpointNoToken) : Promise<ReserveResponse> {
+        if (body.token == undefined || body.token == '')
+        return {
+            status: 401,
+            explanation: 'token missing',
+        };
+
+        this.thingsboardClient.setToken(body.token);
+
+        const response = await this.thingsboardClient.getReserveList();
+        if(response.status == 'fail')
+        return {
+            status : 400,
+            explanation : response.explanation
+        }
+
+        return {
+            status : 200,
+            explanation : response.explanation,
+            data : response.data
+        }
     }
 }

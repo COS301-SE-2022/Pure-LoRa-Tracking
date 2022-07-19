@@ -3,6 +3,10 @@ export interface ReserveEndpoint {
     reserveID : string;
 }
 
+export interface ReserveEndpointNoToken {
+    token : string;
+}
+
 export interface ReserveCreateEndpoint {
     token : string;
     NameOfReserve : string;

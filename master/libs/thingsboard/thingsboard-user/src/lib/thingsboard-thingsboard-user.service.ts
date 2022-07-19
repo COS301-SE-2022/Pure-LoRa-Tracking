@@ -287,7 +287,7 @@ export class ThingsboardThingsboardUserService {
     email: string,
     firstName: string,
     lastName: string,
-    reserves: string[]
+    reserves: {reserveName:string, reserveID:string}[]
   ): Promise<UserResponse> {
     const headersReq = {
       'Content-Type': 'application/json',
@@ -609,7 +609,7 @@ export interface UserResponse {
     firstName?: string;
     lastName?: string;
     additionalInfo?: {
-      reserves?: string[];
+      reserves?: {reserveName:string, reserveID:string}[];
     };
   };
   type?: string;

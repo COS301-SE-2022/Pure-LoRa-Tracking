@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ApiReserveEndpointService } from './api-reserve-endpoint.service';
-import {ReserveCreateEndpoint, ReserveEndpoint, ReserveSetEndpoint, ReserveResponse} from "../reserve-endpoint.interface";
+import {ReserveCreateEndpoint, ReserveEndpoint, ReserveSetEndpoint, ReserveResponse, ReserveEndpointNoToken} from "../reserve-endpoint.interface";
 
 @Controller('reserve')
 export class ApiReserveEndpointController {
@@ -20,8 +20,10 @@ export class ApiReserveEndpointController {
   @Post("location")
   async PostReserveResponse(@Body() body : ReserveEndpoint) : Promise<ReserveResponse> {return await this.apiReserveEndpointService.processReserveInfo(body);}
 
-
   @Post("location/set")
   async PostReserveSetResponse(@Body() body : ReserveSetEndpoint) : Promise<ReserveResponse> {return await this.apiReserveEndpointService.processReserveSet(body);}
+
+  @Post("admin/list")
+  async PostReserveListResponse(@Body() body : ReserveEndpointNoToken) : Promise<ReserveResponse> {return await this.apiReserveEndpointService.processReserveList(body);}
 
 }
