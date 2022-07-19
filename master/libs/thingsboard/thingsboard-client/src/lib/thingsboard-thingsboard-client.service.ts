@@ -7,12 +7,8 @@ import {
   ThingsboardThingsboardDeviceService,
 } from '@lora/thingsboard-device';
 import { ThingsboardThingsboardAssetService } from '@lora/thingsboard-asset';
-import {
-  MapApiReserveResponse,
-} from '@master/shared-interfaces';
-import {
-  ThingsboardThingsboardAdminService,
-} from '@lora/thingsboard/admin';
+import { MapApiReserveResponse } from '@master/shared-interfaces';
+import { ThingsboardThingsboardAdminService } from '@lora/thingsboard/admin';
 import { ThingsboardThingsboardReserveService } from '@lora/thingsboard/reserve';
 @Injectable()
 export class ThingsboardThingsboardClientService {
@@ -190,11 +186,11 @@ export class ThingsboardThingsboardClientService {
       };
 
     const user = await this.userService.userInfo(this.token);
-    if(user.status != 200)
-    return {
-      status : 'fail',
-      explanation : user.explanation
-    }
+    if (user.status != 200)
+      return {
+        status: 'fail',
+        explanation: user.explanation,
+      };
     if (
       user.data.authority == undefined ||
       user.data.authority == 'CUSTOMER_USER'
@@ -210,6 +206,7 @@ export class ThingsboardThingsboardClientService {
       name,
       location
     );
+    this.generateReserveList_ReserveAdmin();
     if (response.status != 200)
       return {
         status: 'fail',
@@ -232,13 +229,13 @@ export class ThingsboardThingsboardClientService {
     */
   async getReservePerimeter(): Promise<MapApiReserveResponse> {
     const userInfo = await this.userService.userInfo(this.token);
-    if(userInfo.status != 200)
-    return {
-      status : 'fail',
-      code : 400,
-      explanation : userInfo.explanation
-    }
-    
+    if (userInfo.status != 200)
+      return {
+        status: 'fail',
+        code: 400,
+        explanation: userInfo.explanation,
+      };
+
     this.assetService.setToken(this.token);
 
     const response = await this.assetService.getAssetIDs(
@@ -313,12 +310,12 @@ export class ThingsboardThingsboardClientService {
       startTime,
       endTime
     );
-    // console.log('resp :>> ', resp);
-    if(resp.status != 200)
-    return {
-      status: 'fail',
-      explanation: resp.explanation,
-    }
+
+    if (resp.status != 200)
+      return {
+        status: 'fail',
+        explanation: resp.explanation,
+      };
 
     const labelName = verifyDevice['label'];
     const deviceName = verifyDevice['name'];
@@ -342,14 +339,13 @@ export class ThingsboardThingsboardClientService {
         token: resp.data.token,
         refreshToken: resp.data.refreshToken,
       };
-    }
-    else
-    return {
-      status: 'fail',
-      explanation: resp.explanation,
-      token:'',
-      refreshToken:''
-    };
+    } else
+      return {
+        status: 'fail',
+        explanation: resp.explanation,
+        token: '',
+        refreshToken: '',
+      };
   }
 
   ////////////////////////////////////////////////
@@ -401,7 +397,7 @@ export class ThingsboardThingsboardClientService {
       return {
         status: 'fail',
         explanation: 'user type unknown',
-        furtherExplain: UserInfo.explanation
+        furtherExplain: UserInfo.explanation,
       };
     let devices: thingsboardResponse;
     if (UserInfo.data.authority == 'TENANT_ADMIN') {
@@ -428,12 +424,12 @@ export class ThingsboardThingsboardClientService {
         explanation: 'call finished',
         data: data,
       };
-    } 
+    }
     return {
-        status: 'ok',
-        explanation: 'call finished',
-        data: devices.data,
-      };
+      status: 'ok',
+      explanation: 'call finished',
+      data: devices.data,
+    };
   }
 
   ///////////////////////////////////////////////////////////////////////
@@ -476,7 +472,7 @@ export class ThingsboardThingsboardClientService {
       return {
         status: 'fail',
         explanation: 'customer ID failed with ' + CustInfo.status,
-        furtherExplain: CustInfo.explanation
+        furtherExplain: CustInfo.explanation,
       };
     }
 
@@ -537,7 +533,7 @@ export class ThingsboardThingsboardClientService {
       };
 
     const UserInfo = await this.userService.userInfo(this.token);
-      if(UserInfo.status != 200)
+    if (UserInfo.status != 200)
       return {
         status: 'fail',
         explanation: UserInfo.explanation,
@@ -575,7 +571,7 @@ export class ThingsboardThingsboardClientService {
     email: string,
     firstName: string,
     lastName: string,
-    reserves: {reserveName:string, reserveID:string}[]
+    reserves: { reserveName: string; reserveID: string }[]
   ): Promise<thingsboardResponse> {
     const login = await this.userService.userInfo(this.token);
 
@@ -624,23 +620,23 @@ export class ThingsboardThingsboardClientService {
   async changeReserveForUser(custID: string): Promise<thingsboardResponse> {
     const UserInfo = await this.userService.userInfo(this.token);
     if (UserInfo.status != 200)
-    return {
-      status: 'fail',
-      explanation: 'token invalid',
-      furtherExplain: UserInfo.explanation
-    };
+      return {
+        status: 'fail',
+        explanation: 'token invalid',
+        furtherExplain: UserInfo.explanation,
+      };
 
     let exists = false;
-    for (let i = 0; i < UserInfo.data.additionalInfo.reserves.length && exists == false; i++) {
+    for (
+      let i = 0;
+      i < UserInfo.data.additionalInfo.reserves.length && exists == false;
+      i++
+    ) {
       const element = UserInfo.data.additionalInfo.reserves[i];
-      if(element.reserveID == custID)
-        exists = true;      
+      if (element.reserveID == custID) exists = true;
     }
 
-    if (
-      UserInfo.data.additionalInfo.reserves == undefined ||
-      exists == false
-    )
+    if (UserInfo.data.additionalInfo.reserves == undefined || exists == false)
       return {
         status: 'fail',
         explanation: 'user not in reserve',
@@ -678,7 +674,7 @@ export class ThingsboardThingsboardClientService {
   */
   async changeReservesAvailableforUser(
     userID: string,
-    reserves: {reserveName:string, reserveID:string}[]
+    reserves: { reserveName: string; reserveID: string }[]
   ): Promise<thingsboardResponse> {
     const login = await this.userService.userInfo(this.token);
 
@@ -703,7 +699,7 @@ export class ThingsboardThingsboardClientService {
       return {
         status: 'fail',
         explanation: 'user is not available',
-        furtherExplain: UserInfo.explanation
+        furtherExplain: UserInfo.explanation,
       };
 
     const resp = await this.userService.changeReserveForUser(
@@ -792,7 +788,7 @@ export class ThingsboardThingsboardClientService {
       return {
         status: 'fail',
         explanation: 'disable failed',
-        furtherExplain: resp.explanation
+        furtherExplain: resp.explanation,
       };
   }
 
@@ -827,7 +823,7 @@ export class ThingsboardThingsboardClientService {
       return {
         status: 'fail',
         explanation: 'enable failed',
-        furtherExplain: resp.explanation
+        furtherExplain: resp.explanation,
       };
   }
 
@@ -841,7 +837,7 @@ export class ThingsboardThingsboardClientService {
       return {
         status: 'fail',
         explanation: 'call failed',
-        furtherExplain: resp.explanation
+        furtherExplain: resp.explanation,
       };
     return {
       status: 'ok',
@@ -1008,7 +1004,7 @@ export class ThingsboardThingsboardClientService {
   }
 
   /////////////////////////////////////////////////////////////////
-  
+
   /*
   check admin
   */
@@ -1026,47 +1022,57 @@ export class ThingsboardThingsboardClientService {
     }
   ): Promise<thingsboardResponse> {
     const user = await this.userService.userInfo(this.token);
-    
-    if(user.status != 200)
-    return {
-      status : 'fail',
-      explanation : 'token invalid'
-    }
 
-    if(user.data.authority != 'TENANT_ADMIN')
-    return {
-      status:'fail',
-      explanation:'wrong permissions'
-    }
+    if (user.status != 200)
+      return {
+        status: 'fail',
+        explanation: 'token invalid',
+      };
+
+    if (user.data.authority != 'TENANT_ADMIN')
+      return {
+        status: 'fail',
+        explanation: 'wrong permissions',
+      };
 
     this.reserveService.setToken(this.token);
     const info = await this.reserveService.CustomerInfo(reserveID);
 
-    if(info.status != 200)
-    return {
-      status: 'fail',
-      explanation: info.explanation
-    }
+    if (info.status != 200)
+      return {
+        status: 'fail',
+        explanation: info.explanation,
+      };
 
-    if(info.data.additionalInfo.location!= undefined)
-    delete info.data.additionalInfo.location;
+    if (info.data.additionalInfo.location != undefined)
+      delete info.data.additionalInfo.location;
 
     const response = await this.reserveService.setReservePerimeter(
-      info.data.externalId?.id, info.data.id.id, info.data.title, info.data.region, info.data.tenantId.id, info.data.country,
-      info.data.city, info.data.address, info.data.address2, info.data.zip, info.data.phone, info.data.email, 
+      info.data.externalId?.id,
+      info.data.id.id,
+      info.data.title,
+      info.data.region,
+      info.data.tenantId.id,
+      info.data.country,
+      info.data.city,
+      info.data.address,
+      info.data.address2,
+      info.data.zip,
+      info.data.phone,
+      info.data.email,
       Object.assign(info.data.additionalInfo, { location: location })
-    )
+    );
 
-    if(response.status!=200)
+    if (response.status != 200)
+      return {
+        status: 'fail',
+        explanation: response.explanation,
+      };
+
     return {
-      status:'fail',
-      explanation:response.explanation
-    }
-
-    return{
-      status:'ok',
-      explanation:'call finished'
-    }
+      status: 'ok',
+      explanation: 'call finished',
+    };
   }
 
   /////////////////////////////////////////////////////////////////
@@ -1096,7 +1102,7 @@ export class ThingsboardThingsboardClientService {
     if (tenants.status != 200) {
       return {
         status: 'fail',
-        explanation : 'tenant info',
+        explanation: 'tenant info',
         furtherExplain: tenants.explanation,
       };
     }
@@ -1188,24 +1194,24 @@ export class ThingsboardThingsboardClientService {
       login.data.tenantId.id
     );
 
-    if(TenantGroup.status != 200)
+    if (TenantGroup.status != 200)
       return {
-        status : 'fail',
-        explanation : 'tenant group fail',
-        furtherExplain : TenantGroup.explanation
-      }
+        status: 'fail',
+        explanation: 'tenant group fail',
+        furtherExplain: TenantGroup.explanation,
+      };
 
     const sysadmin = await this.getToken(
       'server@thingsboard.org',
       'thingsboardserveraccountissecure'
     );
 
-    if(sysadmin.status != 200)
+    if (sysadmin.status != 200)
       return {
-        status : 'fail',
-        explanation : 'server token fail',
-        furtherExplain : TenantGroup.explanation
-      }
+        status: 'fail',
+        explanation: 'server token fail',
+        furtherExplain: TenantGroup.explanation,
+      };
 
     this.adminService.setToken(sysadmin.data.token);
 
@@ -1243,72 +1249,78 @@ export class ThingsboardThingsboardClientService {
   /////////////////////////////////////////////////////////////////
 
   /* TODO check the user is an admin or higher */
-  async CustomerInfo(reserveID: string) : Promise<thingsboardResponse> {
+  async CustomerInfo(reserveID: string): Promise<thingsboardResponse> {
     this.reserveService.setToken(this.token);
     const resp = await this.reserveService.CustomerInfo(reserveID);
-    if(resp.status != 200)
+    if (resp.status != 200)
+      return {
+        status: 'fail',
+        explanation: resp.explanation,
+      };
     return {
-      status:'fail',
-      explanation: resp.explanation
-    }
-    return {
-      status:'ok',
-      explanation:'call finished',
-      data:resp.data
-    }
+      status: 'ok',
+      explanation: 'call finished',
+      data: resp.data,
+    };
   }
 
   /////////////////////////////////////////////////////////////////
-  async removeReserve(reserveID: string) : Promise<thingsboardResponse> {
+  async removeReserve(reserveID: string): Promise<thingsboardResponse> {
     this.reserveService.setToken(this.token);
     const resp = await this.reserveService.deleteReserveGroup(reserveID);
-    if(resp.status != 200)
+    if (resp.status != 200)
+      return {
+        status: 'fail',
+        explanation: resp.explanation,
+      };
+    this.generateReserveList_ReserveAdmin()
     return {
-      status:'fail',
-      explanation: resp.explanation
-    }
-    return {
-      status:'ok',
-      explanation:'call finished',
-    }
+      status: 'ok',
+      explanation: 'call finished',
+    };
   }
 
   /////////////////////////////////////////////////////////////////
   /* TODO */
-  async getReserveList() : Promise<thingsboardResponse> {
+  async getReserveList(): Promise<thingsboardResponse> {
     const userInfo = await this.getUserInfoFromToken();
-    if(userInfo.status == 'fail')
-    return {
-      status : 'fail',
-      explanation : userInfo.furtherExplain
-    }
+    if (userInfo.status == 'fail')
+      return {
+        status: 'fail',
+        explanation: userInfo.furtherExplain,
+      };
 
-    if(userInfo.data.authority == "CUSTOMER_USER" )
-    return {
-      status : 'fail',
-      explanation : 'request not made by an admin'
-    }
+    if (userInfo.data.authority == 'CUSTOMER_USER')
+      return {
+        status: 'fail',
+        explanation: 'request not made by an admin',
+      };
 
+    const serverLogin = await this.loginUser(
+      'server@thingsboard.org',
+      process.env.DEFAULT_SERVER_PASSWORD
+    );
 
-    const serverLogin = await this.loginUser('server@thingsboard.org', process.env.DEFAULT_SERVER_PASSWORD)
-    if(serverLogin == false)
-    return {
-      status: 'fail',
-      explanation: 'server fail'
-    }
-    const serverUser = await this.userService.userInfo(this.token) 
+    if (serverLogin == false)
+      return {
+        status: 'fail',
+        explanation: 'server fail',
+      };
     
-    if(serverUser.status != 200)
-    return {
-      status : 'fail',
-      explanation : serverUser.explanation
-    }
+    await this.generateReserveList_SystemAdmin()
+    const serverUser = await this.userService.userInfo(this.token);
+
+    if (serverUser.status != 200)
+      return {
+        status: 'fail',
+        explanation: serverUser.explanation,
+      };
 
     return {
-      status : 'ok',
-      explanation : 'call finished',
-      data : serverUser.data.additionalInfo.reserves
-    }
+      status: 'ok',
+      explanation: 'call finished',
+      data: serverUser.data.additionalInfo.reserves,
+    };
   }
 }
 
