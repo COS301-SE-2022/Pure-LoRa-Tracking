@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { SnackbarAlertComponent } from './snackbar-alert.component';
+import { MAT_SNACK_BAR_DATA } from '@angular/material/snack-bar';
 
 describe('SnackbarAlertComponent', () => {
   let component: SnackbarAlertComponent;
@@ -9,7 +9,9 @@ describe('SnackbarAlertComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [SnackbarAlertComponent],
-      imports: [SnackbarAlertComponent]
+      providers: [{
+        provide:  MAT_SNACK_BAR_DATA, useValue:{}
+      }]
     }).compileComponents();
   });
 
