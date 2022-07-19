@@ -33,7 +33,7 @@ export class ReserveMapComponent implements OnInit, OnChanges {
   // private mapmarkers: Array<L.Marker<any>> = [];
   public mappolygons: L.Polygon;
   public historicalpath: Array<MapHistoricalPoints> = [];
-  public gatewayMarkers:Array<Gateway>=[];
+  public gatewayMarkers:Array<{gatewayID:string,marker:L.Marker}>=[];
   private bluecirlceicon: L.Icon = new L.Icon({
     iconUrl: "assets/MapIcons/BaseCircle.png",
     iconSize: [20, 20]
@@ -66,6 +66,14 @@ export class ReserveMapComponent implements OnInit, OnChanges {
     this.notifier.getResetSensorView().subscribe(()=>{
       console.log("Reset data");
       this.resetData();
+    })
+    this.notifier.getGatewayLocated().subscribe(deviceid=>{
+      console.log("Showing gateway for "+deviceid)
+      this.showGateway(deviceid);
+    });
+    this.notifier.getPanToMap().subscribe(()=>{
+      console.log();
+      if (this.mainmap != null && this.mappolygons != null) this.mainmap.fitBounds(this.mappolygons.getBounds())
     })
 
   }
@@ -256,7 +264,6 @@ export class ReserveMapComponent implements OnInit, OnChanges {
   }
 
   public loadInnitial(deviceIDs: Device[]): void {
-    console.log("Hit the road jack");
     deviceIDs.forEach(val => this.loadhistorical(val));
   }
 
@@ -287,7 +294,26 @@ export class ReserveMapComponent implements OnInit, OnChanges {
   }
 
   public loadGateways(Gateways:Gateway[]){
-    
+    Gateways.forEach(curr=>{
+      if(curr.location!=undefined){
+        let tempmarker=L.marker([curr.location.latitude,curr.location.longitude]);
+        this.gatewayMarkers.push({
+          gatewayID:curr.id,
+          marker:tempmarker.addTo(this.mainmap).bindTooltip(curr.name, { permanent: true, offset: [1, 0] })
+        })
+      }
+    })
+  }
+
+  public showGateway(deviceID:string){
+    const device=this.gatewayMarkers.find(curr=>curr.gatewayID==deviceID);
+
+    if(device!=undefined){
+      if(this.mainmap!=null) this.mainmap.panTo(device.marker.getLatLng());
+    }
+    else{
+      alert("No location data found");
+    }
   }
 
   //reset all data

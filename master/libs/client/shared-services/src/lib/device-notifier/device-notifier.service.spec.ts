@@ -53,5 +53,30 @@ describe('DeviceNotifierService', () => {
     })
   })
 
+  describe("LocateGateway",()=>{
+    const val="test";
+
+    it("Should emit when reset sensor view is called",()=>{
+      jest.spyOn(service.LocatedGateway,"next").mockImplementation();
+      service.locateGateway(val);
+      expect(service.LocatedGateway.next).toBeCalled();
+    })
+
+    it("Should return the observable when get is called",()=>{
+      expect(service.getGatewayLocated()).toStrictEqual(service.LocatedGateway.asObservable());
+    })
+  })
+
+  describe("PanToMap",()=>{
+    it("Should emit when reset sensor view is called",()=>{
+      jest.spyOn(service.Pantomap,"emit").mockImplementation();
+      service.DoPanToMap();
+      expect(service.Pantomap.emit).toBeCalled();
+    })
+
+    it("Should return the observable when get is called",()=>{
+      expect(service.getPanToMap()).toStrictEqual(service.ResetSensor);
+    })
+  })
 
 });
