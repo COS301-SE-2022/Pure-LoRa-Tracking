@@ -8,6 +8,8 @@ import * as L from 'leaflet';
 // @ts-ignore
 import { antPath } from "leaflet-ant-path"
 import { DeviceNotifierService } from '@master/client/shared-services';
+import { SnackbarAlertComponent } from '@master/client/shared-ui/components-ui';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'master-reserve-map',
@@ -39,7 +41,7 @@ export class ReserveMapComponent implements OnInit, OnChanges {
   });
 
 
-  constructor(private notifier: DeviceNotifierService) {
+  constructor(private notifier: DeviceNotifierService, private locationAlert: MatSnackBar) {
     //set default map options
     this.MapRenderInput = MapRender.ALL;
     this.ViewMapTypeInput = ViewMapType.NORMAL_OPEN_STREET_VIEW;
@@ -201,7 +203,7 @@ export class ReserveMapComponent implements OnInit, OnChanges {
     const latlngs = this.historicalpath.find(val => val.deviceID == deviceID)
     if (latlngs != null) {
       if (!latlngs.polyline.getBounds().isValid()) {
-        alert("No location data found");
+        this.openLocationAlert();
       }
       else {
         const path = antPath(latlngs.polyline.getLatLngs(), {
@@ -282,5 +284,9 @@ export class ReserveMapComponent implements OnInit, OnChanges {
       mapdata.polyline.addTo(this.mainmap)
       mapdata.markers.forEach(val => val.addTo(this.mainmap))
     }
+  }
+
+  private openLocationAlert() {
+    this.locationAlert.openFromComponent(SnackbarAlertComponent,{duration: 5000, panelClass: ['orange-snackbar'], data: {message:"No Location data found.", icon:"error_outline"}});
   }
 }
