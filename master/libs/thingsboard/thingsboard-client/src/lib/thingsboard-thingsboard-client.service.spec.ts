@@ -995,7 +995,7 @@ true
 );
 console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451", "lb@g.com","l", "b"));*/
     expect(
-      await service.changeReservesAvailableforUser('2', ['1'])
+      await service.changeReservesAvailableforUser('2', [{reserveName:"reserve", reserveID:"1"}])
     ).toMatchObject({
       status: 'fail',
       explanation: 'token invalid',
@@ -1008,7 +1008,7 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
       .spyOn(httpService, 'get')
       .mockImplementationOnce(() => of(tests.axiosUserSuccessExample));
     expect(
-      await service.changeReservesAvailableforUser('2', ['1'])
+      await service.changeReservesAvailableforUser('2', [{reserveName:"reserve", reserveID:"1"}])
     ).toMatchObject({
       status: 'fail',
       explanation: 'user not admin',
@@ -1026,7 +1026,7 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
         throwError(() => tests.axiosECONNFailureExample)
       );
     expect(
-      await service.changeReservesAvailableforUser('2', ['1'])
+      await service.changeReservesAvailableforUser('2', [{reserveName:"reserve", reserveID:"1"}])
     ).toMatchObject({
       status: 'fail',
       explanation: 'user is not available',
@@ -1048,7 +1048,7 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
         throwError(() => tests.axiosECONNFailureExample)
       );
     expect(
-      await service.changeReservesAvailableforUser('2', ['1'])
+      await service.changeReservesAvailableforUser('2', [{reserveName:"reserve", reserveID:"1"}])
     ).toMatchObject({
       status: 'fail',
       explanation: 'ECONNREFUSED',
@@ -1067,7 +1067,7 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
       .spyOn(httpService, 'post')
       .mockImplementationOnce(() => of(tests.axiosUserSuccessExample));
     expect(
-      await service.changeReservesAvailableforUser('2', ['1'])
+      await service.changeReservesAvailableforUser('2', [{reserveName:"reserve", reserveID:"1"}])
     ).toMatchObject({
       status: 'ok',
       explanation: 'ok',

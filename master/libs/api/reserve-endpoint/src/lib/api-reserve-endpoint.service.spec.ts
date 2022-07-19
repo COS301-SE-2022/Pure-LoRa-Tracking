@@ -63,4 +63,11 @@ describe('ApiReserveEndpointService', () => {
       reserveID:'cdca5420-02a2-11ed-ac9e-bb12f95a3e82'
     }))*/
   });
+
+  it('reserve list -> get', async () => {
+    /*const token = await thingsboardClient.loginUserReturnToken('reserveadmin@reserve.com', 'reserve');
+    console.log(await service.processReserveList({
+      token:token.Token,
+    }))*/
+  });
 });
