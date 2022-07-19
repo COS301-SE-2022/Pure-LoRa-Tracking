@@ -1,4 +1,4 @@
-import { ThingsboardThingsboardClientModule } from '@lora/thingsboard-client';
+import { ThingsboardThingsboardClientModule, ThingsboardThingsboardClientService } from '@lora/thingsboard-client';
 import { Test } from '@nestjs/testing';
 import { ApiLoginEndpointService } from './api-login-endpoint.service';
 
@@ -17,5 +17,9 @@ describe('ApiLoginEndpointService', () => {
 
   it('should be defined', () => {
     expect(service).toBeTruthy();
+  });
+
+  it('login and get info', async() => {
+    console.log(await service.doLogin({username:'reserveuser@reserve.com', password:'reserve'}))
   });
 });

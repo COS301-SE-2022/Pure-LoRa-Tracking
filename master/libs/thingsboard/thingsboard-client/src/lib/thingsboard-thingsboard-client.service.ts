@@ -574,7 +574,7 @@ export class ThingsboardThingsboardClientService {
     email: string,
     firstName: string,
     lastName: string,
-    reserves: string[]
+    reserves: {reserveName:string, reserveID:string}[]
   ): Promise<thingsboardResponse> {
     const login = await this.userService.userInfo(this.token);
 

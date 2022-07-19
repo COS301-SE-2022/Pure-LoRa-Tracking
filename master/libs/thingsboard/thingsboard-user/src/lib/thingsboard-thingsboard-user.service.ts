@@ -227,7 +227,7 @@ export class ThingsboardThingsboardUserService {
     authority: 'TENANT_ADMIN' | 'CUSTOMER_USER',
     firstName: string,
     lastName: string,
-    reserves: string[]
+    reserves: {reserveName:string, reserveID:string}[]
   ): Promise<UserResponse> {
     const headersReq = {
       'Content-Type': 'application/json',
