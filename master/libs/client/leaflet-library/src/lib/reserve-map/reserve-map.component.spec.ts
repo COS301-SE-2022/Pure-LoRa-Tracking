@@ -5,6 +5,7 @@ import { SimpleChanges,SimpleChange } from '@angular/core';
 import { LayerGroup } from 'leaflet';
 import { exitCode } from 'process';
 import * as L from 'leaflet';
+import {MatSnackBarModule} from'@angular/material/snack-bar';
 // This library does not declare a module type, we we need to ignore this
 // error for a successful import
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -12,7 +13,6 @@ import * as L from 'leaflet';
 import { antPath } from "leaflet-ant-path"
 import { ReserveMapComponent } from './reserve-map.component';
 import exp = require('constants');
-
 describe('ReserveMapComponent', () => {
   let component: ReserveMapComponent;
   let fixture: ComponentFixture<ReserveMapComponent>;
@@ -134,6 +134,7 @@ describe('ReserveMapComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      imports: [MatSnackBarModule],
       declarations: [ReserveMapComponent],
     }).compileComponents();
   });
