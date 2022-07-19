@@ -163,5 +163,12 @@ describe('ThingsboardThingsboardTelemetryService', () => {
   });
   ////////////////////////////////////////////////////////////////////////////////
 
+  /*it('send telemetry V1 -> Mock Data', async () => {
+    expect(await service.V1sendJsonTelemetry("tivBWJ2M8dbvVzhR9Pv1", {
+      latitude: -22.5,
+      longitude: -23.5
+    })).toEqual(200);
+  });*/
+
 });
 
