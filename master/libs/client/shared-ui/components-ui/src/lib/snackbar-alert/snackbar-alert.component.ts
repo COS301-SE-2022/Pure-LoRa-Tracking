@@ -6,7 +6,7 @@ import { MAT_SNACK_BAR_DATA } from '@angular/material/snack-bar';
   templateUrl: './snackbar-alert.component.html',
   styleUrls: ['./snackbar-alert.component.scss'],
 })
-export class SnackbarAlertComponent implements OnInit {
+export class SnackbarAlertComponent {
   message:string;
   icon:string;
 
@@ -14,7 +14,5 @@ export class SnackbarAlertComponent implements OnInit {
     this.message = data.message;
     this.icon = data.icon;
   }
-
-  ngOnInit(): void {}
 
 }

@@ -9,6 +9,7 @@ describe('SnackbarAlertComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [SnackbarAlertComponent],
+      imports: [SnackbarAlertComponent]
     }).compileComponents();
   });
 
