@@ -8,4 +8,4 @@ import { ProcessingApiRouterModule } from '@lora/processing/api/router';
     ConfigModule.forRoot(),
     DatabaseProxyModule]
 })
-export class AppModule {}
+export class DataAppModule {}

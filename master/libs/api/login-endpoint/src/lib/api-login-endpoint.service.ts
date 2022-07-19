@@ -24,8 +24,9 @@ export class ApiLoginEndpointService {
                 explain: 'Login successful.',
                 token: loginResponse.Token,
                 refreshToken: loginResponse.refreshToken,
-               // userID : userInfo.data.id.id,
-               // reserveID : userInfo.data.customerId.id
+                //userID : userInfo.data.id.id,
+                reserveID : userInfo.data.customerId.id,
+                reserves : userInfo.data.additionalInfo.reserves
             }
         }
         return {

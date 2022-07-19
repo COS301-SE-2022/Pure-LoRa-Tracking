@@ -6,7 +6,7 @@ export interface userAddInput {
     firstName: string;
     lastName: string;
   };
-  reserves : string[];
+  reserves : {reserveName:string, reserveID:string}[];
 }
 
 export interface userRemoveInput {

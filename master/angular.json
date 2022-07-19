@@ -4,6 +4,7 @@
     "-api-hardware-debug": "libs/api/hardware-debug",
     "api": "apps/api",
     "api-api-router": "libs/api/api-router",
+    "api-api-testing": "libs/api/api-testing",
     "api-device-endpoint": "libs/api/device-endpoint",
     "api-interfaces": "libs/api-interfaces",
     "api-login-endpoint": "libs/api/login-endpoint",
@@ -32,7 +33,6 @@
     "middleware-http-logger": "libs/middleware/http-logger",
     "middleware-session-management": "libs/middleware/session-management",
     "processing-api-router": "libs/processing-api/router",
-    "processing-tier": "apps/processing-tier",
     "shared-interfaces": "libs/shared-interfaces",
     "thingsboard-thingsboard-admin": "libs/thingsboard/thingsboard-admin",
     "thingsboard-thingsboard-asset": "libs/thingsboard/thingsboard-asset",
@@ -40,6 +40,7 @@
     "thingsboard-thingsboard-device": "libs/thingsboard/thingsboard-device",
     "thingsboard-thingsboard-reserve": "libs/thingsboard/thingsboard-reserve",
     "thingsboard-thingsboard-telemetry": "libs/thingsboard/thingsboard-telemetry",
+    "thingsboard-thingsboard-tests": "libs/thingsboard/thingsboard-tests",
     "thingsboard-thingsboard-user": "libs/thingsboard/thingsboard-user"
   }
 }

@@ -11,12 +11,16 @@ export class ThingsboardThingsboardAdminService {
     Authorization: string;
   };
 
+  //////////////////////////////////////////////////////////////////
+
   setToken(token: string): void {
     this.headersReq = {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + token,
     };
   }
+
+  //////////////////////////////////////////////////////////////////
 
   async getCustomersOfTenant(
     pageSize: number,
@@ -193,6 +197,8 @@ export class ThingsboardThingsboardAdminService {
       data: resp.data,
     };
   }
+  //////////////////////////////////////////////////////////////////
+  
 }
 
 export interface AdminResponse {
