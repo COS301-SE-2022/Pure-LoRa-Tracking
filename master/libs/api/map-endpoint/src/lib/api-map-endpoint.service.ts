@@ -103,7 +103,7 @@ export class ApiMapEndpointService {
                 explanation:"Reserve not found"
             }
         }
-        //console.log(data);
+        console.log(data);
 
         return {
             code : 200,

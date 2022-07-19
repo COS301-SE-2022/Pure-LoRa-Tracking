@@ -50,24 +50,31 @@ export class ReserveViewComponent {
 
   ngOnInit(): void {
     //TODO get reserves a user belongs to
-    this.http.post("api/user/info", {
-      "token": "f96e60d0-dfe8-11ec-bdb3-750ce7ed2451"
-    }).subscribe((val: any) => {
-      this.reservesList = [
-        {
-          id: "ef55ff40-dfe8-11ec-bdb3-750ce7ed2451",
-          name: "reserve user group",
-        },
-        {
-          id: "4bcece40-e1d9-11ec-a9b6-bbb9bad3df39",
-          name: "reserve c",
-        },
-        {
-          id: "123",
-          name: "UP",
-        }
-      ]
-      this.selectedReserveId = this.reservesList[0].id;
+    this.http.post("api/user/info", {}).subscribe((val: any) => {
+      console.log('val :>> ', val);
+      if(val.data?.additionalInfo?.reserves!=undefined&&val.data?.additionalInfo?.reserves.length>0){
+        this.reservesList=val.data?.additionalInfo?.reserves.map((curr:any)=>{
+          return {
+            id:curr.reserveID,
+            name:curr.reserveName
+          }
+        })
+        this.selectedReserveId = val.data?.customerId.id;
+      }
+      // this.reservesList = [
+      //   {
+      //     id: "ef55ff40-dfe8-11ec-bdb3-750ce7ed2451",
+      //     name: "reserve user group",
+      //   },
+      //   {
+      //     id: "4bcece40-e1d9-11ec-a9b6-bbb9bad3df39",
+      //     name: "reserve c",
+      //   },
+      //   {
+      //     id: "123",
+      //     name: "UP",
+      //   }
+      // ]
     })
     this.loadreserve(this.selectedReserveId);
 
@@ -90,7 +97,15 @@ export class ReserveViewComponent {
     this.selectedReserveId = newReserveId;
     console.log("changed reserve");
     this.reservemap?.changeReserve();
-    // this.loadreserve(newReserveId);
+    this.http.post("/api/user/reserve/change",{
+      "reserveID":newReserveId
+    }).subscribe((val:any)=>{
+      if(val.explain=="ok"){
+        this.loadreserve(newReserveId)
+        console.log(val);
+      }
+
+    });
   }
 
   loadreserve(newReserveId: string){
@@ -107,7 +122,7 @@ export class ReserveViewComponent {
       this.reservemap?.loadInnitial(this.LastestHistorical);
 
     });
-    this.apicaller.getGateways("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451").then((val: any) => {
+    this.apicaller.getGateways(this.selectedReserveId).then((val: any) => {
       console.log(val)
       this.Gateways = val.map((curr: any) => ({ id: curr.deviceID, name: curr.humanName, eui: curr.deviceName,location:curr.location } as Gateway));
       console.log(this.Gateways)
