@@ -200,14 +200,15 @@ export class ApiMapEndpointService {
             })
         } else {
             const devices = await this.thingsboardClient.getDeviceInfos();
-            const other=devices.data.data.filter(val=>val.isGateway == false);
+            const other=devices.data.filter(val=>val.isGateway == false);
             other.forEach((device)=> {
                 /* await array -> telem results */
                 awaitArray.push(this.thingsboardClient.getDeviceHistoricalData(device.deviceID, content.startTime, content.endTime))
             })
+            
         }
         
-            
+            this.thingsboardClient.setToken(content.token);
             for (let i = 0; i < awaitArray.length; i++) {
                 awaitArray[i] = await awaitArray[i];
             }
@@ -219,8 +220,14 @@ export class ApiMapEndpointService {
         const data = Array<Device>();
         //console.log("\n\n\n\nreached");
         awaitArray.forEach((item:thingsboardResponse) => {
-            if(item.data.data.telemetryResults == undefined)
-                item.data.data.telemetryResults = [];
+            if(item.status=="fail" && item.explanation=="Invalid username or password") return {
+                code : 401,
+                status : "fail",
+                explanation : "Invalid username or password",
+                data: [],
+            }
+            if(item.data.telemetryResults == undefined)
+                item.data.telemetryResults = [];
 
             if(item.status=='fail') {
                 explanationOfCall = "some devices are missing results";
@@ -229,7 +236,7 @@ export class ApiMapEndpointService {
                     deviceID : item.name,
                     deviceName : item.furtherExplain,
                     type : "sensor",
-                    locationData : item.data.data
+                    locationData : item.data
                 })
             } else if(item['status']=='ok') {
                 data.push({

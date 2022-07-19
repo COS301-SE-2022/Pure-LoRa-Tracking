@@ -80,7 +80,7 @@ export class ReserveViewComponent {
 
   updateRange(event:{start:number,end:number}):void{
     this.apicaller.getHistoricalWithTime(this.token,"123",[],event.start,event.end).then(val=>{
-      //console.table(val['data'])
+      // console.table(val['data'])
       this.reservemap?.reload(val['data']);
     });
   }

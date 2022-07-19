@@ -283,4 +283,9 @@ export class ReserveMapComponent implements OnInit, OnChanges {
       mapdata.markers.forEach(val => val.addTo(this.mainmap))
     }
   }
+
+  // public changeReserve(reserve:MapApiReserveResponse){
+
+  // }
+
 }
