@@ -1289,7 +1289,7 @@ export class ThingsboardThingsboardClientService {
     }
 
 
-    const serverLogin = await this.loginUser('server@thingsboard.org', process.env.SERVER_PASSWORD)
+    const serverLogin = await this.loginUser('server@thingsboard.org', process.env.DEFAULT_SERVER_PASSWORD)
     if(serverLogin == false)
     return {
       status: 'fail',
