@@ -169,14 +169,14 @@ export class ThingsboardThingsboardClientService {
     email: string,
     name: string,
     location?: {
-      location: {
-        latitude: number;
-        longitude: number;
+      features: {
+        type: string;
+        properties: any;
+        geometry: {
+          type: string;
+          coordinates: [number, number][][];
+        };
       }[];
-      center: {
-        latitude: number;
-        longitude: number;
-      };
     }
   ): Promise<thingsboardResponse> {
     if (this.token == undefined)
@@ -236,7 +236,7 @@ export class ThingsboardThingsboardClientService {
         explanation: userInfo.explanation,
       };
 
-    /*this.assetService.setToken(this.token);
+    this.assetService.setToken(this.token);
 
     const response = await this.assetService.getAssetIDs(
       userInfo.data.customerId.id
@@ -255,30 +255,16 @@ export class ThingsboardThingsboardClientService {
     for (let i = 0; i < ids.length; i++) {
       const element = ids[i];
       if (element['type'] == 'Reserve')
-        return this.assetService.getReservePerimeter(element['EntityID']);
-    }*/
-
-    const reserveInfo = await this.CustomerInfo(userInfo.data.customerId.id);
-    //console.log(reserveInfo);
-
-    if(reserveInfo.status == 'fail' || reserveInfo.data.additionalInfo.location == undefined)
-    return {
-      code: 500,
-      status: 'fail',
-      explanation: 'no reserve found',
-    };
-
-    return {
-      code : 200,
-      status : 'ok',
-      explanation : 'call finished',
-      data : {
-        reserveName : reserveInfo.data.title,
-        center : reserveInfo.data.additionalInfo.location.center,
-        location : reserveInfo.data.additionalInfo.location.location
-      }
+      /* TODO FIX */
+        //return this.assetService.getReservePerimeter(element['EntityID']);
+        return null;
     }
 
+    return {
+      code: 404,
+      status: 'fail',
+      explanation: 'no reserve set',
+    };
   }
 
   /////////////////////////////////////////////////////////
@@ -370,9 +356,8 @@ export class ThingsboardThingsboardClientService {
     if (this.token == '') {
       return false;
     }
-    
+
     const resp = await this.userService.userInfo(this.token);
-    // console.log("Validate called with token of "+this.token+" and responed with ",resp.status);
     if (resp.status != 200) return false;
     else return true;
   }
@@ -1027,14 +1012,14 @@ export class ThingsboardThingsboardClientService {
   async updateReservePerimeter(
     reserveID: string,
     location: {
-      location: {
-        latitude: number;
-        longitude: number;
+      features: {
+        type: string;
+        properties: any;
+        geometry: {
+          type: string;
+          coordinates: [number, number][][];
+        };
       }[];
-      center: {
-        latitude: number;
-        longitude: number;
-      };
     }
   ): Promise<thingsboardResponse> {
     const user = await this.userService.userInfo(this.token);

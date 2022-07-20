@@ -34,14 +34,13 @@ describe('ApiUserEndpointService', () => {
 
   /*it('create user with reserve set', async () => {
     console.log(await service.AddUserProcess({
-      customerID: '4bcece40-e1d9-11ec-a9b6-bbb9bad3df39',
+      customerID: '92291e40-0844-11ed-bc6e-a50062f6cdba',
       reserves: [
-        { reserveID: '4bcece40-e1d9-11ec-a9b6-bbb9bad3df39', reserveName: 'reserve c' },
-        { reserveID: 'ef55ff40-dfe8-11ec-bdb3-750ce7ed2451', reserveName: 'reserve user group' },
-        { reserveID: '38f322a0-081f-11ed-bf0a-d7ec46634f65', reserveName: 'rietvlei' }
+        { reserveID: '92291e40-0844-11ed-bc6e-a50062f6cdba', reserveName: 'Groenkloof' },
+        { reserveID: '427430f0-0845-11ed-bc6e-a50062f6cdba', reserveName: 'Tuks' }
       ],
-      token: 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZlYWRtaW5AcmVzZXJ2ZS5jb20iLCJzY29wZXMiOlsiVEVOQU5UX0FETUlOIl0sInVzZXJJZCI6ImQ2MzcyZTMwLWRmZTgtMTFlYy1iZGIzLTc1MGNlN2VkMjQ1MSIsImVuYWJsZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiJjZDJkZjJiMC1kZmU4LTExZWMtYmRiMy03NTBjZTdlZDI0NTEiLCJjdXN0b21lcklkIjoiMTM4MTQwMDAtMWRkMi0xMWIyLTgwODAtODA4MDgwODA4MDgwIiwiaXNzIjoidGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE2NTgzMTE5OTQsImV4cCI6MTY1ODMyMDk5NH0.58v7VC_VKGT4oMcaoHcMzAcy-wQWg0xJVqDBw5dUBDhA40pioppqrMXJ4rqx2uiJ9rbZvQebAxoMw16faYFvIA',
-      userInfo: { email: 'reserveusertwo@reserve.com', firstName: 'reserve user two', lastName: 'reserve' },
+      token: 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZlYWRtaW50d29AcmVzZXJ2ZS5jb20iLCJ1c2VySWQiOiI5ZmYwZmFhMC0wODQxLTExZWQtYmM2ZS1hNTAwNjJmNmNkYmEiLCJzY29wZXMiOlsiVEVOQU5UX0FETUlOIl0sImlzcyI6InRoaW5nc2JvYXJkLmlvIiwiaWF0IjoxNjU4MzMzMjY4LCJleHAiOjE2NTgzNDIyNjgsImZpcnN0TmFtZSI6InJlc2VydmUgYWRtaW4iLCJsYXN0TmFtZSI6InR3byIsImVuYWJsZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiI4ZjkxOGFkMC0wODQxLTExZWQtYmM2ZS1hNTAwNjJmNmNkYmEiLCJjdXN0b21lcklkIjoiMTM4MTQwMDAtMWRkMi0xMWIyLTgwODAtODA4MDgwODA4MDgwIn0.wtEJEzcOtoau574RPdcDWZJMIcDiRNAsv7p6ZLmDDn7Ek02Jvs3S7yD0D4c5S886zYpkMRtBEzQ18zFVCFJOVw',
+      userInfo: { email: 'reserveuserthree@reserve.com', firstName: 'reserve user three', lastName: 'reserve' },
     }))
   });*/
 
