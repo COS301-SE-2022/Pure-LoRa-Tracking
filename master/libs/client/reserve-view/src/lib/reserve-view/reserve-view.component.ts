@@ -5,6 +5,7 @@ import { DeviceNotifierService } from '@master/client/shared-services';
 import { TokenManagerService } from '@master/client/user-storage-controller';
 import { Device, Gateway, MapApiReserveResponse, ViewMapType } from '@master/shared-interfaces';
 import { HttpClient } from "@angular/common/http"
+import { CookieService } from 'ngx-cookie-service';
 
 // export interface GatewayInput {
 //   name: string;
@@ -36,7 +37,7 @@ export class ReserveViewComponent {
   reservesList: ReserveInfo[];
   selectedReserveId = "";
 
-  constructor(public apicaller: MapCallerService, private tokenmanager: TokenManagerService, private notifier: DeviceNotifierService, private http: HttpClient) {
+  constructor(public apicaller: MapCallerService, private tokenmanager: TokenManagerService, private notifier: DeviceNotifierService, private http: HttpClient,private cookiemanager:CookieService) {
     this.LastestHistorical = [];
     this.Gateways = [];
     this.ShowPolygon = true;
@@ -101,8 +102,13 @@ export class ReserveViewComponent {
       "reserveID":newReserveId
     }).subscribe((val:any)=>{
       if(val.explain=="ok"){
-        this.loadreserve(newReserveId)
-        console.log(val);
+        if(val.data.token!=undefined&&val.data.refreshToken!=undefined){
+          // this.token=val.data.token;
+          // this.cookiemanager.set("PURALORA_TOKEN",val.data.token);
+          // this.cookiemanager.set("PURALORA_REFRESHTOKEN",val.data.refreshToken);
+          this.loadreserve(newReserveId)
+          console.log(val);
+        }
       }
 
     });
@@ -111,7 +117,7 @@ export class ReserveViewComponent {
   loadreserve(newReserveId: string){
     this.selectedReserveId = newReserveId;
     this.apicaller.getReserve(this.token, this.selectedReserveId).then(val => {
-      // this.reservemap?.changeReserve();
+      this.reservemap?.changeReserve();
       this.Reserve = val;
       console.log(this.Reserve);
       if (this.Reserve?.data?.reserveName != undefined)

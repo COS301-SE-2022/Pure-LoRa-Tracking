@@ -259,7 +259,8 @@ export class ApiUserEndpointService {
 
       const response = await this.thingsboardClient.changeReserveForUser(content.reserveID);
 
-      //const tokens = await this.thingsboardClient.refresh(content.refreshToken);
+      const tokens = await this.thingsboardClient.refresh(content.refreshToken);
+      console.log('tokens :>> ', tokens);
 
       if(response.status == "fail")
       return {status:400, explain:"Server failed with: "+response.explanation}
@@ -268,7 +269,7 @@ export class ApiUserEndpointService {
         status:200,
         explain:"ok",
         furtherExplain: "refresh the page",
-        data:response.data
+        data:{...response.data,...{token:tokens.token},...{refreshToken:tokens.refreshToken}}
       }
   }
 }
