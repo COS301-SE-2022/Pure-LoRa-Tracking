@@ -1,8 +1,27 @@
 #content-container {
-    background-color: white;
     width: 90%;
     height: 80%;
     margin: 0 auto;
     margin-top: 1%;
+
+    margin-bottom: 1%;
+}
+
+#manage-drawer{
+    display: flex;
+    flex-direction: column;
+}
+
+.nav-buttons{
+    width: 100%;
+    text-align: left;
+}
+
+.btn-icon {
+    margin-right: 0.4em;
+}
+
+#drawer-container{
+    height: 100%;
     border-radius: 0.5rem;
 }

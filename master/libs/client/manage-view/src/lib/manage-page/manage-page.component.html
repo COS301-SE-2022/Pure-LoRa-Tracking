@@ -1,4 +1,41 @@
 <master-header-nav></master-header-nav>
 <div id="content-container">
-
+    <mat-drawer-container autosize id="drawer-container">
+        <mat-drawer mode="side" opened>
+            <div id="manage-drawer">
+                <button mat-button class="nav-buttons" color="primary"  (click)="viewProfile()">
+                    <mat-icon class="btn-icon">person</mat-icon> 
+                    <span>Profile</span>
+                </button>
+                <button  mat-button class="nav-buttons" color="primary"  (click)="viewUsers()">
+                    <mat-icon class="btn-icon">groups</mat-icon> 
+                    <span>Users</span>
+                </button>
+                <button  mat-button class="nav-buttons" color="primary" (click)="viewDevices()">
+                    <mat-icon class="btn-icon">memory</mat-icon> 
+                    <span>Devices</span>
+                </button>
+                <button  mat-button class="nav-buttons" color="primary"  (click)="viewReserves()">
+                    <mat-icon class="btn-icon">nature_people</mat-icon> 
+                    <span>Reserves</span>
+                </button>
+            </div>
+        </mat-drawer>
+        <mat-drawer-content>
+            <ng-container [ngSwitch]="manageCase">
+                <div *ngSwitchDefault>
+                    Content
+                </div>
+                <div *ngSwitchCase="'users'">
+                    Users
+                </div>
+                <div *ngSwitchCase="'reserves'">
+                    Reserves
+                </div>
+                <div *ngSwitchCase="'devices'">
+                    devices
+                </div>
+            </ng-container>
+        </mat-drawer-content>
+    </mat-drawer-container>
 </div>
