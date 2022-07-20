@@ -1,29 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'master-manage-page',
   templateUrl: './manage-page.component.html',
   styleUrls: ['./manage-page.component.scss'],
 })
-export class ManagePageComponent implements OnInit {
+export class ManagePageComponent implements OnInit{
   manageCase = "profile";
-  constructor() {}
+  constructor(private router: Router,private route: ActivatedRoute) {}
 
-  ngOnInit(): void {}
-
-  viewUsers():void {
-    this.manageCase = 'users';
+  ngOnInit(): void {
+    this.router.navigate(['manage',{outlets:{managecontent:['profile']}}]);   
   }
-
-  viewProfile():void {
-    this.manageCase = 'profile';
-  }
-
-  viewDevices():void {
-    this.manageCase = 'devices';
-  }
-
-  viewReserves():void {
-    this.manageCase = 'reserves';
-  }
+  
 }

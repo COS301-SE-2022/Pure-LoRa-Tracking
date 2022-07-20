@@ -3,39 +3,26 @@
     <mat-drawer-container autosize id="drawer-container">
         <mat-drawer mode="side" opened>
             <div id="manage-drawer">
-                <button mat-button class="nav-buttons" color="primary"  (click)="viewProfile()">
+                <button mat-button class="nav-buttons" color="primary"  [routerLink]="[{outlets:{managecontent:['profile']}}]" routerLinkActive="">
                     <mat-icon class="btn-icon">person</mat-icon> 
                     <span>Profile</span>
                 </button>
-                <button  mat-button class="nav-buttons" color="primary"  (click)="viewUsers()">
+                <button  mat-button class="nav-buttons" color="primary"  [routerLink]="[{outlets:{managecontent:['users']}}]">
                     <mat-icon class="btn-icon">groups</mat-icon> 
                     <span>Users</span>
                 </button>
-                <button  mat-button class="nav-buttons" color="primary" (click)="viewDevices()">
+                <button  mat-button class="nav-buttons" color="primary" [routerLink]="[{outlets:{managecontent:['devices']}}]">
                     <mat-icon class="btn-icon">memory</mat-icon> 
                     <span>Devices</span>
                 </button>
-                <button  mat-button class="nav-buttons" color="primary"  (click)="viewReserves()">
+                <button  mat-button class="nav-buttons" color="primary" [routerLink]="[{outlets:{managecontent:['reserves']}}]">
                     <mat-icon class="btn-icon">nature_people</mat-icon> 
                     <span>Reserves</span>
                 </button>
             </div>
         </mat-drawer>
         <mat-drawer-content>
-            <ng-container [ngSwitch]="manageCase">
-                <div *ngSwitchDefault>
-                    Content
-                </div>
-                <div *ngSwitchCase="'users'">
-                    Users
-                </div>
-                <div *ngSwitchCase="'reserves'">
-                    Reserves
-                </div>
-                <div *ngSwitchCase="'devices'">
-                    devices
-                </div>
-            </ng-container>
+            <router-outlet name="managecontent"></router-outlet>
         </mat-drawer-content>
     </mat-drawer-container>
 </div>
