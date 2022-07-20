@@ -1634,6 +1634,9 @@ c4f3e430-084f-11ed-bc6e-a50062f6cdba	1658337421811	8f918ad0-0841-11ed-bc6e-a5006
 c4f3e431-084f-11ed-bc6e-a50062f6cdba	1658337421811	8f918ad0-0841-11ed-bc6e-a50062f6cdba	92291e40-0844-11ed-bc6e-a50062f6cdba	2c49b520-084f-11ed-bc6e-a50062f6cdba	DEVICE	333-22	9ff0faa0-0841-11ed-bc6e-a50062f6cdba	reserveadmintwo@reserve.com	ASSIGNED_TO_CUSTOMER	{"entityId":"2c49b520-084f-11ed-bc6e-a50062f6cdba","assignedCustomerId":"92291e40-0844-11ed-bc6e-a50062f6cdba","assignedCustomerName":"Groenkloof"}	SUCCESS	
 e707cc80-084f-11ed-bc6e-a50062f6cdba	1658337478984	8f918ad0-0841-11ed-bc6e-a50062f6cdba	13814000-1dd2-11b2-8080-808080808080	2356c0c0-084f-11ed-bc6e-a50062f6cdba	DEVICE	333-11	9ff0faa0-0841-11ed-bc6e-a50062f6cdba	reserveadmintwo@reserve.com	ATTRIBUTES_UPDATED	{"entityId":"2356c0c0-084f-11ed-bc6e-a50062f6cdba","scope":"SERVER_SCOPE","attributes":{"location":"{\\"latitude\\":-25.790772375345068,\\"longitude\\":28.21383476257324}"}}	SUCCESS	
 f745f8b0-084f-11ed-bc6e-a50062f6cdba	1658337506235	8f918ad0-0841-11ed-bc6e-a50062f6cdba	13814000-1dd2-11b2-8080-808080808080	2c49b520-084f-11ed-bc6e-a50062f6cdba	DEVICE	333-22	9ff0faa0-0841-11ed-bc6e-a50062f6cdba	reserveadmintwo@reserve.com	ATTRIBUTES_UPDATED	{"entityId":"2c49b520-084f-11ed-bc6e-a50062f6cdba","scope":"SERVER_SCOPE","attributes":{"location":"{\\"latitude\\":-25.800973027864043,\\"longitude\\":28.19984436035156}"}}	SUCCESS	
+ebe6c9d0-0850-11ed-bc6e-a50062f6cdba	1658337916653	ec864350-083e-11ed-bc6e-a50062f6cdba	13814000-1dd2-11b2-8080-808080808080	f74cbf30-083e-11ed-bc6e-a50062f6cdba	USER	reserveadmin@reserve.com	f74cbf30-083e-11ed-bc6e-a50062f6cdba	reserveadmin@reserve.com	LOGIN	{"clientAddress":"127.0.0.1","browser":"Other","os":"Other","device":"Other"}	SUCCESS	
+ebf7b9c0-0850-11ed-bc6e-a50062f6cdba	1658337916764	ec864350-083e-11ed-bc6e-a50062f6cdba	13814000-1dd2-11b2-8080-808080808080	f74cbf30-083e-11ed-bc6e-a50062f6cdba	USER	reserveadmin@reserve.com	f74cbf30-083e-11ed-bc6e-a50062f6cdba	reserveadmin@reserve.com	LOGIN	{"clientAddress":"127.0.0.1","browser":"Other","os":"Other","device":"Other"}	SUCCESS	
+ec0882a0-0850-11ed-bc6e-a50062f6cdba	1658337916874	13814000-1dd2-11b2-8080-808080808080	13814000-1dd2-11b2-8080-808080808080	a48f4bd0-084a-11ed-bc6e-a50062f6cdba	USER	server@thingsboard.org	a48f4bd0-084a-11ed-bc6e-a50062f6cdba	server@thingsboard.org	LOGIN	{"clientAddress":"127.0.0.1","browser":"Other","os":"Other","device":"Other"}	SUCCESS	
 \.
 
 
@@ -1887,7 +1890,12 @@ f1629d00-0849-11ed-bc6e-a50062f6cdba	1658334919376	{"server":"liam-desktop","mes
 9a256ee1-084a-11ed-bc6e-a50062f6cdba	1658335202510	{"server":"liam-desktop","event":"STARTED","success":true}	9a1ce360-084a-11ed-bc6e-a50062f6cdba	RULE_NODE	LC_EVENT	9a256ee1-084a-11ed-bc6e-a50062f6cdba	9a198800-084a-11ed-bc6e-a50062f6cdba	1658335202510
 b037a9f0-084f-11ed-bc6e-a50062f6cdba	1658337387023	{"server":"liam-desktop","messagesProcessed":18,"errorsOccurred":0}	ec9c3c50-083e-11ed-bc6e-a50062f6cdba	RULE_NODE	STATS	b037a9f0-084f-11ed-bc6e-a50062f6cdba	ec864350-083e-11ed-bc6e-a50062f6cdba	1658337387023
 b037f810-084f-11ed-bc6e-a50062f6cdba	1658337387025	{"server":"liam-desktop","messagesProcessed":34,"errorsOccurred":0}	ec9cb180-083e-11ed-bc6e-a50062f6cdba	RULE_NODE	STATS	b037f810-084f-11ed-bc6e-a50062f6cdba	ec864350-083e-11ed-bc6e-a50062f6cdba	1658337387025
+53270501-0852-11ed-bc6e-a50062f6cdba	1658338519376	{"server":"liam-desktop","messagesProcessed":8,"errorsOccurred":0}	8f953450-0841-11ed-bc6e-a50062f6cdba	RULE_NODE	STATS	53270501-0852-11ed-bc6e-a50062f6cdba	8f918ad0-0841-11ed-bc6e-a50062f6cdba	1658338519376
+53277a30-0852-11ed-bc6e-a50062f6cdba	1658338519379	{"server":"liam-desktop","messagesProcessed":90,"errorsOccurred":0}	8f95a980-0841-11ed-bc6e-a50062f6cdba	RULE_NODE	STATS	53277a30-0852-11ed-bc6e-a50062f6cdba	8f918ad0-0841-11ed-bc6e-a50062f6cdba	1658338519379
+fbe988c0-0852-11ed-bc6e-a50062f6cdba	1658338802508	{"server":"liam-desktop","messagesProcessed":1,"errorsOccurred":0}	9a1cbc51-084a-11ed-bc6e-a50062f6cdba	RULE_NODE	STATS	fbe988c0-0852-11ed-bc6e-a50062f6cdba	9a198800-084a-11ed-bc6e-a50062f6cdba	1658338802508
 b038bb60-084f-11ed-bc6e-a50062f6cdba	1658337387030	{"server":"liam-desktop","messagesProcessed":94,"errorsOccurred":0}	ec9d74d0-083e-11ed-bc6e-a50062f6cdba	RULE_NODE	STATS	b038bb60-084f-11ed-bc6e-a50062f6cdba	ec864350-083e-11ed-bc6e-a50062f6cdba	1658337387030
+53270500-0852-11ed-bc6e-a50062f6cdba	1658338519376	{"server":"liam-desktop","messagesProcessed":25,"errorsOccurred":0}	8f955b61-0841-11ed-bc6e-a50062f6cdba	RULE_NODE	STATS	53270500-0852-11ed-bc6e-a50062f6cdba	8f918ad0-0841-11ed-bc6e-a50062f6cdba	1658338519376
+fbe9d6e0-0852-11ed-bc6e-a50062f6cdba	1658338802510	{"server":"liam-desktop","messagesProcessed":60,"errorsOccurred":0}	9a1d0a71-084a-11ed-bc6e-a50062f6cdba	RULE_NODE	STATS	fbe9d6e0-0852-11ed-bc6e-a50062f6cdba	9a198800-084a-11ed-bc6e-a50062f6cdba	1658338802510
 8c09a3f0-083e-11ed-0000-000000000000	1658330024879	{"server":"liam-desktop","event":"STARTED","success":true}	6fa0ff10-083e-11ed-ae42-b726f8804051	RULE_NODE	LC_EVENT	8c09a3f0-083e-11ed-0000-000000000000	6f718aa0-083e-11ed-ae42-b726f8804051	1658330024879
 8c0b0380-083e-11ed-0000-000000000000	1658330024888	{"server":"liam-desktop","event":"STARTED","success":true}	6fa12620-083e-11ed-ae42-b726f8804051	RULE_NODE	LC_EVENT	8c0b0380-083e-11ed-0000-000000000000	6f718aa0-083e-11ed-ae42-b726f8804051	1658330024888
 8c0bc6d0-083e-11ed-0000-000000000000	1658330024893	{"server":"liam-desktop","event":"STARTED","success":true}	6f9feda0-083e-11ed-ae42-b726f8804051	RULE_CHAIN	LC_EVENT	8c0bc6d0-083e-11ed-0000-000000000000	6f718aa0-083e-11ed-ae42-b726f8804051	1658330024893
@@ -2193,11 +2201,11 @@ COPY public.tb_schema_settings (schema_version) FROM stdin;
 COPY public.tb_user (id, created_time, additional_info, authority, customer_id, email, first_name, last_name, search_text, tenant_id) FROM stdin;
 fdb1d890-0845-11ed-bc6e-a50062f6cdba	1658333222041	{"reserves":[{"reserveID":"a0436390-0845-11ed-bc6e-a50062f6cdba","reserveName":"Rietvlei"},{"reserveID":"427430f0-0845-11ed-bc6e-a50062f6cdba","reserveName":"Tuks"}],"userPasswordHistory":{"1658333405369":"$2a$10$RHx8YCu9kp/qNzdzwfBMm.kivpI4rPA2LWyTwElk0Egpl91IbeW/m","1658333405375":"$2a$10$RHx8YCu9kp/qNzdzwfBMm.kivpI4rPA2LWyTwElk0Egpl91IbeW/m"},"userCredentialsEnabled":true,"failedLoginAttempts":0}	CUSTOMER_USER	427430f0-0845-11ed-bc6e-a50062f6cdba	reserveuser@reserve.com	reserve user	reserve	reserveuser@reserve.com	ec864350-083e-11ed-bc6e-a50062f6cdba
 9ff0faa0-0841-11ed-bc6e-a50062f6cdba	1658331346762	{"description":"","defaultDashboardId":null,"defaultDashboardFullscreen":false,"homeDashboardId":null,"homeDashboardHideToolbar":true,"userPasswordHistory":{"1658331363290":"$2a$10$Xb.U2OyW.DPTc3vh4TaONOfiGL03Fjel.k9PmABz4o5eJ09y3AxO6","1658331363298":"$2a$10$Xb.U2OyW.DPTc3vh4TaONOfiGL03Fjel.k9PmABz4o5eJ09y3AxO6"},"userCredentialsEnabled":true,"failedLoginAttempts":0,"lastLoginTs":1658337030858}	TENANT_ADMIN	13814000-1dd2-11b2-8080-808080808080	reserveadmintwo@reserve.com	reserve admin	two	reserveadmintwo@reserve.com	8f918ad0-0841-11ed-bc6e-a50062f6cdba
-a48f4bd0-084a-11ed-bc6e-a50062f6cdba	1658335219981	{"description":"","defaultDashboardId":null,"defaultDashboardFullscreen":false,"homeDashboardId":null,"homeDashboardHideToolbar":true,"userPasswordHistory":{"1658335228897":"$2a$10$HL648zV49I5FKTdnHRvaCucJssyl7uH0Qjt3etz1acfcX4JuIXT6K","1658335228905":"$2a$10$HL648zV49I5FKTdnHRvaCucJssyl7uH0Qjt3etz1acfcX4JuIXT6K","1658335362179":"$2a$10$jA/JzHZB.McNGKTRF/khSe82/ewu20TUOiwxZ/6Ig.AG6gxraoeOC"},"userCredentialsEnabled":true,"failedLoginAttempts":0,"lastLoginTs":1658337646198}	SYS_ADMIN	13814000-1dd2-11b2-8080-808080808080	server@thingsboard.org	server	server	server@thingsboard.org	13814000-1dd2-11b2-8080-808080808080
+f74cbf30-083e-11ed-bc6e-a50062f6cdba	1658330204835	{"description":"","defaultDashboardId":null,"defaultDashboardFullscreen":false,"homeDashboardId":null,"homeDashboardHideToolbar":true,"userPasswordHistory":{"1658330227269":"$2a$10$YIQdVxees9ZVVuW8VhhZSeKhmnMn3w.lhMFaImrJhEqFhKR0pPVSq","1658330227279":"$2a$10$YIQdVxees9ZVVuW8VhhZSeKhmnMn3w.lhMFaImrJhEqFhKR0pPVSq"},"userCredentialsEnabled":true,"failedLoginAttempts":0,"lastLoginTs":1658337916761}	TENANT_ADMIN	13814000-1dd2-11b2-8080-808080808080	reserveadmin@reserve.com	reserve	admin	reserveadmin@reserve.com	ec864350-083e-11ed-bc6e-a50062f6cdba
 0f52f020-0846-11ed-bc6e-a50062f6cdba	1658333251618	{"reserves":[{"reserveID":"a0436390-0845-11ed-bc6e-a50062f6cdba","reserveName":"Rietvlei"},{"reserveID":"427430f0-0845-11ed-bc6e-a50062f6cdba","reserveName":"Tuks"}],"userPasswordHistory":{"1658333381252":"$2a$10$4TrHRO9MhOhs2Lrc/0HZ5OjRdJCEcCOr142ZtNmtyOv37WLWQy8Yq","1658333381259":"$2a$10$4TrHRO9MhOhs2Lrc/0HZ5OjRdJCEcCOr142ZtNmtyOv37WLWQy8Yq"},"userCredentialsEnabled":true,"failedLoginAttempts":0}	CUSTOMER_USER	a0436390-0845-11ed-bc6e-a50062f6cdba	reserveusertwo@reserve.com	reserve user two	reserve	reserveusertwo@reserve.com	ec864350-083e-11ed-bc6e-a50062f6cdba
 46c3bf80-0846-11ed-bc6e-a50062f6cdba	1658333344632	{"reserves":[{"reserveID":"92291e40-0844-11ed-bc6e-a50062f6cdba","reserveName":"Groenkloof"},{"reserveID":"427430f0-0845-11ed-bc6e-a50062f6cdba","reserveName":"Tuks"}],"userPasswordHistory":{"1658333424493":"$2a$10$tGacq24RCM1u4kij6qz5guNQEyYFL03HBaQtKK6cJJx/c4dRr.qo.","1658333424500":"$2a$10$tGacq24RCM1u4kij6qz5guNQEyYFL03HBaQtKK6cJJx/c4dRr.qo."},"userCredentialsEnabled":true,"failedLoginAttempts":0}	CUSTOMER_USER	92291e40-0844-11ed-bc6e-a50062f6cdba	reserveuserthree@reserve.com	reserve user three	reserve	reserveuserthree@reserve.com	8f918ad0-0841-11ed-bc6e-a50062f6cdba
+a48f4bd0-084a-11ed-bc6e-a50062f6cdba	1658335219981	{"description":"","defaultDashboardId":null,"defaultDashboardFullscreen":false,"homeDashboardId":null,"homeDashboardHideToolbar":true,"userPasswordHistory":{"1658335228897":"$2a$10$HL648zV49I5FKTdnHRvaCucJssyl7uH0Qjt3etz1acfcX4JuIXT6K","1658335228905":"$2a$10$HL648zV49I5FKTdnHRvaCucJssyl7uH0Qjt3etz1acfcX4JuIXT6K","1658335362179":"$2a$10$jA/JzHZB.McNGKTRF/khSe82/ewu20TUOiwxZ/6Ig.AG6gxraoeOC"},"userCredentialsEnabled":true,"failedLoginAttempts":0,"lastLoginTs":1658337916871}	SYS_ADMIN	13814000-1dd2-11b2-8080-808080808080	server@thingsboard.org	server	server	server@thingsboard.org	13814000-1dd2-11b2-8080-808080808080
 6ebb5a00-083e-11ed-ae42-b726f8804051	1658329975712	{"userPasswordHistory":{"1658329975887":"$2a$10$7h4LKtUpp/UvdZBmZZXq1.BTexMDv/1C./aeuGHBJjUaPY2SMHN2q"},"failedLoginAttempts":0,"lastLoginTs":1658335192305}	SYS_ADMIN	13814000-1dd2-11b2-8080-808080808080	sysadmin@thingsboard.org	\N	\N	sysadmin@thingsboard.org	13814000-1dd2-11b2-8080-808080808080
-f74cbf30-083e-11ed-bc6e-a50062f6cdba	1658330204835	{"description":"","defaultDashboardId":null,"defaultDashboardFullscreen":false,"homeDashboardId":null,"homeDashboardHideToolbar":true,"userPasswordHistory":{"1658330227269":"$2a$10$YIQdVxees9ZVVuW8VhhZSeKhmnMn3w.lhMFaImrJhEqFhKR0pPVSq","1658330227279":"$2a$10$YIQdVxees9ZVVuW8VhhZSeKhmnMn3w.lhMFaImrJhEqFhKR0pPVSq"},"userCredentialsEnabled":true,"failedLoginAttempts":0,"lastLoginTs":1658335539845}	TENANT_ADMIN	13814000-1dd2-11b2-8080-808080808080	reserveadmin@reserve.com	reserve	admin	reserveadmin@reserve.com	ec864350-083e-11ed-bc6e-a50062f6cdba
 \.
 
 
@@ -2234,9 +2242,8 @@ COPY public.ts_kv_2022_07 (entity_id, key, ts, bool_v, str_v, long_v, dbl_v, jso
 0e0a20a0-083f-11ed-bc6e-a50062f6cdba	21	1658330843048	\N	\N	0	\N	\N
 0e0a20a0-083f-11ed-bc6e-a50062f6cdba	22	1658330843048	\N	\N	0	\N	\N
 0e0a20a0-083f-11ed-bc6e-a50062f6cdba	23	1658330843048	\N	\N	0	\N	\N
-b2a36280-083e-11ed-83b9-c13adc68c006	16	1656633600000	\N	\N	504	\N	\N
-ec8b9a80-083e-11ed-bc6e-a50062f6cdba	16	1656633600000	\N	\N	283	\N	\N
-8f929c40-0841-11ed-bc6e-a50062f6cdba	16	1656633600000	\N	\N	175	\N	\N
+ec8b9a80-083e-11ed-bc6e-a50062f6cdba	16	1656633600000	\N	\N	322	\N	\N
+8f929c40-0841-11ed-bc6e-a50062f6cdba	16	1656633600000	\N	\N	214	\N	\N
 6f7e5be0-083e-11ed-ae42-b726f8804051	0	1658329976990	\N	\N	0	\N	\N
 6f7e5be0-083e-11ed-ae42-b726f8804051	16	1656633600000	\N	\N	2	\N	\N
 6f7e5be0-083e-11ed-ae42-b726f8804051	17	1658329200000	\N	\N	2	\N	\N
@@ -2298,6 +2305,7 @@ b5932810-0841-11ed-bc6e-a50062f6cdba	20	1658331383053	\N	\N	0	\N	\N
 b5932810-0841-11ed-bc6e-a50062f6cdba	21	1658331383053	\N	\N	0	\N	\N
 b5932810-0841-11ed-bc6e-a50062f6cdba	22	1658331383053	\N	\N	0	\N	\N
 b5932810-0841-11ed-bc6e-a50062f6cdba	23	1658331383053	\N	\N	0	\N	\N
+b2a36280-083e-11ed-83b9-c13adc68c006	16	1656633600000	\N	\N	620	\N	\N
 0e0a20a0-083f-11ed-bc6e-a50062f6cdba	18	1658330783047	\N	\N	3	\N	\N
 0e0a20a0-083f-11ed-bc6e-a50062f6cdba	19	1658330783047	\N	\N	3	\N	\N
 0e0a20a0-083f-11ed-bc6e-a50062f6cdba	20	1658330783047	\N	\N	0	\N	\N
@@ -2398,6 +2406,7 @@ a66878a0-084a-11ed-bc6e-a50062f6cdba	20	1658335223080	\N	\N	0	\N	\N
 a66878a0-084a-11ed-bc6e-a50062f6cdba	21	1658335223080	\N	\N	0	\N	\N
 a66878a0-084a-11ed-bc6e-a50062f6cdba	22	1658335223080	\N	\N	0	\N	\N
 a66878a0-084a-11ed-bc6e-a50062f6cdba	23	1658335223080	\N	\N	0	\N	\N
+9a1a4b50-084a-11ed-bc6e-a50062f6cdba	16	1656633600000	\N	\N	82	\N	\N
 8f929c40-0841-11ed-bc6e-a50062f6cdba	17	1658332800000	\N	\N	62	\N	\N
 ec8b9a80-083e-11ed-bc6e-a50062f6cdba	28	1658332800000	\N	\N	10	\N	\N
 ec8b9a80-083e-11ed-bc6e-a50062f6cdba	27	1656633600000	\N	\N	18	\N	\N
@@ -2417,7 +2426,6 @@ ec8b9a80-083e-11ed-bc6e-a50062f6cdba	30	1658332800000	\N	\N	30	\N	\N
 0e0a20a0-083f-11ed-bc6e-a50062f6cdba	22	1658335583088	\N	\N	0	\N	\N
 0e0a20a0-083f-11ed-bc6e-a50062f6cdba	23	1658335583088	\N	\N	0	\N	\N
 b2a36280-083e-11ed-83b9-c13adc68c006	31	1656633600000	\N	\N	78	\N	\N
-9a1a4b50-084a-11ed-bc6e-a50062f6cdba	16	1656633600000	\N	\N	44	\N	\N
 560cec10-0840-11ed-bc6e-a50062f6cdba	24	1658335831813	\N	\N	1658335831746	\N	\N
 0e0a20a0-083f-11ed-bc6e-a50062f6cdba	18	1658333243071	\N	\N	1	\N	\N
 0e0a20a0-083f-11ed-bc6e-a50062f6cdba	19	1658333243071	\N	\N	1	\N	\N
@@ -2454,7 +2462,7 @@ ec8b9a80-083e-11ed-bc6e-a50062f6cdba	32	1658332800000	\N	\N	30	\N	\N
 560cec10-0840-11ed-bc6e-a50062f6cdba	24	1658335901519	\N	\N	1658335901450	\N	\N
 560cec10-0840-11ed-bc6e-a50062f6cdba	25	1658335901519	\N	\N	\N	-25.75313055966428	\N
 560cec10-0840-11ed-bc6e-a50062f6cdba	26	1658335901519	\N	\N	\N	28.231730461120605	\N
-ec8b9a80-083e-11ed-bc6e-a50062f6cdba	17	1658336400000	\N	\N	58	\N	\N
+ec8b9a80-083e-11ed-bc6e-a50062f6cdba	17	1658336400000	\N	\N	96	\N	\N
 ec8b9a80-083e-11ed-bc6e-a50062f6cdba	28	1658336400000	\N	\N	8	\N	\N
 0e0a20a0-083f-11ed-bc6e-a50062f6cdba	18	1658335943090	\N	\N	1	\N	\N
 0e0a20a0-083f-11ed-bc6e-a50062f6cdba	19	1658335943090	\N	\N	1	\N	\N
@@ -2543,10 +2551,10 @@ ec8b9a80-083e-11ed-bc6e-a50062f6cdba	32	1658336400000	\N	\N	24	\N	\N
 252ed9f0-0840-11ed-bc6e-a50062f6cdba	25	1658336908060	\N	\N	\N	-25.90710037306105	\N
 252ed9f0-0840-11ed-bc6e-a50062f6cdba	26	1658336908060	\N	\N	\N	28.29082489013672	\N
 0e0a20a0-083f-11ed-bc6e-a50062f6cdba	23	1658336963096	\N	\N	0	\N	\N
-b2a36280-083e-11ed-83b9-c13adc68c006	17	1658336400000	\N	\N	166	\N	\N
-9a1a4b50-084a-11ed-bc6e-a50062f6cdba	17	1658336400000	\N	\N	23	\N	\N
+9a1a4b50-084a-11ed-bc6e-a50062f6cdba	17	1658336400000	\N	\N	60	\N	\N
 252ed9f0-0840-11ed-bc6e-a50062f6cdba	24	1658336885910	\N	\N	1658336885841	\N	\N
-8f929c40-0841-11ed-bc6e-a50062f6cdba	17	1658336400000	\N	\N	85	\N	\N
+8f929c40-0841-11ed-bc6e-a50062f6cdba	17	1658336400000	\N	\N	123	\N	\N
+b2a36280-083e-11ed-83b9-c13adc68c006	17	1658336400000	\N	\N	279	\N	\N
 0e0a20a0-083f-11ed-bc6e-a50062f6cdba	18	1658336723095	\N	\N	1	\N	\N
 0e0a20a0-083f-11ed-bc6e-a50062f6cdba	19	1658336723095	\N	\N	1	\N	\N
 0e0a20a0-083f-11ed-bc6e-a50062f6cdba	20	1658336723095	\N	\N	0	\N	\N
@@ -2632,9 +2640,13 @@ b5932810-0841-11ed-bc6e-a50062f6cdba	22	1658337323100	\N	\N	0	\N	\N
 b5932810-0841-11ed-bc6e-a50062f6cdba	23	1658337323100	\N	\N	0	\N	\N
 b5932810-0841-11ed-bc6e-a50062f6cdba	22	1658337563101	\N	\N	0	\N	\N
 b5932810-0841-11ed-bc6e-a50062f6cdba	23	1658337563101	\N	\N	0	\N	\N
+9a1a4b50-084a-11ed-bc6e-a50062f6cdba	17	1658340000000	\N	\N	1	\N	\N
+8f929c40-0841-11ed-bc6e-a50062f6cdba	17	1658340000000	\N	\N	1	\N	\N
 f179b530-084e-11ed-bc6e-a50062f6cdba	24	1658337338699	\N	\N	1658337338639	\N	\N
 f179b530-084e-11ed-bc6e-a50062f6cdba	25	1658337338699	\N	\N	\N	-25.80004573208944	\N
 f179b530-084e-11ed-bc6e-a50062f6cdba	26	1658337338699	\N	\N	\N	28.213920593261715	\N
+ec8b9a80-083e-11ed-bc6e-a50062f6cdba	17	1658340000000	\N	\N	1	\N	\N
+b2a36280-083e-11ed-83b9-c13adc68c006	17	1658340000000	\N	\N	3	\N	\N
 f179b530-084e-11ed-bc6e-a50062f6cdba	24	1658337357732	\N	\N	1658337357685	\N	\N
 f179b530-084e-11ed-bc6e-a50062f6cdba	25	1658337357732	\N	\N	\N	-25.80166849493375	\N
 f179b530-084e-11ed-bc6e-a50062f6cdba	26	1658337357732	\N	\N	\N	28.210744857788086	\N
@@ -2707,7 +2719,7 @@ COPY public.ts_kv_indefinite (entity_id, key, ts, bool_v, str_v, long_v, dbl_v, 
 --
 
 COPY public.ts_kv_latest (entity_id, key, ts, bool_v, str_v, long_v, dbl_v, json_v) FROM stdin;
-9a1a4b50-084a-11ed-bc6e-a50062f6cdba	17	1658336400000	\N	\N	23	\N	\N
+b2a36280-083e-11ed-83b9-c13adc68c006	17	1658340000000	\N	\N	3	\N	\N
 6f7e5be0-083e-11ed-ae42-b726f8804051	0	1658329976990	\N	\N	0	\N	\N
 6f7e5be0-083e-11ed-ae42-b726f8804051	16	1656633600000	\N	\N	2	\N	\N
 6f7e5be0-083e-11ed-ae42-b726f8804051	17	1658329200000	\N	\N	2	\N	\N
@@ -2734,9 +2746,7 @@ ec8b9a80-083e-11ed-bc6e-a50062f6cdba	14	1658330186792	\N	\N	0	\N	\N
 ec8b9a80-083e-11ed-bc6e-a50062f6cdba	15	1658330186792	\N	\N	0	\N	\N
 ec8b9a80-083e-11ed-bc6e-a50062f6cdba	12	1658330186792	\N	\N	0	\N	\N
 b5932810-0841-11ed-bc6e-a50062f6cdba	23	1658337563101	\N	\N	0	\N	\N
-b2a36280-083e-11ed-83b9-c13adc68c006	17	1658336400000	\N	\N	166	\N	\N
-ec8b9a80-083e-11ed-bc6e-a50062f6cdba	17	1658336400000	\N	\N	58	\N	\N
-8f929c40-0841-11ed-bc6e-a50062f6cdba	17	1658336400000	\N	\N	85	\N	\N
+9a1a4b50-084a-11ed-bc6e-a50062f6cdba	16	1656633600000	\N	\N	82	\N	\N
 47af66c0-0840-11ed-bc6e-a50062f6cdba	25	1658336116650	\N	\N	\N	-25.755353072352364	\N
 47af66c0-0840-11ed-bc6e-a50062f6cdba	26	1658336116650	\N	\N	\N	28.232438564300537	\N
 8f929c40-0841-11ed-bc6e-a50062f6cdba	1	1658331319300	\N	ENABLED	\N	\N	\N
@@ -2766,9 +2776,9 @@ ec8b9a80-083e-11ed-bc6e-a50062f6cdba	29	1656633600000	\N	\N	54	\N	\N
 9a1a4b50-084a-11ed-bc6e-a50062f6cdba	10	1658335202437	\N	\N	0	\N	\N
 9a1a4b50-084a-11ed-bc6e-a50062f6cdba	13	1658335202437	\N	\N	0	\N	\N
 9a1a4b50-084a-11ed-bc6e-a50062f6cdba	6	1658335202437	\N	ENABLED	\N	\N	\N
+9a1a4b50-084a-11ed-bc6e-a50062f6cdba	17	1658340000000	\N	\N	1	\N	\N
 9a1a4b50-084a-11ed-bc6e-a50062f6cdba	9	1658335202437	\N	\N	0	\N	\N
 b5932810-0841-11ed-bc6e-a50062f6cdba	22	1658337563101	\N	\N	0	\N	\N
-9a1a4b50-084a-11ed-bc6e-a50062f6cdba	16	1656633600000	\N	\N	44	\N	\N
 9a1a4b50-084a-11ed-bc6e-a50062f6cdba	12	1658335202437	\N	\N	0	\N	\N
 9a1a4b50-084a-11ed-bc6e-a50062f6cdba	15	1658335202437	\N	\N	0	\N	\N
 9a1a4b50-084a-11ed-bc6e-a50062f6cdba	5	1658335202437	\N	ENABLED	\N	\N	\N
@@ -2778,7 +2788,7 @@ a66878a0-084a-11ed-bc6e-a50062f6cdba	18	1658335223080	\N	\N	1	\N	\N
 a66878a0-084a-11ed-bc6e-a50062f6cdba	23	1658335223080	\N	\N	0	\N	\N
 a66878a0-084a-11ed-bc6e-a50062f6cdba	22	1658335223080	\N	\N	0	\N	\N
 a66878a0-084a-11ed-bc6e-a50062f6cdba	21	1658335223080	\N	\N	0	\N	\N
-b2a36280-083e-11ed-83b9-c13adc68c006	16	1656633600000	\N	\N	504	\N	\N
+8f929c40-0841-11ed-bc6e-a50062f6cdba	17	1658340000000	\N	\N	1	\N	\N
 33a369b0-0840-11ed-bc6e-a50062f6cdba	24	1658336995055	\N	\N	1658336994986	\N	\N
 0e0a20a0-083f-11ed-bc6e-a50062f6cdba	20	1658337023096	\N	\N	0	\N	\N
 b2a36280-083e-11ed-83b9-c13adc68c006	32	1658336400000	\N	\N	48	\N	\N
@@ -2787,7 +2797,8 @@ ec8b9a80-083e-11ed-bc6e-a50062f6cdba	30	1658336400000	\N	\N	24	\N	\N
 0e0a20a0-083f-11ed-bc6e-a50062f6cdba	23	1658337023096	\N	\N	0	\N	\N
 33a369b0-0840-11ed-bc6e-a50062f6cdba	26	1658336995055	\N	\N	\N	28.284645080566406	\N
 0e0a20a0-083f-11ed-bc6e-a50062f6cdba	22	1658337023096	\N	\N	0	\N	\N
-8f929c40-0841-11ed-bc6e-a50062f6cdba	16	1656633600000	\N	\N	175	\N	\N
+8f929c40-0841-11ed-bc6e-a50062f6cdba	16	1656633600000	\N	\N	214	\N	\N
+b2a36280-083e-11ed-83b9-c13adc68c006	16	1656633600000	\N	\N	620	\N	\N
 560cec10-0840-11ed-bc6e-a50062f6cdba	24	1658335901519	\N	\N	1658335901450	\N	\N
 560cec10-0840-11ed-bc6e-a50062f6cdba	25	1658335901519	\N	\N	\N	-25.75313055966428	\N
 560cec10-0840-11ed-bc6e-a50062f6cdba	26	1658335901519	\N	\N	\N	28.231730461120605	\N
@@ -2795,6 +2806,7 @@ ec8b9a80-083e-11ed-bc6e-a50062f6cdba	31	1656633600000	\N	\N	54	\N	\N
 b5932810-0841-11ed-bc6e-a50062f6cdba	20	1658337563101	\N	\N	0	\N	\N
 252ed9f0-0840-11ed-bc6e-a50062f6cdba	24	1658336908060	\N	\N	1658336908001	\N	\N
 252ed9f0-0840-11ed-bc6e-a50062f6cdba	26	1658336908060	\N	\N	\N	28.29082489013672	\N
+ec8b9a80-083e-11ed-bc6e-a50062f6cdba	17	1658340000000	\N	\N	1	\N	\N
 47af66c0-0840-11ed-bc6e-a50062f6cdba	24	1658336116650	\N	\N	1658336116583	\N	\N
 0e0a20a0-083f-11ed-bc6e-a50062f6cdba	21	1658337023096	\N	\N	0	\N	\N
 33a369b0-0840-11ed-bc6e-a50062f6cdba	25	1658336995055	\N	\N	\N	-25.883009948891146	\N
@@ -2809,12 +2821,12 @@ b2a36280-083e-11ed-83b9-c13adc68c006	31	1656633600000	\N	\N	78	\N	\N
 b2a36280-083e-11ed-83b9-c13adc68c006	30	1658336400000	\N	\N	48	\N	\N
 b2a36280-083e-11ed-83b9-c13adc68c006	27	1656633600000	\N	\N	26	\N	\N
 b2a36280-083e-11ed-83b9-c13adc68c006	29	1656633600000	\N	\N	78	\N	\N
-ec8b9a80-083e-11ed-bc6e-a50062f6cdba	16	1656633600000	\N	\N	283	\N	\N
 ec8b9a80-083e-11ed-bc6e-a50062f6cdba	28	1658336400000	\N	\N	8	\N	\N
 ec8b9a80-083e-11ed-bc6e-a50062f6cdba	32	1658336400000	\N	\N	24	\N	\N
 e8070980-084e-11ed-bc6e-a50062f6cdba	25	1658337256414	\N	\N	\N	-25.788917616951686	\N
 e8070980-084e-11ed-bc6e-a50062f6cdba	24	1658337256414	\N	\N	1658337256359	\N	\N
 e8070980-084e-11ed-bc6e-a50062f6cdba	26	1658337256414	\N	\N	\N	28.20164680480957	\N
+ec8b9a80-083e-11ed-bc6e-a50062f6cdba	16	1656633600000	\N	\N	322	\N	\N
 f179b530-084e-11ed-bc6e-a50062f6cdba	24	1658337374181	\N	\N	1658337374135	\N	\N
 f179b530-084e-11ed-bc6e-a50062f6cdba	26	1658337374181	\N	\N	\N	28.206281661987305	\N
 f179b530-084e-11ed-bc6e-a50062f6cdba	25	1658337374181	\N	\N	\N	-25.802363957922285	\N
