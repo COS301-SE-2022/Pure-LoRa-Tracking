@@ -354,8 +354,9 @@ export class ThingsboardThingsboardClientService {
     if (this.token == '') {
       return false;
     }
-
+    
     const resp = await this.userService.userInfo(this.token);
+    // console.log("Validate called with token of "+this.token+" and responed with ",resp.status);
     if (resp.status != 200) return false;
     else return true;
   }
