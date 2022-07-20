@@ -236,35 +236,28 @@ export class ThingsboardThingsboardClientService {
         explanation: userInfo.explanation,
       };
 
-    this.assetService.setToken(this.token);
-
-    const response = await this.assetService.getAssetIDs(
-      userInfo.data.customerId.id
-    );
-    if (response.status != 200) {
+    const reserve = await this.CustomerInfo(userInfo.data.customerId.id)
+    if(reserve.status == 'fail')
       return {
-        code: 400,
-        status: 'fail',
-        explanation: response.explanation,
-      };
-    }
+        code: 500,
+        status:'fail',
+        explanation:reserve.explanation
+      }
 
-    const ids = response.data.assets;
-    //console.log(ids.length);
-
-    for (let i = 0; i < ids.length; i++) {
-      const element = ids[i];
-      if (element['type'] == 'Reserve')
-      /* TODO FIX */
-        //return this.assetService.getReservePerimeter(element['EntityID']);
-        return null;
-    }
-
+    
+    if(reserve.data.additionalInfo.location == undefined)
     return {
       code: 404,
       status: 'fail',
       explanation: 'no reserve set',
     };
+
+    return {
+      code : 200,
+      status:'ok',
+      explanation:'call finished',
+      data:reserve.data.additionalInfo.location
+    }
   }
 
   /////////////////////////////////////////////////////////
