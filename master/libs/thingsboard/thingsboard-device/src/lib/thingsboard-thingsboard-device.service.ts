@@ -342,10 +342,11 @@ export class ThingsboardThingsboardDeviceService {
         explanation: resp.response.data.message,
       };
     }
+    // console.log('resp :>> ', resp.data[0]?.value);
     return {
       status: resp.status,
       explanation: 'ok',
-      data: resp.data.result,
+      data: resp.data[0]?.value,
       setOrExpired: resp.data.setOrExpired,
     };
   }

@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, Input, OnChanges, SimpleChanges, } from '@angular/core';
-import { MapApiHistoricalData, MapApiHistoricalResponse, MapApiLatestResponse, MapApiReserveResponse, MapHistoricalPoints, MapRender, MarkerView, ViewMapType, Device} from '@master/shared-interfaces';
+import { MapApiHistoricalData, MapApiHistoricalResponse, MapApiLatestResponse, MapApiReserveResponse, MapHistoricalPoints, MapRender, MarkerView, ViewMapType, Device, Gateway} from '@master/shared-interfaces';
 import * as L from 'leaflet';
 // This library does not declare a module type, we we need to ignore this
 // error for a successful import
@@ -35,6 +35,7 @@ export class ReserveMapComponent implements OnInit, OnChanges {
   // private mapmarkers: Array<L.Marker<any>> = [];
   public mappolygons: L.Polygon;
   public historicalpath: Array<MapHistoricalPoints> = [];
+  public gatewayMarkers:Array<{gatewayID:string,marker:L.Marker}>=[];
   private bluecirlceicon: L.Icon = new L.Icon({
     iconUrl: "assets/MapIcons/BaseCircle.png",
     iconSize: [20, 20]
@@ -67,6 +68,14 @@ export class ReserveMapComponent implements OnInit, OnChanges {
     this.notifier.getResetSensorView().subscribe(()=>{
       console.log("Reset data");
       this.resetData();
+    })
+    this.notifier.getGatewayLocated().subscribe(deviceid=>{
+      console.log("Showing gateway for "+deviceid)
+      this.showGateway(deviceid);
+    });
+    this.notifier.getPanToMap().subscribe(()=>{
+      console.log();
+      if (this.mainmap != null && this.mappolygons != null) this.mainmap.fitBounds(this.mappolygons.getBounds())
     })
 
   }
@@ -286,7 +295,45 @@ export class ReserveMapComponent implements OnInit, OnChanges {
     }
   }
 
+
   private openLocationAlert() {
     this.locationAlert.openFromComponent(SnackbarAlertComponent,{duration: 5000, panelClass: ['orange-snackbar'], data: {message:"No Location data found.", icon:"error_outline"}});
   }
+
+  public loadGateways(Gateways:Gateway[]){
+    Gateways.forEach(curr=>{
+      if(curr.location!=undefined){
+        const tempmarker=L.marker([curr.location.latitude,curr.location.longitude]);
+        this.gatewayMarkers.push({
+          gatewayID:curr.id,
+          marker:tempmarker.addTo(this.mainmap).bindTooltip(curr.name, { permanent: true, offset: [1, 0] })
+        })
+      }
+    })
+  }
+
+  public showGateway(deviceID:string){
+    const device=this.gatewayMarkers.find(curr=>curr.gatewayID==deviceID);
+
+    if(device!=undefined){
+      if(this.mainmap!=null) this.mainmap.panTo(device.marker.getLatLng());
+    }
+    else{
+      alert("No location data found");
+    }
+  }
+
+  //reset all data
+  public changeReserve(){
+    this.mappolygons.remove();
+    this.mappolygons=L.polygon([]);
+    this.historicalpath.forEach(val => {
+      val.markers.forEach(curr => curr.remove())
+      val.polyline.remove();
+    })
+    this.historicalpath=[];
+    this.gatewayMarkers.forEach(curr=>curr.marker.remove());
+    this.gatewayMarkers=[];
+  }
+
 }
