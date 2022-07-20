@@ -1328,28 +1328,28 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
     });
   });
 
-  it('get gateway location -> gateway info pass', async () => {
-    service.setToken('1');
-    jest
-      .spyOn(httpService, 'get')
-      .mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
-    jest
-      .spyOn(httpService, 'get')
-      .mockImplementationOnce(() => of(tests.axiosDeviceSuccessExample));
-    jest
-      .spyOn(httpService, 'get')
-      .mockImplementationOnce(() =>
-        of(tests.axiosDeviceAttributeSuccessExample)
-      );
-    expect(await service.getGatewayLocation('2')).toMatchObject({
-      status: 'ok',
-      explanation: 'call finished',
-      data: {
-        latitude: -22,
-        longitude: -23,
-      },
-    });
-  });
+  // it('get gateway location -> gateway info pass', async () => {
+  //   service.setToken('1');
+  //   jest
+  //     .spyOn(httpService, 'get')
+  //     .mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
+  //   jest
+  //     .spyOn(httpService, 'get')
+  //     .mockImplementationOnce(() => of(tests.axiosDeviceSuccessExample));
+  //   jest
+  //     .spyOn(httpService, 'get')
+  //     .mockImplementationOnce(() =>
+  //       of(tests.axiosDeviceAttributeSuccessExample)
+  //     );
+  //   expect(await service.getGatewayLocation('2')).toMatchObject({
+  //     status: 'ok',
+  //     explanation: 'call finished',
+  //     data: {
+  //       latitude: -22,
+  //       longitude: -23,
+  //     },
+  //   });
+  // });
 
   //////////////////////////////////////////////////////////////////////////////////////////
 
