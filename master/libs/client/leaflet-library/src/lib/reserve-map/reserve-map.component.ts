@@ -296,7 +296,7 @@ export class ReserveMapComponent implements OnInit, OnChanges {
   public loadGateways(Gateways:Gateway[]){
     Gateways.forEach(curr=>{
       if(curr.location!=undefined){
-        let tempmarker=L.marker([curr.location.latitude,curr.location.longitude]);
+        const tempmarker=L.marker([curr.location.latitude,curr.location.longitude]);
         this.gatewayMarkers.push({
           gatewayID:curr.id,
           marker:tempmarker.addTo(this.mainmap).bindTooltip(curr.name, { permanent: true, offset: [1, 0] })
