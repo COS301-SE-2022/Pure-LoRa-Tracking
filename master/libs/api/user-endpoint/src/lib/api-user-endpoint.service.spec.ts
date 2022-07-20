@@ -33,15 +33,15 @@ describe('ApiUserEndpointService', () => {
   });
 
   it('create user with reserve set', async () => {
-    // console.log(await service.AddUserProcess({
-    //   customerID: '4bcece40-e1d9-11ec-a9b6-bbb9bad3df39',
-    //   reserves: [
-    //     { reserveID: '4bcece40-e1d9-11ec-a9b6-bbb9bad3df39', reserveName: 'reserve c' },
-    //     { reserveID: 'ef55ff40-dfe8-11ec-bdb3-750ce7ed2451', reserveName: 'reserve user group' },
-    //   ],
-    //   token: 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZlYWRtaW5AcmVzZXJ2ZS5jb20iLCJzY29wZXMiOlsiVEVOQU5UX0FETUlOIl0sInVzZXJJZCI6ImQ2MzcyZTMwLWRmZTgtMTFlYy1iZGIzLTc1MGNlN2VkMjQ1MSIsImVuYWJsZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiJjZDJkZjJiMC1kZmU4LTExZWMtYmRiMy03NTBjZTdlZDI0NTEiLCJjdXN0b21lcklkIjoiMTM4MTQwMDAtMWRkMi0xMWIyLTgwODAtODA4MDgwODA4MDgwIiwiaXNzIjoidGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE2NTgyNDQxMjcsImV4cCI6MTY1ODI1MzEyN30.XwXblChqNRdJ3lcqOY1d9uX8l0oalujrtyggrR-sX51-25r__7Lm3iao7DY262LINirIVbQEyHMB7NL0Tjly4w',
-    //   userInfo: { email: 'reserveusertwo@reserve.com', firstName: 'reserve user two', lastName: 'reserve' },
-    // }))
+   /* console.log(await service.AddUserProcess({
+      customerID: '4bcece40-e1d9-11ec-a9b6-bbb9bad3df39',
+      reserves: [
+        { reserveID: '4bcece40-e1d9-11ec-a9b6-bbb9bad3df39', reserveName: 'reserve c' },
+        { reserveID: 'ef55ff40-dfe8-11ec-bdb3-750ce7ed2451', reserveName: 'reserve user group' },
+      ],
+      token: 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZlYWRtaW5AcmVzZXJ2ZS5jb20iLCJzY29wZXMiOlsiVEVOQU5UX0FETUlOIl0sInVzZXJJZCI6ImQ2MzcyZTMwLWRmZTgtMTFlYy1iZGIzLTc1MGNlN2VkMjQ1MSIsImVuYWJsZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiJjZDJkZjJiMC1kZmU4LTExZWMtYmRiMy03NTBjZTdlZDI0NTEiLCJjdXN0b21lcklkIjoiMTM4MTQwMDAtMWRkMi0xMWIyLTgwODAtODA4MDgwODA4MDgwIiwiaXNzIjoidGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE2NTgzMTE5OTQsImV4cCI6MTY1ODMyMDk5NH0.58v7VC_VKGT4oMcaoHcMzAcy-wQWg0xJVqDBw5dUBDhA40pioppqrMXJ4rqx2uiJ9rbZvQebAxoMw16faYFvIA',
+      userInfo: { email: 'reserveusertwo@reserve.com', firstName: 'reserve user two', lastName: 'reserve' },
+    }))*/
   });
 
   it("get user info", async () => {

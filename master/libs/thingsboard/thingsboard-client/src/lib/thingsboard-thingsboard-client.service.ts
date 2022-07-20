@@ -236,7 +236,7 @@ export class ThingsboardThingsboardClientService {
         explanation: userInfo.explanation,
       };
 
-    this.assetService.setToken(this.token);
+    /*this.assetService.setToken(this.token);
 
     const response = await this.assetService.getAssetIDs(
       userInfo.data.customerId.id
@@ -256,13 +256,29 @@ export class ThingsboardThingsboardClientService {
       const element = ids[i];
       if (element['type'] == 'Reserve')
         return this.assetService.getReservePerimeter(element['EntityID']);
-    }
+    }*/
+
+    const reserveInfo = await this.CustomerInfo(userInfo.data.customerId.id);
+    //console.log(reserveInfo);
+
+    if(reserveInfo.status == 'fail' || reserveInfo.data.additionalInfo.location == undefined)
+    return {
+      code: 500,
+      status: 'fail',
+      explanation: 'no reserve found',
+    };
 
     return {
-      code: 404,
-      status: 'fail',
-      explanation: 'no reserve set',
-    };
+      code : 200,
+      status : 'ok',
+      explanation : 'call finished',
+      data : {
+        reserveName : reserveInfo.data.title,
+        center : reserveInfo.data.additionalInfo.location.center,
+        location : reserveInfo.data.additionalInfo.location.location
+      }
+    }
+
   }
 
   /////////////////////////////////////////////////////////

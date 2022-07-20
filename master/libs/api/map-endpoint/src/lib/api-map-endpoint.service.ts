@@ -71,13 +71,14 @@ export class ApiMapEndpointService {
     }
 
     async ReserveProcess(content: MapApiReserve): Promise<MapApiReserveResponse> {
+        //console.log(content)
         /* Validate Token and ReserveID */
-        if (content.reserveID == undefined)
+        /*if (content.reserveID == undefined || content.reserveID == '')
             return {
                 code: 401,
                 status: 'failure',
                 explanation: "ReserveID missing"
-            }
+            }*/
 
         if (content.token == undefined)
             return {
@@ -96,23 +97,23 @@ export class ApiMapEndpointService {
                 explanation:"Username/Password/Token invalid"
             }
         }
-        else if(data.code==404){
+        else if(data.code==500){
             return {
                 code:404,
                 status:"failure",
                 explanation:"Reserve not found"
             }
         }
-        console.log(data);
+        //console.log(data);
 
         return {
             code : 200,
             status : "success",
             explanation : "",
             "data" : {
-                reserveName : data['value']['reserveName'],
-                center : data['value']['center'],
-                location : data['value']['location']
+                reserveName : data.data.reserveName,
+                center : data.data.center,
+                location : data.data.location
             }
         }
         // return {

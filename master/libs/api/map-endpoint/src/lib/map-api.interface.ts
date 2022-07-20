@@ -6,7 +6,7 @@ export interface MapApiLatest {
 export interface MapApiReserve {
     token: string,
     reserveID: string,
-    options: {
+    options?: {
         items: ""
     }
 }
