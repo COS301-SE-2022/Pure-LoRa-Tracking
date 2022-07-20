@@ -46,6 +46,7 @@ export interface usersInfoInput {
 
 export interface UserChangeReserveInput {
   token : string;
+  refreshToken : string;
   reserveID : string;
 }
 

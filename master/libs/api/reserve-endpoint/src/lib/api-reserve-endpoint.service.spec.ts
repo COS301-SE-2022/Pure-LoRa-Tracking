@@ -29,14 +29,6 @@ describe('ApiReserveEndpointService', () => {
     console.log((await service.processReserveInfo({reserveID:'9700a190-029f-11ed-ac9e-bb12f95a3e82', token:token.Token})).data.additionalInfo)*/
   });
 
-  it('create reserve -> process endpoint', async () => {
-    /*const token = await thingsboardClient.loginUserReturnToken('reserveadmin@reserve.com', 'reserve');
-    console.log(await service.processReserveCreate({
-      email:"liamburgess299@gmail.com", NameOfReserve:"reserve n",
-      token:token.Token
-    }))*/
-  });
-
   it('remove reserve -> process endpoint', async () => {
     const token = await thingsboardClient.loginUserReturnToken('reserveadmin@reserve.com', 'reserve');
     console.log(await service.processReserveRemove({
@@ -117,4 +109,102 @@ describe('ApiReserveEndpointService', () => {
       }
     }))
   });*/
+
+ /* it('create reserve -> process endpoint', async () => {
+    const token = await thingsboardClient.loginUserReturnToken('reserveadmin@reserve.com', 'reserve');
+    console.log(await service.processReserveCreate({
+      email: "rietvlei@reserve.com", NameOfReserve: "reserve",
+      token: token.Token,
+      location: {
+        center: {
+          latitude: -25.890268478851333,
+          longitude: 28.29254150390625
+        },
+        location: [
+
+          {
+            longitude: 28.280353546142578,
+            latitude: -25.84856446134235
+          },
+
+          {
+            longitude: 28.260955810546875,
+            latitude: -25.86880047113439
+          },
+
+          {
+            longitude: 28.266963958740234,
+            latitude: -25.903085643869964
+          },
+
+          {
+            longitude: 28.272113800048828,
+            latitude: -25.901541480878638
+          },
+
+          {
+            longitude: 28.275890350341797,
+            latitude: -25.91404861991099
+          },
+
+          {
+            longitude: 28.28224182128906,
+            latitude: -25.914357421380984
+          },
+
+          {
+            longitude: 28.28327178955078,
+            latitude: -25.923775477721993
+          },
+
+          {
+            longitude: 28.277950286865234,
+            latitude: -25.923775477721993
+          },
+
+          {
+            longitude: 28.27383041381836,
+            latitude: -25.933192781610504
+          },
+
+          {
+            longitude: 28.301124572753906,
+            latitude: -25.936280258400437
+          },
+
+          {
+            longitude: 28.304729461669922,
+            latitude: -25.93180339065838
+          },
+
+          {
+            longitude: 28.30747604370117,
+            latitude: -25.913739817632358
+          },
+
+          {
+            longitude: 28.324298858642578,
+            latitude: -25.912659003289058
+          },
+
+          {
+            longitude: 28.32292556762695,
+            latitude: -25.89134949832312
+          },
+
+          {
+            longitude: 28.296661376953125,
+            latitude: -25.855979584575365
+          },
+
+          {
+            longitude: 28.280353546142578,
+            latitude: -25.84856446134235
+          }
+
+        ]
+      }
+    }))
+  });*/
+
 });
