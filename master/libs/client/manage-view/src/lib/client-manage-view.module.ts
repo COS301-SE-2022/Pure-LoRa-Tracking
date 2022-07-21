@@ -7,7 +7,6 @@ import { ClientSharedUiComponentsUiModule } from '@master/client/shared-ui/compo
 import {MatSidenavModule} from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-
 export const clientManageViewRoutes: Route[] = [];
 
 @NgModule({

@@ -15,7 +15,7 @@ const routes: Routes = [
   {path:"staff",loadChildren:()=>import('@master/client/users-management-view').then(m => m.ClientUsersManagementViewModule)},
   {path:"manage",component:ManagePageComponent,children: [
     { path: 'profile', outlet:'managecontent',component: ProfileViewComponent },
-    { path: 'users',outlet:'managecontent',component: UsersViewComponent },
+    { path: 'users',outlet:'managecontent',loadChildren:()=>import('@master/client/manage-view/src/lib/manage-content').then(m=>m.ClientManageViewSrcLibManageContentModule) },
     { path: 'devices', outlet:'managecontent', component: DevicesViewComponent},
     { path: 'reserves', outlet:'managecontent', component: ReservesViewComponent}
 ]}
