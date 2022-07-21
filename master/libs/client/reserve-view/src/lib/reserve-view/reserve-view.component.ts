@@ -103,9 +103,11 @@ export class ReserveViewComponent {
     }).subscribe((val:any)=>{
       if(val.explain=="ok"){
         if(val.data.token!=undefined&&val.data.refreshToken!=undefined){
-          // this.token=val.data.token;
-          // this.cookiemanager.set("PURALORA_TOKEN",val.data.token);
-          // this.cookiemanager.set("PURALORA_REFRESHTOKEN",val.data.refreshToken);
+          console.log("OLD TOKEN ",this.cookiemanager.get(""));
+          this.token=val.data.token;
+          this.cookiemanager.deleteAll();
+          this.cookiemanager.set("PURELORA_TOKEN",val.data.token);
+          this.cookiemanager.set("PURELORA_REFRESHTOKEN",val.data.refreshToken);
           this.loadreserve(newReserveId)
           console.log(val);
         }
