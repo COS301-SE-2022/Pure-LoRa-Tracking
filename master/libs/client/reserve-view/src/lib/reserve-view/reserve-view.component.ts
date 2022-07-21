@@ -119,7 +119,7 @@ export class ReserveViewComponent {
   loadreserve(newReserveId: string){
     this.selectedReserveId = newReserveId;
     this.apicaller.getReserve(this.token, this.selectedReserveId).then(val => {
-      this.reservemap?.changeReserve();
+      // this.reservemap?.changeReserve();
       this.Reserve = val;
       console.log(this.Reserve);
       if (this.Reserve?.data?.reserveName != undefined)

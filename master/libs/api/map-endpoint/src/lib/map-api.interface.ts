@@ -52,15 +52,11 @@ export interface MapApiReserveResponse {
     explanation: string,
     data?: {
         reserveName: string,
-        center: {
-            latitude: string,
-            longitude: string
-        },
-        location:
-        {
-            latitude: string,
-            longitude: string
-        }[]
+        // center: {
+        //     latitude: string,
+        //     longitude: string
+        // },
+        location: GeoJSON.FeatureCollection
     }
 }
 

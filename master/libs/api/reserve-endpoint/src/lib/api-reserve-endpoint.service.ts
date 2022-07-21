@@ -163,7 +163,6 @@ export class ApiReserveEndpointService {
         };
         this.thingsboardClient.setToken(body.token);
         const resp = await this.thingsboardClient.CustomerInfo(body.reserveID);
-
         if(resp.status=='fail')
         return {
             status:500,

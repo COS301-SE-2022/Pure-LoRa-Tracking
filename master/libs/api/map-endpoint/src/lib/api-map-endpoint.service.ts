@@ -87,9 +87,9 @@ export class ApiMapEndpointService {
                 explanation: "Token missing"
             }
 
-
         this.thingsboardClient.setToken(content.token);
         const data = await this.thingsboardClient.getReservePerimeter();
+        console.log('data :>> ', data.data);
         if(data.code==401){
             return {
                 code:401,
@@ -112,7 +112,6 @@ export class ApiMapEndpointService {
             explanation : "",
             "data" : {
                 reserveName : data.data.reserveName,
-                center : data.data.center,
                 location : data.data.location
             }
         }
