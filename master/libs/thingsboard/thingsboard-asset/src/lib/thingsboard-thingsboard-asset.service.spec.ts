@@ -52,7 +52,7 @@ describe('ThingsboardThingsboardAssetService', () => {
 
   ///////////////////////////////////////////////////////////////////////////
 
-  it('get perimeter -> return info', async() => {
+  /*it('get perimeter -> return info', async() => {
     const result : AxiosResponse<any> = {
       data:[mockReservePerimeterCall], 
       headers: {},
@@ -115,7 +115,7 @@ describe('ThingsboardThingsboardAssetService', () => {
       status: 'not found',
       explanation: 'no reserve set',
     });
-  });
+  });*/
 
   ///////////////////////////////////////////////////////////////////////////
 

@@ -25,7 +25,7 @@ export class ApiReserveEndpointService {
             explanation: 'Email Address missing, this can be the owner\'s or reserve\'s email',
         };
 
-        if (body.location != undefined) {
+       /* if (body.location != undefined) {
             if(body.location.center == undefined) {
                 return {
                     status: 401,
@@ -43,7 +43,7 @@ export class ApiReserveEndpointService {
                     status : 403,
                     explanation: 'not enough co-ordinates given: '+body.location.location.length
                 }
-        }
+        }*/
 
         this.thingsboardClient.setToken(body.token);
         const response = await this.thingsboardClient.createReserve(body.email, body.NameOfReserve, body.location);
@@ -106,7 +106,7 @@ export class ApiReserveEndpointService {
             explanation: 'Reserve ID missing',
         };
 
-        if (body.location != undefined) {
+        /*if (body.location != undefined) {
             if(body.location.center == undefined) {
                 return {
                     status: 401,
@@ -128,7 +128,7 @@ export class ApiReserveEndpointService {
             return {
                 status : 401,
                 explanation : 'no location co-ordinates given'
-            }
+            }*/
 
         this.thingsboardClient.setToken(body.token);
         const response = await this.thingsboardClient.updateReservePerimeter(body.reserveID, body.location);
