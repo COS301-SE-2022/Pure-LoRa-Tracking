@@ -4,7 +4,7 @@ import { Routes,RouterModule } from '@angular/router';
 import {HomescreenComponent} from '@master/client/defaultpage'
 import { ReserveMapComponent } from '@master/client/leaflet-library';
 import { LoginComponent } from '@master/client/users-view';
-import { DevicesViewComponent, ProfileViewComponent,ReservesViewComponent,UsersViewComponent } from '@master/client/manage-view/src/lib/manage-content';
+import { DevicesViewComponent, ProfileViewComponent,ReservesViewComponent,UsersViewComponent,EditProfileViewComponent } from '@master/client/manage-view/src/lib/manage-content';
 import { ManagePageComponent } from '@master/client/manage-view';
 const routes: Routes = [
   {path:"",component:LoginComponent},
@@ -17,7 +17,8 @@ const routes: Routes = [
     { path: 'profile', outlet:'managecontent',component: ProfileViewComponent },
     { path: 'users',outlet:'managecontent',loadChildren:()=>import('@master/client/manage-view/src/lib/manage-content').then(m=>m.ClientManageViewSrcLibManageContentModule) },
     { path: 'devices', outlet:'managecontent', component: DevicesViewComponent},
-    { path: 'reserves', outlet:'managecontent', component: ReservesViewComponent}
+    { path: 'reserves', outlet:'managecontent', component: ReservesViewComponent},
+    { path: 'editprofile', outlet:'managecontent', component: EditProfileViewComponent }
 ]}
 ];
 

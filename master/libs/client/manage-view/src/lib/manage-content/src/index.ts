@@ -7,3 +7,5 @@ export * from './lib/users-view/users-view.component';
 export * from './lib/devices-view/devices-view.component';
 
 export * from './lib/reserves-view/reserves-view.component';
+
+export * from './lib/edit-profile-view/edit-profile-view.component';

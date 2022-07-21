@@ -8,7 +8,9 @@
         <span id="banner-spacer"></span>
         <div id="button-wrapper">
 
-            <button mat-raised-button id="edit-button" color="white"><span><mat-icon>edit</mat-icon>Edit</span></button>
+            <button mat-raised-button id="edit-button" color="white" (click)="openEdit()">
+                <span><mat-icon>edit</mat-icon>Edit</span>
+            </button>
         </div>
     </div>
     <div id="content">

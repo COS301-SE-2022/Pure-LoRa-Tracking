@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
+import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'master-profile-view',
   templateUrl: './profile-view.component.html',
@@ -10,7 +11,8 @@ export class ProfileViewComponent implements OnInit {
   role:string;
   email:string;
   reserves:string[];
-  constructor() {
+
+  constructor(private router:Router) {
     this.name = "Name Surname";
     this.role = "Admin";
     this.email = "reserve@reserve.com";
@@ -18,4 +20,8 @@ export class ProfileViewComponent implements OnInit {
   }
 
   ngOnInit(): void {}
+
+  openEdit():void {
+    this.router.navigate(['manage',{outlets:{managecontent:['editprofile']}}]);   
+  }
 }
