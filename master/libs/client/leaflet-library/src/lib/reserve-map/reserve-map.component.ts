@@ -77,6 +77,7 @@ export class ReserveMapComponent implements OnInit, OnChanges {
       if (this.mainmap != null && this.mappolygons != null) this.mainmap.fitBounds(this.mappolygons.getBounds())
     })
 
+    
   }
 
   ngOnInit(): void {
@@ -175,6 +176,8 @@ export class ReserveMapComponent implements OnInit, OnChanges {
         // ]) as unknown as L.LatLngExpression[])
         console.log('this.Reserve :>> ', this.Reserve);
         this.mappolygons=L.geoJSON(this.Reserve.data.location);
+        //pan to map at the beggining
+        if (this.mainmap != null && this.mappolygons != null) this.mainmap.fitBounds(this.mappolygons.getBounds())
       }
     }
   }
