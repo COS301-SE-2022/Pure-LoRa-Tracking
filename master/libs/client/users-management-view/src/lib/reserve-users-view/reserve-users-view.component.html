@@ -6,13 +6,13 @@
         <input matInput placeholder="Search" type="text">
         <mat-icon matSuffix>search</mat-icon>
     </mat-form-field> -->
-    <mat-form-field appearance="fill" color="white">
+    <!-- <mat-form-field appearance="fill" color="white">
       <mat-label>Group</mat-label>
       <mat-select #myform (valueChange)="changeGroup(myform.value)" >
         <mat-option *ngFor="let curr of groups" [value]="curr.customerid">{{curr.name}}</mat-option>
       </mat-select>
-    </mat-form-field>
-    <button class="addbtn" mat-raised-button color="accent" (click)="openUserForm()" [disabled]="!canadd">Add User</button>
+    </mat-form-field> -->
+    <button class="addbtn" mat-raised-button color="accent" (click)="openUserForm()">Add User</button>
     <table mat-table [dataSource]="sourceData" >
         <ng-container matColumnDef="id">
             <th mat-header-cell *matHeaderCellDef>

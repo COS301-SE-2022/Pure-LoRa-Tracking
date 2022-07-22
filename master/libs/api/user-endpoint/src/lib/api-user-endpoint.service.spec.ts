@@ -33,15 +33,15 @@ describe('ApiUserEndpointService', () => {
   });
 
   it('create user with reserve set', async () => {
-    // console.log(await service.AddUserProcess({
-    //   customerID: '4bcece40-e1d9-11ec-a9b6-bbb9bad3df39',
-    //   reserves: [
-    //     { reserveID: '4bcece40-e1d9-11ec-a9b6-bbb9bad3df39', reserveName: 'reserve c' },
-    //     { reserveID: 'ef55ff40-dfe8-11ec-bdb3-750ce7ed2451', reserveName: 'reserve user group' },
-    //   ],
-    //   token: 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZlYWRtaW5AcmVzZXJ2ZS5jb20iLCJzY29wZXMiOlsiVEVOQU5UX0FETUlOIl0sInVzZXJJZCI6ImQ2MzcyZTMwLWRmZTgtMTFlYy1iZGIzLTc1MGNlN2VkMjQ1MSIsImVuYWJsZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiJjZDJkZjJiMC1kZmU4LTExZWMtYmRiMy03NTBjZTdlZDI0NTEiLCJjdXN0b21lcklkIjoiMTM4MTQwMDAtMWRkMi0xMWIyLTgwODAtODA4MDgwODA4MDgwIiwiaXNzIjoidGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE2NTgyNDQxMjcsImV4cCI6MTY1ODI1MzEyN30.XwXblChqNRdJ3lcqOY1d9uX8l0oalujrtyggrR-sX51-25r__7Lm3iao7DY262LINirIVbQEyHMB7NL0Tjly4w',
-    //   userInfo: { email: 'reserveusertwo@reserve.com', firstName: 'reserve user two', lastName: 'reserve' },
-    // }))
+    console.log(await service.AddUserProcess({
+      customerID: '427430f0-0845-11ed-bc6e-a50062f6cdba',
+      reserves: [
+        { reserveID: '427430f0-0845-11ed-bc6e-a50062f6cdba', reserveName: 'tuks' },
+        { reserveID: 'a0436390-0845-11ed-bc6e-a50062f6cdba', reserveName: 'Rietvlei' },
+      ],
+      token: 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZlYWRtaW5AcmVzZXJ2ZS5jb20iLCJzY29wZXMiOlsiVEVOQU5UX0FETUlOIl0sInVzZXJJZCI6ImY3NGNiZjMwLTA4M2UtMTFlZC1iYzZlLWE1MDA2MmY2Y2RiYSIsImZpcnN0TmFtZSI6InJlc2VydmUiLCJsYXN0TmFtZSI6ImFkbWluIiwiZW5hYmxlZCI6dHJ1ZSwiaXNQdWJsaWMiOmZhbHNlLCJ0ZW5hbnRJZCI6ImVjODY0MzUwLTA4M2UtMTFlZC1iYzZlLWE1MDA2MmY2Y2RiYSIsImN1c3RvbWVySWQiOiIxMzgxNDAwMC0xZGQyLTExYjItODA4MC04MDgwODA4MDgwODAiLCJpc3MiOiJ0aGluZ3Nib2FyZC5pbyIsImlhdCI6MTY1ODQ4MjU0NSwiZXhwIjoxNjU4NDkxNTQ1fQ.9SjFxAongejI5VqEiWw-uZgid079KRrCq8E7aVO95FY0cYgBdAqs6DqOF5Ch2-PTtWcxbNGRvXonL1PtqVxPcw',
+      userInfo: { email: 'reserveuserfour@reserve.com', firstName: 'jack', lastName: 'Johns' },
+    }))
   });
 
   it("get user info", async () => {
