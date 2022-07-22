@@ -2,7 +2,7 @@ from random import uniform, randint
 from json import dump
 from datetime import datetime, timedelta
 
-# Assuming a box border is used.
+# Assuming a box-border is used.
 # Format : (longitude, latitude)
 bounds = [
     (28.235185146331787, -25.752202889891826),  # Top right
@@ -11,11 +11,13 @@ bounds = [
     (28.235281705856323, -25.75700543526357)  # Bottom right
 ]
 
+# For displaying on geojson.io.
 final_js_data = {
     "type": "FeatureCollection",
     "features": []
 }
 
+# For .json output files.
 average_input_interface = {
     "sensorID": "",
     "coordinates": [],
