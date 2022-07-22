@@ -5,6 +5,7 @@ import { DeviceNotifierService } from '@master/client/shared-services';
 import { TokenManagerService } from '@master/client/user-storage-controller';
 import { Device, Gateway, MapApiReserveResponse, ViewMapType } from '@master/shared-interfaces';
 import { HttpClient } from "@angular/common/http"
+import { CookieService } from 'ngx-cookie-service';
 
 // export interface GatewayInput {
 //   name: string;
@@ -36,7 +37,7 @@ export class ReserveViewComponent {
   reservesList: ReserveInfo[];
   selectedReserveId = "";
 
-  constructor(public apicaller: MapCallerService, private tokenmanager: TokenManagerService, private notifier: DeviceNotifierService, private http: HttpClient) {
+  constructor(public apicaller: MapCallerService, private tokenmanager: TokenManagerService, private notifier: DeviceNotifierService, private http: HttpClient,private cookiemanager:CookieService) {
     this.LastestHistorical = [];
     this.Gateways = [];
     this.ShowPolygon = true;
@@ -101,8 +102,15 @@ export class ReserveViewComponent {
       "reserveID":newReserveId
     }).subscribe((val:any)=>{
       if(val.explain=="ok"){
-        this.loadreserve(newReserveId)
-        console.log(val);
+        if(val.data.token!=undefined&&val.data.refreshToken!=undefined){
+          console.log("OLD TOKEN ",this.cookiemanager.get(""));
+          this.token=val.data.token;
+          this.cookiemanager.deleteAll();
+          this.cookiemanager.set("PURELORA_TOKEN",val.data.token);
+          this.cookiemanager.set("PURELORA_REFRESHTOKEN",val.data.refreshToken);
+          this.loadreserve(newReserveId)
+          console.log(val);
+        }
       }
 
     });

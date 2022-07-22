@@ -45,7 +45,8 @@ export class MapCallerService {
   getGateways(custid:string):Promise<any>{
     return new Promise((res,rej)=>{
       this.http.post("/api/device/gateway/info",{"customerID":custid}).subscribe((val:any)=>{
-        // console.log('val :>> ', val);
+        
+        if(val.status!=200) return res([]);
         this.http.post("/api/device/gateway/info/location",{deviceIDs:val.data.map((curr:any)=>curr.deviceID)}).subscribe((other:any)=>{
           // console.log('other :>> ', other);
           const toreturn=val.data.map((othercurr:any)=>{

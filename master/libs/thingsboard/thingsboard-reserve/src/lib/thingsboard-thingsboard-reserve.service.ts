@@ -20,14 +20,14 @@ export class ThingsboardThingsboardReserveService {
     email: string,
     title: string,
     location?: {
-      location: {
-        latitude: number;
-        longitude: number;
+      features: {
+        type: string;
+        properties: any;
+        geometry: {
+          type: string;
+          coordinates: [number, number][][];
+        };
       }[];
-      center: {
-        latitude: number;
-        longitude: number;
-      };
     }
   ): Promise<CustomerInfoResponse> {
     const resp = await firstValueFrom(
