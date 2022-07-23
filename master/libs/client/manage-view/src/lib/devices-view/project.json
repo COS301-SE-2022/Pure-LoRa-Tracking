@@ -1,0 +1,41 @@
+{
+  "projectType": "library",
+  "sourceRoot": "libs/client/manage-view/src/lib/devices-view/src",
+  "prefix": "master",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:ng-packagr-lite",
+      "outputs": ["dist/libs/client/manage-view/src/lib/devices-view"],
+      "options": {
+        "project": "libs/client/manage-view/src/lib/devices-view/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/client/manage-view/src/lib/devices-view/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/client/manage-view/src/lib/devices-view/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/client/manage-view/src/lib/devices-view"],
+      "options": {
+        "jestConfig": "libs/client/manage-view/src/lib/devices-view/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/client/manage-view/src/lib/devices-view/**/*.ts",
+          "libs/client/manage-view/src/lib/devices-view/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

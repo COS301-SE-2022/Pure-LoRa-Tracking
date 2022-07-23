@@ -13,13 +13,15 @@ const routes: Routes = [
   {path:"reserve/add",loadChildren:()=>import('@master/client/device-add-view').then(m => m.ClientDeviceAddViewModule)},
   {path:"reserve",loadChildren:()=>import('@master/client/reserve-view').then(m => m.ClientReserveViewModule)},
   {path:"staff",loadChildren:()=>import('@master/client/users-management-view').then(m => m.ClientUsersManagementViewModule)},
-  {path:"manage",component:ManagePageComponent,children: [
-    { path: 'profile', outlet:'managecontent',component: ProfileViewComponent },
-    { path: 'users',outlet:'managecontent',loadChildren:()=>import('@master/client/manage-view/src/lib/manage-content').then(m=>m.ClientManageViewSrcLibManageContentModule) },
-    { path: 'devices', outlet:'managecontent', component: DevicesViewComponent},
-    { path: 'reserves', outlet:'managecontent', component: ReservesViewComponent},
-    { path: 'editprofile', outlet:'managecontent', component: EditProfileViewComponent }
-]}
+  {path:"manage",component:ManagePageComponent, loadChildren: ()=>import('@master/client/manage-view').then(m => m.ClientManageViewModule)
+  //children: [
+    // { path: 'profile', outlet:'managecontent',component: ProfileViewComponent },
+    // { path: 'users',outlet:'managecontent',component: UsersViewComponent },
+    // { path: 'devices', outlet:'managecontent', component: DevicesViewComponent},
+    // { path: 'reserves', outlet:'managecontent', loadChildren:()=>import('@master/client/manage-view/src/lib/reserve-detail-view').then(m => m.ClientManageViewSrcLibReserveDetailViewModule)},
+    // { path: 'editprofile', outlet:'managecontent', component: EditProfileViewComponent }
+//]
+}
 ];
 
 @NgModule({

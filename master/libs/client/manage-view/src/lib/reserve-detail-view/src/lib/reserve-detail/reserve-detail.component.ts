@@ -7,11 +7,11 @@ export interface Reserve {
 }
 
 @Component({
-  selector: 'master-reserves-view',
-  templateUrl: './reserves-view.component.html',
-  styleUrls: ['./reserves-view.component.scss'],
+  selector: 'master-reserve-detail',
+  templateUrl: './reserve-detail.component.html',
+  styleUrls: ['./reserve-detail.component.scss'],
 })
-export class ReservesViewComponent implements OnInit {
+export class ReserveDetailComponent implements OnInit {
   reserves:Reserve[] = [];
   reserveControl = new FormControl('');
 

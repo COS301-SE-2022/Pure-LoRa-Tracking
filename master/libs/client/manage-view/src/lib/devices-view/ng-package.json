@@ -1,0 +1,7 @@
+{
+  "$schema": "../../../../../../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "../../../../../../dist/libs/client/manage-view/src/lib/devices-view",
+  "lib": {
+    "entryFile": "src/index.ts"
+  }
+}

@@ -12,6 +12,7 @@ import { EditProfileViewComponent } from './edit-profile-view/edit-profile-view.
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import {MatSelectModule} from '@angular/material/select';
 
 export const clientManageViewSrcLibManageContentRoutes: Route[] = [];
 
@@ -25,7 +26,8 @@ export const clientManageViewSrcLibManageContentRoutes: Route[] = [];
     MatFormFieldModule,
     MatInputModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    MatSelectModule
   ],
   declarations: [
     ProfileViewComponent,

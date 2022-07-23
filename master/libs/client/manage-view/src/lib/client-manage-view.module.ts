@@ -7,10 +7,37 @@ import { ClientSharedUiComponentsUiModule } from '@master/client/shared-ui/compo
 import {MatSidenavModule} from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-export const clientManageViewRoutes: Route[] = [];
+import { ReserveDetailComponent } from './reserve-detail-view/src/lib/reserve-detail/reserve-detail.component';
+
+export const clientManageViewRoutes: Route[] = [
+  {
+    path: 'profile', 
+    outlet: 'managecontent',
+    loadChildren: ()=> import('@master/client/manage-view/src/lib/reserve-detail-view').then(m => m.ClientManageViewSrcLibReserveDetailViewModule),
+    component: ReserveDetailComponent
+  },
+  {
+    path: 'reserves', 
+    outlet: 'managecontent',
+    loadChildren: ()=> import('@master/client/manage-view/src/lib/reserve-detail-view').then(m => m.ClientManageViewSrcLibReserveDetailViewModule),
+    component: ReserveDetailComponent
+  },
+  {
+    path: 'reserves', 
+    outlet: 'managecontent',
+    loadChildren: ()=> import('@master/client/manage-view/src/lib/reserve-detail-view').then(m => m.ClientManageViewSrcLibReserveDetailViewModule),
+    component: ReserveDetailComponent
+  },
+  {
+    path: 'reserves', 
+    outlet: 'managecontent',
+    loadChildren: ()=> import('@master/client/manage-view/src/lib/reserve-detail-view').then(m => m.ClientManageViewSrcLibReserveDetailViewModule),
+    component: ReserveDetailComponent
+  },
+];
 
 @NgModule({
-  imports: [CommonModule, RouterModule, ManageViewRoutingModule, ClientSharedUiComponentsUiModule,MatSidenavModule, MatButtonModule, MatIconModule],
+  imports: [CommonModule, RouterModule, ManageViewRoutingModule, ClientSharedUiComponentsUiModule,MatSidenavModule, MatButtonModule, MatIconModule, RouterModule.forChild(clientManageViewRoutes)],
   declarations: [ManagePageComponent],
   exports: [ManagePageComponent],
 })
