@@ -37,6 +37,6 @@ export class ReserveDetailComponent implements OnInit {
   }
 
   editReseve(id:string):void{
-    console.log(id);
+    this.router.navigate(['manage',{outlets:{managecontent:['reserve-edit',id]}}]);  
   }
 }
