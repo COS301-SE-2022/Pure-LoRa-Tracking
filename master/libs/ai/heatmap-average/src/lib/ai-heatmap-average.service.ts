@@ -17,15 +17,18 @@ export class AiHeatmapAverageService {
         this.buildModel();
     }
 
-    async buildModel() {
-        // this.model = await tf.loadGraphModel('file://libs/ai/Models/averaging/Model.json').catch(error => {
-        //     console.log(error);
-        //     console.log("Returning new model\r\n")
-        //     return tf.GraphModel()
-        // })
+    deconstructData(data: any[]) {
+        const toRet = new Array<number>();
+        data.forEach(element => {
+            toRet.push(element.latitude);
+            toRet.push(element.longitude);
+        });
+        return toRet;
+    }
 
+    async buildModel() {
         this.model = tf.sequential();
-        this.model.add(tf.layers.dense({inputShape: [10], units: 8, activation:"relu", }));
+        this.model.add(tf.layers.dense({inputShape: [20], units: 8, activation:"sigmoid", }));
         this.model.add((tf.layers.dense({units:2, activation: 'softmax'})));
         this.model.compile({
             optimizer: 'sgd',
@@ -42,7 +45,7 @@ export class AiHeatmapAverageService {
     }
 
     async fitModel(learningData, trueData) {
-        await this.model.fit(learningData, trueData, {
+        await this.model.fit(tf.tensor(learningData, [1,20]), tf.tensor(trueData, [1,2]), {
             epochs : 5, 
             callbacks : {
                 onEpochEnd: async (epoch, logs) => {
@@ -51,10 +54,6 @@ export class AiHeatmapAverageService {
                   }
             }
         })
-    }
-
-    async getData(deviceID: string, startingIndex : number, endingIndex : number) {
-        // TODO poll database for info
     }
 
     LatLongToGeometric(latitude: number, longitude: number): { x: number, y: number, z: number } {
