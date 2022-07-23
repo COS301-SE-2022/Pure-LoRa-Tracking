@@ -18,6 +18,7 @@
     "client-device-add-view": "libs/client/device-add-view",
     "client-leaflet-library": "libs/client/leaflet-library",
     "client-manage-view": "libs/client/manage-view",
+    "client-manage-view-src-lib-create-reserve": "libs/client/manage-view/src/lib/create-reserve",
     "client-manage-view-src-lib-devices-view": "libs/client/manage-view/src/lib/devices-view",
     "client-manage-view-src-lib-profile-edit": "libs/client/manage-view/src/lib/profile-edit",
     "client-manage-view-src-lib-profile-view": "libs/client/manage-view/src/lib/profile-view",

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {FormControl} from '@angular/forms';
+import { Router } from '@angular/router';
 
 export interface Reserve {
   name: string;
@@ -13,9 +13,9 @@ export interface Reserve {
 })
 export class ReserveDetailComponent implements OnInit {
   reserves:Reserve[] = [];
-  reserveControl = new FormControl('');
 
-  constructor() {
+
+  constructor(private router:Router) {
     this.reserves = [{
       name: 'Kruger Park',
       id: '123'
@@ -27,4 +27,8 @@ export class ReserveDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {}
+
+  openCreateReserve():void {
+    this.router.navigate(['manage',{outlets:{managecontent:['reserve-create']}}]);  
+  }
 }

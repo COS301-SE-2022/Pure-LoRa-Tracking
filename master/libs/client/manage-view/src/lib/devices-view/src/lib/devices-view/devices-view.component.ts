@@ -1,4 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import {FormControl} from '@angular/forms';
+
+export interface Reserve {
+  name: string;
+  id: string;
+}
 
 @Component({
   selector: 'master-devices-view',
@@ -6,7 +12,19 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./devices-view.component.scss'],
 })
 export class DevicesViewComponent implements OnInit {
-  constructor() {}
+  reserves:Reserve[] = [];
+  reserveControl = new FormControl('');
+
+  constructor() {
+    this.reserves = [{
+      name: 'Kruger Park',
+      id: '123'
+    },
+    {
+      name: 'Park 2',
+      id: '12a3'
+    }]
+  }
 
   ngOnInit(): void {}
 }
