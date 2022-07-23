@@ -15,4 +15,10 @@ describe('AiHeatmapAverageService', () => {
   it('should be defined', () => {
     expect(service).toBeTruthy();
   });
+
+  it('tf -> save', async() => {
+    console.log(
+      await service.saveModel()
+    )
+  });
 });
