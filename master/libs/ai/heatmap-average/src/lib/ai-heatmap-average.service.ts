@@ -24,9 +24,9 @@ export class AiHeatmapAverageService {
         })
 
         return {
-            x : Xtot,
-            y : Ytot,
-            z : Ztot
+            x : Xtot / GeomSet.length,
+            y : Ytot / GeomSet.length,
+            z : Ztot / GeomSet.length
         }
     }
 
