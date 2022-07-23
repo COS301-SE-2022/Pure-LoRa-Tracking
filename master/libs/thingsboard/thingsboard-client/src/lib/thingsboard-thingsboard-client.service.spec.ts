@@ -353,6 +353,11 @@ it(' -> HTTP ERROR', async () => {
   //////////////////////////////////////////////////////////////////////////////////////////
 
   it('Historical Data -> no token', async () => {
+    jest
+      .spyOn(httpService, 'post')
+      .mockImplementationOnce(() =>
+        throwError(() => tests.axiosECONNFailureExample)
+      );
     expect(await service.getDeviceHistoricalData('1', 2, 3)).toMatchObject({
       ...tests.TBFailureResponse,
       ...{ explanation: 'token' },
@@ -441,7 +446,7 @@ it(' -> HTTP ERROR', async () => {
   it('refresh -> HTTP ERROR', async () => {
     service.setToken('123');
     jest
-      .spyOn(httpService, 'get')
+      .spyOn(httpService, 'post')
       .mockImplementationOnce(() =>
         throwError(() => tests.axiosECONNFailureExample)
       );
