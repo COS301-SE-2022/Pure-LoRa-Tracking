@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
+import {Router } from '@angular/router';
 
-import { ActivatedRoute, Router } from '@angular/router';
 @Component({
-  selector: 'master-profile-view',
-  templateUrl: './profile-view.component.html',
-  styleUrls: ['./profile-view.component.scss'],
+  selector: 'master-profiles-view',
+  templateUrl: './profiles-view.component.html',
+  styleUrls: ['./profiles-view.component.scss'],
 })
-export class ProfileViewComponent implements OnInit {
+
+export class ProfilesViewComponent implements OnInit {
+ 
   name:string;
   role:string;
   email:string;

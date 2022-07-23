@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ReservesViewComponent } from './reserves-view.component';
+import { ProfilesEditComponent } from './profiles-edit.component';
 
-describe('ReservesViewComponent', () => {
-  let component: ReservesViewComponent;
-  let fixture: ComponentFixture<ReservesViewComponent>;
+describe('ProfilesEditComponent', () => {
+  let component: ProfilesEditComponent;
+  let fixture: ComponentFixture<ProfilesEditComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ReservesViewComponent],
+      declarations: [ProfilesEditComponent],
     }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ReservesViewComponent);
+    fixture = TestBed.createComponent(ProfilesEditComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

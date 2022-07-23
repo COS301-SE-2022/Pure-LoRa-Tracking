@@ -8,13 +8,29 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { ReserveDetailComponent } from './reserve-detail-view/src/lib/reserve-detail/reserve-detail.component';
+import { ProfilesViewComponent } from './profile-view/src/lib/profiles-view/profiles-view.component';
+import { ProfilesEditComponent } from './profile-edit/src/lib/profiles-edit/profiles-edit.component';
+import { UserViewComponent } from './users-view/src/lib/user-view/user-view.component';
+import { DevicesViewComponent } from './devices-view/src/lib/devices-view/devices-view.component';
 
 export const clientManageViewRoutes: Route[] = [
   {
     path: 'profile', 
     outlet: 'managecontent',
-    loadChildren: ()=> import('@master/client/manage-view/src/lib/reserve-detail-view').then(m => m.ClientManageViewSrcLibReserveDetailViewModule),
-    component: ReserveDetailComponent
+    loadChildren: ()=> import('@master/client/manage-view/src/lib/profile-view').then(m => m.ClientManageViewSrcLibProfileViewModule),
+    component: ProfilesViewComponent
+  },
+  {
+    path: 'editprofile', 
+    outlet: 'managecontent',
+    loadChildren: ()=> import('@master/client/manage-view/src/lib/profile-edit').then(m => m.ClientManageViewSrcLibProfileEditModule),
+    component: ProfilesEditComponent
+  },
+  {
+    path: 'users', 
+    outlet: 'managecontent',
+    loadChildren: ()=> import('@master/client/manage-view/src/lib/users-view').then(m => m.ClientManageViewSrcLibUsersViewModule),
+    component: UserViewComponent
   },
   {
     path: 'reserves', 
@@ -23,16 +39,10 @@ export const clientManageViewRoutes: Route[] = [
     component: ReserveDetailComponent
   },
   {
-    path: 'reserves', 
+    path: 'devices', 
     outlet: 'managecontent',
-    loadChildren: ()=> import('@master/client/manage-view/src/lib/reserve-detail-view').then(m => m.ClientManageViewSrcLibReserveDetailViewModule),
-    component: ReserveDetailComponent
-  },
-  {
-    path: 'reserves', 
-    outlet: 'managecontent',
-    loadChildren: ()=> import('@master/client/manage-view/src/lib/reserve-detail-view').then(m => m.ClientManageViewSrcLibReserveDetailViewModule),
-    component: ReserveDetailComponent
+    loadChildren: ()=> import('@master/client/manage-view/src/lib/devices-view').then(m => m.ClientManageViewSrcLibDevicesViewModule),
+    component: DevicesViewComponent
   },
 ];
 

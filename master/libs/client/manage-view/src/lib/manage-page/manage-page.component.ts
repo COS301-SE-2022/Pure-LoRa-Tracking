@@ -11,7 +11,7 @@ export class ManagePageComponent implements OnInit{
   constructor(private router: Router,private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-   // this.router.navigate(['manage',{outlets:{managecontent:['profile']}}]);   
+   this.router.navigate(['manage',{outlets:{managecontent:['profile']}}]);   
   }
   
 }
