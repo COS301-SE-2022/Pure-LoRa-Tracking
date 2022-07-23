@@ -2,6 +2,7 @@
   "version": 2,
   "projects": {
     "-api-hardware-debug": "libs/api/hardware-debug",
+    "ai-heatmap-average": "libs/ai/heatmap-average",
     "api": "apps/api",
     "api-api-router": "libs/api/api-router",
     "api-api-testing": "libs/api/api-testing",
