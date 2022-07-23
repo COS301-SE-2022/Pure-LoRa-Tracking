@@ -17,6 +17,20 @@ export class AiHeatmapAverageService {
         this.buildModel();
     }
 
+    normalizePoints(dataSet: number[]) : number[] {
+        const toRet = new Array<number>();
+        dataSet.forEach(item => {
+            if(dataSet.indexOf(item) % 2 == 0)
+            toRet.push( (item + 200)  / 400 )
+            else toRet.push((item + 100) / 200)
+        })
+        return toRet
+    }
+
+    deNormalizePoints(dataSet: number[]) : number[] {
+        return [dataSet[0]*400 -200, dataSet[1]*200 -100];
+    }
+
     deconstructData(data: any[]) {
         const toRet = new Array<number>();
         data.forEach(element => {
@@ -44,6 +58,10 @@ export class AiHeatmapAverageService {
         return true;
     }
 
+    /*
+        load model from file
+    */
+
     async fitModel(learningData, trueData) {
         await this.model.fit(tf.tensor(learningData, [1,20]), tf.tensor(trueData, [1,2]), {
             epochs : 5, 
@@ -51,9 +69,16 @@ export class AiHeatmapAverageService {
                 onEpochEnd: async (epoch, logs) => {
                     console.log("Epoch " + epoch);
                     console.log("Loss: " + logs.loss + " accuracy: " + logs.acc);
-                  }
+                  },
+                onTrainEnd: async(logs : tf.Logs) => {
+                    console.log(logs)
+                }
             }
         })
+    }
+
+    async predictData(inputData)  {
+        return this.deNormalizePoints((await (this.model.predict(tf.tensor(inputData, [1,20])) as tf.Tensor).array() as number[][])[0]);
     }
 
     LatLongToGeometric(latitude: number, longitude: number): { x: number, y: number, z: number } {
