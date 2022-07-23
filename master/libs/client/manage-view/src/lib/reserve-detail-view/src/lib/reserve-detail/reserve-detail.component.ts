@@ -31,4 +31,12 @@ export class ReserveDetailComponent implements OnInit {
   openCreateReserve():void {
     this.router.navigate(['manage',{outlets:{managecontent:['reserve-create']}}]);  
   }
+
+  deleteReserve(id:string):void{
+    console.log(id);
+  }
+
+  editReseve(id:string):void{
+    console.log(id);
+  }
 }

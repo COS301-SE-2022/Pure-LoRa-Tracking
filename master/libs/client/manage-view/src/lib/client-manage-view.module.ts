@@ -11,7 +11,6 @@ import { ReserveDetailComponent } from './reserve-detail-view/src/lib/reserve-de
 import { ProfilesViewComponent } from './profile-view/src/lib/profiles-view/profiles-view.component';
 import { ProfilesEditComponent } from './profile-edit/src/lib/profiles-edit/profiles-edit.component';
 import { UserViewComponent } from './users-view/src/lib/user-view/user-view.component';
-import { DevicesViewComponent } from './devices-view/src/lib/devices-view/devices-view.component';
 import { ReserveCreateComponent } from './create-reserve/src/lib/reserve-create/reserve-create.component';
 
 export const clientManageViewRoutes: Route[] = [
@@ -38,12 +37,6 @@ export const clientManageViewRoutes: Route[] = [
     outlet: 'managecontent',
     loadChildren: ()=> import('@master/client/manage-view/src/lib/reserve-detail-view').then(m => m.ClientManageViewSrcLibReserveDetailViewModule),
     component: ReserveDetailComponent
-  },
-  {
-    path: 'devices', 
-    outlet: 'managecontent',
-    loadChildren: ()=> import('@master/client/manage-view/src/lib/devices-view').then(m => m.ClientManageViewSrcLibDevicesViewModule),
-    component: DevicesViewComponent
   },
   {
     path: 'reserve-create', 
