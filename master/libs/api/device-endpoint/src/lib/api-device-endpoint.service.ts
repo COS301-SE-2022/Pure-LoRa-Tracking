@@ -8,6 +8,7 @@ import { ChirpstackChirpstackSensorService } from '@lora/chirpstack-sensor';
 import {
   AddGatewayDevice,
   AddSensorDevice,
+  deviceAssign,
   deviceAvailable,
   deviceInfos,
   deviceResponse,
@@ -475,15 +476,51 @@ export class ApiDeviceEndpointService {
   }
 
   ///////////////////////////////////////////////////////////////////////////
-  async processDeviceAvailable(body : deviceAvailable) : Promise<deviceResponse> {
+  async processDeviceAvailable(body: deviceAvailable): Promise<deviceResponse> {
     if (body.token == undefined || body.token == '')
       return {
         status: 401,
         explanation: 'no token found',
       };
 
+    this.thingsboardClient.setToken(body.token);
+    const response = await this.thingsboardClient.getUnassignedDevicesForAdmin();
+    if (response.status == 'fail') {
+      return {
+        status: 500,
+        explanation: response.explanation
+      }
+    }
+
+    return {
+      status: 200,
+      explanation: "call finished",
+      data: response.data
+    }
+  }
+
+  ///////////////////////////////////////////////////////////////////////////
+  async processDeviceAssign(body: deviceAssign): Promise<deviceResponse> {
+    if (body.token == undefined || body.token == '')
+      return {
+        status: 401,
+        explanation: 'no token found',
+      };
+
+    if (body.customerID == undefined || body.customerID == '')
+      return {
+        status: 401,
+        explanation: 'no customer ID found',
+      };
+
+    if (body.deviceID == undefined || body.deviceID == '')
+      return {
+        status: 401,
+        explanation: 'no device ID found',
+      };
+
       this.thingsboardClient.setToken(body.token);
-      const response = await this.thingsboardClient.getUnassignedDevicesForAdmin();
+      const response = await this.thingsboardClient.assignDeviceToReserve(body.customerID, body.deviceID);
       if (response.status == 'fail') {
         return {
           status: 500,
@@ -494,7 +531,6 @@ export class ApiDeviceEndpointService {
       return {
         status: 200,
         explanation: "call finished",
-        data : response.data
       }
   }
 }

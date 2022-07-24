@@ -1494,6 +1494,35 @@ export class ThingsboardThingsboardClientService {
       data : retArray
     }
   }
+
+  ////////////////////////////////////////////////////////////////
+  async assignDeviceToReserve(reserveID: string, deviceID : string) : Promise<thingsboardResponse> {
+    const userInfo = await this.getUserInfoFromToken();
+    if(userInfo.status == 'fail')
+    return {
+      status : 'fail',
+      explanation : userInfo.explanation
+    }
+
+    if(userInfo.data.authority != "TENANT_ADMIN")
+    return {
+      status : 'fail',
+      explanation : "not admin"
+    }
+
+    const resp = await this.deviceService.assignDevicetoCustomer(reserveID, deviceID);
+
+    if(resp.status != 200)
+    return {
+      status : 'fail',
+      explanation : resp.explanation
+    }
+
+    return {
+      status : 'ok',
+      explanation : 'call finished'
+    }
+  }
 }
 
 /* data is required to be any due to the many possible response data types */

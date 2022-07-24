@@ -11,6 +11,12 @@ export interface deviceInfos {
   deviceIDs: string[];
 }
 
+export interface deviceAssign {
+  token: string;
+  customerID : string;
+  deviceID: string;
+}
+
 export interface deviceAvailable {
   token: string;
 }
