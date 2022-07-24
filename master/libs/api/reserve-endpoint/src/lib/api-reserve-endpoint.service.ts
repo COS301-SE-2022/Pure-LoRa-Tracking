@@ -1,6 +1,6 @@
 import { ThingsboardThingsboardClientService } from '@lora/thingsboard-client';
 import { Injectable } from '@nestjs/common';
-import { ReserveCreateEndpoint, ReserveEndpoint, ReserveEndpointNoToken, ReserveResponse, ReserveSetEndpoint } from '../reserve-endpoint.interface';
+import { ReserveCreateEndpoint, ReserveEndpoint, ReserveEndpointNoToken, ReserveResponse, ReserveSetEndpoint, ReserveUpdateEndpoint } from '../reserve-endpoint.interface';
 
 @Injectable()
 export class ApiReserveEndpointService {
@@ -207,4 +207,45 @@ export class ApiReserveEndpointService {
             data : response.data
         }
     }
+
+    //////////////////////////////////////////////////////////////////////////////////
+    async processReserveUpdate(body : ReserveUpdateEndpoint) : Promise<ReserveResponse> {
+        if (body.token == undefined || body.token == '')
+        return {
+            status: 401,
+            explanation: 'reserve id missing',
+        };
+
+        if (body.reserveID == undefined || body.reserveID == '')
+        return {
+            status: 401,
+            explanation: 'token missing',
+        };
+
+        if (body.NameOfReserve == undefined || body.NameOfReserve == '')
+        return {
+            status: 401,
+            explanation: 'Reserve Name missing',
+        };
+
+        if (body.email == undefined || body.email == '')
+        return {
+            status: 401,
+            explanation: 'Email Address missing, this can be the owner\'s or reserve\'s email',
+        };
+
+        this.thingsboardClient.setToken(body.token);
+        const resp = await this.thingsboardClient.updateReserveInfo(body.reserveID, body);
+
+        if(resp.status == 'fail')
+        return {
+            status : 500,
+            explanation : resp.explanation
+        }
+
+        return {
+            status : 200,
+            explanation : resp.explanation
+        }
+    } 
 }

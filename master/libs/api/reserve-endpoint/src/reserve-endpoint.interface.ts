@@ -23,6 +23,21 @@ export interface ReserveCreateEndpoint {
   };
 }
 
+export interface ReserveUpdateEndpoint {
+  token: string;
+  NameOfReserve: string;
+  email: string;
+  reserveID: string;
+  title: string,
+  region: string,
+  country: string,
+  city: string,
+  address: string,
+  address2: string,
+  zip: string,
+  phone: string,
+}
+
 export interface ReserveSetEndpoint {
   token: string;
   reserveID: string;

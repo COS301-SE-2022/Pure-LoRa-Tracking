@@ -23,7 +23,7 @@ export class ThingsboardThingsboardClientService {
     private assetService: ThingsboardThingsboardAssetService,
     private adminService: ThingsboardThingsboardAdminService,
     private reserveService: ThingsboardThingsboardReserveService
-  ) {}
+  ) { }
 
   //////////////////////////////////////////////////////////
 
@@ -238,28 +238,28 @@ export class ThingsboardThingsboardClientService {
 
     const reserve = await this.CustomerInfo(userInfo.data.customerId.id)
     console.log('reserve :>> ', reserve);
-    if(reserve.status == 'fail')
+    if (reserve.status == 'fail')
       return {
         code: 500,
-        status:'fail',
-        explanation:reserve.explanation
+        status: 'fail',
+        explanation: reserve.explanation
       }
 
-    
-    if(reserve.data.additionalInfo.location == undefined)
-    return {
-      code: 404,
-      status: 'fail',
-      explanation: 'no reserve set',
-    };
+
+    if (reserve.data.additionalInfo.location == undefined)
+      return {
+        code: 404,
+        status: 'fail',
+        explanation: 'no reserve set',
+      };
 
     return {
-      code : 200,
-      status:'ok',
-      explanation:'call finished',
-      data:{
-        "reserveName":reserve.data.name,
-        "location":reserve.data.additionalInfo.location
+      code: 200,
+      status: 'ok',
+      explanation: 'call finished',
+      data: {
+        "reserveName": reserve.data.name,
+        "location": reserve.data.additionalInfo.location
       }
     }
   }
@@ -1304,7 +1304,7 @@ export class ThingsboardThingsboardClientService {
         status: 'fail',
         explanation: 'server fail',
       };
-    
+
     await this.generateReserveList_SystemAdmin()
     const serverUser = await this.userService.userInfo(this.token);
 
@@ -1318,6 +1318,69 @@ export class ThingsboardThingsboardClientService {
       status: 'ok',
       explanation: 'call finished',
       data: serverUser.data.additionalInfo.reserves,
+    };
+  }
+
+  /////////////////////////////////////////////////////////////////
+  async updateReserveInfo(reserveID : string, details: {
+    title: string,
+    region: string,
+    country: string,
+    city: string,
+    address: string,
+    address2: string,
+    zip: string,
+    phone: string,
+    email: string,
+  }) {
+    const user = await this.userService.userInfo(this.token);
+
+    if (user.status != 200)
+      return {
+        status: 'fail',
+        explanation: 'token invalid',
+      };
+
+    if (user.data.authority != 'TENANT_ADMIN')
+      return {
+        status: 'fail',
+        explanation: 'wrong permissions',
+      };
+
+    this.reserveService.setToken(this.token);
+    const info = await this.reserveService.CustomerInfo(reserveID);
+
+    if (info.status != 200)
+      return {
+        status: 'fail',
+        explanation: info.explanation,
+      };
+
+    const response = await this.reserveService.setReservePerimeter(
+      info.data.externalId?.id,
+      info.data.id.id,
+      details.title,
+      details.region,
+      info.data.tenantId.id,
+      details.country,
+      details.city,
+      details.address,
+      details.address2,
+      details.zip,
+      details.phone,
+      details.email,
+      info.data.additionalInfo
+    );
+
+    if (response.status != 200)
+      return {
+        status: 'fail',
+        explanation: response.explanation,
+      };
+
+    return {
+      status: 'ok',
+      explanation: 'call finished',
     };
   }
 }
