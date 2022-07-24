@@ -3,7 +3,7 @@ import {HttpClient} from "@angular/common/http"
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import { FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import { DialogConfirmationComponent } from '@master/client/shared-ui/components-ui';
-
+import { Router } from '@angular/router';
 export interface userInfo{
   name: string,
   surname: string,
@@ -24,7 +24,7 @@ export interface SingleGroup{
 })
 export class ReserveUsersViewComponent implements OnInit {
     
-  tableColumns:string[] = ['id', 'surname', 'name','email',"status","delete"];
+  tableColumns:string[] = ['id', 'surname', 'name','email',"status","delete","edit"];
   addUser= false;
   
   nameGroup!: FormGroup;
@@ -38,7 +38,7 @@ export class ReserveUsersViewComponent implements OnInit {
   token="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZlYWRtaW5AcmVzZXJ2ZS5jb20iLCJzY29wZXMiOlsiVEVOQU5UX0FETUlOIl0sInVzZXJJZCI6ImQ2MzcyZTMwLWRmZTgtMTFlYy1iZGIzLTc1MGNlN2VkMjQ1MSIsImVuYWJsZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiJjZDJkZjJiMC1kZmU4LTExZWMtYmRiMy03NTBjZTdlZDI0NTEiLCJjdXN0b21lcklkIjoiMTM4MTQwMDAtMWRkMi0xMWIyLTgwODAtODA4MDgwODA4MDgwIiwiaXNzIjoidGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE2NTQ4MDU3NzUsImV4cCI6MTY1NDgxNDc3NX0.76eRuu1QDS4QLxUVuJNcawQkpyMoXezGuRfPiVMhLnDHxtxwUQqtIrnbEeLBMkVITbwjYhozU6zOyQaRiW2ajA"
   assignedReserves= new FormControl();
   
-  constructor(private _formBuilder: FormBuilder,private http:HttpClient,public confirmDialog: MatDialog) {
+  constructor(private _formBuilder: FormBuilder,private http:HttpClient,public confirmDialog: MatDialog, private router:Router) {
    
   }
 
@@ -183,5 +183,8 @@ export class ReserveUsersViewComponent implements OnInit {
 
   }
 
+  editUser():void{
+    this.router.navigate(['manage',{outlets:{managecontent:['edit-user']}}]);   
+  }
 
 }

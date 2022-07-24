@@ -98,6 +98,9 @@
       "@master/client/manage-view/src/lib/reserve-edit": [
         "libs/client/manage-view/src/lib/reserve-edit/src/index.ts"
       ],
+      "@master/client/manage-view/src/lib/users-edit": [
+        "libs/client/manage-view/src/lib/users-edit/src/index.ts"
+      ],
       "@master/client/manage-view/src/lib/users-view": [
         "libs/client/manage-view/src/lib/users-view/src/index.ts"
       ],

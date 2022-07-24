@@ -18,9 +18,15 @@ export class ProfilesEditComponent implements OnInit {
   ngOnInit(): void {
     this.editProfile = this.formBuilder.group({
       name: [null,[Validators.required,Validators.minLength(2)]],
-      surname: [null,Validators.required, Validators.minLength(2)],
-      email: [null, Validators.required, Validators.email]
+      surname: [null,[Validators.required, Validators.minLength(2)]],
+      email: [null, [Validators.required, Validators.email]]
     });
+
+    this.editProfile.setValue({
+      name:"AAa",
+      surname:"BBB",
+      email:"email@email.com"
+    })
   }
 
   saveProfile(form:any):void {

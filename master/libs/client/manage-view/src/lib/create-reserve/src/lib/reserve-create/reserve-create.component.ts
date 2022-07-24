@@ -17,8 +17,8 @@ export class ReserveCreateComponent implements OnInit {
   ngOnInit(): void {
     this.reserveInfo = this.formBuilder.group({
       name: [null,[Validators.required,Validators.minLength(2)]],
-      email: [null,Validators.required, Validators.minLength(2)],
-      geojson: [null, Validators.required]
+      email: [null,[Validators.required, Validators.minLength(2)]],
+      geojson: [null, [Validators.required]]
     });
   }
 
@@ -34,6 +34,19 @@ export class ReserveCreateComponent implements OnInit {
     const file: File = event?.target.files[0];
     if (file){
       console.log( file);    
+      // postFile(fileToUpload: File): Observable<boolean> {
+//     const endpoint = 'your-destination-url';
+//     const formData: FormData = new FormData();
+//     // Append image file to formdata as a seperate property
+//     formData.append('fileKey', fileToUpload, fileToUpload.name);
+
+//     // Append reactive form data too in a seperate property
+//     formData.append('productForm', JSON.stringify(this.productForm, null, 4));
+//     return this.httpClient
+//       .post(endpoint, formData, { headers: yourHeadersConfig })
+//       .map(() => { return true; })
+//       .catch((e) => this.handleError(e));
+// }
     }
   }
 

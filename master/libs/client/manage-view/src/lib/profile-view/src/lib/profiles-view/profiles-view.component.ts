@@ -21,7 +21,9 @@ export class ProfilesViewComponent implements OnInit {
     this.reserves = ["Reserve A", "Reserve B"];
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log("profile");
+  }
 
   openEdit():void {
     this.router.navigate(['manage',{outlets:{managecontent:['editprofile']}}]);   

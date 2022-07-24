@@ -22,8 +22,8 @@ export class ReserveEditComponent implements OnInit {
 
     this.reserveInfo = this.formBuilder.group({
       name: [null,[Validators.required,Validators.minLength(2)]],
-      email: [null,Validators.required, Validators.minLength(2)],
-      geojson: [null, Validators.required]
+      email: [null,[Validators.required, Validators.minLength(2)]],
+      geojson: [null, [Validators.required]]
     });
 
     //this.reserveInfo.patchValue({'name':"park",'email':'reserve@reserve.co.za'});

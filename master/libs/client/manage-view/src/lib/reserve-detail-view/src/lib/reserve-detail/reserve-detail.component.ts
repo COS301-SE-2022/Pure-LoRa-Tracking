@@ -26,7 +26,9 @@ export class ReserveDetailComponent implements OnInit {
     }]
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log("reserves");
+  }
 
   openCreateReserve():void {
     this.router.navigate(['manage',{outlets:{managecontent:['reserve-create']}}]);  

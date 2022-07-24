@@ -13,6 +13,7 @@ import { ProfilesEditComponent } from './profile-edit/src/lib/profiles-edit/prof
 import { UserViewComponent } from './users-view/src/lib/user-view/user-view.component';
 import { ReserveCreateComponent } from './create-reserve/src/lib/reserve-create/reserve-create.component';
 import { ReserveEditComponent } from './reserve-edit/src/lib/reserve-edit/reserve-edit.component';
+import { UserEditComponent } from './users-edit/src';
 
 export const clientManageViewRoutes: Route[] = [
   {
@@ -50,6 +51,12 @@ export const clientManageViewRoutes: Route[] = [
     outlet: 'managecontent',
     loadChildren: ()=> import('@master/client/manage-view/src/lib/reserve-edit').then(m => m.ClientManageViewSrcLibReserveEditModule),
     component: ReserveEditComponent
+  },
+  {
+    path: 'edit-user', 
+    outlet: 'managecontent',
+    loadChildren: ()=>import('@master/client/manage-view/src/lib/users-edit').then(m=>m.ClientManageViewSrcLibUsersEditModule),
+    component: UserEditComponent
   },
 ];
 
