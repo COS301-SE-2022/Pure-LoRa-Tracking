@@ -58,15 +58,15 @@ def generate_random_point_within_bounds(b: list) -> tuple:
 
 
 # 2. Generate random number of random points near the 'correct' location.
-def generate_false_points(point: tuple):
-    points_to_generate = randint(3, 6)
+def generate_false_points(point: tuple, number_of_samples: int):
+    #points_to_generate = randint(3, 6)
     long, lat = point
     variation_factor = 1000
     deviation_factor = 0.3
     result = []
-    timestamps = [(datetime.now() + timedelta(seconds=60 * a)).timestamp() for a in range(points_to_generate)]
+    timestamps = [(datetime.now() + timedelta(seconds=60 * a)).timestamp() for a in range(number_of_samples)]
 
-    for a in range(points_to_generate):
+    for a in range(number_of_samples):
         longitude = uniform(long * variation_factor, (long * variation_factor) + deviation_factor) / float(
             variation_factor)
         latitude = uniform(lat * variation_factor, (lat * variation_factor) + deviation_factor) / float(
@@ -109,21 +109,23 @@ def output_data(entry_count):
 
 
 # 4. Helper function to do 1->3.
-def generateData(target_sample_count):
+def generateData(target_sample_count, target_points_per_sample_count):
     for a in range(target_sample_count):
         truePoint = generate_random_point_within_bounds(bounds)
-        generate_false_points(truePoint)
+        generate_false_points(truePoint, target_points_per_sample_count)
         output_data(a)
 
 
 def main():
     try:
         t_sample_count = int(input("# of samples to generate: "))
+        t_points_per_sample_count = int(input("# of points per sample to generate: "))
     except:
-        print("[-] Exception occured: defaulting to 200.")
-        t_sample_count = 200
+        print("[-] Exception occured: defaulting to 2 samples of 10 points.")
+        t_sample_count = 2
+        t_points_per_sample_count = 10
 
-    generateData(t_sample_count)
+    generateData(t_sample_count, t_points_per_sample_count)
 
 
 if __name__ == '__main__':
