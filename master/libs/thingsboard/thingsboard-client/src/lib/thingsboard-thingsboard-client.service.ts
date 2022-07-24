@@ -1322,7 +1322,7 @@ export class ThingsboardThingsboardClientService {
   }
 
   /////////////////////////////////////////////////////////////////
-  async updateReserveInfo(reserveID : string, details: {
+  async updateReserveInfo(reserveID: string, details: {
     title: string,
     region: string,
     country: string,
@@ -1382,6 +1382,48 @@ export class ThingsboardThingsboardClientService {
       status: 'ok',
       explanation: 'call finished',
     };
+  }
+
+  ////////////////////////////////////////////////////////////////
+
+  async updateUser(userID: string, details: {
+    firstName: string,
+    lastName: string,
+  }): Promise<thingsboardResponse> {
+    const user = await this.userService.userInfo(this.token);
+
+    if (user.status != 200)
+      return {
+        status: 'fail',
+        explanation: 'token invalid',
+      };
+
+    const userinfo = await this.userService.userInfoByUserID(this.token, userID);
+    if (userinfo.status != 200)
+      return {
+        status: 'fail',
+        explanation: userinfo.explanation
+      }
+
+    const resp = await this.userService.UpdateUserInfo(this.token, 
+      userID, 
+      userinfo.data.tenantId.id, 
+      userinfo.data.customerId.id, 
+      userinfo.data.email, userinfo.data.authority, 
+      details.firstName, 
+      details.lastName, 
+      userinfo.data.additionalInfo);
+
+    if(resp.status != 200)
+    return {
+      status : 'fail',
+      explanation : resp.explanation
+    }
+
+    return {
+      status : 'ok',
+      explanation : 'call finished'
+    }
   }
 }
 
