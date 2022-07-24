@@ -25,6 +25,9 @@ describe('AiHeatmapAverageService', () => {
     console.log(await service.predictData(ToPredictData))
   });*/
 
+  /* This test will fail because running saveModel in 
+     Jest results in an exception. */
+
   it('tf -> create, fit, save, load', async () => {
     const learn = service.normalizePoints(
       service.deconstructData(learning.coordinates)
@@ -37,17 +40,15 @@ describe('AiHeatmapAverageService', () => {
     const ToPredictData = service.normalizePoints(
       service.deconstructData(mock2.coordinates)
     );
-    const predictedDataToMatch = await service.predictData(ToPredictData);
-    const saveModelResult = await service.saveModel();
-    console.log('Save Model Result: ' + saveModelResult);
 
-    const loadModelResult = await service.loadModel();
-    console.log('Load Model Result: ' + loadModelResult);
+    const predictedDataToMatch = await service.predictData(ToPredictData);
+
+    await service.saveModel();
+    await service.loadModel();
 
     const resultantData = await service.predictData(ToPredictData);
 
-    console.log('1: ' + predictedDataToMatch);
-    console.log('2: ' + resultantData);
+    expect(resultantData).toEqual(predictedDataToMatch);
   });
 });
 
