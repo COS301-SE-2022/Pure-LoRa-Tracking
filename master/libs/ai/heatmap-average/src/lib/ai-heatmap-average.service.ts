@@ -58,9 +58,6 @@ export class AiHeatmapAverageService {
     return true;
   }
 
-  /*
-        load model from file
-    */
   async loadModel(): Promise<boolean> {
     const res = await tf
       .loadLayersModel('file://libs/ai/Models/averaging')
