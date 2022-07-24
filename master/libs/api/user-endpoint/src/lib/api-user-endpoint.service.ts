@@ -9,6 +9,7 @@ import {
   userRemoveInput,
   userResponse,
   usersInfoInput,
+  userUpdateInput,
 } from '../api-user.interface';
 
 import { ThingsboardThingsboardClientService } from '@lora/thingsboard-client';
@@ -16,6 +17,8 @@ import { ThingsboardThingsboardClientService } from '@lora/thingsboard-client';
 @Injectable()
 export class ApiUserEndpointService {
   constructor(private thingsboardClient: ThingsboardThingsboardClientService) {}
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////////
 
   async AddUserProcess(content: userAddInput): Promise<userResponse> {
     if (content.token == undefined || content.token == '')
@@ -91,6 +94,8 @@ export class ApiUserEndpointService {
     };
   }
 
+  //////////////////////////////////////////////////////////////////////////////////////////////////////
+
   async RemoveUserProcess(content: userRemoveInput): Promise<userResponse> {
     if (content.token == undefined || content.token == '')
       return {
@@ -120,6 +125,8 @@ export class ApiUserEndpointService {
       };
   }
 
+  //////////////////////////////////////////////////////////////////////////////////////////////////////
+
   async DisableUserProcess(content: userDisableInput): Promise<userResponse> {
     if (content.token == undefined || content.token == '')
       return {
@@ -146,6 +153,8 @@ export class ApiUserEndpointService {
         explain: 'ok',
       };
   }
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////////
 
   async EnableUserProcess(content: userEnableInput): Promise<userResponse> {
     if (content.token == undefined || content.token == '')
@@ -174,6 +183,8 @@ export class ApiUserEndpointService {
       };
   }
 
+  //////////////////////////////////////////////////////////////////////////////////////////////////////
+
   async UserInfoProcess(content: userInfoInput): Promise<userResponse> {
     if (content.token == undefined || content.token == '')
       return {
@@ -193,6 +204,8 @@ export class ApiUserEndpointService {
       data: resp.data,
     };
   }
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////////
 
   async AdminGroupsProcess(content: userAdminGroups) : Promise<userResponse> {
     if (content.token == undefined || content.token == '')
@@ -214,9 +227,9 @@ export class ApiUserEndpointService {
       explain : "call finished",
       data : response.data
     }
-
-    
   }
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////////
 
   async AdminAllReserveUsersProcess(content: usersInfoInput) : Promise<userResponse> {
     if (content.token == undefined || content.token == '')
@@ -242,6 +255,8 @@ export class ApiUserEndpointService {
       data:response.data
     }
   }
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////////
 
   async UserChangeReserveProcess(content: UserChangeReserveInput) : Promise<userResponse> {
     if (content.token == undefined || content.token == '')
@@ -271,5 +286,36 @@ export class ApiUserEndpointService {
         furtherExplain: "refresh the page",
         data:{...response.data,...{token:tokens.token},...{refreshToken:tokens.refreshToken}}
       }
+  }
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  async UserInfoUpdateProcess(content: userUpdateInput): Promise<userResponse> {
+    if (content.token == undefined || content.token == '')
+      return {
+        status: 401,
+        explain: 'token missing',
+      };
+    if (content.userID == undefined || content.userID == '')
+      return {
+        status: 400,
+        explain: 'userID not defined',
+      };
+    
+      this.thingsboardClient.setToken(content.token);
+      const resp = await this.thingsboardClient.updateUser(content.userID, content.userInfo);
+
+      if(resp.status == "fail")
+      return {
+        status : 500,
+        explain : resp.explanation
+      }
+
+      return {
+        status : 200,
+        explain : resp.explanation
+      }
+
+
   }
 }
