@@ -1425,6 +1425,37 @@ export class ThingsboardThingsboardClientService {
       explanation : 'call finished'
     }
   }
+
+  ////////////////////////////////////////////////////////////////
+  async unassignDevice(deviceID:string) : Promise<thingsboardResponse> {
+    const userInfo = await this.getUserInfoFromToken();
+    if(userInfo.status == 'fail')
+    return {
+      status : 'fail',
+      explanation : userInfo.explanation
+    }
+
+    if(userInfo.data.authority != "TENANT_ADMIN")
+    return {
+      status : 'fail',
+      explanation : "not admin"
+    }
+
+    this.deviceService.setToken(this.token);
+    const response = await this.deviceService.removeDeviceFromCustomer(deviceID);
+
+    if(response.status != 200)
+    return {
+      status : 'fail',
+      explanation : response.explanation
+    }
+
+    return {
+      status : 'ok',
+      explanation : "call finished"
+    }
+
+  }
 }
 
 /* data is required to be any due to the many possible response data types */

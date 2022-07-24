@@ -47,6 +47,11 @@ export interface RemoveDevice {
   devEUI: string;
 }
 
+export interface UnassignDevice {
+  token: string;
+  deviceID: string;
+}
+
 export interface GatewayLocationInfo {
   token: string;
   deviceIDs: string[];

@@ -21,8 +21,11 @@ export class ApiDeviceEndpointController {
   @Post("add/gateway")
   async PostDeviceAddGateway(@Body() content : AddGatewayDevice) : Promise<deviceResponse> {return this.apiDeviceEndpointService.processDeviceAddGateway(content);}
 
-  @Post("remove")
+  @Post("delete")
   async PostDeviceRemove(@Body() content : RemoveDevice) : Promise<deviceResponse> {return this.apiDeviceEndpointService.processDeviceremove(content);}
+
+  @Post("unassign")
+  async PostDeviceRemoveFromReserve(@Body() content : RemoveDevice) : Promise<deviceResponse> {return this.apiDeviceEndpointService.processDeviceRemoveDeviceFromReserve(content);}
 
   @Post("gateway/info")
   async GetGateways(@Body() content : GetGatewaysInput) : Promise<deviceResponse> {return this.apiDeviceEndpointService.getGatewaysProcess(content);}
