@@ -17,6 +17,9 @@ export class ApiReserveEndpointController {
   @Post("remove")
   async PostReserveRemoveResponse(@Body() body : ReserveEndpoint) : Promise<ReserveResponse> {return await this.apiReserveEndpointService.processReserveRemove(body);}
 
+  @Post("details")
+  async PostReserveDetailsResponse(@Body() body : ReserveEndpoint) : Promise<ReserveResponse> {return await this.apiReserveEndpointService.processReserveDetails(body);}
+
   @Post("details/update")
   async PostReserveUpdateResponse(@Body() body : ReserveUpdateEndpoint) : Promise<ReserveResponse> {return await this.apiReserveEndpointService.processReserveUpdate(body);}
 
