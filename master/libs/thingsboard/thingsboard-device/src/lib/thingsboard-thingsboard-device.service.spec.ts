@@ -148,7 +148,7 @@ describe('ThingsboardThingsboardDeviceService', () => {
     //service.setToken(data.token);
     service.setToken('token')
     jest.spyOn(httpService, 'delete').mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
-    expect(await service.removeDeviceFromCustomer("2fe67850-dfe9-11ec-bdb3-750ce7ed2451")).toEqual(true);
+    expect(await service.removeDeviceFromCustomer("2fe67850-dfe9-11ec-bdb3-750ce7ed2451")).toMatchObject(tests.SuccessResponse);
   });
 
   it('remove device -> ECONNREFUSED', async () => {
@@ -156,7 +156,7 @@ describe('ThingsboardThingsboardDeviceService', () => {
     //service.setToken(data.token);
     service.setToken('token')
     jest.spyOn(httpService, 'delete').mockImplementationOnce(() => throwError(() => tests.axiosECONNFailureExample));
-    expect(await service.removeDeviceFromCustomer("2fe67850-dfe9-11ec-bdb3-750ce7ed2451")).toEqual(false);
+    expect(await service.removeDeviceFromCustomer("2fe67850-dfe9-11ec-bdb3-750ce7ed2451")).toMatchObject(tests.ECONNResponse);
   });
 
   it('remove device -> HTTP ERROR', async () => {
@@ -164,7 +164,7 @@ describe('ThingsboardThingsboardDeviceService', () => {
     //service.setToken(data.token);
     service.setToken('token')
     jest.spyOn(httpService, 'delete').mockImplementationOnce(() => throwError(() => tests.axiosFailureExample));
-    expect(await service.removeDeviceFromCustomer("2fe67850-dfe9-11ec-bdb3-750ce7ed2451")).toEqual(false);
+    expect(await service.removeDeviceFromCustomer("2fe67850-dfe9-11ec-bdb3-750ce7ed2451")).toEqual(tests.FailResponse);
   });
 
   ///////////////////////////////////////////////////////////////////////////////////////////
@@ -292,5 +292,12 @@ describe('ThingsboardThingsboardDeviceService', () => {
     expect(await service.createDevice("device2", "rietvlei gateway", true)).toMatchObject(tests.FailResponse);
   });*/
 
+  /*it('tenant devices', async () => {
+    const data = await loginService.login(tests.admin, tests.adminPassword);
+    service.setToken(data.data.token);
+    console.table(
+      (await service.GetTenantDevices()).data.data
+    );
+  });*/
 
 });

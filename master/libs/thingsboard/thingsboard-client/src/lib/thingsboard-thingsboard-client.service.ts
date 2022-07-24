@@ -1425,6 +1425,104 @@ export class ThingsboardThingsboardClientService {
       explanation : 'call finished'
     }
   }
+
+  ////////////////////////////////////////////////////////////////
+  async unassignDevice(deviceID:string) : Promise<thingsboardResponse> {
+    const userInfo = await this.getUserInfoFromToken();
+    if(userInfo.status == 'fail')
+    return {
+      status : 'fail',
+      explanation : userInfo.explanation
+    }
+
+    if(userInfo.data.authority != "TENANT_ADMIN")
+    return {
+      status : 'fail',
+      explanation : "not admin"
+    }
+
+    this.deviceService.setToken(this.token);
+    const response = await this.deviceService.removeDeviceFromCustomer(deviceID);
+
+    if(response.status != 200)
+    return {
+      status : 'fail',
+      explanation : response.explanation
+    }
+
+    return {
+      status : 'ok',
+      explanation : "call finished"
+    }
+  }
+
+  ////////////////////////////////////////////////////////////////
+  async getUnassignedDevicesForAdmin() : Promise<thingsboardResponse> {
+    const userInfo = await this.getUserInfoFromToken();
+    if(userInfo.status == 'fail')
+    return {
+      status : 'fail',
+      explanation : userInfo.explanation
+    }
+
+    if(userInfo.data.authority != "TENANT_ADMIN")
+    return {
+      status : 'fail',
+      explanation : "not admin"
+    }
+
+    const response = await this.deviceService.GetTenantDevices();
+
+    if(response.status != 200)
+    return {
+      status : 'fail',
+      explanation : response.explanation
+    }
+
+    const retArray = new Array<any>();
+    for (let i = 0; i < response.data.data.length; i++) {
+      if(response.data.data[i].customerId.id == '13814000-1dd2-11b2-8080-808080808080')
+        retArray.push({
+          deviceID : response.data.data[i].id.id,
+          deviceName : response.data.data[i].name
+        })
+    }
+
+    return {
+      status : 'ok',
+      explanation : 'call finished',
+      data : retArray
+    }
+  }
+
+  ////////////////////////////////////////////////////////////////
+  async assignDeviceToReserve(reserveID: string, deviceID : string) : Promise<thingsboardResponse> {
+    const userInfo = await this.getUserInfoFromToken();
+    if(userInfo.status == 'fail')
+    return {
+      status : 'fail',
+      explanation : userInfo.explanation
+    }
+
+    if(userInfo.data.authority != "TENANT_ADMIN")
+    return {
+      status : 'fail',
+      explanation : "not admin"
+    }
+
+    const resp = await this.deviceService.assignDevicetoCustomer(reserveID, deviceID);
+
+    if(resp.status != 200)
+    return {
+      status : 'fail',
+      explanation : resp.explanation
+    }
+
+    return {
+      status : 'ok',
+      explanation : 'call finished'
+    }
+  }
 }
 
 /* data is required to be any due to the many possible response data types */
