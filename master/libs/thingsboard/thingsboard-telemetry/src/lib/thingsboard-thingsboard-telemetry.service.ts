@@ -13,7 +13,7 @@ export class ThingsboardThingsboardTelemetryService {
   setToken(token: string): void {
     this.headersReq = {
       'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + this.token,
+      Authorization: 'Bearer ' + token,
     };
   }
 

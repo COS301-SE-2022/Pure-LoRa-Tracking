@@ -130,40 +130,37 @@ describe('ReserveViewComponent', () => {
   });
 
 
-  describe("Update Reserve", () => {
-    const val="Testval";
-    const tempgateways={data:[demogatewayinput1,demogatewayinput2]};
+  // describe("Update Reserve", () => {
+  //   const val="Testval";
+  //   const tempgateways={data:[demogatewayinput1,demogatewayinput2]};
 
-    beforeEach(()=>{
-      jest.spyOn(component.apicaller,"getReserve").mockResolvedValue(demoreserve);
-      jest.spyOn(component.apicaller,"getHistorical").mockResolvedValue({data:val});
-      jest.spyOn(component.apicaller,"getGateways").mockResolvedValue(tempgateways);
-    })
+  //   beforeEach(()=>{
+  //     jest.spyOn(component.apicaller,"getReserve").mockResolvedValue(demoreserve);
+  //     jest.spyOn(component.apicaller,"getHistorical").mockResolvedValue({data:val});
+  //     jest.spyOn(component.apicaller,"getGateways").mockResolvedValue(tempgateways);
+  //   })
 
-    it("Should update the reserve", async() => {
-      component.updateReserve("mytest");
-      await new Promise(process.nextTick)
-      expect(component.apicaller.getReserve).toBeCalled();
-      expect(component.Reserve).toEqual(demoreserve);
-      expect(component.ReserveName).toEqual(demoreserve.data.reserveName);
-    });
-    it("Should update the update the historical", async() => {
-      if(component.reservemap!=null) jest.spyOn(component.reservemap,"loadInnitial").mockImplementation();
-      component.updateReserve("mytest");
-      await new Promise(process.nextTick)
-      expect(component.apicaller.getHistorical).toBeCalled();
-      expect(component.LastestHistorical).toEqual(val);
-      if(component.reservemap!=null) expect(component.reservemap.loadInnitial).toBeCalled();
-    });
-    it("Should update the gateways", async() => {
-      component.updateReserve("mytest");
-      await new Promise(process.nextTick)
-      expect(component.apicaller.getGateways).toBeCalled();
-      expect(component.Gateways).toEqual([demogateway1,demogateway2]);
-    });
-
-
-    
-  });
+  //   it("Should update the reserve", async() => {
+  //     component.updateReserve("mytest");
+  //     await new Promise(process.nextTick)
+  //     expect(component.apicaller.getReserve).toBeCalled();
+  //     expect(component.Reserve).toEqual(demoreserve);
+  //     expect(component.ReserveName).toEqual(demoreserve.data.reserveName);
+  //   });
+  //   it("Should update the update the historical", async() => {
+  //     if(component.reservemap!=null) jest.spyOn(component.reservemap,"loadInnitial").mockImplementation();
+  //     component.updateReserve("mytest");
+  //     await new Promise(process.nextTick)
+  //     expect(component.apicaller.getHistorical).toBeCalled();
+  //     expect(component.LastestHistorical).toEqual(val);
+  //     if(component.reservemap!=null) expect(component.reservemap.loadInnitial).toBeCalled();
+  //   });
+  //   it("Should update the gateways", async() => {
+  //     component.updateReserve("mytest");
+  //     await new Promise(process.nextTick)
+  //     expect(component.apicaller.getGateways).toBeCalled();
+  //     expect(component.Gateways).toEqual([demogateway1,demogateway2]);
+  //   });
+  // });
 
 });

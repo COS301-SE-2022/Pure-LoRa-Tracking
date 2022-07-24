@@ -33,20 +33,20 @@ describe('ApiUserEndpointService', () => {
   });
 
   it('create user with reserve set', async () => {
-    /*console.log(await service.AddUserProcess({
-      customerID: '41d7c300-ffb7-11ec-971b-3fcc7eafec15',
+    console.log(await service.AddUserProcess({
+      customerID: '427430f0-0845-11ed-bc6e-a50062f6cdba',
       reserves: [
-        { reserveID: '41d7c300-ffb7-11ec-971b-3fcc7eafec15', reserveName: 'Kruger' },
-        { reserveID: '262045b0-ffb7-11ec-971b-3fcc7eafec15', reserveName: 'Rietvlei' },
+        { reserveID: '427430f0-0845-11ed-bc6e-a50062f6cdba', reserveName: 'tuks' },
+        { reserveID: 'a0436390-0845-11ed-bc6e-a50062f6cdba', reserveName: 'Rietvlei' },
       ],
-      token: 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZlYWRtaW5AcmVzZXJ2ZS5jb20iLCJzY29wZXMiOlsiVEVOQU5UX0FETUlOIl0sInVzZXJJZCI6ImEyOGYxNmUwLWZmYjYtMTFlYy05NzFiLTNmY2M3ZWFmZWMxNSIsImZpcnN0TmFtZSI6InJlc2VydmUgYWRtaW4gb25lIiwiZW5hYmxlZCI6dHJ1ZSwiaXNQdWJsaWMiOmZhbHNlLCJ0ZW5hbnRJZCI6IjdkNGMwZWIwLWZmYjYtMTFlYy05NzFiLTNmY2M3ZWFmZWMxNSIsImN1c3RvbWVySWQiOiIxMzgxNDAwMC0xZGQyLTExYjItODA4MC04MDgwODA4MDgwODAiLCJpc3MiOiJ0aGluZ3Nib2FyZC5pbyIsImlhdCI6MTY1ODIzMzEwNSwiZXhwIjoxNjU4MjQyMTA1fQ.b-URUr3r0MzNz5x7E_QrX8-2rcbPCkJ2mt9Q5ht8nrh2kf0f0QpAw_3Y8ApQHeLehnJiQtetHLyWbIeWuPlqeQ',
-      userInfo: { email: 'reserveusertwo@reserve.com', firstName: 'reserve user two', lastName: 'reserve' },
-    }))*/
+      token: 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZlYWRtaW5AcmVzZXJ2ZS5jb20iLCJzY29wZXMiOlsiVEVOQU5UX0FETUlOIl0sInVzZXJJZCI6ImY3NGNiZjMwLTA4M2UtMTFlZC1iYzZlLWE1MDA2MmY2Y2RiYSIsImZpcnN0TmFtZSI6InJlc2VydmUiLCJsYXN0TmFtZSI6ImFkbWluIiwiZW5hYmxlZCI6dHJ1ZSwiaXNQdWJsaWMiOmZhbHNlLCJ0ZW5hbnRJZCI6ImVjODY0MzUwLTA4M2UtMTFlZC1iYzZlLWE1MDA2MmY2Y2RiYSIsImN1c3RvbWVySWQiOiIxMzgxNDAwMC0xZGQyLTExYjItODA4MC04MDgwODA4MDgwODAiLCJpc3MiOiJ0aGluZ3Nib2FyZC5pbyIsImlhdCI6MTY1ODQ4MjU0NSwiZXhwIjoxNjU4NDkxNTQ1fQ.9SjFxAongejI5VqEiWw-uZgid079KRrCq8E7aVO95FY0cYgBdAqs6DqOF5Ch2-PTtWcxbNGRvXonL1PtqVxPcw',
+      userInfo: { email: 'reserveuserfour@reserve.com', firstName: 'jack', lastName: 'Johns' },
+    }))
   });
 
   it("get user info", async () => {
-    console.log(
-      //(await service.UserInfoProcess({token:'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZlYWRtaW5AcmVzZXJ2ZS5jb20iLCJzY29wZXMiOlsiVEVOQU5UX0FETUlOIl0sInVzZXJJZCI6ImEyOGYxNmUwLWZmYjYtMTFlYy05NzFiLTNmY2M3ZWFmZWMxNSIsImZpcnN0TmFtZSI6InJlc2VydmUgYWRtaW4gb25lIiwiZW5hYmxlZCI6dHJ1ZSwiaXNQdWJsaWMiOmZhbHNlLCJ0ZW5hbnRJZCI6IjdkNGMwZWIwLWZmYjYtMTFlYy05NzFiLTNmY2M3ZWFmZWMxNSIsImN1c3RvbWVySWQiOiIxMzgxNDAwMC0xZGQyLTExYjItODA4MC04MDgwODA4MDgwODAiLCJpc3MiOiJ0aGluZ3Nib2FyZC5pbyIsImlhdCI6MTY1ODIzMzEwNSwiZXhwIjoxNjU4MjQyMTA1fQ.b-URUr3r0MzNz5x7E_QrX8-2rcbPCkJ2mt9Q5ht8nrh2kf0f0QpAw_3Y8ApQHeLehnJiQtetHLyWbIeWuPlqeQ'})).data.additionalInfo
-    )
+    // console.log(
+    //   (await service.UserInfoProcess({token:'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZldXNlcnR3b0ByZXNlcnZlLmNvbSIsInNjb3BlcyI6WyJDVVNUT01FUl9VU0VSIl0sInVzZXJJZCI6ImQ4ZDRiZjMwLTA3NzYtMTFlZC1iMWU0LWVkZDUzMjRhY2YwNSIsImZpcnN0TmFtZSI6InJlc2VydmUgdXNlciB0d28iLCJsYXN0TmFtZSI6InJlc2VydmUiLCJlbmFibGVkIjp0cnVlLCJpc1B1YmxpYyI6ZmFsc2UsInRlbmFudElkIjoiY2QyZGYyYjAtZGZlOC0xMWVjLWJkYjMtNzUwY2U3ZWQyNDUxIiwiY3VzdG9tZXJJZCI6IjRiY2VjZTQwLWUxZDktMTFlYy1hOWI2LWJiYjliYWQzZGYzOSIsImlzcyI6InRoaW5nc2JvYXJkLmlvIiwiaWF0IjoxNjU4MjQ0MzEwLCJleHAiOjE2NTgyNTMzMTB9.ZvlY6mW8DKBJrp9oF6Adki6ZsWzvxasDVu1KKC0RZYtWojlekkwydn4w6dyX57gG_R3bI5XJPQKwVHfReHS03Q'})).data.additionalInfo
+    // )
   });
 });

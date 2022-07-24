@@ -11,6 +11,16 @@ export interface deviceInfos {
   deviceIDs: string[];
 }
 
+export interface deviceAssign {
+  token: string;
+  customerID : string;
+  deviceID: string;
+}
+
+export interface deviceAvailable {
+  token: string;
+}
+
 export interface AddSensorDevice {
   token: string;
   customerID: string;
@@ -45,6 +55,11 @@ export interface RemoveDevice {
   deviceID: string;
   isGateway: boolean;
   devEUI: string;
+}
+
+export interface UnassignDevice {
+  token: string;
+  deviceID: string;
 }
 
 export interface GatewayLocationInfo {

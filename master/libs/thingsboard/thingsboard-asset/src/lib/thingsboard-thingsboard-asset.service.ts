@@ -68,7 +68,7 @@ export class ThingsboardThingsboardAssetService {
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  async getReservePerimeter(entityIdOfAsset: string): Promise<MapApiReserveResponse> {
+  /*async getReservePerimeter(entityIdOfAsset: string): Promise<MapApiReserveResponse> {
     const resp = await firstValueFrom(
       this.httpService.get(
         this.ThingsBoardURL +
@@ -120,7 +120,7 @@ export class ThingsboardThingsboardAssetService {
         });
         return ret;
       }
-  }
+  }*/
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }

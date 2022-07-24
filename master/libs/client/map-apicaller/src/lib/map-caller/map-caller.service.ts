@@ -42,10 +42,23 @@ export class MapCallerService {
     })
   }
   
-  getGateways(token:string,custid:string):Promise<any>{
+  getGateways(custid:string):Promise<any>{
     return new Promise((res,rej)=>{
-      this.http.post("/api/device/gateway/info",{"token":token,"customerID":custid}).subscribe(val=>{
-        res(val);
+      this.http.post("/api/device/gateway/info",{"customerID":custid}).subscribe((val:any)=>{
+        
+        if(val.status!=200) return res([]);
+        this.http.post("/api/device/gateway/info/location",{deviceIDs:val.data.map((curr:any)=>curr.deviceID)}).subscribe((other:any)=>{
+          // console.log('other :>> ', other);
+          const toreturn=val.data.map((othercurr:any)=>{
+            return {
+              deviceID:othercurr.deviceID,
+              deviceName:othercurr.deviceName,
+              humanName:othercurr.humanName,
+              location:other.data.find((devid:any)=>devid.deviceID==othercurr.deviceID)?.location
+            }
+          })
+          res(toreturn);
+        })
       });
     })
   }
