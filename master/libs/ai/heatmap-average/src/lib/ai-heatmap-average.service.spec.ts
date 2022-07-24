@@ -16,14 +16,14 @@ describe('AiHeatmapAverageService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('tf -> create, fit, save', async() => {
+ /* it('tf -> create, fit, save', async() => {
     const learn = service.normalizePoints(service.deconstructData(learning.coordinates));
     const train = service.normalizePoints(service.deconstructData([learning.truePoint]));
     await service.fitModel(learn, train)
 
     const ToPredictData = service.normalizePoints(service.deconstructData(mock2.coordinates));
     console.log(await service.predictData(ToPredictData))
-  });
+  });*/
 });
 
 const learning = {
