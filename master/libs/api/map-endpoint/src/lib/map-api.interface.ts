@@ -5,7 +5,6 @@ export interface MapApiLatest {
 
 export interface MapApiReserve {
     token: string,
-    reserveID: string,
     options?: {
         items: ""
     }
@@ -50,6 +49,7 @@ export interface MapApiReserveResponse {
     code: number,
     status: string,
     explanation: string,
+    isAdmin? : boolean,
     data?: {
         reserveName: string,
         // center: {
@@ -58,6 +58,10 @@ export interface MapApiReserveResponse {
         // },
         location: GeoJSON.FeatureCollection
     }
+    adminData? : {
+        reserveName: string,
+        location: GeoJSON.FeatureCollection
+    }[]
 }
 
 
