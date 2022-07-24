@@ -258,7 +258,7 @@ export class ThingsboardThingsboardClientService {
       status:'ok',
       explanation:'call finished',
       data:{
-        "reserveName":reserve.name,
+        "reserveName":reserve.data.name,
         "location":reserve.data.additionalInfo.location
       }
     }

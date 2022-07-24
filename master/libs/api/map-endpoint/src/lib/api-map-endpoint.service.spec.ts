@@ -18,10 +18,9 @@ describe('ApiMapEndpointService', () => {
     expect(service).toBeTruthy();
   });
 
- /* it('get reserve perimeter', async() => {
+  /*it('get reserve perimeter', async() => {
     console.log(
-      await service.ReserveProcess({token:'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZldXNlcnR3b0ByZXNlcnZlLmNvbSIsInNjb3BlcyI6WyJDVVNUT01FUl9VU0VSIl0sInVzZXJJZCI6IjZmN2Q2MjkwLTA4MWYtMTFlZC1iZjBhLWQ3ZWM0NjYzNGY2NSIsImZpcnN0TmFtZSI6InJlc2VydmUgdXNlciB0d28iLCJsYXN0TmFtZSI6InJlc2VydmUiLCJlbmFibGVkIjp0cnVlLCJpc1B1YmxpYyI6ZmFsc2UsInRlbmFudElkIjoiY2QyZGYyYjAtZGZlOC0xMWVjLWJkYjMtNzUwY2U3ZWQyNDUxIiwiY3VzdG9tZXJJZCI6IjM4ZjMyMmEwLTA4MWYtMTFlZC1iZjBhLWQ3ZWM0NjYzNGY2NSIsImlzcyI6InRoaW5nc2JvYXJkLmlvIiwiaWF0IjoxNjU4MzE2ODQ1LCJleHAiOjE2NTgzMjU4NDV9.zf85urBWY2FTxsot1ZpBdr7N3RqBef4WCMv4b4eOzWWB8Hs9lOv11nOdJKWnv_fWiiEuLHIOXlv7oqRexD3iEw',
-    reserveID:'1'})
+      await service.ReserveProcess({token:'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZldXNlckByZXNlcnZlLmNvbSIsInVzZXJJZCI6ImZkYjFkODkwLTA4NDUtMTFlZC1iYzZlLWE1MDA2MmY2Y2RiYSIsInNjb3BlcyI6WyJDVVNUT01FUl9VU0VSIl0sImlzcyI6InRoaW5nc2JvYXJkLmlvIiwiaWF0IjoxNjU4NjUzODM3LCJleHAiOjE2NTg2NjI4MzcsImZpcnN0TmFtZSI6InJlc2VydmUgdXNlciIsImxhc3ROYW1lIjoicmVzZXJ2ZSIsImVuYWJsZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiJlYzg2NDM1MC0wODNlLTExZWQtYmM2ZS1hNTAwNjJmNmNkYmEiLCJjdXN0b21lcklkIjoiYTA0MzYzOTAtMDg0NS0xMWVkLWJjNmUtYTUwMDYyZjZjZGJhIn0.de-hbJIJluXY1rqYPiqc5AcQqNFe4Rdv8yRLYV9DgN-QRdHaSXCwUa01rbE-qtFxonjvhm71nsSO51HnKQfHPQ'})
     );
   });*/
 });
