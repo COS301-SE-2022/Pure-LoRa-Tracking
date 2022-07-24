@@ -11,6 +11,10 @@ export interface deviceInfos {
   deviceIDs: string[];
 }
 
+export interface deviceAvailable {
+  token: string;
+}
+
 export interface AddSensorDevice {
   token: string;
   customerID: string;

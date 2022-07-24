@@ -8,6 +8,7 @@ import { ChirpstackChirpstackSensorService } from '@lora/chirpstack-sensor';
 import {
   AddGatewayDevice,
   AddSensorDevice,
+  deviceAvailable,
   deviceInfos,
   deviceResponse,
   GatewayLocationAdd,
@@ -473,5 +474,27 @@ export class ApiDeviceEndpointService {
     }
   }
 
+  ///////////////////////////////////////////////////////////////////////////
+  async processDeviceAvailable(body : deviceAvailable) : Promise<deviceResponse> {
+    if (body.token == undefined || body.token == '')
+      return {
+        status: 401,
+        explanation: 'no token found',
+      };
 
+      this.thingsboardClient.setToken(body.token);
+      const response = await this.thingsboardClient.getUnassignedDevicesForAdmin();
+      if (response.status == 'fail') {
+        return {
+          status: 500,
+          explanation: response.explanation
+        }
+      }
+  
+      return {
+        status: 200,
+        explanation: "call finished",
+        data : response.data
+      }
+  }
 }

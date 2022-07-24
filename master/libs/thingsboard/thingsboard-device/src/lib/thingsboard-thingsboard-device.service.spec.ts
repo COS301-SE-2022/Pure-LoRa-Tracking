@@ -292,5 +292,12 @@ describe('ThingsboardThingsboardDeviceService', () => {
     expect(await service.createDevice("device2", "rietvlei gateway", true)).toMatchObject(tests.FailResponse);
   });*/
 
+  it('tenant devices', async () => {
+    const data = await loginService.login(tests.admin, tests.adminPassword);
+    service.setToken(data.data.token);
+    console.table(
+      (await service.GetTenantDevices()).data.data
+    );
+  });
 
 });
