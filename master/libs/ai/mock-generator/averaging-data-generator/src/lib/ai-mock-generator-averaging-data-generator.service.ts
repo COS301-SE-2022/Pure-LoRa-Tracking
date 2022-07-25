@@ -61,6 +61,21 @@ export class AiMockGeneratorAveragingDataGeneratorService {
       });
     }
   }
+
+  generateData(
+    nOfEntries: number,
+    nOfSamples: number
+  ): AverageInputInterface[] {
+    let entries: AverageInputInterface[];
+    for (let i = 0; i < nOfEntries; i++) {
+      this.trainData.coordinates = [];
+      this.generatePointWithinBounds();
+      this.generateFalsePoints(nOfSamples);
+      const nTrainData = Object.assign({}, this.trainData);
+      entries.push(nTrainData);
+    }
+    return entries;
+  }
 }
 
 export interface AverageInputInterface {
