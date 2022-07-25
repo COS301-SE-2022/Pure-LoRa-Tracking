@@ -200,8 +200,8 @@ export class ReserveUsersViewComponent implements OnInit {
 
   }
 
-  editUser():void{
-    this.router.navigate(['manage',{outlets:{managecontent:['edit-user']}}]);   
+  editUser(id:string):void{
+    this.router.navigate(['manage',{outlets:{managecontent:['edit-user',id]}}]);   
   }
 
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'master-reserve-edit',
   templateUrl: './reserve-edit.component.html',
@@ -13,7 +14,7 @@ export class ReserveEditComponent implements OnInit {
   reserveInfo: FormGroup = new FormGroup({});
   mapgeojson:string="";
 
-  constructor(private activeRoute: ActivatedRoute, private formBuilder: FormBuilder, private router:Router) {
+  constructor(private activeRoute: ActivatedRoute, private formBuilder: FormBuilder, private router:Router,private http:HttpClient) {
    this.id="";
    this.email="";
    this.name="";
@@ -41,7 +42,13 @@ export class ReserveEditComponent implements OnInit {
 
   saveReserve(form:any):void {
     console.log(JSON.stringify(form.value,null,6));
-
+    this.http.post("api/reserve/details/update",{
+      reserveID:this.id,
+      NameOfReserve:this.reserveInfo.get("name")?.value,
+      email:this.reserveInfo.get("email")?.value
+    }).subscribe(val=>{
+      console.log(val);
+    })
   }
 
   navigateBack():void{

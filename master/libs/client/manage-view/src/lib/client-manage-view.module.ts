@@ -53,7 +53,7 @@ export const clientManageViewRoutes: Route[] = [
     component: ReserveEditComponent
   },
   {
-    path: 'edit-user', 
+    path: 'edit-user/:id', 
     outlet: 'managecontent',
     loadChildren: ()=>import('@master/client/manage-view/src/lib/users-edit').then(m=>m.ClientManageViewSrcLibUsersEditModule),
     component: UserEditComponent

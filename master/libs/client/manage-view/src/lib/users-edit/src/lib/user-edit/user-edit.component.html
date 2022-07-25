@@ -16,7 +16,6 @@
         <mat-form-field appearance="fill">
             <mat-label>Accessible Reserves</mat-label>
             <mat-select formControlName="reserves" multiple>
-              <mat-option>None</mat-option>
               <mat-option *ngFor="let reserve of reservesList" [value]="reserve.id">
                 {{reserve.name}}
               </mat-option>
