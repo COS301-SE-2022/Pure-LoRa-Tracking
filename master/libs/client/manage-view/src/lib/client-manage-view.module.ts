@@ -47,7 +47,7 @@ export const clientManageViewRoutes: Route[] = [
     component: ReserveCreateComponent
   },
   {
-    path: 'reserve-edit/:id', 
+    path: 'reserve-edit/:id/:email/:name', 
     outlet: 'managecontent',
     loadChildren: ()=> import('@master/client/manage-view/src/lib/reserve-edit').then(m => m.ClientManageViewSrcLibReserveEditModule),
     component: ReserveEditComponent
