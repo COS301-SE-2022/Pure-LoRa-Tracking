@@ -1523,6 +1523,22 @@ export class ThingsboardThingsboardClientService {
       explanation : 'call finished'
     }
   }
+
+  ////////////////////////////////////////////////////////////////
+  async getUserInfoByID(userID: string): Promise<thingsboardResponse> {
+    const resp = await this.userService.userInfoByUserID(this.token, userID);
+    if(resp.status != 200)
+    return {
+      status : 'fail',
+      explanation : resp.explanation
+    }
+
+    return {
+      status : 'ok',
+      explanation : 'call finished',
+      data : resp.data
+    }
+  }
 }
 
 /* data is required to be any due to the many possible response data types */
