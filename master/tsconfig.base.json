@@ -80,6 +80,34 @@
       "@master/client/leaflet-library": [
         "libs/client/leaflet-library/src/index.ts"
       ],
+      "@master/client/manage-view": ["libs/client/manage-view/src/index.ts"],
+      "@master/client/manage-view/src/lib/create-reserve": [
+        "libs/client/manage-view/src/lib/create-reserve/src/index.ts"
+      ],
+      "@master/client/manage-view/src/lib/devices-view": [
+        "libs/client/manage-view/src/lib/devices-view/src/index.ts"
+      ],
+      "@master/client/manage-view/src/lib/manage-content": [
+        "libs/client/manage-view/src/lib/manage-content/src/index.ts"
+      ],
+      "@master/client/manage-view/src/lib/profile-edit": [
+        "libs/client/manage-view/src/lib/profile-edit/src/index.ts"
+      ],
+      "@master/client/manage-view/src/lib/profile-view": [
+        "libs/client/manage-view/src/lib/profile-view/src/index.ts"
+      ],
+      "@master/client/manage-view/src/lib/reserve-detail-view": [
+        "libs/client/manage-view/src/lib/reserve-detail-view/src/index.ts"
+      ],
+      "@master/client/manage-view/src/lib/reserve-edit": [
+        "libs/client/manage-view/src/lib/reserve-edit/src/index.ts"
+      ],
+      "@master/client/manage-view/src/lib/users-edit": [
+        "libs/client/manage-view/src/lib/users-edit/src/index.ts"
+      ],
+      "@master/client/manage-view/src/lib/users-view": [
+        "libs/client/manage-view/src/lib/users-view/src/index.ts"
+      ],
       "@master/client/map-apicaller": [
         "libs/client/map-apicaller/src/index.ts"
       ],

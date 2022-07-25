@@ -9,6 +9,16 @@ export interface userAddInput {
   reserves : {reserveName:string, reserveID:string}[];
 }
 
+export interface userUpdateInput {
+  token: string;
+  userID : string;
+  userInfo: {
+    firstName: string;
+    lastName: string;
+  };
+}
+
+
 export interface userRemoveInput {
   token: string;
   userID: string;
@@ -26,6 +36,7 @@ export interface userEnableInput {
 
 export interface userInfoInput {
   token: string;
+  userID?: string;
 }
 
 export interface userAdminGroups {

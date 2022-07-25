@@ -353,6 +353,11 @@ it(' -> HTTP ERROR', async () => {
   //////////////////////////////////////////////////////////////////////////////////////////
 
   it('Historical Data -> no token', async () => {
+    jest
+      .spyOn(httpService, 'post')
+      .mockImplementationOnce(() =>
+        throwError(() => tests.axiosECONNFailureExample)
+      );
     expect(await service.getDeviceHistoricalData('1', 2, 3)).toMatchObject({
       ...tests.TBFailureResponse,
       ...{ explanation: 'token' },
@@ -441,7 +446,7 @@ it(' -> HTTP ERROR', async () => {
   it('refresh -> HTTP ERROR', async () => {
     service.setToken('123');
     jest
-      .spyOn(httpService, 'get')
+      .spyOn(httpService, 'post')
       .mockImplementationOnce(() =>
         throwError(() => tests.axiosECONNFailureExample)
       );
@@ -1903,6 +1908,14 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
       explanation: "ECONNREFUSED"
     });
   });
+
+  //////////////////////////////////////////////////////////////////////
+  /*it('user info -> live', async () => {
+    await service.loginUser('reserveadmin@reserve.com', 'reserve');
+    console.log(
+      await service.getUserInfoByID('fdb1d890-0845-11ed-bc6e-a50062f6cdba')
+    )
+  });*/
 
 });
 

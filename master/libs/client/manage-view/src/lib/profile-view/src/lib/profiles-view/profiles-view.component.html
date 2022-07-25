@@ -1,0 +1,26 @@
+<div id="wrapper">
+    
+    <div id="banner">
+        <div id="banner-content">
+            <mat-icon id="profile-icon">account_circle</mat-icon>
+            {{name}}
+        </div>
+        <span id="banner-spacer"></span>
+        <div id="button-wrapper">
+
+            <button mat-raised-button id="edit-button" color="white" (click)="openEdit()">
+                <span><mat-icon>edit</mat-icon>Edit</span>
+            </button>
+        </div>
+    </div>
+    <div id="content">
+        Role: {{role}}
+        <br>
+        E-mail: {{email}}
+        <br>
+        Reserves:
+        <br>
+        {{reserves}}
+    </div>
+   
+</div>
