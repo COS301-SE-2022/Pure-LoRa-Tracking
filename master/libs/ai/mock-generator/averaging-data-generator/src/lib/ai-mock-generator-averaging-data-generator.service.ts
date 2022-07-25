@@ -10,6 +10,14 @@ export class AiMockGeneratorAveragingDataGeneratorService {
     [28.227782249450684, -25.756155099326918],
     [28.235281705856323, -25.75700543526357],
   ];
+
+  private decimals = 15;
+
+  getRandomFloat(min, max) {
+    return parseFloat(
+      (Math.random() * (max - min) + min).toFixed(this.decimals)
+    );
+  }
 }
 
 export interface AverageInputInterface {
