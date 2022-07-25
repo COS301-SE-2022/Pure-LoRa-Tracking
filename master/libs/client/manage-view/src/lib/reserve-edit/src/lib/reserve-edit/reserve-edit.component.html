@@ -1,0 +1,21 @@
+<div id="formContainer">
+    <form [formGroup]="reserveInfo" (ngSubmit)="saveReserve(reserveInfo)" id="form">
+        <mat-form-field appearance="outline" required class="input-form" id="firstForm" >
+            <mat-label>Reserve Name</mat-label>
+            <input matInput placeholder="Reserve Name" formControlName="name" class="placeholder">
+        </mat-form-field>
+        <mat-form-field appearance="outline" required class="input-form">
+            <mat-label>Email</mat-label>
+            <input matInput placeholder="E-mail"  formControlName="email" class="placeholder">
+            <mat-error *ngIf="reserveInfo.controls['email'].errors?.['required']">Valid e-mail is required.</mat-error>
+        </mat-form-field>
+
+        <mat-label>Perimeter (Leave empty if no perimeter changes are needed)</mat-label>
+        <input formControlName="geojson" type="file" (change)="fileSelected($event)">
+        
+        <div id="button-wrapper">
+            <button mat-raised-button (click)="navigateBack()" class="action-buttons" color="primary">Cancel</button>
+            <button mat-flat-button type="submit" class="action-buttons" color="primary" >Save</button>
+        </div>
+    </form>
+</div>

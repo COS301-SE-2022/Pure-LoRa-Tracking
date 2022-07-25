@@ -1,0 +1,23 @@
+<div id="content-wrapper">
+  <mat-form-field appearance="legacy">
+    <mat-label>Search</mat-label>
+    <input matInput placeholder="Search">
+    <mat-icon matSuffix>search</mat-icon>
+  </mat-form-field>
+
+  <button mat-raised-button (click)="openCreateReserve()">Create</button>
+  
+  <mat-list>
+    <mat-list-item *ngFor="let reserve of reserves">
+      <div mat-line>
+        {{reserve.name}}
+      </div>
+      <div mat-line>
+        {{reserve.id}}
+      </div>
+      <button mat-button (click)="editReseve(reserve.id)">Edit</button>
+      <button mat-button (click)="deleteReserve(reserve.id)">Delete</button>
+    </mat-list-item>
+  </mat-list>
+
+</div>
