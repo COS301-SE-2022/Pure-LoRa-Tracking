@@ -13,7 +13,14 @@ export class AiMockGeneratorAveragingDataGeneratorService {
 
   private decimals = 15;
 
-  private trainData: AverageInputInterface;
+  private trainData: AverageInputInterface = <AverageInputInterface>{
+    sensorID: '975',
+    coordinates: [],
+    truePoint: {
+      latitude: 0,
+      longitude: 0,
+    },
+  };
 
   private variationFactor = 1000;
   private deviationFactor = 0.3;
@@ -66,13 +73,17 @@ export class AiMockGeneratorAveragingDataGeneratorService {
     nOfEntries: number,
     nOfSamples: number
   ): AverageInputInterface[] {
-    let entries: AverageInputInterface[];
+    const entries: AverageInputInterface[] = [];
     for (let i = 0; i < nOfEntries; i++) {
       this.trainData.coordinates = [];
       this.generatePointWithinBounds();
       this.generateFalsePoints(nOfSamples);
-      const nTrainData = Object.assign({}, this.trainData);
+      const nTrainData: AverageInputInterface = Object.assign(
+        {},
+        this.trainData
+      );
       entries.push(nTrainData);
+      console.log(this.trainData);
     }
     return entries;
   }
