@@ -13,10 +13,23 @@ export class AiMockGeneratorAveragingDataGeneratorService {
 
   private decimals = 15;
 
+  private trainData: AverageInputInterface;
+
   getRandomFloat(min, max) {
     return parseFloat(
       (Math.random() * (max - min) + min).toFixed(this.decimals)
     );
+  }
+
+  generatePointWithinBounds() {
+    const t_long = this.bounds[0][0],
+      t_lat = this.bounds[0][1];
+    const b_long = this.bounds[2][0],
+      b_lat = this.bounds[2][1];
+    const longitude = this.getRandomFloat(b_long, t_long);
+    const latitude = this.getRandomFloat(b_lat, t_lat);
+    this.trainData.truePoint.latitude = latitude;
+    this.trainData.truePoint.longitude = longitude;
   }
 }
 
