@@ -36,6 +36,7 @@ export interface userEnableInput {
 
 export interface userInfoInput {
   token: string;
+  userID?: string;
 }
 
 export interface userAdminGroups {
