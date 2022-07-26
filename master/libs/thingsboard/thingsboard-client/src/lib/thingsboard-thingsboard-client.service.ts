@@ -237,7 +237,7 @@ export class ThingsboardThingsboardClientService {
       };
 
     const reserve = await this.CustomerInfo(userInfo.data.customerId.id)
-    console.log('reserve :>> ', reserve);
+    //console.log('reserve :>> ', reserve);
     if (reserve.status == 'fail')
       return {
         code: 500,
@@ -828,14 +828,11 @@ export class ThingsboardThingsboardClientService {
   ///////////////////////////////////////////////////////////////////////
 
   async getUserInfoFromToken(): Promise<thingsboardResponse> {
-    const Login = await this.validateToken();
-    if (!Login) return { status: 'fail', explanation: 'token invalid' };
     const resp = await this.userService.userInfo(this.token);
     if (resp.status != 200)
       return {
         status: 'fail',
-        explanation: 'call failed',
-        furtherExplain: resp.explanation,
+        explanation: resp.explanation,
       };
     return {
       status: 'ok',
@@ -1285,7 +1282,7 @@ export class ThingsboardThingsboardClientService {
     if (userInfo.status == 'fail')
       return {
         status: 'fail',
-        explanation: userInfo.furtherExplain,
+        explanation: userInfo.explanation,
       };
 
     if (userInfo.data.authority == 'CUSTOMER_USER')
