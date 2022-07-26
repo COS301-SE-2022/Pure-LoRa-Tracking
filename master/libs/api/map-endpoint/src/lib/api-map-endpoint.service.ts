@@ -103,9 +103,11 @@ export class ApiMapEndpointService {
             data.data.data.forEach(item => {
                 adminData.push({
                     reserveName : item.name,
-                    location : item.additionalInfo.location
+                    location : item.additionalInfo?.location,
+                    reserveID:item.id.id
                 })
             })
+
 
             return {
                 status : "reserve-process success",
@@ -230,6 +232,7 @@ export class ApiMapEndpointService {
             })
         } else {
             const devices = await this.thingsboardClient.getDeviceInfos();
+            console.log(devices);
             const other = devices.data.filter(val => val.isGateway == false);
             other.forEach((device) => {
                 /* await array -> telem results */

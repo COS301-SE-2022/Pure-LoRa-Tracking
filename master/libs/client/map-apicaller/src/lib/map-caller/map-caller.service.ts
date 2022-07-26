@@ -10,9 +10,9 @@ export class MapCallerService {
     //placeholder
   }
 
-  getReserve(token:string,reserveID:string):Promise<any>{
+  getReserve():Promise<any>{
     return new Promise((res,rej)=>{
-      this.http.post("/api/map/reserve",{"reserveID":reserveID}).subscribe(val=>{
+      this.http.post("/api/map/reserve",{}).subscribe(val=>{
         res(val)  
       });
     })

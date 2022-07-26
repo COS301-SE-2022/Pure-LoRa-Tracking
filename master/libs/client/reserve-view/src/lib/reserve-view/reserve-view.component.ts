@@ -33,11 +33,12 @@ export class ReserveViewComponent {
   Gateways: Gateway[];
   ReserveName = "";
   token = "";
+  isadmin: boolean = false;
 
   reservesList: ReserveInfo[];
   selectedReserveId = "";
 
-  constructor(public apicaller: MapCallerService, private tokenmanager: TokenManagerService, private notifier: DeviceNotifierService, private http: HttpClient,private cookiemanager:CookieService) {
+  constructor(public apicaller: MapCallerService, private tokenmanager: TokenManagerService, private notifier: DeviceNotifierService, private http: HttpClient, private cookiemanager: CookieService) {
     this.LastestHistorical = [];
     this.Gateways = [];
     this.ShowPolygon = true;
@@ -51,33 +52,52 @@ export class ReserveViewComponent {
 
   ngOnInit(): void {
     //TODO get reserves a user belongs to
+
     this.http.post("api/user/info", {}).subscribe((val: any) => {
-      console.log('val :>> ', val);
-      if(val.data?.additionalInfo?.reserves!=undefined&&val.data?.additionalInfo?.reserves.length>0){
-        this.reservesList=val.data?.additionalInfo?.reserves.map((curr:any)=>{
-          return {
-            id:curr.reserveID,
-            name:curr.reserveName
+      console.log('val :>> ', val)
+      if (val.data.authority == "TENANT_ADMIN") {
+        this.isadmin = true;
+        this.apicaller.getReserve().then(otherval => {
+          //create new object
+          const temp = {
+            code: otherval.code,
+            explanation: otherval.explanation,
+            status: otherval.status,
+            data: {
+              reserveName: otherval.adminData[0].reserveName,
+              location: otherval.adminData[0].location
+            }
+          } as MapApiReserveResponse
+          this.selectedReserveId=otherval.adminData[0].reserveID;
+          // console.log(otherval);
+          this.reservesList = otherval.adminData.map((curr: any) => {
+            return {
+              id: curr.reserveID,
+              name: curr.reserveName
+            }
+          })
+          this.Reserve = temp;
+          console.log("reserve call in nginit", this.Reserve);
+          if (this.Reserve?.data?.reserveName != undefined){
+            this.ReserveName = this.Reserve?.data?.reserveName;
           }
-        })
-        this.selectedReserveId = val.data?.customerId.id;
+          this.loadreserve(this.selectedReserveId);
+        });
+      } else {
+        if (val.data?.additionalInfo?.reserves != undefined && val.data?.additionalInfo?.reserves.length > 0) {
+          this.reservesList = val.data?.additionalInfo?.reserves.map((curr: any) => {
+            return {
+              id: curr.reserveID,
+              name: curr.reserveName
+            }
+          })
+          this.selectedReserveId = val.data?.customerId.id;
+          this.loadreserve(this.selectedReserveId);
+        }
       }
-      // this.reservesList = [
-      //   {
-      //     id: "ef55ff40-dfe8-11ec-bdb3-750ce7ed2451",
-      //     name: "reserve user group",
-      //   },
-      //   {
-      //     id: "4bcece40-e1d9-11ec-a9b6-bbb9bad3df39",
-      //     name: "reserve c",
-      //   },
-      //   {
-      //     id: "123",
-      //     name: "UP",
-      //   }
-      // ]
+
     })
-    this.loadreserve(this.selectedReserveId);
+
 
   }
 
@@ -98,41 +118,57 @@ export class ReserveViewComponent {
     this.selectedReserveId = newReserveId;
     console.log("changed reserve");
     this.reservemap?.changeReserve();
-    this.http.post("/api/user/reserve/change",{
-      "reserveID":newReserveId
-    }).subscribe((val:any)=>{
-      if(val.explain=="ok"){
-        if(val.data.token!=undefined&&val.data.refreshToken!=undefined){
-          console.log("OLD TOKEN ",this.cookiemanager.get(""));
-          this.token=val.data.token;
-          this.cookiemanager.deleteAll();
-          this.cookiemanager.set("PURELORA_TOKEN",val.data.token);
-          this.cookiemanager.set("PURELORA_REFRESHTOKEN",val.data.refreshToken);
-          this.loadreserve(newReserveId)
-          console.log(val);
-        }
-      }
 
-    });
+    if (this.isadmin) {
+      this.loadreserve(newReserveId)
+    } else {
+      this.http.post("/api/user/reserve/change", {
+        "reserveID": newReserveId
+      }).subscribe((val: any) => {
+        if (val.explain == "ok") {
+          if (val.data.token != undefined && val.data.refreshToken != undefined) {
+            console.log("OLD TOKEN ", this.cookiemanager.get(""));
+            this.token = val.data.token;
+            this.cookiemanager.deleteAll();
+            this.cookiemanager.set("PURELORA_TOKEN", val.data.token);
+            this.cookiemanager.set("PURELORA_REFRESHTOKEN", val.data.refreshToken);
+            this.loadreserve(newReserveId)
+            console.log(val);
+          }
+        }
+      });
+    }
   }
 
-  loadreserve(newReserveId: string){
+  loadreserve(newReserveId: string) {
     this.selectedReserveId = newReserveId;
-    this.apicaller.getReserve(this.token, this.selectedReserveId).then(val => {
+    this.apicaller.getReserve().then(val => {
+      console.log(val);
       // this.reservemap?.changeReserve();
+      if (val.isAdmin) {
+        const temp = {
+          code: val.code,
+          explanation: val.explanation,
+          status: val.status,
+          data: {
+            reserveName: val.adminData?.find((curr:any)=>curr.reserveID==newReserveId).reserveName,
+            location: val.adminData?.find((curr:any)=>curr.reserveID==newReserveId).location
+          }
+        } as MapApiReserveResponse
+        val=temp;
+      }
       this.Reserve = val;
-      console.log(this.Reserve);
+      console.log("reserve call in loadreserve", this.Reserve);
       if (this.Reserve?.data?.reserveName != undefined)
-      this.ReserveName = this.Reserve?.data?.reserveName;
+        this.ReserveName = this.Reserve?.data?.reserveName;
     });
     this.apicaller.getHistorical(this.token, this.selectedReserveId, []).then(val => {
       this.LastestHistorical = val.data;
       this.reservemap?.loadInnitial(this.LastestHistorical);
-
     });
     this.apicaller.getGateways(this.selectedReserveId).then((val: any) => {
       console.log(val)
-      this.Gateways = val.map((curr: any) => ({ id: curr.deviceID, name: curr.humanName, eui: curr.deviceName,location:curr.location } as Gateway));
+      this.Gateways = val.map((curr: any) => ({ id: curr.deviceID, name: curr.humanName, eui: curr.deviceName, location: curr.location } as Gateway));
       console.log(this.Gateways)
       this.reservemap?.loadGateways(this.Gateways);
     })
