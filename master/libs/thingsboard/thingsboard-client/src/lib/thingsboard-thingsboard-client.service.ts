@@ -1112,6 +1112,7 @@ export class ThingsboardThingsboardClientService {
     }>();
 
     tenants.data.forEach((tenant) => {
+      if(tenant.additionalInfo.reserves == undefined) return;
       tenant.additionalInfo.reserves.forEach((reserve) => {
         reserveList.push({
           tenantID: tenant.id.id,
@@ -1281,11 +1282,11 @@ export class ThingsboardThingsboardClientService {
   /////////////////////////////////////////////////////////////////
   /* TODO */
   async getReserveList(): Promise<thingsboardResponse> {
-    const userInfo = await this.getUserInfoFromToken();
-    if (userInfo.status == 'fail')
+    const userInfo = await this.userService.userInfo(this.token);
+    if (userInfo.status != 200)
       return {
         status: 'fail',
-        explanation: userInfo.furtherExplain,
+        explanation: userInfo.explanation,
       };
 
     if (userInfo.data.authority == 'CUSTOMER_USER')

@@ -186,14 +186,14 @@ export class ApiReserveEndpointService {
             explanation: 'token missing',
         };
 
-        this.thingsboardClient.setToken(body.token);
+        
         /*const generate = await this.thingsboardClient.generateReserveList_SystemAdmin();
         if(generate.status != 'ok')
         return {
             status : 500,
             explanation : generate.explanation
         }*/
-
+        this.thingsboardClient.setToken(body.token);
         const response = await this.thingsboardClient.getReserveList();
         if(response.status == 'fail')
         return {

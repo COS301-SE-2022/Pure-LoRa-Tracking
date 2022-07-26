@@ -30,19 +30,19 @@ describe('ApiReserveEndpointService', () => {
   });
 
   it('remove reserve -> process endpoint', async () => {
-    const token = await thingsboardClient.loginUserReturnToken('reserveadmin@reserve.com', 'reserve');
+    /*const token = await thingsboardClient.loginUserReturnToken('reserveadmin@reserve.com', 'reserve');
     console.log(await service.processReserveRemove({
       token: token.Token,
       reserveID: '4684c420-0769-11ed-b5fa-3d4d27eec548'
-    }))
+    }))*/
   });
 
-  /*it('reserve list -> get', async () => {
+  it('reserve list -> get', async () => {
     const token = await thingsboardClient.loginUserReturnToken('reserveadmin@reserve.com', 'reserve');
     console.log(await service.processReserveList({
       token: token.Token,
     }))
-  });*/
+  });
 
   /*it('update reserve -> process endpoint', async () => {
     const token = await thingsboardClient.loginUserReturnToken('reserveadmin@reserve.com', 'reserve');
