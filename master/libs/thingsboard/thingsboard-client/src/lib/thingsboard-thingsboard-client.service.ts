@@ -1108,6 +1108,7 @@ export class ThingsboardThingsboardClientService {
       reserveName: string;
     }>();
 
+    console.log(tenants)
     tenants.data.forEach((tenant) => {
       tenant.additionalInfo.reserves.forEach((reserve) => {
         reserveList.push({
