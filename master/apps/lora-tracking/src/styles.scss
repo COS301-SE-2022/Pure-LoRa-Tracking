@@ -37,33 +37,65 @@ $primary-pallete: (
     )
 );
 
-/* For use in src/lib/core/theming/_palette.scss */
+// $accent-palette: (
+//     50 : #f2f9fe,
+//     100 : #deeffd,
+//     200 : #c8e5fc,
+//     300 : #b1dafb,
+//     400 : #a1d2fa,
+//     500 : #90caf9,
+//     600 : #88c5f8,
+//     700 : #7dbdf7,
+//     800 : #73b7f6,
+//     900 : #61abf5,
+//     A100 : #ffffff,
+//     A200 : #ffffff,
+//     A400 : #fafcff,
+//     A700 : #e0efff,
+//     contrast: (
+//         50 : #000000,
+//         100 : #000000,
+//         200 : #000000,
+//         300 : #000000,
+//         400 : #000000,
+//         500 : #000000,
+//         600 : #000000,
+//         700 : #000000,
+//         800 : #000000,
+//         900 : #000000,
+//         A100 : #000000,
+//         A200 : #000000,
+//         A400 : #000000,
+//         A700 : #000000,
+//     )
+// );
+
 $accent-palette: (
-    50 : #f2f9fe,
-    100 : #deeffd,
-    200 : #c8e5fc,
-    300 : #b1dafb,
-    400 : #a1d2fa,
-    500 : #90caf9,
-    600 : #88c5f8,
-    700 : #7dbdf7,
-    800 : #73b7f6,
-    900 : #61abf5,
+    50 : #e0ebff,
+    100 : #b3cdff,
+    200 : #80acff,
+    300 : #4d8aff,
+    400 : #2671ff,
+    500 : #0058ff,
+    600 : #0050ff,
+    700 : #0047ff,
+    800 : #003dff,
+    900 : #002dff,
     A100 : #ffffff,
-    A200 : #ffffff,
-    A400 : #fafcff,
-    A700 : #e0efff,
+    A200 : #f2f4ff,
+    A400 : #bfc7ff,
+    A700 : #a6b0ff,
     contrast: (
         50 : #000000,
         100 : #000000,
         200 : #000000,
         300 : #000000,
-        400 : #000000,
-        500 : #000000,
-        600 : #000000,
-        700 : #000000,
-        800 : #000000,
-        900 : #000000,
+        400 : #ffffff,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
         A100 : #000000,
         A200 : #000000,
         A400 : #000000,
@@ -73,7 +105,10 @@ $accent-palette: (
 
 $lora-tracking-primary: mat.define-palette($primary-pallete);
 
-$lora-tracking-accent: mat.define-palette($accent-palette, A200, A100, A400);
+//$lora-tracking-accent: mat.define-palette($accent-palette, A200, A100, A400);
+
+
+$lora-tracking-accent: mat.define-palette($accent-palette);
 
 $lora-tracking-warn: mat.define-palette(mat.$red-palette);
 
@@ -97,3 +132,18 @@ $header-font-level: mat.define-typography-level(
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-color: #122343;}
+ 
+:root {
+  --color-primary: #122343;
+  --color-accent: #90caf9;
+  --color-bright-accent:#0058FF;
+}
+
+.remove-expand-body-padding .mat-expansion-panel-content .mat-expansion-panel-body {
+  padding-bottom: 0;
+}
+
+.orange-snackbar {
+  background-color: orange;
+  color: black;
+}

@@ -6,6 +6,7 @@ import { ClientSharedUiMaterialUiModule } from '@master/client/shared-ui/materia
 import { DialogConfirmationComponent } from './dialog-confirmation/dialog-confirmation.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { SensorDetailViewComponent } from './sensor-detail-view/sensor-detail-view.component';
+import { SnackbarAlertComponent } from './snackbar-alert/snackbar-alert.component';
 
 export const clientSharedUiComponentsUiRoutes: Route[] = [];
 
@@ -20,14 +21,14 @@ export const clientSharedUiComponentsUiRoutes: Route[] = [];
     HeaderUiComponent,
     DialogConfirmationComponent,
     SensorDetailViewComponent,
+    SnackbarAlertComponent,
   ],
   exports: [
     HeaderUiComponent,
     DialogConfirmationComponent,
     SensorDetailViewComponent,
+    SnackbarAlertComponent,
   ],
-  entryComponents:[
-    DialogConfirmationComponent
-  ]
+  entryComponents: [DialogConfirmationComponent],
 })
 export class ClientSharedUiComponentsUiModule {}
