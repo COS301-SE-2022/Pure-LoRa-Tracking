@@ -1937,7 +1937,83 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
 
   //////////////////////////////////////////////////////////////////////
 
-  
+  it('get reserve list -> no user', async () => {
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() =>
+        throwError(() => tests.axiosECONNFailureExample)
+      );
+    expect(await service.getReserveList()).toMatchObject({
+      status: 'fail',
+      explanation: 'ECONNREFUSED',
+    });
+  });  
+
+  it('get reserve list -> not admin', async () => {
+    jest
+    .spyOn(httpService, 'get')
+    .mockImplementationOnce(() => of(tests.axiosUserSuccessExample));
+    expect(await service.getReserveList()).toMatchObject({
+      status: 'fail',
+      explanation: 'request not made by an admin',
+    });
+  }); 
+
+  it('get reserve list -> server fail login', async () => {
+    jest
+    .spyOn(httpService, 'get')
+    .mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
+    jest
+    .spyOn(httpService, 'get')
+    .mockImplementationOnce(() =>
+      throwError(() => tests.axiosECONNFailureExample)
+    );
+    expect(await service.getReserveList()).toMatchObject({
+      status: 'fail',
+      explanation: 'server fail',
+    });
+  }); 
+
+  it('get reserve list -> server fail get list', async () => {
+    jest
+    .spyOn(httpService, 'get')
+    .mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
+    jest
+    .spyOn(service, 'loginUser')
+    .mockImplementationOnce(async () => true);
+    jest
+    .spyOn(service, 'generateReserveList_SystemAdmin')
+    .mockImplementationOnce(() => null);
+    jest
+    .spyOn(httpService, 'get')
+    .mockImplementationOnce(() =>
+      throwError(() => tests.axiosECONNFailureExample)
+    );
+    expect(await service.getReserveList()).toMatchObject({
+      status: 'fail',
+      explanation: 'ECONNREFUSED',
+    });
+  }); 
+
+  it('get reserve list -> server pass get list', async () => {
+    jest
+    .spyOn(httpService, 'get')
+    .mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
+    jest
+    .spyOn(service, 'loginUser')
+    .mockImplementationOnce(async () => true);
+    jest
+    .spyOn(service, 'generateReserveList_SystemAdmin')
+    .mockImplementationOnce(() => null);
+    jest
+    .spyOn(httpService, 'get')
+    .mockImplementationOnce(() => of(tests.axiosSysAdminSuccessExample));
+    expect(await service.getReserveList()).toMatchObject({
+      status: 'ok',
+      explanation: 'call finished',
+      data: []
+    });
+  }); 
 
   //////////////////////////////////////////////////////////////////////
   /*it('user info -> live', async () => {

@@ -1282,7 +1282,7 @@ export class ThingsboardThingsboardClientService {
     if (userInfo.status == 'fail')
       return {
         status: 'fail',
-        explanation: userInfo.furtherExplain,
+        explanation: userInfo.explanation,
       };
 
     if (userInfo.data.authority == 'CUSTOMER_USER')

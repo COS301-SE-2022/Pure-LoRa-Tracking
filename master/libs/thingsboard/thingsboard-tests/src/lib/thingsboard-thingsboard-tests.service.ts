@@ -78,7 +78,7 @@ export class ThingsboardThingsboardTestsService {
     "authority": "SYS_ADMIN",
     "firstName": "John",
     "lastName": "Doe",
-    "additionalInfo": {}
+    "additionalInfo": {reserves:[]}
   }
 
   UsersExample = {
