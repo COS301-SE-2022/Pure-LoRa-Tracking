@@ -208,7 +208,7 @@ export class ThingsboardThingsboardTestsService {
         zip: '10004',
         phone: '+1(415)777-7777',
         email: 'example@company.com',
-        additionalInfo: {reserves:[]},
+        additionalInfo: {reserves:[{tenantID:"123", reserveID:"aws", reserveName:"losdj"}]},
         tenantProfileName: 'Default',
       },
     ],

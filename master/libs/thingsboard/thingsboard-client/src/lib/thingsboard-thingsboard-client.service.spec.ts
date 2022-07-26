@@ -1647,6 +1647,26 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
     });
   });
 
+  it('update reserve perimeter -> reserve update', async () => {
+    service.setToken('1');
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
+      delete tests.axiosCustomerSuccessExample.data.externalId
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() => of(tests.axiosCustomerSuccessExample));
+    jest
+      .spyOn(httpService, 'post')
+      .mockImplementationOnce(() => of(tests.axiosCustomerSuccessExample));
+    expect(
+      await service.updateReservePerimeter('1', null)
+    ).toMatchObject({
+      status: 'ok',
+      explanation: 'call finished',
+    });
+  });
+
   //////////////////////////////////////////////////////////////////////
 
   it('generate reserve list -> login fail', async () => {
@@ -1672,16 +1692,18 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
     });
   });
 
-  it('generate reserve list -> customer info fail', async () => {
+  it('generate reserve list -> customers info fail', async () => {
     jest
       .spyOn(httpService, 'get')
       .mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
-    jest
+      jest
       .spyOn(httpService, 'get')
-      .mockImplementationOnce(() => of(tests.axiosCustomersSuccessExample));
+      .mockImplementationOnce(() =>
+        throwError(() => tests.axiosECONNFailureExample)
+      );
     expect(await service.generateReserveList_ReserveAdmin()).toMatchObject({
       status: 'fail',
-      explanation: 'tenant group fail',
+      explanation: 'ECONNREFUSED',
     });
   });
 
@@ -1832,7 +1854,7 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
     });
   });
 
-  it('generate reserve list sys admin -> update fail', async () => {
+  it('generate reserve list sys admin -> update pass', async () => {
     jest
       .spyOn(httpService, 'get')
       .mockImplementationOnce(() => of(tests.axiosSysAdminSuccessExample));
@@ -1860,7 +1882,7 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
     });
   });
 
-  it('customer info -> pass', async () => {
+  it('customer info -> fail', async () => {
     jest
       .spyOn(httpService, 'get')
       .mockImplementationOnce(() =>
@@ -1895,6 +1917,27 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
       explanation: "ECONNREFUSED"
     });
   });
+
+ 
+  //////////////////////////////////////////////////////////////////////
+  it('user info from token -> fail', async () => {
+    expect(await service.getUserInfoFromToken()).toMatchObject({ status: 'fail', explanation: 'ECONNREFUSED' });
+  });
+
+  it('user info from token -> pass', async () => {
+    jest
+    .spyOn(httpService, 'get')
+    .mockImplementationOnce(() => of(tests.axiosUserSuccessExample));
+    expect(await service.getUserInfoFromToken()).toMatchObject({
+      status:'ok',
+      explanation: "call finished",
+      ...{data:tests.axiosUserSuccessExample.data}
+    });
+  });
+
+  //////////////////////////////////////////////////////////////////////
+
+  
 
   //////////////////////////////////////////////////////////////////////
   /*it('user info -> live', async () => {
