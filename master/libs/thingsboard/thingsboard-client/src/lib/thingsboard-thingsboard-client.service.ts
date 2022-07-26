@@ -1321,15 +1321,15 @@ export class ThingsboardThingsboardClientService {
 
   /////////////////////////////////////////////////////////////////
   async updateReserveInfo(reserveID: string, details: {
-    title: string,
-    region: string,
-    country: string,
-    city: string,
-    address: string,
-    address2: string,
-    zip: string,
-    phone: string,
-    email: string,
+    NameOfReserve: string,
+    region?: string,
+    country?: string,
+    city?: string,
+    address?: string,
+    address2?: string,
+    zip?: string,
+    phone?: string,
+    email?: string,
   }) {
     const user = await this.userService.userInfo(this.token);
 
@@ -1357,15 +1357,15 @@ export class ThingsboardThingsboardClientService {
     const response = await this.reserveService.setReservePerimeter(
       info.data.externalId?.id,
       info.data.id.id,
-      details.title,
+      details.NameOfReserve,
       details.region,
       info.data.tenantId.id,
-      details.country,
-      details.city,
-      details.address,
-      details.address2,
-      details.zip,
-      details.phone,
+      info.data.country,
+      info.data.city,
+      info.data.address,
+      info.data.address2,
+      info.data.zip,
+      info.data.phone,
       details.email,
       info.data.additionalInfo
     );

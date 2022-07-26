@@ -47,7 +47,15 @@ export class ReserveEditComponent implements OnInit {
       NameOfReserve:this.reserveInfo.get("name")?.value,
       email:this.reserveInfo.get("email")?.value
     }).subscribe(val=>{
-      console.log(val);
+      console.log("after save reserve",val);
+      if(this.mapgeojson!=""){
+        this.http.post("api/reserve/location/set",{
+          reserveID:this.id,
+          location:JSON.parse(this.mapgeojson)
+        }).subscribe(otherval=>{
+          console.log(otherval);
+        })
+      }
     })
   }
 

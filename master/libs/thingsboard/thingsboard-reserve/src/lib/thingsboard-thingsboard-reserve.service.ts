@@ -122,10 +122,10 @@ export class ThingsboardThingsboardReserveService {
         this.httpService.post(
           this.ThingsBoardURL + "/customer",
           {
-            externalId: {
-              id : exID,
-              entityType: 'CUSTOMER'
-            },
+            // externalId: {
+            //   id : exID,
+            //   entityType: 'CUSTOMER'
+            // },
             id: {
               id: id,
               entityType: 'CUSTOMER',
