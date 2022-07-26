@@ -63,7 +63,7 @@ export class ApiUserEndpointService {
 
       if (
         content.reserves == undefined ||
-        content.reserves == []
+        content.reserves.length == 0
       )
         return {
           status: 400,
@@ -191,7 +191,7 @@ export class ApiUserEndpointService {
         status: 401,
         explain: 'token missing',
       };
-      this.thingsboardClient.setToken(content.token);
+    this.thingsboardClient.setToken(content.token);
     let resp;
     if (content.userID == undefined) {
       resp = await this.thingsboardClient.getUserInfoFromToken();
@@ -308,7 +308,7 @@ export class ApiUserEndpointService {
       };
 
     this.thingsboardClient.setToken(content.token);
-    const resp = await this.thingsboardClient.updateUser(content.userID, content.userInfo);
+    const resp = await this.thingsboardClient.updateUser(content.userID, content.userInfo, content.reserves);
 
     if (resp.status == "fail")
       return {
