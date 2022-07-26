@@ -20,21 +20,35 @@ export class UserEditComponent implements OnInit {
 
   reservesList:ReserveDetails[] = [];
   id:string|null;
+  name:string="";
+  surname:string="";
+  email:string="";
+  selected:string[]=[];
   constructor(private activeRoute:ActivatedRoute,private formBuilder: FormBuilder, private router:Router,private http:HttpClient) {
     this.id="";
   }
 
   ngOnInit(): void {
+    this.userInfo = this.formBuilder.group({
+      name: [null,[Validators.required,Validators.minLength(2)]],
+      surname: [null,[Validators.required, Validators.minLength(2)]],
+      email: [null, [Validators.required, Validators.email]],
+      reserves: [null,[Validators.required]]
+    });
+
     this.activeRoute.paramMap.subscribe( params => { 
       this.id = params.get('id');
       console.log(this.id)
     });
 
-    // this.http.post("api/user/info",{
-
-    // }).subscribe(val=>{
-    //   console.log(val)
-    // });
+    this.http.post("api/user/info",{
+      userID:this.id
+    }).subscribe((val:any)=>{
+      this.userInfo.get("name")?.setValue(val.data.firstName);
+      this.userInfo.get("surname")?.setValue(val.data.lastName);
+      this.userInfo.get("email")?.setValue(val.data.email);
+      this.userInfo.get("reserves")?.setValue(val.data.additionalInfo.reserves?.map((curr:any)=>curr.reserveID));
+    });
 
     this.http.post("api/user/admin/groups",{}).subscribe((val:any)=>{
       if(val.status==200){
@@ -48,19 +62,16 @@ export class UserEditComponent implements OnInit {
         alert("Something went wrong, please contact an administrator");
       }
     })
-
-    this.userInfo = this.formBuilder.group({
-      name: [null,[Validators.required,Validators.minLength(2)]],
-      surname: [null,[Validators.required, Validators.minLength(2)]],
-      email: [null, [Validators.required, Validators.email]],
-      reserves: [null,[Validators.required]]
-    });
   }
 
   saveUser(form:any):void {
     console.log(JSON.stringify(form.value,null,6));
     this.http.post("/api/user/info/details",{
-
+      userID:this.id,
+      userInfo: {
+        firstName:this.userInfo.get("name")?.value,
+        lastName:this.userInfo.get("surname")?.value
+      }
     }).subscribe((val:any)=>{
       console.log(val);
     });

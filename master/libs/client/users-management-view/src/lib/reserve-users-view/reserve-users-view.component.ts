@@ -66,7 +66,7 @@ export class ReserveUsersViewComponent implements OnInit {
         } as SingleGroup)) as Array<SingleGroup>
 
         this.groups.forEach(curr=>{
-          console.log("test");
+          // console.log("test");
           this.http.post("api/user/admin/reserve/all",{
             "customerID":curr.customerid
           }).subscribe((val:any)=>{
@@ -79,7 +79,7 @@ export class ReserveUsersViewComponent implements OnInit {
               accountEnabled:curr.additionalInfo!=undefined
             } as userInfo)) as Array<userInfo>
             this.sourceData=[...this.sourceData,...temp]
-            console.log(this.sourceData)
+            // console.log(this.sourceData)
           })
         })
       }
