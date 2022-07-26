@@ -9,12 +9,13 @@ import {
   userRemoveInput,
   userResponse,
   usersInfoInput,
+  userUpdateInput,
 } from '../api-user.interface';
 import { ApiUserEndpointService } from './api-user-endpoint.service';
 
 @Controller('user')
 export class ApiUserEndpointController {
-  constructor(private apiUserEndpointService: ApiUserEndpointService) {}
+  constructor(private apiUserEndpointService: ApiUserEndpointService) { }
 
   @Get()
   upState() {
@@ -59,6 +60,14 @@ export class ApiUserEndpointController {
     @Body() content: userInfoInput
   ): Promise<userResponse> {
     return this.apiUserEndpointService.UserInfoProcess(content);
+  }
+
+  /* Get user info from token/cookie */
+  @Post('info/details')
+  async UserInfoUpdateEndpoint(
+    @Body() content: userUpdateInput
+  ): Promise<userResponse> {
+    return this.apiUserEndpointService.UserInfoUpdateProcess(content);
   }
 
   /* Get all reserves admin is incharge of */

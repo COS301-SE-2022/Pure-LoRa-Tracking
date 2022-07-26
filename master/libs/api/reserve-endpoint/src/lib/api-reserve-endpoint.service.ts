@@ -1,6 +1,6 @@
 import { ThingsboardThingsboardClientService } from '@lora/thingsboard-client';
 import { Injectable } from '@nestjs/common';
-import { ReserveCreateEndpoint, ReserveEndpoint, ReserveEndpointNoToken, ReserveResponse, ReserveSetEndpoint } from '../reserve-endpoint.interface';
+import { ReserveCreateEndpoint, ReserveEndpoint, ReserveEndpointNoToken, ReserveResponse, ReserveSetEndpoint, ReserveUpdateEndpoint } from '../reserve-endpoint.interface';
 
 @Injectable()
 export class ApiReserveEndpointService {
@@ -25,7 +25,7 @@ export class ApiReserveEndpointService {
             explanation: 'Email Address missing, this can be the owner\'s or reserve\'s email',
         };
 
-        if (body.location != undefined) {
+       /* if (body.location != undefined) {
             if(body.location.center == undefined) {
                 return {
                     status: 401,
@@ -43,7 +43,7 @@ export class ApiReserveEndpointService {
                     status : 403,
                     explanation: 'not enough co-ordinates given: '+body.location.location.length
                 }
-        }
+        }*/
 
         this.thingsboardClient.setToken(body.token);
         const response = await this.thingsboardClient.createReserve(body.email, body.NameOfReserve, body.location);
@@ -106,7 +106,7 @@ export class ApiReserveEndpointService {
             explanation: 'Reserve ID missing',
         };
 
-        if (body.location != undefined) {
+        /*if (body.location != undefined) {
             if(body.location.center == undefined) {
                 return {
                     status: 401,
@@ -128,7 +128,7 @@ export class ApiReserveEndpointService {
             return {
                 status : 401,
                 explanation : 'no location co-ordinates given'
-            }
+            }*/
 
         this.thingsboardClient.setToken(body.token);
         const response = await this.thingsboardClient.updateReservePerimeter(body.reserveID, body.location);
@@ -163,7 +163,6 @@ export class ApiReserveEndpointService {
         };
         this.thingsboardClient.setToken(body.token);
         const resp = await this.thingsboardClient.CustomerInfo(body.reserveID);
-
         if(resp.status=='fail')
         return {
             status:500,
@@ -207,5 +206,82 @@ export class ApiReserveEndpointService {
             explanation : response.explanation,
             data : response.data
         }
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////
+    async processReserveUpdate(body : ReserveUpdateEndpoint) : Promise<ReserveResponse> {
+        if (body.token == undefined || body.token == '')
+        return {
+            status: 401,
+            explanation: 'reserve id missing',
+        };
+
+        if (body.reserveID == undefined || body.reserveID == '')
+        return {
+            status: 401,
+            explanation: 'token missing',
+        };
+
+        if (body.NameOfReserve == undefined || body.NameOfReserve == '')
+        return {
+            status: 401,
+            explanation: 'Reserve Name missing',
+        };
+
+        if (body.email == undefined || body.email == '')
+        return {
+            status: 401,
+            explanation: 'Email Address missing, this can be the owner\'s or reserve\'s email',
+        };
+
+        this.thingsboardClient.setToken(body.token);
+        const resp = await this.thingsboardClient.updateReserveInfo(body.reserveID, body);
+
+        if(resp.status == 'fail')
+        return {
+            status : 500,
+            explanation : resp.explanation
+        }
+
+        return {
+            status : 200,
+            explanation : resp.explanation
+        }
+    } 
+
+    //////////////////////////////////////////////////////////////////////////////////
+    async processReserveDetails(body : ReserveEndpoint) : Promise<ReserveResponse> {
+        if (body.token == undefined || body.token == '')
+        return {
+            status: 401,
+            explanation: 'reserve id missing',
+        };
+
+        if (body.reserveID == undefined || body.reserveID == '')
+        return {
+            status: 401,
+            explanation: 'token missing',
+        };
+        
+        this.thingsboardClient.setToken(body.token);
+        const resp = await this.thingsboardClient.CustomerInfo(body.reserveID);
+
+        if(resp.status == 'fail')
+        return {
+            status : 500,
+            explanation : resp.explanation
+        }
+
+        delete resp.data.externalId;
+        delete resp.data.id;
+        delete resp.data.tenantId;
+        delete resp.data.createdTime;
+        delete resp.data.additionalInfo;
+
+        return {
+            status : 200,
+            explanation : resp.explanation,
+        }
+
     }
 }

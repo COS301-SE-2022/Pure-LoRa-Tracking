@@ -62,11 +62,13 @@ export class MiddlewareSessionManagementService implements NestMiddleware {
                 //reset the tokens and set headers
                 // //console.log("asdf");
                 req.body["token"]=refreshresp.token;
+                req.body["refreshToken"]=refreshresp.refreshToken;
                 res.setHeader("Set-Cookie",[`${refreshtokenCookieName}=${refreshresp.refreshToken}; Max-Age=1209600; Path=/;`,`${tokenCookieName}=${refreshresp.token}; Max-Age=1209600; Path=/;`]);
             }
         }
         else{
             req.body["token"]=cookietoken;
+            req.body["refreshToken"]=cookierefreshtoken;
         }
         
         //carry on with the request

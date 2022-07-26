@@ -158,7 +158,7 @@ export class ThingsboardThingsboardUserService {
       Authorization: 'Bearer ' + token,
     };
     const resp = await firstValueFrom(
-      this.httpService.get(this.ThingsBoardURL + '/auth/user/' + userID, {
+      this.httpService.get(this.ThingsBoardURL + '/user/' + userID, {
         headers: headersReq,
       })
     ).catch((error) => {
