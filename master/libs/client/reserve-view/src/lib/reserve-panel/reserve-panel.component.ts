@@ -6,6 +6,11 @@ import { DeviceNotifierService } from '@master/client/shared-services';
 import { Device, ViewMapType, Gateway } from '@master/shared-interfaces';
 import { ReserveInfo } from '../reserve-view/reserve-view.component';
 
+export interface Gateway {
+  name: string;
+  id: string;
+  eui:string;
+}
 
 @Component({
   selector: 'master-reserve-panel',
@@ -70,6 +75,7 @@ export class ReservePanelComponent implements OnInit {
     });
     this.reserveList = [];
   }
+
 
   getSelectedStyle(deviceId: string): string {
     if (this.selectedDeviceID == deviceId) {

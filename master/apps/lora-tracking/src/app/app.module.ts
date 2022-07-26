@@ -1,5 +1,6 @@
 import { NgModule,CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
@@ -17,6 +18,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     HttpClientJsonpModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    LeafletModule
     ReactiveFormsModule,
     FormsModule
   ],
