@@ -470,8 +470,13 @@ export class ThingsboardThingsboardTestsService {
       latitude : [{value:3, ts:22}, {value:4, ts:22}],
   }
 
-  DeviceAttributeExample = {
+  /*DeviceAttributeExample = {
     "result": {latitude:-22,longitude:-23},
+    "setOrExpired": true
+  }*/
+
+  DeviceAttributeExample = {
+    "data": [{latitude:-22,longitude:-23}],
     "setOrExpired": true
   }
 

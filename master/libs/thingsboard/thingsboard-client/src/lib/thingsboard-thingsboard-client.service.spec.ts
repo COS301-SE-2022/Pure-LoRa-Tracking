@@ -316,14 +316,15 @@ it(' -> HTTP ERROR', async () => {
     });
   });
 
-  // TODO FIX
-  /*it('reserve perimeter -> no reserve found in asset', async () => {
+
+  it('reserve perimeter -> no reserve found in asset', async () => {
     jest
       .spyOn(httpService, 'get')
       .mockImplementationOnce(() => of(tests.axiosUserSuccessExample));
+    delete tests.axiosCustomerSuccessExample.data.additionalInfo.location
     jest
       .spyOn(httpService, 'get')
-      .mockImplementationOnce(() => of(tests.axiosAssetsSuccessExample));
+      .mockImplementationOnce(() => of(tests.axiosCustomerSuccessExample));
     expect(await service.getReservePerimeter()).toMatchObject({
       ...tests.TBFailureResponse,
       ...{ explanation: 'no reserve set' },
@@ -331,25 +332,14 @@ it(' -> HTTP ERROR', async () => {
   });
 
   it('reserve perimeter -> return asset', async () => {
-    const result: AxiosResponse<any> = {
-      data: [mockReservePerimeterCall],
-      headers: {},
-      config: {},
-      status: 200,
-      statusText: 'OK',
-    };
     jest
       .spyOn(httpService, 'get')
       .mockImplementationOnce(() => of(tests.axiosUserSuccessExample));
     jest
       .spyOn(httpService, 'get')
-      .mockImplementationOnce(() => of(tests.axiosAssetsReserveSuccessExample));
-    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(result));
-    expect(await service.getReservePerimeter()).toMatchObject({
-      ...{},
-      ...mockReservePerimeterCall,
-    });
-  });*/
+      .mockImplementationOnce(() => of(tests.axiosCustomerSuccessExample));
+    expect(await service.getReservePerimeter()).toMatchObject(tests.TBSuccessResponse);
+  });
   //////////////////////////////////////////////////////////////////////////////////////////
 
   it('Historical Data -> no token', async () => {
@@ -1334,28 +1324,25 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
     });
   });
 
-  // it('get gateway location -> gateway info pass', async () => {
-  //   service.setToken('1');
-  //   jest
-  //     .spyOn(httpService, 'get')
-  //     .mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
-  //   jest
-  //     .spyOn(httpService, 'get')
-  //     .mockImplementationOnce(() => of(tests.axiosDeviceSuccessExample));
-  //   jest
-  //     .spyOn(httpService, 'get')
-  //     .mockImplementationOnce(() =>
-  //       of(tests.axiosDeviceAttributeSuccessExample)
-  //     );
-  //   expect(await service.getGatewayLocation('2')).toMatchObject({
-  //     status: 'ok',
-  //     explanation: 'call finished',
-  //     data: {
-  //       latitude: -22,
-  //       longitude: -23,
-  //     },
-  //   });
-  // });
+  it('get gateway location -> gateway info pass', async () => {
+    service.setToken('1');
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() => of(tests.axiosDeviceSuccessExample));
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() =>
+        of(tests.axiosDeviceAttributeSuccessExample)
+      );
+    expect(await service.getGatewayLocation('2')).toMatchObject({
+      status: 'ok',
+      explanation: 'call finished',
+      data: undefined,
+    });
+  });
 
   //////////////////////////////////////////////////////////////////////////////////////////
 

@@ -237,7 +237,7 @@ export class ThingsboardThingsboardClientService {
       };
 
     const reserve = await this.CustomerInfo(userInfo.data.customerId.id)
-    console.log('reserve :>> ', reserve);
+    //console.log('reserve :>> ', reserve);
     if (reserve.status == 'fail')
       return {
         code: 500,
