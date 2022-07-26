@@ -38,16 +38,28 @@ export interface MapApiLatestResponse {
     data?: Device[]
 }
 
+
 export interface Device {
     deviceID: string,
     deviceName: string,
     type: string,
     locationData: {
-        longitude: string,
+        timeStamp: number,
         latitude: string,
-        timeStamp: number
+        longitude: string
     }[]
 }
+
+export interface Gateway {
+    name: string;
+    id: string;
+    eui:string;
+    location?:{
+        latitude:number,
+        longitude:number
+    }
+  }
+
 
 export interface MapApiReserveResponse {
     code: number,
@@ -55,15 +67,11 @@ export interface MapApiReserveResponse {
     explanation: string,
     data?: {
         reserveName: string,
-        center: {
-            latitude: string,
-            longitude: string
-        },
-        location:
-        {
-            latitude: string,
-            longitude: string
-        }[]
+        // center: {
+        //     latitude: string,
+        //     longitude: string
+        // },
+        location: GeoJSON.FeatureCollection;
     }
 }
 

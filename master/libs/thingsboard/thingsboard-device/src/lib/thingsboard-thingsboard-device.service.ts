@@ -5,21 +5,27 @@ import { lastValueFrom } from 'rxjs';
 @Injectable()
 export class ThingsboardThingsboardDeviceService {
   private token: string;
-  private baseURL = 'http://localhost:9090/api/';
+  private ThingsBoardURL: string = process.env.TB_URL || 'http://localhost:8080/api';
   constructor(private httpService: HttpService) {
     this.token = '';
   }
+
+  ///////////////////////////////////////////////////////////////////////////////////////////
 
   setToken(token: string): void {
     this.token = token;
   }
 
-  async getCustomerDevices(page: number, pageSize: number, customerID: string) {
-    if (this.token == '') return null;
+  ///////////////////////////////////////////////////////////////////////////////////////////
 
+  async getCustomerDevices(
+    page: number,
+    pageSize: number,
+    customerID: string
+  ): Promise<deviceResponse> {
     const url =
-      this.baseURL +
-      'customer/' +
+      this.ThingsBoardURL +
+      '/customer/' +
       customerID +
       '/deviceInfos?pageSize=' +
       pageSize +
@@ -34,13 +40,35 @@ export class ThingsboardThingsboardDeviceService {
     };
     const resp = await lastValueFrom(
       this.httpService.get(url, { headers: headersReq })
-    );
-    return this.processDevices(resp['data']['data']);
+    ).catch((error) => {
+      if (error.response == undefined) return error.code;
+      return error;
+    });
+    if (resp == 'ECONNREFUSED')
+      return {
+        status: 500,
+        explanation: resp,
+      };
+    else if (resp.status != 200) {
+      return {
+        status: resp.response.status,
+        explanation: resp.response.data.message,
+      };
+    }
+    return {
+      status: resp.status,
+      explanation: 'ok',
+      data: {
+        deviceList: this.processDevices(resp['data']['data']),
+      },
+    };
   }
 
   //////////////////////////////////////////////////////////////////////////
 
   processDevices(devices): deviceList[] {
+    if (devices == null)
+      return []
     const list: deviceList[] = new Array<deviceList>();
     for (let i = 0; i < devices.length; i++) {
       list.push({
@@ -63,10 +91,9 @@ export class ThingsboardThingsboardDeviceService {
     isGateway: boolean,
     profileType?: profileList,
     extraParams?: any
-  ): Promise<string> {
-    if (this.token == '') return 'token-fail';
+  ): Promise<deviceResponse> {
 
-    const url = this.baseURL + 'device';
+    const url = this.ThingsBoardURL + '/device';
 
     let deviceType = 'animalSensor';
     if (isGateway) deviceType = 'gateway';
@@ -83,18 +110,30 @@ export class ThingsboardThingsboardDeviceService {
           name: hardwareID,
           type: deviceType,
           label: labelName,
-          additionalInfo: { 'gateway': isGateway },
+          additionalInfo: { gateway: isGateway },
         },
         { headers: headersReq }
       )
     ).catch((error) => {
-      if (error.response == undefined) return null;
-      if (error.response.status == 400) {
-        return { status: 400 };
-      }
+      if (error.response == undefined) return error.code;
+      return error;
     });
-    if (resp.status != 200) return 'fail-server';
-    else return resp['data']['id']['id'];
+    if (resp == 'ECONNREFUSED')
+      return {
+        status: 500,
+        explanation: resp,
+      };
+    else if (resp.status != 200) {
+      return {
+        status: resp.response.status,
+        explanation: resp.response.data.message,
+      };
+    }
+    return {
+      status: resp.status,
+      explanation: 'ok',
+      data: resp['data'],
+    };
   }
 
   //////////////////////////////////////////////////////////////////////////
@@ -102,9 +141,9 @@ export class ThingsboardThingsboardDeviceService {
   async assignDevicetoCustomer(
     custID: string,
     deviceID: string
-  ): Promise<boolean> {
-    if (this.token == '') return false;
-    const url = this.baseURL + 'customer/' + custID + '/device/' + deviceID;
+  ): Promise<deviceResponse> {
+    const url =
+      this.ThingsBoardURL + '/customer/' + custID + '/device/' + deviceID;
 
     const headersReq = {
       'Content-Type': 'application/json',
@@ -121,50 +160,63 @@ export class ThingsboardThingsboardDeviceService {
         { headers: headersReq }
       )
     ).catch((error) => {
-      if (error.response == undefined) return null;
-      if (error.response.status == 400) {
-        return { status: 400 };
-      }
+      if (error.response == undefined) return error.code;
+      return error;
     });
-
-    return resp.status == 200;
+    if (resp == 'ECONNREFUSED')
+      return {
+        status: 500,
+        explanation: resp,
+      };
+    else if (resp.status != 200) {
+      return {
+        status: resp.response.status,
+        explanation: resp.response.data.message,
+      };
+    }
+    return {
+      status: resp.status,
+      explanation: 'ok',
+      data: resp.data,
+    };
   }
 
   //////////////////////////////////////////////////////////////////////////
-  async getDeviceProfiles() {
-    return null;
-  }
-
-  //////////////////////////////////////////////////////////////////////////
-  processDeviceProfiles(profiles: any): profileList[] {
-    return null;
-  }
-
-  //////////////////////////////////////////////////////////////////////////
-  async deleteDevice(deviceID: string): Promise<boolean> {
+  async deleteDevice(deviceID: string): Promise<deviceResponse> {
     const headersReq = {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + this.token,
     };
 
-    const url = this.baseURL + 'device/' + deviceID;
+    const url = this.ThingsBoardURL + '/device/' + deviceID;
 
     const resp = await lastValueFrom(
       this.httpService.delete(url, { headers: headersReq })
     ).catch((error) => {
-      if (error.response == undefined) return null;
-      if (error.response.status == 400) {
-        return { status: 400 };
-      }
-      return { status: 400 };
+      if (error.response == undefined) return error.code;
+      return error;
     });
-    return resp.status == 200;
+    if (resp == 'ECONNREFUSED')
+      return {
+        status: 500,
+        explanation: resp,
+      };
+    else if (resp.status != 200) {
+      return {
+        status: resp.response.status,
+        explanation: resp.response.data.message,
+      };
+    }
+    return {
+      status: resp.status,
+      explanation: 'ok',
+    };
   }
 
   //////////////////////////////////////////////////////////////////////////
-  async removeDeviceFromCustomer(deviceID: string): Promise<boolean> {
-    if (this.token == '') return false;
-    const url = this.baseURL + 'customer/device/' + deviceID;
+  /* TODO change to response */
+  async removeDeviceFromCustomer(deviceID: string): Promise<deviceResponse> {
+    const url = this.ThingsBoardURL + '/customer/device/' + deviceID;
 
     const headersReq = {
       'Content-Type': 'application/json',
@@ -174,43 +226,69 @@ export class ThingsboardThingsboardDeviceService {
     const resp = await lastValueFrom(
       this.httpService.delete(url, { headers: headersReq })
     ).catch((error) => {
-      if (error.response == undefined) return null;
-      if (error.response.status == 400) {
-        return { status: 400 };
-      }
+      if (error.response == undefined) return error.code;
+      return error;
     });
-
-    return resp.status == 200;
+    if (resp == 'ECONNREFUSED')
+      return {
+        status: 500,
+        explanation: resp,
+      };
+    else if (resp.status != 200) {
+      return {
+        status: resp.response.status,
+        explanation: resp.response.data.message,
+      };
+    }
+    return {
+      status: resp.status,
+      explanation: 'ok',
+      data: resp.data,
+    };
   }
 
   //////////////////////////////////////////////////////////////////////////
-  async getDeviceInfo(deviceID: string) {
-    if (this.token == '') return null;
-
-    const url = this.baseURL + 'device/' + deviceID;
+  async getDeviceInfo(deviceID: string): Promise<deviceResponse> {
+    const url = this.ThingsBoardURL + '/device/' + deviceID;
 
     const headersReq = {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + this.token,
     };
-    return await lastValueFrom(
+    const resp = await lastValueFrom(
       this.httpService.get(url, { headers: headersReq })
     ).catch((error) => {
-      if (error.response == undefined) return null;
-      return { status: error.response.status };
+      if (error.response == undefined) return error.code;
+      return error;
     });
+    if (resp == 'ECONNREFUSED')
+      return {
+        status: 500,
+        explanation: resp,
+      };
+    else if (resp.status != 200) {
+      return {
+        status: resp.response.status,
+        explanation: resp.response.data.message,
+      };
+    }
+    return {
+      status: resp.status,
+      explanation: 'ok',
+      data: resp.data,
+    };
   }
 
   //////////////////////////////////////////////////////////////////////////
   async setGatewayLocation(
     deviceID: string,
     locationParamters: { latitude: number; longitude: number }
-  ): Promise<{ status: number }> {
-    if (this.token == '') return {
-      status : 401
-    };
-
-    const url = this.baseURL + 'plugins/telemetry/DEVICE/'+deviceID+'/attributes/SERVER_SCOPE';
+  ): Promise<deviceResponse> {
+    const url =
+      this.ThingsBoardURL +
+      '/plugins/telemetry/DEVICE/' +
+      deviceID +
+      '/attributes/SERVER_SCOPE';
 
     const headersReq = {
       'Content-Type': 'application/json',
@@ -221,29 +299,39 @@ export class ThingsboardThingsboardDeviceService {
       this.httpService.post(
         url,
         {
-          location : locationParamters
+          location: locationParamters,
         },
         { headers: headersReq }
       )
     ).catch((error) => {
-      if (error.response == undefined) return null;
-      if (error.response.status == 400) {
-        return { status: 400 };
-      }
+      if (error.response == undefined) return error.code;
+      return error;
     });
-
-    return resp;
-    
+    if (resp == 'ECONNREFUSED')
+      return {
+        status: 500,
+        explanation: resp,
+      };
+    else if (resp.status != 200) {
+      return {
+        status: resp.response.status,
+        explanation: resp.response.data.message,
+      };
+    }
+    return {
+      status: resp.status,
+      explanation: 'ok',
+    };
   }
 
   //////////////////////////////////////////////////////////////////////////
-  async GetGatewayLocation(
-    deviceID: string
-  ): Promise<any> {
-    if (this.token == '') return null;
+  async GetGatewayLocation(deviceID: string): Promise<deviceResponse> {
 
     const url =
-      this.baseURL + "plugins/telemetry/DEVICE/"+deviceID+"/values/attributes?keys=location"
+      this.ThingsBoardURL +
+      '/plugins/telemetry/DEVICE/' +
+      deviceID +
+      '/values/attributes?keys=location';
 
     const headersReq = {
       'Content-Type': 'application/json',
@@ -252,23 +340,33 @@ export class ThingsboardThingsboardDeviceService {
     const resp = await lastValueFrom(
       this.httpService.get(url, { headers: headersReq })
     ).catch((error) => {
-      if (error.response == undefined) return null;
-      return {status : error.response.status}
+      if (error.response == undefined) return error.code;
+      return error;
     });
-
+    if (resp == 'ECONNREFUSED')
+      return {
+        status: 500,
+        explanation: resp,
+      };
+    else if (resp.status != 200) {
+      return {
+        status: resp.response.status,
+        explanation: resp.response.data.message,
+      };
+    }
+    // console.log('resp :>> ', resp.data[0]?.value);
     return {
-      status : resp.status,
-      data : resp['data']
+      status: resp.status,
+      explanation: 'ok',
+      data: resp.data[0]?.value,
+      setOrExpired: resp.data.setOrExpired,
     };
   }
 
-  async GetAccessToken(
-    deviceID: string
-  ): Promise<{token:string, explain?:string}> {
-    if (this.token == '') return null;
+  /////////////////////////////////////////////////////////////////////////////
 
-    const url =
-      this.baseURL + "device/"+deviceID+"/credentials"
+  async GetAccessToken(deviceID: string): Promise<deviceResponse> {
+    const url = this.ThingsBoardURL + '/device/' + deviceID + '/credentials';
 
     const headersReq = {
       'Content-Type': 'application/json',
@@ -277,16 +375,60 @@ export class ThingsboardThingsboardDeviceService {
     const resp = await lastValueFrom(
       this.httpService.get(url, { headers: headersReq })
     ).catch((error) => {
-      if (error.response == undefined) return null;
-      return {status : error.response.status}
+      if (error.response == undefined) return error.code;
+      return error;
     });
-
-    if(resp.status != 200)
-    return {token:"", explain:resp.status}
-
-    return {token:resp['data']['credentialsId']}
-
+    if (resp == 'ECONNREFUSED')
+      return {
+        status: 500,
+        explanation: resp,
+      };
+    else if (resp.status != 200) {
+      return {
+        status: resp.response.status,
+        explanation: resp.response.data.message,
+      };
+    }
+    return {
+      status: resp.status,
+      explanation: 'ok',
+      data: resp.data
+    };
   }
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  async GetTenantDevices(): Promise<deviceResponses> {
+    const url = this.ThingsBoardURL + '/tenant/devices?page=0&pageSize=1000';
+
+    const headersReq = {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + this.token,
+    };
+    const resp = await lastValueFrom(
+      this.httpService.get(url, { headers: headersReq })
+    ).catch((error) => {
+      if (error.response == undefined) return error.code;
+      return error;
+    });
+    if (resp == 'ECONNREFUSED')
+      return {
+        status: 500,
+        explanation: resp,
+      };
+    else if (resp.status != 200) {
+      return {
+        status: resp.response.status,
+        explanation: resp.response.data.message,
+      };
+    }
+    return {
+      status: resp.status,
+      explanation: 'ok',
+      data: resp.data
+    };
+  }
+
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -310,4 +452,96 @@ export interface deviceParameters {
   isGateway: boolean;
   profileType?: profileList;
   extraParams?: any;
+}
+
+export interface deviceResponse {
+  status: number;
+  explanation: string;
+  data?: {
+    deviceList?: deviceList[];
+    id?: {
+      id?: string;
+      entityType?: string;
+    };
+    createdTime?: number;
+    tenantId?: {
+      id?: string;
+      entityType?: string;
+    };
+    customerId?: {
+      id?: string;
+      entityType?: string;
+    };
+    name?: string;
+    type?: string;
+    label?: string;
+    deviceProfileId?: {
+      id?: string;
+      entityType?: string;
+    };
+    deviceData?: {
+      configuration?: any;
+      transportConfiguration?: any;
+    };
+    firmwareId?: {
+      id?: string;
+      entityType?: string;
+    };
+    softwareId?: {
+      id?: string;
+      entityType?: string;
+    };
+    additionalInfo?: any;
+    credentialsType?: string;
+    credentialsId?: string;
+    credentialsValue?: string;
+  };
+  setOrExpired?: boolean;
+}
+
+export interface deviceResponses {
+  status: number;
+  explanation: string;
+  data?: {
+    data: {
+      deviceList?: deviceList[];
+      id?: {
+        id?: string;
+        entityType?: string;
+      };
+      createdTime?: number;
+      tenantId?: {
+        id?: string;
+        entityType?: string;
+      };
+      customerId?: {
+        id?: string;
+        entityType?: string;
+      };
+      name?: string;
+      type?: string;
+      label?: string;
+      deviceProfileId?: {
+        id?: string;
+        entityType?: string;
+      };
+      deviceData?: {
+        configuration?: any;
+        transportConfiguration?: any;
+      };
+      firmwareId?: {
+        id?: string;
+        entityType?: string;
+      };
+      softwareId?: {
+        id?: string;
+        entityType?: string;
+      };
+      additionalInfo?: any;
+      credentialsType?: string;
+      credentialsId?: string;
+      credentialsValue?: string;
+    }[]
+  };
+  setOrExpired?: boolean;
 }

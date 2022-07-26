@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import {HttpClientTestingModule} from "@angular/common/http/testing"
 import { SensorDetailViewComponent } from './sensor-detail-view.component';
+import {MatDialogModule} from '@angular/material/dialog';
 
 describe('SensorDetailViewComponent', () => {
   let component: SensorDetailViewComponent;
@@ -9,6 +10,7 @@ describe('SensorDetailViewComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [SensorDetailViewComponent],
+      imports:[HttpClientTestingModule,MatDialogModule]
     }).compileComponents();
   });
 

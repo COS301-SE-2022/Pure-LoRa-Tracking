@@ -2,19 +2,23 @@ import { Injectable } from '@nestjs/common';
 import {
   userAddInput,
   userAdminGroups,
+  UserChangeReserveInput,
   userDisableInput,
   userEnableInput,
   userInfoInput,
   userRemoveInput,
   userResponse,
   usersInfoInput,
+  userUpdateInput,
 } from '../api-user.interface';
 
 import { ThingsboardThingsboardClientService } from '@lora/thingsboard-client';
 
 @Injectable()
 export class ApiUserEndpointService {
-  constructor(private thingsboardClient: ThingsboardThingsboardClientService) {}
+  constructor(private thingsboardClient: ThingsboardThingsboardClientService) { }
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////////
 
   async AddUserProcess(content: userAddInput): Promise<userResponse> {
     if (content.token == undefined || content.token == '')
@@ -56,6 +60,15 @@ export class ApiUserEndpointService {
           status: 400,
           explain: 'no last name found',
         };
+
+      if (
+        content.reserves == undefined ||
+        content.reserves == []
+      )
+        return {
+          status: 400,
+          explain: 'no reserves found, there must at least be one',
+        };
     }
 
     this.thingsboardClient.setToken(content.token);
@@ -64,7 +77,8 @@ export class ApiUserEndpointService {
       content.customerID,
       content.userInfo.email,
       content.userInfo.firstName,
-      content.userInfo.lastName
+      content.userInfo.lastName,
+      content.reserves
     );
 
     if (resp.status == 'fail')
@@ -79,6 +93,8 @@ export class ApiUserEndpointService {
       data: resp.explanation,
     };
   }
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////////
 
   async RemoveUserProcess(content: userRemoveInput): Promise<userResponse> {
     if (content.token == undefined || content.token == '')
@@ -109,6 +125,8 @@ export class ApiUserEndpointService {
       };
   }
 
+  //////////////////////////////////////////////////////////////////////////////////////////////////////
+
   async DisableUserProcess(content: userDisableInput): Promise<userResponse> {
     if (content.token == undefined || content.token == '')
       return {
@@ -135,6 +153,8 @@ export class ApiUserEndpointService {
         explain: 'ok',
       };
   }
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////////
 
   async EnableUserProcess(content: userEnableInput): Promise<userResponse> {
     if (content.token == undefined || content.token == '')
@@ -163,15 +183,21 @@ export class ApiUserEndpointService {
       };
   }
 
+  //////////////////////////////////////////////////////////////////////////////////////////////////////
+
   async UserInfoProcess(content: userInfoInput): Promise<userResponse> {
     if (content.token == undefined || content.token == '')
       return {
         status: 401,
         explain: 'token missing',
       };
-    this.thingsboardClient.setToken(content.token);
-    const resp = await this.thingsboardClient.getUserInfoFromToken();
-
+      this.thingsboardClient.setToken(content.token);
+    let resp;
+    if (content.userID == undefined) {
+      resp = await this.thingsboardClient.getUserInfoFromToken();
+    } else {
+      resp = await this.thingsboardClient.getUserInfoByID(content.userID);
+    }
     if (resp.status == 'fail')
       return {
         status: 500,
@@ -180,11 +206,13 @@ export class ApiUserEndpointService {
     return {
       status: 200,
       explain: resp.explanation,
-      data: resp.data['id'],
+      data: resp.data,
     };
   }
 
-  async AdminGroupsProcess(content: userAdminGroups) : Promise<userResponse> {
+  //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  async AdminGroupsProcess(content: userAdminGroups): Promise<userResponse> {
     if (content.token == undefined || content.token == '')
       return {
         status: 401,
@@ -194,21 +222,21 @@ export class ApiUserEndpointService {
     this.thingsboardClient.setToken(content.token);
     const response = await this.thingsboardClient.AdminGetCustomers();
 
-    if(response.status=="fail")
+    if (response.status == "fail")
+      return {
+        status: 400,
+        explain: response.explanation,
+      }
     return {
-      status : 400,
-      explain : response.explanation,
+      status: 200,
+      explain: "call finished",
+      data: response.data
     }
-    return {
-      status:200,
-      explain : "call finished",
-      data : response.data
-    }
-
-    
   }
 
-  async AdminAllReserveUsersProcess(content: usersInfoInput) : Promise<userResponse> {
+  //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  async AdminAllReserveUsersProcess(content: usersInfoInput): Promise<userResponse> {
     if (content.token == undefined || content.token == '')
       return {
         status: 401,
@@ -223,13 +251,76 @@ export class ApiUserEndpointService {
     this.thingsboardClient.setToken(content.token);
 
     const response = await this.thingsboardClient.AdminGetUsersFromReserve(content.customerID);
-    if(response.status == "fail")
-    return {status:400, explain:"Server failed with: "+response.explanation}
+    if (response.status == "fail")
+      return { status: 400, explain: "Server failed with: " + response.explanation }
 
     return {
-      status:200,
-      explain:"ok",
-      data:response.data
+      status: 200,
+      explain: "ok",
+      data: response.data
     }
+  }
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  async UserChangeReserveProcess(content: UserChangeReserveInput): Promise<userResponse> {
+    if (content.token == undefined || content.token == '')
+      return {
+        status: 401,
+        explain: 'token missing',
+      };
+    if (content.reserveID == undefined || content.reserveID == '')
+      return {
+        status: 400,
+        explain: 'reserveID not defined',
+      };
+
+    this.thingsboardClient.setToken(content.token);
+
+    const response = await this.thingsboardClient.changeReserveForUser(content.reserveID);
+
+    const tokens = await this.thingsboardClient.refresh(content.refreshToken);
+    console.log('tokens :>> ', tokens);
+
+    if (response.status == "fail")
+      return { status: 400, explain: "Server failed with: " + response.explanation }
+
+    return {
+      status: 200,
+      explain: "ok",
+      furtherExplain: "refresh the page",
+      data: { ...response.data, ...{ token: tokens.token }, ...{ refreshToken: tokens.refreshToken } }
+    }
+  }
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  async UserInfoUpdateProcess(content: userUpdateInput): Promise<userResponse> {
+    if (content.token == undefined || content.token == '')
+      return {
+        status: 401,
+        explain: 'token missing',
+      };
+    if (content.userID == undefined || content.userID == '')
+      return {
+        status: 400,
+        explain: 'userID not defined',
+      };
+
+    this.thingsboardClient.setToken(content.token);
+    const resp = await this.thingsboardClient.updateUser(content.userID, content.userInfo);
+
+    if (resp.status == "fail")
+      return {
+        status: 500,
+        explain: resp.explanation
+      }
+
+    return {
+      status: 200,
+      explain: resp.explanation
+    }
+
+
   }
 }

@@ -1,0 +1,45 @@
+{
+  "sourceRoot": "libs/ai/heatmap-average/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/ai/heatmap-average",
+        "tsConfig": "libs/ai/heatmap-average/tsconfig.lib.json",
+        "packageJson": "libs/ai/heatmap-average/package.json",
+        "main": "libs/ai/heatmap-average/src/index.ts",
+        "assets": ["libs/ai/heatmap-average/*.md"]
+      }
+    },
+    "publish": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "node tools/scripts/publish.mjs ai-heatmap-average {args.ver} {args.tag}"
+      },
+      "dependsOn": [
+        {
+          "projects": "self",
+          "target": "build"
+        }
+      ]
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/ai/heatmap-average/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/ai/heatmap-average"],
+      "options": {
+        "jestConfig": "libs/ai/heatmap-average/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

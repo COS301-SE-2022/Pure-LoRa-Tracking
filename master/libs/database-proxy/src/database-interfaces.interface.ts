@@ -1,18 +1,19 @@
 import { Document } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
-export type RSSIdataDocument = rssiData & Document;
+export type InputDataDocument = DataInput & Document;
 
 @Schema()
-export class rssiData {
+export class DataInput {
     @Prop()
     gateway : string;
 
-    /*@Prop()
-    gatewayCoord : {
-        latitude : number;
-        longitude : number;
-    };*/
+    
+    @Prop()
+    latitude : number;
+
+    @Prop()
+    longitude : number;
 
     @Prop()
     FirstPoint : number;
@@ -24,4 +25,4 @@ export class rssiData {
     ThirdPoint : number;
 }
 
-export const rssiDataSchema = SchemaFactory.createForClass(rssiData);
+export const InputDataSchema = SchemaFactory.createForClass(DataInput);

@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { AddGatewayDevice, AddSensorDevice } from '@master/shared-interfaces';
+import {TokenManagerService} from "@master/client/user-storage-controller"
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {deviceOptionList} from "@master/shared-interfaces"
 import * as L from 'leaflet';
@@ -28,7 +29,7 @@ export class DeviceAddComponent implements OnInit {
   gatewaylat:number=0;
   gatewaylng:number=0;
 
-  constructor(private _formBuilder: FormBuilder,private http:HttpClient) {
+  constructor(private _formBuilder: FormBuilder,private http:HttpClient,private tokenmanager:TokenManagerService) {
     this.gatewaymarker.on("dragend",(e)=>{
       this.gatewayGroup.get("gatlong")?.setValue(this.gatewaymarker.getLatLng().lng);
       this.gatewayGroup.get("gatlat")?.setValue(this.gatewaymarker.getLatLng().lat);
@@ -54,8 +55,7 @@ export class DeviceAddComponent implements OnInit {
     zoom: 5,
     center: L.latLng(46.879966, -121.726909)
   };
-  
-
+ 
 
   ngOnInit(): void {
     // this.loadmap();

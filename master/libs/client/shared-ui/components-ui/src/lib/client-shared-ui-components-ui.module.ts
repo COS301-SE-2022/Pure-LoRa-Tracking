@@ -26,5 +26,8 @@ export const clientSharedUiComponentsUiRoutes: Route[] = [];
     DialogConfirmationComponent,
     SensorDetailViewComponent,
   ],
+  entryComponents:[
+    DialogConfirmationComponent
+  ]
 })
 export class ClientSharedUiComponentsUiModule {}

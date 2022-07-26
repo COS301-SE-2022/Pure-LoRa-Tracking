@@ -1,4 +1,3 @@
-<master-header-nav></master-header-nav>
 <div id="main-container">
 <div id="userContainer" *ngIf="addUser === false">
     <!-- <mat-form-field appearance="legacy">
@@ -6,13 +5,13 @@
         <input matInput placeholder="Search" type="text">
         <mat-icon matSuffix>search</mat-icon>
     </mat-form-field> -->
-    <mat-form-field appearance="fill" color="white">
+    <!-- <mat-form-field appearance="fill" color="white">
       <mat-label>Group</mat-label>
       <mat-select #myform (valueChange)="changeGroup(myform.value)" >
         <mat-option *ngFor="let curr of groups" [value]="curr.customerid">{{curr.name}}</mat-option>
       </mat-select>
-    </mat-form-field>
-    <button class="addbtn" mat-raised-button color="accent" (click)="openUserForm()" [disabled]="!canadd">Add User</button>
+    </mat-form-field> -->
+    <button class="addbtn" mat-raised-button color="accent" (click)="openUserForm()">Add User</button>
     <table mat-table [dataSource]="sourceData" >
         <ng-container matColumnDef="id">
             <th mat-header-cell *matHeaderCellDef>
@@ -65,7 +64,14 @@
                 <button mat-icon-button color="warn" (click)="confirmDelete(element.id)"><mat-icon>delete</mat-icon></button>
             </td>
         </ng-container>
-
+        <ng-container matColumnDef="edit">
+          <th mat-header-cell *matHeaderCellDef>
+              
+          </th>
+          <td mat-cell *matCellDef="let element">
+              <button mat-icon-button (click)="editUser(element.id)"><mat-icon>edit</mat-icon></button>
+          </td>
+      </ng-container>
         <tr mat-header-row *matHeaderRowDef="tableColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: tableColumns;"></tr>
     </table>
@@ -106,6 +112,21 @@
         <mat-label>E-mail</mat-label>
         <input type="email" matInput formControlName="emailControl" placeholder="Valid e-mail"
                required>
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="reserveGroup">
+    <form [formGroup]="reserveGroup">
+      <ng-template matStepLabel>Select reserve(s)</ng-template>
+      <mat-form-field appearance="fill">
+        <mat-label>Reserves</mat-label>
+        <mat-select formControlName="reserveControl" placeholder="Reserve" multiple required>
+            <mat-option *ngFor="let reserveOpt of groups" [value]="reserveOpt.customerid">{{reserveOpt.name}}</mat-option>
+        </mat-select>
       </mat-form-field>
       <div>
         <button mat-button matStepperPrevious>Back</button>
