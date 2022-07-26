@@ -63,7 +63,7 @@ export class ApiUserEndpointService {
 
       if (
         content.reserves == undefined ||
-        content.reserves == []
+        content.reserves.length == 0
       )
         return {
           status: 400,
