@@ -56,9 +56,9 @@ export class DeviceAddComponent implements OnInit {
       }
     })
 
-    // this.http.post("api/device/sensor/info/profiles",{}).subscribe((val:any)=>{
-    //   this.deviceprofilelist = val.data as Array<{id: string, name: string}>;
-    // })
+    this.http.post("api/device/sensor/info/profiles",{}).subscribe((val:any)=>{
+      this.deviceprofilelist = val.data as Array<{id: string, name: string}>;
+    })
   }
 
   create(){
