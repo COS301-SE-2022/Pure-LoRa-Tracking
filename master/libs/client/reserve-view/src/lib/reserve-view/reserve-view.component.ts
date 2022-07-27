@@ -37,7 +37,7 @@ export class ReserveViewComponent {
 
   reservesList: ReserveInfo[];
   selectedReserveId = "";
-
+  
   constructor(public apicaller: MapCallerService, private tokenmanager: TokenManagerService, private notifier: DeviceNotifierService, private http: HttpClient, private cookiemanager: CookieService) {
     this.LastestHistorical = [];
     this.Gateways = [];
