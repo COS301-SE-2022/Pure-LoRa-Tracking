@@ -17,6 +17,7 @@
     "paths": {
       "@chirpstack": ["libs/chirpstack/src/index.ts"],
       "@lora/ai/average": ["libs/ai/heatmap-average/src/index.ts"],
+      "@lora/ai/mock-data-trainer": ["libs/ai/mock-data-trainer/src/index.ts"],
       "@lora/ai/mock-generator/average": [
         "libs/ai/mock-generator/averaging-data-generator/src/index.ts"
       ],
