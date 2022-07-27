@@ -304,7 +304,7 @@ export class ThingsboardThingsboardTestsService {
           "entityType": "TENANT"
         },
         "customerId": {
-          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "id": "13814000-1dd2-11b2-8080-808080808080",
           "entityType": "CUSTOMER"
         },
         "name": "A4B72CCDFF33",

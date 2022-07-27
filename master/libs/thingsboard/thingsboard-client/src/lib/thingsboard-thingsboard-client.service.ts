@@ -1330,19 +1330,21 @@ export class ThingsboardThingsboardClientService {
     zip: string,
     phone: string,
     email: string,
-  }) {
+  }) : Promise<thingsboardResponse> {
     const user = await this.userService.userInfo(this.token);
 
     if (user.status != 200)
       return {
         status: 'fail',
-        explanation: 'token invalid',
+        explanation: 'token fail',
+        furtherExplain: user.explanation
       };
 
     if (user.data.authority != 'TENANT_ADMIN')
       return {
         status: 'fail',
         explanation: 'wrong permissions',
+        furtherExplain: user.explanation
       };
 
     this.reserveService.setToken(this.token);
@@ -1351,7 +1353,8 @@ export class ThingsboardThingsboardClientService {
     if (info.status != 200)
       return {
         status: 'fail',
-        explanation: info.explanation,
+        explanation: 'reserve info',
+        furtherExplain: info.explanation
       };
 
     const response = await this.reserveService.setReservePerimeter(
@@ -1373,7 +1376,8 @@ export class ThingsboardThingsboardClientService {
     if (response.status != 200)
       return {
         status: 'fail',
-        explanation: response.explanation,
+        explanation: 'reserve update',
+        furtherExplain: response.explanation,
       };
 
     return {
@@ -1393,14 +1397,16 @@ export class ThingsboardThingsboardClientService {
     if (user.status != 200)
       return {
         status: 'fail',
-        explanation: 'token invalid',
+        explanation: 'token',
+        furtherExplain: user.explanation
       };
 
     const userinfo = await this.userService.userInfoByUserID(this.token, userID);
     if (userinfo.status != 200)
       return {
         status: 'fail',
-        explanation: userinfo.explanation
+        explanation: 'user to update',
+        furtherExplain: userinfo.explanation
       }
 
     const additionalinfo = userinfo.data.additionalInfo;
@@ -1421,7 +1427,8 @@ export class ThingsboardThingsboardClientService {
     if (resp.status != 200)
       return {
         status: 'fail',
-        explanation: resp.explanation
+        explanation:'update',
+        furtherExplain: resp.explanation
       }
 
     return {
@@ -1439,13 +1446,15 @@ export class ThingsboardThingsboardClientService {
     if (userInfo.status == 'fail')
       return {
         status: 'fail',
-        explanation: userInfo.explanation
+        explanation:'token',
+        furtherExplain: userInfo.explanation
       }
 
     if (userInfo.data.authority != "TENANT_ADMIN")
       return {
         status: 'fail',
-        explanation: "not admin"
+        explanation: "not admin",
+        furtherExplain:userInfo.explanation
       }
 
     this.deviceService.setToken(this.token);
@@ -1454,7 +1463,8 @@ export class ThingsboardThingsboardClientService {
     if (response.status != 200)
       return {
         status: 'fail',
-        explanation: response.explanation
+        explanation:'unassign',
+        furtherExplain: response.explanation
       }
 
     return {
@@ -1469,13 +1479,15 @@ export class ThingsboardThingsboardClientService {
     if (userInfo.status == 'fail')
       return {
         status: 'fail',
-        explanation: userInfo.explanation
+        explanation:'user',
+        furtherExplain: userInfo.explanation
       }
 
     if (userInfo.data.authority != "TENANT_ADMIN")
       return {
         status: 'fail',
-        explanation: "not admin"
+        explanation: "not admin",
+        furtherExplain:userInfo.explanation
       }
 
     const response = await this.deviceService.GetTenantDevices();
@@ -1483,7 +1495,8 @@ export class ThingsboardThingsboardClientService {
     if (response.status != 200)
       return {
         status: 'fail',
-        explanation: response.explanation
+        explanation:'get',
+        furtherExplain: response.explanation
       }
 
     const retArray = new Array<any>();
