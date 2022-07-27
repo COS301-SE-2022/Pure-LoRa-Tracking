@@ -1,24 +1,36 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 
+export interface DeviceInterface {
+  id: string;
+  name: string;
+}
+export interface SensorInterface{
+  id: string,
+  name: string,
+  reserve: string,
+  status: string
+}
 @Component({
   selector: 'master-devices-list',
   templateUrl: './devices-list.component.html',
   styleUrls: ['./devices-list.component.scss'],
 })
+
 export class DevicesListComponent implements OnInit {
 
   tableColumns:string[] = ["id", "name","reserve","status","delete","edit"];
-  sensorData=[{
-    id: "abc",
-    name: "bcd",
-    reserve: "2",
-    status: "active"
-  },{
-    id: "fcd",
-    name: "dfg",
-    reserve: "3",
-    status: "inactive"
-  }];
+  // sensorData=[{
+  //   id: "abc",
+  //   name: "bcd",
+  //   reserve: "2",
+  //   status: "active"
+  // },{
+  //   id: "fcd",
+  //   name: "dfg",
+  //   reserve: "3",
+  //   status: "inactive"
+  // }];
 
   gatewayData=[{
     id: "as",
@@ -32,11 +44,43 @@ export class DevicesListComponent implements OnInit {
     status: "inactive"
   }];
 
-  reserveList=[{name:"A", id:"1"},{name:"B",id:"2"},{name:"C",id:"3"}];
+  sensorData:SensorInterface[] = [];
 
-  constructor() {}
+  reserveList:DeviceInterface[]=[];
+
+  constructor(private http:HttpClient) {}
 
   ngOnInit(): void {
+    this.http.post("api/user/admin/groups",{}).subscribe((val:any)=>{
+      console.log(val);
+      this.reserveList = val.data.data.map((curr:any)=>{
+        return {
+          name:curr.name,
+          id:curr.id.id
+        }
+      });
+      this.reserveList.forEach((curr)=>{
+        this.http.post("api/map/historical",{
+          reserveID:curr.id
+        }).subscribe((val:any)=>{
+          console.log(val);
+          if(val.data.length>0){
+          this.sensorData = this.sensorData.concat(val.data.map((other:any)=>{
+            return {
+              id:other.deviceID,
+              name:other.deviceName,
+              reserve:curr.id,
+              status:"active"
+            }
+          }));
+          }
+        });
+      })
+    })
+    this.http.post("api/device/available",{}).subscribe((val:any)=>{
+      console.log(val);
+    });
+    
   }
 
   deleteDevice(id:string):void {
