@@ -82,33 +82,45 @@
                   <input matInput placeholder="Server" formControlName="networkserver" required [defaultValue]="one">
                 </mat-form-field>
                 <br> -->
-                <mat-form-field appearance="fill">
-                  <mat-label>Gateway Latitude</mat-label>
-                  <input matInput placeholder="Location" formControlName="gatlang" optional>
-                </mat-form-field>
-                <mat-form-field appearance="fill">
-                  <mat-label>Gateway Longitude</mat-label>
-                  <input matInput placeholder="Location" formControlName="gatlong" optional>
-                </mat-form-field>
+                
+                <div id="gatewaylocation">
+                  <mat-form-field appearance="fill">
+                    <mat-label>Gateway Latitude</mat-label>
+                    <input #lat matInput placeholder="Location" formControlName="gatlat" (focusout)="updatelat(lat.value)">
+                  </mat-form-field>
+                  <mat-form-field appearance="fill">
+                    <mat-label>Gateway Longitude</mat-label>
+                    <input #lng matInput placeholder="Location" formControlName="gatlong" (focusout)="updatelng(lng.value)">
+                  </mat-form-field>
+                  
+                  <div style="height: 300px;"
+                    leaflet 
+                    [leafletOptions]="options">
+                    
+                  </div>
+                </div>
                 
               </form>
+              
             </div>
-                
+            
+            
             <div>
               <button mat-button matStepperNext [disabled]="gatewayGroup.invalid&&sensorGroup.invalid">Next</button>
               <button mat-button matStepperPrevious>Back</button>
             </div>
-          
-        </mat-step>
-        <mat-step>
-
-          <ng-template matStepLabel>Finish</ng-template>
-          <div>
-            <button mat-button (click)="create()">Create</button>
-            <button mat-button matStepperPrevious>Back</button>
-            <button mat-button (click)="stepper.reset()">Reset</button>
-          </div>
-        </mat-step>
-      </mat-stepper>
+            
+          </mat-step>
+          <mat-step>
+            
+            <ng-template matStepLabel>Finish</ng-template>
+            <div>
+              <button mat-button (click)="create()">Create</button>
+              <button mat-button matStepperPrevious>Back</button>
+              <button mat-button (click)="stepper.reset()">Reset</button>
+            </div>
+          </mat-step>
+        </mat-stepper>
+        
+      </div>
     </div>
-  </div>

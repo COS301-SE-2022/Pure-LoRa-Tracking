@@ -8,10 +8,12 @@ import {FormsModule} from '@angular/forms';
 import { DeviceViewRoutingModule } from './device-add/device-add-routing.module';
 import {ClientSharedUiComponentsUiModule} from '@master/client/shared-ui/components-ui';
 import {HttpClientModule} from "@angular/common/http"
+import { LeafletModule } from '@asymmetrik/ngx-leaflet';
+
 export const clientDeviceAddViewRoutes: Route[] = [];
 
 @NgModule({
-  imports: [CommonModule, RouterModule, ClientSharedUiMaterialUiModule,ReactiveFormsModule,DeviceViewRoutingModule,ClientSharedUiComponentsUiModule, FormsModule,HttpClientModule],
+  imports: [CommonModule, RouterModule, ClientSharedUiMaterialUiModule,ReactiveFormsModule,DeviceViewRoutingModule,ClientSharedUiComponentsUiModule, FormsModule,HttpClientModule,LeafletModule],
   declarations: [DeviceAddComponent],
   exports: [DeviceAddComponent],
 })

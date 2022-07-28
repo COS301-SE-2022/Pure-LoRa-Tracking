@@ -4,6 +4,8 @@ import { AddGatewayDevice, AddSensorDevice } from '@master/shared-interfaces';
 import {TokenManagerService} from "@master/client/user-storage-controller"
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {deviceOptionList} from "@master/shared-interfaces"
+import * as L from 'leaflet';
+
 @Component({
   selector: 'master-add-device',
   templateUrl: './device-add.component.html',
@@ -20,7 +22,39 @@ export class DeviceAddComponent implements OnInit {
   profilelist:Array<deviceOptionList>=[];
   deviceprofilelist:Array<{id: string, name: string}>=[];
   deviceType = "";
-  constructor(private _formBuilder: FormBuilder,private http:HttpClient,private tokenmanager:TokenManagerService) {}
+  gatewaymarker:L.Marker=L.marker([0,0],{
+    draggable:true
+  });
+  gatewaylat:number=0;
+  gatewaylng:number=0;
+
+  constructor(private _formBuilder: FormBuilder,private http:HttpClient,private tokenmanager:TokenManagerService) {
+    this.gatewaymarker.on("dragend",(e)=>{
+      this.gatewayGroup.get("gatlong")?.setValue(this.gatewaymarker.getLatLng().lng);
+      this.gatewayGroup.get("gatlat")?.setValue(this.gatewaymarker.getLatLng().lat);
+      this.gatewayGroup.get("gatlat")?.markAsDirty();
+      this.gatewayGroup.get("gatlong")?.markAsDirty();
+    })
+  }
+
+  
+  options = {
+    layers: [
+      L.tileLayer(
+            'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+            {
+              maxZoom: 18,
+              minZoom: 2,
+              attribution:
+                'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+            }),
+            this.gatewaymarker
+     
+    ],
+    
+    zoom: 5,
+    center: L.latLng(46.879966, -121.726909)
+  };
 
   ngOnInit(): void {
     this.typeGroup = this._formBuilder.group({
@@ -34,8 +68,8 @@ export class DeviceAddComponent implements OnInit {
     this.gatewayGroup = this._formBuilder.group({
       gatewayid: ['', Validators.required],
       // networkserver: ['', Validators.required],
-      gatlang: ['', Validators.required],
-      gatlong: ['', Validators.required],
+      gatlang: ['', [Validators.required,Validators.pattern("-?[0-9]+\.?[0-9]+")]],
+      gatlong: ['', [Validators.required,Validators.pattern("-?[0-9]+\.?[0-9]+")]],
     });
     this.sensorGroup=this._formBuilder.group({
       eui: ['', Validators.required],
@@ -106,6 +140,24 @@ export class DeviceAddComponent implements OnInit {
     }
 
 
-
+  }
+  updatelat(e:string){
+    //check string is in correct form
+    if((/-?[0-9]+\.?[0-9]+/).test(e)){
+      this.gatewaymarker.setLatLng([
+        parseFloat(e),
+        this.gatewaymarker.getLatLng().lng,
+      ])
+    }
+  }
+  
+  updatelng(e:string){
+    //check string is in correct form
+    if((/-?[0-9]+\.?[0-9]+/).test(e)){
+      this.gatewaymarker.setLatLng([
+        this.gatewaymarker.getLatLng().lat,
+        parseFloat(e),
+      ])
+    }
   }
 }
