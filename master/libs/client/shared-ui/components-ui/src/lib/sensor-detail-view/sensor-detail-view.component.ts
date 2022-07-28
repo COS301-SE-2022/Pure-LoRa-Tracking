@@ -53,7 +53,7 @@ export class SensorDetailViewComponent {
     })
     mydialog.afterClosed().subscribe(val=>{
       if(val){
-        this.apicaller.removeDevice(this.tokenManager.getAdminToken(),this.sensorInfo.id,this.sensorInfo.name,false).then(curr=>{
+        this.apicaller.removeDevice(this.sensorInfo.id,this.sensorInfo.name,false).then(curr=>{
           //TODO change alert to proper pop up @brandon-c-k
           if(curr.status==200&&curr.explanation=="ok"){
             alert("Device deleted");

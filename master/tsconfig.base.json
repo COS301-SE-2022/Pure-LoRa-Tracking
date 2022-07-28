@@ -81,6 +81,9 @@
       "@master/client/manage-view/src/lib/create-reserve": [
         "libs/client/manage-view/src/lib/create-reserve/src/index.ts"
       ],
+      "@master/client/manage-view/src/lib/devices-mange-view": [
+        "libs/client/manage-view/src/lib/devices-mange-view/src/index.ts"
+      ],
       "@master/client/manage-view/src/lib/devices-view": [
         "libs/client/manage-view/src/lib/devices-view/src/index.ts"
       ],

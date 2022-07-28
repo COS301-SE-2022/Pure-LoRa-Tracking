@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormControl, Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-
 @Component({
   selector: 'master-reserve-create',
   templateUrl: './reserve-create.component.html',
@@ -11,8 +10,8 @@ import { HttpClient } from '@angular/common/http';
 export class ReserveCreateComponent implements OnInit {
  
   reserveInfo: FormGroup = new FormGroup({});
-  
   constructor(private formBuilder: FormBuilder, private router:Router, private http: HttpClient) {}
+  mapgeojson="";
 
   ngOnInit(): void {
     this.reserveInfo = this.formBuilder.group({
@@ -24,29 +23,32 @@ export class ReserveCreateComponent implements OnInit {
 
   createReserve(form:any):void {
     console.log(JSON.stringify(form.value,null,6));
+      if(this.mapgeojson!=""){
+      //api call
+      this.http.post("/api/reserve/create",{
+        email:this.reserveInfo.get("email")?.value,
+        NameOfReserve:this.reserveInfo.get("name")?.value,
+        location:JSON.parse(this.mapgeojson)   
+      }).subscribe(val=>{
+        console.log(val);
+      });
+    }
+    else{
+      alert("File not uploaded");
+    }
+
+
   }
 
   navigateBack():void{
     this.router.navigate(['manage',{outlets:{managecontent:['reserves']}}]);   
   }
 
-  fileSelected(event:any): void {
+  async fileSelected(event:any): Promise<void> {
     const file: File = event?.target.files[0];
     if (file){
-      console.log( file);    
-      // postFile(fileToUpload: File): Observable<boolean> {
-//     const endpoint = 'your-destination-url';
-//     const formData: FormData = new FormData();
-//     // Append image file to formdata as a seperate property
-//     formData.append('fileKey', fileToUpload, fileToUpload.name);
-
-//     // Append reactive form data too in a seperate property
-//     formData.append('productForm', JSON.stringify(this.productForm, null, 4));
-//     return this.httpClient
-//       .post(endpoint, formData, { headers: yourHeadersConfig })
-//       .map(() => { return true; })
-//       .catch((e) => this.handleError(e));
-// }
+      console.log(file.text());
+      this.mapgeojson=await file.text();
     }
   }
 
