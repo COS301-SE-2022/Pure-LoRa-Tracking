@@ -1,12 +1,12 @@
 {
   "version": 2,
   "projects": {
-    "-api-hardware-debug": "libs/api/hardware-debug",
     "ai-heatmap-average": "libs/ai/heatmap-average",
     "api": "apps/api",
     "api-api-router": "libs/api/api-router",
     "api-api-testing": "libs/api/api-testing",
     "api-device-endpoint": "libs/api/device-endpoint",
+    "api-hardware-grpc": "libs/api/hardware-grpc",
     "api-interfaces": "libs/api-interfaces",
     "api-login-endpoint": "libs/api/login-endpoint",
     "api-map-endpoint": "libs/api/map-endpoint",

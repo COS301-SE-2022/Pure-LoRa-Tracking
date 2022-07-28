@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: '-api-hardware-debug',
+  displayName: 'api-hardware-grpc',
   preset: '../../../jest.preset.ts',
   globals: {
     'ts-jest': {
@@ -11,5 +11,5 @@ module.exports = {
     '^.+\\.[tj]s$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageDirectory: '../../../coverage/libs/api/hardware-debug',
+  coverageDirectory: '../../../coverage/libs/api/hardware-grpc',
 };
