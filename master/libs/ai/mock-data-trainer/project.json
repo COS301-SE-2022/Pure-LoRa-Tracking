@@ -1,0 +1,45 @@
+{
+  "sourceRoot": "libs/ai/mock-data-trainer/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/ai/mock-data-trainer",
+        "tsConfig": "libs/ai/mock-data-trainer/tsconfig.lib.json",
+        "packageJson": "libs/ai/mock-data-trainer/package.json",
+        "main": "libs/ai/mock-data-trainer/src/index.ts",
+        "assets": ["libs/ai/mock-data-trainer/*.md"]
+      }
+    },
+    "publish": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "node tools/scripts/publish.mjs ai-mock-data-trainer {args.ver} {args.tag}"
+      },
+      "dependsOn": [
+        {
+          "projects": "self",
+          "target": "build"
+        }
+      ]
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/ai/mock-data-trainer/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/ai/mock-data-trainer"],
+      "options": {
+        "jestConfig": "libs/ai/mock-data-trainer/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

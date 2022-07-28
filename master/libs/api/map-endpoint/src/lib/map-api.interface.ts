@@ -61,6 +61,7 @@ export interface MapApiReserveResponse {
     adminData? : {
         reserveName: string,
         location: GeoJSON.FeatureCollection
+        reserveID:string
     }[]
 }
 

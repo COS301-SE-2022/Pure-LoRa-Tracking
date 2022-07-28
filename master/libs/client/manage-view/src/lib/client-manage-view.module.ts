@@ -14,6 +14,7 @@ import { UserViewComponent } from '@master/client/manage-view/src/lib/users-view
 import { ReserveCreateComponent } from '@master/client/manage-view/src/lib/create-reserve';
 import { ReserveEditComponent } from '@master/client/manage-view/src/lib/reserve-edit';
 import { UserEditComponent } from '@master/client/manage-view/src/lib/users-edit';
+import { DevicesListComponent } from "@master/client/manage-view/src/lib/devices-mange-view";
 
 export const clientManageViewRoutes: Route[] = [
   {
@@ -47,17 +48,23 @@ export const clientManageViewRoutes: Route[] = [
     component: ReserveCreateComponent
   },
   {
-    path: 'reserve-edit/:id', 
+    path: 'reserve-edit/:id/:email/:name', 
     outlet: 'managecontent',
     loadChildren: ()=> import('@master/client/manage-view/src/lib/reserve-edit').then(m => m.ClientManageViewSrcLibReserveEditModule),
     component: ReserveEditComponent
   },
   {
-    path: 'edit-user', 
+    path: 'edit-user/:id', 
     outlet: 'managecontent',
     loadChildren: ()=>import('@master/client/manage-view/src/lib/users-edit').then(m=>m.ClientManageViewSrcLibUsersEditModule),
     component: UserEditComponent
   },
+  {
+    path: 'manage-devices',
+    outlet: 'managecontent',
+    loadChildren: ()=>import('@master/client/manage-view/src/lib/devices-mange-view').then(m => m.ClientManageViewSrcLibDevicesMangeViewModule),
+    component: DevicesListComponent
+  }
 ];
 
 @NgModule({

@@ -61,20 +61,25 @@ export interface Gateway {
   }
 
 
-export interface MapApiReserveResponse {
+  export interface MapApiReserveResponse {
     code: number,
     status: string,
     explanation: string,
+    isAdmin? : boolean,
     data?: {
         reserveName: string,
         // center: {
         //     latitude: string,
         //     longitude: string
         // },
-        location: GeoJSON.FeatureCollection;
+        location: GeoJSON.FeatureCollection
     }
+    adminData? : {
+        reserveName: string,
+        location: GeoJSON.FeatureCollection,
+        reserveID:string
+    }[]
 }
-
 
 export interface MapApiHistoricalResponse {
     code: number,

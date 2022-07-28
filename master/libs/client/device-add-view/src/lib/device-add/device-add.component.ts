@@ -20,7 +20,6 @@ export class DeviceAddComponent implements OnInit {
   profilelist:Array<deviceOptionList>=[];
   deviceprofilelist:Array<{id: string, name: string}>=[];
   deviceType = "";
-  token="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZlYWRtaW5AcmVzZXJ2ZS5jb20iLCJzY29wZXMiOlsiVEVOQU5UX0FETUlOIl0sInVzZXJJZCI6ImQ2MzcyZTMwLWRmZTgtMTFlYy1iZGIzLTc1MGNlN2VkMjQ1MSIsImVuYWJsZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiJjZDJkZjJiMC1kZmU4LTExZWMtYmRiMy03NTBjZTdlZDI0NTEiLCJjdXN0b21lcklkIjoiMTM4MTQwMDAtMWRkMi0xMWIyLTgwODAtODA4MDgwODA4MDgwIiwiaXNzIjoidGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE2NTQ4MjM4MjAsImV4cCI6MTY1NDgzMjgyMH0.7znHjokdbaR-O77imOcuokkp5lJTN03QsowagHuUvVD7vE8gzVuaFSb62GnLIOJIK2UtbfuZ70h7El9jabs-Xw"
   constructor(private _formBuilder: FormBuilder,private http:HttpClient,private tokenmanager:TokenManagerService) {}
 
   ngOnInit(): void {
@@ -45,11 +44,10 @@ export class DeviceAddComponent implements OnInit {
     })
 
     this.http.post("/api/user/admin/groups",{
-      "token":this.token
     }).subscribe((val:any)=>{
       console.log(val);
       if(val.status==200){
-        val.data.forEach((curr:any)=>{
+        val.data.data.forEach((curr:any)=>{
           this.profilelist.push({
             deviceID:curr.id.id,
             name:curr.title
@@ -71,7 +69,6 @@ export class DeviceAddComponent implements OnInit {
         labelName:this.descriptionGroup.get("name")?.value,
       } as AddSensorDevice
       this.http.post("api/device/add/sensor",{
-        token:this.token,
         customerID:this.descriptionGroup.get("profilegroup")?.value,
         hardwareName:this.sensorGroup.get("eui")?.value,
         labelName:this.descriptionGroup.get("name")?.value,
@@ -87,7 +84,6 @@ export class DeviceAddComponent implements OnInit {
         labelName:this.descriptionGroup.get("name")?.value,
       } as AddGatewayDevice
       this.http.post("api/device/add/gateway",{
-        token:this.token,
         customerID:this.descriptionGroup.get("profilegroup")?.value,
         hardwareName:this.gatewayGroup.get("gatewayid")?.value,
         labelName:this.descriptionGroup.get("name")?.value,
@@ -96,8 +92,7 @@ export class DeviceAddComponent implements OnInit {
         if(val.status==200){
           console.log("test");
           this.http.post("api/device/gateway/info/location/add",{
-            token:this.token,
-            deviceID:val.data,
+            deviceID:val.data.data.id.id,
             locationParameters:{
               latitude: this.gatewayGroup.get("gatlang")?.value,
               longitude: this.gatewayGroup.get("gatlong")?.value,

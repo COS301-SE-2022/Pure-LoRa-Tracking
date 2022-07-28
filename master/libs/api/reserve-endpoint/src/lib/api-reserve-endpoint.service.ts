@@ -131,8 +131,9 @@ export class ApiReserveEndpointService {
             }*/
 
         this.thingsboardClient.setToken(body.token);
+        console.log(body.reserveID);
         const response = await this.thingsboardClient.updateReservePerimeter(body.reserveID, body.location);
-
+        console.log(response);
         if(response.status == 'fail')
         return {
             status : 500,

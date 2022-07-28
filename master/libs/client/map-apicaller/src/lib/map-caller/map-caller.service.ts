@@ -10,9 +10,9 @@ export class MapCallerService {
     //placeholder
   }
 
-  getReserve(token:string,reserveID:string):Promise<any>{
+  getReserve():Promise<any>{
     return new Promise((res,rej)=>{
-      this.http.post("/api/map/reserve",{"reserveID":reserveID}).subscribe(val=>{
+      this.http.post("/api/map/reserve",{}).subscribe(val=>{
         res(val)  
       });
     })
@@ -63,10 +63,9 @@ export class MapCallerService {
     })
   }
 
-  removeDevice(token:string,inputid:string,inputeui:string,isGateway:boolean):Promise<any>{
+  removeDevice(inputid:string,inputeui:string,isGateway:boolean):Promise<any>{
     return new Promise((res,rej)=>{
-      this.http.post("/api/device/remove",{
-        token: token,
+      this.http.post("/api/device/delete",{
         deviceID: inputid,
         isGateway: isGateway,
         devEUI: inputeui

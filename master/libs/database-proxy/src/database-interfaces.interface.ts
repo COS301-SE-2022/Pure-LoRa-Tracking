@@ -1,28 +1,23 @@
-import { Document } from 'mongoose';
+import { Document, Schema as MongooseSchema } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
-export type InputDataDocument = DataInput & Document;
+export type AverageInputDocument = AverageInput & Document;
 
-@Schema()
-export class DataInput {
-    @Prop()
-    gateway : string;
-
-    
-    @Prop()
-    latitude : number;
-
-    @Prop()
+class Coordinate {
+    @Prop({required:true, type:Number})
     longitude : number;
 
-    @Prop()
-    FirstPoint : number;
-
-    @Prop()
-    SecondPoint : number;
-
-    @Prop()
-    ThirdPoint : number;
+    @Prop({required:true, type:Number})
+    latitude : number;
 }
 
-export const InputDataSchema = SchemaFactory.createForClass(DataInput);
+@Schema()
+export class AverageInput {
+    @Prop({required:true, type:String})
+    deviceID : string;
+
+    @Prop({type:MongooseSchema.Types.Array})
+    locations : Coordinate[]
+}
+
+export const AverageInputSchema = SchemaFactory.createForClass(AverageInput)

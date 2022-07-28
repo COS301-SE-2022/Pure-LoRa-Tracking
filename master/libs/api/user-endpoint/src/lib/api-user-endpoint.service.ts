@@ -63,7 +63,7 @@ export class ApiUserEndpointService {
 
       if (
         content.reserves == undefined ||
-        content.reserves == []
+        content.reserves.length == 0
       )
         return {
           status: 400,
@@ -191,7 +191,7 @@ export class ApiUserEndpointService {
         status: 401,
         explain: 'token missing',
       };
-      this.thingsboardClient.setToken(content.token);
+    this.thingsboardClient.setToken(content.token);
     let resp;
     if (content.userID == undefined) {
       resp = await this.thingsboardClient.getUserInfoFromToken();
@@ -274,6 +274,11 @@ export class ApiUserEndpointService {
         status: 400,
         explain: 'reserveID not defined',
       };
+      if (content.refreshToken == undefined || content.refreshToken == '')
+      return {
+        status: 400,
+        explain: 'refreshToken not defined',
+      };
 
     this.thingsboardClient.setToken(content.token);
 
@@ -306,9 +311,19 @@ export class ApiUserEndpointService {
         status: 400,
         explain: 'userID not defined',
       };
+      if (content.userInfo == undefined || content.userInfo.firstName == undefined || content.userInfo.firstName == '')
+      return {
+        status: 400,
+        explain: 'firstname not defined',
+      };
+      if (content.userInfo == undefined || content.userInfo.lastName == undefined || content.userInfo.lastName == '')
+      return {
+        status: 400,
+        explain: 'lastname not defined',
+      };
 
     this.thingsboardClient.setToken(content.token);
-    const resp = await this.thingsboardClient.updateUser(content.userID, content.userInfo);
+    const resp = await this.thingsboardClient.updateUser(content.userID, content.userInfo, content.reserves);
 
     if (resp.status == "fail")
       return {

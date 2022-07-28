@@ -1,0 +1,119 @@
+<mat-tab-group mat-align-tabs="center">
+    <mat-tab label="Sensors">
+        <!-- <mat-form-field appearance="fill">
+            <mat-label>Reserve</mat-label>
+            <mat-select (selectionChange)="sensorReserveFilter($event)">
+              <mat-option *ngFor="let reserve of reserveList" [value]="reserve.id">{{reserve.name}}</mat-option>
+            </mat-select>
+        </mat-form-field> -->
+
+        <table mat-table [dataSource]="sensorData">
+            <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef> ID </th>
+                <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef> Name </th>
+                <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="reserve">
+                <th mat-header-cell *matHeaderCellDef> Reserve </th>
+                <td mat-cell *matCellDef="let element">
+                    <mat-form-field>
+                        <mat-select [(value)]="element.reserve" >
+                            <mat-option *ngFor="let reserve of reserveList" [value]="reserve.id">
+                                {{reserve.name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef> Status </th>
+                <td mat-cell *matCellDef="let element">
+                    <button *ngIf="element.status" mat-button (click)="unassign(element.id)">Unassign</button>
+                    <button *ngIf="!element.status" [disabled]="element.reserve===''" mat-button (click)="assign(element.id,element.reserve)">Assign</button>
+                    <!-- <button *ngIf="!element.status&&element.originalreserve!==element.reserve" mat-button (click)="reassign(element.id,element.reserve,element.originalreserve)">Reassign</button> -->
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="delete">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let element"> 
+                    <button mat-icon-button (click)="deleteDevice(element.id)"><mat-icon>delete</mat-icon></button>
+                    </td>
+            </ng-container>
+
+            <ng-container matColumnDef="edit">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let element"> 
+                    <button mat-icon-button><mat-icon>edit</mat-icon></button> </td>
+            </ng-container>
+            
+            <tr mat-header-row *matHeaderRowDef="tableColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: tableColumns;"></tr>
+        </table>
+
+    </mat-tab>
+    <mat-tab label="Gateways">
+        <!-- <mat-form-field appearance="fill">
+            <mat-label>Reserve</mat-label>
+            <mat-select (selectionChange)="gatewayReserveFilter($event)">
+              <mat-option *ngFor="let reserve of reserveList" [value]="reserve.id">{{reserve.name}}</mat-option>
+            </mat-select>
+        </mat-form-field> -->
+
+        <table mat-table [dataSource]="gatewayData">
+            <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef> ID </th>
+                <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef> Name </th>
+                <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="reserve">
+                <th mat-header-cell *matHeaderCellDef> Reserve </th>
+                <td mat-cell *matCellDef="let element">
+                    <mat-form-field>
+                        <mat-select [(value)]="element.reserve">
+                            <mat-option *ngFor="let reserve of reserveList" [value]="reserve.id">
+                                {{reserve.name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef> Status </th>
+                <td mat-cell *matCellDef="let element">
+                    <button *ngIf="element.status" mat-button (click)="unassign(element.id)">Unassign</button>
+                    <button *ngIf="!element.status" [disabled]="element.reserve===''" mat-button (click)="assign(element.id,element.reserve)">Assign</button>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="delete">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let element"> 
+                    <button mat-icon-button (click)="deleteDevice(element.id)"><mat-icon>delete</mat-icon></button>
+                    </td>
+            </ng-container>
+
+            <ng-container matColumnDef="edit">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let element"> 
+                    <button mat-icon-button><mat-icon>edit</mat-icon></button> </td>
+            </ng-container>
+            
+            <tr mat-header-row *matHeaderRowDef="tableColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: tableColumns;"></tr>
+        </table>
+
+    </mat-tab>
+  </mat-tab-group>

@@ -1,0 +1,47 @@
+{
+  "sourceRoot": "libs/ai/mock-generator/averaging-data-generator/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/ai/mock-generator/averaging-data-generator",
+        "tsConfig": "libs/ai/mock-generator/averaging-data-generator/tsconfig.lib.json",
+        "packageJson": "libs/ai/mock-generator/averaging-data-generator/package.json",
+        "main": "libs/ai/mock-generator/averaging-data-generator/src/index.ts",
+        "assets": ["libs/ai/mock-generator/averaging-data-generator/*.md"]
+      }
+    },
+    "publish": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "node tools/scripts/publish.mjs ai-mock-generator-averaging-data-generator {args.ver} {args.tag}"
+      },
+      "dependsOn": [
+        {
+          "projects": "self",
+          "target": "build"
+        }
+      ]
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "libs/ai/mock-generator/averaging-data-generator/**/*.ts"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/ai/mock-generator/averaging-data-generator"],
+      "options": {
+        "jestConfig": "libs/ai/mock-generator/averaging-data-generator/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}
