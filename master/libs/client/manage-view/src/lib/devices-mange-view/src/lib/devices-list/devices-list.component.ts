@@ -5,11 +5,11 @@ export interface DeviceInterface {
   id: string;
   name: string;
 }
-export interface SensorInterface{
+export interface SensorGatewayInterface{
   id: string,
   name: string,
   reserve: string,
-  status: string
+  status: boolean
 }
 @Component({
   selector: 'master-devices-list',
@@ -32,19 +32,21 @@ export class DevicesListComponent implements OnInit {
   //   status: "inactive"
   // }];
 
-  gatewayData=[{
-    id: "as",
-    name: "sd",
-    reserve: "1",
-    status: "active"
-  },{
-    id: "fcdfd",
-    name: "dfd",
-    reserve: "2",
-    status: "inactive"
-  }];
+  // gatewayData=[{
+  //   id: "as",
+  //   name: "sd",
+  //   reserve: "1",
+  //   status: "active"
+  // },{
+  //   id: "fcdfd",
+  //   name: "dfd",
+  //   reserve: "2",
+  //   status: "inactive"
+  // }];
 
-  sensorData:SensorInterface[] = [];
+  gatewayData:SensorGatewayInterface[] = [];
+
+  sensorData:SensorGatewayInterface[] = [];
 
   reserveList:DeviceInterface[]=[];
 
@@ -52,7 +54,7 @@ export class DevicesListComponent implements OnInit {
 
   ngOnInit(): void {
     this.http.post("api/user/admin/groups",{}).subscribe((val:any)=>{
-      console.log(val);
+      // console.log(val);
       this.reserveList = val.data.data.map((curr:any)=>{
         return {
           name:curr.name,
@@ -63,37 +65,70 @@ export class DevicesListComponent implements OnInit {
         this.http.post("api/map/historical",{
           reserveID:curr.id
         }).subscribe((val:any)=>{
-          console.log(val);
+          // console.log(val);
           if(val.data.length>0){
           this.sensorData = this.sensorData.concat(val.data.map((other:any)=>{
             return {
               id:other.deviceID,
               name:other.deviceName,
               reserve:curr.id,
-              status:"active"
+              status:true
             }
           }));
           }
         });
+
+        this.http.post("/api/device/gateway/info",{
+          customerID:curr.id
+        }).subscribe((val:any)=>{
+          // console.log('val :>> ', val);
+          this.gatewayData=this.gatewayData.concat(val.data.map((other:any)=>{
+            return {
+              id:other.deviceID,
+              name:other.deviceName,
+              reserve:curr.id,
+              status:true
+            }
+          }));
+        })
       })
     })
     this.http.post("api/device/available",{}).subscribe((val:any)=>{
-      console.log(val);
+      console.log("curr",val);
+      if(val.data!=undefined){
+      this.sensorData=this.sensorData.concat(val.data.filter((curr:any)=>!curr.isGateway).map((curr:any)=>{
+        return {
+          id:curr.deviceID,
+          name:curr.deviceName,
+          reserve:"",
+          status:false
+        }
+      }));
+      this.gatewayData=this.gatewayData.concat(val.data.filter((curr:any)=>curr.isGateway).map((curr:any)=>{
+        return {
+          id:curr.deviceID,
+          name:curr.deviceName,
+          reserve:"",
+          status:false
+        }
+      }));
+
+    }
     });
-    
+
   }
 
   deleteDevice(id:string):void {
     console.log("Delete: " + id);
   }
 
-  sensorReserveFilter(event:any): void {
-    console.log(event);
-  }
+  // sensorReserveFilter(event:any): void {
+  //   console.log(event);
+  // }
 
-  gatewayReserveFilter(event:any): void {
-    console.log(event);
-  }
+  // gatewayReserveFilter(event:any): void {
+  //   console.log(event);
+  // }
 
   changeDeviceStatus(event:any, type:string, id: string): void {
     console.log(type + ": "+ id +" changed to "+event.value);
@@ -101,5 +136,27 @@ export class DevicesListComponent implements OnInit {
 
   reassignDevice(event:any, type:string, id: string): void {
 
+  }
+
+  unassign(id:string):void{
+    this.http.post("api/device/unassign",{
+      deviceID:id
+    }).subscribe((val:any)=>{
+      console.log(val);
+    });
+
+  }
+  
+  assign(id:string,reserveid:string):void{
+    this.http.post("api/device/assign",{
+      deviceID:id,
+      customerID:reserveid
+    }).subscribe((val:any)=>{
+      console.log(val);
+    }); 
+  }
+
+  reassign(id:string,reserveid:string,other:string):void{
+    console.log("first "+reserveid+" "+reserveid+" "+other);
   }
 }
