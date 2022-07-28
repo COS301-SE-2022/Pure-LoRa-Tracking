@@ -42,6 +42,7 @@
     "ngx-cookie-service": "^14.0.1",
     "reflect-metadata": "^0.1.13",
     "rxjs": "~7.4.0",
+    "trilat": "^1.0.0",
     "tslib": "^2.0.0",
     "zone.js": "~0.11.4"
   },

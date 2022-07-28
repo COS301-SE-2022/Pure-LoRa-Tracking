@@ -1,5 +1,5 @@
 {
-  "name": "@lora/hardware-debug",
+  "name": "@lora/hardware-grpc",
   "version": "0.0.1",
   "type": "commonjs"
 }
