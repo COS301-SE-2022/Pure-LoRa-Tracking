@@ -22,7 +22,7 @@
                 <th mat-header-cell *matHeaderCellDef> Reserve </th>
                 <td mat-cell *matCellDef="let element">
                     <mat-form-field>
-                        <mat-select [(value)]="element.reserve" (selectionChange)="reassignDevice($event,'sensor',element.id)">
+                        <mat-select [(value)]="element.reserve" >
                             <mat-option *ngFor="let reserve of reserveList" [value]="reserve.id">
                                 {{reserve.name}}
                             </mat-option>
@@ -81,7 +81,7 @@
                 <th mat-header-cell *matHeaderCellDef> Reserve </th>
                 <td mat-cell *matCellDef="let element">
                     <mat-form-field>
-                        <mat-select [(value)]="element.reserve" (selectionChange)="reassignDevice($event,'gateway',element.id)">
+                        <mat-select [(value)]="element.reserve">
                             <mat-option *ngFor="let reserve of reserveList" [value]="reserve.id">
                                 {{reserve.name}}
                             </mat-option>
