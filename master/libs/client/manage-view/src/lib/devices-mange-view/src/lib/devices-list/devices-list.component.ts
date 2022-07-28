@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 export interface DeviceInterface {
   id: string;
@@ -19,30 +20,9 @@ export interface SensorGatewayInterface{
 
 export class DevicesListComponent implements OnInit {
 
-  tableColumns:string[] = ["id", "name","reserve","status","delete","edit"];
-  // sensorData=[{
-  //   id: "abc",
-  //   name: "bcd",
-  //   reserve: "2",
-  //   status: "active"
-  // },{
-  //   id: "fcd",
-  //   name: "dfg",
-  //   reserve: "3",
-  //   status: "inactive"
-  // }];
+  sensorColumns:string[] = ["id", "name","reserve","status","delete"];
 
-  // gatewayData=[{
-  //   id: "as",
-  //   name: "sd",
-  //   reserve: "1",
-  //   status: "active"
-  // },{
-  //   id: "fcdfd",
-  //   name: "dfd",
-  //   reserve: "2",
-  //   status: "inactive"
-  // }];
+  gatewayColumns:string[] = ["id", "name","reserve","status","delete","edit"];
 
   gatewayData:SensorGatewayInterface[] = [];
 
@@ -50,7 +30,7 @@ export class DevicesListComponent implements OnInit {
 
   reserveList:DeviceInterface[]=[];
 
-  constructor(private http:HttpClient) {}
+  constructor(private http:HttpClient, private router:Router) {}
 
   ngOnInit(): void {
     this.http.post("api/user/admin/groups",{}).subscribe((val:any)=>{
@@ -122,22 +102,6 @@ export class DevicesListComponent implements OnInit {
     console.log("Delete: " + id);
   }
 
-  // sensorReserveFilter(event:any): void {
-  //   console.log(event);
-  // }
-
-  // gatewayReserveFilter(event:any): void {
-  //   console.log(event);
-  // }
-
-  // changeDeviceStatus(event:any, type:string, id: string): void {
-  //   console.log(type + ": "+ id +" changed to "+event.value);
-  // }
-
-  // reassignDevice(event:any, type:string, id: string): void {
-
-  // }
-
   unassign(id:string):void{
     this.http.post("api/device/unassign",{
       deviceID:id
@@ -158,5 +122,9 @@ export class DevicesListComponent implements OnInit {
 
   reassign(id:string,reserveid:string,other:string):void{
     console.log("first "+reserveid+" "+reserveid+" "+other);
+  }
+
+  editGateway(): void {
+    this.router.navigate(['manage',{outlets:{managecontent:['edit-gateway']}}]);  
   }
 }
