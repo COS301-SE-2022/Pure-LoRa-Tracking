@@ -274,6 +274,11 @@ export class ApiUserEndpointService {
         status: 400,
         explain: 'reserveID not defined',
       };
+      if (content.refreshToken == undefined || content.refreshToken == '')
+      return {
+        status: 400,
+        explain: 'refreshToken not defined',
+      };
 
     this.thingsboardClient.setToken(content.token);
 

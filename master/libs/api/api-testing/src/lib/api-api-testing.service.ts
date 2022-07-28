@@ -11,7 +11,9 @@ export class ApiApiTestingService {
           lastName: 'lname',
         },
         reserves : [{reserveName:'rname', reserveID:'rid'}],
-        userID:'uid'
+        userID:'uid',
+        refreshToken:"23",
+        reserveID:"12"
     }
 
     tbSuccess = {
