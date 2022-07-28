@@ -7,7 +7,6 @@
         {{gateway.id}}
     </h5>
     <div id="input-wrapper">
-        
         <form [formGroup]="gatewayInfo">
             <mat-form-field appearance="outline">
                 <mat-label>Latitude</mat-label>
@@ -20,7 +19,6 @@
                 <mat-hint>00.00000000000000</mat-hint>
             </mat-form-field>
         </form>
-
     </div>
     <button mat-raised-button (click)="cancelEdit()" color="primary" class="buttons">Cancel</button>
     <button mat-raised-button color="primary" (click)="savegateway()" class="buttons">Save</button>
