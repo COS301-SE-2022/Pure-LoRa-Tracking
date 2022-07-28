@@ -1,7 +1,7 @@
 <div class="container">
     <div class="wrapper">
         <div class="loginform">
-            <form [formGroup]="logingroup">
+            <form [formGroup]="logingroup" id="login-content">
                 <mat-form-field>
                     <mat-label>Email</mat-label>
                     <input matInput type="email" formControlName="email" placeholder="Email">
@@ -10,7 +10,12 @@
                     <mat-label>Password</mat-label>
                     <input matInput type="password" formControlName="password" placeholder="Password">
                 </mat-form-field>
-                <button mat-button (click)="login()">Login</button>
+                <div id="login-button">
+                    <button mat-flat-button color="primary" (click)="login()">Login</button>
+                </div>
+                <div>
+                    <button mat-button (click)="reset()">Reset password</button>
+                </div>
             </form>
         </div>
     </div>
