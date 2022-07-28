@@ -2100,7 +2100,7 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
         throwError(() => tests.axiosECONNFailureExample)
       );
     expect(await service.updateReserveInfo("", {
-      title: '',
+      NameOfReserve:'',
       region: '',
       country: '',
       city: '',
@@ -2125,7 +2125,7 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
         throwError(() => tests.axiosECONNFailureExample)
       );
     expect(await service.updateReserveInfo("", {
-      title: '',
+      NameOfReserve:'',
       region: '',
       country: '',
       city: '',
@@ -2150,7 +2150,7 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
         throwError(() => tests.axiosECONNFailureExample)
       );
     expect(await service.updateReserveInfo("", {
-      title: '',
+      NameOfReserve:'',
       region: '',
       country: '',
       city: '',
@@ -2178,7 +2178,7 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
         throwError(() => tests.axiosECONNFailureExample)
       );
     expect(await service.updateReserveInfo("", {
-      title: '',
+      NameOfReserve:'',
       region: '',
       country: '',
       city: '',
@@ -2204,7 +2204,7 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
       .spyOn(httpService, 'post')
       .mockImplementationOnce(() => of(tests.axiosCustomerSuccessExample));
     expect(await service.updateReserveInfo("", {
-      title: '',
+      NameOfReserve:'',
       region: '',
       country: '',
       city: '',
