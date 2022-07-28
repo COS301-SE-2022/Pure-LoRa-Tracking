@@ -13,7 +13,7 @@ export class ProfilesEditComponent implements OnInit {
 
   editProfile: FormGroup = new FormGroup({});
   emailControl = new FormControl('',[Validators.required, Validators.email]);
-  id:string="";
+  id="";
   constructor(private formBuilder: FormBuilder, private router:Router,private http:HttpClient) {}
 
   ngOnInit(): void {

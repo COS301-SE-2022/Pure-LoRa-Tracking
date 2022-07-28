@@ -20,9 +20,9 @@ export class UserEditComponent implements OnInit {
 
   reservesList:ReserveDetails[] = [];
   id:string|null;
-  name:string="";
-  surname:string="";
-  email:string="";
+  name="";
+  surname="";
+  email="";
   selected:string[]=[];
   constructor(private activeRoute:ActivatedRoute,private formBuilder: FormBuilder, private router:Router,private http:HttpClient) {
     this.id="";
@@ -70,8 +70,14 @@ export class UserEditComponent implements OnInit {
       userID:this.id,
       userInfo: {
         firstName:this.userInfo.get("name")?.value,
-        lastName:this.userInfo.get("surname")?.value
-      }
+        lastName:this.userInfo.get("surname")?.value,
+      },
+      reserves:this.userInfo.get("reserves")?.value?.map((curr:any)=>{
+        return {
+          reserveName:this.reservesList.find(other=>other.id==curr)?.name,
+          reserveID:curr
+        }
+      })
     }).subscribe((val:any)=>{
       console.log(val);
     });

@@ -46,6 +46,11 @@ export class ReserveDetailComponent implements OnInit {
 
   deleteReserve(id: string): void {
     console.log(id);
+    this.http.post("/api/reserve/remove",{
+      reserveID:id
+    }).subscribe(val=>{
+      console.log("value after delete",val);
+    })
   }
 
   editReseve(id: string): void {

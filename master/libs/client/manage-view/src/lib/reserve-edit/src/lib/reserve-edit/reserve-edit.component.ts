@@ -12,7 +12,7 @@ export class ReserveEditComponent implements OnInit {
   email:string|null;
   name:string|null;
   reserveInfo: FormGroup = new FormGroup({});
-  mapgeojson:string="";
+  mapgeojson="";
 
   constructor(private activeRoute: ActivatedRoute, private formBuilder: FormBuilder, private router:Router,private http:HttpClient) {
    this.id="";
@@ -47,7 +47,15 @@ export class ReserveEditComponent implements OnInit {
       NameOfReserve:this.reserveInfo.get("name")?.value,
       email:this.reserveInfo.get("email")?.value
     }).subscribe(val=>{
-      console.log(val);
+      console.log("after save reserve",val);
+      if(this.mapgeojson!=""){
+        this.http.post("api/reserve/location/set",{
+          reserveID:this.id,
+          location:JSON.parse(this.mapgeojson)
+        }).subscribe(otherval=>{
+          console.log(otherval);
+        })
+      }
     })
   }
 

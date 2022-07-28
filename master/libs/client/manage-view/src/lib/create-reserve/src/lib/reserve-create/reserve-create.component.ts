@@ -11,7 +11,7 @@ export class ReserveCreateComponent implements OnInit {
  
   reserveInfo: FormGroup = new FormGroup({});
   constructor(private formBuilder: FormBuilder, private router:Router, private http: HttpClient) {}
-  mapgeojson:string="";
+  mapgeojson="";
 
   ngOnInit(): void {
     this.reserveInfo = this.formBuilder.group({

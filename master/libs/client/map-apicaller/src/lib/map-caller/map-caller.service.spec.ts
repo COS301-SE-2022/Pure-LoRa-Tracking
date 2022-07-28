@@ -24,7 +24,7 @@ describe('MapCallerService', () => {
   describe("getReserve", ()=>{
     it("Should return a promise with the correct value",async ()=>{
       jest.spyOn(client,"post").mockImplementation(()=>of(true))
-      expect(await service.getReserve("sd","sd")).toEqual(true);
+      expect(await service.getReserve()).toEqual(true);
     })
   })
 
@@ -59,7 +59,7 @@ describe('MapCallerService', () => {
   describe("removeDevice", ()=>{
     it("Should return a promise with the correct value",async ()=>{
       jest.spyOn(client,"post").mockImplementation(()=>of(true))
-      expect(await service.removeDevice("sd","sd","sd",true)).toEqual(true);
+      expect(await service.removeDevice("sd","sd",true)).toEqual(true);
     })
   })
 
