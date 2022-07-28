@@ -69,7 +69,7 @@
               
           </th>
           <td mat-cell *matCellDef="let element">
-              <button mat-icon-button (click)="editUser()"><mat-icon>edit</mat-icon></button>
+              <button mat-icon-button (click)="editUser(element.id)"><mat-icon>edit</mat-icon></button>
           </td>
       </ng-container>
         <tr mat-header-row *matHeaderRowDef="tableColumns"></tr>

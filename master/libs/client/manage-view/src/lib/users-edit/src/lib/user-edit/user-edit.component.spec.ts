@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { UserEditComponent } from './user-edit.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
-
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { MatSelectModule } from '@angular/material/select';
 
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -16,7 +16,7 @@ describe('UserEditComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule, RouterTestingModule,MatSelectModule,MatFormFieldModule,MatInputModule,BrowserAnimationsModule],
+      imports: [ReactiveFormsModule, RouterTestingModule,MatSelectModule,MatFormFieldModule,MatInputModule,BrowserAnimationsModule,HttpClientTestingModule],
       declarations: [UserEditComponent],
     }).compileComponents();
   });

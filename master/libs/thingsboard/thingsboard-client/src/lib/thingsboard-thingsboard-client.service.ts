@@ -1108,6 +1108,7 @@ export class ThingsboardThingsboardClientService {
       reserveName: string;
     }>();
 
+    console.log(tenants)
     tenants.data.forEach((tenant) => {
       tenant.additionalInfo.reserves.forEach((reserve) => {
         reserveList.push({
@@ -1320,15 +1321,15 @@ export class ThingsboardThingsboardClientService {
 
   /////////////////////////////////////////////////////////////////
   async updateReserveInfo(reserveID: string, details: {
-    title: string,
-    region: string,
-    country: string,
-    city: string,
-    address: string,
-    address2: string,
-    zip: string,
-    phone: string,
-    email: string,
+    NameOfReserve: string,
+    region?: string,
+    country?: string,
+    city?: string,
+    address?: string,
+    address2?: string,
+    zip?: string,
+    phone?: string,
+    email?: string,
   }) {
     const user = await this.userService.userInfo(this.token);
 
@@ -1356,15 +1357,15 @@ export class ThingsboardThingsboardClientService {
     const response = await this.reserveService.setReservePerimeter(
       info.data.externalId?.id,
       info.data.id.id,
-      details.title,
+      details.NameOfReserve,
       details.region,
       info.data.tenantId.id,
-      details.country,
-      details.city,
-      details.address,
-      details.address2,
-      details.zip,
-      details.phone,
+      info.data.country,
+      info.data.city,
+      info.data.address,
+      info.data.address2,
+      info.data.zip,
+      info.data.phone,
       details.email,
       info.data.additionalInfo
     );
@@ -1386,7 +1387,7 @@ export class ThingsboardThingsboardClientService {
   async updateUser(userID: string, details: {
     firstName: string,
     lastName: string,
-  }): Promise<thingsboardResponse> {
+  }, reserves?: { reserveName: string, reserveID: string }[]): Promise<thingsboardResponse> {
     const user = await this.userService.userInfo(this.token);
 
     if (user.status != 200)
@@ -1402,138 +1403,148 @@ export class ThingsboardThingsboardClientService {
         explanation: userinfo.explanation
       }
 
-    const resp = await this.userService.UpdateUserInfo(this.token, 
-      userID, 
-      userinfo.data.tenantId.id, 
-      userinfo.data.customerId.id, 
-      userinfo.data.email, userinfo.data.authority, 
-      details.firstName, 
-      details.lastName, 
-      userinfo.data.additionalInfo);
-
-    if(resp.status != 200)
-    return {
-      status : 'fail',
-      explanation : resp.explanation
+    const additionalinfo = userinfo.data.additionalInfo;
+    if (reserves != undefined) {
+      delete additionalinfo.reserves
+      additionalinfo.reserves = reserves
     }
 
+    const resp = await this.userService.UpdateUserInfo(this.token,
+      userID,
+      userinfo.data.tenantId.id,
+      userinfo.data.customerId.id,
+      userinfo.data.email, userinfo.data.authority,
+      details.firstName,
+      details.lastName,
+      additionalinfo);
+
+    if (resp.status != 200)
+      return {
+        status: 'fail',
+        explanation: resp.explanation
+      }
+
     return {
-      status : 'ok',
-      explanation : 'call finished'
+      status: 'ok',
+      explanation: 'call finished'
     }
   }
 
   ////////////////////////////////////////////////////////////////
-  async unassignDevice(deviceID:string) : Promise<thingsboardResponse> {
-    const userInfo = await this.getUserInfoFromToken();
-    if(userInfo.status == 'fail')
-    return {
-      status : 'fail',
-      explanation : userInfo.explanation
-    }
 
-    if(userInfo.data.authority != "TENANT_ADMIN")
-    return {
-      status : 'fail',
-      explanation : "not admin"
-    }
+
+  ////////////////////////////////////////////////////////////////
+  async unassignDevice(deviceID: string): Promise<thingsboardResponse> {
+    const userInfo = await this.getUserInfoFromToken();
+    if (userInfo.status == 'fail')
+      return {
+        status: 'fail',
+        explanation: userInfo.explanation
+      }
+
+    if (userInfo.data.authority != "TENANT_ADMIN")
+      return {
+        status: 'fail',
+        explanation: "not admin"
+      }
 
     this.deviceService.setToken(this.token);
     const response = await this.deviceService.removeDeviceFromCustomer(deviceID);
 
-    if(response.status != 200)
-    return {
-      status : 'fail',
-      explanation : response.explanation
-    }
+    if (response.status != 200)
+      return {
+        status: 'fail',
+        explanation: response.explanation
+      }
 
     return {
-      status : 'ok',
-      explanation : "call finished"
+      status: 'ok',
+      explanation: "call finished"
     }
   }
 
   ////////////////////////////////////////////////////////////////
-  async getUnassignedDevicesForAdmin() : Promise<thingsboardResponse> {
+  async getUnassignedDevicesForAdmin(): Promise<thingsboardResponse> {
     const userInfo = await this.getUserInfoFromToken();
-    if(userInfo.status == 'fail')
-    return {
-      status : 'fail',
-      explanation : userInfo.explanation
-    }
+    if (userInfo.status == 'fail')
+      return {
+        status: 'fail',
+        explanation: userInfo.explanation
+      }
 
-    if(userInfo.data.authority != "TENANT_ADMIN")
-    return {
-      status : 'fail',
-      explanation : "not admin"
-    }
+    if (userInfo.data.authority != "TENANT_ADMIN")
+      return {
+        status: 'fail',
+        explanation: "not admin"
+      }
 
     const response = await this.deviceService.GetTenantDevices();
 
-    if(response.status != 200)
-    return {
-      status : 'fail',
-      explanation : response.explanation
-    }
+    if (response.status != 200)
+      return {
+        status: 'fail',
+        explanation: response.explanation
+      }
 
     const retArray = new Array<any>();
     for (let i = 0; i < response.data.data.length; i++) {
-      if(response.data.data[i].customerId.id == '13814000-1dd2-11b2-8080-808080808080')
+      if (response.data.data[i].customerId.id == '13814000-1dd2-11b2-8080-808080808080')
         retArray.push({
-          deviceID : response.data.data[i].id.id,
-          deviceName : response.data.data[i].name
+          deviceID: response.data.data[i].id.id,
+          deviceName: response.data.data[i].name,
+          isGateway:response.data.data[i].additionalInfo.gateway
         })
     }
 
     return {
-      status : 'ok',
-      explanation : 'call finished',
-      data : retArray
+      status: 'ok',
+      explanation: 'call finished',
+      data: retArray
     }
   }
 
   ////////////////////////////////////////////////////////////////
-  async assignDeviceToReserve(reserveID: string, deviceID : string) : Promise<thingsboardResponse> {
+  async assignDeviceToReserve(reserveID: string, deviceID: string): Promise<thingsboardResponse> {
     const userInfo = await this.getUserInfoFromToken();
-    if(userInfo.status == 'fail')
-    return {
-      status : 'fail',
-      explanation : userInfo.explanation
-    }
+    if (userInfo.status == 'fail')
+      return {
+        status: 'fail',
+        explanation: userInfo.explanation
+      }
 
-    if(userInfo.data.authority != "TENANT_ADMIN")
-    return {
-      status : 'fail',
-      explanation : "not admin"
-    }
+    if (userInfo.data.authority != "TENANT_ADMIN")
+      return {
+        status: 'fail',
+        explanation: "not admin"
+      }
 
     const resp = await this.deviceService.assignDevicetoCustomer(reserveID, deviceID);
 
-    if(resp.status != 200)
-    return {
-      status : 'fail',
-      explanation : resp.explanation
-    }
+    if (resp.status != 200)
+      return {
+        status: 'fail',
+        explanation: resp.explanation
+      }
 
     return {
-      status : 'ok',
-      explanation : 'call finished'
+      status: 'ok',
+      explanation: 'call finished'
     }
   }
 
   ////////////////////////////////////////////////////////////////
   async getUserInfoByID(userID: string): Promise<thingsboardResponse> {
     const resp = await this.userService.userInfoByUserID(this.token, userID);
-    if(resp.status != 200)
-    return {
-      status : 'fail',
-      explanation : resp.explanation
-    }
+    if (resp.status != 200)
+      return {
+        status: 'fail',
+        explanation: resp.explanation
+      }
 
     return {
-      status : 'ok',
-      explanation : 'call finished',
-      data : resp.data
+      status: 'ok',
+      explanation: 'call finished',
+      data: resp.data
     }
   }
 }

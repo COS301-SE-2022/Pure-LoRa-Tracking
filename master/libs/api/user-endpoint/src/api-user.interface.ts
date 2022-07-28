@@ -1,21 +1,22 @@
 export interface userAddInput {
   token: string;
-  customerID : string;
+  customerID: string;
   userInfo: {
     email: string;
     firstName: string;
     lastName: string;
   };
-  reserves : {reserveName:string, reserveID:string}[];
+  reserves: { reserveName: string, reserveID: string }[];
 }
 
 export interface userUpdateInput {
   token: string;
-  userID : string;
+  userID: string;
   userInfo: {
     firstName: string;
     lastName: string;
   };
+  reserves?: { reserveName: string, reserveID: string }[];
 }
 
 
@@ -51,14 +52,14 @@ export interface userResponse {
 }
 
 export interface usersInfoInput {
-  token : string;
-  customerID : string;
+  token: string;
+  customerID: string;
 }
 
 export interface UserChangeReserveInput {
-  token : string;
-  refreshToken : string;
-  reserveID : string;
+  token: string;
+  refreshToken: string;
+  reserveID: string;
 }
 
 
