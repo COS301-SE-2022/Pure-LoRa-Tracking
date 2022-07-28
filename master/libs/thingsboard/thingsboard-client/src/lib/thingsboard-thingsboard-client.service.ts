@@ -1491,7 +1491,8 @@ export class ThingsboardThingsboardClientService {
       if (response.data.data[i].customerId.id == '13814000-1dd2-11b2-8080-808080808080')
         retArray.push({
           deviceID: response.data.data[i].id.id,
-          deviceName: response.data.data[i].name
+          deviceName: response.data.data[i].name,
+          isGateway:response.data.data[i].additionalInfo.gateway
         })
     }
 
