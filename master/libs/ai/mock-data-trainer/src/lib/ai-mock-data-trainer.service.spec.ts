@@ -15,4 +15,8 @@ describe('AiMockDataTrainerService', () => {
   it('should be defined', () => {
     expect(service).toBeTruthy();
   });
+
+  it('should call trainModel and display results', async () => {
+    await service.trainModel();
+  });
 });
