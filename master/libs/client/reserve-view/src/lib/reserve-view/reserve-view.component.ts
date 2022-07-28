@@ -1,11 +1,22 @@
 import { Component, ViewChild } from '@angular/core';
 import { ReserveMapComponent } from '@master/client/leaflet-library';
 import { MapCallerService } from '@master/client/map-apicaller';
-import { Device, MapApiReserveResponse, ViewMapType } from '@master/shared-interfaces';
-export interface GatewayInput {
+import { DeviceNotifierService } from '@master/client/shared-services';
+import { TokenManagerService } from '@master/client/user-storage-controller';
+import { Device, Gateway, MapApiReserveResponse, ViewMapType } from '@master/shared-interfaces';
+import { HttpClient } from "@angular/common/http"
+import { CookieService } from 'ngx-cookie-service';
+
+// export interface GatewayInput {
+//   name: string;
+//   id: string;
+//   eui: string;
+// }
+
+
+export interface ReserveInfo {
   name: string;
   id: string;
-  eui:string;
 }
 
 @Component({
@@ -14,60 +25,152 @@ export interface GatewayInput {
   styleUrls: ['./reserve-view.component.scss'],
 })
 export class ReserveViewComponent {
-  @ViewChild('reservemap') reservemap:ReserveMapComponent|null=null;
+  @ViewChild('reservemap') reservemap: ReserveMapComponent | null = null;
   ViewMapTypeInput: ViewMapType;
-  Reserve:MapApiReserveResponse|null=null;
-  LastestHistorical:Device[];
-  ShowPolygon:boolean;
-  Gateways:GatewayInput[];
-  token="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZldXNlckByZXNlcnZlLmNvbSIsInNjb3BlcyI6WyJDVVNUT01FUl9VU0VSIl0sInVzZXJJZCI6ImY5NmU2MGQwLWRmZTgtMTFlYy1iZGIzLTc1MGNlN2VkMjQ1MSIsImVuYWJsZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiJjZDJkZjJiMC1kZmU4LTExZWMtYmRiMy03NTBjZTdlZDI0NTEiLCJjdXN0b21lcklkIjoiZWY1NWZmNDAtZGZlOC0xMWVjLWJkYjMtNzUwY2U3ZWQyNDUxIiwiaXNzIjoidGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE2NTQ4MjM0NDYsImV4cCI6MTY1NDgzMjQ0Nn0.xoZzxHTsM2ej27xRln1Q1Ly8-F_nY97-uPejn1QmWmyQ_ubKquJiGqciuo-jwOtzszVyCCHnfCjVp5AKNsVqdw";
+  Reserve: MapApiReserveResponse | null = null;
+  LastestHistorical: Device[];
+  ShowPolygon: boolean;
+  Gateways: Gateway[];
+  ReserveName = "";
+  token = "";
+  isadmin = false;
 
-  constructor(private apicaller:MapCallerService) {
-    this.LastestHistorical=[];
-    this.Gateways=[];
-    this.ShowPolygon=true;
-    this.ViewMapTypeInput=ViewMapType.NORMAL_OPEN_STREET_VIEW;
-  }
+  reservesList: ReserveInfo[];
+  selectedReserveId = "";
   
+  constructor(public apicaller: MapCallerService, private tokenmanager: TokenManagerService, private notifier: DeviceNotifierService, private http: HttpClient, private cookiemanager: CookieService) {
+    this.LastestHistorical = [];
+    this.Gateways = [];
+    this.ShowPolygon = true;
+    this.ViewMapTypeInput = ViewMapType.NORMAL_OPEN_STREET_VIEW;
+    this.token = this.tokenmanager.getToken();
+    this.notifier.getSensorDeleted().subscribe(val => {
+      this.LastestHistorical = this.LastestHistorical.filter(curr => curr.deviceID != val);
+    })
+    this.reservesList = [];
+  }
+
   ngOnInit(): void {
-    //get the reserve
-    this.apicaller.getReserve(this.token, "123").then(val => this.Reserve = val);
-    this.apicaller.getHistorical(this.token,"123",[]).then(val=>{
-      console.log(val)
-      this.LastestHistorical=val.data;
+    //TODO get reserves a user belongs to
+
+    this.http.post("api/user/info", {}).subscribe((val: any) => {
+      console.log('val :>> ', val)
+      if (val.data.authority == "TENANT_ADMIN") {
+        this.isadmin = true;
+        this.apicaller.getReserve().then(otherval => {
+          //create new object
+          const temp = {
+            code: otherval.code,
+            explanation: otherval.explanation,
+            status: otherval.status,
+            data: {
+              reserveName: otherval.adminData[0].reserveName,
+              location: otherval.adminData[0].location
+            }
+          } as MapApiReserveResponse
+          this.selectedReserveId=otherval.adminData[0].reserveID;
+          // console.log(otherval);
+          this.reservesList = otherval.adminData.map((curr: any) => {
+            return {
+              id: curr.reserveID,
+              name: curr.reserveName
+            }
+          })
+          this.Reserve = temp;
+          console.log("reserve call in nginit", this.Reserve);
+          if (this.Reserve?.data?.reserveName != undefined){
+            this.ReserveName = this.Reserve?.data?.reserveName;
+          }
+          this.loadreserve(this.selectedReserveId);
+        });
+      } else {
+        if (val.data?.additionalInfo?.reserves != undefined && val.data?.additionalInfo?.reserves.length > 0) {
+          this.reservesList = val.data?.additionalInfo?.reserves.map((curr: any) => {
+            return {
+              id: curr.reserveID,
+              name: curr.reserveName
+            }
+          })
+          this.selectedReserveId = val.data?.customerId.id;
+          this.loadreserve(this.selectedReserveId);
+        }
+      }
+
+    })
+
+
+  }
+
+  updateViewMapType(newval: string) {
+    if (newval == "norm") this.ViewMapTypeInput = ViewMapType.NORMAL_OPEN_STREET_VIEW;
+    else if (newval == "sat") this.ViewMapTypeInput = ViewMapType.SATELLITE_ESRI_1;
+  }
+
+  updateRange(event: { start: number, end: number }): void {
+    this.apicaller.getHistoricalWithTime(this.token, this.selectedReserveId, [], event.start, event.end).then(val => {
+      // console.table(val['data'])
+      this.reservemap?.reload(val.data);
+      this.LastestHistorical = val.data;
+    });
+  }
+
+  updateReserve(newReserveId: string) {
+    this.selectedReserveId = newReserveId;
+    console.log("changed reserve");
+    this.reservemap?.changeReserve();
+
+    if (this.isadmin) {
+      this.loadreserve(newReserveId)
+    } else {
+      this.http.post("/api/user/reserve/change", {
+        "reserveID": newReserveId
+      }).subscribe((val: any) => {
+        if (val.explain == "ok") {
+          if (val.data.token != undefined && val.data.refreshToken != undefined) {
+            console.log("OLD TOKEN ", this.cookiemanager.get(""));
+            this.token = val.data.token;
+            this.cookiemanager.deleteAll();
+            this.cookiemanager.set("PURELORA_TOKEN", val.data.token);
+            this.cookiemanager.set("PURELORA_REFRESHTOKEN", val.data.refreshToken);
+            this.loadreserve(newReserveId)
+            console.log(val);
+          }
+        }
+      });
+    }
+  }
+
+  loadreserve(newReserveId: string) {
+    this.selectedReserveId = newReserveId;
+    this.apicaller.getReserve().then(val => {
+      console.log(val);
+      // this.reservemap?.changeReserve();
+      if (val.isAdmin) {
+        const temp = {
+          code: val.code,
+          explanation: val.explanation,
+          status: val.status,
+          data: {
+            reserveName: val.adminData?.find((curr:any)=>curr.reserveID==newReserveId).reserveName,
+            location: val.adminData?.find((curr:any)=>curr.reserveID==newReserveId).location
+          }
+        } as MapApiReserveResponse
+        val=temp;
+      }
+      this.Reserve = val;
+      console.log("reserve call in loadreserve", this.Reserve);
+      if (this.Reserve?.data?.reserveName != undefined)
+        this.ReserveName = this.Reserve?.data?.reserveName;
+    });
+    this.apicaller.getHistorical(this.token, this.selectedReserveId, []).then(val => {
+      this.LastestHistorical = val.data;
       this.reservemap?.loadInnitial(this.LastestHistorical);
     });
-    this.apicaller.getGateways(this.token,"ef55ff40-dfe8-11ec-bdb3-750ce7ed2451").then((val:any)=>{
-      this.Gateways=val.data.map((curr:any)=>({id:curr.deviceID,name:curr.humanName,eui:curr.deviceName} as GatewayInput));
+    this.apicaller.getGateways(this.selectedReserveId).then((val: any) => {
+      console.log(val)
+      this.Gateways = val.map((curr: any) => ({ id: curr.deviceID, name: curr.humanName, eui: curr.deviceName, location: curr.location } as Gateway));
       console.log(this.Gateways)
-    })
-  }
-
-  updateSensor(idinput:string){
-    if(idinput==""){
-      this.reservemap?.resetData();
-    }
-    else{
-      this.reservemap?.showOnly(idinput);
-    }
-  }
-
-  updateViewMapType(newval:string){
-    if(newval=="norm") this.ViewMapTypeInput=ViewMapType.NORMAL_OPEN_STREET_VIEW;
-    else if(newval=="sat") this.ViewMapTypeInput=ViewMapType.SATELLITE_ESRI_1;
-  }
-
-  
-// export interface RemoveDevice {
-//   token: string;
-//   deviceID: string;
-//   isGateway: boolean;
-//   devEUI: string;
-// }
-
-  deletedevice(event:{inputid:string,inputeui:string,isgateway:boolean}){
-    this.apicaller.removeDevice("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZlYWRtaW5AcmVzZXJ2ZS5jb20iLCJzY29wZXMiOlsiVEVOQU5UX0FETUlOIl0sInVzZXJJZCI6ImQ2MzcyZTMwLWRmZTgtMTFlYy1iZGIzLTc1MGNlN2VkMjQ1MSIsImVuYWJsZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiJjZDJkZjJiMC1kZmU4LTExZWMtYmRiMy03NTBjZTdlZDI0NTEiLCJjdXN0b21lcklkIjoiMTM4MTQwMDAtMWRkMi0xMWIyLTgwODAtODA4MDgwODA4MDgwIiwiaXNzIjoidGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE2NTQ4MjY2NDEsImV4cCI6MTY1NDgzNTY0MX0.rqqGXx99CuHz0iPAem64ZQ1d9_vOUs3LZC-QZNQm7XJHk4R5JQZ-F55O4FeYi8xZxQjKjqW-bAj5zrIY2_Hpyg",event.inputid,event.inputeui,event.isgateway).then((val:any)=>{
-      if(val.explanation=="ok") alert("Device removed");
+      this.reservemap?.loadGateways(this.Gateways);
     })
   }
 }

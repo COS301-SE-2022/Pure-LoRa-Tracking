@@ -1,27 +1,23 @@
-import { Document } from 'mongoose';
+import { Document, Schema as MongooseSchema } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
-export type RSSIdataDocument = rssiData & Document;
+export type AverageInputDocument = AverageInput & Document;
 
-@Schema()
-export class rssiData {
-    @Prop()
-    gateway : string;
+class Coordinate {
+    @Prop({required:true, type:Number})
+    longitude : number;
 
-    /*@Prop()
-    gatewayCoord : {
-        latitude : number;
-        longitude : number;
-    };*/
-
-    @Prop()
-    FirstPoint : number;
-
-    @Prop()
-    SecondPoint : number;
-
-    @Prop()
-    ThirdPoint : number;
+    @Prop({required:true, type:Number})
+    latitude : number;
 }
 
-export const rssiDataSchema = SchemaFactory.createForClass(rssiData);
+@Schema()
+export class AverageInput {
+    @Prop({required:true, type:String})
+    deviceID : string;
+
+    @Prop({type:MongooseSchema.Types.Array})
+    locations : Coordinate[]
+}
+
+export const AverageInputSchema = SchemaFactory.createForClass(AverageInput)

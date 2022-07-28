@@ -1,176 +1,221 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
-import { AxiosResponse } from 'axios';
 import { firstValueFrom } from 'rxjs';
 @Injectable()
 export class ThingsboardThingsboardUserService {
+  private ThingsBoardURL = process.env.TB_URL || 'http://localhost:8080/api';
   constructor(private httpService: HttpService) {}
 
   /////////////////////////////////////////////////////////
 
-  async login(name: string, password: string): Promise<AxiosResponse> {
-    return await firstValueFrom(
-      this.httpService.post('http://localhost:9090/api/auth/login', {
+  async login(name: string, password: string): Promise<UserResponse> {
+    const resp = await firstValueFrom(
+      this.httpService.post(this.ThingsBoardURL + '/auth/login', {
         username: name,
         password: password,
       })
     ).catch((error) => {
-      if (error.response == undefined) return null;
-      if (error.response.status == 401)
-        return new Promise((resolve, reject) => {
-          return {
-            status: error.response.status,
-          };
-        });
+      if (error.response == undefined) return error.code;
+      return error;
     });
+    if (resp == 'ECONNREFUSED')
+      return {
+        status: 500,
+        explanation: resp,
+      };
+    else if (resp.status != 200) {
+      return {
+        status: resp.response.status,
+        explanation: resp.response.data.message,
+      };
+    }
+    return {
+      status: resp.status,
+      explanation: 'ok',
+      data: {
+        token: resp.data.token,
+        refreshToken: resp.data.refreshToken,
+      },
+    };
   }
 
   /////////////////////////////////////////////////////
 
-  async logout(token: string): Promise<AxiosResponse> {
+  async logout(token: string): Promise<UserResponse> {
     const headersReq = {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + token,
     };
-    return await firstValueFrom(
+    const resp = await firstValueFrom(
       this.httpService.post(
-        'http://localhost:9090/api/auth/logout',
+        this.ThingsBoardURL + '/auth/logout',
         {},
         { headers: headersReq }
       )
     ).catch((error) => {
-      if (error.response == undefined) return null;
-      if (error.response.status == 401)
-        return new Promise((resolve, reject) => {
-          return {
-            status: error.response.status,
-          };
-        });
+      if (error.response == undefined) return error.code;
+      return error;
     });
+    if (resp == 'ECONNREFUSED')
+      return {
+        status: 500,
+        explanation: resp,
+        data: null,
+      };
+    else if (resp.status != 200) {
+      return {
+        status: resp.response.status,
+        explanation: resp.response.data.message,
+      };
+    }
+    return {
+      status: resp.status,
+      explanation: 'ok',
+    };
   }
 
-    async refreshToken(refreshTokenValue: string) {
-    if (refreshTokenValue == undefined || refreshTokenValue == "") {
+  //////////////////////////////////////////////////////////////////////////
+
+  async refreshToken(refreshTokenValue: string): Promise<UserResponse> {
+    if (refreshTokenValue == undefined || refreshTokenValue == '') {
       return {
-        status: 400
-      }
+        status: 400,
+        explanation: 'token invalid',
+      };
     }
-    const url = 'http://localhost:9090/api/auth/token'
+    const url = this.ThingsBoardURL + '/auth/token';
     const requestHeaders = {
       'Content-type': 'application/json',
-    }
-    return await firstValueFrom(
+    };
+    const resp = await firstValueFrom(
       this.httpService.post(
         url,
-        { "refreshToken": refreshTokenValue },
+        { refreshToken: refreshTokenValue },
         { headers: requestHeaders }
       )
     ).catch((error) => {
-      if (error.response == undefined) return null;
-      else {
-        return new Promise((resolve, reject) => {
-          return {
-            status: error.response.status
-          };
-        });
-      };
+      if (error.response == undefined) return error.code;
+      return error;
     });
-    
+
+    if (resp == 'ECONNREFUSED')
+      return {
+        status: 500,
+        explanation: resp,
+      };
+    else if (resp.status != 200) {
+      return {
+        status: resp.response.status,
+        explanation: resp.response.data.message,
+      };
+    }
+    return {
+      status: resp.status,
+      explanation: 'ok',
+      data: resp.data,
+    };
   }
 
   //////////////////////////////////////////////////////
 
-  async userInfo(token: string): Promise<any> {
+  async userInfo(token: string): Promise<UserResponse> {
     const headersReq = {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + token,
     };
-    return await firstValueFrom(
-      this.httpService.get('http://localhost:9090/api/auth/user', {
+    const resp = await firstValueFrom(
+      this.httpService.get(this.ThingsBoardURL + '/auth/user', {
         headers: headersReq,
       })
     ).catch((error) => {
-      if (error.response == undefined) return null;
-      return { status: error.response.status };
+      if (error.response == undefined) return error.code;
+      return error;
     });
+
+    if (resp == 'ECONNREFUSED')
+      return {
+        status: 500,
+        explanation: resp,
+      };
+    else if (resp.status != 200) {
+      return {
+        status: resp.response.status,
+        explanation: resp.response.data.message,
+      };
+    }
+    return {
+      status: resp.status,
+      explanation: 'ok',
+      data: resp.data,
+    };
   }
 
-  ///////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////
 
-  async getUserID(
-    token: string
-  ): Promise<{ id?: string; type?: string; code: number }> {
-    const resp = await this.userInfo(token);
-    if (resp.status != 200) {
-      return {
-        code: resp.status,
-      };
-    }
-
-    if (resp.data == undefined) {
-      return {
-        code: 500,
-      };
-    }
-
-    if (resp.data['authority'] == 'SYS_ADMIN') {
-      return {
-        code: 200,
-        id: resp.data['tenantId']['id'],
-        type: 'sysAdmin',
-      } 
-    }
-    else if (resp.data['authority'] == 'TENANT_ADMIN') {
-      return {
-        code: 200,
-        id: resp.data['tenantId']['id'],
-        type: 'admin',
-      };
-    } else {
-      return {
-        code: 200,
-        id: resp.data['customerId']['id'],
-        type: 'user',
-      };
-    }
-  }
-
-  //////////////////////////////////////////////////////////////////////
-
-  async userInfoByCustID(token: string, custID: string): Promise<any> {
+  async userInfoByUserID(token: string, userID: string): Promise<UserResponse> {
     const headersReq = {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + token,
     };
-
-    return await firstValueFrom(
-      this.httpService.get('http://localhost:9090/api/customer/' + custID, {
+    const resp = await firstValueFrom(
+      this.httpService.get(this.ThingsBoardURL + '/user/' + userID, {
         headers: headersReq,
       })
     ).catch((error) => {
-      if (error.response == undefined) return null;
-      return { status: error.response.status };
+      if (error.response == undefined) return error.code;
+      return error;
     });
+
+    if (resp == 'ECONNREFUSED')
+      return {
+        status: 500,
+        explanation: resp,
+      };
+    else if (resp.status != 200) {
+      return {
+        status: resp.response.status,
+        explanation: resp.response.data.message,
+      };
+    }
+    return {
+      status: resp.status,
+      explanation: 'ok',
+      data: resp.data,
+    };
   }
 
   /////////////////////////////////////////////////////////////////
 
-  async deleteUser(token: string, userID: string): Promise<boolean> {
+  async deleteUser(token: string, userID: string): Promise<UserResponse> {
     const headersReq = {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + token,
     };
 
     const resp = await firstValueFrom(
-      this.httpService.delete('http://localhost:9090/api/user/' + userID, {
+      this.httpService.delete(this.ThingsBoardURL + '/user/' + userID, {
         headers: headersReq,
       })
     ).catch((error) => {
-      if (error.response == undefined) return null;
-      return { status: error.response.status };
+      if (error.response == undefined) return error.code;
+      return error;
     });
 
-    return resp.status == 200;
+    if (resp == 'ECONNREFUSED')
+      return {
+        status: 500,
+        explanation: resp,
+      };
+    else if (resp.status != 200) {
+      return {
+        status: resp.response.status,
+        explanation: resp.response.data.message,
+      };
+    }
+    return {
+      status: resp.status,
+      explanation: 'ok',
+    };
   }
 
   /////////////////////////////////////////////////////////////////
@@ -181,7 +226,8 @@ export class ThingsboardThingsboardUserService {
     email: string,
     authority: 'TENANT_ADMIN' | 'CUSTOMER_USER',
     firstName: string,
-    lastName: string
+    lastName: string,
+    reserves: {reserveName:string, reserveID:string}[]
   ): Promise<UserResponse> {
     const headersReq = {
       'Content-Type': 'application/json',
@@ -190,7 +236,7 @@ export class ThingsboardThingsboardUserService {
 
     const resp = await firstValueFrom(
       this.httpService.post(
-        'http://localhost:9090/api/user?sendActivationMail=false',
+        this.ThingsBoardURL + '/user?sendActivationMail=false',
         {
           email: email,
           customerId: {
@@ -200,22 +246,104 @@ export class ThingsboardThingsboardUserService {
           authority: authority,
           firstName: firstName,
           lastName: lastName,
+          additionalInfo: {
+            reserves: reserves,
+          },
         },
         {
           headers: headersReq,
         }
       )
     ).catch((error) => {
-      if (error.response == undefined) return null;
-      return {
-        status: error.response.status,
-        data: error.response.data.message,
-      };
+      if (error.response == undefined) return error.code;
+      return error;
     });
 
+    if (resp == 'ECONNREFUSED')
+      return {
+        status: 500,
+        explanation: resp,
+      };
+    else if (resp.status != 200) {
+      return {
+        status: resp.response.status,
+        explanation: resp.response.data.message,
+      };
+    }
     return {
       status: resp.status,
-      explanation: resp.data,
+      explanation: 'ok',
+      data: resp.data,
+    };
+  }
+
+  /////////////////////////////////////////////////////////////////
+
+  async changeReserveForUser(
+    token: string,
+    tenantID: string,
+    entityID: string,
+    custID: string,
+    email: string,
+    firstName: string,
+    lastName: string,
+    reserves: {reserveName:string, reserveID:string}[]
+  ): Promise<UserResponse> {
+    const headersReq = {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + token,
+    };
+
+    const authority = 'CUSTOMER_USER';
+
+    const resp = await firstValueFrom(
+      this.httpService.post(
+        this.ThingsBoardURL + '/user?sendActivationMail=false',
+        {
+          id: {
+            id: entityID,
+            entityType: 'USER',
+          },
+          customerId: {
+            id: custID,
+            entityType: 'CUSTOMER',
+          },
+          tenantId: {
+            id: tenantID,
+            entityType: 'TENANT',
+          },
+          authority: authority,
+          email: email,
+          firstName: firstName,
+          lastName: lastName,
+          additionalInfo: {
+            reserves: reserves,
+          },
+        },
+        {
+          headers: headersReq,
+        }
+      )
+    ).catch((error) => {
+      if (error.response == undefined) return error.code;
+      return error;
+    });
+
+    if (resp == 'ECONNREFUSED')
+      return {
+        status: 500,
+        explanation: resp,
+      };
+    else if (resp.status != 200) {
+      return {
+        status: resp.response.status,
+        explanation: resp.response.data.message,
+      };
+    }
+    return {
+      status: resp.status,
+      explanation: 'ok',
+      data: resp.data,
     };
   }
 
@@ -224,38 +352,9 @@ export class ThingsboardThingsboardUserService {
   /* 
     possibly add a process method
   */
-  async GetUsersFromReserve(token: string, custID: string): Promise<any> {
-    const headersReq = {
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + token,
-    };
-
-    const resp = await firstValueFrom(
-      this.httpService.get(
-        'http://localhost:9090/api/customer/' +
-          custID +
-          '/users?page=0&pageSize=100',
-        {
-          headers: headersReq,
-        }
-      )
-    ).catch((error) => {
-      if (error.response == undefined) return null;
-      return { status: error.response.status };
-    });
-
-    if(resp.status != 200)
-    return {status:resp.status, data:[]} 
-
-    return {status: 200, data:resp['data']};
-  }
-
-  /////////////////////////////////////////////////////////////////
-
-  async createReserveGroup(
+  async GetUsersFromReserve(
     token: string,
-    email: string,
-    title: string
+    custID: string
   ): Promise<UserResponse> {
     const headersReq = {
       'Content-Type': 'application/json',
@@ -263,53 +362,41 @@ export class ThingsboardThingsboardUserService {
     };
 
     const resp = await firstValueFrom(
-      this.httpService.post(
-        'http://localhost:9090/api/customer',
-        {
-          email: email,
-          title: title,
-        },
+      this.httpService.get(
+        this.ThingsBoardURL +
+          '/customer/' +
+          custID +
+          '/users?page=0&pageSize=100',
         {
           headers: headersReq,
         }
       )
     ).catch((error) => {
-      if (error.response == undefined) return null;
-      return {
-        status: error.response.status,
-        data: error.response.data.message,
-      };
+      if (error.response == undefined) return error.code;
+      return error;
     });
 
+    if (resp == 'ECONNREFUSED')
+      return {
+        status: 500,
+        explanation: resp,
+      };
+    else if (resp.status != 200) {
+      return {
+        status: resp.response.status,
+        explanation: resp.response.data.message,
+      };
+    }
     return {
       status: resp.status,
-      explanation: resp.data,
+      explanation: 'ok',
+      data: resp.data,
     };
   }
 
   /////////////////////////////////////////////////////////////////
 
-  async deleteReserveGroup(token: string, custID: string): Promise<boolean> {
-    const headersReq = {
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + token,
-    };
-
-    const resp = await firstValueFrom(
-      this.httpService.delete('http://localhost:9090/api/customer/' + custID, {
-        headers: headersReq,
-      })
-    ).catch((error) => {
-      if (error.response == undefined) return null;
-      return { status: error.response.status };
-    });
-
-    return resp.status == 200;
-  }
-
-  /////////////////////////////////////////////////////////////////
-
-  async DisableUser(token: string, userID: string): Promise<boolean> {
+  async DisableUser(token: string, userID: string): Promise<UserResponse> {
     const headersReq = {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + token,
@@ -317,7 +404,8 @@ export class ThingsboardThingsboardUserService {
 
     const resp = await firstValueFrom(
       this.httpService.post(
-        'http://localhost:9090/api/user/' +
+        this.ThingsBoardURL +
+          '/user/' +
           userID +
           '/userCredentialsEnabled?userCredentialsEnabled=false',
         {},
@@ -326,20 +414,30 @@ export class ThingsboardThingsboardUserService {
         }
       )
     ).catch((error) => {
-      console.log(error);
-      if (error.response == undefined) return null;
-      return {
-        status: error.response.status,
-        data: error.response.data.message,
-      };
+      if (error.response == undefined) return error.code;
+      return error;
     });
 
-    return resp.status == 200;
+    if (resp == 'ECONNREFUSED')
+      return {
+        status: 500,
+        explanation: resp,
+      };
+    else if (resp.status != 200) {
+      return {
+        status: resp.response.status,
+        explanation: resp.response.data.message,
+      };
+    }
+    return {
+      status: resp.status,
+      explanation: 'ok',
+    };
   }
 
   /////////////////////////////////////////////////////////////////
 
-  async EnableUser(token: string, userID: string): Promise<boolean> {
+  async EnableUser(token: string, userID: string): Promise<UserResponse> {
     const headersReq = {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + token,
@@ -347,7 +445,8 @@ export class ThingsboardThingsboardUserService {
 
     const resp = await firstValueFrom(
       this.httpService.post(
-        'http://localhost:9090/api/user/' +
+        this.ThingsBoardURL +
+          '/user/' +
           userID +
           '/userCredentialsEnabled?userCredentialsEnabled=true',
         {},
@@ -356,45 +455,198 @@ export class ThingsboardThingsboardUserService {
         }
       )
     ).catch((error) => {
-      if (error.response == undefined) return null;
-      return {
-        status: error.response.status,
-        data: error.response.data.message,
-      };
+      if (error.response == undefined) return error.code;
+      return error;
     });
 
-    return resp.status == 200;
+    if (resp == 'ECONNREFUSED')
+      return {
+        status: 500,
+        explanation: resp,
+      };
+    else if (resp.status != 200) {
+      return {
+        status: resp.response.status,
+        explanation: resp.response.data.message,
+      };
+    }
+    return {
+      status: resp.status,
+      explanation: 'ok',
+    };
   }
 
   /////////////////////////////////////////////////////////////////
-    async AdminGetCustomers(token: string): Promise<{data:any, status:number}> {
-      const headersReq = {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token,
-      };
-  
-      const resp = await firstValueFrom(
-        this.httpService.get(
-          'http://localhost:9090/api/customers?page=0&pageSize=100',
-          {
-            headers: headersReq,
-          }
-        )
-      ).catch((error) => {
-        if (error.response == undefined) return null;
-        return { status: error.response.status };
-      });
-  
 
+  async AdminGetCustomers(token: string): Promise<UserResponseCustomers> {
+    const headersReq = {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + token,
+    };
+
+    const resp = await firstValueFrom(
+      this.httpService.get(
+        this.ThingsBoardURL + '/customers?page=0&pageSize=100',
+        {
+          headers: headersReq,
+        }
+      )
+    ).catch((error) => {
+      if (error.response == undefined) return error.code;
+      return error;
+    });
+
+    if (resp == 'ECONNREFUSED')
       return {
-        status : resp.status,
-        data : resp['data']
-      }
+        status: 500,
+        explanation: resp,
+      };
+    else if (resp.status != 200) {
+      return {
+        status: resp.response.status,
+        explanation: resp.response.data.message,
+      };
     }
+    return {
+      status: resp.status,
+      explanation: 'ok',
+      data: resp.data,
+    };
+  }
 
+  /////////////////////////////////////////////////////////////////
+
+  async UpdateUserInfo(
+    token: string,
+    userID: string,
+    tenantID: string,
+    customerID: string,
+    email: string,
+    authority: string,
+    firstname: string,
+    lastname: string,
+    additionalInfo: any
+  ): Promise<UserResponse> {
+    const headersReq = {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + token,
+    };
+
+    const resp = await firstValueFrom(
+      this.httpService.post(
+        this.ThingsBoardURL + "/user?sendActivationEmail=false",
+        {
+          id: {
+            id: userID,
+            entityType: 'USER',
+          },
+          customerId: {
+            id: customerID,
+            entityType: 'CUSTOMER',
+          },
+          tenantId: {
+            id: tenantID,
+            entityType: 'TENANT',
+          },
+          authority: authority,
+          email: email,
+          firstName: firstname,
+          lastName: lastname,
+          additionalInfo: additionalInfo,
+        },
+        {
+          headers: headersReq,
+        }
+      )
+    ).catch((error) => {
+      if (error.response == undefined) return error.code;
+      return error;
+    });
+
+    if (resp == 'ECONNREFUSED')
+      return {
+        status: 500,
+        explanation: resp,
+      };
+    else if (resp.status != 200) {
+      return {
+        status: resp.response.status,
+        explanation: resp.response.data.message,
+      };
+    }
+    return {
+      status: resp.status,
+      explanation: 'ok',
+      data: resp.data,
+    };
+  }
 }
 
+/////////////////////////////////////////////////////////////////
+
 export interface UserResponse {
-  explanation: string;
   status: number;
+  explanation: string;
+  data?: {
+    token?: string;
+    refreshToken?: string;
+    id?: {
+      id?: string;
+      entityType?: string;
+    };
+    createdTime?: number;
+    tenantId?: {
+      id?: string;
+      entityType?: string;
+    };
+    customerId?: {
+      id?: string;
+      entityType?: string;
+    };
+    email?: string;
+    name?: string;
+    authority?: 'SYS_ADMIN' | 'TENANT_ADMIN' | 'CUSTOMER_USER';
+    firstName?: string;
+    lastName?: string;
+    additionalInfo?: {
+      reserves?: {reserveName:string, reserveID:string}[];
+    };
+  };
+  type?: string;
+}
+
+export interface UserResponseCustomers {
+  status: number;
+  explanation: string;
+  data?: [
+    {
+      id?: {
+        id?: string;
+        entityType?: string;
+      };
+      createdTime?: number;
+      title?: string;
+      name?: string;
+      tenantId?: {
+        id?: string;
+        entityType?: string;
+      };
+      country?: string;
+      state?: string;
+      city?: string;
+      address?: string;
+      address2?: string;
+      zip?: string;
+      phone?: string;
+      email?: string;
+      additionalInfo?: {
+        reserve?: string[];
+      };
+    }
+  ];
+  totalPages?: 0;
+  totalElements?: 0;
+  hasNext?: false;
+  type?: string;
+  userID?: string;
 }

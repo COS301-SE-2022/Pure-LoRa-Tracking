@@ -2,26 +2,25 @@ import { ThingsboardThingsboardUserModule, ThingsboardThingsboardUserService } f
 import { HttpModule, HttpService } from '@nestjs/axios';
 import { Test } from '@nestjs/testing';
 import { ThingsboardThingsboardDeviceService } from './thingsboard-thingsboard-device.service';
-import { AxiosResponse } from 'axios';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
+import { ThingsboardThingsboardTestsModule, ThingsboardThingsboardTestsService } from '@lora/thingsboard/tests';
 
 describe('ThingsboardThingsboardDeviceService', () => {
   let service: ThingsboardThingsboardDeviceService;
   let loginService: ThingsboardThingsboardUserService;
   let httpService: HttpService;
-  const username = "reserveadmin@reserve.com";
-  const password = "reserve";
-  
+  let tests: ThingsboardThingsboardTestsService;
 
   beforeAll(async () => {
     const module = await Test.createTestingModule({
       providers: [ThingsboardThingsboardDeviceService],
-      imports: [HttpModule, ThingsboardThingsboardUserModule],
+      imports: [HttpModule, ThingsboardThingsboardUserModule, ThingsboardThingsboardTestsModule],
     }).compile();
 
     service = module.get(ThingsboardThingsboardDeviceService);
     loginService = module.get(ThingsboardThingsboardUserService);
     httpService = module.get(HttpService);
+    tests = module.get(ThingsboardThingsboardTestsService);
     service.setToken("token")
   });
 
@@ -29,275 +28,276 @@ describe('ThingsboardThingsboardDeviceService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should get the device infos and print them...', async () => {
-    const result: AxiosResponse<any> = {
-      data: {
-        "data": [
+  ///////////////////////////////////////////////////////////////////////////////////////////
+
+  it('get devices -> return info', async () => {
+    //const data = await loginService.login(tests.user, tests.userPassword);
+    //service.setToken(data.token);
+    service.setToken('token')
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosDevicesSuccessExample));
+    expect(await service.getCustomerDevices(0,5,'custID')).toMatchObject(tests.SuccessResponse);
+  });
+
+  it('get devices -> ECONNREFUSED', async () => {
+    //const data = await loginService.login(tests.user, tests.userPassword);
+    //service.setToken(data.token);
+    service.setToken('token')
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => throwError(() => tests.axiosECONNFailureExample));
+    expect(await service.getCustomerDevices(0,5,'custID')).toMatchObject(tests.ECONNResponse);
+  });
+
+  it('get devices -> HTTP ERROR', async () => {
+    //const data = await loginService.login(tests.user, tests.userPassword);
+    //service.setToken(data.token);
+    service.setToken('token')
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => throwError(() => tests.axiosFailureExample));
+    expect(await service.getCustomerDevices(0,5,'custID')).toMatchObject(tests.FailResponse);
+  });
+
+  ///////////////////////////////////////////////////////////////////////////////////////////
+
+  it('create device -> return info', async () => {
+    //const data = await loginService.login(tests.user, tests.userPassword);
+    //service.setToken(data.token);
+    service.setToken('token')
+    jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(tests.axiosDeviceSuccessExample));
+    expect(await service.createDevice('hardwareID', 'deviceLabel', false)).toMatchObject(tests.SuccessResponse);
+  });
+
+  it('create device -> return info', async () => {
+    //const data = await loginService.login(tests.user, tests.userPassword);
+    //service.setToken(data.token);
+    service.setToken('token')
+    jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(tests.axiosDeviceSuccessExample));
+    expect(await service.createDevice('hardwareID', 'deviceLabel', true)).toMatchObject(tests.SuccessResponse);
+  });
+
+  it('create device -> ECONNREFUSED', async () => {
+    //const data = await loginService.login(tests.user, tests.userPassword);
+    //service.setToken(data.token);
+    service.setToken('token')
+    jest.spyOn(httpService, 'post').mockImplementationOnce(() => throwError(() => tests.axiosECONNFailureExample));
+    expect(await service.createDevice('hardwareID', 'deviceLabel', false)).toMatchObject(tests.ECONNResponse);
+  });
+
+  it('create device -> HTTP ERROR', async () => {
+    //const data = await loginService.login(tests.user, tests.userPassword);
+    //service.setToken(data.token);
+    service.setToken('token')
+    jest.spyOn(httpService, 'post').mockImplementationOnce(() => throwError(() => tests.axiosFailureExample));
+    expect(await service.createDevice('hardwareID', 'deviceLabel', false)).toMatchObject(tests.FailResponse);
+  });
+
+  ///////////////////////////////////////////////////////////////////////////////////////////
+
+  it('delete device -> return info', async () => {
+    //const data = await loginService.login(tests.user, tests.userPassword);
+    //service.setToken(data.token);
+    service.setToken('token')
+    jest.spyOn(httpService, 'delete').mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
+    expect(await service.deleteDevice("8e4fcc90-dc0e-11ec-931b-3544ea43758e")).toMatchObject(tests.SuccessResponse);
+  });
+
+  it('delete device -> ECONNREFUSED', async () => {
+    //const data = await loginService.login(tests.user, tests.userPassword);
+    //service.setToken(data.token);
+    service.setToken('token')
+    jest.spyOn(httpService, 'delete').mockImplementationOnce(() => throwError(() => tests.axiosECONNFailureExample));
+    expect(await service.deleteDevice("8e4fcc90-dc0e-11ec-931b-3544ea43758e")).toMatchObject(tests.ECONNResponse);
+  });
+
+  it('delete device -> HTTP ERROR', async () => {
+    //const data = await loginService.login(tests.user, tests.userPassword);
+    //service.setToken(data.token);
+    service.setToken('token')
+    jest.spyOn(httpService, 'delete').mockImplementationOnce(() => throwError(() => tests.axiosFailureExample));
+    expect(await service.deleteDevice("8e4fcc90-dc0e-11ec-931b-3544ea43758e")).toMatchObject(tests.FailResponse);
+  });
+
+  ///////////////////////////////////////////////////////////////////////////////////////////
+
+  it('assign device -> return info', async () => {
+    //const data = await loginService.login(tests.user, tests.userPassword);
+    //service.setToken(data.token);
+    service.setToken('token')
+    jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(tests.axiosDeviceSuccessExample));
+    expect(await service.assignDevicetoCustomer('custID', 'deviceID')).toMatchObject(tests.SuccessResponse);
+  });
+
+  it('assign device -> ECONNREFUSED', async () => {
+    //const data = await loginService.login(tests.user, tests.userPassword);
+    //service.setToken(data.token);
+    service.setToken('token')
+    jest.spyOn(httpService, 'post').mockImplementationOnce(() => throwError(() => tests.axiosECONNFailureExample));
+    expect(await service.assignDevicetoCustomer('custID', 'deviceID')).toMatchObject(tests.ECONNResponse);
+  });
+
+  it('assign device -> HTTP ERROR', async () => {
+    //const data = await loginService.login(tests.user, tests.userPassword);
+    //service.setToken(data.token);
+    service.setToken('token')
+    jest.spyOn(httpService, 'post').mockImplementationOnce(() => throwError(() => tests.axiosFailureExample));
+    expect(await service.assignDevicetoCustomer('custID', 'deviceID')).toMatchObject(tests.FailResponse);
+  });
+
+
+  ///////////////////////////////////////////////////////////////////////////////////////////
+
+  it('remove device -> return info', async () => {
+    //const data = await loginService.login(tests.user, tests.userPassword);
+    //service.setToken(data.token);
+    service.setToken('token')
+    jest.spyOn(httpService, 'delete').mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
+    expect(await service.removeDeviceFromCustomer("2fe67850-dfe9-11ec-bdb3-750ce7ed2451")).toMatchObject(tests.SuccessResponse);
+  });
+
+  it('remove device -> ECONNREFUSED', async () => {
+    //const data = await loginService.login(tests.user, tests.userPassword);
+    //service.setToken(data.token);
+    service.setToken('token')
+    jest.spyOn(httpService, 'delete').mockImplementationOnce(() => throwError(() => tests.axiosECONNFailureExample));
+    expect(await service.removeDeviceFromCustomer("2fe67850-dfe9-11ec-bdb3-750ce7ed2451")).toMatchObject(tests.ECONNResponse);
+  });
+
+  it('remove device -> HTTP ERROR', async () => {
+    //const data = await loginService.login(tests.user, tests.userPassword);
+    //service.setToken(data.token);
+    service.setToken('token')
+    jest.spyOn(httpService, 'delete').mockImplementationOnce(() => throwError(() => tests.axiosFailureExample));
+    expect(await service.removeDeviceFromCustomer("2fe67850-dfe9-11ec-bdb3-750ce7ed2451")).toEqual(tests.FailResponse);
+  });
+
+  ///////////////////////////////////////////////////////////////////////////////////////////
+
+  it('set gateway location -> return info', async () => {
+    //const data = await loginService.login(tests.user, tests.userPassword);
+    //service.setToken(data.token);
+    jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
+    expect(await service.setGatewayLocation("2fe67850-dfe9-11ec-bdb3-750ce7ed2451", 
+      {latitude : -25, longitude : 23}
+    )).toMatchObject(tests.SuccessResponse);
+  });
+
+  it('set gateway location -> ECONNREFUSED', async () => {
+    //const data = await loginService.login(tests.user, tests.userPassword);
+    //service.setToken(data.token);
+    jest.spyOn(httpService, 'post').mockImplementationOnce(() => throwError(() => tests.axiosECONNFailureExample));
+    expect(await service.setGatewayLocation("2fe67850-dfe9-11ec-bdb3-750ce7ed2451", 
+    {latitude : -25, longitude : 23}
+  )).toMatchObject(tests.ECONNResponse);
+  });
+
+  it('set gateway location -> HTTP ERROR', async () => {
+    //const data = await loginService.login(tests.user, tests.userPassword);
+    //service.setToken(data.token);
+    jest.spyOn(httpService, 'post').mockImplementationOnce(() => throwError(() => tests.axiosFailureExample));
+    expect(await service.setGatewayLocation("2fe67850-dfe9-11ec-bdb3-750ce7ed2451", 
+    {latitude : -25, longitude : 23}
+  )).toMatchObject(tests.FailResponse);
+  });
+
+
+  ///////////////////////////////////////////////////////////////////////////////////////////
+
+  it('get gateway location -> return info', async () => {
+    //const data = await loginService.login(tests.user, tests.userPassword);
+    //service.setToken(data.token);
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosDeviceAttributeSuccessExample));
+    expect(await service.GetGatewayLocation("2fe67850-dfe9-11ec-bdb3-750ce7ed2451")).toMatchObject(tests.SuccessResponse);
+  });
+
+  it('get gateway location -> ECONNREFUSED', async () => {
+    //const data = await loginService.login(tests.user, tests.userPassword);
+    //service.setToken(data.token);
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => throwError(() => tests.axiosECONNFailureExample));
+    expect(await service.GetGatewayLocation("2fe67850-dfe9-11ec-bdb3-750ce7ed2451")).toMatchObject(tests.ECONNResponse);
+  });
+
+  it('get gateway location -> HTTP ERROR', async () => {
+    //const data = await loginService.login(tests.user, tests.userPassword);
+    //service.setToken(data.token);
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => throwError(() => tests.axiosFailureExample));
+    expect(await service.GetGatewayLocation("2fe67850-dfe9-11ec-bdb3-750ce7ed2451")).toMatchObject(tests.FailResponse);
+  });
+
+  ///////////////////////////////////////////////////////////////////////////////////////////
+
+  it('device access token -> return info', async () => {
+    //const data = await loginService.login(tests.user, tests.userPassword);
+    //service.setToken(data.token);
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosDeviceCredentialSuccessExample));
+    expect(await service.GetAccessToken("2fe67850-dfe9-11ec-bdb3-750ce7ed2451")).toMatchObject(tests.SuccessResponse);
+  });
+
+  it('device access token -> ECONNREFUSED', async () => {
+    //const data = await loginService.login(tests.user, tests.userPassword);
+    //service.setToken(data.token);
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => throwError(() => tests.axiosECONNFailureExample));
+    expect(await service.GetAccessToken("2fe67850-dfe9-11ec-bdb3-750ce7ed2451")).toMatchObject(tests.ECONNResponse);
+  });
+
+  it('device access token -> HTTP ERROR', async () => {
+    //const data = await loginService.login(tests.user, tests.userPassword);
+    //service.setToken(data.token);
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => throwError(() => tests.axiosFailureExample));
+    expect(await service.GetAccessToken("2fe67850-dfe9-11ec-bdb3-750ce7ed2451")).toMatchObject(tests.FailResponse);
+  });
+
+  ///////////////////////////////////////////////////////////////////////////////////////////
+  /* processDevices */
+  it('devices process -> return info', async () => {
+    expect(service.processDevices(tests.DevicesExample.data)).toMatchObject([
           {
-            "id": {
-              "id": "784f394c-42b6-435a-983c-b7beff2784f9",
-              "entityType": "DEVICE"
-            },
-            "createdTime": 1609459200000,
-            "tenantId": {
-              "id": "784f394c-42b6-435a-983c-b7beff2784f9",
-              "entityType": "TENANT"
-            },
-            "customerId": {
-              "id": "784f394c-42b6-435a-983c-b7beff2784f9",
-              "entityType": "CUSTOMER"
-            },
-            "name": "A4B72CCDFF33",
-            "type": "Temperature Sensor",
-            "label": "Room 234 Sensor",
-            "deviceProfileId": {
-              "id": "784f394c-42b6-435a-983c-b7beff2784f9",
-              "entityType": "DEVICE_PROFILE"
-            },
-            "deviceData": {
-              "configuration": {},
-              "transportConfiguration": {}
-            },
-            "firmwareId": {
-              "id": "784f394c-42b6-435a-983c-b7beff2784f9",
-              "entityType": "OTA_PACKAGE"
-            },
-            "softwareId": {
-              "id": "784f394c-42b6-435a-983c-b7beff2784f9",
-              "entityType": "OTA_PACKAGE"
-            },
-            "additionalInfo": {},
-            "customerTitle": "string",
-            "customerIsPublic": false,
-            "deviceProfileName": "string"
-          }
-        ],
-        "totalPages": 0,
-        "totalElements": 0,
-        "hasNext": false
-      },
-      headers: {},
-      config: {},
-      status: 200,
-      statusText: 'OK'
-    }
-
-    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(result));
-    const custID = "784f394c-42b6-435a-983c-b7beff2784f9";
-    expect(await service.getCustomerDevices(0,5,custID)).toBeDefined();
-    /*const data = await loginService.login(username, password);
-    service.setToken(data['data']['token']);
-    const userinfo = await loginService.userInfo(data['data']['token']);
-    const custID = userinfo['data']['customerId']['id'];
-    expect(custID).toBeDefined();
-    const DeviceData = await service.getCustomerDevices(0, 5, custID);
-    console.log(service.processDevices(DeviceData['data']['data']));*/
-  })
-
-  it('should create a device and return status 200', async () => {
-    const result: AxiosResponse<any> = {
-      data: {
-        "id": {
-          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
-          "entityType": "DEVICE"
-        },
-        "createdTime": 1609459200000,
-        "tenantId": {
-          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
-          "entityType": "TENANT"
-        },
-        "customerId": {
-          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
-          "entityType": "CUSTOMER"
-        },
-        "name": "A4B72CCDFF33",
-        "type": "Temperature Sensor",
-        "label": "Room 234 Sensor",
-        "deviceProfileId": {
-          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
-          "entityType": "DEVICE_PROFILE"
-        },
-        "deviceData": {
-          "configuration": {},
-          "transportConfiguration": {}
-        },
-        "firmwareId": {
-          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
-          "entityType": "OTA_PACKAGE"
-        },
-        "softwareId": {
-          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
-          "entityType": "OTA_PACKAGE"
-        },
-        "additionalInfo": {}
-      },
-      headers: {},
-      config: {},
-      status: 200,
-      statusText: 'OK'
-    }
-
-    jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(result));
-    const hardwareID = "123";
-    const deviceLabel = "testingSensor";
-    expect(await service.createDevice(hardwareID, deviceLabel, false)).toEqual("784f394c-42b6-435a-983c-b7beff2784f9");
-    /*const data = await loginService.login(username, password);
-    service.setToken(data['data']['token']);
-    expect(await service.createDevice('123', 'testingSensor', false)).toEqual(true);*/
-  })
-
-  it('should delete the target device and return status 200', async () => {
-    const result: AxiosResponse<any> = {
-      data: {},
-      headers: {},
-      config: {},
-      status: 200,
-      statusText: 'OK'
-    }
-
-    jest.spyOn(httpService, 'delete').mockImplementationOnce(() => of(result));
-    const deviceID = "fa0097e0-dfaa-11ec-b99c-f7477a3db362";
-    expect(await service.deleteDevice(deviceID)).toEqual(true);
-    /*const data = await loginService.login(username, password);
-    service.setToken(data['data']['token']);
-    expect(await service.deleteDevice("8e4fcc90-dc0e-11ec-931b-3544ea43758e")).toEqual(true);*/
-  })
-
-  it('should assign the specified device to the specified customer and return status 200', async () => {
-    const result: AxiosResponse<any> = {
-      data: {
-        "id": {
-          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
-          "entityType": "DEVICE"
-        },
-        "createdTime": 1609459200000,
-        "tenantId": {
-          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
-          "entityType": "TENANT"
-        },
-        "customerId": {
-          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
-          "entityType": "CUSTOMER"
-        },
-        "name": "A4B72CCDFF33",
-        "type": "Temperature Sensor",
-        "label": "Room 234 Sensor",
-        "deviceProfileId": {
-          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
-          "entityType": "DEVICE_PROFILE"
-        },
-        "deviceData": {
-          "configuration": {},
-          "transportConfiguration": {}
-        },
-        "firmwareId": {
-          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
-          "entityType": "OTA_PACKAGE"
-        },
-        "softwareId": {
-          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
-          "entityType": "OTA_PACKAGE"
-        },
-        "additionalInfo": {}
-      },
-      headers: {},
-      config: {},
-      status: 200,
-      statusText: 'OK'
-    }
-
-    jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(result));
-    const custID = "784f394c-42b6-435a-983c-b7beff2784f9";
-    const deviceID = "fa0097e0-dfaa-11ec-b99c-f7477a3db362";
-    expect(await service.assignDevicetoCustomer(custID, deviceID)).toEqual(true);
-    /*const data = await loginService.login(username, password);
-    service.setToken(data['data']['token']);
-    expect(await service.assignDevicetoCustomer("9fed2a30-dfa9-11ec-b99c-f7477a3db362", "fa0097e0-dfaa-11ec-b99c-f7477a3db362")).toEqual(true);*/
-  })
-
-  it('should unassign the specified device from the specified customer and return status 200', async () => {
-    const result: AxiosResponse<any> = {
-      data: {
-        "id": {
-          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
-          "entityType": "DEVICE"
-        },
-        "createdTime": 1609459200000,
-        "tenantId": {
-          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
-          "entityType": "TENANT"
-        },
-        "customerId": {
-          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
-          "entityType": "CUSTOMER"
-        },
-        "name": "A4B72CCDFF33",
-        "type": "Temperature Sensor",
-        "label": "Room 234 Sensor",
-        "deviceProfileId": {
-          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
-          "entityType": "DEVICE_PROFILE"
-        },
-        "deviceData": {
-          "configuration": {},
-          "transportConfiguration": {}
-        },
-        "firmwareId": {
-          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
-          "entityType": "OTA_PACKAGE"
-        },
-        "softwareId": {
-          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
-          "entityType": "OTA_PACKAGE"
-        },
-        "additionalInfo": {}
-      },
-      headers: {},
-      config: {},
-      status: 200,
-      statusText: 'OK'
-    }
-    jest.spyOn(httpService, 'delete').mockImplementationOnce(() => of(result));
-    const deviceID = "fa0097e0-dfaa-11ec-b99c-f7477a3db362";
-    expect(await service.removeDeviceFromCustomer(deviceID)).toEqual(true);
-    /*const data = await loginService.login(username, password);
-    service.setToken(data['data']['token']);
-    expect(await service.removeDeviceFromCustomer("fa0097e0-dfaa-11ec-b99c-f7477a3db362")).toEqual(true);*/
+           "deviceID": "784f394c-42b6-435a-983c-b7beff2784f9",
+           "deviceName": "A4B72CCDFF33",
+           "humanName": "Room 234 Sensor",
+           "isGateway": undefined,
+           "profile": "DEVICE",
+         },
+       ]);
   });
 
-  it('should get device profiles and return null, tentatively.', async () => {
-    expect(await service.getDeviceProfiles()).toEqual(null);
+  it('devices process -> return [] for null', async () => {
+    expect(service.processDevices(null)).toMatchObject([]);
   });
 
-  it('should process a list of device profiles and return null, tentatively.', async () => {
-    expect(await service.processDeviceProfiles([])).toEqual(null);
+  ///////////////////////////////////////////////////////////////////////////////////////////
+  /* getDeviceInfo */
+  it('device access token -> return info', async () => {
+    //const data = await loginService.login(tests.user, tests.userPassword);
+    //service.setToken(data.token);
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosDeviceSuccessExample));
+    expect(await service.getDeviceInfo("2fe67850-dfe9-11ec-bdb3-750ce7ed2451")).toMatchObject(tests.SuccessResponse);
+  });
+
+  it('device access token -> ECONNREFUSED', async () => {
+    //const data = await loginService.login(tests.user, tests.userPassword);
+    //service.setToken(data.token);
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => throwError(() => tests.axiosECONNFailureExample));
+    expect(await service.getDeviceInfo("2fe67850-dfe9-11ec-bdb3-750ce7ed2451")).toMatchObject(tests.ECONNResponse);
+  });
+
+  it('device access token -> HTTP ERROR', async () => {
+    //const data = await loginService.login(tests.user, tests.userPassword);
+    //service.setToken(data.token);
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => throwError(() => tests.axiosFailureExample));
+    expect(await service.getDeviceInfo("2fe67850-dfe9-11ec-bdb3-750ce7ed2451")).toMatchObject(tests.FailResponse);
   });
 
   ///////////////////////////////////////////////////////////////////////////////////////////
 
-  it('should set the gateway location', async () => {
-    /*const data = await loginService.login(username, password);
-    service.setToken(data['data']['token']);
-    console.log(await service.setGatewayLocation("2fe67850-dfe9-11ec-bdb3-750ce7ed2451", [
-      {latitude : -25, longitude : 23},
-      {latitude : -25.2, longitude : 21}
-    ]))*/
-  });
+  /*it('device create -> Mock device', async () => {
+    const data = await loginService.login(tests.admin, tests.adminPassword);
+    service.setToken(data.data.token);
+    expect(await service.createDevice("device2", "rietvlei gateway", true)).toMatchObject(tests.FailResponse);
+  });*/
 
-  ///////////////////////////////////////////////////////////////////////////////////////////
-
-  it('should set the gateway location', async () => {
-    /*const data = await loginService.login(username, password);
-    service.setToken(data['data']['token']);
-    console.log(await service.GetGatewayLocation("2fe67850-dfe9-11ec-bdb3-750ce7ed2451"));*/
-  });
-
-  ///////////////////////////////////////////////////////////////////////////////////////////
-
-  it('should get the device access token', async () => {
-   /* const data = await loginService.login(username, password);
-    service.setToken(data['data']['token']);
-    console.log(await service.GetAccessToken("2fe67850-dfe9-11ec-bdb3-750ce7ed2451"));*/
-  });
+  /*it('tenant devices', async () => {
+    const data = await loginService.login(tests.admin, tests.adminPassword);
+    service.setToken(data.data.token);
+    console.table(
+      (await service.GetTenantDevices()).data.data
+    );
+  });*/
 
 });

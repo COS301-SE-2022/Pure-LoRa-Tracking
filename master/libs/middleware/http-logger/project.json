@@ -1,0 +1,45 @@
+{
+  "sourceRoot": "libs/middleware/http-logger/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/middleware/http-logger",
+        "tsConfig": "libs/middleware/http-logger/tsconfig.lib.json",
+        "packageJson": "libs/middleware/http-logger/package.json",
+        "main": "libs/middleware/http-logger/src/index.ts",
+        "assets": ["libs/middleware/http-logger/*.md"]
+      }
+    },
+    "publish": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "node tools/scripts/publish.mjs middleware-http-logger {args.ver} {args.tag}"
+      },
+      "dependsOn": [
+        {
+          "projects": "self",
+          "target": "build"
+        }
+      ]
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/middleware/http-logger/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/middleware/http-logger"],
+      "options": {
+        "jestConfig": "libs/middleware/http-logger/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

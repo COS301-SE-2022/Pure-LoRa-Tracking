@@ -1,0 +1,29 @@
+<div id="formContainer">
+    <form [formGroup]="userInfo" (ngSubmit)="saveUser(userInfo)" id="form">
+        <mat-form-field appearance="outline" required class="input-form" id="firstForm" >
+            <mat-label>Name</mat-label>
+            <input matInput placeholder="Name" formControlName="name" class="placeholder" >
+        </mat-form-field>
+        <mat-form-field appearance="outline" required class="input-form">
+            <mat-label>Surname</mat-label>
+            <input matInput placeholder="Surname" formControlName="surname" class="placeholder" >
+        </mat-form-field>
+        <mat-form-field appearance="outline" required class="input-form">
+            <mat-label>Email</mat-label>
+            <input matInput placeholder="E-mail"  formControlName="email" class="placeholder">
+            <mat-error *ngIf="userInfo.controls['email'].errors?.['required']">Valid e-mail is required.</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Accessible Reserves</mat-label>
+            <mat-select formControlName="reserves" multiple [(ngModel)]="selected">
+              <mat-option *ngFor="let reserve of reservesList" [value]="reserve.id">
+                {{reserve.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        <div id="button-wrapper">
+            <button mat-raised-button (click)="navigateBack()" class="action-buttons" color="primary">Cancel</button>
+            <button mat-flat-button type="submit" class="action-buttons" color="primary" >Save</button>
+        </div>
+    </form>
+</div>

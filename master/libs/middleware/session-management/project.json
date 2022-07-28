@@ -1,0 +1,45 @@
+{
+  "sourceRoot": "libs/middleware/session-management/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/middleware/session-management",
+        "tsConfig": "libs/middleware/session-management/tsconfig.lib.json",
+        "packageJson": "libs/middleware/session-management/package.json",
+        "main": "libs/middleware/session-management/src/index.ts",
+        "assets": ["libs/middleware/session-management/*.md"]
+      }
+    },
+    "publish": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "node tools/scripts/publish.mjs middleware-session-management {args.ver} {args.tag}"
+      },
+      "dependsOn": [
+        {
+          "projects": "self",
+          "target": "build"
+        }
+      ]
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/middleware/session-management/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/middleware/session-management"],
+      "options": {
+        "jestConfig": "libs/middleware/session-management/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

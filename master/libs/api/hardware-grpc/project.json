@@ -1,0 +1,45 @@
+{
+  "sourceRoot": "libs/api/hardware-grpc/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs//api/hardware-grpc",
+        "tsConfig": "libs/api/hardware-grpc/tsconfig.lib.json",
+        "packageJson": "libs/api/hardware-grpc/package.json",
+        "main": "libs/api/hardware-grpc/src/index.ts",
+        "assets": ["libs/api/hardware-grpc/*.md"]
+      }
+    },
+    "publish": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "node tools/scripts/publish.mjs hardware-grpc {args.ver} {args.tag}"
+      },
+      "dependsOn": [
+        {
+          "projects": "self",
+          "target": "build"
+        }
+      ]
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/api/hardware-grpc/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/api/hardware-grpc"],
+      "options": {
+        "jestConfig": "libs/api/hardware-grpc/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

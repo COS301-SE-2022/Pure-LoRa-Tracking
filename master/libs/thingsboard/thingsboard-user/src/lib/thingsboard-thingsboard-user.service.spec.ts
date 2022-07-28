@@ -2,23 +2,23 @@ import { HttpModule, HttpService } from '@nestjs/axios';
 import { Test } from '@nestjs/testing';
 import { ThingsboardThingsboardUserService } from './thingsboard-thingsboard-user.service';
 import { AxiosResponse } from 'axios';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
+import { ThingsboardThingsboardTestsModule, ThingsboardThingsboardTestsService } from "@lora/thingsboard/tests";
 
 describe('ThingsboardThingsboardUserService', () => {
   let service: ThingsboardThingsboardUserService;
   let httpService: HttpService;
-  const username = 'reserveadmin@reserve.com';
-  const password = 'reserve';
-  const custID = 'ef55ff40-dfe8-11ec-bdb3-750ce7ed2451';
+  let tests: ThingsboardThingsboardTestsService;
 
   beforeAll(async () => {
     const module = await Test.createTestingModule({
       providers: [ThingsboardThingsboardUserService],
-      imports: [HttpModule],
+      imports: [HttpModule, ThingsboardThingsboardTestsModule],
     }).compile();
 
     service = module.get(ThingsboardThingsboardUserService);
     httpService = module.get(HttpService);
+    tests = module.get(ThingsboardThingsboardTestsService)
   });
 
   it('should be defined', () => {
@@ -27,7 +27,27 @@ describe('ThingsboardThingsboardUserService', () => {
 
   /////////////////////////////////////////////////////////////////
 
-  it('valid login should return token and refreshToken', async () => {
+  it('login-> return info', async () => {
+    //const Login = await service.login(tests.user, tests.userPassword);
+    jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
+    expect(await service.login(tests.user, tests.userPassword)).toMatchObject(tests.SuccessResponse);
+  });
+
+  it('login -> ECONNREFUSED', async () => {
+    //const Login = await service.login(tests.user, tests.userPassword);
+    jest.spyOn(httpService, 'post').mockImplementationOnce(() => throwError(() => tests.axiosECONNFailureExample));
+    expect(await service.login(tests.user, tests.userPassword)).toMatchObject(tests.ECONNResponse);
+  });
+
+  it('login -> HTTP ERROR', async () => {
+    //const Login = await service.login(tests.user, tests.userPassword);
+    jest.spyOn(httpService, 'post').mockImplementationOnce(() => throwError(() => tests.axiosFailureExample));
+    expect(await service.login(tests.user, tests.userPassword)).toMatchObject(tests.FailResponse);
+  });
+
+  /////////////////////////////////////////////////////////////////
+
+ /* it('valid login should return token and refreshToken', async () => {
     const result: AxiosResponse<any> = {
       data: {
         token:
@@ -43,11 +63,28 @@ describe('ThingsboardThingsboardUserService', () => {
     jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(result));
     const login = await service.login('reserveAdmin@reserve.com', 'reserve');
     expect(login['data']['token']).toBeDefined;
-  });
+  });*/
 
   /////////////////////////////////////////////////////////////////
+  it('logout -> return info', async () => {
+    //const Login = await service.login(tests.user, tests.userPassword);
+    jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
+    expect(await service.logout(tests.tokenExample.token)).toMatchObject(tests.SuccessResponse);
+  });
 
-  it('should logout and return status 200 - OK', async () => {
+  it('logout -> ECONNREFUSED', async () => {
+    //const Login = await service.login(tests.user, tests.userPassword);
+    jest.spyOn(httpService, 'post').mockImplementationOnce(() => throwError(() => tests.axiosECONNFailureExample));
+    expect(await service.logout(tests.tokenExample.token)).toMatchObject(tests.ECONNResponse);
+  });
+
+  it('logout -> HTTP ERROR', async () => {
+    //const Login = await service.login(tests.user, tests.userPassword);
+    jest.spyOn(httpService, 'post').mockImplementationOnce(() => throwError(() => tests.axiosFailureExample));
+    expect(await service.logout(tests.tokenExample.token)).toMatchObject(tests.FailResponse);
+  });
+
+ /* it('should logout and return status 200 - OK', async () => {
     const result: AxiosResponse<any> = {
       data: {
         token:
@@ -71,11 +108,28 @@ describe('ThingsboardThingsboardUserService', () => {
     jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(result));
     const logout = await service.logout(login['data']['token']);
     expect(logout['status']).toEqual(200);
-  });
+  });*/
 
   /////////////////////////////////////////////////////////////////
+  it('user info -> return info', async () => {
+    //const Login = await service.login(tests.user, tests.userPassword);
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosUserSuccessExample));
+    expect(await service.userInfo(tests.tokenExample.token)).toMatchObject(tests.SuccessResponse);
+  });
 
-  it('Should print user info', async () => {
+  it('user info -> ECONNREFUSED', async () => {
+    //const Login = await service.login(tests.user, tests.userPassword);
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => throwError(() => tests.axiosECONNFailureExample));
+    expect(await service.userInfo(tests.tokenExample.token)).toMatchObject(tests.ECONNResponse);
+  });
+
+  it('user info -> HTTP ERROR', async () => {
+    //const Login = await service.login(tests.user, tests.userPassword);
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => throwError(() => tests.axiosFailureExample));
+    expect(await service.userInfo(tests.tokenExample.token)).toMatchObject(tests.FailResponse);
+  });
+
+  /*it('Should print user info', async () => {
     const result: AxiosResponse<any> = {
       data: {
         token:
@@ -115,88 +169,241 @@ describe('ThingsboardThingsboardUserService', () => {
     jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(result));
     const userInfo = await service.userInfo(login['data']['token']);
     expect(userInfo['data']['customerId']['id']).toBeDefined();
+  });*/
+
+  /////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////
+
+  it('customer info -> return info', async () => {
+    //const Login = await service.login(tests.user, tests.userPassword);
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosUserSuccessExample));
+    expect(await service.userInfoByUserID(tests.tokenExample.token, "123456")).toMatchObject(tests.SuccessResponse);
+  });
+
+  it('customer info -> ECONNREFUSED', async () => {
+    //const Login = await service.login(tests.user, tests.userPassword);
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => throwError(() => tests.axiosECONNFailureExample));
+    expect(await service.userInfoByUserID(tests.tokenExample.token, "123456")).toMatchObject(tests.ECONNResponse);
+  });
+
+  it('customer info -> HTTP ERROR', async () => {
+    //const Login = await service.login(tests.user, tests.userPassword);
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => throwError(() => tests.axiosFailureExample));
+    expect(await service.userInfoByUserID(tests.tokenExample.token, "123456")).toMatchObject(tests.FailResponse);
   });
 
   /////////////////////////////////////////////////////////////////
 
-  it('should return the customer info', async () => {
-    //const Login = await service.login(username, password);
-    //console.log(await service.userInfoByCustID(Login['data']['token'], custID));
+  it('users of reserve -> return info', async () => {
+    //const Login = await service.login(tests.user, tests.userPassword);
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosUserSuccessExample));
+    expect(await service.GetUsersFromReserve(tests.tokenExample.token, "123456")).toMatchObject(tests.SuccessResponse);
+  });
+
+  it('users of reserve -> ECONNREFUSED', async () => {
+    //const Login = await service.login(tests.user, tests.userPassword);
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => throwError(() => tests.axiosECONNFailureExample));
+    expect(await service.GetUsersFromReserve(tests.tokenExample.token, "123456")).toMatchObject(tests.ECONNResponse);
+  });
+
+  it('users of reserve -> HTTP ERROR', async () => {
+    //const Login = await service.login(tests.user, tests.userPassword);
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => throwError(() => tests.axiosFailureExample));
+    expect(await service.GetUsersFromReserve(tests.tokenExample.token, "123456")).toMatchObject(tests.FailResponse);
+  });
+  /////////////////////////////////////////////////////////////////
+
+  it('should create the user -> return info', async () => {
+    //const Login = await service.login(tests.user, tests.userPassword);
+    jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(tests.axiosUserSuccessExample));
+    expect(await service.createReserveUser(
+      'token',
+      'custID',
+      'liamburgess299@gmail.com',
+      'CUSTOMER_USER',
+      'Liam',
+      'Burgess',
+      []
+    )).toMatchObject(tests.SuccessResponse);
+  });
+
+  it('should create the user -> ECONNREFUSED', async () => {
+    //const Login = await service.login(tests.user, tests.userPassword);
+    jest.spyOn(httpService, 'post').mockImplementationOnce(() => throwError(() => tests.axiosECONNFailureExample));
+    expect(await service.createReserveUser(
+      'token',
+      'custID',
+      'liamburgess299@gmail.com',
+      'CUSTOMER_USER',
+      'Liam',
+      'Burgess',
+      []
+    )).toMatchObject(tests.ECONNResponse);
+  });
+
+  it('should create the user -> HTTP ERROR', async () => {
+    //const Login = await service.login(tests.user, tests.userPassword);
+    jest.spyOn(httpService, 'post').mockImplementationOnce(() => throwError(() => tests.axiosFailureExample));
+    expect(await service.createReserveUser(
+      'token',
+      'custID',
+      'liamburgess299@gmail.com',
+      'CUSTOMER_USER',
+      'Liam',
+      'Burgess',
+      []
+    )).toMatchObject(tests.FailResponse);
   });
 
   /////////////////////////////////////////////////////////////////
 
-  it('should return the User ID and privilege by token', async () => {
-    /*const Login = await service.login(username, password);
-    console.log(await service.getUserID(Login['data']['token']));*/
+  it('delete user -> return info', async () => {
+    //const Login = await service.login(tests.user, tests.userPassword);
+    jest.spyOn(httpService, 'delete').mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
+    expect(await service.deleteUser(tests.tokenExample.token, "123456")).toMatchObject(tests.SuccessResponse);
+  });
+
+  it('delete user -> ECONNREFUSED', async () => {
+    //const Login = await service.login(tests.user, tests.userPassword);
+    jest.spyOn(httpService, 'delete').mockImplementationOnce(() => throwError(() => tests.axiosECONNFailureExample));
+    expect(await service.deleteUser(tests.tokenExample.token, "123456")).toMatchObject(tests.ECONNResponse);
+  });
+
+  it('delete user -> HTTP ERROR', async () => {
+    //const Login = await service.login(tests.user, tests.userPassword);
+    jest.spyOn(httpService, 'delete').mockImplementationOnce(() => throwError(() => tests.axiosFailureExample));
+    expect(await service.deleteUser(tests.tokenExample.token, "123456")).toMatchObject(tests.FailResponse);
   });
 
   /////////////////////////////////////////////////////////////////
 
-  it('should get users of reserve', async () => {
-    /*const Login = await service.login(username, password);
-    console.log(
-      await service.GetUsersFromReserve(Login['data']['token'], custID)
-    );*/
+  it('disable user -> return info', async () => {
+    //const Login = await service.login(tests.user, tests.userPassword);
+    jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
+    expect(await service.DisableUser(tests.tokenExample.token, "123456")).toMatchObject(tests.SuccessResponse);
+  });
+
+  it('disable user -> ECONNREFUSED', async () => {
+    //const Login = await service.login(tests.user, tests.userPassword);
+    jest.spyOn(httpService, 'post').mockImplementationOnce(() => throwError(() => tests.axiosECONNFailureExample));
+    expect(await service.DisableUser(tests.tokenExample.token, "123456")).toMatchObject(tests.ECONNResponse);
+  });
+
+  it('disable user -> HTTP ERROR', async () => {
+    //const Login = await service.login(tests.user, tests.userPassword);
+    jest.spyOn(httpService, 'post').mockImplementationOnce(() => throwError(() => tests.axiosFailureExample));
+    expect(await service.DisableUser(tests.tokenExample.token, "123456")).toMatchObject(tests.FailResponse);
+  });
+
+
+  /////////////////////////////////////////////////////////////////
+
+  it('enable user -> return info', async () => {
+    //const Login = await service.login(tests.user, tests.userPassword);
+    jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
+    expect(await service.EnableUser(tests.tokenExample.token, "123456")).toMatchObject(tests.SuccessResponse);
+  });
+
+  it('enable user -> ECONNREFUSED', async () => {
+    //const Login = await service.login(tests.user, tests.userPassword);
+    jest.spyOn(httpService, 'post').mockImplementationOnce(() => throwError(() => tests.axiosECONNFailureExample));
+    expect(await service.EnableUser(tests.tokenExample.token, "123456")).toMatchObject(tests.ECONNResponse);
+  });
+
+  it('enable user -> HTTP ERROR', async () => {
+    //const Login = await service.login(tests.user, tests.userPassword);
+    jest.spyOn(httpService, 'post').mockImplementationOnce(() => throwError(() => tests.axiosFailureExample));
+    expect(await service.EnableUser(tests.tokenExample.token, "123456")).toMatchObject(tests.FailResponse);
+  });
+
+  /////////////////////////////////////////////////////////////////
+  it('admin get customers -> return info', async () => {
+    //const Login = await service.login(tests.user, tests.userPassword);
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosCustomersSuccessExample));
+    expect(await service.AdminGetCustomers(tests.tokenExample.token)).toMatchObject(tests.SuccessResponse);
+  });
+
+  it('admin get customers -> ECONNREFUSED', async () => {
+    //const Login = await service.login(tests.user, tests.userPassword);
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => throwError(() => tests.axiosECONNFailureExample));
+    expect(await service.AdminGetCustomers(tests.tokenExample.token)).toMatchObject(tests.ECONNResponse);
+  });
+
+  it('admin get customers -> HTTP ERROR', async () => {
+    //const Login = await service.login(tests.user, tests.userPassword);
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => throwError(() => tests.axiosFailureExample));
+    expect(await service.AdminGetCustomers(tests.tokenExample.token)).toMatchObject(tests.FailResponse);
   });
 
   /////////////////////////////////////////////////////////////////
 
-  it('should create the user', async () => {
-    /*const Login = await service.login(username, password);
-    console.log(
-      await
-      service.createReserveUser(
-        Login['data']['token'],
-        custID,
-        'liamburgess299@gmail.com',
-        'CUSTOMER_USER',
-        'Liam',
-        'Burgess'
-      )
-    );*/
+  /* changeReserveForUser */
+  it('change reserve for user -> return info', async () => {
+    //const Login = await service.login(tests.user, tests.userPassword);
+    jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(tests.axiosUserSuccessExample));
+    expect(await service.changeReserveForUser(
+      'token',
+      'Tid',
+      'custID',
+      'liamburgess299@gmail.com',
+      'CUSTOMER_USER',
+      'Liam',
+      'Burgess',
+      []
+    )).toMatchObject(tests.SuccessResponse);
+  });
+
+  it('change reserve for user -> ECONNREFUSED', async () => {
+    //const Login = await service.login(tests.user, tests.userPassword);
+    jest.spyOn(httpService, 'post').mockImplementationOnce(() => throwError(() => tests.axiosECONNFailureExample));
+    expect(await service.changeReserveForUser(
+      'token',
+      'Tid',
+      'custID',
+      'liamburgess299@gmail.com',
+      'CUSTOMER_USER',
+      'Liam',
+      'Burgess',
+      []
+    )).toMatchObject(tests.ECONNResponse);
+  });
+
+  it('change reserve for user -> HTTP ERROR', async () => {
+    //const Login = await service.login(tests.user, tests.userPassword);
+    jest.spyOn(httpService, 'post').mockImplementationOnce(() => throwError(() => tests.axiosFailureExample));
+    expect(await service.changeReserveForUser(
+      'token',
+      'Tid',
+      'custID',
+      'liamburgess299@gmail.com',
+      'CUSTOMER_USER',
+      'Liam',
+      'Burgess',
+      []
+    )).toMatchObject(tests.FailResponse);
   });
 
   /////////////////////////////////////////////////////////////////
 
-  it('should delete the user', async () => {
-    /*const Login = await service.login(username, password);
-    console.log(await service.deleteUser(Login['data']['token'], "f6c10a50-e5aa-11ec-a9e5-f30a5c07bcf3"));*/
+  /* refresh token */
+  it('refresh token -> return info', async () => {
+    //const Login = await service.login(tests.user, tests.userPassword);
+    jest.spyOn(httpService, 'post').mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
+    expect(await service.refreshToken(tests.tokenExample.refreshToken)).toMatchObject(tests.SuccessResponse);
+  });
+
+  it('refresh token-> ECONNREFUSED', async () => {
+    //const Login = await service.login(tests.user, tests.userPassword);
+    jest.spyOn(httpService, 'post').mockImplementationOnce(() => throwError(() => tests.axiosECONNFailureExample));
+    expect(await service.refreshToken(tests.tokenExample.refreshToken)).toMatchObject(tests.ECONNResponse);
+  });
+
+  it('refresh token -> HTTP ERROR', async () => {
+    //const Login = await service.login(tests.user, tests.userPassword);
+    jest.spyOn(httpService, 'post').mockImplementationOnce(() => throwError(() => tests.axiosFailureExample));
+    expect(await service.refreshToken(tests.tokenExample.refreshToken)).toMatchObject(tests.FailResponse);
   });
 
   /////////////////////////////////////////////////////////////////
 
-  it('should create the reserve group', async () => {
-    /*const Login = await service.login(username, password);
-    console.log(await service.createReserveGroup(Login["data"]["token"], "liamburgess299@gmail.com", "reserveb"));*/
-  });
-
-  /////////////////////////////////////////////////////////////////
-
-  it('should delete the reserve group', async () => {
-    /*const Login = await service.login(username, password);
-    console.log(await service.deleteReserveGroup(Login["data"]["token"], "573911a0-e5b2-11ec-a9e5-f30a5c07bcf3"));*/
-  });
-
-  /////////////////////////////////////////////////////////////////
-
-  it('should disable the reserve user', async () => {
-    /*const Login = await service.login(username, password);
-    console.log(await service.DisableUser(Login["data"]["token"], "f96e60d0-dfe8-11ec-bdb3-750ce7ed2451"));*/
-  });
-
-  /////////////////////////////////////////////////////////////////
-
-  it('should enable the reserve user', async () => {
-    /*const Login = await service.login(username, password);
-    console.log(await service.EnableUser(Login["data"]["token"], "f96e60d0-dfe8-11ec-bdb3-750ce7ed2451"));*/
-    
-  });
-
-  /////////////////////////////////////////////////////////////////
-
-  it('should get the reserve users', async () => {
-    //console.log(await service.GetUsersFromReserve("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZlYWRtaW5AcmVzZXJ2ZS5jb20iLCJzY29wZXMiOlsiVEVOQU5UX0FETUlOIl0sInVzZXJJZCI6ImQ2MzcyZTMwLWRmZTgtMTFlYy1iZGIzLTc1MGNlN2VkMjQ1MSIsImVuYWJsZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiJjZDJkZjJiMC1kZmU4LTExZWMtYmRiMy03NTBjZTdlZDI0NTEiLCJjdXN0b21lcklkIjoiMTM4MTQwMDAtMWRkMi0xMWIyLTgwODAtODA4MDgwODA4MDgwIiwiaXNzIjoidGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE2NTQ3OTEwOTIsImV4cCI6MTY1NDgwMDA5Mn0.7J8AnYhPKPFUBoSe9WupzRTky5xaBFDZ5XHWdQ-wcLg8we8GKA06BOK9FuX8fDVrPVSeI654ZLD_7W1dASEHWA", "ef55ff40-dfe8-11ec-bdb3-750ce7ed2451"));
-    
-  });
 });

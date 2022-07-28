@@ -11,7 +11,8 @@ import { deviceInfos } from '@master/shared-interfaces';
 import { ChirpstackChirpstackGatewayModule } from '@lora/chirpstack-gateway';
 import { ChirpstackChirpstackSensorModule } from '@lora/chirpstack-sensor';
 
-const describeLive = process.env.PURELORABUILD == 'DEV' ? describe : describe.skip;
+const describeLive =
+  process.env.PURELORABUILD == 'DEV' ? describe : describe.skip;
 
 describe('ApiDeviceEndpointService', () => {
   let service: ApiDeviceEndpointService;
@@ -20,7 +21,11 @@ describe('ApiDeviceEndpointService', () => {
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      imports: [ThingsboardThingsboardClientModule, ChirpstackChirpstackGatewayModule, ChirpstackChirpstackSensorModule],
+      imports: [
+        ThingsboardThingsboardClientModule,
+        ChirpstackChirpstackGatewayModule,
+        ChirpstackChirpstackSensorModule,
+      ],
       providers: [ApiDeviceEndpointService],
     }).compile();
 
@@ -28,8 +33,9 @@ describe('ApiDeviceEndpointService', () => {
     httpService = module.get(HttpService);
     tbClient = module.get(ThingsboardThingsboardClientService);
 
-    process.env.TB_URL = "http://127.0.0.1:9090";
-    process.env.CHIRPSTACK_API = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5X2lkIjoiMWIwMmZhNDAtMzI4OS00NzllLWI2NjUtM2MwMzg4YmEzZDRmIiwiYXVkIjoiYXMiLCJpc3MiOiJhcyIsIm5iZiI6MTY1Mzg1MDYwNywic3ViIjoiYXBpX2tleSJ9.epxodFKkLwrvinNBVgo0r9k4PWLxumzAGw61oKrTMrI";
+    process.env.TB_URL = 'http://127.0.0.1:9090';
+    process.env.CHIRPSTACK_API =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5X2lkIjoiMWIwMmZhNDAtMzI4OS00NzllLWI2NjUtM2MwMzg4YmEzZDRmIiwiYXVkIjoiYXMiLCJpc3MiOiJhcyIsIm5iZiI6MTY1Mzg1MDYwNywic3ViIjoiYXBpX2tleSJ9.epxodFKkLwrvinNBVgo0r9k4PWLxumzAGw61oKrTMrI';
   });
 
   it('should be defined', () => {
@@ -151,7 +157,6 @@ describe('ApiDeviceEndpointService', () => {
     console.log(result);
     expect(result).toBeDefined();
   });
-
 
   // it('should process a sensor device, add it to a specified reserve, and return a confirmation message', async () => {
   //   const bodyData = {
@@ -507,7 +512,7 @@ describe('ApiDeviceEndpointService', () => {
   });
 
   ///////////////////////////////////////////////////////////////////////////////
-  it('should process the gateway list and return their locations', async() => {
+  it('should process the gateway list and return their locations', async () => {
     /*const testInput = {
       token:
         'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZlYWRtaW5AcmVzZXJ2ZS5jb20iLCJzY29wZXMiOlsiVEVOQU5UX0FETUlOIl0sInVzZXJJZCI6ImQ2MzcyZTMwLWRmZTgtMTFlYy1iZGIzLTc1MGNlN2VkMjQ1MSIsImVuYWJsZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiJjZDJkZjJiMC1kZmU4LTExZWMtYmRiMy03NTBjZTdlZDI0NTEiLCJjdXN0b21lcklkIjoiMTM4MTQwMDAtMWRkMi0xMWIyLTgwODAtODA4MDgwODA4MDgwIiwiaXNzIjoidGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE2NTQ3MDMyNzcsImV4cCI6MTY1NDcxMjI3N30.9PTeASiluMvW0NOi_FiAZiR17-dUMooWNqb_Xys5iiGBGtfHKWyOyGZiEF1Xj9ItkDY97ohQ13yCsAnzJ8c9-w',
@@ -518,29 +523,28 @@ describe('ApiDeviceEndpointService', () => {
   });
 
   ///////////////////////////////////////////////////////////////////////////////
-  it('should process the gateway list and return their locations', async() => {
+  it('should process the gateway list and return their locations', async () => {
     const testInput = {
-      "token" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZlYWRtaW5AcmVzZXJ2ZS5jb20iLCJzY29wZXMiOlsiVEVOQU5UX0FETUlOIl0sInVzZXJJZCI6ImQ2MzcyZTMwLWRmZTgtMTFlYy1iZGIzLTc1MGNlN2VkMjQ1MSIsImVuYWJsZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiJjZDJkZjJiMC1kZmU4LTExZWMtYmRiMy03NTBjZTdlZDI0NTEiLCJjdXN0b21lcklkIjoiMTM4MTQwMDAtMWRkMi0xMWIyLTgwODAtODA4MDgwODA4MDgwIiwiaXNzIjoidGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE2NTQ3MDcxODgsImV4cCI6MTY1NDcxNjE4OH0.ANHDlH4zU3JG8743lMCCRD5N86pzSBOoQB0pxdq_KZgBmzacC5N0l91ZjKZZxi7f6r2BL-JXc5WWsArS-qe04Q",
-      "deviceID" : "2fe67850-dfe9-11ec-bdb3-750ce7ed2451",
-      "locationParameters" : [
-          {
-              "latitude" : 23,
-              "longitude" : 22
-          },
-          {
-              "latitude" : 21,
-              "longitude" : 22
-          },
-          {
-              "latitude" : 23.56,
-              "longitude" : 24.25
-          }
-      ]
-    }
+      token:
+        'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZlYWRtaW5AcmVzZXJ2ZS5jb20iLCJzY29wZXMiOlsiVEVOQU5UX0FETUlOIl0sInVzZXJJZCI6ImQ2MzcyZTMwLWRmZTgtMTFlYy1iZGIzLTc1MGNlN2VkMjQ1MSIsImVuYWJsZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiJjZDJkZjJiMC1kZmU4LTExZWMtYmRiMy03NTBjZTdlZDI0NTEiLCJjdXN0b21lcklkIjoiMTM4MTQwMDAtMWRkMi0xMWIyLTgwODAtODA4MDgwODA4MDgwIiwiaXNzIjoidGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE2NTQ3MDcxODgsImV4cCI6MTY1NDcxNjE4OH0.ANHDlH4zU3JG8743lMCCRD5N86pzSBOoQB0pxdq_KZgBmzacC5N0l91ZjKZZxi7f6r2BL-JXc5WWsArS-qe04Q',
+      deviceID: '2fe67850-dfe9-11ec-bdb3-750ce7ed2451',
+      locationParameters: [
+        {
+          latitude: 23,
+          longitude: 22,
+        },
+        {
+          latitude: 21,
+          longitude: 22,
+        },
+        {
+          latitude: 23.56,
+          longitude: 24.25,
+        },
+      ],
+    };
     //console.log(await service.processGatewaySetLocation(testInput));
   });
-
-  
 
   // export interface AddSensorDevice {
   //   token: string;
@@ -552,12 +556,15 @@ describe('ApiDeviceEndpointService', () => {
   //   extraParams?: any;
   // }
   describeLive('ApiDeviceEndpointService Live', () => {
-    it('should should add a sensor', async() => {
-      const tbToken = await tbClient.loginUserReturnToken('reserveadmin@reserve.com','reserve');
-      process.env.CHIRPSTACK_API='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5X2lkIjoiMWIwMmZhNDAtMzI4OS00NzllLWI2NjUtM2MwMzg4YmEzZDRmIiwiYXVkIjoiYXMiLCJpc3MiOiJhcyIsIm5iZiI6MTY1Mzg1MDYwNywic3ViIjoiYXBpX2tleSJ9.epxodFKkLwrvinNBVgo0r9k4PWLxumzAGw61oKrTMrI';
+    it('should should add a sensor', async () => {
+      const tbToken = await tbClient.loginUserReturnToken(
+        'reserveadmin@reserve.com',
+        'reserve'
+      );
+      process.env.CHIRPSTACK_API =
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5X2lkIjoiMWIwMmZhNDAtMzI4OS00NzllLWI2NjUtM2MwMzg4YmEzZDRmIiwiYXVkIjoiYXMiLCJpc3MiOiJhcyIsIm5iZiI6MTY1Mzg1MDYwNywic3ViIjoiYXBpX2tleSJ9.epxodFKkLwrvinNBVgo0r9k4PWLxumzAGw61oKrTMrI';
 
-      const result = await
-      service.processDeviceAddsensor({
+      const result = await service.processDeviceAddsensor({
         token: tbToken.Token,
         customerID: 'ef55ff40-dfe8-11ec-bdb3-750ce7ed2451',
         hardwareName: '70b3d5705000dfb1',
@@ -566,57 +573,80 @@ describe('ApiDeviceEndpointService', () => {
       });
 
       console.log(result);
-      
+
       expect(result.status).toBe(200);
       expect(result.explanation).toBe('ok');
     });
 
-    it('should should delete a sensor', async() => {
-      const tbToken = await tbClient.loginUserReturnToken('reserveadmin@reserve.com','reserve');
-      process.env.CHIRPSTACK_API='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5X2lkIjoiMWIwMmZhNDAtMzI4OS00NzllLWI2NjUtM2MwMzg4YmEzZDRmIiwiYXVkIjoiYXMiLCJpc3MiOiJhcyIsIm5iZiI6MTY1Mzg1MDYwNywic3ViIjoiYXBpX2tleSJ9.epxodFKkLwrvinNBVgo0r9k4PWLxumzAGw61oKrTMrI';
+    it('should should delete a sensor', async () => {
+      const tbToken = await tbClient.loginUserReturnToken(
+        'reserveadmin@reserve.com',
+        'reserve'
+      );
+      process.env.CHIRPSTACK_API =
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5X2lkIjoiMWIwMmZhNDAtMzI4OS00NzllLWI2NjUtM2MwMzg4YmEzZDRmIiwiYXVkIjoiYXMiLCJpc3MiOiJhcyIsIm5iZiI6MTY1Mzg1MDYwNywic3ViIjoiYXBpX2tleSJ9.epxodFKkLwrvinNBVgo0r9k4PWLxumzAGw61oKrTMrI';
 
-      const result = await 
-      service.processDeviceremove({
+      const result = await service.processDeviceremove({
         token: tbToken.Token,
         deviceID: 'f52a0480-e7f8-11ec-9cbe-a5b859dcff2c',
         isGateway: false,
-        devEUI: '70b3d5705000dfb1'
+        devEUI: '70b3d5705000dfb1',
       });
 
       console.log(result);
-      expect(result).toStrictEqual({"explanation": "device deletion failed", "status": 400});
+      expect(result).toStrictEqual({
+        explanation: 'device deletion failed',
+        status: 400,
+      });
     });
 
-    it('should should add a gateway', async() => {
-      const tbToken = await tbClient.loginUserReturnToken('reserveadmin@reserve.com','reserve');
-      process.env.CHIRPSTACK_API='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5X2lkIjoiMWIwMmZhNDAtMzI4OS00NzllLWI2NjUtM2MwMzg4YmEzZDRmIiwiYXVkIjoiYXMiLCJpc3MiOiJhcyIsIm5iZiI6MTY1Mzg1MDYwNywic3ViIjoiYXBpX2tleSJ9.epxodFKkLwrvinNBVgo0r9k4PWLxumzAGw61oKrTMrI';
+    it('should should add a gateway', async () => {
+      const tbToken = await tbClient.loginUserReturnToken(
+        'reserveadmin@reserve.com',
+        'reserve'
+      );
+      process.env.CHIRPSTACK_API =
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5X2lkIjoiMWIwMmZhNDAtMzI4OS00NzllLWI2NjUtM2MwMzg4YmEzZDRmIiwiYXVkIjoiYXMiLCJpc3MiOiJhcyIsIm5iZiI6MTY1Mzg1MDYwNywic3ViIjoiYXBpX2tleSJ9.epxodFKkLwrvinNBVgo0r9k4PWLxumzAGw61oKrTMrI';
 
-      const result = await
-      service.processDeviceAddGateway({
+      const result = await service.processDeviceAddGateway({
         token: tbToken.Token,
         customerID: 'ef55ff40-dfe8-11ec-bdb3-750ce7ed2451',
         hardwareName: '353036203a001015',
         labelName: 'new_gateway_test2',
       });
       console.log(result);
-
     });
-  // });
-    it('should should delete a gateway', async() => {
-      const tbToken = await tbClient.loginUserReturnToken('reserveadmin@reserve.com','reserve');
-      process.env.CHIRPSTACK_API='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5X2lkIjoiMWIwMmZhNDAtMzI4OS00NzllLWI2NjUtM2MwMzg4YmEzZDRmIiwiYXVkIjoiYXMiLCJpc3MiOiJhcyIsIm5iZiI6MTY1Mzg1MDYwNywic3ViIjoiYXBpX2tleSJ9.epxodFKkLwrvinNBVgo0r9k4PWLxumzAGw61oKrTMrI';
+    // });
+    it('should should delete a gateway', async () => {
+      const tbToken = await tbClient.loginUserReturnToken(
+        'reserveadmin@reserve.com',
+        'reserve'
+      );
+      process.env.CHIRPSTACK_API =
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5X2lkIjoiMWIwMmZhNDAtMzI4OS00NzllLWI2NjUtM2MwMzg4YmEzZDRmIiwiYXVkIjoiYXMiLCJpc3MiOiJhcyIsIm5iZiI6MTY1Mzg1MDYwNywic3ViIjoiYXBpX2tleSJ9.epxodFKkLwrvinNBVgo0r9k4PWLxumzAGw61oKrTMrI';
 
-      const result = await
-      service.processDeviceremove({
+      const result = await service.processDeviceremove({
         token: tbToken.Token,
         deviceID: 'f52a0480-e7f8-11ec-9cbe-a5b859dcff2c',
         isGateway: false,
-        devEUI: '70b3d5705000dfb1'
-
+        devEUI: '70b3d5705000dfb1',
       });
       console.log(result);
-      expect(result).toStrictEqual({"explanation": "device deletion failed", "status": 400});
+      expect(result).toStrictEqual({
+        explanation: 'device deletion failed',
+        status: 400,
+      });
     });
   });
-});
 
+  /*it('should set gateway location -> mock', async () => {
+    service.processGatewaySetLocation({
+      deviceID: '2c49b520-084f-11ed-bc6e-a50062f6cdba',
+      locationParameters: {
+        latitude: -25.800973027864043,
+        longitude: 28.19984436035156,
+      },
+      token: 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZlYWRtaW50d29AcmVzZXJ2ZS5jb20iLCJ1c2VySWQiOiI5ZmYwZmFhMC0wODQxLTExZWQtYmM2ZS1hNTAwNjJmNmNkYmEiLCJzY29wZXMiOlsiVEVOQU5UX0FETUlOIl0sImlzcyI6InRoaW5nc2JvYXJkLmlvIiwiaWF0IjoxNjU4MzM3MDMwLCJleHAiOjE2NTgzNDYwMzAsImZpcnN0TmFtZSI6InJlc2VydmUgYWRtaW4iLCJsYXN0TmFtZSI6InR3byIsImVuYWJsZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiI4ZjkxOGFkMC0wODQxLTExZWQtYmM2ZS1hNTAwNjJmNmNkYmEiLCJjdXN0b21lcklkIjoiMTM4MTQwMDAtMWRkMi0xMWIyLTgwODAtODA4MDgwODA4MDgwIn0.e_r_ek2gTBfRW_sga2c4fR--Yos1euDtqM9d9mGk7L8fj2dK5F4II5Jh-En8xtbMfCSFaD_WoWmjKHqcpPdTXA',
+    });
+  });*/
+});

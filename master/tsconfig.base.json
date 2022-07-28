@@ -16,17 +16,35 @@
     "baseUrl": ".",
     "paths": {
       "@chirpstack": ["libs/chirpstack/src/index.ts"],
+      "@lora/ai/average": ["libs/ai/heatmap-average/src/index.ts"],
+      "@lora/ai/mock-data-trainer": ["libs/ai/mock-data-trainer/src/index.ts"],
+      "@lora/ai/mock-generator/average": [
+        "libs/ai/mock-generator/averaging-data-generator/src/index.ts"
+      ],
       "@lora/api/login": ["libs/api/login-endpoint/src/index.ts"],
       "@lora/api/mapEndpoint": ["libs/api/map-endpoint/src/index.ts"],
+      "@lora/api/reserve": ["libs/api/reserve-endpoint/src/index.ts"],
+      "@lora/api/testing": ["libs/api/api-testing/src/index.ts"],
       "@lora/api/user-endpoint": ["libs/api/user-endpoint/src/index.ts"],
       "@lora/apiRouter": ["libs/api/api-router/src/index.ts"],
       "@lora/chirpstack": ["libs/chirpstack/src/index.ts"],
-      "@lora/chirpstack-gateway": ["libs/chirpstack/chirpstack-gateway/src/index.ts"],
-      "@lora/chirpstack-sensor": ["libs/chirpstack/chirpstack-sensor/src/index.ts"],
+      "@lora/chirpstack-gateway": [
+        "libs/chirpstack/chirpstack-gateway/src/index.ts"
+      ],
+      "@lora/chirpstack-sensor": [
+        "libs/chirpstack/chirpstack-sensor/src/index.ts"
+      ],
       "@lora/database": ["libs/database-proxy/src/index.ts"],
       "@lora/device-endpoint": ["libs/api/device-endpoint/src/index.ts"],
-      "@lora/hardware-debug": ["libs/api/hardware-debug/src/index.ts"],
+      "@lora/hardware-grpc": ["libs/api/hardware-grpc/src/index.ts"],
       "@lora/location": ["libs/location/src/index.ts"],
+      "@lora/middleware/logger": ["libs/middleware/http-logger/src/index.ts"],
+      "@lora/middleware/session-management": [
+        "libs/middleware/session-management/src/index.ts"
+      ],
+      "@lora/processing/api/router": [
+        "libs/processing-api/router/src/index.ts"
+      ],
       "@lora/thingsboard-asset": [
         "libs/thingsboard/thingsboard-asset/src/index.ts"
       ],
@@ -45,33 +63,79 @@
       "@lora/thingsboard-user": [
         "libs/thingsboard/thingsboard-user/src/index.ts"
       ],
+      "@lora/thingsboard/admin": [
+        "libs/thingsboard/thingsboard-admin/src/index.ts"
+      ],
+      "@lora/thingsboard/reserve": [
+        "libs/thingsboard/thingsboard-reserve/src/index.ts"
+      ],
+      "@lora/thingsboard/tests": [
+        "libs/thingsboard/thingsboard-tests/src/index.ts"
+      ],
       "@master/api-interfaces": ["libs/api-interfaces/src/index.ts"],
       "@master/client/apiservice": ["libs/client/apiservice/src/index.ts"],
       "@master/client/defaultpage": ["libs/client/defaultpage/src/index.ts"],
-      "@master/client/demo": ["libs/client/demo/src/index.ts"],
       "@master/client/device-add-view": [
         "libs/client/device-add-view/src/index.ts"
       ],
       "@master/client/leaflet-library": [
         "libs/client/leaflet-library/src/index.ts"
       ],
+      "@master/client/manage-view": ["libs/client/manage-view/src/index.ts"],
+      "@master/client/manage-view/src/lib/create-reserve": [
+        "libs/client/manage-view/src/lib/create-reserve/src/index.ts"
+      ],
+      "@master/client/manage-view/src/lib/devices-mange-view": [
+        "libs/client/manage-view/src/lib/devices-mange-view/src/index.ts"
+      ],
+      "@master/client/manage-view/src/lib/devices-view": [
+        "libs/client/manage-view/src/lib/devices-view/src/index.ts"
+      ],
+      "@master/client/manage-view/src/lib/manage-content": [
+        "libs/client/manage-view/src/lib/manage-content/src/index.ts"
+      ],
+      "@master/client/manage-view/src/lib/profile-edit": [
+        "libs/client/manage-view/src/lib/profile-edit/src/index.ts"
+      ],
+      "@master/client/manage-view/src/lib/profile-view": [
+        "libs/client/manage-view/src/lib/profile-view/src/index.ts"
+      ],
+      "@master/client/manage-view/src/lib/reserve-detail-view": [
+        "libs/client/manage-view/src/lib/reserve-detail-view/src/index.ts"
+      ],
+      "@master/client/manage-view/src/lib/reserve-edit": [
+        "libs/client/manage-view/src/lib/reserve-edit/src/index.ts"
+      ],
+      "@master/client/manage-view/src/lib/users-edit": [
+        "libs/client/manage-view/src/lib/users-edit/src/index.ts"
+      ],
+      "@master/client/manage-view/src/lib/users-view": [
+        "libs/client/manage-view/src/lib/users-view/src/index.ts"
+      ],
       "@master/client/map-apicaller": [
         "libs/client/map-apicaller/src/index.ts"
       ],
       "@master/client/reserve-view": ["libs/client/reserve-view/src/index.ts"],
+      "@master/client/shared-services": [
+        "libs/client/shared-services/src/index.ts"
+      ],
       "@master/client/shared-ui/components-ui": [
         "libs/client/shared-ui/components-ui/src/index.ts"
       ],
       "@master/client/shared-ui/material-ui": [
         "libs/client/shared-ui/material-ui/src/index.ts"
       ],
+      "@master/client/user-storage-controller": [
+        "libs/client/user-storage-controller/src/index.ts"
+      ],
       "@master/client/users-management-view": [
         "libs/client/users-management-view/src/index.ts"
       ],
-      "@master/shared-interfaces": ["libs/shared-interfaces/src/index.ts"],
-      "@thingsboard/provision-user": [
-        "libs/thingsboard/thingsboard-user/thingsboard-user-provision/src/index.ts"
-      ]
+      "@master/client/users-view": ["libs/client/users-view/src/index.ts"],
+      "@master/middleware/cookie-management": [
+        "libs/middleware/cookie-management/src/index.ts"
+      ],
+      "@master/shared-interfaces": ["libs/shared-interfaces/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
