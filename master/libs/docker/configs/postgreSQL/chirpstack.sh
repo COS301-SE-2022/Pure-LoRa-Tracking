@@ -12,5 +12,5 @@ EOSQL
 
 if [ "$PURELORABUILD" == "DEV" ]; then
     psql --username "$POSTGRES_USER" -f '/dev_db/chirpstack_as' chirpstack_as;
-    # psql --username "$POSTGRES_USER" -f '/dev_db/chirpstack_ns' chirpstack_ns;
+    psql --username "$POSTGRES_USER" -f '/dev_db/chirpstack_ns' chirpstack_ns;
 fi
