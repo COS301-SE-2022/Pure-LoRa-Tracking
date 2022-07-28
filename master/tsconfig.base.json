@@ -91,6 +91,9 @@
       "@master/client/manage-view/src/lib/devices-view": [
         "libs/client/manage-view/src/lib/devices-view/src/index.ts"
       ],
+      "@master/client/manage-view/src/lib/gateway-edit-view": [
+        "libs/client/manage-view/src/lib/gateway-edit-view/src/index.ts"
+      ],
       "@master/client/manage-view/src/lib/manage-content": [
         "libs/client/manage-view/src/lib/manage-content/src/index.ts"
       ],
