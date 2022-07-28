@@ -20,9 +20,9 @@ export class UserEditComponent implements OnInit {
 
   reservesList:ReserveDetails[] = [];
   id:string|null;
-  name:string="";
-  surname:string="";
-  email:string="";
+  name="";
+  surname="";
+  email="";
   selected:string[]=[];
   constructor(private activeRoute:ActivatedRoute,private formBuilder: FormBuilder, private router:Router,private http:HttpClient) {
     this.id="";

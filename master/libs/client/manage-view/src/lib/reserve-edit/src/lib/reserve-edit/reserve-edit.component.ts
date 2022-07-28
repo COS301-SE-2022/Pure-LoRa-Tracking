@@ -12,7 +12,7 @@ export class ReserveEditComponent implements OnInit {
   email:string|null;
   name:string|null;
   reserveInfo: FormGroup = new FormGroup({});
-  mapgeojson:string="";
+  mapgeojson="";
 
   constructor(private activeRoute: ActivatedRoute, private formBuilder: FormBuilder, private router:Router,private http:HttpClient) {
    this.id="";

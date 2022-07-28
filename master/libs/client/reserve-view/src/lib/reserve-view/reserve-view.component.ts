@@ -33,7 +33,7 @@ export class ReserveViewComponent {
   Gateways: Gateway[];
   ReserveName = "";
   token = "";
-  isadmin: boolean = false;
+  isadmin = false;
 
   reservesList: ReserveInfo[];
   selectedReserveId = "";

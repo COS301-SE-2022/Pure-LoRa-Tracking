@@ -130,13 +130,13 @@ export class DevicesListComponent implements OnInit {
   //   console.log(event);
   // }
 
-  changeDeviceStatus(event:any, type:string, id: string): void {
-    console.log(type + ": "+ id +" changed to "+event.value);
-  }
+  // changeDeviceStatus(event:any, type:string, id: string): void {
+  //   console.log(type + ": "+ id +" changed to "+event.value);
+  // }
 
-  reassignDevice(event:any, type:string, id: string): void {
+  // reassignDevice(event:any, type:string, id: string): void {
 
-  }
+  // }
 
   unassign(id:string):void{
     this.http.post("api/device/unassign",{
