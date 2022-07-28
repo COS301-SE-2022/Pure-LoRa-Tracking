@@ -15,7 +15,7 @@ import { ReserveCreateComponent } from '@master/client/manage-view/src/lib/creat
 import { ReserveEditComponent } from '@master/client/manage-view/src/lib/reserve-edit';
 import { UserEditComponent } from '@master/client/manage-view/src/lib/users-edit';
 import { DevicesListComponent } from "@master/client/manage-view/src/lib/devices-mange-view";
-import { GatewayEditComponent } from './gateway-edit-view/src/lib/gateway-edit/gateway-edit.component';
+import { GatewayEditComponent } from '@master/client/manage-view/src/lib/gateway-edit-view';
 
 export const clientManageViewRoutes: Route[] = [
   {
