@@ -1,3 +1,4 @@
+import tf = require('@tensorflow/tfjs-node');
 import { Test } from '@nestjs/testing';
 import { AiMockDataTrainerService } from './ai-mock-data-trainer.service';
 
@@ -10,6 +11,7 @@ describe('AiMockDataTrainerService', () => {
     }).compile();
 
     service = module.get(AiMockDataTrainerService);
+    tf.setBackend('cpu');
   });
 
   it('should be defined', () => {
