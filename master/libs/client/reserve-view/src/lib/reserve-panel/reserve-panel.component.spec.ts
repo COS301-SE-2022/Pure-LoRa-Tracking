@@ -94,13 +94,13 @@ describe('ReservePanelComponent', () => {
 
   describe("ViewSensor",()=>{
     it("Should change the current sensor",()=>{
-      component.viewSensor(demoval1,demoval2);
+      component.viewSensor({id:demoval1,name:demoval2});
       expect(component.currentSensor.id).toEqual(demoval1);
       expect(component.currentSensor.name).toEqual(demoval2);
     })
 
     it("Should set open sensor to true",()=>{
-      component.viewSensor(demoval1,demoval2);
+      component.viewSensor({id:demoval1,name:demoval2});
       expect(component.openSensor).toEqual(true);
     })
   })

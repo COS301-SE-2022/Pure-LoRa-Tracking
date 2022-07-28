@@ -1,23 +1,23 @@
 import { LocationModule } from '@lora/location';
 import { ThingsboardThingsboardClientModule } from '@lora/thingsboard-client';
 import { Test } from '@nestjs/testing';
-import { ApiHardwareDebugController } from './-api-hardware-debug.controller';
-import { ApiHardwareDebugService } from './-api-hardware-debug.service';
-import { acknowledge } from './hardware-payload.interface'
+import { ApiHardwareGrpcController } from './api-hardware-grpc.controller';
+import { ApiHardwareGrpcService } from './api-hardware-grpc.service';
+import { acknowledge } from './api-hardware-payload.interface';
 
-describe('ApiHardwareDebugController', () => {
-  let controller: ApiHardwareDebugController;
-  let service: ApiHardwareDebugService;
+describe('ApiHardwareGrpcController', () => {
+  let controller: ApiHardwareGrpcController;
+  let service: ApiHardwareGrpcService;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      imports : [ThingsboardThingsboardClientModule, LocationModule],
-      providers: [ApiHardwareDebugService],
-      controllers: [ApiHardwareDebugController],
+      imports: [ThingsboardThingsboardClientModule, LocationModule],
+      providers: [ApiHardwareGrpcService],
+      controllers: [ApiHardwareGrpcController],
     }).compile();
 
-    controller = module.get(ApiHardwareDebugController);
-    service = module.get(ApiHardwareDebugService);
+    controller = module.get(ApiHardwareGrpcController);
+    service = module.get(ApiHardwareGrpcService);
   });
 
   it('should be defined', () => {
@@ -31,13 +31,13 @@ describe('ApiHardwareDebugController', () => {
         status: 'OK',
         explanation: 'Data successfully processed',
       };
-      const resError: acknowledge = {
-        code: 400,
-        status: 'Invalid request',
-        explanation: 'Request format and/or request data is invalid',
-      };
+      // const resError: acknowledge = {
+      //   code: 400,
+      //   status: 'Invalid request',
+      //   explanation: 'Request format and/or request data is invalid',
+      // };
       // const data = {event : 'up'};
-      
+
       // service = moduleMock;
       // jest.mock('./-api-hardware-debug.service');
       jest.spyOn(service, 'deviceStatusProcess').mockImplementation();
@@ -51,12 +51,24 @@ describe('ApiHardwareDebugController', () => {
       // service = moduleMock;
       const input: Uint8Array = new Uint8Array();
 
-      expect(controller.deviceData({event : 'up'}, input)).toStrictEqual(result);
-      expect(controller.deviceData({event : 'status'}, input)).toStrictEqual(result);
-      expect(controller.deviceData({event : 'join'}, input)).toStrictEqual(result);
-      expect(controller.deviceData({event : 'ack'}, input)).toStrictEqual(result);
-      expect(controller.deviceData({event : 'txack'}, input)).toStrictEqual(result);
-      expect(controller.deviceData({event : 'error'}, input)).toStrictEqual(result);
+      expect(controller.deviceData({ event: 'up' }, input)).toStrictEqual(
+        result
+      );
+      expect(controller.deviceData({ event: 'status' }, input)).toStrictEqual(
+        result
+      );
+      expect(controller.deviceData({ event: 'join' }, input)).toStrictEqual(
+        result
+      );
+      expect(controller.deviceData({ event: 'ack' }, input)).toStrictEqual(
+        result
+      );
+      expect(controller.deviceData({ event: 'txack' }, input)).toStrictEqual(
+        result
+      );
+      expect(controller.deviceData({ event: 'error' }, input)).toStrictEqual(
+        result
+      );
     });
 
     it('should return not return acknowledge interface', () => {
