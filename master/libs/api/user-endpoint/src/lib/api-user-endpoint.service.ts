@@ -274,6 +274,11 @@ export class ApiUserEndpointService {
         status: 400,
         explain: 'reserveID not defined',
       };
+      if (content.refreshToken == undefined || content.refreshToken == '')
+      return {
+        status: 400,
+        explain: 'refreshToken not defined',
+      };
 
     this.thingsboardClient.setToken(content.token);
 
@@ -305,6 +310,16 @@ export class ApiUserEndpointService {
       return {
         status: 400,
         explain: 'userID not defined',
+      };
+      if (content.userInfo == undefined || content.userInfo.firstName == undefined || content.userInfo.firstName == '')
+      return {
+        status: 400,
+        explain: 'firstname not defined',
+      };
+      if (content.userInfo == undefined || content.userInfo.lastName == undefined || content.userInfo.lastName == '')
+      return {
+        status: 400,
+        explain: 'lastname not defined',
       };
 
     this.thingsboardClient.setToken(content.token);

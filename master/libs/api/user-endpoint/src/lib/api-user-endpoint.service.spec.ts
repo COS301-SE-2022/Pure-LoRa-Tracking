@@ -82,7 +82,7 @@ describe('ApiUserEndpointService', () => {
       status: 401,
       explain: 'token missing',
     });
-  }); 
+  });
 
   it('add user -> missing customer ID', async () => {
     delete tests.userEndpointExample.customerID;
@@ -96,7 +96,7 @@ describe('ApiUserEndpointService', () => {
       status: 400,
       explain: 'customerID not defined',
     });
-  }); 
+  });
 
   it('add user -> missing userinfo', async () => {
     delete tests.userEndpointExample.userInfo;
@@ -104,7 +104,7 @@ describe('ApiUserEndpointService', () => {
       status: 400,
       explain: 'userInfo not defined',
     });
-  }); 
+  });
 
   it('add user -> missing email', async () => {
     delete tests.userEndpointExample.userInfo.email;
@@ -118,7 +118,7 @@ describe('ApiUserEndpointService', () => {
       status: 400,
       explain: 'no user email found',
     });
-  }); 
+  });
 
   it('add user -> missing first name', async () => {
     delete tests.userEndpointExample.userInfo.firstName;
@@ -132,7 +132,7 @@ describe('ApiUserEndpointService', () => {
       status: 400,
       explain: 'no first name found',
     });
-  }); 
+  });
 
   it('add user -> missing last name', async () => {
     delete tests.userEndpointExample.userInfo.lastName;
@@ -146,7 +146,7 @@ describe('ApiUserEndpointService', () => {
       status: 400,
       explain: 'no last name found',
     });
-  }); 
+  });
 
   it('add user -> missing reserve', async () => {
     delete tests.userEndpointExample.reserves;
@@ -160,7 +160,7 @@ describe('ApiUserEndpointService', () => {
       status: 400,
       explain: 'no reserves found, there must at least be one'
     });
-  }); 
+  });
 
   /*it('add user -> missing reserve', async () => {
     jest
@@ -168,4 +168,190 @@ describe('ApiUserEndpointService', () => {
     .mockImplementationOnce(() => of({status:'fail'}));
   }); */
 
+  ///////////////////////////////////////////////////////////////////////////////////
+  it('change reserve -> missing token', async () => {
+    delete tests.userEndpointExample.token;
+    expect(await service.UserChangeReserveProcess(tests.userEndpointExample)).toMatchObject({
+      status: 401,
+      explain: 'token missing',
+    });
+
+    tests.userEndpointExample.token = '';
+    expect(await service.UserChangeReserveProcess(tests.userEndpointExample)).toMatchObject({
+      status: 401,
+      explain: 'token missing',
+    });
+  });
+
+  it('change reserve -> missing refreshToken', async () => {
+    delete tests.userEndpointExample.refreshToken;
+    expect(await service.UserChangeReserveProcess(tests.userEndpointExample)).toMatchObject({
+      status: 400,
+      explain: 'refreshToken not defined',
+    });
+
+    tests.userEndpointExample.refreshToken = '';
+    expect(await service.UserChangeReserveProcess(tests.userEndpointExample)).toMatchObject({
+      status: 400,
+      explain: 'refreshToken not defined',
+    });
+  });
+
+  it('change reserve -> missing reserveID', async () => {
+    delete tests.userEndpointExample.reserveID;
+    expect(await service.UserChangeReserveProcess(tests.userEndpointExample)).toMatchObject({
+      status: 400,
+      explain: 'reserveID not defined',
+    });
+
+    tests.userEndpointExample.reserveID = '';
+    expect(await service.UserChangeReserveProcess(tests.userEndpointExample)).toMatchObject({
+      status: 400,
+      explain: 'reserveID not defined',
+    });
+  });
+
+  ///////////////////////////////////////////////////////////////////////////////////
+  it('remove user -> missing token', async () => {
+    delete tests.userEndpointExample.token;
+    expect(await service.RemoveUserProcess(tests.userEndpointExample)).toMatchObject({
+      status: 401,
+      explain: 'token missing',
+    });
+
+    tests.userEndpointExample.token = '';
+    expect(await service.RemoveUserProcess(tests.userEndpointExample)).toMatchObject({
+      status: 401,
+      explain: 'token missing',
+    });
+  });
+
+  it('remove user -> missing user id', async () => {
+    delete tests.userEndpointExample.userID;
+    expect(await service.RemoveUserProcess(tests.userEndpointExample)).toMatchObject({
+      status: 400,
+      explain: 'userID not defined',
+    });
+
+    tests.userEndpointExample.userID = '';
+    expect(await service.RemoveUserProcess(tests.userEndpointExample)).toMatchObject({
+      status: 400,
+      explain: 'userID not defined',
+    });
+  });
+
+  ///////////////////////////////////////////////////////////////////////////////////
+  it('disable user -> missing token', async () => {
+    delete tests.userEndpointExample.token;
+    expect(await service.DisableUserProcess(tests.userEndpointExample)).toMatchObject({
+      status: 401,
+      explain: 'token missing',
+    });
+
+    tests.userEndpointExample.token = '';
+    expect(await service.DisableUserProcess(tests.userEndpointExample)).toMatchObject({
+      status: 401,
+      explain: 'token missing',
+    });
+  });
+
+  it('disable user -> missing user id', async () => {
+    delete tests.userEndpointExample.userID;
+    expect(await service.DisableUserProcess(tests.userEndpointExample)).toMatchObject({
+      status: 400,
+      explain: 'userID not defined',
+    });
+
+    tests.userEndpointExample.userID = '';
+    expect(await service.DisableUserProcess(tests.userEndpointExample)).toMatchObject({
+      status: 400,
+      explain: 'userID not defined',
+    });
+  });
+
+  ///////////////////////////////////////////////////////////////////////////////////
+  it('enable user -> missing token', async () => {
+    delete tests.userEndpointExample.token;
+    expect(await service.EnableUserProcess(tests.userEndpointExample)).toMatchObject({
+      status: 401,
+      explain: 'token missing',
+    });
+
+    tests.userEndpointExample.token = '';
+    expect(await service.EnableUserProcess(tests.userEndpointExample)).toMatchObject({
+      status: 401,
+      explain: 'token missing',
+    });
+  });
+
+  it('enable user -> missing user id', async () => {
+    delete tests.userEndpointExample.userID;
+    expect(await service.EnableUserProcess(tests.userEndpointExample)).toMatchObject({
+      status: 400,
+      explain: 'userID not defined',
+    });
+
+    tests.userEndpointExample.userID = '';
+    expect(await service.EnableUserProcess(tests.userEndpointExample)).toMatchObject({
+      status: 400,
+      explain: 'userID not defined',
+    });
+  });
+
+  ///////////////////////////////////////////////////////////////////////////////////
+  it('user info -> missing token', async () => {
+    delete tests.userEndpointExample.token;
+    expect(await service.UserInfoProcess(tests.userEndpointExample)).toMatchObject({
+      status: 401,
+      explain: 'token missing',
+    });
+
+    tests.userEndpointExample.token = '';
+    expect(await service.UserInfoProcess(tests.userEndpointExample)).toMatchObject({
+      status: 401,
+      explain: 'token missing',
+    });
+  });
+  ///////////////////////////////////////////////////////////////////////////////////
+  it('update user -> missing token', async () => {
+    delete tests.userEndpointExample.token;
+    expect(await service.UserInfoUpdateProcess(tests.userEndpointExample)).toMatchObject({
+      status: 401,
+      explain: 'token missing',
+    });
+
+    tests.userEndpointExample.token = '';
+    expect(await service.UserInfoUpdateProcess(tests.userEndpointExample)).toMatchObject({
+      status: 401,
+      explain: 'token missing',
+    });
+  });
+
+  it('update user -> missing user id', async () => {
+    delete tests.userEndpointExample.userID;
+    expect(await service.UserInfoUpdateProcess(tests.userEndpointExample)).toMatchObject({
+      status: 400,
+      explain: 'userID not defined',
+    });
+
+    tests.userEndpointExample.userID = '';
+    expect(await service.UserInfoUpdateProcess(tests.userEndpointExample)).toMatchObject({
+      status: 400,
+      explain: 'userID not defined',
+    });
+  });
+
+  it('update user -> missing firstname', async () => {
+    delete tests.userEndpointExample.userInfo.firstName;
+    expect(await service.UserInfoUpdateProcess(tests.userEndpointExample)).toMatchObject({
+      status: 400,
+      explain: 'firstname not defined',
+    });
+
+    tests.userEndpointExample.userInfo.firstName = '';
+    expect(await service.UserInfoUpdateProcess(tests.userEndpointExample)).toMatchObject({
+      status: 400,
+      explain: 'firstname not defined',
+    });
+  });
 });
