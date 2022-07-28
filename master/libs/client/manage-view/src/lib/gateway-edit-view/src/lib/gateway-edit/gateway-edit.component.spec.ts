@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { RouterTestingModule } from '@angular/router/testing';
 import { GatewayEditComponent } from './gateway-edit.component';
 
 describe('GatewayEditComponent', () => {
@@ -8,6 +9,7 @@ describe('GatewayEditComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      imports: [RouterTestingModule],
       declarations: [GatewayEditComponent],
     }).compileComponents();
   });
