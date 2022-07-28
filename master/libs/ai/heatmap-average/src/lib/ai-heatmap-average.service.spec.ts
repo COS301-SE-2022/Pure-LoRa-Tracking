@@ -4,6 +4,8 @@ import { AiHeatmapAverageService } from './ai-heatmap-average.service';
 
 describe('AiHeatmapAverageService', () => {
   let service: AiHeatmapAverageService;
+  const saveFilePath = 'file://libs/ai/Models/averaging';
+  const loadFilePath = 'file://libs/ai/Models/averaging/model.json';
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
@@ -27,8 +29,8 @@ describe('AiHeatmapAverageService', () => {
   });*/
 
   it('tf -> save, load', async () => {
-    const saveModelResult = await service.saveModel();
-    const loadModelResult = await service.loadModel();
+    const saveModelResult = await service.saveModel(saveFilePath);
+    const loadModelResult = await service.loadModel(loadFilePath);
     expect(saveModelResult).toEqual(loadModelResult);
     expect(loadModelResult).toEqual(true);
   });
