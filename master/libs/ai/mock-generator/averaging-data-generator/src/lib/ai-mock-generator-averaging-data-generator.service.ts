@@ -83,7 +83,6 @@ export class AiMockGeneratorAveragingDataGeneratorService {
         this.trainData
       );
       entries.push(nTrainData);
-      console.log(this.trainData);
     }
     return entries;
   }
