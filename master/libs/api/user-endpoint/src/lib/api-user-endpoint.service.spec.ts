@@ -240,5 +240,118 @@ describe('ApiUserEndpointService', () => {
     });
   });
 
+  ///////////////////////////////////////////////////////////////////////////////////
+  it('disable user -> missing token', async () => {
+    delete tests.userEndpointExample.token;
+    expect(await service.DisableUserProcess(tests.userEndpointExample)).toMatchObject({
+      status: 401,
+      explain: 'token missing',
+    });
 
+    tests.userEndpointExample.token = '';
+    expect(await service.DisableUserProcess(tests.userEndpointExample)).toMatchObject({
+      status: 401,
+      explain: 'token missing',
+    });
+  });
+
+  it('disable user -> missing user id', async () => {
+    delete tests.userEndpointExample.userID;
+    expect(await service.DisableUserProcess(tests.userEndpointExample)).toMatchObject({
+      status: 400,
+      explain: 'userID not defined',
+    });
+
+    tests.userEndpointExample.userID = '';
+    expect(await service.DisableUserProcess(tests.userEndpointExample)).toMatchObject({
+      status: 400,
+      explain: 'userID not defined',
+    });
+  });
+
+  ///////////////////////////////////////////////////////////////////////////////////
+  it('enable user -> missing token', async () => {
+    delete tests.userEndpointExample.token;
+    expect(await service.EnableUserProcess(tests.userEndpointExample)).toMatchObject({
+      status: 401,
+      explain: 'token missing',
+    });
+
+    tests.userEndpointExample.token = '';
+    expect(await service.EnableUserProcess(tests.userEndpointExample)).toMatchObject({
+      status: 401,
+      explain: 'token missing',
+    });
+  });
+
+  it('enable user -> missing user id', async () => {
+    delete tests.userEndpointExample.userID;
+    expect(await service.EnableUserProcess(tests.userEndpointExample)).toMatchObject({
+      status: 400,
+      explain: 'userID not defined',
+    });
+
+    tests.userEndpointExample.userID = '';
+    expect(await service.EnableUserProcess(tests.userEndpointExample)).toMatchObject({
+      status: 400,
+      explain: 'userID not defined',
+    });
+  });
+
+  ///////////////////////////////////////////////////////////////////////////////////
+  it('user info -> missing token', async () => {
+    delete tests.userEndpointExample.token;
+    expect(await service.UserInfoProcess(tests.userEndpointExample)).toMatchObject({
+      status: 401,
+      explain: 'token missing',
+    });
+
+    tests.userEndpointExample.token = '';
+    expect(await service.UserInfoProcess(tests.userEndpointExample)).toMatchObject({
+      status: 401,
+      explain: 'token missing',
+    });
+  });
+  ///////////////////////////////////////////////////////////////////////////////////
+  it('update user -> missing token', async () => {
+    delete tests.userEndpointExample.token;
+    expect(await service.UserInfoUpdateProcess(tests.userEndpointExample)).toMatchObject({
+      status: 401,
+      explain: 'token missing',
+    });
+
+    tests.userEndpointExample.token = '';
+    expect(await service.UserInfoUpdateProcess(tests.userEndpointExample)).toMatchObject({
+      status: 401,
+      explain: 'token missing',
+    });
+  });
+
+  it('update user -> missing user id', async () => {
+    delete tests.userEndpointExample.userID;
+    expect(await service.UserInfoUpdateProcess(tests.userEndpointExample)).toMatchObject({
+      status: 400,
+      explain: 'userID not defined',
+    });
+
+    tests.userEndpointExample.userID = '';
+    expect(await service.UserInfoUpdateProcess(tests.userEndpointExample)).toMatchObject({
+      status: 400,
+      explain: 'userID not defined',
+    });
+  });
+
+  it('update user -> missing firstname', async () => {
+    delete tests.userEndpointExample.userInfo.firstName;
+    expect(await service.UserInfoUpdateProcess(tests.userEndpointExample)).toMatchObject({
+      status: 400,
+      explain: 'firstname not defined',
+    });
+
+    tests.userEndpointExample.userInfo.firstName = '';
+    expect(await service.UserInfoUpdateProcess(tests.userEndpointExample)).toMatchObject({
+      status: 400,
+      explain: 'firstname not defined',
+    });
+  });
 });
