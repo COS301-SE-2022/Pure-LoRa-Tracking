@@ -1,1 +1,24 @@
-<button mat-button (click)="cancelEdit()">Cancel</button>
+<div class="content-wrapper">
+    
+    <h3>
+        {{gateway.name}}
+    </h3>
+    <h5>
+        {{gateway.id}}
+    </h5>
+    <div id="input-wrapper">
+        
+        <mat-form-field appearance="outline">
+            <mat-label>Latitude</mat-label>
+            <input matInput>
+            <mat-hint>00.00000000000000</mat-hint>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Longitude</mat-label>
+            <input matInput>
+            <mat-hint>00.00000000000000</mat-hint>
+        </mat-form-field>
+    </div>
+    <button mat-raised-button (click)="cancelEdit()" color="primary" class="buttons">Cancel</button>
+    <button mat-raised-button color="primary" class="buttons">Save</button>
+</div>

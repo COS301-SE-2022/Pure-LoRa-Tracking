@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./gateway-edit.component.scss'],
 })
 export class GatewayEditComponent implements OnInit {
+  gateway = {id:"123", name:"g1"}
   constructor(private router: Router) {}
 
   ngOnInit(): void {}
