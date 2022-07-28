@@ -37,4 +37,8 @@ describe("ReservePage",()=>{
         cy.get(".managebtn").click();
         cy.contains("Role");
     })
+
+    it("Should be able to access the users page ",()=>{
+        cy.get(".usersbtn").click();
+    })
 })
