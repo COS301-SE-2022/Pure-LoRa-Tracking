@@ -1,12 +1,17 @@
 @import "apps/lora-tracking/src/styles.scss";
 
 mat-card {
-    border: 5%;
     height: 100%;
+    padding-top: 0.3em;
     }
 
 mat-card-title {
     font-weight: 500;
+    margin-bottom: 0;
+}
+
+mat-card-header{
+    margin: 0;
 }
 
 #actionBtn{
@@ -63,3 +68,22 @@ cdk-virtual-scroll-viewport {
 #card-content {
     height:70%
 }
+
+.reserve-select .mat-select-arrow {
+    border: none;
+}
+
+#switchIcon {
+    // vertical-align: sub;
+}
+
+::ng-deep .reserve-select-field .mat-form-field-wrapper {
+    padding-bottom:  0;
+}
+
+::ng-deep .reserve-select-field .mat-form-field-wrapper .mat-form-field-flex .mat-form-field-infix {
+    border-top: 0;
+    padding: 0;
+    width: fit-content;
+}
+

@@ -1,11 +1,14 @@
 <mat-card color='$primary' *ngIf="openSensor === false">
     <mat-card-header class="headerText">
         <mat-card-title >
-            <mat-select [(value)]="selectedReserve" (selectionChange)="reserveChanged()">
-                <mat-option [value]="option.id" *ngFor="let option of reserveList">
-                    {{option.name}}
-                </mat-option>
-            </mat-select>
+            <mat-form-field class="reserve-select-field">
+                <mat-select [(value)]="selectedReserve" (selectionChange)="reserveChanged()" class="reserve-select">
+                    <mat-option [value]="option.id" *ngFor="let option of reserveList">
+                        {{option.name}}
+                    </mat-option>
+                </mat-select>
+                <mat-icon class="material-icons-outlined" matSuffix id="switchIcon">arrow_drop_down</mat-icon>
+            </mat-form-field>
         </mat-card-title>
     </mat-card-header>
     <mat-divider></mat-divider>
