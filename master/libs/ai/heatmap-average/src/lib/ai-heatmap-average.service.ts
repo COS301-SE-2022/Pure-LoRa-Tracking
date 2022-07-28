@@ -5,7 +5,7 @@ import tf = require('@tensorflow/tfjs-node');
 export class AiHeatmapAverageService {
   private EarthRadius = 6371;
   private model: tf.Sequential;
-  private targetEpochs = 10;
+  private targetEpochs = 3;
 
   /*
         1) get model
@@ -53,15 +53,15 @@ export class AiHeatmapAverageService {
     });
   }
 
-  async saveModel(): Promise<boolean> {
-    const res = await this.model.save('file://libs/ai/Models/averaging');
+  async saveModel(filePath: string): Promise<boolean> {
+    const res = await this.model.save(filePath); //'file://libs/ai/Models/averaging');
     if (res.errors != undefined) return false;
     return true;
   }
 
-  async loadModel(): Promise<boolean> {
+  async loadModel(filePath: string): Promise<boolean> {
     const res = await tf
-      .loadLayersModel('file://libs/ai/Models/averaging/model.json')
+      .loadLayersModel(filePath) //'file://libs/ai/Models/averaging/model.json')
       .then(() => {
         return true;
       })
@@ -78,7 +78,7 @@ export class AiHeatmapAverageService {
       tf.tensor(trueData, [1, 2]),
       {
         epochs: this.targetEpochs,
-        callbacks: {
+        /*callbacks: {
           onEpochEnd: async (epoch, logs) => {
             console.log('Epoch ' + epoch);
             console.log('Loss: ' + logs.loss + ' accuracy: ' + logs.acc);
@@ -86,7 +86,7 @@ export class AiHeatmapAverageService {
           onTrainEnd: async (logs: tf.Logs) => {
             console.log(logs);
           },
-        },
+        },*/
       }
     );
   }
