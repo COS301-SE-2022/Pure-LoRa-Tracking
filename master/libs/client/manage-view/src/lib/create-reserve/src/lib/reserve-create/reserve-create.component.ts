@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormControl, Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { SnackbarAlertComponent } from '@master/client/shared-ui/components-ui';
 @Component({
   selector: 'master-reserve-create',
   templateUrl: './reserve-create.component.html',
@@ -10,7 +12,7 @@ import { HttpClient } from '@angular/common/http';
 export class ReserveCreateComponent implements OnInit {
  
   reserveInfo: FormGroup = new FormGroup({});
-  constructor(private formBuilder: FormBuilder, private router:Router, private http: HttpClient) {}
+  constructor(private formBuilder: FormBuilder, private router:Router, private http: HttpClient,private snackbar:MatSnackBar) {}
   mapgeojson="";
 
   ngOnInit(): void {
@@ -29,12 +31,18 @@ export class ReserveCreateComponent implements OnInit {
         email:this.reserveInfo.get("email")?.value,
         NameOfReserve:this.reserveInfo.get("name")?.value,
         location:JSON.parse(this.mapgeojson)   
-      }).subscribe(val=>{
+      }).subscribe((val:any)=>{
         console.log(val);
+        if(val.status==200&&val.explanation=="reserve created"){
+          this.snackbar.openFromComponent(SnackbarAlertComponent,{duration: 5000, panelClass: ['green-snackbar'], data: {message:"Reserve created", icon:"check_circle"}});
+          this.ngOnInit();
+          this.navigateBack();
+        }
       });
     }
     else{
-      alert("File not uploaded");
+      this.snackbar.openFromComponent(SnackbarAlertComponent,{duration: 5000, panelClass: ['red-snackbar'], data: {message:"Map not uploaded", icon:"error_outline"}});
+
     }
 
 

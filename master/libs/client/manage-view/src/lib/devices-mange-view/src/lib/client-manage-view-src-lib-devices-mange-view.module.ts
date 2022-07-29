@@ -7,11 +7,13 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatSelectModule} from '@angular/material/select';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDialogModule } from '@angular/material/dialog';
 
 export const clientManageViewSrcLibDevicesMangeViewRoutes: Route[] = [];
 
 @NgModule({
-  imports: [CommonModule, RouterModule, MatTableModule, MatIconModule, MatButtonModule, MatTabsModule, MatSelectModule],
+  imports: [CommonModule, RouterModule, MatTableModule, MatIconModule, MatButtonModule, MatTabsModule, MatSelectModule, MatSnackBarModule, MatDialogModule],
   declarations: [DevicesListComponent],
   exports: [DevicesListComponent],
 })

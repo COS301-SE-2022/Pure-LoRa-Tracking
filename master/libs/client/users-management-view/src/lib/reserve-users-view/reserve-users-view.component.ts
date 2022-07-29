@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import {HttpClient} from "@angular/common/http"
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import { FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import { DialogConfirmationComponent } from '@master/client/shared-ui/components-ui';
+import { DialogConfirmationComponent, SnackbarAlertComponent } from '@master/client/shared-ui/components-ui';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 export interface userInfo{
   name: string,
   surname: string,
@@ -38,7 +39,7 @@ export class ReserveUsersViewComponent implements OnInit {
   // token="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZlYWRtaW5AcmVzZXJ2ZS5jb20iLCJzY29wZXMiOlsiVEVOQU5UX0FETUlOIl0sInVzZXJJZCI6ImQ2MzcyZTMwLWRmZTgtMTFlYy1iZGIzLTc1MGNlN2VkMjQ1MSIsImVuYWJsZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiJjZDJkZjJiMC1kZmU4LTExZWMtYmRiMy03NTBjZTdlZDI0NTEiLCJjdXN0b21lcklkIjoiMTM4MTQwMDAtMWRkMi0xMWIyLTgwODAtODA4MDgwODA4MDgwIiwiaXNzIjoidGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE2NTQ4MDU3NzUsImV4cCI6MTY1NDgxNDc3NX0.76eRuu1QDS4QLxUVuJNcawQkpyMoXezGuRfPiVMhLnDHxtxwUQqtIrnbEeLBMkVITbwjYhozU6zOyQaRiW2ajA"
   assignedReserves= new FormControl();
   
-  constructor(private _formBuilder: FormBuilder,private http:HttpClient,public confirmDialog: MatDialog, private router:Router) {
+  constructor(private _formBuilder: FormBuilder,private http:HttpClient,public confirmDialog: MatDialog, private router:Router,private snackbar:MatSnackBar) {
    
   }
 
@@ -55,6 +56,8 @@ export class ReserveUsersViewComponent implements OnInit {
     this.reserveGroup = this._formBuilder.group({
       reserveControl: ['',Validators.required],
     })
+
+    this.sourceData=[];
 
     this.http.post("api/user/admin/groups",{
     }).subscribe((val:any)=>{
@@ -144,8 +147,11 @@ export class ReserveUsersViewComponent implements OnInit {
             reserveID: curr, reserveName: this.groups.find(other=>other.customerid==curr)?.name
           }
         }),
-      }).subscribe((curr)=>{
-        console.log(curr);
+      }).subscribe((curr:any)=>{
+        if(curr.status==200&&curr.explain=="ok"){
+          this.snackbar.openFromComponent(SnackbarAlertComponent,{duration: 5000, panelClass: ['green-snackbar'], data: {message:"User Added", icon:"check_circle"}});
+          this.ngOnInit();
+        }
       })
 
     }
@@ -165,7 +171,10 @@ export class ReserveUsersViewComponent implements OnInit {
           userID:userId
         }).subscribe((val:any)=>{
           console.log(val);
-          if(val.explain=="ok") alert("User deleted");
+          if(val.explain=="ok") {
+            this.snackbar.openFromComponent(SnackbarAlertComponent,{duration: 5000, panelClass: ['red-snackbar'], data: {message:"User Deleted", icon:"check_circle"}});
+            this.ngOnInit();
+          }
         })
       }
     })

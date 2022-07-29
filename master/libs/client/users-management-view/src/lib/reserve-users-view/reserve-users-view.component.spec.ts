@@ -5,7 +5,7 @@ import { ReserveUsersViewComponent } from './reserve-users-view.component';
 import {ReactiveFormsModule} from '@angular/forms';
 
 import { RouterTestingModule } from '@angular/router/testing';
-
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatDialogModule} from '@angular/material/dialog';
 describe('ReserveUsersViewComponent', () => {
   let component: ReserveUsersViewComponent;
@@ -14,7 +14,7 @@ describe('ReserveUsersViewComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ReserveUsersViewComponent],
-      imports: [ReactiveFormsModule,HttpClientTestingModule,MatDialogModule,RouterTestingModule]
+      imports: [ReactiveFormsModule,HttpClientTestingModule,MatDialogModule,RouterTestingModule,MatSnackBarModule]
     }).compileComponents();
   });
 
