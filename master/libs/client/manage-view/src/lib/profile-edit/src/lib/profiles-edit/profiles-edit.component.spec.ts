@@ -3,6 +3,7 @@ import {HttpClientTestingModule} from "@angular/common/http/testing"
 import { ProfilesEditComponent } from './profiles-edit.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 describe('ProfilesEditComponent', () => {
   let component: ProfilesEditComponent;
@@ -10,7 +11,7 @@ describe('ProfilesEditComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule,RouterTestingModule,HttpClientTestingModule],
+      imports: [ReactiveFormsModule,RouterTestingModule,HttpClientTestingModule,MatSnackBarModule],
       declarations: [ProfilesEditComponent],
     }).compileComponents();
   });

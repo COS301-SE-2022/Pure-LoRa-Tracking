@@ -7,6 +7,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 export const clientManageViewSrcLibReserveDetailViewRoutes: Route[] = [];
 
 @NgModule({
@@ -17,7 +19,9 @@ export const clientManageViewSrcLibReserveDetailViewRoutes: Route[] = [];
     MatListModule,
     MatFormFieldModule,
     MatInputModule,
-    MatIconModule
+    MatIconModule,
+    MatDialogModule,
+    MatSnackBarModule
   ],
   declarations: [ReserveDetailComponent],
   exports: [ReserveDetailComponent],

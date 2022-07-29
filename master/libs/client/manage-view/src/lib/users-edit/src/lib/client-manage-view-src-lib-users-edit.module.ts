@@ -7,10 +7,11 @@ import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 export const clientManageViewSrcLibUsersEditRoutes: Route[] = [];
 
 @NgModule({
-  imports: [CommonModule, RouterModule,MatFormFieldModule, ReactiveFormsModule, FormsModule, MatButtonModule, MatInputModule,MatSelectModule],
+  imports: [CommonModule, RouterModule,MatFormFieldModule, ReactiveFormsModule, FormsModule, MatButtonModule, MatInputModule,MatSelectModule,MatSnackBarModule],
   declarations: [UserEditComponent],
   exports: [UserEditComponent],
 })
