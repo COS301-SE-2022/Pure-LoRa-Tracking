@@ -9,6 +9,7 @@ import {MatTableModule} from '@angular/material/table';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { DialogConfirmationComponent } from '@master/client/shared-ui/components-ui';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 @NgModule({
   imports: [
     CommonModule,
@@ -18,6 +19,7 @@ import { DialogConfirmationComponent } from '@master/client/shared-ui/components
     MatTableModule,
     ReactiveFormsModule,
     MatDialogModule,
+    MatSnackBarModule,
     RouterModule.forChild([
        {path: '', pathMatch: 'full', component: ReserveUsersViewComponent} 
     ]),

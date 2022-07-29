@@ -4,6 +4,8 @@ import { AddGatewayDevice, AddSensorDevice } from '@master/shared-interfaces';
 import {TokenManagerService} from "@master/client/user-storage-controller"
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {deviceOptionList} from "@master/shared-interfaces"
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { SnackbarAlertComponent } from '@master/client/shared-ui/components-ui';
 @Component({
   selector: 'master-add-device',
   templateUrl: './device-add.component.html',
@@ -20,7 +22,7 @@ export class DeviceAddComponent implements OnInit {
   profilelist:Array<deviceOptionList>=[];
   deviceprofilelist:Array<{id: string, name: string}>=[];
   deviceType = "";
-  constructor(private _formBuilder: FormBuilder,private http:HttpClient,private tokenmanager:TokenManagerService) {}
+  constructor(private _formBuilder: FormBuilder,private http:HttpClient,private tokenmanager:TokenManagerService,private snackbar:MatSnackBar) {}
 
   ngOnInit(): void {
     this.typeGroup = this._formBuilder.group({
@@ -97,8 +99,11 @@ export class DeviceAddComponent implements OnInit {
               latitude: this.gatewayGroup.get("gatlang")?.value,
               longitude: this.gatewayGroup.get("gatlong")?.value,
             }
-          }).subscribe(curr=>{
+          }).subscribe((curr:any)=>{
             console.log(curr);
+            if(curr.explanation=="call finished"){
+              this.snackbar.openFromComponent(SnackbarAlertComponent,{duration: 5000, panelClass: ['green-snackbar'], data: {message:"Device Added", icon:"check_circle"}});
+            }
           })
         }
 
