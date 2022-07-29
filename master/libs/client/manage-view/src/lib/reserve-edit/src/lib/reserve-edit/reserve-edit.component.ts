@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { SnackbarAlertComponent } from '@master/client/shared-ui/components-ui';
 @Component({
   selector: 'master-reserve-edit',
   templateUrl: './reserve-edit.component.html',
@@ -14,7 +16,7 @@ export class ReserveEditComponent implements OnInit {
   reserveInfo: FormGroup = new FormGroup({});
   mapgeojson="";
 
-  constructor(private activeRoute: ActivatedRoute, private formBuilder: FormBuilder, private router:Router,private http:HttpClient) {
+  constructor(private activeRoute: ActivatedRoute, private formBuilder: FormBuilder, private router:Router,private http:HttpClient,private snackbar:MatSnackBar) { 
    this.id="";
    this.email="";
    this.name="";
@@ -46,14 +48,20 @@ export class ReserveEditComponent implements OnInit {
       reserveID:this.id,
       NameOfReserve:this.reserveInfo.get("name")?.value,
       email:this.reserveInfo.get("email")?.value
-    }).subscribe(val=>{
+    }).subscribe((val:any)=>{
       console.log("after save reserve",val);
+      if(val.status==200&&val.explanation=="call finished"){
+        this.snackbar.openFromComponent(SnackbarAlertComponent,{duration: 5000, panelClass: ['green-snackbar'], data: {message:"Reserve updated", icon:"check_circle"}});
+      }
+      else{
+        this.snackbar.openFromComponent(SnackbarAlertComponent,{duration: 5000, panelClass: ['red-snackbar'], data: {message:val.explanation, icon:"check_circle"}});
+      }
       if(this.mapgeojson!=""){
         this.http.post("api/reserve/location/set",{
           reserveID:this.id,
           location:JSON.parse(this.mapgeojson)
-        }).subscribe(otherval=>{
-          console.log(otherval);
+        }).subscribe((otherval:any)=>{
+          console.log(otherval);   
         })
       }
     })

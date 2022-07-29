@@ -1,5 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
+import { DialogConfirmationComponent, SnackbarAlertComponent } from '@master/client/shared-ui/components-ui';
 
 export interface DeviceInterface {
   id: string;
@@ -19,30 +23,9 @@ export interface SensorGatewayInterface{
 
 export class DevicesListComponent implements OnInit {
 
-  tableColumns:string[] = ["id", "name","reserve","status","delete","edit"];
-  // sensorData=[{
-  //   id: "abc",
-  //   name: "bcd",
-  //   reserve: "2",
-  //   status: "active"
-  // },{
-  //   id: "fcd",
-  //   name: "dfg",
-  //   reserve: "3",
-  //   status: "inactive"
-  // }];
+  sensorColumns:string[] = ["id", "name","reserve","status","delete"];
 
-  // gatewayData=[{
-  //   id: "as",
-  //   name: "sd",
-  //   reserve: "1",
-  //   status: "active"
-  // },{
-  //   id: "fcdfd",
-  //   name: "dfd",
-  //   reserve: "2",
-  //   status: "inactive"
-  // }];
+  gatewayColumns:string[] = ["id", "name","reserve","status","delete","edit"];
 
   gatewayData:SensorGatewayInterface[] = [];
 
@@ -50,9 +33,11 @@ export class DevicesListComponent implements OnInit {
 
   reserveList:DeviceInterface[]=[];
 
-  constructor(private http:HttpClient) {}
+  constructor(private http:HttpClient, private router:Router,private snackbar:MatSnackBar,private dialogcontroller:MatDialog) {}
 
   ngOnInit(): void {
+    this.sensorData=[];
+    this.gatewayData=[];
     this.http.post("api/user/admin/groups",{}).subscribe((val:any)=>{
       // console.log(val);
       this.reserveList = val.data.data.map((curr:any)=>{
@@ -118,31 +103,40 @@ export class DevicesListComponent implements OnInit {
 
   }
 
-  deleteDevice(id:string):void {
+  deleteDevice(id:string,isGateway:boolean,eui:string):void {
     console.log("Delete: " + id);
+    const mydialog=this.dialogcontroller.open(DialogConfirmationComponent,{
+      data: {
+        title: 'Confirm Delete',
+        dialogMessage: 'Are you sure you want to this device?  NOTE: THIS ACTION CANNOT BE REVERSED!',
+      },
+    })
+    mydialog.afterClosed().subscribe(val=>{
+      if(val){
+        this.http.post("/api/device/delete",{
+          deviceID: id,
+          isGateway: isGateway,
+          devEUI: eui
+        }).subscribe((other:any)=>{
+          console.log(other);
+          if(other.status=="200"&&other.explanation=="ok"){
+            this.snackbar.openFromComponent(SnackbarAlertComponent,{duration: 5000, panelClass: ['red-snackbar'], data: {message:"Device Deleted", icon:"check_circle"}});
+            this.ngOnInit();
+          }
+        })
+      }
+    })
   }
-
-  // sensorReserveFilter(event:any): void {
-  //   console.log(event);
-  // }
-
-  // gatewayReserveFilter(event:any): void {
-  //   console.log(event);
-  // }
-
-  // changeDeviceStatus(event:any, type:string, id: string): void {
-  //   console.log(type + ": "+ id +" changed to "+event.value);
-  // }
-
-  // reassignDevice(event:any, type:string, id: string): void {
-
-  // }
 
   unassign(id:string):void{
     this.http.post("api/device/unassign",{
       deviceID:id
     }).subscribe((val:any)=>{
       console.log(val);
+      if(val.status&&val.explanation=="call finished"){
+        this.snackbar.openFromComponent(SnackbarAlertComponent,{duration: 5000, panelClass: ['green-snackbar'], data: {message:"Device Unassigned", icon:"check_circle"}});
+        this.ngOnInit();
+      }
     });
 
   }
@@ -152,11 +146,18 @@ export class DevicesListComponent implements OnInit {
       deviceID:id,
       customerID:reserveid
     }).subscribe((val:any)=>{
-      console.log(val);
+      if(val.status&&val.explanation=="call finished"){
+        this.snackbar.openFromComponent(SnackbarAlertComponent,{duration: 5000, panelClass: ['green-snackbar'], data: {message:"Device Assigned", icon:"check_circle"}});
+        this.ngOnInit();
+      }
     }); 
   }
 
   reassign(id:string,reserveid:string,other:string):void{
     console.log("first "+reserveid+" "+reserveid+" "+other);
+  }
+
+  editGateway(id:string): void {
+    this.router.navigate(['manage',{outlets:{managecontent:['edit-gateway',id]}}]);  
   }
 }

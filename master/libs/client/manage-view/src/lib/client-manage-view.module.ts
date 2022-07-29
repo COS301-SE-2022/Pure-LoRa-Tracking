@@ -15,6 +15,8 @@ import { ReserveCreateComponent } from '@master/client/manage-view/src/lib/creat
 import { ReserveEditComponent } from '@master/client/manage-view/src/lib/reserve-edit';
 import { UserEditComponent } from '@master/client/manage-view/src/lib/users-edit';
 import { DevicesListComponent } from "@master/client/manage-view/src/lib/devices-mange-view";
+import { GatewayEditComponent } from '@master/client/manage-view/src/lib/gateway-edit-view';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 export const clientManageViewRoutes: Route[] = [
   {
@@ -64,11 +66,17 @@ export const clientManageViewRoutes: Route[] = [
     outlet: 'managecontent',
     loadChildren: ()=>import('@master/client/manage-view/src/lib/devices-mange-view').then(m => m.ClientManageViewSrcLibDevicesMangeViewModule),
     component: DevicesListComponent
+  },
+  {
+    path: 'edit-gateway/:id',
+    outlet: 'managecontent',
+    loadChildren: ()=>import('@master/client/manage-view/src/lib/gateway-edit-view').then(m => m.ClientManageViewSrcLibGatewayEditViewModule),
+    component: GatewayEditComponent
   }
 ];
 
 @NgModule({
-  imports: [CommonModule, RouterModule, ManageViewRoutingModule, ClientSharedUiComponentsUiModule,MatSidenavModule, MatButtonModule, MatIconModule, RouterModule.forChild(clientManageViewRoutes)],
+  imports: [CommonModule, RouterModule, ManageViewRoutingModule, ClientSharedUiComponentsUiModule,MatSidenavModule, MatButtonModule, MatIconModule, RouterModule.forChild(clientManageViewRoutes), MatSnackBarModule],
   declarations: [ManagePageComponent],
   exports: [ManagePageComponent],
 })

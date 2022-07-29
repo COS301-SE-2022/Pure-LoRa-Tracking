@@ -1,7 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators, FormBuilder, FormGroup } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { SnackbarAlertComponent } from '@master/client/shared-ui/components-ui';
 
 @Component({
   selector: 'master-profiles-edit',
@@ -14,7 +16,7 @@ export class ProfilesEditComponent implements OnInit {
   editProfile: FormGroup = new FormGroup({});
   emailControl = new FormControl('',[Validators.required, Validators.email]);
   id="";
-  constructor(private formBuilder: FormBuilder, private router:Router,private http:HttpClient) {}
+  constructor(private formBuilder: FormBuilder, private router:Router,private http:HttpClient,private snackbar:MatSnackBar) {}
 
   ngOnInit(): void {
     this.http.post("api/user/info",{}).subscribe((val:any)=>{
@@ -44,6 +46,10 @@ export class ProfilesEditComponent implements OnInit {
       }
     }).subscribe((val:any)=>{
       console.log(val);
+      if(val.status==200&&val.explain=="call finished"){
+        this.snackbar.openFromComponent(SnackbarAlertComponent,{duration: 5000, panelClass: ['green-snackbar'], data: {message:"User Updated", icon:"check_circle"}});
+        this.navigateBack();
+      }
     });
   }
 

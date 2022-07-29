@@ -52,6 +52,10 @@ export class LoginComponent implements OnInit {
       });
     }
     
+  } 
+  
+  reset():void{
+      console.log("reset");
   }
 
 }
