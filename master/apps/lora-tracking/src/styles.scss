@@ -132,6 +132,22 @@ $header-font-level: mat.define-typography-level(
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-color: #122343;}
+
+.reserve-select .mat-select-arrow {
+  border: none;
+}
+
+.reserve-select-field .mat-form-field-underline{
+  display: none;
+}
+
+.mat-form-field.reserve-select-field .mat-form-field-wrapper .mat-form-field-flex {
+  align-items: center;
+}
+
+.mat-card-header.headerText .mat-card-header-text .mat-card-title{
+  margin-bottom: 0.2em;
+}
  
 :root {
   --color-primary: #122343;
