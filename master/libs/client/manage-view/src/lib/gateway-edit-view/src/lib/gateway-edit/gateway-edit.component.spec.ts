@@ -1,21 +1,22 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
-import { DevicesListComponent } from './devices-list.component';
-
 import { RouterTestingModule } from '@angular/router/testing';
-describe('DevicesListComponent', () => {
-  let component: DevicesListComponent;
-  let fixture: ComponentFixture<DevicesListComponent>;
+import { GatewayEditComponent } from './gateway-edit.component';
+import { ReactiveFormsModule } from '@angular/forms';
+
+describe('GatewayEditComponent', () => {
+  let component: GatewayEditComponent;
+  let fixture: ComponentFixture<GatewayEditComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule],
-      declarations: [DevicesListComponent],
+      imports: [RouterTestingModule,HttpClientTestingModule,ReactiveFormsModule],
+      declarations: [GatewayEditComponent],
     }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DevicesListComponent);
+    fixture = TestBed.createComponent(GatewayEditComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
