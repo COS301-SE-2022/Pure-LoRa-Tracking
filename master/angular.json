@@ -2,6 +2,8 @@
   "version": 2,
   "projects": {
     "ai-heatmap-average": "libs/ai/heatmap-average",
+    "ai-mock-data-trainer": "libs/ai/mock-data-trainer",
+    "ai-mock-generator-averaging-data-generator": "libs/ai/mock-generator/averaging-data-generator",
     "api": "apps/api",
     "api-api-router": "libs/api/api-router",
     "api-api-testing": "libs/api/api-testing",
@@ -21,6 +23,7 @@
     "client-manage-view": "libs/client/manage-view",
     "client-manage-view-src-lib-create-reserve": "libs/client/manage-view/src/lib/create-reserve",
     "client-manage-view-src-lib-devices-mange-view": "libs/client/manage-view/src/lib/devices-mange-view",
+    "client-manage-view-src-lib-gateway-edit-view": "libs/client/manage-view/src/lib/gateway-edit-view",
     "client-manage-view-src-lib-profile-edit": "libs/client/manage-view/src/lib/profile-edit",
     "client-manage-view-src-lib-profile-view": "libs/client/manage-view/src/lib/profile-view",
     "client-manage-view-src-lib-reserve-detail-view": "libs/client/manage-view/src/lib/reserve-detail-view",

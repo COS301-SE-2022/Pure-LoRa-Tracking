@@ -17,6 +17,10 @@
     "paths": {
       "@chirpstack": ["libs/chirpstack/src/index.ts"],
       "@lora/ai/average": ["libs/ai/heatmap-average/src/index.ts"],
+      "@lora/ai/mock-data-trainer": ["libs/ai/mock-data-trainer/src/index.ts"],
+      "@lora/ai/mock-generator/average": [
+        "libs/ai/mock-generator/averaging-data-generator/src/index.ts"
+      ],
       "@lora/api/login": ["libs/api/login-endpoint/src/index.ts"],
       "@lora/api/mapEndpoint": ["libs/api/map-endpoint/src/index.ts"],
       "@lora/api/reserve": ["libs/api/reserve-endpoint/src/index.ts"],
@@ -86,6 +90,9 @@
       ],
       "@master/client/manage-view/src/lib/devices-view": [
         "libs/client/manage-view/src/lib/devices-view/src/index.ts"
+      ],
+      "@master/client/manage-view/src/lib/gateway-edit-view": [
+        "libs/client/manage-view/src/lib/gateway-edit-view/src/index.ts"
       ],
       "@master/client/manage-view/src/lib/manage-content": [
         "libs/client/manage-view/src/lib/manage-content/src/index.ts"
