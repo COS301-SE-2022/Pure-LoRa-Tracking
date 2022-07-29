@@ -1,7 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators, FormBuilder, FormGroup } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
+import { SnackbarAlertComponent } from '@master/client/shared-ui/components-ui';
 
 export interface ReserveDetails{
   name:string;
@@ -24,7 +26,7 @@ export class UserEditComponent implements OnInit {
   surname="";
   email="";
   selected:string[]=[];
-  constructor(private activeRoute:ActivatedRoute,private formBuilder: FormBuilder, private router:Router,private http:HttpClient) {
+  constructor(private activeRoute:ActivatedRoute,private formBuilder: FormBuilder, private router:Router,private http:HttpClient,private snackbar:MatSnackBar) {
     this.id="";
   }
 
@@ -79,7 +81,11 @@ export class UserEditComponent implements OnInit {
         }
       })
     }).subscribe((val:any)=>{
-      console.log(val);
+      console.log("here",val);
+      if(val.status==200&&val.explain=="call finished"){
+        this.snackbar.openFromComponent(SnackbarAlertComponent,{duration: 5000, panelClass: ['green-snackbar'], data: {message:"User Updated", icon:"check_circle"}});
+        this.navigateBack();
+      }
     });
   }
 

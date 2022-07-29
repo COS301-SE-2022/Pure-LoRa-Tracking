@@ -1,6 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { DialogConfirmationComponent, SnackbarAlertComponent } from '@master/client/shared-ui/components-ui';
 
 export interface DeviceInterface {
   id: string;
@@ -30,9 +33,11 @@ export class DevicesListComponent implements OnInit {
 
   reserveList:DeviceInterface[]=[];
 
-  constructor(private http:HttpClient, private router:Router) {}
+  constructor(private http:HttpClient, private router:Router,private snackbar:MatSnackBar,private dialogcontroller:MatDialog) {}
 
   ngOnInit(): void {
+    this.sensorData=[];
+    this.gatewayData=[];
     this.http.post("api/user/admin/groups",{}).subscribe((val:any)=>{
       // console.log(val);
       this.reserveList = val.data.data.map((curr:any)=>{
@@ -98,8 +103,29 @@ export class DevicesListComponent implements OnInit {
 
   }
 
-  deleteDevice(id:string):void {
+  deleteDevice(id:string,isGateway:boolean,eui:string):void {
     console.log("Delete: " + id);
+    const mydialog=this.dialogcontroller.open(DialogConfirmationComponent,{
+      data: {
+        title: 'Confirm Delete',
+        dialogMessage: 'Are you sure you want to this device?  NOTE: THIS ACTION CANNOT BE REVERSED!',
+      },
+    })
+    mydialog.afterClosed().subscribe(val=>{
+      if(val){
+        this.http.post("/api/device/delete",{
+          deviceID: id,
+          isGateway: isGateway,
+          devEUI: eui
+        }).subscribe((other:any)=>{
+          console.log(other);
+          if(other.status=="200"&&other.explanation=="ok"){
+            this.snackbar.openFromComponent(SnackbarAlertComponent,{duration: 5000, panelClass: ['red-snackbar'], data: {message:"Device Deleted", icon:"check_circle"}});
+            this.ngOnInit();
+          }
+        })
+      }
+    })
   }
 
   unassign(id:string):void{
@@ -107,6 +133,10 @@ export class DevicesListComponent implements OnInit {
       deviceID:id
     }).subscribe((val:any)=>{
       console.log(val);
+      if(val.status&&val.explanation=="call finished"){
+        this.snackbar.openFromComponent(SnackbarAlertComponent,{duration: 5000, panelClass: ['green-snackbar'], data: {message:"Device Unassigned", icon:"check_circle"}});
+        this.ngOnInit();
+      }
     });
 
   }
@@ -116,7 +146,10 @@ export class DevicesListComponent implements OnInit {
       deviceID:id,
       customerID:reserveid
     }).subscribe((val:any)=>{
-      console.log(val);
+      if(val.status&&val.explanation=="call finished"){
+        this.snackbar.openFromComponent(SnackbarAlertComponent,{duration: 5000, panelClass: ['green-snackbar'], data: {message:"Device Assigned", icon:"check_circle"}});
+        this.ngOnInit();
+      }
     }); 
   }
 
