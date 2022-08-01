@@ -85,6 +85,7 @@ services:
     environment:
       TB_QUEUE_TYPE: in-memory # while-testing
       PURELORABUILD: ${PURELORABUILD-''}
+      JWT_TOKEN_SIGNING_KEY: 53ff38ebc9f89fdb047fa366909e5b610477f1a3
       # SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/thingsboard
       # SPRING_DATASOURCE_PASSWORD: postgres
       # SPRING_DATASOURCE_USERNAME: postgres

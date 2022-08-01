@@ -43,6 +43,7 @@ export class MiddlewareSessionManagementService implements NestMiddleware {
         if(cookierefreshtoken==undefined||cookierefreshtoken==null||cookietoken=="")
             return this.failedrequest(res,"Refresh Token cookie not found",400);
 
+        
         const valid=await this.TBClient.validateTokenParam(cookietoken);
         //console.log(cookietoken)
         //maybe change to only refresh if token is expired
