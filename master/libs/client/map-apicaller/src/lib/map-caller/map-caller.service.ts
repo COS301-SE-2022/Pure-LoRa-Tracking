@@ -65,7 +65,7 @@ export class MapCallerService {
 
   removeDevice(inputid:string,inputeui:string,isGateway:boolean):Promise<any>{
     return new Promise((res,rej)=>{
-      this.http.post("/api/device/delete",{
+      this.http.post("/api/device/admin/delete",{
         deviceID: inputid,
         isGateway: isGateway,
         devEUI: inputeui

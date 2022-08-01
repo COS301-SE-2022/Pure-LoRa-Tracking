@@ -21,16 +21,16 @@ export class ApiDeviceEndpointController {
   @Post("add/gateway")
   async PostDeviceAddGateway(@Body() content : AddGatewayDevice) : Promise<deviceResponse> {return this.apiDeviceEndpointService.processDeviceAddGateway(content);}
 
-  @Post("delete")
+  @Post("admin/delete")
   async PostDeviceRemove(@Body() content : RemoveDevice) : Promise<deviceResponse> {return this.apiDeviceEndpointService.processDeviceremove(content);}
 
-  @Post("available")
+  @Post("admin/available")
   async PostDeviceAvailableResponse(@Body() content : deviceAvailable) : Promise<deviceResponse> {return await this.apiDeviceEndpointService.processDeviceAvailable(content);}
 
-  @Post("assign")
+  @Post("admin/assign")
   async PostDeviceAssignResponse(@Body() content : deviceAssign) : Promise<deviceResponse> {return await this.apiDeviceEndpointService.processDeviceAssign(content);}
 
-  @Post("unassign")
+  @Post("admin/unassign")
   async PostDeviceRemoveFromReserve(@Body() content : RemoveDevice) : Promise<deviceResponse> {return this.apiDeviceEndpointService.processDeviceRemoveDeviceFromReserve(content);}
 
   @Post("gateway/info")
@@ -39,10 +39,10 @@ export class ApiDeviceEndpointController {
   @Post("gateway/info/location")
   async PostGatewayInfo(@Body() content : GatewayLocationInfo) : Promise<deviceResponse> {return this.apiDeviceEndpointService.processGatewayGetLocationInfo(content);}
 
-  @Post("gateway/info/location/add")
+  @Post("admin/gateway/info/location/add")
   async PostGatewayAdd(@Body() content : GatewayLocationAdd) : Promise<deviceResponse> {return this.apiDeviceEndpointService.processGatewaySetLocation(content);}
 
-  @Post("sensor/info/profiles")
+  @Post("admin/sensor/info/profiles")
   async PostGatewayProfiles() : Promise<deviceResponse> {return this.apiDeviceEndpointService.processGetDeviceProfiles();}
 
 }

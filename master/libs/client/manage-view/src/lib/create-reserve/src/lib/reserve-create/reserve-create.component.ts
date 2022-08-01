@@ -27,7 +27,7 @@ export class ReserveCreateComponent implements OnInit {
     console.log(JSON.stringify(form.value,null,6));
       if(this.mapgeojson!=""){
       //api call
-      this.http.post("/api/reserve/create",{
+      this.http.post("/api/reserve/admin/create",{
         email:this.reserveInfo.get("email")?.value,
         NameOfReserve:this.reserveInfo.get("name")?.value,
         location:JSON.parse(this.mapgeojson)   

@@ -58,7 +58,7 @@ export class ReserveDetailComponent implements OnInit {
     });
     mydialog.afterClosed().subscribe((result) => {
       if (result) {
-        this.http.post("/api/reserve/remove", {
+        this.http.post("/api/reserve/admin/remove", {
           reserveID: id
         }).subscribe((val:any) => {
           if (val.status == 200&&val.explanation=="reserve removed") {

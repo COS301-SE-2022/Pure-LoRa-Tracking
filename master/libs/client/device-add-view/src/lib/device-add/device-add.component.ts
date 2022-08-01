@@ -58,7 +58,7 @@ export class DeviceAddComponent implements OnInit {
       }
     })
 
-    this.http.post("api/device/sensor/info/profiles",{}).subscribe((val:any)=>{
+    this.http.post("api/device/admin/sensor/info/profiles",{}).subscribe((val:any)=>{
       this.deviceprofilelist = val.data as Array<{id: string, name: string}>;
     })
   }
@@ -93,7 +93,7 @@ export class DeviceAddComponent implements OnInit {
         console.log(val)
         if(val.status==200){
           console.log("test");
-          this.http.post("api/device/gateway/info/location/add",{
+          this.http.post("api/device/admin/gateway/info/location/add",{
             deviceID:val.data.data.id.id,
             locationParameters:{
               latitude: this.gatewayGroup.get("gatlang")?.value,

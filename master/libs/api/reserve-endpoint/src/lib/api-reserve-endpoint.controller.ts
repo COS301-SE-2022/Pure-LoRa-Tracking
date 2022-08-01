@@ -11,22 +11,22 @@ export class ApiReserveEndpointController {
     return "reachable"
   }
 
-  @Post("create")
+  @Post("admin/create")
   async PostReserveCreateResponse(@Body() body : ReserveCreateEndpoint) : Promise<ReserveResponse> {return await this.apiReserveEndpointService.processReserveCreate(body);}
 
-  @Post("remove")
+  @Post("admin/remove")
   async PostReserveRemoveResponse(@Body() body : ReserveEndpoint) : Promise<ReserveResponse> {return await this.apiReserveEndpointService.processReserveRemove(body);}
 
   @Post("details")
   async PostReserveDetailsResponse(@Body() body : ReserveEndpoint) : Promise<ReserveResponse> {return await this.apiReserveEndpointService.processReserveDetails(body);}
 
-  @Post("details/update")
+  @Post("admin/details/update")
   async PostReserveUpdateResponse(@Body() body : ReserveUpdateEndpoint) : Promise<ReserveResponse> {return await this.apiReserveEndpointService.processReserveUpdate(body);}
 
   @Post("location")
   async PostReserveResponse(@Body() body : ReserveEndpoint) : Promise<ReserveResponse> {return await this.apiReserveEndpointService.processReserveInfo(body);}
 
-  @Post("location/set")
+  @Post("admin/location/set")
   async PostReserveSetResponse(@Body() body : ReserveSetEndpoint) : Promise<ReserveResponse> {return await this.apiReserveEndpointService.processReserveSet(body);}
 
   @Post("admin/list")

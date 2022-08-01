@@ -36,7 +36,7 @@ gateway={
 
   savegateway():void{
     console.log("save");
-    this.http.post("/api/device/gateway/info/location/add",{
+    this.http.post("/api/device/admin/gateway/info/location/add",{
       deviceID:this.id,
       locationParameters: {
         latitude: this.gatewayInfo.get("lat")?.value,
