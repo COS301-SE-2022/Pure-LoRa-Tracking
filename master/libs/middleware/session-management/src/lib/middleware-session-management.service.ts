@@ -16,6 +16,7 @@ export class MiddlewareSessionManagementService implements NestMiddleware {
         }
 
 
+
         //check for no cookie at all
         if(req.headers["cookie"]==undefined)
         return this.failedrequest(res,"Token cookie or refresh token cookie not provided",400);
@@ -81,6 +82,11 @@ export class MiddlewareSessionManagementService implements NestMiddleware {
                 }
             }
             else{
+                if(!decoded?.scopes?.includes("TENANT_ADMIN")&&req.url.includes("admin")){
+                    return this.failedrequest(res,"You are not an admin",401);
+                }
+                console.log(decoded?.sd);
+
                 req.body["token"]=cookietoken;
                 req.body["refreshToken"]=cookierefreshtoken;
                 return next();

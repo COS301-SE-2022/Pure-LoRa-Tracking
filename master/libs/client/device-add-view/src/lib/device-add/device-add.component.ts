@@ -70,7 +70,7 @@ export class DeviceAddComponent implements OnInit {
         hardwareName:this.sensorGroup.get("eui")?.value,
         labelName:this.descriptionGroup.get("name")?.value,
       } as AddSensorDevice
-      this.http.post("api/device/add/sensor",{
+      this.http.post("api/device/admin/add/sensor",{
         customerID:this.descriptionGroup.get("profilegroup")?.value,
         hardwareName:this.sensorGroup.get("eui")?.value,
         labelName:this.descriptionGroup.get("name")?.value,
@@ -85,7 +85,7 @@ export class DeviceAddComponent implements OnInit {
         hardwareName:this.gatewayGroup.get("gatewayid")?.value,
         labelName:this.descriptionGroup.get("name")?.value,
       } as AddGatewayDevice
-      this.http.post("api/device/add/gateway",{
+      this.http.post("api/device/admin/add/gateway",{
         customerID:this.descriptionGroup.get("profilegroup")?.value,
         hardwareName:this.gatewayGroup.get("gatewayid")?.value,
         labelName:this.descriptionGroup.get("name")?.value,

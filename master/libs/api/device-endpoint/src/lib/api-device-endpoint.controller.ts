@@ -15,10 +15,10 @@ export class ApiDeviceEndpointController {
   @Post("infos")
   async PostDeviceInfosResponse(@Body() content : deviceInfos) : Promise<deviceResponse> {return await this.apiDeviceEndpointService.processDeviceInfos(content);}
 
-  @Post("add/sensor")
+  @Post("admin/add/sensor")
   async PostDeviceAddSensor(@Body() content : AddSensorDevice) : Promise<deviceResponse> {return this.apiDeviceEndpointService.processDeviceAddsensor(content);}
 
-  @Post("add/gateway")
+  @Post("admin/add/gateway")
   async PostDeviceAddGateway(@Body() content : AddGatewayDevice) : Promise<deviceResponse> {return this.apiDeviceEndpointService.processDeviceAddGateway(content);}
 
   @Post("admin/delete")
