@@ -102,8 +102,4 @@ export class MiddlewareSessionManagementService implements NestMiddleware {
         return res;
     }
 
-    fowardToThingsboard():void{
-
-    }
-
 }
