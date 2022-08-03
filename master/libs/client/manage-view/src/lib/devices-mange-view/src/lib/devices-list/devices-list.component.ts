@@ -78,7 +78,7 @@ export class DevicesListComponent implements OnInit {
         })
       })
     })
-    this.http.post("api/device/available",{}).subscribe((val:any)=>{
+    this.http.post("api/device/admin/available",{}).subscribe((val:any)=>{
       console.log("curr",val);
       if(val.data!=undefined){
       this.sensorData=this.sensorData.concat(val.data.filter((curr:any)=>!curr.isGateway).map((curr:any)=>{
@@ -113,7 +113,7 @@ export class DevicesListComponent implements OnInit {
     })
     mydialog.afterClosed().subscribe(val=>{
       if(val){
-        this.http.post("/api/device/delete",{
+        this.http.post("/api/device/admin/delete",{
           deviceID: id,
           isGateway: isGateway,
           devEUI: eui
@@ -129,7 +129,7 @@ export class DevicesListComponent implements OnInit {
   }
 
   unassign(id:string):void{
-    this.http.post("api/device/unassign",{
+    this.http.post("api/device/admin/unassign",{
       deviceID:id
     }).subscribe((val:any)=>{
       console.log(val);
@@ -142,7 +142,7 @@ export class DevicesListComponent implements OnInit {
   }
   
   assign(id:string,reserveid:string):void{
-    this.http.post("api/device/assign",{
+    this.http.post("api/device/admin/assign",{
       deviceID:id,
       customerID:reserveid
     }).subscribe((val:any)=>{

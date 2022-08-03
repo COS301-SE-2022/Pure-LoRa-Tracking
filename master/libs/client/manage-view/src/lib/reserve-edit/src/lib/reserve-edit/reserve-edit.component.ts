@@ -44,7 +44,7 @@ export class ReserveEditComponent implements OnInit {
 
   saveReserve(form:any):void {
     console.log(JSON.stringify(form.value,null,6));
-    this.http.post("api/reserve/details/update",{
+    this.http.post("api/reserve/admin/details/update",{
       reserveID:this.id,
       NameOfReserve:this.reserveInfo.get("name")?.value,
       email:this.reserveInfo.get("email")?.value

@@ -1,7 +1,7 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { ThingsboardThingsboardClientService } from "@lora/thingsboard-client";
 import { Server, ServerResponse } from 'http';
-
+import * as jwt from "jsonwebtoken"
 @Injectable()
 export class MiddlewareSessionManagementService implements NestMiddleware {
     constructor(private TBClient: ThingsboardThingsboardClientService) { }
@@ -14,8 +14,9 @@ export class MiddlewareSessionManagementService implements NestMiddleware {
             //this MUST be a return
             return next();
         }
-        
-        
+
+
+
         //check for no cookie at all
         if(req.headers["cookie"]==undefined)
         return this.failedrequest(res,"Token cookie or refresh token cookie not provided",400);
@@ -43,36 +44,57 @@ export class MiddlewareSessionManagementService implements NestMiddleware {
         if(cookierefreshtoken==undefined||cookierefreshtoken==null||cookietoken=="")
             return this.failedrequest(res,"Refresh Token cookie not found",400);
 
-        const valid=await this.TBClient.validateTokenParam(cookietoken);
-        //console.log(cookietoken)
-        //maybe change to only refresh if token is expired
-
-        if(!valid){
-            //try to refresh
-            const refreshresp=await this.TBClient.refresh(cookierefreshtoken);
-            // //console.log(cookierefreshtoken)
-            //theoretically should never run unless status is changed to string
-            if(refreshresp.status!="fail"&&refreshresp.status!="ok")
-                return this.failedrequest(res,"Something went wrong",500);
-                
-            if(refreshresp.status=="fail")
-                return this.failedrequest(res,"Could not refresh Token Or Token Invalid",401);
-
-            if(refreshresp.status=="ok"){
-                //reset the tokens and set headers
-                // //console.log("asdf");
-                req.body["token"]=refreshresp.token;
-                req.body["refreshToken"]=refreshresp.refreshToken;
-                res.setHeader("Set-Cookie",[`${refreshtokenCookieName}=${refreshresp.refreshToken}; Max-Age=1209600; Path=/;`,`${tokenCookieName}=${refreshresp.token}; Max-Age=1209600; Path=/;`]);
-            }
-        }
-        else{
-            req.body["token"]=cookietoken;
-            req.body["refreshToken"]=cookierefreshtoken;
-        }
         
-        //carry on with the request
-        next();
+        //check if the token is valid
+        jwt.verify(cookietoken,Buffer.from(process.env.THINGSBOARD_SECRET,"base64"),async (err,decoded)=>{
+            if(err){
+                if(err.message=="jwt malformed"){
+                    this.failedrequest(res,"Token cookie is malformed",400);
+                    // next();
+                }
+                else if(err.message=="invalid signature"){
+                    this.failedrequest(res,"Token cookie is invalid",400);
+                    // next();
+                }
+                else if(err.message=="jwt expired"){
+                    //try to refresh
+                    const refreshresp=await this.TBClient.refresh(cookierefreshtoken);
+                    // //console.log(cookierefreshtoken)
+                    //theoretically should never run unless status is changed to string
+                    if(refreshresp.status!="fail"&&refreshresp.status!="ok")
+                        return this.failedrequest(res,"Something went wrong",500);
+                        
+                    else if(refreshresp.status=="fail")
+                        return this.failedrequest(res,"Could not refresh Token Or Token Invalid",401);
+
+                    else if(refreshresp.status=="ok"){
+                        //reset the tokens and set headers
+                        // //console.log("asdf");
+                        req.body["token"]=refreshresp.token;
+                        req.body["refreshToken"]=refreshresp.refreshToken;
+                        res.setHeader("Set-Cookie",[`${refreshtokenCookieName}=${refreshresp.refreshToken}; Max-Age=1209600; Path=/;`,`${tokenCookieName}=${refreshresp.token}; Max-Age=1209600; Path=/;`]);
+                    }
+                    return next();
+                }
+                else{
+                    //unknown error
+                    return this.failedrequest(res,"Something went wrong",500);
+                }
+            }
+            else{
+                if(!decoded?.scopes?.includes("TENANT_ADMIN")&&req.url.includes("admin")){
+                    return this.failedrequest(res,"You are not an admin",401);
+                }
+                console.log(decoded?.sd);
+
+                req.body["token"]=cookietoken;
+                req.body["refreshToken"]=cookierefreshtoken;
+                return next();
+            }
+        });
+        
+        // NB
+        // nothing should happen after this function, it returns headers to user
     }
 
     failedrequest(res:ServerResponse,msg:string,code:number):ServerResponse{
@@ -85,4 +107,5 @@ export class MiddlewareSessionManagementService implements NestMiddleware {
         res.end(Buffer.from(JSON.stringify(temp)))
         return res;
     }
+
 }
