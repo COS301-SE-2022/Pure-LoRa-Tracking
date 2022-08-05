@@ -462,6 +462,20 @@ describe('ApiUserEndpointService', () => {
     });
   });
 
+  it('update user -> missing lastname', async () => {
+    delete tests.userEndpointExample.userInfo.lastName;
+    expect(await service.UserInfoUpdateProcess(tests.userEndpointExample)).toMatchObject({
+      status: 400,
+      explain: 'lastname not defined',
+    });
+
+    tests.userEndpointExample.userInfo.lastName = '';
+    expect(await service.UserInfoUpdateProcess(tests.userEndpointExample)).toMatchObject({
+      status: 400,
+      explain: 'lastname not defined',
+    });
+  });
+
   it('update user -> fail', async () => {
     jest
     .spyOn(tbClient, 'updateUser')
@@ -475,5 +489,81 @@ describe('ApiUserEndpointService', () => {
     .spyOn(tbClient, 'updateUser')
     .mockImplementationOnce(() => Promise.resolve({status:"ok", explanation:"call finished"}));
     expect(await service.UserInfoUpdateProcess(tests.userEndpointExample)).toMatchObject(tests.tbSuccess)
+  });
+
+  ///////////////////////////////////////////////////////////////////////////////////
+
+  it('admin all reserve users -> missing token', async () => {
+    delete tests.userEndpointExample.token;
+    expect(await service.AdminAllReserveUsersProcess(tests.userEndpointExample)).toMatchObject({
+      status: 401,
+      explain: 'token missing',
+    });
+
+    tests.userEndpointExample.token = '';
+    expect(await service.AdminAllReserveUsersProcess(tests.userEndpointExample)).toMatchObject({
+      status: 401,
+      explain: 'token missing',
+    });
+  });
+
+  it('admin all reserve users -> missing customer ID', async () => {
+    delete tests.userEndpointExample.customerID;
+    expect(await service.AdminAllReserveUsersProcess(tests.userEndpointExample)).toMatchObject({
+      status: 400,
+      explain: 'customerID not defined',
+    });
+
+    tests.userEndpointExample.customerID = '';
+    expect(await service.AdminAllReserveUsersProcess(tests.userEndpointExample)).toMatchObject({
+      status: 400,
+      explain: 'customerID not defined',
+    });
+  });
+
+  it('admin all reserve users -> pass', async () => {
+    jest
+    .spyOn(tbClient, 'AdminGetUsersFromReserve')
+    .mockImplementationOnce(() => Promise.resolve({status:"ok", explanation:"call finished"}));
+    tests.tbSuccess.explain = 'ok';
+    expect(await service.AdminAllReserveUsersProcess(tests.userEndpointExample)).toMatchObject(tests.tbSuccess)
+  });
+
+  it('admin all reserve users -> fail', async () => {
+    jest
+    .spyOn(tbClient, 'AdminGetUsersFromReserve')
+    .mockImplementationOnce(() => Promise.resolve({status:"fail", explanation:"ECONNREFUSED"}));
+    tests.tbFail.explain = 'Server failed with: ECONNREFUSED';
+    expect(await service.AdminAllReserveUsersProcess(tests.userEndpointExample)).toMatchObject(tests.tbFail)
+  });
+
+  ///////////////////////////////////////////////////////////////////////////////////
+
+  it('admin groups process -> missing token', async () => {
+    delete tests.userEndpointExample.token;
+    expect(await service.AdminGroupsProcess(tests.userEndpointExample)).toMatchObject({
+      status: 401,
+      explain: 'token missing',
+    });
+
+    tests.userEndpointExample.token = '';
+    expect(await service.AdminGroupsProcess(tests.userEndpointExample)).toMatchObject({
+      status: 401,
+      explain: 'token missing',
+    });
+  });
+
+  it('admin groups process -> fail', async () => {
+    jest
+    .spyOn(tbClient, 'AdminGetCustomers')
+    .mockImplementationOnce(() => Promise.resolve({status:"fail", explanation:"ECONNREFUSED"}));
+    expect(await service.AdminGroupsProcess(tests.userEndpointExample)).toMatchObject(tests.tbFail)
+  });
+
+  it('admin groups process -> pass', async () => {
+    jest
+    .spyOn(tbClient, 'AdminGetCustomers')
+    .mockImplementationOnce(() => Promise.resolve({status:"ok", explanation:"call finished"}));
+    expect(await service.AdminGroupsProcess(tests.userEndpointExample)).toMatchObject(tests.tbSuccess)
   });
 });

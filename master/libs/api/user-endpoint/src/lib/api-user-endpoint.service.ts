@@ -316,7 +316,7 @@ export class ApiUserEndpointService {
         status: 400,
         explain: 'firstname not defined',
       };
-    if (content.userInfo == undefined || content.userInfo.lastName == undefined || content.userInfo.lastName == '')
+    if (content.userInfo.lastName == undefined || content.userInfo.lastName == '')
       return {
         status: 400,
         explain: 'lastname not defined',
