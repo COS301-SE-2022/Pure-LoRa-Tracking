@@ -83,7 +83,7 @@ export class ApiUserEndpointService {
 
     if (resp.status == 'fail')
       return {
-        status: 400,
+        status: 500,
         explain: resp.explanation,
       };
 
@@ -115,7 +115,7 @@ export class ApiUserEndpointService {
 
     if (resp.status == 'fail')
       return {
-        status: 400,
+        status: 500,
         explain: resp.explanation,
       };
     else
@@ -144,7 +144,7 @@ export class ApiUserEndpointService {
     const resp = await this.thingsboardClient.disableUser(content.userID);
     if (resp.status == 'fail')
       return {
-        status: 400,
+        status: 500,
         explain: resp.explanation,
       };
     else
@@ -173,7 +173,7 @@ export class ApiUserEndpointService {
     const resp = await this.thingsboardClient.enableUser(content.userID);
     if (resp.status == 'fail')
       return {
-        status: 400,
+        status: 500,
         explain: resp.explanation,
       };
     else
@@ -224,7 +224,7 @@ export class ApiUserEndpointService {
 
     if (response.status == "fail")
       return {
-        status: 400,
+        status: 500,
         explain: response.explanation,
       }
     return {
@@ -252,7 +252,7 @@ export class ApiUserEndpointService {
 
     const response = await this.thingsboardClient.AdminGetUsersFromReserve(content.customerID);
     if (response.status == "fail")
-      return { status: 400, explain: "Server failed with: " + response.explanation }
+      return { status: 500, explain: "Server failed with: " + response.explanation }
 
     return {
       status: 200,
@@ -274,7 +274,7 @@ export class ApiUserEndpointService {
         status: 400,
         explain: 'reserveID not defined',
       };
-      if (content.refreshToken == undefined || content.refreshToken == '')
+    if (content.refreshToken == undefined || content.refreshToken == '')
       return {
         status: 400,
         explain: 'refreshToken not defined',
@@ -288,7 +288,7 @@ export class ApiUserEndpointService {
     console.log('tokens :>> ', tokens);
 
     if (response.status == "fail")
-      return { status: 400, explain: "Server failed with: " + response.explanation }
+      return { status: 500, explain: "Server failed with: " + response.explanation }
 
     return {
       status: 200,
@@ -311,12 +311,12 @@ export class ApiUserEndpointService {
         status: 400,
         explain: 'userID not defined',
       };
-      if (content.userInfo == undefined || content.userInfo.firstName == undefined || content.userInfo.firstName == '')
+    if (content.userInfo == undefined || content.userInfo.firstName == undefined || content.userInfo.firstName == '')
       return {
         status: 400,
         explain: 'firstname not defined',
       };
-      if (content.userInfo == undefined || content.userInfo.lastName == undefined || content.userInfo.lastName == '')
+    if (content.userInfo == undefined || content.userInfo.lastName == undefined || content.userInfo.lastName == '')
       return {
         status: 400,
         explain: 'lastname not defined',

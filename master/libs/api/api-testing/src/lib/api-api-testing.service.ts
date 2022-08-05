@@ -4,19 +4,21 @@ import { Injectable } from '@nestjs/common';
 export class ApiApiTestingService {
     userEndpointExample = {
         token: '123',
-        customerID : 'cid',
+        customerID: 'cid',
         userInfo: {
-          email: 'email',
-          firstName: 'fname',
-          lastName: 'lname',
+            email: 'email',
+            firstName: 'fname',
+            lastName: 'lname',
         },
-        reserves : [{reserveName:'rname', reserveID:'rid'}],
-        userID:'uid',
-        refreshToken:"23",
-        reserveID:"12"
+        reserves: [{ reserveName: 'rname', reserveID: 'rid' }],
+        userID: 'uid',
+        refreshToken: "23",
+        reserveID: "12"
     }
 
-    tbSuccess = {
-        status : 'ok'
-    }
+    tbSuccess =
+        { status: 200, explain: "call finished" }
+
+    tbFail = 
+    { status : 500, explain : "ECONNREFUSED" }
 }
