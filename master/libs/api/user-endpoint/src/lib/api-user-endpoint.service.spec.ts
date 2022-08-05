@@ -167,6 +167,7 @@ describe('ApiUserEndpointService', () => {
     jest
     .spyOn(tbClient, 'addUserToReserve')
     .mockImplementationOnce(() => Promise.resolve({status:"ok", explanation:"call finished"}));
+    tests.tbSuccess.explain = 'ok';
     expect(await service.AddUserProcess(tests.userEndpointExample)).toMatchObject(tests.tbSuccess)
   }); 
 
