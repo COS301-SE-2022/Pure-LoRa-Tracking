@@ -67,6 +67,7 @@
     "@nrwl/node": "14.1.4",
     "@nrwl/nx-cloud": "latest",
     "@nrwl/workspace": "14.1.4",
+    "@types/cron": "^2.0.0",
     "@types/googlemaps": "^3.43.3",
     "@types/jest": "27.4.1",
     "@types/node": "^16.11.7",
