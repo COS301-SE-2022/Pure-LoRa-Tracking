@@ -1,0 +1,45 @@
+{
+  "sourceRoot": "libs/processing-api/bus/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/processing-api/bus",
+        "tsConfig": "libs/processing-api/bus/tsconfig.lib.json",
+        "packageJson": "libs/processing-api/bus/package.json",
+        "main": "libs/processing-api/bus/src/index.ts",
+        "assets": ["libs/processing-api/bus/*.md"]
+      }
+    },
+    "publish": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "node tools/scripts/publish.mjs processing-api-bus {args.ver} {args.tag}"
+      },
+      "dependsOn": [
+        {
+          "projects": "self",
+          "target": "build"
+        }
+      ]
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/processing-api/bus/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/processing-api/bus"],
+      "options": {
+        "jestConfig": "libs/processing-api/bus/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

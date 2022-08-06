@@ -46,6 +46,7 @@
     "middleware-cookie-management": "libs/middleware/cookie-management",
     "middleware-http-logger": "libs/middleware/http-logger",
     "middleware-session-management": "libs/middleware/session-management",
+    "processing-api-bus": "libs/processing-api/bus",
     "processing-api-router": "libs/processing-api/router",
     "shared-interfaces": "libs/shared-interfaces",
     "thingsboard-thingsboard-admin": "libs/thingsboard/thingsboard-admin",

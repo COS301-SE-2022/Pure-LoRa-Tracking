@@ -138,7 +138,8 @@
       "@master/middleware/cookie-management": [
         "libs/middleware/cookie-management/src/index.ts"
       ],
-      "@master/shared-interfaces": ["libs/shared-interfaces/src/index.ts"]
+      "@master/shared-interfaces": ["libs/shared-interfaces/src/index.ts"],
+      "@processing/bus": ["libs/processing-api/bus/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
