@@ -374,6 +374,36 @@ describe('ApiDeviceEndpointService', () => {
     });
   });
 
+  it('processDeviceAddGateway -> success', async () => {
+    jest.spyOn(tbClient, 'addDeviceToReserve').mockImplementationOnce(() =>
+      Promise.resolve({
+        status: 'ok',
+        explanation: 'call finished',
+        data: [],
+      })
+    );
+
+    jest
+      .spyOn(tbClient, 'RemoveDeviceFromReserve')
+      .mockImplementationOnce(() => Promise.resolve({ status: 'ok' }));
+
+    jest
+      .spyOn(csSensor, 'addDevice')
+      .mockImplementationOnce(() => Promise.resolve({ status: 'ok' }));
+
+    jest
+      .spyOn(tbClient, 'RemoveDeviceFromReserve')
+      .mockImplementationOnce(() => Promise.resolve({ status: 'ok' }));
+
+    expect(
+      await service.processDeviceAddGateway(tests.addSensorExampleInput)
+    ).toMatchObject({
+      status: 200,
+      explanation: 'ok',
+      data: [],
+    });
+  });
+
   // it('should process a sensor device, add it to a specified reserve, and return a confirmation message', async () => {
   //   const bodyData = {
   //     token:
