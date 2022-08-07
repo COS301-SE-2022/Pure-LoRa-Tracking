@@ -171,6 +171,21 @@ describe('ApiDeviceEndpointService', () => {
     });
   });
 
+  it('processDeviceInfos -> success', async () => {
+    jest
+      .spyOn(tbClient, 'getDeviceInfos')
+      .mockImplementationOnce(() =>
+        Promise.resolve({
+          status: 'ok',
+          explanation: 'call finished',
+          data: [],
+        })
+      );
+    expect(
+      await service.processDeviceInfos(tests.deviceInfosExample)
+    ).toMatchObject(tests.deviceInfosResponseExample);
+  });
+
   // it('should process a sensor device, add it to a specified reserve, and return a confirmation message', async () => {
   //   const bodyData = {
   //     token:
