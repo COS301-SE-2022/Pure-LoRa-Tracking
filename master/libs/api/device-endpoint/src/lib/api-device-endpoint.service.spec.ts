@@ -204,6 +204,16 @@ describe('ApiDeviceEndpointService', () => {
     });
   });
 
+  it('processDeviceAddSensor -> undefined hardwareName', async () => {
+    delete tests.addSensorExampleInput.hardwareName;
+    expect(
+      await service.processDeviceAddsensor(tests.addSensorExampleInput)
+    ).toMatchObject({
+      status: 400,
+      explanation: 'no hardware name found',
+    });
+  });
+
   // it('should process a sensor device, add it to a specified reserve, and return a confirmation message', async () => {
   //   const bodyData = {
   //     token:
