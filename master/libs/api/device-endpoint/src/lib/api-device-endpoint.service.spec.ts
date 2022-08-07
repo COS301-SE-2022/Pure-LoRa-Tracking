@@ -8,8 +8,12 @@ import { ApiDeviceEndpointService } from './api-device-endpoint.service';
 import { AxiosResponse } from 'axios';
 import { of } from 'rxjs';
 import { ChirpstackChirpstackGatewayModule } from '@lora/chirpstack-gateway';
-import { ChirpstackChirpstackSensorModule } from '@lora/chirpstack-sensor';
+import {
+  ChirpstackChirpstackSensorModule,
+  ChirpstackChirpstackSensorService,
+} from '@lora/chirpstack-sensor';
 import { ApiApiTestingService, ApiApiTestingModule } from '@lora/api/testing';
+import { HttpException, NotFoundException } from '@nestjs/common';
 
 const describeLive =
   process.env.PURELORABUILD == 'DEV' ? describe : describe.skip;
@@ -19,6 +23,7 @@ describe('ApiDeviceEndpointService', () => {
   let tests: ApiApiTestingService;
   let httpService: HttpService;
   let tbClient: ThingsboardThingsboardClientService;
+  let csSensor: ChirpstackChirpstackSensorService;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
@@ -35,6 +40,7 @@ describe('ApiDeviceEndpointService', () => {
     httpService = module.get(HttpService);
     tests = module.get(ApiApiTestingService);
     tbClient = module.get(ThingsboardThingsboardClientService);
+    csSensor = module.get(ChirpstackChirpstackSensorService);
 
     process.env.TB_URL = 'http://127.0.0.1:9090';
     process.env.CHIRPSTACK_API =
@@ -263,6 +269,36 @@ describe('ApiDeviceEndpointService', () => {
     ).toMatchObject({
       status: 400,
       explanation: 'access token failure',
+    });
+  });
+
+  it('processDeviceAddSensor -> success', async () => {
+    jest.spyOn(tbClient, 'addDeviceToReserve').mockImplementationOnce(() =>
+      Promise.resolve({
+        status: 'ok',
+        explanation: 'call finished',
+        data: [],
+      })
+    );
+
+    jest
+      .spyOn(tbClient, 'RemoveDeviceFromReserve')
+      .mockImplementationOnce(() => Promise.resolve({ status: 'ok' }));
+
+    jest
+      .spyOn(csSensor, 'addDevice')
+      .mockImplementationOnce(() => Promise.resolve({ status: 'ok' }));
+
+    jest
+      .spyOn(tbClient, 'RemoveDeviceFromReserve')
+      .mockImplementationOnce(() => Promise.resolve({ status: 'ok' }));
+
+    expect(
+      await service.processDeviceAddsensor(tests.addSensorExampleInput)
+    ).toMatchObject({
+      status: 200,
+      explanation: 'ok',
+      data: [],
     });
   });
 
