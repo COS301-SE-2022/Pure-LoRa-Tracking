@@ -172,18 +172,26 @@ describe('ApiDeviceEndpointService', () => {
   });
 
   it('processDeviceInfos -> success', async () => {
-    jest
-      .spyOn(tbClient, 'getDeviceInfos')
-      .mockImplementationOnce(() =>
-        Promise.resolve({
-          status: 'ok',
-          explanation: 'call finished',
-          data: [],
-        })
-      );
+    jest.spyOn(tbClient, 'getDeviceInfos').mockImplementationOnce(() =>
+      Promise.resolve({
+        status: 'ok',
+        explanation: 'call finished',
+        data: [],
+      })
+    );
     expect(
       await service.processDeviceInfos(tests.deviceInfosExample)
     ).toMatchObject(tests.deviceInfosResponseExample);
+  });
+
+  it('processDeviceAddSensor -> empty token', async () => {
+    tests.addSensorExampleInput.token = '';
+    expect(
+      await service.processDeviceAddsensor(tests.addSensorExampleInput)
+    ).toMatchObject({
+      status: 401,
+      explanation: 'no token found',
+    });
   });
 
   // it('should process a sensor device, add it to a specified reserve, and return a confirmation message', async () => {
