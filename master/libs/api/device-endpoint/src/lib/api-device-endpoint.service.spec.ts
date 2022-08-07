@@ -10,12 +10,14 @@ import { of } from 'rxjs';
 import { deviceInfos } from '@master/shared-interfaces';
 import { ChirpstackChirpstackGatewayModule } from '@lora/chirpstack-gateway';
 import { ChirpstackChirpstackSensorModule } from '@lora/chirpstack-sensor';
+import { ApiApiTestingModule, ApiApiTestingService } from '@lora/api/testing';
 
 const describeLive =
   process.env.PURELORABUILD == 'DEV' ? describe : describe.skip;
 
 describe('ApiDeviceEndpointService', () => {
   let service: ApiDeviceEndpointService;
+  let tests: ApiApiTestingService;
   let httpService: HttpService;
   let tbClient: ThingsboardThingsboardClientService;
 
@@ -157,6 +159,8 @@ describe('ApiDeviceEndpointService', () => {
     console.log(result);
     expect(result).toBeDefined();
   });
+
+  it('processDeviceInfos -> empty token', async () => {});
 
   // it('should process a sensor device, add it to a specified reserve, and return a confirmation message', async () => {
   //   const bodyData = {
