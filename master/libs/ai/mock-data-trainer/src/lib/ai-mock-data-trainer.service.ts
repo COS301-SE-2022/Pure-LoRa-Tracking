@@ -10,8 +10,7 @@ export class AiMockDataTrainerService {
     new AiHeatmapAverageService();
   private aiMockDataGenerator: AiMockGeneratorAveragingDataGeneratorService =
     new AiMockGeneratorAveragingDataGeneratorService();
-  private nEntries = 5;
-  private nFalsePoints = 10;
+  private nEntries = 30;
   private saveFilePath = 'file://libs/ai/Models/averaging';
   private loadFilePath = 'file://libs/ai/Models/averaging/model.json';
 
@@ -26,26 +25,41 @@ export class AiMockDataTrainerService {
         '%c Failed to load from file. Building new model...',
         'color: red;'
       );
-      this.aiHeatMapService.buildModel();
+      await this.aiHeatMapService.buildModel();
     } else {
       console.log('%c Load from file successful.', 'color: green;');
     }
 
-    const learning = this.aiMockDataGenerator.generateData(
-      this.nEntries,
-      this.nFalsePoints
-    );
-
-    const mock2 = this.aiMockDataGenerator.generateData(1, this.nFalsePoints);
-    for (let a = 0; a < this.nEntries; a++) {
-      const learn = this.aiHeatMapService.normalizePoints(
-        this.aiHeatMapService.deconstructData(learning[a].coordinates)
+    const learning = [];
+    for (let i = 0; i < this.nEntries; i++) {
+      learning.push(
+        this.aiMockDataGenerator.generateData(
+          1,
+          Math.random() * (10 - 3) + 3
+        )[0]
       );
-      const train = this.aiHeatMapService.normalizePoints(
-        this.aiHeatMapService.deconstructData([learning[a].truePoint])
-      );
-      await this.aiHeatMapService.fitModel(learn, train);
     }
+
+    const mock2 = this.aiMockDataGenerator.generateData(
+      1,
+      Math.random() * (10 - 3) + 3
+    );
+    const learn = [];
+    const train = [];
+    for (let a = 0; a < this.nEntries; a++) {
+      learn.push(
+        this.aiHeatMapService.normalizePoints(
+          this.aiHeatMapService.deconstructData(await learning[a].coordinates)
+        )
+      );
+      train.push(
+        this.aiHeatMapService.normalizePoints(
+          this.aiHeatMapService.deconstructData([learning[a].truePoint])
+        )
+      );
+    }
+
+    await this.aiHeatMapService.fitModel(learn, train, this.nEntries);
 
     const saveSuccessful = await this.aiHeatMapService.saveModel(
       this.saveFilePath
@@ -58,10 +72,10 @@ export class AiMockDataTrainerService {
     }
 
     const ToPredictData = this.aiHeatMapService.normalizePoints(
-      this.aiHeatMapService.deconstructData(mock2[0].coordinates)
+      this.aiHeatMapService.deconstructData(await mock2[0].coordinates)
     );
 
-    console.log(mock2[0].truePoint);
-    console.log(await this.aiHeatMapService.predictData(ToPredictData));
+    const predicted = await this.aiHeatMapService.predictData(ToPredictData);
+    console.log(predicted);
   }
 }
