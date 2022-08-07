@@ -332,6 +332,16 @@ describe('ApiDeviceEndpointService', () => {
     });
   });
 
+  it('processDeviceAddGateway -> undefined lblName', async () => {
+    delete tests.addSensorExampleInput.labelName;
+    expect(
+      await service.processDeviceAddGateway(tests.addSensorExampleInput)
+    ).toMatchObject({
+      status: 400,
+      explanation: 'no label name found',
+    });
+  });
+
   // it('should process a sensor device, add it to a specified reserve, and return a confirmation message', async () => {
   //   const bodyData = {
   //     token:
