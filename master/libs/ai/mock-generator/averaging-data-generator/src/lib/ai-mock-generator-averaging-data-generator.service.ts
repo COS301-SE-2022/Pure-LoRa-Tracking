@@ -13,6 +13,8 @@ export class AiMockGeneratorAveragingDataGeneratorService {
 
   private decimals = 15;
 
+  private maxBound = 10;
+
   private trainData: AverageInputInterface = <AverageInputInterface>{
     sensorID: '975',
     coordinates: [],
@@ -69,15 +71,34 @@ export class AiMockGeneratorAveragingDataGeneratorService {
     }
   }
 
+  generateZeroedFalsePoints(numberOfSamples) {
+    for (let i = 0; i < numberOfSamples; i++) {
+      const nTimestamp = (Date.now() + 60 * 1000 * i).toString();
+      this.trainData.coordinates.push({
+        latitude: 0,
+        longitude: 0,
+        timestamp: nTimestamp,
+      });
+    }
+  }
+
   generateData(
     nOfEntries: number,
     nOfSamples: number
   ): AverageInputInterface[] {
     const entries: AverageInputInterface[] = [];
+
+    if (nOfSamples > this.maxBound) nOfSamples = 10;
+
     for (let i = 0; i < nOfEntries; i++) {
       this.trainData.coordinates = [];
       this.generatePointWithinBounds();
       this.generateFalsePoints(nOfSamples);
+
+      if (this.maxBound > nOfSamples) {
+        this.generateZeroedFalsePoints(this.maxBound - (nOfSamples + 1));
+      }
+
       const nTrainData: AverageInputInterface = Object.assign(
         {},
         this.trainData
