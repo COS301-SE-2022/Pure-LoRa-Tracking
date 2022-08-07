@@ -194,6 +194,16 @@ describe('ApiDeviceEndpointService', () => {
     });
   });
 
+  it('processDeviceAddSensor -> undefined customerID', async () => {
+    delete tests.addSensorExampleInput.customerID;
+    expect(
+      await service.processDeviceAddsensor(tests.addSensorExampleInput)
+    ).toMatchObject({
+      status: 400,
+      explanation: 'no customer ID found',
+    });
+  });
+
   // it('should process a sensor device, add it to a specified reserve, and return a confirmation message', async () => {
   //   const bodyData = {
   //     token:
