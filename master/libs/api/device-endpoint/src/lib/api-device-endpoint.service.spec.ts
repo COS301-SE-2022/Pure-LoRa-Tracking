@@ -3,14 +3,13 @@ import {
   ThingsboardThingsboardClientService,
 } from '@lora/thingsboard-client';
 import { HttpService } from '@nestjs/axios';
-import { Test } from '@nestjs/testing';
+import { Test, TestingModule } from '@nestjs/testing';
 import { ApiDeviceEndpointService } from './api-device-endpoint.service';
 import { AxiosResponse } from 'axios';
 import { of } from 'rxjs';
-import { deviceInfos } from '@master/shared-interfaces';
 import { ChirpstackChirpstackGatewayModule } from '@lora/chirpstack-gateway';
 import { ChirpstackChirpstackSensorModule } from '@lora/chirpstack-sensor';
-import { ApiApiTestingModule, ApiApiTestingService } from '@lora/api/testing';
+import { ApiApiTestingService, ApiApiTestingModule } from '@lora/api/testing';
 
 const describeLive =
   process.env.PURELORABUILD == 'DEV' ? describe : describe.skip;
@@ -27,12 +26,14 @@ describe('ApiDeviceEndpointService', () => {
         ThingsboardThingsboardClientModule,
         ChirpstackChirpstackGatewayModule,
         ChirpstackChirpstackSensorModule,
+        ApiApiTestingModule,
       ],
       providers: [ApiDeviceEndpointService],
     }).compile();
 
     service = module.get(ApiDeviceEndpointService);
     httpService = module.get(HttpService);
+    tests = module.get(ApiApiTestingService);
     tbClient = module.get(ThingsboardThingsboardClientService);
 
     process.env.TB_URL = 'http://127.0.0.1:9090';
@@ -160,7 +161,15 @@ describe('ApiDeviceEndpointService', () => {
     expect(result).toBeDefined();
   });
 
-  it('processDeviceInfos -> empty token', async () => {});
+  it('processDeviceInfos -> empty token', async () => {
+    tests.deviceInfosExample.token = '';
+    expect(
+      await service.processDeviceInfos(tests.deviceInfosExample)
+    ).toMatchObject({
+      status: 401,
+      explanation: 'no token found',
+    });
+  });
 
   // it('should process a sensor device, add it to a specified reserve, and return a confirmation message', async () => {
   //   const bodyData = {
