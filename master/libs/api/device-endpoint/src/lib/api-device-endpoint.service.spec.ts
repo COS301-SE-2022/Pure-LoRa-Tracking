@@ -312,13 +312,23 @@ describe('ApiDeviceEndpointService', () => {
     });
   });
 
-  it('processDeviceAddGateway -> empty custID', async () => {
+  it('processDeviceAddGateway -> undefined custID', async () => {
     delete tests.addSensorExampleInput.customerID;
     expect(
       await service.processDeviceAddGateway(tests.addSensorExampleInput)
     ).toMatchObject({
       status: 400,
       explanation: 'no customer ID found',
+    });
+  });
+
+  it('processDeviceAddGateway -> undefined hdwName', async () => {
+    delete tests.addSensorExampleInput.hardwareName;
+    expect(
+      await service.processDeviceAddGateway(tests.addSensorExampleInput)
+    ).toMatchObject({
+      status: 400,
+      explanation: 'no hardware name found',
     });
   });
 
