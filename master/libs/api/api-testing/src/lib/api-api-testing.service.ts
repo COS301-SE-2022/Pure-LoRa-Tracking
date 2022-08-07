@@ -22,6 +22,12 @@ export class ApiApiTestingService {
     deviceIDs: ['122', '123', '124'],
   };
 
+  deviceInfosResponseExample = {
+    status: 'ok',
+    explanation: 'call finished',
+    data: [],
+  };
+
   tbSuccess = { status: 200, explain: 'call finished' };
 
   tbFail = { status: 500, explain: 'ECONNREFUSED' };
