@@ -234,6 +234,21 @@ describe('ApiDeviceEndpointService', () => {
     });
   });
 
+  it('processDeviceAddSensor -> ECONNREFUSED', async () => {
+    jest
+      .spyOn(tbClient, 'addDeviceToReserve')
+      .mockImplementationOnce(() =>
+        Promise.resolve({ status: 'fail', explanation: 'ECONNREFUSED' })
+      );
+
+    expect(
+      await service.processDeviceAddsensor(tests.addSensorExampleInput)
+    ).toMatchObject({
+      status: 400,
+      explanation: 'ECONNREFUSED',
+    });
+  });
+
   // it('should process a sensor device, add it to a specified reserve, and return a confirmation message', async () => {
   //   const bodyData = {
   //     token:
