@@ -357,6 +357,23 @@ describe('ApiDeviceEndpointService', () => {
     });
   });
 
+  it('processDeviceAddGateway -> explanation undefined', async () => {
+    jest
+      .spyOn(tbClient, 'addDeviceToReserve')
+      .mockImplementationOnce(() => Promise.resolve({ status: 'ok' }));
+
+    jest
+      .spyOn(tbClient, 'RemoveDeviceFromReserve')
+      .mockImplementationOnce(() => Promise.resolve({ status: 'ok' }));
+
+    expect(
+      await service.processDeviceAddGateway(tests.addSensorExampleInput)
+    ).toMatchObject({
+      status: 400,
+      explanation: 'access token failure',
+    });
+  });
+
   // it('should process a sensor device, add it to a specified reserve, and return a confirmation message', async () => {
   //   const bodyData = {
   //     token:
