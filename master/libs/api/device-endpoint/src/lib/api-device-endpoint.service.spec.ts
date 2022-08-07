@@ -198,7 +198,7 @@ describe('ApiDeviceEndpointService', () => {
       status: 401,
       explanation: 'no token found',
     });
-  }); //
+  });
 
   it('processDeviceAddSensor -> undefined customerID', async () => {
     delete tests.addSensorExampleInput.customerID;
@@ -309,6 +309,16 @@ describe('ApiDeviceEndpointService', () => {
     ).toMatchObject({
       status: 401,
       explanation: 'no token found',
+    });
+  });
+
+  it('processDeviceAddGateway -> empty custID', async () => {
+    delete tests.addSensorExampleInput.customerID;
+    expect(
+      await service.processDeviceAddGateway(tests.addSensorExampleInput)
+    ).toMatchObject({
+      status: 400,
+      explanation: 'no customer ID found',
     });
   });
 
