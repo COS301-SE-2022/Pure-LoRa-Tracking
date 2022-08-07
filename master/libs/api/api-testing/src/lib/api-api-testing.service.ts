@@ -28,6 +28,18 @@ export class ApiApiTestingService {
     data: [],
   };
 
+  addSensorExampleInput = {
+    token: '123',
+    customerID: 'EA34',
+    hardwareName: 'Sensor3',
+    labelName: 'Animal Sensor 3',
+    deviceProfileId: '123456',
+    profileType: {
+      profileID: '1234567',
+      profileName: 'ABCDEF',
+    },
+  };
+
   tbSuccess = { status: 200, explain: 'call finished' };
 
   tbFail = { status: 500, explain: 'ECONNREFUSED' };
