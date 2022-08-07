@@ -23,8 +23,8 @@ export class ApiApiTestingService {
   };
 
   deviceInfosResponseExample = {
-    status: 'ok',
-    explanation: 'call finished',
+    status: 200,
+    explanation: 'ok',
     data: [],
   };
 
