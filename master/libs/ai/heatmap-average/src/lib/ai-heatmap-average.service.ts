@@ -5,7 +5,7 @@ import tf = require('@tensorflow/tfjs-node');
 export class AiHeatmapAverageService {
   private EarthRadius = 6371;
   private model: tf.Sequential;
-  private targetEpochs = 3;
+  private targetEpochs = 200;
 
   /*
         1) get model
@@ -72,10 +72,10 @@ export class AiHeatmapAverageService {
     return res;
   }
 
-  async fitModel(learningData, trueData) {
+  async fitModel(learningData, trueData, nOfEntries) {
     await this.model.fit(
-      tf.tensor(learningData, [1, 20]),
-      tf.tensor(trueData, [1, 2]),
+      tf.tensor(learningData, [nOfEntries, 20]),
+      tf.tensor(trueData, [nOfEntries, 2]),
       {
         epochs: this.targetEpochs,
         /*callbacks: {
