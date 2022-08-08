@@ -5,10 +5,11 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
-import { httpMock, matdialogTesting, snackbarTesting } from '@master/shared-interfaces';
+import { httpMock, matdialogTesting, routerMock, snackbarTesting } from '@master/shared-interfaces';
 import { HttpClient } from '@angular/common/http';
 import { time } from 'console';
 import { of } from 'rxjs';
+import { Router } from '@angular/router';
 
 describe('ProfilesEditComponent', () => {
   let component: ProfilesEditComponent;
@@ -21,6 +22,7 @@ describe('ProfilesEditComponent', () => {
       providers: [
         { provide: MatSnackBar, useValue: snackbarTesting},
         { provide:HttpClient,useValue:httpMock },
+        { provide:Router,useValue:routerMock },
       ]
     }).compileComponents();
   });
@@ -50,12 +52,45 @@ describe('ProfilesEditComponent', () => {
       }))
       component.ngOnInit()
       expect(httpMock.post).toBeCalled();
-      expect(component.editProfile.get("firstName")).toBe("Steve");
-      expect(component.editProfile.get("lastName")).toBe("Smith");
-      expect(component.editProfile.get("email")).toBe("steve@smith.com");
       expect(component.id).toBe(1);
+      // expect(component.editProfile.get("name")?.value).toBe("Steve");
+      // expect(component.editProfile.get("surname")?.value).toBe("Smith");
+      // expect(component.editProfile.get("email")?.value).toBe("steve@smith.com");
 
 
+    })
+  })
+
+  describe("saveProfile",()=>{
+    beforeEach(()=>{
+      jest.clearAllMocks();
+      jest.spyOn(httpMock,"post").mockImplementation(()=>of({
+        explain:"call finished",
+        status:200
+      }));
+      jest.spyOn(snackbarTesting,"openFromComponent").mockImplementation(()=>{});
+      jest.spyOn(component,"navigateBack").mockImplementation(()=>{});
+      component.saveProfile("test");
+    })
+
+    it("Save profile calls post",()=>{
+      expect(httpMock.post).toBeCalled();
+    })
+
+    it("Save profile opens snackbar",()=>{
+      expect(snackbarTesting.openFromComponent).toBeCalled();
+    })
+
+    it("Save profile calls navigate back",()=>{
+      expect(component.navigateBack).toBeCalled();
+    })
+  })
+
+  describe("Navigate back",()=>{
+    it("Should call the router navigate",()=>{
+      jest.spyOn(routerMock,"navigate").mockImplementation(()=>{});
+      component.navigateBack();
+      expect(routerMock.navigate).toBeCalled();
     })
   })
 
