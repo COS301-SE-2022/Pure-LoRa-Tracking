@@ -39,7 +39,7 @@ export class ReserveUsersViewComponent implements OnInit {
   // token="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZlYWRtaW5AcmVzZXJ2ZS5jb20iLCJzY29wZXMiOlsiVEVOQU5UX0FETUlOIl0sInVzZXJJZCI6ImQ2MzcyZTMwLWRmZTgtMTFlYy1iZGIzLTc1MGNlN2VkMjQ1MSIsImVuYWJsZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiJjZDJkZjJiMC1kZmU4LTExZWMtYmRiMy03NTBjZTdlZDI0NTEiLCJjdXN0b21lcklkIjoiMTM4MTQwMDAtMWRkMi0xMWIyLTgwODAtODA4MDgwODA4MDgwIiwiaXNzIjoidGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE2NTQ4MDU3NzUsImV4cCI6MTY1NDgxNDc3NX0.76eRuu1QDS4QLxUVuJNcawQkpyMoXezGuRfPiVMhLnDHxtxwUQqtIrnbEeLBMkVITbwjYhozU6zOyQaRiW2ajA"
   assignedReserves= new FormControl();
   
-  constructor(private _formBuilder: FormBuilder,private http:HttpClient,public confirmDialog: MatDialog, private router:Router,private snackbar:MatSnackBar) {
+  constructor(private _formBuilder: FormBuilder,public http:HttpClient,public confirmDialog: MatDialog, private router:Router,private snackbar:MatSnackBar) {
    
   }
 
@@ -61,8 +61,8 @@ export class ReserveUsersViewComponent implements OnInit {
 
     this.http.post("api/user/admin/groups",{
     }).subscribe((val:any)=>{
-      console.log(val);
       if(val.data.data.length>0){
+        console.log("Test"+val);
         this.groups=val.data.data.map((curr:any)=>({
           name:curr.title,
           customerid:curr.id.id
@@ -82,21 +82,12 @@ export class ReserveUsersViewComponent implements OnInit {
               accountEnabled:curr.additionalInfo!=undefined
             } as userInfo)) as Array<userInfo>
             this.sourceData=[...this.sourceData,...temp]
-            // console.log(this.sourceData)
+            console.log(this.sourceData)
           })
         })
       }
     })
 
-  }
-
-  removeUser(userId:string): void {
-    console.log(userId);
-  }
-
-  changeUserStatus(userId:string): void {
-      console.log(userId);
-    
   }
 
   changeGroup(userinput:string){
