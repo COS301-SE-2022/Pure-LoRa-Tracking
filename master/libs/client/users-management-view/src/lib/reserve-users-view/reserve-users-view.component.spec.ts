@@ -133,4 +133,64 @@ describe('ReserveUsersViewComponent', () => {
 
   })
 
+  describe("ConfirmSwitch",()=>{
+    it("Show dialog->Enable user-> call -> open snackbar",()=>{
+      jest.clearAllMocks();
+      jest.spyOn(matdialogTesting.matdialog, "open").mockImplementationOnce(() => matdialogTesting.afterClosedMockTrue);
+      jest.spyOn(httpMock, "post").mockImplementationOnce(() => of({
+        explain: "ok"
+      }));
+      jest.spyOn(snackbarTesting, "openFromComponent").mockImplementationOnce(() => {});
+      component.confirmSwitch("1",true);
+      expect(matdialogTesting.matdialog.open).toBeCalled();
+      expect(snackbarTesting.openFromComponent).toBeCalled();
+      expect(httpMock.post).toBeCalled();
+    })
+
+    it("Show dialog->Disable user-> call -> open snackbar",()=>{
+      jest.clearAllMocks();
+      jest.spyOn(matdialogTesting.matdialog, "open").mockImplementationOnce(() => matdialogTesting.afterClosedMockTrue);
+      jest.spyOn(httpMock, "post").mockImplementationOnce(() => of({
+        explain: "ok"
+      }));
+      jest.spyOn(snackbarTesting, "openFromComponent").mockImplementationOnce(() => {});
+      component.confirmSwitch("1",false);
+      expect(matdialogTesting.matdialog.open).toBeCalled();
+      expect(snackbarTesting.openFromComponent).toBeCalled();
+      expect(httpMock.post).toBeCalled();
+    })
+
+    it("Show dialog -> cancel",()=>{
+      jest.clearAllMocks();
+      jest.spyOn(matdialogTesting.matdialog, "open").mockImplementationOnce(() => matdialogTesting.afterClosedMockFalse);
+      jest.spyOn(httpMock, "post").mockImplementationOnce(() => of({
+        explain: "ok"
+      }));
+      jest.spyOn(snackbarTesting, "openFromComponent").mockImplementationOnce(() => {});
+      component.confirmSwitch("1",false);
+      expect(matdialogTesting.matdialog.open).toBeCalled();
+      expect(snackbarTesting.openFromComponent).not.toBeCalled();
+      expect(httpMock.post).not.toBeCalled();
+    })
+  })
+
+  describe("AddUserToDB",()=>{
+    it("Not Valid information form leads to nothing",()=>{
+      jest.spyOn(snackbarTesting, "openFromComponent").mockImplementationOnce(() => {});
+      jest.spyOn(httpMock, "post").mockImplementationOnce(() => of());
+      component.addUserToDB();
+      expect(snackbarTesting.openFromComponent).not.toBeCalled();
+      expect(httpMock.post).not.toBeCalled();
+    })
+
+    it("Valid information form leads to add user to db",()=>{
+      jest.spyOn(snackbarTesting, "openFromComponent").mockImplementationOnce(() => {});
+      jest.spyOn(httpMock, "post").mockImplementationOnce(() => of({
+        explain: "ok",
+        status:200
+      }));
+    })
+
+  })
+
 });

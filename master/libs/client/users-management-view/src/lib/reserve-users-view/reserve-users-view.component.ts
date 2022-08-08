@@ -184,14 +184,14 @@ export class ReserveUsersViewComponent implements OnInit {
             userID:userId
           }).subscribe((val:any)=>{
             console.log(val);
-            if(val.explain=="ok") alert("User disabled");
+            if(val.explain=="ok")this.snackbar.openFromComponent(SnackbarAlertComponent,{duration: 5000, panelClass: ['green-snackbar'], data: {message:"User Disabled", icon:"check_circle"}});
           });
         }else {
           this.http.post('api/user/admin/enable',{
             userID:userId
           }).subscribe((val:any)=>{
             console.log(val);
-            if(val.explain=="ok") alert("User enabled");
+            if(val.explain=="ok")this.snackbar.openFromComponent(SnackbarAlertComponent,{duration: 5000, panelClass: ['green-snackbar'], data: {message:"User Enabled", icon:"check_circle"}});
           });
         }
       }  
