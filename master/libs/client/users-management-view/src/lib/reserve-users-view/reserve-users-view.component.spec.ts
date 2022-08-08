@@ -176,6 +176,7 @@ describe('ReserveUsersViewComponent', () => {
 
   describe("AddUserToDB",()=>{
     it("Not Valid information form leads to nothing",()=>{
+      jest.clearAllMocks();
       jest.spyOn(snackbarTesting, "openFromComponent").mockImplementationOnce(() => {});
       jest.spyOn(httpMock, "post").mockImplementationOnce(() => of());
       component.addUserToDB();
@@ -183,12 +184,23 @@ describe('ReserveUsersViewComponent', () => {
       expect(httpMock.post).not.toBeCalled();
     })
 
-    it("Valid information form leads to add user to db",()=>{
+    it("Valid information -> useradded -> snackbar",()=>{
+      jest.clearAllMocks();
       jest.spyOn(snackbarTesting, "openFromComponent").mockImplementationOnce(() => {});
-      jest.spyOn(httpMock, "post").mockImplementationOnce(() => of({
+      jest.spyOn(httpMock, "post").mockImplementation(() => of({
         explain: "ok",
         status:200
       }));
+      component.ngOnInit();
+      component.nameGroup.setValue({nameControl:"myname"});
+      component.emailGroup.setValue({emailControl:"myemail@email.com"});
+      component.reserveGroup.setValue({reserveControl:[
+        "myreserve"
+      ]});
+      component.surnameGroup.setValue({surnameControl:"mysurname"});
+      component.addUserToDB();
+      expect(httpMock.post).toBeCalled();
+      expect(snackbarTesting.openFromComponent).toBeCalled();
     })
 
   })
