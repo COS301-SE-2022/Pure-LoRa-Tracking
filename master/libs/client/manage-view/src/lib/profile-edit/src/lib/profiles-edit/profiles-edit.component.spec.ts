@@ -7,6 +7,8 @@ import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { httpMock, matdialogTesting, snackbarTesting } from '@master/shared-interfaces';
 import { HttpClient } from '@angular/common/http';
+import { time } from 'console';
+import { of } from 'rxjs';
 
 describe('ProfilesEditComponent', () => {
   let component: ProfilesEditComponent;
@@ -32,4 +34,29 @@ describe('ProfilesEditComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  describe("NgOnIt", () => {
+    it("Should call userinfo and set default vals",()=>{
+      jest.spyOn(httpMock,"post").mockImplementation(()=>of({
+        data:{
+          firstName:"Steve",
+          lastName:"Smith",
+          email:"steve@smith.com",
+          id:{
+            id:1
+          }
+
+        }
+      }))
+      component.ngOnInit()
+      expect(httpMock.post).toBeCalled();
+      expect(component.editProfile.get("firstName")).toBe("Steve");
+      expect(component.editProfile.get("lastName")).toBe("Smith");
+      expect(component.editProfile.get("email")).toBe("steve@smith.com");
+      expect(component.id).toBe(1);
+
+
+    })
+  })
+
 });
