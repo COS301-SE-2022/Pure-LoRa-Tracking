@@ -90,25 +90,25 @@ export class ReserveUsersViewComponent implements OnInit {
 
   }
 
-  changeGroup(userinput:string){
-    if(userinput!=""){
-      this.http.post("api/user/admin/reserve/all",{
-        "customerID":userinput
-      }).subscribe((val:any)=>{
-        console.log(val)
-        this.sourceData=val.data.data.map((curr:any)=>({
-          email:curr.email,
-          id:curr.id.id,
-          name:curr.firstName,
-          surname:curr.lastName,
-          status:curr.additionalInfo!=undefined?curr.additionalInfo.userCredentialsEnabled:false,
-          accountEnabled:curr.additionalInfo!=undefined
-        } as userInfo)) as Array<userInfo>
-        this.currentid=userinput;
-        this.canadd=true;
-      })
-    }
-  }
+  // changeGroup(userinput:string){
+  //   if(userinput!=""){
+  //     this.http.post("api/user/admin/reserve/all",{
+  //       "customerID":userinput
+  //     }).subscribe((val:any)=>{
+  //       console.log(val)
+  //       this.sourceData=val.data.data.map((curr:any)=>({
+  //         email:curr.email,
+  //         id:curr.id.id,
+  //         name:curr.firstName,
+  //         surname:curr.lastName,
+  //         status:curr.additionalInfo!=undefined?curr.additionalInfo.userCredentialsEnabled:false,
+  //         accountEnabled:curr.additionalInfo!=undefined
+  //       } as userInfo)) as Array<userInfo>
+  //       this.currentid=userinput;
+  //       this.canadd=true;
+  //     })
+  //   }
+  // }
   
   openUserForm(): void {
     this.addUser = !this.addUser;

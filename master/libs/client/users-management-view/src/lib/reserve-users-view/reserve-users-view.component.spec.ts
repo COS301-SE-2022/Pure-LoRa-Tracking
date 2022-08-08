@@ -5,9 +5,10 @@ import { HttpClient } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormBuilder } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { of } from 'rxjs';
+import { matdialogTesting, httpMock, snackbarTesting } from '@master/shared-interfaces';
 describe('ReserveUsersViewComponent', () => {
   let component: ReserveUsersViewComponent;
   let fixture: ComponentFixture<ReserveUsersViewComponent>;
@@ -17,7 +18,12 @@ describe('ReserveUsersViewComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ReserveUsersViewComponent],
-      imports: [ReactiveFormsModule, HttpClientTestingModule, MatDialogModule, RouterTestingModule, MatSnackBarModule]
+      imports: [ReactiveFormsModule, HttpClientTestingModule, MatDialogModule, RouterTestingModule, MatSnackBarModule],
+      providers: [
+        { provide: HttpClient, useValue: httpMock },
+        { provide: MatDialog, useValue: matdialogTesting.matdialog },
+        { provide: MatSnackBar, useValue: snackbarTesting}
+      ]
     }).compileComponents();
     TestBed.inject(HttpClient)
   });
@@ -33,9 +39,9 @@ describe('ReserveUsersViewComponent', () => {
   });
 
   describe("NgOnIt", () => {
-    beforeEach(()=>{
-      jest.spyOn(component.http, "post").mockImplementationOnce(() => of(groupsdata))
-      jest.spyOn(component.http, "post").mockImplementationOnce(() => of(reserveall))
+    beforeEach(() => {
+      jest.spyOn(httpMock, "post").mockImplementationOnce(() => of(groupsdata))
+      jest.spyOn(httpMock, "post").mockImplementationOnce(() => of(reserveall))
       component.ngOnInit()
     })
     const groupsdata = {
@@ -70,18 +76,17 @@ describe('ReserveUsersViewComponent', () => {
 
 
 
-    it("Should build the form", () => {
-
-    })
-    it("Should have called the post function twice",()=>{
+    it("Should have called the post function twice", () => {
       expect(component.http.post).toHaveBeenCalledTimes(2)
+      jest.clearAllMocks();
     })
 
     it("Groups should be populated correctly", () => {
       expect(component.groups).toEqual([{ "customerid": 1, "name": "Myreserve" }]);
+      jest.clearAllMocks();
     })
 
-    it("Source Data should be populated correctly",()=>{
+    it("Source Data should be populated correctly", () => {
       expect(component.sourceData).toEqual([
         {
           email: 'myemail',
@@ -92,6 +97,38 @@ describe('ReserveUsersViewComponent', () => {
           accountEnabled: true
         }
       ]);
+      jest.clearAllMocks();
+    })
+
+  })
+
+  describe("ConfirmDelete", () => {
+    it("Dialog Shows, if user clicks yes -> call delete -> show snackbar", () => {
+      jest.clearAllMocks();
+      jest.spyOn(component,"ngOnInit").mockImplementationOnce(() => {})
+      jest.spyOn(matdialogTesting.matdialog, "open").mockImplementationOnce(() => matdialogTesting.afterClosedMockTrue)
+      jest.spyOn(httpMock, "post").mockImplementationOnce(() => of({
+        explain: "ok"
+      }));
+      jest.spyOn(snackbarTesting, "openFromComponent").mockImplementationOnce(() => {})
+      component.confirmDelete("1")
+      expect(matdialogTesting.matdialog.open).toHaveBeenCalled()
+      expect(httpMock.post).toBeCalled();
+      expect(snackbarTesting.openFromComponent).toBeCalled();
+      expect(component.ngOnInit).toBeCalled();
+    })
+
+    it("Dialog Shows, if user clicks cancel -> dont call delete -> dont show snackbar", () => {
+      jest.clearAllMocks();
+      jest.spyOn(matdialogTesting.matdialog, "open").mockImplementationOnce(() => matdialogTesting.afterClosedMockFalse)
+      jest.spyOn(httpMock, "post").mockImplementationOnce(() => of({
+        explain: "ok"
+      }));
+      jest.spyOn(snackbarTesting, "openFromComponent").mockImplementationOnce(() => {})
+      component.confirmDelete("1")
+      expect(matdialogTesting.matdialog.open).toHaveBeenCalled()
+      expect(httpMock.post).not.toBeCalled();
+      expect(snackbarTesting.openFromComponent).not.toBeCalled();
     })
 
   })
