@@ -8,7 +8,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { of } from 'rxjs';
-import { matdialogTesting, httpMock, snackbarTesting } from '@master/shared-interfaces';
+import { matdialogTesting, httpMock, snackbarTesting, routerMock } from '@master/shared-interfaces';
+import { Router } from '@angular/router';
 describe('ReserveUsersViewComponent', () => {
   let component: ReserveUsersViewComponent;
   let fixture: ComponentFixture<ReserveUsersViewComponent>;
@@ -22,7 +23,8 @@ describe('ReserveUsersViewComponent', () => {
       providers: [
         { provide: HttpClient, useValue: httpMock },
         { provide: MatDialog, useValue: matdialogTesting.matdialog },
-        { provide: MatSnackBar, useValue: snackbarTesting}
+        { provide: MatSnackBar, useValue: snackbarTesting },
+        { provide: Router, useValue: routerMock }
       ]
     }).compileComponents();
     TestBed.inject(HttpClient)
@@ -105,12 +107,12 @@ describe('ReserveUsersViewComponent', () => {
   describe("ConfirmDelete", () => {
     it("Dialog Shows, if user clicks yes -> call delete -> show snackbar", () => {
       jest.clearAllMocks();
-      jest.spyOn(component,"ngOnInit").mockImplementationOnce(() => {})
+      jest.spyOn(component, "ngOnInit").mockImplementationOnce(() => { })
       jest.spyOn(matdialogTesting.matdialog, "open").mockImplementationOnce(() => matdialogTesting.afterClosedMockTrue)
       jest.spyOn(httpMock, "post").mockImplementationOnce(() => of({
         explain: "ok"
       }));
-      jest.spyOn(snackbarTesting, "openFromComponent").mockImplementationOnce(() => {})
+      jest.spyOn(snackbarTesting, "openFromComponent").mockImplementationOnce(() => { })
       component.confirmDelete("1")
       expect(matdialogTesting.matdialog.open).toHaveBeenCalled()
       expect(httpMock.post).toBeCalled();
@@ -124,7 +126,7 @@ describe('ReserveUsersViewComponent', () => {
       jest.spyOn(httpMock, "post").mockImplementationOnce(() => of({
         explain: "ok"
       }));
-      jest.spyOn(snackbarTesting, "openFromComponent").mockImplementationOnce(() => {})
+      jest.spyOn(snackbarTesting, "openFromComponent").mockImplementationOnce(() => { })
       component.confirmDelete("1")
       expect(matdialogTesting.matdialog.open).toHaveBeenCalled()
       expect(httpMock.post).not.toBeCalled();
@@ -133,76 +135,102 @@ describe('ReserveUsersViewComponent', () => {
 
   })
 
-  describe("ConfirmSwitch",()=>{
-    it("Show dialog->Enable user-> call -> open snackbar",()=>{
+  describe("ConfirmSwitch", () => {
+    it("Show dialog->Enable user-> call -> open snackbar", () => {
       jest.clearAllMocks();
       jest.spyOn(matdialogTesting.matdialog, "open").mockImplementationOnce(() => matdialogTesting.afterClosedMockTrue);
       jest.spyOn(httpMock, "post").mockImplementationOnce(() => of({
         explain: "ok"
       }));
-      jest.spyOn(snackbarTesting, "openFromComponent").mockImplementationOnce(() => {});
-      component.confirmSwitch("1",true);
+      jest.spyOn(snackbarTesting, "openFromComponent").mockImplementationOnce(() => { });
+      component.confirmSwitch("1", true);
       expect(matdialogTesting.matdialog.open).toBeCalled();
       expect(snackbarTesting.openFromComponent).toBeCalled();
       expect(httpMock.post).toBeCalled();
     })
 
-    it("Show dialog->Disable user-> call -> open snackbar",()=>{
+    it("Show dialog->Disable user-> call -> open snackbar", () => {
       jest.clearAllMocks();
       jest.spyOn(matdialogTesting.matdialog, "open").mockImplementationOnce(() => matdialogTesting.afterClosedMockTrue);
       jest.spyOn(httpMock, "post").mockImplementationOnce(() => of({
         explain: "ok"
       }));
-      jest.spyOn(snackbarTesting, "openFromComponent").mockImplementationOnce(() => {});
-      component.confirmSwitch("1",false);
+      jest.spyOn(snackbarTesting, "openFromComponent").mockImplementationOnce(() => { });
+      component.confirmSwitch("1", false);
       expect(matdialogTesting.matdialog.open).toBeCalled();
       expect(snackbarTesting.openFromComponent).toBeCalled();
       expect(httpMock.post).toBeCalled();
     })
 
-    it("Show dialog -> cancel",()=>{
+    it("Show dialog -> cancel", () => {
       jest.clearAllMocks();
       jest.spyOn(matdialogTesting.matdialog, "open").mockImplementationOnce(() => matdialogTesting.afterClosedMockFalse);
       jest.spyOn(httpMock, "post").mockImplementationOnce(() => of({
         explain: "ok"
       }));
-      jest.spyOn(snackbarTesting, "openFromComponent").mockImplementationOnce(() => {});
-      component.confirmSwitch("1",false);
+      jest.spyOn(snackbarTesting, "openFromComponent").mockImplementationOnce(() => { });
+      component.confirmSwitch("1", false);
       expect(matdialogTesting.matdialog.open).toBeCalled();
       expect(snackbarTesting.openFromComponent).not.toBeCalled();
       expect(httpMock.post).not.toBeCalled();
     })
   })
 
-  describe("AddUserToDB",()=>{
-    it("Not Valid information form leads to nothing",()=>{
+  describe("AddUserToDB", () => {
+    it("Not Valid information form leads to nothing", () => {
       jest.clearAllMocks();
-      jest.spyOn(snackbarTesting, "openFromComponent").mockImplementationOnce(() => {});
+      jest.spyOn(snackbarTesting, "openFromComponent").mockImplementationOnce(() => { });
       jest.spyOn(httpMock, "post").mockImplementationOnce(() => of());
       component.addUserToDB();
       expect(snackbarTesting.openFromComponent).not.toBeCalled();
       expect(httpMock.post).not.toBeCalled();
     })
 
-    it("Valid information -> useradded -> snackbar",()=>{
+    it("Valid information -> useradded -> snackbar", () => {
       jest.clearAllMocks();
-      jest.spyOn(snackbarTesting, "openFromComponent").mockImplementationOnce(() => {});
+      jest.spyOn(snackbarTesting, "openFromComponent").mockImplementationOnce(() => { });
       jest.spyOn(httpMock, "post").mockImplementation(() => of({
         explain: "ok",
-        status:200
+        status: 200
       }));
       component.ngOnInit();
-      component.nameGroup.setValue({nameControl:"myname"});
-      component.emailGroup.setValue({emailControl:"myemail@email.com"});
-      component.reserveGroup.setValue({reserveControl:[
-        "myreserve"
-      ]});
-      component.surnameGroup.setValue({surnameControl:"mysurname"});
+      component.nameGroup.setValue({ nameControl: "myname" });
+      component.emailGroup.setValue({ emailControl: "myemail@email.com" });
+      component.reserveGroup.setValue({
+        reserveControl: [
+          "myreserve"
+        ]
+      });
+      component.surnameGroup.setValue({ surnameControl: "mysurname" });
       component.addUserToDB();
       expect(httpMock.post).toBeCalled();
       expect(snackbarTesting.openFromComponent).toBeCalled();
     })
 
+  })
+
+  describe("openUserForm", () => {
+    it("Should change the value of addUser from false to true", () => {
+      component.addUser = false;
+      component.openUserForm();
+      expect(component.addUser).toBe(true);
+    })
+
+    it("Should change the value of addUser from true to false", () => {
+      component.addUser = true;
+      component.openUserForm();
+      expect(component.addUser).toBe(false);
+    }
+    )
+
+  })
+
+  describe("editUser",()=>{
+    it("Should call the navigate function",()=>{
+      jest.spyOn(routerMock, "navigate").mockImplementationOnce(()=>{})
+      component.editUser("1")
+      expect(routerMock.navigate).toBeCalled()
+    })
   })
 
 });

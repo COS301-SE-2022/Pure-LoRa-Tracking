@@ -26,7 +26,14 @@ export const snackbarTesting={
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     openFromComponent(component:any,data:any){
+    }
+}
 
+
+export const routerMock={
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    navigate(path:any){
     }
 }
 
