@@ -15,13 +15,13 @@ export class ApiReserveEndpointService {
 
         if (body.NameOfReserve == undefined || body.NameOfReserve == '')
         return {
-            status: 401,
+            status: 400,
             explanation: 'Reserve Name missing',
         };
 
         if (body.email == undefined || body.email == '')
         return {
-            status: 401,
+            status: 400,
             explanation: 'Email Address missing, this can be the owner\'s or reserve\'s email',
         };
 
@@ -71,7 +71,7 @@ export class ApiReserveEndpointService {
 
         if (body.reserveID == undefined || body.reserveID == '')
         return {
-            status: 401,
+            status: 400,
             explanation: 'Reserve ID missing',
         };
 
@@ -102,7 +102,7 @@ export class ApiReserveEndpointService {
 
         if (body.reserveID == undefined || body.reserveID == '')
         return {
-            status: 401,
+            status: 400,
             explanation: 'Reserve ID missing',
         };
 
@@ -159,7 +159,7 @@ export class ApiReserveEndpointService {
 
         if (body.reserveID == undefined || body.reserveID == '')
         return {
-            status: 401,
+            status: 400,
             explanation: 'Reserve ID missing',
         };
         this.thingsboardClient.setToken(body.token);
@@ -214,24 +214,24 @@ export class ApiReserveEndpointService {
         if (body.token == undefined || body.token == '')
         return {
             status: 401,
-            explanation: 'reserve id missing',
+            explanation: 'token missing',
         };
 
         if (body.reserveID == undefined || body.reserveID == '')
         return {
-            status: 401,
-            explanation: 'token missing',
+            status: 400,
+            explanation: 'reserve id missing',
         };
 
         if (body.NameOfReserve == undefined || body.NameOfReserve == '')
         return {
-            status: 401,
+            status: 400,
             explanation: 'Reserve Name missing',
         };
 
         if (body.email == undefined || body.email == '')
         return {
-            status: 401,
+            status: 400,
             explanation: 'Email Address missing, this can be the owner\'s or reserve\'s email',
         };
 
@@ -255,13 +255,13 @@ export class ApiReserveEndpointService {
         if (body.token == undefined || body.token == '')
         return {
             status: 401,
-            explanation: 'reserve id missing',
+            explanation: 'token missing',
         };
 
         if (body.reserveID == undefined || body.reserveID == '')
         return {
-            status: 401,
-            explanation: 'token missing',
+            status: 400,
+            explanation: 'Reserve ID missing',
         };
         
         this.thingsboardClient.setToken(body.token);

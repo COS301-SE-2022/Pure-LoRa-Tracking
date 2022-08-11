@@ -31,6 +31,18 @@ services:
     volumes:
       - redisdata:/data
 
+  # rabbitMQ:
+  #   container_name: 'rabbitMQ'
+  #   image: rabbitmq:3.8-management-alpine
+  #   volumes:
+  #       - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+  #       - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+  #   networks:
+  #       - rabbitmq_nest
+  #   ports:
+  #     - "5672:5672"
+  #     - "15673:15672"
+
   mosquitto:
     image: eclipse-mosquitto:1.6
     ports:

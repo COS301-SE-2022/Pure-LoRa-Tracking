@@ -16,6 +16,29 @@ export class ApiApiTestingService {
     reserveID: '12',
   };
 
+    reserveEndpointExample = {
+        token: '123',
+        NameOfReserve: "rietvlei",
+        email: "rietvlei@reserve.com",
+        reserveID : "sas2132-13swadw-123asdwe-123gf",
+        location: {
+            features: [{
+              type: 'map',
+              properties: "",
+              geometry: {
+                type: 'location',
+                coordinates: [],
+              }
+            }]
+          }
+    }
+
+    reserveEndpointResponseExample = {
+
+    }
+
+    tbSuccess =
+        { status: 200, explain: "call finished" }
   deviceInfosExample = {
     token: 'SJNCKJWNJQQUIBWIU2837HJB1U12BJ',
     customerID: '123',
@@ -39,8 +62,6 @@ export class ApiApiTestingService {
       profileName: 'ABCDEF',
     },
   };
-
-  tbSuccess = { status: 200, explain: 'call finished' };
 
   tbFail = { status: 500, explain: 'ECONNREFUSED' };
 }
