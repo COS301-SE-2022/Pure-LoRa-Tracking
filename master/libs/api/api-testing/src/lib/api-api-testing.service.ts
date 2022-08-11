@@ -63,7 +63,5 @@ export class ApiApiTestingService {
     },
   };
 
-  tbSuccess = { status: 200, explain: 'call finished' };
-
   tbFail = { status: 500, explain: 'ECONNREFUSED' };
 }
