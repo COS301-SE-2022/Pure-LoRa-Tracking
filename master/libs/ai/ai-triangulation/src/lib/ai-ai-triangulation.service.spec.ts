@@ -1,15 +1,15 @@
 import { Test } from '@nestjs/testing';
-import { AiAiTriangulationService } from './ai-ai-triangulation.service';
+import { AiTriangulationService } from './ai-ai-triangulation.service';
 
 describe('AiAiTriangulationService', () => {
-  let service: AiAiTriangulationService;
+  let service: AiTriangulationService;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      providers: [AiAiTriangulationService],
+      providers: [AiTriangulationService],
     }).compile();
 
-    service = module.get(AiAiTriangulationService);
+    service = module.get(AiTriangulationService);
   });
 
   it('should be defined', () => {

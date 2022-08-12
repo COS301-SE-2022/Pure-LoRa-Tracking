@@ -5,6 +5,7 @@
     "ai-heatmap-average": "libs/ai/heatmap-average",
     "ai-mock-data-trainer": "libs/ai/mock-data-trainer",
     "ai-mock-generator-averaging-data-generator": "libs/ai/mock-generator/averaging-data-generator",
+    "ai-mock-generator-triangulation": "libs/ai/mock-generator/triangulation",
     "api": "apps/api",
     "api-api-router": "libs/api/api-router",
     "api-api-testing": "libs/api/api-testing",
