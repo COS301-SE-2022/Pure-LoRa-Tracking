@@ -60,11 +60,11 @@ describe('LocationService', () => {
   });
 
   it('should give the distance between two point in meters', () => {
-    expect(service.distanceInMeters(-25.79089916441019, 28.22651758790016, -25.79136043396041, 28.226017355918884)*1000).toEqual(71.68680160826995);
+    expect(service.distanceInMeters(-25.79089916441019, 28.22651758790016, -25.79136043396041, 28.226017355918884)).toEqual(71.68678217150459);
   });
 
   it('should compute the RSSI from distance', ()=> {
-    expect(service.MetersToRSSI(1,2,3)).toEqual(2);
-    expect(service.MetersToRSSI(2,2,3)).toEqual(-7.030899869919436);
+    expect(service.MetersToRSSI(1)).toEqual(-61.1);
+    expect(service.MetersToRSSI(2)).toEqual(-7.030899869919436);
   })
 });
