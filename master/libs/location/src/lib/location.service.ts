@@ -206,6 +206,7 @@ export class LocationService {
 
     /*
         credit: https://stackoverflow.com/questions/27928/calculate-distance-between-two-latitude-longitude-points-haversine-formula 
+        Optimised for batch processing
     */
     distanceInMeters(lat1 : number, lon1 : number, lat2 : number, lon2 : number) {
         const p = 0.017453292519943295;    // Math.PI / 180

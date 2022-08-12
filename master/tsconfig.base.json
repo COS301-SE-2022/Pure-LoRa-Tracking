@@ -21,6 +21,7 @@
       "@lora/ai/mock-generator/average": [
         "libs/ai/mock-generator/averaging-data-generator/src/index.ts"
       ],
+      "@lora/ai/triangulation": ["libs/ai/ai-triangulation/src/index.ts"],
       "@lora/api/login": ["libs/api/login-endpoint/src/index.ts"],
       "@lora/api/mapEndpoint": ["libs/api/map-endpoint/src/index.ts"],
       "@lora/api/reserve": ["libs/api/reserve-endpoint/src/index.ts"],
