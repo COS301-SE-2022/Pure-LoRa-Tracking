@@ -39,6 +39,12 @@ export class ApiApiTestingService {
 
     tbSuccess =
         { status: 200, explain: "call finished" }
+
+    tbSuccessExplanation = {
+      status : 200,
+      explanation: "call finished"
+    }
+
   deviceInfosExample = {
     token: 'SJNCKJWNJQQUIBWIU2837HJB1U12BJ',
     customerID: '123',
@@ -64,4 +70,6 @@ export class ApiApiTestingService {
   };
 
   tbFail = { status: 500, explain: 'ECONNREFUSED' };
+
+  tbFailExplanation = { status: 500, explanation: 'ECONNREFUSED' };
 }
