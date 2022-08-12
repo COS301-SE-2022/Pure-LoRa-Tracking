@@ -65,6 +65,6 @@ describe('LocationService', () => {
 
   it('should compute the RSSI from distance', ()=> {
     expect(service.MetersToRSSI(1)).toEqual(-61.1);
-    expect(service.MetersToRSSI(2)).toEqual(-7.030899869919436);
+    expect(service.MetersToRSSI(2)).toEqual(-67.12059991327962);
   })
 });
