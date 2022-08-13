@@ -33,6 +33,39 @@ export class ApiApiTestingService {
           }
     }
 
+    mapData = [
+      {
+        name : 'rietvlei',
+        additionalInfo : {location:null},
+        id:{id:null}
+      }
+    ]
+
+    mapEndpointExample = {
+      token : "`1rthtgys-wr321fsd-qw3423sdfcvs",
+      reserveID : "3234jklnosdf",
+      startTime : 1,
+      endTime : 2,
+      deviceID : ['a','b','c', 'd'],
+    }
+
+    MapDeviceDataFail = {
+      status : 'fail',
+      explanation : "Invalid username or password"
+    }
+
+    MapDeviceDataA = {
+      status : 'fail',
+      explanation : 'ECONNREFUSED',
+    }
+
+    MapDeviceDataB = {
+      status : 'ok',
+      name : 'B',
+      furtherExplain : 'call finished',
+
+    }
+
 
     customerResponse = {
       externalId : '',
@@ -81,4 +114,6 @@ export class ApiApiTestingService {
   tbFail = { status: 500, explain: 'ECONNREFUSED' };
 
   tbFailExplanation = { status: 500, explanation: 'ECONNREFUSED' };
+
+  tbFailCode = {code:500, explanation: 'ECONNREFUSED', status:''}
 }
