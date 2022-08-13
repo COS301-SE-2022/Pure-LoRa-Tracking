@@ -699,6 +699,20 @@ describe('ApiReserveEndpointService', () => {
     });
   });
 
+  it('reserve update -> no reserve ID', async () => {
+    delete tests.reserveEndpointExample.reserveID;
+    expect(await service.processReserveUpdate(tests.reserveEndpointExample)).toMatchObject({
+      status: 400,
+      explanation: 'reserve id missing',
+    });
+
+    tests.reserveEndpointExample.reserveID = '';
+    expect(await service.processReserveUpdate(tests.reserveEndpointExample)).toMatchObject({
+      status: 400,
+      explanation: 'reserve id missing',
+    });
+  });
+
   it('reserve update -> no reserve name', async () => {
     delete tests.reserveEndpointExample.NameOfReserve;
     expect(await service.processReserveUpdate(tests.reserveEndpointExample)).toMatchObject({
@@ -726,6 +740,22 @@ describe('ApiReserveEndpointService', () => {
       explanation: 'Email Address missing, this can be the owner\'s or reserve\'s email',
     });
   });
+
+  it('reserve update -> fail', async () => {
+    jest
+    .spyOn(thingsboardClient, 'updateReserveInfo')
+    .mockImplementationOnce(() => Promise.resolve({status:"fail", explanation:"ECONNREFUSED"}));
+    tests.tbFailExplanation.explanation = 'ECONNREFUSED';
+    expect(await service.processReserveUpdate(tests.reserveEndpointExample)).toMatchObject(tests.tbFailExplanation)
+  }); 
+
+  it('reserve update -> pass', async () => {
+    jest
+    .spyOn(thingsboardClient, 'updateReserveInfo')
+    .mockImplementationOnce(() => Promise.resolve({status:"ok", explanation:"call finished"}));
+    tests.tbSuccessExplanation.explanation = 'call finished';
+    expect(await service.processReserveUpdate(tests.reserveEndpointExample)).toMatchObject(tests.tbSuccessExplanation)
+  }); 
   /////////////////////////////////////////////////////////////////////////////////////////////
   it('reserve details -> no token', async () => {
     delete tests.reserveEndpointExample.token;
@@ -754,6 +784,22 @@ describe('ApiReserveEndpointService', () => {
       explanation: 'Reserve ID missing',
     });
   });
+
+  it('reserve details -> fail', async () => {
+    jest
+    .spyOn(thingsboardClient, 'CustomerInfo')
+    .mockImplementationOnce(() => Promise.resolve({status:"fail", explanation:"ECONNREFUSED"}));
+    tests.tbFailExplanation.explanation = 'ECONNREFUSED';
+    expect(await service.processReserveDetails(tests.reserveEndpointExample)).toMatchObject(tests.tbFailExplanation)
+  }); 
+
+  it('reserve details -> pass', async () => {
+    jest
+    .spyOn(thingsboardClient, 'CustomerInfo')
+    .mockImplementationOnce(() => Promise.resolve({status:"ok", explanation:"call finished", data:tests.customerResponse}));
+    tests.tbSuccessExplanation.explanation = 'call finished';
+    expect(await service.processReserveDetails(tests.reserveEndpointExample)).toMatchObject(tests.tbSuccessExplanation)
+  }); 
   /////////////////////////////////////////////////////////////////////////////////////////////
 
 

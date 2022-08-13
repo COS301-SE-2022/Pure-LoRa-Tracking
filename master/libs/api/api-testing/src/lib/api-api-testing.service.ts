@@ -33,6 +33,15 @@ export class ApiApiTestingService {
           }
     }
 
+
+    customerResponse = {
+      externalId : '',
+      id : '',
+      tenantId : '',
+      createdTime : '',
+      additionalInfo : ''
+    }
+
     reserveEndpointResponseExample = {
 
     }
