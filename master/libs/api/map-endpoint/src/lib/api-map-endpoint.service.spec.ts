@@ -138,7 +138,34 @@ describe('ApiMapEndpointService', () => {
   });
 
   ////////////////////////////////////////////////////////////////////////////////////
+  it('historical process -> no token', async () => {
+    delete tests.mapEndpointExample.token;
+    expect(await service.HistoricalProcess(tests.mapEndpointExample)).toMatchObject({
+      code: 401,
+      explanation: 'Token missing',
+    });
 
+    tests.reserveEndpointExample.token = '';
+    expect(await service.HistoricalProcess(tests.mapEndpointExample)).toMatchObject({
+      code: 401,
+      explanation: 'Token missing',
+    });
+  });
+
+  it('historical process -> no reserve ID', async () => {
+    delete tests.mapEndpointExample.reserveID;
+    expect(await service.HistoricalProcess(tests.mapEndpointExample)).toMatchObject({
+      code: 400,
+      explanation: 'ReserveID missing',
+    });
+
+    tests.reserveEndpointExample.reserveID = '';
+    expect(await service.HistoricalProcess(tests.mapEndpointExample)).toMatchObject({
+      code: 400,
+      explanation: 'ReserveID missing',
+    });
+    
+  });
   ////////////////////////////////////////////////////////////////////////////////////
 
   ////////////////////////////////////////////////////////////////////////////////////

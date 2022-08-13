@@ -124,7 +124,7 @@ export class ApiMapEndpointService {
         /* Validate Token and ReserveID */
         if (content.reserveID == undefined)
             return {
-                code: 401,
+                code: 400,
                 status: 'failure',
                 explanation: "ReserveID missing"
             }
@@ -137,7 +137,7 @@ export class ApiMapEndpointService {
             }
 
 
-        if (content.startTime == undefined && content.endTime == undefined) {
+        if (content.startTime == undefined || content.endTime == undefined) {
             content.startTime = Date.now() - 24 * 60 * 60 * 1000;
             content.endTime = Date.now();
             console.log(content.startTime);
