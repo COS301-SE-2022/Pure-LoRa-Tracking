@@ -251,8 +251,44 @@ describe('DevicesListComponent', () => {
       expect(component.ngOnInit).toBeCalled();
     })
 
+  })
 
+  describe("Assign device",()=>{
+    it("Assign Device -> call -> snackbar -> ngOnInit",()=>{
+      jest.spyOn(httpMock,"post").mockImplementationOnce(()=>of({
+        status:true,
+        explanation:"call finished"
+      }));
+      jest.spyOn(snackbarTesting,"openFromComponent").mockImplementation();
+      jest.spyOn(component,"ngOnInit").mockImplementation();
+      component.assign("test","test");
+      expect(httpMock.post).toBeCalled();
+      expect(snackbarTesting.openFromComponent).toBeCalled();
+      expect(component.ngOnInit).toBeCalled();
+    })
+  })
 
+  describe("Unassign device",()=>{
+    it("Unassign Device -> call -> snackbar -> ngOnInit",()=>{
+      jest.spyOn(httpMock,"post").mockImplementationOnce(()=>of({
+        status:true,
+        explanation:"call finished"
+      }));
+      jest.spyOn(snackbarTesting,"openFromComponent").mockImplementation();
+      jest.spyOn(component,"ngOnInit").mockImplementation();
+      component.unassign("test");
+      expect(httpMock.post).toBeCalled();
+      expect(snackbarTesting.openFromComponent).toBeCalled();
+      expect(component.ngOnInit).toBeCalled();
+    })
+  })
+
+  describe("EditGateway",()=>{
+    it("Call the router",()=>{
+      jest.spyOn(routerMock,"navigate").mockImplementation();
+      component.editGateway("test");
+      expect(routerMock.navigate).toBeCalled();
+    })
   })
 
 });
