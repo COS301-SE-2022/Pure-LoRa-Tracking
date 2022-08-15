@@ -71,16 +71,18 @@ describe('ReserveCreateComponent', () => {
       jest.clearAllMocks();
       component.reserveInfo.get("name")?.setValue("test");
       component.reserveInfo.get("email")?.setValue("test@test.com");
-      jest.spyOn(httpMock, "post").mockImplementationOnce(() => of(true));
+      jest.spyOn(httpMock, "post").mockImplementation();
       jest.spyOn(snackbarTesting,"openFromComponent").mockImplementationOnce(()=>of(true));
-      // component.createReserve();
+      component.createReserve();
       expect(snackbarTesting.openFromComponent).toBeCalled();
       expect(httpMock.post).not.toBeCalled();
+      
     })
 
     it("Info Correct -> Api call -> Snackbar -> NgOnIt -> Navigate",()=>{
       jest.clearAllMocks();
-      component.reserveInfo.get("nam e")?.setValue("test");
+      
+      component.reserveInfo.get("name")?.setValue("test");
       component.reserveInfo.get("email")?.setValue("test@test.com");
       jest.spyOn(httpMock, "post").mockImplementationOnce(() => of({
         status:200,
@@ -91,8 +93,8 @@ describe('ReserveCreateComponent', () => {
       jest.spyOn(component,"ngOnInit").mockImplementationOnce(()=>{});
       jest.spyOn(component,"navigateBack").mockImplementationOnce(()=>{});
       component.createReserve();
-      expect(snackbarTesting.openFromComponent).toBeCalled();
       expect(httpMock.post).toBeCalled();
+      expect(snackbarTesting.openFromComponent).toBeCalled();
       expect(component.ngOnInit).toBeCalled();
       expect(component.navigateBack).toBeCalled();
     })
