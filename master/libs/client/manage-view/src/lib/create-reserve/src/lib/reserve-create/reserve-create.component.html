@@ -1,5 +1,5 @@
 <div id="formContainer">
-    <form [formGroup]="reserveInfo" (ngSubmit)="createReserve(reserveInfo)" id="form">
+    <form [formGroup]="reserveInfo" (ngSubmit)="createReserve()" id="form">
         <mat-form-field appearance="outline" required class="input-form" id="firstForm" >
             <mat-label>Reserve Name</mat-label>
             <input matInput placeholder="Reserve Name" formControlName="name" class="placeholder" >
