@@ -13,17 +13,7 @@ export class AppService {
         return channel.assertQueue('data_queue', { durable: false });
       },
     });
-    // channelWrapper.addSetup(function (channel) {
-    //   return Promise.all([
-    //     // channel.assertQueue('data_queue', { exclusive: true, autoDelete: true }),
-    //     // channel.bindQueue('data_queue', 'my-exchange', 'create'),
-    //     channel.consume('data_queue', handleMessage),
-    //   ]);
-    // });
-    // const handleMessage=(other)=>{
-    //   console.log("i got data");
-    //   console.log("ayo"+channelWrapper.queueLength());
-    // }
+    
     setTimeout(()=>{
       channelWrapper.consume("data_queue",function(other){
         console.log("I have recieved ",other.content.toString());
