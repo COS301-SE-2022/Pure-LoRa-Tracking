@@ -43,6 +43,7 @@ gateway={
         longitude: this.gatewayInfo.get("lng")?.value,
       }
     }).subscribe((val:any)=>{
+      //TODO add snackbar alert
       console.log(val);
     })
   }
