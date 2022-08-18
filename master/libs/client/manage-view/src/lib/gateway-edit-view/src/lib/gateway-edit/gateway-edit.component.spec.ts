@@ -15,7 +15,6 @@ describe('GatewayEditComponent', () => {
     await TestBed.configureTestingModule({
       imports: [RouterTestingModule,HttpClientTestingModule,ReactiveFormsModule],
       providers:[
-        {provide: Router, useValue: routerMock},
         {provide: HttpClient, useValue: httpMock}
       ],
       declarations: [GatewayEditComponent],
