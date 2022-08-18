@@ -15,13 +15,13 @@ export class ApiReserveEndpointService {
 
         if (body.NameOfReserve == undefined || body.NameOfReserve == '')
         return {
-            status: 401,
+            status: 400,
             explanation: 'Reserve Name missing',
         };
 
         if (body.email == undefined || body.email == '')
         return {
-            status: 401,
+            status: 400,
             explanation: 'Email Address missing, this can be the owner\'s or reserve\'s email',
         };
 
@@ -71,7 +71,7 @@ export class ApiReserveEndpointService {
 
         if (body.reserveID == undefined || body.reserveID == '')
         return {
-            status: 401,
+            status: 400,
             explanation: 'Reserve ID missing',
         };
 
@@ -102,7 +102,7 @@ export class ApiReserveEndpointService {
 
         if (body.reserveID == undefined || body.reserveID == '')
         return {
-            status: 401,
+            status: 400,
             explanation: 'Reserve ID missing',
         };
 
@@ -133,7 +133,7 @@ export class ApiReserveEndpointService {
         this.thingsboardClient.setToken(body.token);
         console.log(body.reserveID);
         const response = await this.thingsboardClient.updateReservePerimeter(body.reserveID, body.location);
-        console.log(response);
+        //console.log(response);
         if(response.status == 'fail')
         return {
             status : 500,
@@ -159,7 +159,7 @@ export class ApiReserveEndpointService {
 
         if (body.reserveID == undefined || body.reserveID == '')
         return {
-            status: 401,
+            status: 400,
             explanation: 'Reserve ID missing',
         };
         this.thingsboardClient.setToken(body.token);
@@ -195,10 +195,10 @@ export class ApiReserveEndpointService {
             explanation : generate.explanation
         }*/
 
-        const response = await this.thingsboardClient.getReserveList();
+        const response =    await this.thingsboardClient.getReserveList();
         if(response.status == 'fail')
         return {
-            status : 400,
+            status : 500,
             explanation : response.explanation
         }
 
@@ -214,24 +214,24 @@ export class ApiReserveEndpointService {
         if (body.token == undefined || body.token == '')
         return {
             status: 401,
-            explanation: 'reserve id missing',
+            explanation: 'token missing',
         };
 
         if (body.reserveID == undefined || body.reserveID == '')
         return {
-            status: 401,
-            explanation: 'token missing',
+            status: 400,
+            explanation: 'reserve id missing',
         };
 
         if (body.NameOfReserve == undefined || body.NameOfReserve == '')
         return {
-            status: 401,
+            status: 400,
             explanation: 'Reserve Name missing',
         };
 
         if (body.email == undefined || body.email == '')
         return {
-            status: 401,
+            status: 400,
             explanation: 'Email Address missing, this can be the owner\'s or reserve\'s email',
         };
 
@@ -255,13 +255,13 @@ export class ApiReserveEndpointService {
         if (body.token == undefined || body.token == '')
         return {
             status: 401,
-            explanation: 'reserve id missing',
+            explanation: 'token missing',
         };
 
         if (body.reserveID == undefined || body.reserveID == '')
         return {
-            status: 401,
-            explanation: 'token missing',
+            status: 400,
+            explanation: 'Reserve ID missing',
         };
         
         this.thingsboardClient.setToken(body.token);
