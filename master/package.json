@@ -33,6 +33,7 @@
     "@nestjs/platform-express": "^8.0.0",
     "@nestjs/schedule": "^2.1.0",
     "@nrwl/angular": "14.1.4",
+    "@swimlane/ngx-charts": "^20.1.0",
     "@tensorflow/tfjs-node": "^3.19.0",
     "@types/leaflet": "^1.7.10",
     "cors": "^2.8.5",

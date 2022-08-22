@@ -8,37 +8,56 @@
     <mat-divider></mat-divider>
 
     <mat-card-content id="card-content">     
-        <div id="field-list">
-            <p>
-                <span>{{sensorInfo.id}}</span>
-                <br>
-                <span class="field-label">Device UEI</span>
-            </p>  
-            <p>
-                <span>Sensor</span>
-                <br>
-                <span class="field-label">Device Type</span>
-            </p>    
-            <p>
-                <span>{{aditionalInfo.lastPing}}</span>
-                <br>
-                <span class="field-label">Last Ping</span>
-            </p>
-            <p>
-                <span>{{aditionalInfo.park}}</span>
-                <br>
-                <span class="field-label">Reserve</span>
-            </p>
-            <p>
-                <span>{{aditionalInfo.signals}}</span>
-                <br>
-                <span class="field-label">Signals sent</span>
-            </p>
-        </div>
+        <mat-tab-group mat-align-tabs="center">
+            <mat-tab label="Info">
+                <div id="field-list">
+                    <p>
+                        <span>{{sensorInfo.id}}</span>
+                        <br>
+                        <span class="field-label">Device UEI</span>
+                    </p>  
+                    <p>
+                        <span>Sensor</span>
+                        <br>
+                        <span class="field-label">Device Type</span>
+                    </p>    
+                    <p>
+                        <span>{{aditionalInfo.lastPing}}</span>
+                        <br>
+                        <span class="field-label">Last Ping</span>
+                    </p>
+                    <p>
+                        <span>{{aditionalInfo.park}}</span>
+                        <br>
+                        <span class="field-label">Reserve</span>
+                    </p>
+                    <p>
+                        <span>{{aditionalInfo.signals}}</span>
+                        <br>
+                        <span class="field-label">Signals sent</span>
+                    </p>
+                </div>
+            </mat-tab>
+            <mat-tab label="Activity">
+
+            </mat-tab>
+            <mat-tab  label="Communication">
+                <ngx-charts-line-chart
+                    [legend]="legend"
+                    [showXAxisLabel]="showXAxisLabel"
+                    [showYAxisLabel]="showYAxisLabel"
+                    [xAxis]="xAxis"
+                    [yAxis]="yAxis"
+                    [xAxisLabel]="xAxisLabel"
+                    [yAxisLabel]="yAxisLabel"
+                    [timeline]="timeline"
+                >
+                </ngx-charts-line-chart>
+            </mat-tab>
+        </mat-tab-group>
+        
     </mat-card-content>
     <mat-action-list>
-        <button class="actionButtons" mat-raised-button >Signals<mat-icon>import_export</mat-icon></button>
-        <button class="actionButtons" mat-raised-button (click)="showActivity()">Activity <mat-icon>show_chart</mat-icon></button>
         <button id="locateButton" mat-raised-button (click)="locateSensor()">Locate <mat-icon>my_location</mat-icon></button>
         <button id="delete-button" mat-raised-button (click)="deleteSensor()">Delete</button>
     </mat-action-list>

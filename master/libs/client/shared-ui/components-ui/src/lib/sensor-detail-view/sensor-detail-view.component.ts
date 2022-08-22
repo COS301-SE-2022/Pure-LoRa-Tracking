@@ -39,6 +39,21 @@ export class SensorDetailViewComponent {
     activeSince: "",
   }
 
+ // view: [number,number]= [400, 200];
+
+  // options
+  legend = false;
+  showLabels = true;
+  animations = true;
+  xAxis = true;
+  yAxis = true;
+  showYAxisLabel = true;
+  showXAxisLabel = true;
+  xAxisLabel = 'Date';
+  yAxisLabel = 'Heart Rate (bpm)';
+  timeline = true;
+  yScaleMin = 0;
+
   closeSensor():void {
     this.openView = false;
     this.viewChange.emit(this.openView);

@@ -7,7 +7,9 @@ import { DialogConfirmationComponent } from './dialog-confirmation/dialog-confir
 import { MatDialogModule } from '@angular/material/dialog';
 import { SensorDetailViewComponent } from './sensor-detail-view/sensor-detail-view.component';
 import { SnackbarAlertComponent } from './snackbar-alert/snackbar-alert.component';
+import { MatTabsModule } from '@angular/material/tabs';
 
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 export const clientSharedUiComponentsUiRoutes: Route[] = [];
 
 @NgModule({
@@ -16,6 +18,8 @@ export const clientSharedUiComponentsUiRoutes: Route[] = [];
     RouterModule,
     ClientSharedUiMaterialUiModule,
     MatDialogModule,
+    MatTabsModule,
+    NgxChartsModule
   ],
   declarations: [
     HeaderUiComponent,
