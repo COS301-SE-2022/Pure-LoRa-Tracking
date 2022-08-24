@@ -55,7 +55,7 @@ export class SensorDetailViewComponent {
   yScaleMin = 0;
 
   closeSensor():void {
-    this.openView = false;
+    this.openView = false; 
     this.viewChange.emit(this.openView);
   }
 
