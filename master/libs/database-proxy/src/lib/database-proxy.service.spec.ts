@@ -1,6 +1,6 @@
 import { MongooseModule } from '@nestjs/mongoose';
 import { Test } from '@nestjs/testing';
-import { AverageInput, AverageInputSchema } from '../database-interfaces.interface';
+import { AverageInput, AverageInputSchema, DataInput, DataInputSchema } from '../database-interfaces.interface';
 import { DatabaseProxyService } from './database-proxy.service';
 
 describe('DatabaseProxyService', () => {
@@ -9,7 +9,10 @@ describe('DatabaseProxyService', () => {
   beforeEach(async () => {
     const module = await Test.createTestingModule({
       imports : [MongooseModule.forRoot('mongodb://localhost/lora'),
-      MongooseModule.forFeature([{name:AverageInput.name, schema:AverageInputSchema}])],
+      MongooseModule.forFeature([
+        {name:DataInput.name, schema:DataInputSchema},
+      {name:AverageInput.name, schema:AverageInputSchema}
+    ])],
       providers: [DatabaseProxyService],
     }).compile();
 
@@ -28,5 +31,8 @@ describe('DatabaseProxyService', () => {
    // console.log(await service.getAverageData("123482hjk-2drewe43-3242sd"))
   })
 
-  
+  it("live test -> should forward the record to the data-processing collection", async()=> {
+    console.log(await service.InsertRaw({data:"2", deviceID:"lwle-12de",eventtype:"12",timestamp:Date.now()}))
+  })
+
 });
