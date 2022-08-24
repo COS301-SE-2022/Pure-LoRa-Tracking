@@ -71,5 +71,6 @@
         </cdk-virtual-scroll-viewport>
     </mat-card-content>
 </mat-card>
-<master-sensor-detail-view *ngIf="openSensor === true" [openView]="openSensor" (viewChange)="openSensor=$event" [sensorInfo]="currentSensor" >
-</master-sensor-detail-view>
+<!-- <master-sensor-detail-view *ngIf="openSensor === true" [openView]="openSensor" (viewChange)="openSensor=$event" [sensorInfo]="currentSensor" >
+</master-sensor-detail-view> -->
+<master-sensor-view-detail *ngIf="openSensor === true" [openView]="openSensor" (viewChange)="openSensor=$event" [sensorInfo]="currentSensor"></master-sensor-view-detail>

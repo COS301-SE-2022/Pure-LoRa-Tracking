@@ -1,1 +1,54 @@
-<p>sensor-view-detail works!</p>
+<mat-card>
+    <mat-card-header class="headerText">
+        <button mat-icon-button (click)="closeSensor()"><mat-icon>arrow_back</mat-icon></button>
+        <mat-card-title >
+            {{sensorInfo.name}}
+        </mat-card-title>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+
+    <mat-card-content id="card-content">     
+        <mat-tab-group mat-align-tabs="center">
+            <mat-tab label="Info">
+                <div id="field-list">
+                    <p>
+                        <span>{{sensorInfo.id}}</span>
+                        <br>
+                        <span class="field-label">Device UEI</span>
+                    </p>  
+                    <p>
+                        <span>Sensor</span>
+                        <br>
+                        <span class="field-label">Device Type</span>
+                    </p>    
+                    <p>
+                        <span>{{aditionalInfo.lastPing}}</span>
+                        <br>
+                        <span class="field-label">Last Ping</span>
+                    </p>
+                    <p>
+                        <span>{{aditionalInfo.park}}</span>
+                        <br>
+                        <span class="field-label">Reserve</span>
+                    </p>
+                    <p>
+                        <span>{{aditionalInfo.signals}}</span>
+                        <br>
+                        <span class="field-label">Signals sent</span>
+                    </p>
+                </div>
+            </mat-tab>
+            <mat-tab label="Activity">
+                <master-sensor-activity></master-sensor-activity>
+            </mat-tab>
+            <mat-tab  label="Communication">
+                <master-sensor-communication></master-sensor-communication>
+            </mat-tab>
+        </mat-tab-group>
+        
+    </mat-card-content>
+    <mat-action-list>
+        <button id="locateButton" mat-raised-button (click)="locateSensor()">Locate <mat-icon>my_location</mat-icon></button>
+        <button id="delete-button" mat-raised-button (click)="deleteSensor()">Delete</button>
+    </mat-action-list>
+</mat-card>
