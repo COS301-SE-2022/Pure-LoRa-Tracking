@@ -32,7 +32,7 @@ describe('DatabaseProxyService', () => {
   })
 
   it("live test -> should forward the record to the data-processing collection", async()=> {
-    console.log(await service.InsertRaw({data:"2", deviceID:"lwle-12de",eventtype:"12",timestamp:Date.now()}))
+    //console.log(await service.InsertRaw({data:"2", deviceID:"lwle-12de",eventtype:"12",timestamp:Date.now()}))
   })
 
 });
