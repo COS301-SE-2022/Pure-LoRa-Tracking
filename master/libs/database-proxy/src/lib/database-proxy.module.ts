@@ -5,7 +5,7 @@ import { AverageInput, AverageInputSchema, DataInput, DataInputSchema, } from '.
 
 @Global()
 @Module({
-  imports : [MongooseModule.forRoot('mongodb://localhost/lora'),
+  imports : [MongooseModule.forRoot('mongodb://lora:@localhost/lora'),
               MongooseModule.forFeature([{name:AverageInput.name, schema:AverageInputSchema},
                 {name:DataInput.name, schema:DataInputSchema}])
 ],
