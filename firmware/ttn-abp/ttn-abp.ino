@@ -35,10 +35,15 @@
 #include <Wire.h>
 #include <TinyGPS++.h>
 #include <U8g2lib.h>
-
-
+#include <axp20x.h>
+AXP20X_Class PMU;
 TinyGPSPlus gps;
 HardwareSerial sGps(1);
+
+#define PMU_IRQ                     35
+#define I2C_SDA                     21
+#define I2C_SCL                     22
+
 
 U8G2_SSD1306_128X64_NONAME_F_HW_I2C *u8g2 = nullptr;
 // LoRaWAN NwkSKey, network session key
@@ -167,6 +172,11 @@ void setup() {
     Serial.begin(115200);
     Serial.println(F("Starting"));
 
+//    Wire.setSCL(I2C_SCL);
+//    Wire.setSDA(I2C_SDA);
+//    Wire.begin(I2C_SDA, I2C_SCL);
+    initPMU();
+    
     #ifdef VCC_ENABLE
     // For Pinoccio Scout boards
     pinMode(VCC_ENABLE, OUTPUT);
@@ -175,7 +185,7 @@ void setup() {
     #endif
 
     sGps.begin(9600, SERIAL_8N1, 34, 12);
-
+    
 
     Wire.beginTransmission(0x3C);
     if (Wire.endTransmission() == 0) {
@@ -323,4 +333,66 @@ static void printFloat(float val, bool valid, int len, int prec) {
       Serial.print(' ');
   }
   smartDelay(0);
+}
+
+bool initPMU()
+{
+    if (PMU.begin(Wire, AXP192_SLAVE_ADDRESS) == AXP_FAIL) {
+        return false;
+    }
+    /*
+     * The charging indicator can be turned on or off
+     * * * */
+     //PMU.setChgLEDMode(AXP20X_LED_LOW_LEVEL);
+
+    /*
+    * The default ESP32 power supply has been turned on,
+    * no need to set, please do not set it, if it is turned off,
+    * it will not be able to program
+    *
+    *   PMU.setDCDC3Voltage(3300);
+    *   PMU.setPowerOutPut(AXP192_DCDC3, AXP202_ON);
+    *
+    * * * */
+
+    /*
+     *   Turn off unused power sources to save power
+     * **/
+
+    PMU.setPowerOutPut(AXP192_DCDC1, AXP202_OFF);
+    PMU.setPowerOutPut(AXP192_DCDC2, AXP202_OFF);
+    PMU.setPowerOutPut(AXP192_LDO2, AXP202_OFF);
+    PMU.setPowerOutPut(AXP192_LDO3, AXP202_OFF);
+    PMU.setPowerOutPut(AXP192_EXTEN, AXP202_OFF);
+
+    /*
+     * Set the power of LoRa and GPS module to 3.3V
+     **/
+    PMU.setLDO2Voltage(3300);   //LoRa VDD
+    PMU.setLDO3Voltage(3300);   //GPS  VDD
+    PMU.setDCDC1Voltage(3300);  //3.3V Pin next to 21 and 22 is controlled by DCDC1
+
+    PMU.setPowerOutPut(AXP192_DCDC1, AXP202_ON);
+    PMU.setPowerOutPut(AXP192_LDO2, AXP202_ON);
+    PMU.setPowerOutPut(AXP192_LDO3, AXP202_ON);
+
+    pinMode(PMU_IRQ, INPUT_PULLUP);
+    attachInterrupt(PMU_IRQ, [] {
+        // pmu_irq = true;
+    }, FALLING);
+
+    PMU.adc1Enable(AXP202_VBUS_VOL_ADC1 |
+                   AXP202_VBUS_CUR_ADC1 |
+                   AXP202_BATT_CUR_ADC1 |
+                   AXP202_BATT_VOL_ADC1,
+                   AXP202_ON);
+
+    PMU.enableIRQ(AXP202_VBUS_REMOVED_IRQ |
+                  AXP202_VBUS_CONNECT_IRQ |
+                  AXP202_BATT_REMOVED_IRQ |
+                  AXP202_BATT_CONNECT_IRQ,
+                  AXP202_ON);
+    PMU.clearIRQ();
+
+    return true;
 }
