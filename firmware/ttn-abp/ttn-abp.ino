@@ -32,16 +32,24 @@
 #include <lmic.h>
 #include <hal/hal.h>
 #include <SPI.h>
+#include <Wire.h>
+#include <TinyGPS++.h>
+#include <U8g2lib.h>
 
+
+TinyGPSPlus gps;
+HardwareSerial sGps(1);
+
+U8G2_SSD1306_128X64_NONAME_F_HW_I2C *u8g2 = nullptr;
 // LoRaWAN NwkSKey, network session key
 // This is the default Semtech key, which is used by the early prototype TTN
 // network.
-static const PROGMEM u1_t NWKSKEY[16] = { 0xDF, 0xD7, 0x61, 0xF3, 0x36, 0x7B, 0x36, 0xF8, 0x57, 0x62, 0xB9, 0xAE, 0xFD, 0x17, 0xDC, 0x70 };
+static const PROGMEM u1_t NWKSKEY[16] = { 0x70, 0xDC, 0x17, 0x7D, 0xAE, 0xB9, 0x62, 0x57, 0xF8, 0x36, 0x7B, 0x36, 0xF3, 0x61, 0xF7, 0xDF };
 
 // LoRaWAN AppSKey, application session key
 // This is the default Semtech key, which is used by the early prototype TTN
 // network.
-static const u1_t PROGMEM APPSKEY[16] = { 0x4A, 0x98, 0x51, 0xA0, 0x71, 0x9D, 0x17, 0x8F, 0x96, 0x55, 0x34, 0x32, 0x06, 0x62, 0x07, 0x13 };
+static const u1_t PROGMEM APPSKEY[16] = { 0x70, 0xDC, 0x17, 0x7D, 0xAE, 0xB9, 0x62, 0x57, 0xF8, 0x36, 0x7B, 0x36, 0xF3, 0x61, 0xF7, 0xDF };
 
 // LoRaWAN end-device address (DevAddr)
 static const u4_t DEVADDR = 0x01C93655 ; // <-- Change this address for every node!
@@ -53,13 +61,13 @@ void os_getArtEui (u1_t* buf) { }
 void os_getDevEui (u1_t* buf) { }
 void os_getDevKey (u1_t* buf) { }
 
-static uint8_t mydata[] = "Hello, world!";
+static uint8_t buf[60];
+uint8_t tchars = 0;
 static osjob_t sendjob;
 
 // Schedule TX every this many seconds (might become longer due to duty
 // cycle limitations).
-const unsigned TX_INTERVAL = 60;
-
+const unsigned TX_INTERVAL = 10;
 
 const lmic_pinmap lmic_pins = {
     .nss =  18,
@@ -138,10 +146,21 @@ void do_send(osjob_t* j){
         Serial.println(F("OP_TXRXPEND, not sending"));
     } else {
         // Prepare upstream data transmission at the next possible time.
-        LMIC_setTxData2(1, mydata, sizeof(mydata)-1, 0);
+        LMIC_setTxData2(0, buf, 60, 0);
         Serial.println(F("Packet queued"));
     }
     // Next TX is scheduled after TX_COMPLETE event.
+}
+
+static void smartDelay(unsigned long ms)
+{
+  unsigned long start = millis();
+  do 
+  {
+    while (sGps.available())
+      gps.encode(sGps.read());
+      yield();
+  } while (millis() - start < ms);
 }
 
 void setup() {
@@ -155,6 +174,35 @@ void setup() {
     delay(1000);
     #endif
 
+    sGps.begin(9600, SERIAL_8N1, 34, 12);
+
+
+    Wire.beginTransmission(0x3C);
+    if (Wire.endTransmission() == 0) {
+        Serial.println("Started OLED");
+        u8g2 = new U8G2_SSD1306_128X64_NONAME_F_HW_I2C(U8G2_R0, U8X8_PIN_NONE);
+        u8g2->begin();
+        u8g2->clearBuffer();
+        u8g2->setFlipMode(0);
+        u8g2->setFontMode(1); // Transparent
+        u8g2->setDrawColor(1);
+        u8g2->setFontDirection(0);
+        u8g2->firstPage();
+        do {
+            u8g2->setFont(u8g2_font_inb19_mr);
+            u8g2->drawStr(0, 30, "LilyGo");
+            u8g2->drawHLine(2, 35, 47);
+            u8g2->drawHLine(3, 36, 47);
+            u8g2->drawVLine(45, 32, 12);
+            u8g2->drawVLine(46, 33, 12);
+            u8g2->setFont(u8g2_font_inb19_mf);
+            u8g2->drawStr(58, 60, "LoRa");
+        } while ( u8g2->nextPage() );
+        u8g2->sendBuffer();
+        u8g2->setFont(u8g2_font_fur11_tf);
+        delay(5000);
+    }
+    
     // LMIC init
     os_init();
     // Reset the MAC state. Session and pending data transfers will be discarded.
@@ -210,11 +258,69 @@ void setup() {
 
     // Set data rate and transmit power for uplink (note: txpow seems to be ignored by the library)
     LMIC_setDrTxpow(DR_SF7,14);
-
+    
+//    double lat = gps.location.lat();
+//    double lng = gps.location.lng();
+//    double alt = gps.altitude.feet() / 3.2808;
     // Start job
     do_send(&sendjob);
 }
 
 void loop() {
+    static int i = 0;
+    i++;
+    if (i % 2000 == 1) {
+      smartDelay(0);
+//      printDateTime(gps.date, gps.time);
+        
+      if (gps.location.isValid()) {
+        double lat = gps.location.lat();
+        double lng = gps.location.lng();
+        double alt = gps.altitude.feet() / 3.2808;
+        memcpy((buf+tchars), &lat, sizeof(double)); tchars += sizeof(double);
+        memcpy((buf+tchars), &lng, sizeof(double)); tchars += sizeof(double);
+        memcpy((buf+tchars), &alt, sizeof(double)); tchars += sizeof(double);
+//        lat = gps.location.lat();
+//        lon = gps.location.lng();
+        Serial.println("location available");
+        printFloat(gps.location.lat(), gps.location.isValid(), 11, 6);
+        printFloat(gps.location.lng(), gps.location.isValid(), 12, 6);
+        if (u8g2) {
+            u8g2->clearBuffer();
+            char buffer[256];
+            String(lat).toCharArray(buffer,256);
+//            snprintf(buffer, sizeof(buffer), , millis() / 1000);
+            u8g2->drawStr(0, 12, buffer);
+            
+            u8g2->sendBuffer();
+            String(lng).toCharArray(buffer,256);
+//            snprintf(buffer, sizeof(buffer), , millis() / 1000);
+            u8g2->drawStr(1, 12, buffer);
+            
+            u8g2->sendBuffer();
+        }
+      
+      } 
+  }
     os_runloop_once();
+}
+
+static void printFloat(float val, bool valid, int len, int prec) {
+  if (!valid)
+  {
+    while (len-- > 1)
+      Serial.print('*');
+    Serial.print(' ');
+  }
+  else
+  {
+    Serial.print(val, prec);
+    
+    int vi = abs((int)val);
+    int flen = prec + (val < 0.0 ? 2 : 1); // . and -
+    flen += vi >= 1000 ? 4 : vi >= 100 ? 3 : vi >= 10 ? 2 : 1;
+    for (int i=flen; i<len; ++i)
+      Serial.print(' ');
+  }
+  smartDelay(0);
 }
