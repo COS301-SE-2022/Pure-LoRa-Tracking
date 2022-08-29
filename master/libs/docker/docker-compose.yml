@@ -15,6 +15,15 @@ services:
     ports:
       - "27017:27017"
 
+  # RabbitMQ
+  rabbitmq:
+    image: rabbitmq:3.10-management
+    volumes:
+      - ./enabled_plugins:/etc/rabbitmq/enabled_plugins
+    ports:
+      - 15672:15672
+      - 5672:5672
+
   # Chirpstack
   postgresql:
     image: postgres:9.6-alpine
@@ -81,8 +90,12 @@ services:
       - APPLICATION_SERVER__INTEGRATION__MQTT__SERVER=tcp://mosquitto:1883
       - APPLICATION_SERVER__API__PUBLIC_HOST=chirpstack-application-server:8001
       - APPLICATION_SERVER__EXTERNAL_API__JWT_SECRET=verysecret
+      - APPLICATION_SERVER__INTEGRATION__ENABLED=amqp
+      - APPLICATION_SERVER__INTEGRATION__AMQP__URL=amqp://guest:guest@rabbitmq:5672
+      - APPLICATION_SERVER__INTEGRATION__AMQP__EVENT_ROUTING_KEY_TEMPLATE="application.{{ .ApplicationID }}.device.{{ .DevEUI }}.event.{{ .EventType }}"
     depends_on:
       - chirpstack-network-server
+      - rabbitmq
 
   
   # Thingsboard
