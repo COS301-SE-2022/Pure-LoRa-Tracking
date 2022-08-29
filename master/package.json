@@ -35,6 +35,7 @@
     "@nrwl/angular": "14.1.4",
     "@tensorflow/tfjs-node": "^3.19.0",
     "@types/leaflet": "^1.7.10",
+    "amqp": "^0.2.7",
     "amqp-connection-manager": "^4.1.6",
     "amqplib": "^0.10.2",
     "cors": "^2.8.5",
