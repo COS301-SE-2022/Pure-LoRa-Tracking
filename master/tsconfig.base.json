@@ -139,6 +139,7 @@
         "libs/client/users-management-view/src/index.ts"
       ],
       "@master/client/users-view": ["libs/client/users-view/src/index.ts"],
+      "@master/message-queue": ["libs/message-queue/src/index.ts"],
       "@master/middleware/cookie-management": [
         "libs/middleware/cookie-management/src/index.ts"
       ],

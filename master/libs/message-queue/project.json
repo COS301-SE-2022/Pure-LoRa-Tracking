@@ -1,0 +1,41 @@
+{
+  "projectType": "library",
+  "sourceRoot": "libs/message-queue/src",
+  "prefix": "master",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:ng-packagr-lite",
+      "outputs": ["dist/libs/message-queue"],
+      "options": {
+        "project": "libs/message-queue/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/message-queue/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/message-queue/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/message-queue"],
+      "options": {
+        "jestConfig": "libs/message-queue/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/message-queue/**/*.ts",
+          "libs/message-queue/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}
