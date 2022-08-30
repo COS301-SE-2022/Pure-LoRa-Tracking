@@ -11,9 +11,10 @@ import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
 import { SensorActivityComponent } from './sensor-activity/sensor-activity.component';
 import { SensorCommunicationComponent } from './sensor-communication/sensor-communication.component';
-import {MatChipsModule} from '@angular/material/chips';
-import {MatTableModule} from '@angular/material/table';
-
+import { MatChipsModule } from '@angular/material/chips';
+import { MatTableModule } from '@angular/material/table';
+import { CommunicationDataComponent } from './communication-data/communication-data.component';
+import {MatTreeModule} from '@angular/material/tree';
 export const clientSensorDetailsRoutes: Route[] = [];
 
 @NgModule({
@@ -28,17 +29,20 @@ export const clientSensorDetailsRoutes: Route[] = [];
     MatListModule,
     MatButtonModule,
     MatChipsModule,
-    MatTableModule
+    MatTableModule,
+    MatTreeModule
   ],
   declarations: [
     SensorViewDetailComponent,
     SensorActivityComponent,
     SensorCommunicationComponent,
+    CommunicationDataComponent,
   ],
   exports: [
     SensorViewDetailComponent,
     SensorActivityComponent,
     SensorCommunicationComponent,
+    CommunicationDataComponent,
   ],
 })
 export class ClientSensorDetailsModule {}

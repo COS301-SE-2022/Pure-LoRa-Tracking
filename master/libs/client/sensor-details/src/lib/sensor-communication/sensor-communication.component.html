@@ -8,7 +8,7 @@
     <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplay.length">
       <div class="elm-detail" [@detailExpand]="element === expandedElm ? 'expanded' : 'collapsed'">
         <div>
-          {{element | json}}
+          <master-communication-data></master-communication-data>
         </div>
       </div>
     </td>
