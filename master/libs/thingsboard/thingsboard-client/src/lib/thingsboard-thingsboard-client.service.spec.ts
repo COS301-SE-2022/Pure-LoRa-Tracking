@@ -887,6 +887,21 @@ it(' -> HTTP ERROR', async () => {
 
   //////////////////////////////////////////////////////////////////////////////////////////
 
+  /*it('add user to reserve -> live', async () => {
+    await service.loginUser('reserveadmin@reserve.com', 'reserve')
+    console.table(await service.addUserToReserve('a0436390-0845-11ed-bc6e-a50062f6cdba', 'reserveuserthree@reserve.com', 'reserveuserthree', 'reserve',
+      [
+        {
+          reserveID: "a0436390-0845-11ed-bc6e-a50062f6cdba",
+          reserveName: "Rietvlei"
+        },
+        {
+          reserveID: "92291e40-0844-11ed-bc6e-a50062f6cdba",
+          reserveName: "Groenkloof"
+        },
+      ]))
+  });*/
+
   it('add user to reserve -> login fail', async () => {
     expect(await service.addUserToReserve('1', '', '', '', [])).toMatchObject({
       status: 'fail',
@@ -931,6 +946,8 @@ it(' -> HTTP ERROR', async () => {
       explanation: 'ok',
     });
   });
+
+
   //////////////////////////////////////////////////////////////////////////////////////////
 
   it('change reserve for user -> login fail', async () => {
@@ -1668,6 +1685,10 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
   });
 
   //////////////////////////////////////////////////////////////////////
+  it('gen admin reserve list -> live', async () => {
+    /*await service.loginUser('reserveadmintwo@reserve.com', 'reserve');
+    console.table(await service.generateReserveList_ReserveAdmin());*/
+  })
 
   it('generate reserve list -> login fail', async () => {
     /*await service.loginUser('server@thingsboard.org', 'thingsboardserveraccountissecure')
@@ -1920,6 +1941,10 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
 
 
   //////////////////////////////////////////////////////////////////////
+  it('should get user info -> live', async () => {
+    await service.loginUser('reserveuserthree@reserve.com', 'reserve');
+    console.table((await service.getUserInfoFromToken()).data.reserves);
+  })
   it('user info from token -> fail', async () => {
     expect(await service.getUserInfoFromToken()).toMatchObject({ status: 'fail', explanation: 'ECONNREFUSED' });
   });
@@ -2100,7 +2125,7 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
         throwError(() => tests.axiosECONNFailureExample)
       );
     expect(await service.updateReserveInfo("", {
-      NameOfReserve:'',
+      NameOfReserve: '',
       region: '',
       country: '',
       city: '',
@@ -2125,7 +2150,7 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
         throwError(() => tests.axiosECONNFailureExample)
       );
     expect(await service.updateReserveInfo("", {
-      NameOfReserve:'',
+      NameOfReserve: '',
       region: '',
       country: '',
       city: '',
@@ -2150,7 +2175,7 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
         throwError(() => tests.axiosECONNFailureExample)
       );
     expect(await service.updateReserveInfo("", {
-      NameOfReserve:'',
+      NameOfReserve: '',
       region: '',
       country: '',
       city: '',
@@ -2178,7 +2203,7 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
         throwError(() => tests.axiosECONNFailureExample)
       );
     expect(await service.updateReserveInfo("", {
-      NameOfReserve:'',
+      NameOfReserve: '',
       region: '',
       country: '',
       city: '',
@@ -2204,7 +2229,7 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
       .spyOn(httpService, 'post')
       .mockImplementationOnce(() => of(tests.axiosCustomerSuccessExample));
     expect(await service.updateReserveInfo("", {
-      NameOfReserve:'',
+      NameOfReserve: '',
       region: '',
       country: '',
       city: '',
@@ -2296,8 +2321,8 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
 
   it('unassign device -> not admin', async () => {
     jest
-    .spyOn(httpService, 'get')
-    .mockImplementationOnce(() => of(tests.axiosUserSuccessExample));
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() => of(tests.axiosUserSuccessExample));
     expect(await service.unassignDevice('')).toMatchObject({
       status: 'fail',
       explanation: 'not admin',
@@ -2306,8 +2331,8 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
 
   it('unassign device -> unassign fail', async () => {
     jest
-    .spyOn(httpService, 'get')
-    .mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
     jest
       .spyOn(httpService, 'delete')
       .mockImplementationOnce(() =>
@@ -2321,11 +2346,11 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
 
   it('unassign device -> pass', async () => {
     jest
-    .spyOn(httpService, 'get')
-    .mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
     jest
-    .spyOn(httpService, 'delete')
-    .mockImplementationOnce(() => of(tests.axiosDeviceSuccessExample));
+      .spyOn(httpService, 'delete')
+      .mockImplementationOnce(() => of(tests.axiosDeviceSuccessExample));
     expect(await service.unassignDevice('')).toMatchObject({
       status: 'ok',
       explanation: 'call finished',
@@ -2335,8 +2360,8 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
   //////////////////////////////////////////////////////////////////////
   it('get unassigned devices -> not admin', async () => {
     jest
-    .spyOn(httpService, 'get')
-    .mockImplementationOnce(() => of(tests.axiosUserSuccessExample));
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() => of(tests.axiosUserSuccessExample));
     expect(await service.getUnassignedDevicesForAdmin()).toMatchObject({
       status: 'fail',
       explanation: 'not admin',
@@ -2345,8 +2370,8 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
 
   it('get unassigned devices -> get fail', async () => {
     jest
-    .spyOn(httpService, 'get')
-    .mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
     jest
       .spyOn(httpService, 'get')
       .mockImplementationOnce(() =>
@@ -2360,20 +2385,20 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
 
   it('get unassigned devices -> pass', async () => {
     jest
-    .spyOn(httpService, 'get')
-    .mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
     jest
-    .spyOn(httpService, 'get')
-    .mockImplementationOnce(() => of(tests.axiosDevicesSuccessExample));
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() => of(tests.axiosDevicesSuccessExample));
     expect(await service.getUnassignedDevicesForAdmin()).toMatchObject({
       status: 'ok',
       explanation: 'call finished',
       "data": [
-             {
-               "deviceID": "784f394c-42b6-435a-983c-b7beff2784f9",
-               "deviceName": "A4B72CCDFF33",
-             },
-           ]
+        {
+          "deviceID": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "deviceName": "A4B72CCDFF33",
+        },
+      ]
     });
   });
 
@@ -2386,7 +2411,7 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
     expect(await service.getUnassignedDevicesForAdmin()).toMatchObject({
       status: 'fail',
       explanation: 'user',
-      furtherExplain:"ECONNREFUSED"
+      furtherExplain: "ECONNREFUSED"
     });
   });
 

@@ -683,7 +683,12 @@ describe('ApiReserveEndpointService', () => {
     .mockImplementationOnce(() => Promise.resolve({status:"ok", explanation:"call finished"}));
     tests.tbSuccessExplanation.explanation = 'call finished';
     expect(await service.processReserveList(tests.reserveEndpointExample)).toMatchObject(tests.tbSuccessExplanation)
-  }); 
+  });
+  
+  it('reserve list -> live test', async () => {
+    const login = await thingsboardClient.loginUserReturnToken('reserveadmin@reserve.com', 'reserve');
+    console.table((await service.processReserveList({token:login.Token})).data)
+  });
   /////////////////////////////////////////////////////////////////////////////////////////////
   it('reserve update -> no token', async () => {
     delete tests.reserveEndpointExample.token;

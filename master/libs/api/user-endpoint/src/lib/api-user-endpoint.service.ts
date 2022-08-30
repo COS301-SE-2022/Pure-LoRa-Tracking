@@ -285,7 +285,7 @@ export class ApiUserEndpointService {
     const response = await this.thingsboardClient.changeReserveForUser(content.reserveID);
 
     const tokens = await this.thingsboardClient.refresh(content.refreshToken);
-    console.log('tokens :>> ', tokens);
+    //console.log('tokens :>> ', tokens);
 
     if (response.status == "fail")
       return { status: 500, explain: "Server failed with: " + response.explanation }
