@@ -39,6 +39,7 @@
         "libs/chirpstack/chirpstack-sensor/src/index.ts"
       ],
       "@lora/database": ["libs/database-proxy/src/index.ts"],
+      "@lora/db-proxy": ["libs/database/db-proxy/src/index.ts"],
       "@lora/device-endpoint": ["libs/api/device-endpoint/src/index.ts"],
       "@lora/hardware-grpc": ["libs/api/hardware-grpc/src/index.ts"],
       "@lora/location": ["libs/location/src/index.ts"],
