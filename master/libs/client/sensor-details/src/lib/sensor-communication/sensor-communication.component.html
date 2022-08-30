@@ -1,1 +1,26 @@
-<p>sensor-communication works!</p>
+<table mat-table [dataSource]="dataSource" multiTemplateDataRows>
+  <ng-container *ngFor="let col of columnsToDisplay" matColumnDef="{{col}}">
+    <th mat-header-cell *matHeaderCellDef="">{{getPrettyColumn(col)}}</th>
+    <td mat-cell *matCellDef="let element">{{element[col]}}</td> 
+  </ng-container>
+
+  <ng-container matColumnDef="expandedDetail">
+    <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplay.length">
+      <div class="elm-detail" [@detailExpand]="element === expandedElm ? 'expanded' : 'collapsed'">
+        <div>
+          {{element | json}}
+        </div>
+      </div>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+  <tr mat-row *matRowDef="let element; 
+    columns: columnsToDisplay;" 
+    class="elmRow" 
+    [class.elmExpand]="expandedElm === element"
+    (click)="expandedElm = expandedElm === element ? null : element" >
+  </tr>
+  <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detailRow"></tr>
+
+</table>

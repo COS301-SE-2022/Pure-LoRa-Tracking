@@ -11,6 +11,8 @@ import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
 import { SensorActivityComponent } from './sensor-activity/sensor-activity.component';
 import { SensorCommunicationComponent } from './sensor-communication/sensor-communication.component';
+import {MatChipsModule} from '@angular/material/chips';
+import {MatTableModule} from '@angular/material/table';
 
 export const clientSensorDetailsRoutes: Route[] = [];
 
@@ -25,6 +27,8 @@ export const clientSensorDetailsRoutes: Route[] = [];
     MatIconModule,
     MatListModule,
     MatButtonModule,
+    MatChipsModule,
+    MatTableModule
   ],
   declarations: [
     SensorViewDetailComponent,
