@@ -90,14 +90,14 @@ export class QueueFactoryService {
       return channel;
     }
 
-    public createALTChannel():ChannelWrapper|undefined{
+    public createNamedQChannel(name:string,queue:string):ChannelWrapper|undefined{
       const amqpconnection=QueueFactoryService.amqpconnection;//this is just for readibility
       let channel=amqpconnection?.createChannel({
-        name:`PURELORA_CHANNEL_ALTLINE`,
+        name:name,
         confirm:true,
         json:true,
         setup:function(ch:any){
-          return ch.assertQueue("PURELORA_ALTQUEUE");
+          return ch.assertQueue(queue);
         }
       })
       return channel;

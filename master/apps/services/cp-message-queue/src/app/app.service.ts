@@ -5,7 +5,16 @@ import { QueueFactoryService } from 'libs/message-queue/src/lib/queue-factory/qu
 @Injectable()
 export class AppService {
   constructor(private msgq:MessageQueueService) {
+    // console.log("start test");
+    msgq.STARTTEST();
     msgq.setUpMain();
+    msgq.setUpAlt();
+    msgq.setUpReady();
+    // msgq.DELTETE();
+    // setTimeout(() => {
+    //   console.log("starting rest")
+    // }, 500);
+
     
   }
   getData(): { message: string } {
