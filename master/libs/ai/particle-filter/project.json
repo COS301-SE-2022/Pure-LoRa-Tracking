@@ -1,0 +1,45 @@
+{
+  "sourceRoot": "libs/ai/particle-filter/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/ai/particle-filter",
+        "tsConfig": "libs/ai/particle-filter/tsconfig.lib.json",
+        "packageJson": "libs/ai/particle-filter/package.json",
+        "main": "libs/ai/particle-filter/src/index.ts",
+        "assets": ["libs/ai/particle-filter/*.md"]
+      }
+    },
+    "publish": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "node tools/scripts/publish.mjs ai-particle-filter {args.ver} {args.tag}"
+      },
+      "dependsOn": [
+        {
+          "projects": "self",
+          "target": "build"
+        }
+      ]
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/ai/particle-filter/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/ai/particle-filter"],
+      "options": {
+        "jestConfig": "libs/ai/particle-filter/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}
