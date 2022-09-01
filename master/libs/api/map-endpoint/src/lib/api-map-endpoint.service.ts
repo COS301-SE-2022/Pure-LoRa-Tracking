@@ -57,7 +57,7 @@ export class ApiMapEndpointService {
         } else {
             data = await this.thingsboardClient.getReservePerimeter();
         }
-        console.log('data :>> ', data.data);
+        //console.log('data :>> ', data.data);
         if (data.code == 401) {
             return {
                 code: 401,
@@ -140,8 +140,8 @@ export class ApiMapEndpointService {
         if (content.startTime == undefined || content.endTime == undefined) {
             content.startTime = Date.now() - 24 * 60 * 60 * 1000;
             content.endTime = Date.now();
-            console.log(content.startTime);
-            console.log(content.endTime);
+            //console.log(content.startTime);
+            //console.log(content.endTime);
         }
 
         this.thingsboardClient.setToken(content.token);
@@ -172,7 +172,7 @@ export class ApiMapEndpointService {
             if(content.reserveID==undefined) devices = await this.thingsboardClient.getDeviceInfos();
             else devices = await this.thingsboardClient.getDeviceInfos([],content.reserveID);
 
-            console.log(devices);
+            //console.log(devices);
             const other = devices.data.filter(val => val.isGateway == false);
             other.forEach((device) => {
                 /* await array -> telem results */
