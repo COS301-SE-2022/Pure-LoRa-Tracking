@@ -1093,11 +1093,17 @@ export class ThingsboardThingsboardClientService {
         explanation: 'token invalid',
       };
 
-    if (login.data.authority != 'SYS_ADMIN')
+    if (login.data.authority == 'CUSTOMER_USER')
       return {
         status: 'fail',
         explanation: 'user not system admin',
-      };
+      }
+    else {
+      const serverLogin = await this.loginUser(
+        'server@thingsboard.org',
+        process.env.DEFAULT_SERVER_PASSWORD
+      );
+    }
 
     this.adminService.setToken(this.token);
     const tenants = await this.adminService.getTenantInfos(1000, 0);
