@@ -673,6 +673,9 @@ describe('ApiReserveEndpointService', () => {
     jest
     .spyOn(thingsboardClient, 'getReserveList')
     .mockImplementationOnce(() => Promise.resolve({status:"fail", explanation:"ECONNREFUSED"}));
+    jest
+    .spyOn(thingsboardClient, 'generateReserveList_SystemAdmin')
+    .mockImplementationOnce(() => Promise.resolve({status:"fail", explanation:"ECONNREFUSED"}));
     tests.tbFailExplanation.explanation = 'ECONNREFUSED';
     expect(await service.processReserveList(tests.reserveEndpointExample)).toMatchObject(tests.tbFailExplanation)
   }); 
@@ -681,6 +684,9 @@ describe('ApiReserveEndpointService', () => {
     jest
     .spyOn(thingsboardClient, 'getReserveList')
     .mockImplementationOnce(() => Promise.resolve({status:"ok", explanation:"call finished"}));
+    jest
+    .spyOn(thingsboardClient, 'generateReserveList_SystemAdmin')
+    .mockImplementationOnce(() => Promise.resolve({status:'ok', explanation:"call finished"}));
     tests.tbSuccessExplanation.explanation = 'call finished';
     expect(await service.processReserveList(tests.reserveEndpointExample)).toMatchObject(tests.tbSuccessExplanation)
   });

@@ -1834,7 +1834,7 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
   it('generate reserve list sys admin -> not admin', async () => {
     jest
       .spyOn(httpService, 'get')
-      .mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
+      .mockImplementationOnce(() => of(tests.axiosUserSuccessExample));
     expect(await service.generateReserveList_SystemAdmin()).toMatchObject({
       status: 'fail',
       explanation: 'user not system admin',
@@ -1869,6 +1869,11 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
       .mockImplementationOnce(() =>
         throwError(() => tests.axiosECONNFailureExample)
       );
+    jest
+      .spyOn(httpService, 'post')
+      .mockImplementationOnce(() =>
+        throwError(() => tests.axiosECONNFailureExample)
+      );
     expect(await service.generateReserveList_SystemAdmin()).toMatchObject({
       status: 'fail',
       explanation: "ECONNREFUSED"
@@ -1882,6 +1887,11 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
     jest
       .spyOn(httpService, 'get')
       .mockImplementationOnce(() => of(tests.axiosTenantsSuccessExample));
+    jest
+      .spyOn(httpService, 'post')
+      .mockImplementationOnce(() =>
+        throwError(() => tests.axiosECONNFailureExample)
+      );
     jest
       .spyOn(httpService, 'post')
       .mockImplementationOnce(() => of(tests.axiosUserSuccessExample));
