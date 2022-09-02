@@ -27,7 +27,7 @@ describe('Proxy', () => {
     expect(service).toBeTruthy;
   });
 
-  it('should call proxy', async ()=> {
+  /*it('should call proxy', async ()=> {
     const devices = 5;
     const entriesPerDevice = 5;
     for (let i = 0; i < devices; i++) {
@@ -40,5 +40,5 @@ describe('Proxy', () => {
 
   it('should query the proxy for n records', async ()=> {
     console.table(await service.fetchRSSIinfos('254', 5));
-  })
+  })*/
 });
