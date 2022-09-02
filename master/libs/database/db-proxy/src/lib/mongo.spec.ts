@@ -1,2 +1,0 @@
-import { Mongo } from './mongo';
-

@@ -41,7 +41,6 @@
     "client-users-management-view": "libs/client/users-management-view",
     "client-users-view": "libs/client/users-view",
     "data-processing": "apps/data-processing",
-    "database-db-proxy": "libs/database/db-proxy",
     "database-proxy": "libs/database-proxy",
     "location": "libs/location",
     "lora-tracking": "apps/lora-tracking",
