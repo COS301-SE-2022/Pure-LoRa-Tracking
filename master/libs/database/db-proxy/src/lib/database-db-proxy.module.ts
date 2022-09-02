@@ -1,4 +1,4 @@
-import { Module, Global } from '@nestjs/common';
+import { Module, Global, Logger } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Mongo } from './mongo';
 import { AverageInput, AverageInputSchema, DataInput, DataInputSchema } from './mongo-interface.interface';

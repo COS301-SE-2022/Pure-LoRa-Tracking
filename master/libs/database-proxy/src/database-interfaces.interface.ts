@@ -27,7 +27,7 @@ export class DataInput {
     timestamp : number;
 
     @Prop({required:true})
-    deviceID : string;
+    deviceEUI : string;
 
     @Prop({required:true})
     eventtype : string;

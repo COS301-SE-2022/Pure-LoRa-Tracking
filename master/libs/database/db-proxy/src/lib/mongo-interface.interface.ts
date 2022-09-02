@@ -15,7 +15,7 @@ class Coordinate {
 @Schema()
 export class AverageInput {
     @Prop({required:true, type:String})
-    deviceID : string;
+    deviceEUI : string;
 
     @Prop({type:MongooseSchema.Types.Array})
     locations : Coordinate[]
@@ -27,7 +27,7 @@ export class DataInput {
     timestamp : number;
 
     @Prop({required:true})
-    deviceID : string;
+    deviceEUI : string;
 
     @Prop({required:true})
     eventtype : string;
