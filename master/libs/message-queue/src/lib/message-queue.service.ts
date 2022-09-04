@@ -43,19 +43,27 @@ export class MessageQueueService {
             //this method will run when data is pushed
             
             //send to mongo
+            channel.ack(msg);
             console.log("Consumed",msg);
             const routingkey=msg.fields.routingKey;
-            const msgdata=JSON.parse(msg.content.toString());
+            // const msgdata=JSON.parse(msg.content.toString());
+            console.log("test");
+            // this.processbus.forwardChirpstackData({
+            //     data:msgdata,
+            //     deviceEUI:routingkey.substring(routingkey.indexOf("device.")+7,routingkey.indexOf(".event")),
+            //     eventtype:routingkey.substring(routingkey.indexOf("event.")+6),
+            //     timestamp:msgdata.rxInfo[0]?.time
+            // }).then(curr=>{
+            //     console.log(curr);
+            // });
             this.processbus.forwardChirpstackData({
-                data:msgdata,
+                data:"test",
                 deviceEUI:routingkey.substring(routingkey.indexOf("device.")+7,routingkey.indexOf(".event")),
                 eventtype:routingkey.substring(routingkey.indexOf("event.")+6),
-                timestamp:msgdata.rxInfo[0]?.time
+                timestamp:Date.now()
             }).then(curr=>{
                 console.log(curr);
             });
-            channel.ack(msg);
-            
 
             
         }, {
