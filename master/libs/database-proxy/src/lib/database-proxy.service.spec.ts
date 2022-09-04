@@ -9,7 +9,7 @@ describe('DatabaseProxyService', () => {
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      imports : [Logger, MongooseModule.forRoot('mongodb://localhost/lora'),
+      imports : [Logger, MongooseModule.forRoot('mongodb://lora:lora@localhost:27017'),
       MongooseModule.forFeature([
         {name:DataInput.name, schema:DataInputSchema},
       {name:AverageInput.name, schema:AverageInputSchema}

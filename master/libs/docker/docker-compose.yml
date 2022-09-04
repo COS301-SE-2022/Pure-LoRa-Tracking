@@ -9,9 +9,11 @@ services:
   # MongoDB for our server
   mongodb:
     image: mongo:5.0
+    volumes:
+      - mongodata:/data/db
     environment:
       - MONGO_INITDB_ROOT_USERNAME=lora
-      - MONGO_INITDB_ROOT_PASSWORD=''
+      - MONGO_INITDB_ROOT_PASSWORD=lora
     ports:
       - "27017:27017"
   
@@ -130,6 +132,7 @@ volumes:
   thingsboard_data:
   postgresqldata:
   redisdata:
+  mongodata:
   
 
 # networks:
