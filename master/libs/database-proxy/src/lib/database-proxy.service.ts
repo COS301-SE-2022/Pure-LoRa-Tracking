@@ -45,4 +45,8 @@ export class DatabaseProxyService {
         })
         return res;
     }
+
+    public async deleteDeviceData(deviceEUI:string, timestamp:number) {
+        return await this.DataModel.findOneAndDelete({deviceEUI:deviceEUI, timestamp:timestamp});
+    }
 }
