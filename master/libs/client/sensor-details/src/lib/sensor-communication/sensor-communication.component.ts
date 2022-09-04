@@ -9,7 +9,11 @@ const TABLE_DATA = [
       time: "11:24",
       gateway: "G2",
       temperature: 2,
-      heartrate: 80
+      heartrate: 80,
+      location:{
+        long: 1,
+        lat: 1
+      }
     
   },
   {
@@ -19,7 +23,11 @@ const TABLE_DATA = [
       time: "11:24",
       gateway: "G2",
       temperature: 2,
-      heartrate: 80
+      heartrate: 80,
+      location:{
+        long: 1,
+        lat: 1
+      }
   }
 ];
 

@@ -1,4 +1,6 @@
-
+table{
+    width: 100%;
+}
 tr.detailRow {
     height: 0;
 }
@@ -20,3 +22,7 @@ border-bottom-width: 0;
     display: flex;
   }
   
+.scrollcontainer{
+   
+   height: 300px;
+}

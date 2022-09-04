@@ -15,6 +15,8 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatTableModule } from '@angular/material/table';
 import { CommunicationDataComponent } from './communication-data/communication-data.component';
 import {MatTreeModule} from '@angular/material/tree';
+import {ScrollingModule} from '@angular/cdk/scrolling';
+
 export const clientSensorDetailsRoutes: Route[] = [];
 
 @NgModule({
@@ -30,7 +32,8 @@ export const clientSensorDetailsRoutes: Route[] = [];
     MatButtonModule,
     MatChipsModule,
     MatTableModule,
-    MatTreeModule
+    MatTreeModule,
+    ScrollingModule
   ],
   declarations: [
     SensorViewDetailComponent,

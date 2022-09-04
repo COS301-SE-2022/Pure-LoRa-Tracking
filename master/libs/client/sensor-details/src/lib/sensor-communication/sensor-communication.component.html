@@ -1,3 +1,5 @@
+<cdk-virtual-scroll-viewport itemSize="0" class="scrollcontainer">
+
 <table mat-table [dataSource]="dataSource" multiTemplateDataRows>
   <ng-container *ngFor="let col of columnsToDisplay" matColumnDef="{{col}}">
     <th mat-header-cell *matHeaderCellDef="">{{getPrettyColumn(col)}}</th>
@@ -8,7 +10,7 @@
     <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplay.length">
       <div class="elm-detail" [@detailExpand]="element === expandedElm ? 'expanded' : 'collapsed'">
         <div>
-          <master-communication-data></master-communication-data>
+          <master-communication-data [sensorCommunication]="element"></master-communication-data>
         </div>
       </div>
     </td>
@@ -24,3 +26,4 @@
   <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detailRow"></tr>
 
 </table>
+</cdk-virtual-scroll-viewport>
