@@ -1,5 +1,5 @@
 import { DatabaseProxyService } from '@lora/database';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 
 @Injectable()
 export class ProcessingApiProcessingBusService {
@@ -16,5 +16,15 @@ export class ProcessingApiProcessingBusService {
             return false;
         }
         return true;
+    }
+
+    /* request delete device data from db service */
+    async deleteDeviceData(data:{timestamp:number, deviceEUI:string}) {
+        try {
+            this.database.deleteDeviceData(data.deviceEUI, data.timestamp);
+        } catch(error) {
+            Logger.log('Delete Error');
+            Logger.log(error);
+        }
     }
 }
