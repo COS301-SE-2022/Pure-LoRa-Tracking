@@ -173,3 +173,11 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-
   background-color: red;
   color: black;
 }
+
+mat-tab-group.mat-tab-group.sensor-tabs.mat-primary div.mat-tab-body-wrapper{
+  height: 100%;
+}
+
+.mat-tab-group.sensor-tabs.mat-primary .mat-tab-body-wrapper mat-tab-body.mat-tab-body.mat-tab-body-active{
+  position: absolute;
+}
