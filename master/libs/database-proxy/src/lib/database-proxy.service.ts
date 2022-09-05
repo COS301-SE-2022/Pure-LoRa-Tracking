@@ -50,7 +50,9 @@ export class DatabaseProxyService {
 
     public async markAsProcessed(data:{deviceEUI:string,timestamp:string}[]):Promise<void>{
         data.forEach(async (curr)=>{
-            await this.DataModel.find({deviceEUI:curr.deviceEUI,timestamp:curr.timestamp}).set({processed:true});
+            // await this.DataModel.find({deviceEUI:curr.deviceEUI,timestamp:curr.timestamp}).set({processed:true});
+            await this.DataModel.findOneAndUpdate({deviceEUI:curr.deviceEUI,timestamp:curr.timestamp},{processed:true});
+            
         })
         return;
     }

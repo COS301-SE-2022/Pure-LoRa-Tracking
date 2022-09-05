@@ -30,6 +30,19 @@ export class ProcessingApiProcessingBusService {
         return false;
     }
 
+    /* mark points as proccessed */
+    async markProcessed(data:{deviceEUI:string,timestamp:string}[]):Promise<void>{
+        console.log("Process mark ",data);
+        try {
+            await this.database.markAsProcessed(data);
+            return;
+        } catch(error) {
+            Logger.log('Delete Error');
+            Logger.log(error);
+        }
+        return;
+    }
+
     /* request delete device data from db service */
     async deleteDeviceData(data:{timestamp:number, deviceEUI:string}) {
         try {
@@ -39,4 +52,6 @@ export class ProcessingApiProcessingBusService {
             Logger.log(error);
         }
     }
+
+
 }
