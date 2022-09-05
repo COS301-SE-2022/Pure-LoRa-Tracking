@@ -46,4 +46,8 @@ describe('DatabaseProxyService', () => {
   it('should query the proxy for n records', async ()=> {
     //console.table((await service.fetchRSSIinfos('254', 5))[1]);
   })
+
+  it('should delete device data', async ()=> {
+    //console.table(service.deleteDeviceData('254', 1662112541314));
+  })
 });
