@@ -14,8 +14,11 @@ import { SensorCommunicationComponent } from './sensor-communication/sensor-comm
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTableModule } from '@angular/material/table';
 import { CommunicationDataComponent } from './communication-data/communication-data.component';
-import {MatTreeModule} from '@angular/material/tree';
-import {ScrollingModule} from '@angular/cdk/scrolling';
+import { MatTreeModule } from '@angular/material/tree';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { ReactiveFormsModule } from '@angular/forms';
 
 export const clientSensorDetailsRoutes: Route[] = [];
 
@@ -33,7 +36,10 @@ export const clientSensorDetailsRoutes: Route[] = [];
     MatChipsModule,
     MatTableModule,
     MatTreeModule,
-    ScrollingModule
+    ScrollingModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    ReactiveFormsModule
   ],
   declarations: [
     SensorViewDetailComponent,

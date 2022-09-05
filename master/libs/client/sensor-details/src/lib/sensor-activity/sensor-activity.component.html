@@ -1,4 +1,13 @@
-<ngx-charts-line-chart
+<mat-form-field>
+    <mat-select [formControl]="graphOption">
+        <mat-option value="temperature">Temperature</mat-option>
+        <mat-option value="heartrate">Heart Rate</mat-option>
+        <mat-option value="signals">Signal Frequency</mat-option>
+    </mat-select>
+</mat-form-field>
+<div id="chart-container" [ngSwitch]="graphOption.value">
+    <ngx-charts-line-chart
+    *ngSwitchCase="'heartrate'"
     [legend]="legend"
     [showXAxisLabel]="showXAxisLabel"
     [showYAxisLabel]="showYAxisLabel"
@@ -7,5 +16,32 @@
     [xAxisLabel]="xAxisLabel"
     [yAxisLabel]="yAxisLabel"
     [timeline]="timeline"
->
-</ngx-charts-line-chart>
+    [results]="bpmData"
+    >
+    </ngx-charts-line-chart>
+    <ngx-charts-line-chart
+    *ngSwitchCase="'temperature'"
+    [legend]="legend"
+    [showXAxisLabel]="showXAxisLabel"
+    [showYAxisLabel]="showYAxisLabel"
+    [xAxis]="xAxis"
+    [yAxis]="yAxis"
+    [xAxisLabel]="xAxisLabel"
+    [yAxisLabel]="'Degrees Celsius (&deg;C)'"
+    [timeline]="timeline"
+    [results]="tempData"
+    >
+    </ngx-charts-line-chart>
+    <ngx-charts-bar-vertical
+    *ngSwitchCase="'signals'"
+    [legend]="legend"
+    [showXAxisLabel]="showXAxisLabel"
+    [showYAxisLabel]="showYAxisLabel"
+    [xAxis]="xAxis"
+    [yAxis]="yAxis"
+    [xAxisLabel]="xAxisLabel"
+    [yAxisLabel]="'Signals Received'"
+    [results]="signalData"
+    >
+    </ngx-charts-bar-vertical>
+</div>
