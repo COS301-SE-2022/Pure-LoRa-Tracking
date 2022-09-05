@@ -33,7 +33,7 @@ export class DatabaseProxyService {
 
     public async fetchRSSIinfos(deviceEUI: string, numberOfRecords: number): Promise<DataInput[]> {
         Logger.log(`Fetch ${numberOfRecords}\n`);
-        const data = await this.DataModel.find({deviceEUI:deviceEUI}).sort({timestamp:-1}).limit(numberOfRecords).exec();
+        const data = await this.DataModel.find({deviceEUI:deviceEUI}).sort({timestamp:1}).limit(numberOfRecords).exec();
         const res = new Array<DataInput>();
         data.forEach(item => {
             res.push({

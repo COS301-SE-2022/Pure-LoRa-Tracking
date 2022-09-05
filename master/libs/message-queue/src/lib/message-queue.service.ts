@@ -46,8 +46,8 @@ export class MessageQueueService {
             channel.ack(msg);
             console.log("Consumed",msg);
             const routingkey=msg.fields.routingKey;
+            const deveui=routingkey.substring(routingkey.indexOf("device.")+7,routingkey.indexOf(".event"));
             // const msgdata=JSON.parse(msg.content.toString());
-            console.log("test");
             // this.processbus.forwardChirpstackData({
             //     data:msgdata,
             //     deviceEUI:routingkey.substring(routingkey.indexOf("device.")+7,routingkey.indexOf(".event")),
@@ -57,7 +57,7 @@ export class MessageQueueService {
             //     console.log(curr);
             // });
             this.processbus.forwardChirpstackData({
-                data:"test",
+                data:msg.content.toString(),
                 deviceEUI:routingkey.substring(routingkey.indexOf("device.")+7,routingkey.indexOf(".event")),
                 eventtype:routingkey.substring(routingkey.indexOf("event.")+6),
                 timestamp:Date.now()
@@ -65,10 +65,16 @@ export class MessageQueueService {
                 console.log(curr);
             });
 
+          
+
             
         }, {
             prefetch: parseInt(process.env.RABBITMQ_PREFETCH)
         });
     }
 
+
+    checkToSend(deveui:string){
+        this.processbus.getRssiInfo(deveui,parseInt(process.env.AVGAMOUNT) )
+    }
 }

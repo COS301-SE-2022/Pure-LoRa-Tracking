@@ -18,6 +18,18 @@ export class ProcessingApiProcessingBusService {
         return true;
     }
 
+    /* get the last data points */
+    //TODO change this to the devicedata input
+    async getRssiInfo(deviceEUI: string, numberOfRecords: number):Promise<any>{
+        try {
+            return await this.database.fetchRSSIinfos(deviceEUI,numberOfRecords);
+        } catch(error) {
+            Logger.log('Delete Error');
+            Logger.log(error);
+        }
+        return false;
+    }
+
     /* request delete device data from db service */
     async deleteDeviceData(data:{timestamp:number, deviceEUI:string}) {
         try {
