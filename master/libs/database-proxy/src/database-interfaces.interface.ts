@@ -34,6 +34,9 @@ export class DataInput {
 
     @Prop({required:true})
     data : string;
+
+    @Prop({required:true})
+    processed : boolean;
 }
 
 export const AverageInputSchema = SchemaFactory.createForClass(AverageInput)

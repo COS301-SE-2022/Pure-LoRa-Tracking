@@ -24,26 +24,35 @@ export class DatabaseProxyService {
         return this.AverageModel.find({ deviceID: deviceID }).exec();
     }
 
-    public async saveRSSIinfos(data: { timestamp: number, deviceEUI: string, data: string, eventtype: string }) {
+    public async saveRSSIinfos(data: { timestamp: number, deviceEUI: string, data: string, eventtype: string, processed:false }) {
         //console.log("Insert Raw:\n");
         //console.table(data);
+        const transfer=data;
         const Insert = new this.DataModel(data);
         return await Insert.save();
     }
 
     public async fetchRSSIinfos(deviceEUI: string, numberOfRecords: number): Promise<DataInput[]> {
         Logger.log(`Fetch ${numberOfRecords}\n`);
-        const data = await this.DataModel.find({deviceEUI:deviceEUI}).sort({timestamp:1}).limit(numberOfRecords).exec();
+        const data = await this.DataModel.find({deviceEUI:deviceEUI,processed:false}).sort({timestamp:1}).limit(numberOfRecords).exec();
         const res = new Array<DataInput>();
         data.forEach(item => {
             res.push({
                 data : item.data,
                 deviceEUI : item.deviceEUI,
                 eventtype : item.eventtype,
-                timestamp : item.timestamp
+                timestamp : item.timestamp,
+                processed : item.processed
             })
         })
         return res;
+    }
+
+    public async markAsProcessed(data:{deviceEUI:string,timestamp:string}[]):Promise<void>{
+        data.forEach(async (curr)=>{
+            await this.DataModel.find({deviceEUI:curr.deviceEUI,timestamp:curr.timestamp}).set({processed:true});
+        })
+        return;
     }
 
     public async deleteDeviceData(deviceEUI:string, timestamp:number) {
