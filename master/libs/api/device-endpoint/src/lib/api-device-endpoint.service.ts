@@ -107,7 +107,7 @@ export class ApiDeviceEndpointService {
 
     if (resp.explanation == undefined) {
       /* delete the device as we do not want a half install */
-      this.thingsboardClient.RemoveDeviceFromReserve(resp.data);
+      this.thingsboardClient.RemoveDeviceFromReserve(resp.data.deviceCreate);
       return {
         status: 400,
         explanation: "access token failure"
@@ -116,16 +116,16 @@ export class ApiDeviceEndpointService {
 
     const chirpPromise = await this.chirpstackSensor.addDevice(
       process.env.CHIRPSTACK_API,
-      resp.explanation,
+      resp.data.deviceToken,
       body.labelName,
       body.hardwareName,
       body.deviceProfileId
     ).catch((err) => {
-      this.thingsboardClient.RemoveDeviceFromReserve(resp.data);
+      this.thingsboardClient.RemoveDeviceFromReserve(resp.data.deviceCreate);
       return {
         status: 400,
         explanation: "access token failure"
-      }
+      } 
     });
 
     return {
@@ -184,7 +184,7 @@ export class ApiDeviceEndpointService {
 
     if (resp.explanation == undefined) {
       /* delete the device as we do not want a half install */
-      this.thingsboardClient.RemoveDeviceFromReserve(resp.data);
+      this.thingsboardClient.RemoveDeviceFromReserve(resp.data.deviceCreate);
       return {
         status: 400,
         explanation: "access token failure"
@@ -197,7 +197,7 @@ export class ApiDeviceEndpointService {
       body.labelName,
       body.hardwareName,
     ).catch((_) => {
-      this.thingsboardClient.RemoveDeviceFromReserve(resp.data);
+      this.thingsboardClient.RemoveDeviceFromReserve(resp.data.deviceCreate);
       return {
         status: 400,
         explanation: "access token failure"
@@ -377,6 +377,13 @@ export class ApiDeviceEndpointService {
         status: 400,
         explanation: 'no location parameters',
       };
+    
+    this.chirpstackGateway.setGatewayLocation(
+      process.env.CHIRPSTACK_API,
+      body.devEUI,
+      body.locationParameters.latitude,
+      body.locationParameters.longitude
+    )
 
     this.thingsboardClient.setToken(body.token);
     const resp = await this.thingsboardClient.setGatewayLocation(body.deviceID, body.locationParameters);
@@ -432,12 +439,11 @@ export class ApiDeviceEndpointService {
   }
 
   ///////////////////////////////////////////////////////////////////////////
-  // TODO: Implement endpoint
   async processGetDeviceProfiles(): Promise<deviceResponse> {
 
     const result = await this.chirpstackSensor.getProfiles(process.env.CHIRPSTACK_API);
     const resultData = result.map((item) => ({
-      id: item.getId(), name: item.getName()
+      id: item.getId(), name: item.getName(), isOTAA: item.getSupportsJoin() , macVerion: item.getMacVersion()
     }));
     return {
       status: 200,

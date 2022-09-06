@@ -509,8 +509,11 @@ export class ThingsboardThingsboardClientService {
 
     return {
       status: 'ok',
-      data: deviceCreate,
-      explanation: AccessToken.data.credentialsId,
+      data: { 
+        deviceCreate: deviceCreate,
+        deviceToken: AccessToken.data.credentialsId 
+      },
+      explanation: AccessToken.explanation,
     };
   }
 
