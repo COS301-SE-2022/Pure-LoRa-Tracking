@@ -68,7 +68,7 @@ export const clientManageViewRoutes: Route[] = [
     component: DevicesListComponent
   },
   {
-    path: 'edit-gateway/:id',
+    path: 'edit-gateway/:id/:devEUI',
     outlet: 'managecontent',
     loadChildren: ()=>import('@master/client/manage-view/src/lib/gateway-edit-view').then(m => m.ClientManageViewSrcLibGatewayEditViewModule),
     component: GatewayEditComponent

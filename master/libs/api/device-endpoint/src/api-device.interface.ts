@@ -69,6 +69,7 @@ export interface GatewayLocationInfo {
 export interface GatewayLocationAdd {
   token: string;
   deviceID: string;
+  devEUI: string;
   locationParameters: {
     latitude: number;
     longitude: number;

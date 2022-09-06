@@ -94,7 +94,8 @@ export class DeviceAddComponent implements OnInit {
         if(val.status==200){
           console.log("test");
           this.http.post("api/device/admin/gateway/info/location/add",{
-            deviceID:val.data.data.id.id,
+            deviceID: val.data.deviceCreate.data.id.id,
+            devEUI: val.data.deviceCreate.data.name,
             locationParameters:{
               latitude: this.gatewayGroup.get("gatlang")?.value,
               longitude: this.gatewayGroup.get("gatlong")?.value,

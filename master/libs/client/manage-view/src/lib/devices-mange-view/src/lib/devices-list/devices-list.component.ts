@@ -157,7 +157,7 @@ export class DevicesListComponent implements OnInit {
     console.log("first "+reserveid+" "+reserveid+" "+other);
   }
 
-  editGateway(id:string): void {
-    this.router.navigate(['manage',{outlets:{managecontent:['edit-gateway',id]}}]);  
+  editGateway(id:string,devEUI:string): void {
+    this.router.navigate(['manage',{outlets:{managecontent:['edit-gateway',id,devEUI]}}]);  
   }
 }

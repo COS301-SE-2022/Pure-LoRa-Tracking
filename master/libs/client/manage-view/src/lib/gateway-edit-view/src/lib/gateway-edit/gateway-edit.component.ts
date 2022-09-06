@@ -14,13 +14,15 @@ gateway={
   id:''
 }
   id:string|null;
-
+  devEUI:string|null;
   gatewayInfo: FormGroup = new FormGroup({});
 
   constructor(private router: Router,private activeRoute:ActivatedRoute,private http:HttpClient,private formBuilder: FormBuilder) {
     this.id="";
+    this.devEUI=null;
     this.activeRoute.paramMap.subscribe( params => { 
       this.id = params.get('id');
+      this.devEUI = params.get('devEUI');
       console.log("id",this.id);
     });
     this.gatewayInfo = this.formBuilder.group({
@@ -37,7 +39,8 @@ gateway={
   savegateway():void{
     console.log("save");
     this.http.post("/api/device/admin/gateway/info/location/add",{
-      deviceID:this.id,
+      deviceID: this.id,
+      devEUI: this.devEUI,
       locationParameters: {
         latitude: this.gatewayInfo.get("lat")?.value,
         longitude: this.gatewayInfo.get("lng")?.value,

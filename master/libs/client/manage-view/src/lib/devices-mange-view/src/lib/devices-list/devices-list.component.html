@@ -108,7 +108,7 @@
             <ng-container matColumnDef="edit">
                 <th mat-header-cell *matHeaderCellDef></th>
                 <td mat-cell *matCellDef="let element"> 
-                    <button mat-icon-button (click)="editGateway(element.id)"><mat-icon>edit</mat-icon></button> </td>
+                    <button mat-icon-button (click)="editGateway(element.id, element.name)"><mat-icon>edit</mat-icon></button> </td>
             </ng-container>
             
             <tr mat-header-row *matHeaderRowDef="gatewayColumns"></tr>
