@@ -64,6 +64,12 @@ describe('ThingsboardThingsboardTelemetryService', () => {
     expect(await service.getSensorData('deviceID', 'deviceType', 0, 1654072587463)).toMatchObject(tests.ECONNResponse);
   });
 
+  it('get sensor data -> HTTP ERROR', async () => {
+    service.setToken('token')
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => throwError(() => tests.axiosFailureExample));
+    expect(await service.getSensorData('deviceID', 'deviceType', 0, 1654072587463)).toMatchObject(tests.FailResponse);
+  });
+
   it('get telemetry -> return info, no time start', async () => {
     //const data = await loginService.login(tests.user, tests.userPassword);
     //service.setToken(data.token);
