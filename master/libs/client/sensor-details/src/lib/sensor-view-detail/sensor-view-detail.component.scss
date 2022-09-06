@@ -1,7 +1,8 @@
 .headerText {
     flex-direction: row-reverse;
-    align-items: baseline;
+    align-items: center;
     justify-content: flex-end;
+    padding-top: 0;
 }
 
 #field-list {
@@ -19,19 +20,6 @@
     margin: 0.5%;
 }
 
-#delete-button {
-    background-color: transparent;
-    color: red;
-    border: 1px solid red;
-    margin: 0.5%;
-}
-
-#locateButton{
-    background-color: transparent;
-    color: #0058FF;
-    border: 1px solid #0058FF;
-    margin: 0.5%;
-}
 
 mat-card{
     display: flex;
@@ -52,3 +40,30 @@ mat-tab-group.mat-tab-group.sensor-tabs.mat-primary{
     position: relative;
 }
 
+#backButton{
+    order: 4;
+}
+
+#spacer{
+    order: 2;
+    flex: 1 1 auto;
+}
+
+#locateButton{
+    background-color: transparent;
+    color: var(--color-bright-accent);
+    // margin: 0.5%;
+    order: 1;
+}
+
+#sensor-title-text{
+    margin: 0;
+}
+
+#sensorCard {
+    padding-top: 0.2em;
+}
+
+#locateIcon{
+    margin-left: 0.2em;
+}

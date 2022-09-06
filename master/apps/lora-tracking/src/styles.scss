@@ -103,6 +103,8 @@ $accent-palette: (
     )
 );
 
+$accent: #0058FF;
+
 $lora-tracking-primary: mat.define-palette($primary-pallete);
 
 //$lora-tracking-accent: mat.define-palette($accent-palette, A200, A100, A400);
@@ -184,4 +186,13 @@ mat-tab-group.mat-tab-group.sensor-tabs.mat-primary div.mat-tab-body-wrapper{
 
 svg.ngx-charts{
   float: unset;
+}
+
+mat-card-header.mat-card-header.headerText div.mat-card-header-text {
+  order: 3;
+}
+
+.button-icon-text {
+  display: flex;
+  align-items: center;
 }

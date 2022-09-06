@@ -1,8 +1,12 @@
-<mat-card>
+<mat-card id="sensorCard">
     <mat-card-header class="headerText">
-        <button mat-icon-button (click)="closeSensor()"><mat-icon>arrow_back</mat-icon></button>
-        <mat-card-title >
+
+        <button id="locateButton" mat-button (click)="locateSensor()"><div class="button-icon-text">Locate<mat-icon id="locateIcon">my_location</mat-icon></div></button>
+        <span id="spacer"></span>
+        <button id="backButton"  mat-icon-button (click)="closeSensor()"><mat-icon>arrow_back</mat-icon></button>
+        <mat-card-title id="sensor-title-text" style="order: 3;">
             {{sensorInfo.name}}
+           
         </mat-card-title>
     </mat-card-header>
     <mat-divider></mat-divider>
@@ -47,8 +51,4 @@
         </mat-tab-group>
         
     </mat-card-content>
-    <mat-action-list>
-        <button id="locateButton" mat-raised-button (click)="locateSensor()">Locate <mat-icon>my_location</mat-icon></button>
-        <button id="delete-button" mat-raised-button (click)="deleteSensor()">Delete</button>
-    </mat-action-list>
 </mat-card>
