@@ -75,6 +75,63 @@ export class ThingsboardThingsboardTelemetryService {
 
   //////////////////////////////////////////////////////////////////
 
+  async getSensorData(
+    DeviceID: string,
+    DeviceProfile: string,
+    timeStart?: number,
+    timeStop?: number
+  ): Promise<TelemetryResponse> {
+    let url = '';
+    if (timeStart != undefined) {
+      url =
+        this.ThingsBoardURL +
+        '/plugins/telemetry/' +
+        DeviceProfile +
+        '/' +
+        DeviceID +
+        '/values/timeseries' +
+        '?startTs=' +
+        timeStart +
+        '&endTs=' +
+        timeStop +
+        '&keys=ts,latitude,longitude';
+    } else {
+      url =
+        this.ThingsBoardURL +
+        '/plugins/telemetry/' +
+        DeviceProfile +
+        '/' +
+        DeviceID +
+        '/values/timeseries';
+    }
+    const resp = await lastValueFrom(
+      this.httpService.get(url, { headers: this.headersReq })
+    ).catch((error) => {
+      if (error.response == undefined) return error.code;
+      return error;
+    });
+    if (resp == 'ECONNREFUSED')
+      return {
+        status: 500,
+        explanation: resp,
+      };
+    else if (resp.status != 200) {
+      return {
+        status: resp.response.status,
+        explanation: resp.response.data.message,
+      };
+    }
+    return {
+      status: resp.status,
+      explanation: 'ok',
+      data: {
+        telemetryResults: resp.data,
+      },
+    };
+  }
+
+  //////////////////////////////////////////////////////////////////
+
   buildTelemetryResults(items): TelemetryResult[] {
     if (items['longitude'] == undefined) return [];
     const TelList: TelemetryResult[] = new Array<TelemetryResult>();
