@@ -47,19 +47,21 @@ describe('ThingsboardThingsboardTelemetryService', () => {
   });
 
   it('get sensor data -> return info', async () => {
-    //const data = await loginService.login(tests.user, tests.userPassword);
-    //service.setToken(data.token);
     service.setToken('token')
     jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosTelemetrySuccessExample));
     expect(await service.getSensorData('deviceID', 'deviceType', 0, 1654072587463)).toMatchObject(tests.SuccessResponse);
   });
 
   it('get sensor data -> return info, no time start', async () => {
-    //const data = await loginService.login(tests.user, tests.userPassword);
-    //service.setToken(data.token);
     service.setToken('token')
     jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosTelemetrySuccessExample));
     expect(await service.getSensorData('deviceID', 'deviceType')).toMatchObject(tests.SuccessResponse);
+  });
+
+  it('get sensor data -> ECONNREFUSED', async () => {
+    service.setToken('token')
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => throwError(() => tests.axiosECONNFailureExample));
+    expect(await service.getSensorData('deviceID', 'deviceType', 0, 1654072587463)).toMatchObject(tests.ECONNResponse);
   });
 
   it('get telemetry -> return info, no time start', async () => {
