@@ -328,7 +328,58 @@ export class ThingsboardThingsboardClientService {
     };
   }
 
-  ////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+  async getDeviceSensorData(
+    DeviceID: string,
+    startTime?: number,
+    endTime?: number
+  ): Promise<thingsboardResponse> {
+    const verifyToken = await this.validateToken();
+    if (verifyToken == false) {
+      return {
+        status: 'fail',
+        explanation: 'token',
+      };
+    }
+
+    const verifyDevice = await this.validateDevice(DeviceID);
+    if (verifyDevice == undefined || verifyDevice == null) {
+      return {
+        status: 'fail',
+        explanation: 'device with ID not found for user token combination',
+        name: DeviceID,
+        data: [],
+      };
+    }
+
+    this.telemetryService.setToken(this.token);
+    const resp = await this.telemetryService.getSensorData(
+      DeviceID,
+      'DEVICE',
+      startTime,
+      endTime
+    );
+
+    if (resp.status != 200)
+      return {
+        status: 'fail',
+        explanation: resp.explanation,
+      };
+
+    const labelName = verifyDevice['label'];
+    const deviceName = verifyDevice['name'];
+
+    return {
+      status: 'ok',
+      name: DeviceID,
+      explanation: labelName,
+      furtherExplain: deviceName,
+      data: resp,
+    };
+  }
+
+  //////////////////////////////////////////////////////////
+
   async refresh(token: string): Promise<refreshResponse> {
     const resp = await this.userService.refreshToken(token);
     if (resp.status == 200) {
