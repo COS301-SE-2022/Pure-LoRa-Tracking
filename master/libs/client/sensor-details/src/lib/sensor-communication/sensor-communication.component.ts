@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 
 const TABLE_DATA = [
@@ -53,17 +53,12 @@ const prettyColumnNames = {
 })
 
 
-export class SensorCommunicationComponent implements OnInit {
+export class SensorCommunicationComponent {
  
   dataSource = TABLE_DATA;
 
   columnsToDisplay = ['date','time', 'gateway', 'temperature', 'heartrate'];
   expandedElm = null;
-  constructor() {
-  }
-  
-
-  ngOnInit(): void {}
 
   getPrettyColumn(column: string): string {
     const prettyName = prettyColumnNames[column as keyof typeof prettyColumnNames] as string;

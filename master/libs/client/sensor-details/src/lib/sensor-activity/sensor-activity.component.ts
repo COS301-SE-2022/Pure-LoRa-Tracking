@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl } from '@angular/forms';
 @Component({
   selector: 'master-sensor-activity',
   templateUrl: './sensor-activity.component.html',
   styleUrls: ['./sensor-activity.component.scss'],
 })
-export class SensorActivityComponent implements OnInit {
+export class SensorActivityComponent {
 
   graphOption = new FormControl();
    // view: [number,number]= [400, 200];
@@ -108,11 +108,5 @@ export class SensorActivityComponent implements OnInit {
       "value":0,
       "name": new Date("2020-05-22"),
     },
-  ]}];
-
-  constructor() {}
-
-  ngOnInit(): void {}
-
-  
+  ]}];  
 }
