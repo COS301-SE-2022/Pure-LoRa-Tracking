@@ -23,30 +23,32 @@ export class SensorActivityComponent implements OnInit {
   timeline = true;
   yScaleMin = 0;
 
+
+  // TODO @MildogMiller for timeseries name must be valid js date object
   signalData = [
     {
       "value":15,
-      "name": "12/05/2020"
+      "name": new Date("2020-05-12"),
     },
     {
       "value":6,
-      "name": "13/05/2020"
+      "name": new Date("2020-05-13"),
     },
     {
       "value":5,
-      "name": "14/05/2020"
+      "name": new Date("2020-05-14"),
     },
     {
       "value":10,
-      "name": "15/05/2020"
+      "name": new Date("2020-05-15"),
     },
     {
       "value":9,
-      "name": "16/05/2020"
+      "name": new Date("2020-05-17"),
     },
     {
       "value":12,
-      "name": "17/05/2020"
+      "name": new Date("2020-05-19"),
     },
   ];
 
@@ -54,28 +56,28 @@ export class SensorActivityComponent implements OnInit {
     "name":"averagetemp",
     "series": [
     {
-      "name": "12/05/2020",
-      "value":"23"
+      "name": new Date("2020-05-12"),
+      "value":23.1
     },
     {
-      "name": "13/05/2020",
-      "value":"23"
+      "name": new Date("2020-05-13"),
+      "value":23.2
     },
     {
-      "name": "14/05/2020",
-      "value":"24"
+      "name": new Date("2020-05-14"),
+      "value":24
     },
     {
-      "name": "17/05/2020",
-      "value":"23",
+      "name": new Date("2020-05-15"),
+      "value":23.4,
     },
     {
-      "name": "15/05/2020",
-      "value":"16"
+      "name": new Date("2020-05-17"),
+      "value":22.9
     },
     {
-      "name": "16/05/2020",
-      "value":"0",
+      "name": new Date("2020-05-20"),
+      "value":23.6,
     },
   ]}];
 
@@ -84,27 +86,27 @@ export class SensorActivityComponent implements OnInit {
     "series":[
     {
       "value":26,
-      "name": "12/05/2020"
+      "name": new Date("2020-05-12"),
     },
     {
       "value":28,
-      "name": "13/05/2020"
+      "name": new Date("2020-05-13"),
     },
     {
       "value":29,
-      "name": "14/05/2020"
+      "name": new Date("2020-05-15"),
     },
     {
       "value":28,
-      "name": "15/05/2020"
+      "name": new Date("2020-05-17"),
     },
     {
       "value":14,
-      "name": "16/05/2020"
+      "name": new Date("2020-05-20"),
     },
     {
       "value":0,
-      "name": "17/05/2020"
+      "name": new Date("2020-05-22"),
     },
   ]}];
 

@@ -1,4 +1,5 @@
 #chart-container {
-    
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: visible !important;
 }
-

@@ -1,3 +1,4 @@
+<div>
 <mat-form-field>
     <mat-select [formControl]="graphOption">
         <mat-option value="temperature">Temperature</mat-option>
@@ -15,8 +16,9 @@
     [yAxis]="yAxis"
     [xAxisLabel]="xAxisLabel"
     [yAxisLabel]="yAxisLabel"
-    [timeline]="timeline"
+    [timeline]=true
     [results]="bpmData"
+    [autoScale]=true
     >
     </ngx-charts-line-chart>
     <ngx-charts-line-chart
@@ -28,8 +30,9 @@
     [yAxis]="yAxis"
     [xAxisLabel]="xAxisLabel"
     [yAxisLabel]="'Degrees Celsius (&deg;C)'"
-    [timeline]="timeline"
+    [timeline]=true
     [results]="tempData"
+    [autoScale]=true
     >
     </ngx-charts-line-chart>
     <ngx-charts-bar-vertical
@@ -44,4 +47,5 @@
     [results]="signalData"
     >
     </ngx-charts-bar-vertical>
+</div>
 </div>

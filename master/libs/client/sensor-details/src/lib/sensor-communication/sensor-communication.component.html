@@ -1,5 +1,4 @@
 <cdk-virtual-scroll-viewport itemSize="0" class="scrollcontainer">
-
 <table mat-table [dataSource]="dataSource" multiTemplateDataRows>
   <ng-container *ngFor="let col of columnsToDisplay" matColumnDef="{{col}}">
     <th mat-header-cell *matHeaderCellDef="">{{getPrettyColumn(col)}}</th>
