@@ -39,7 +39,7 @@ export class ReserveUsersViewComponent implements OnInit {
   // token="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZlYWRtaW5AcmVzZXJ2ZS5jb20iLCJzY29wZXMiOlsiVEVOQU5UX0FETUlOIl0sInVzZXJJZCI6ImQ2MzcyZTMwLWRmZTgtMTFlYy1iZGIzLTc1MGNlN2VkMjQ1MSIsImVuYWJsZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiJjZDJkZjJiMC1kZmU4LTExZWMtYmRiMy03NTBjZTdlZDI0NTEiLCJjdXN0b21lcklkIjoiMTM4MTQwMDAtMWRkMi0xMWIyLTgwODAtODA4MDgwODA4MDgwIiwiaXNzIjoidGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE2NTQ4MDU3NzUsImV4cCI6MTY1NDgxNDc3NX0.76eRuu1QDS4QLxUVuJNcawQkpyMoXezGuRfPiVMhLnDHxtxwUQqtIrnbEeLBMkVITbwjYhozU6zOyQaRiW2ajA"
   assignedReserves= new FormControl();
   
-  constructor(private _formBuilder: FormBuilder,private http:HttpClient,public confirmDialog: MatDialog, private router:Router,private snackbar:MatSnackBar) {
+  constructor(private _formBuilder: FormBuilder,public http:HttpClient,public confirmDialog: MatDialog, private router:Router,private snackbar:MatSnackBar) {
    
   }
 
@@ -61,8 +61,8 @@ export class ReserveUsersViewComponent implements OnInit {
 
     this.http.post("api/user/admin/groups",{
     }).subscribe((val:any)=>{
-      console.log(val);
       if(val.data.data.length>0){
+        console.log("Test"+val);
         this.groups=val.data.data.map((curr:any)=>({
           name:curr.title,
           customerid:curr.id.id
@@ -82,7 +82,7 @@ export class ReserveUsersViewComponent implements OnInit {
               accountEnabled:curr.additionalInfo!=undefined
             } as userInfo)) as Array<userInfo>
             this.sourceData=[...this.sourceData,...temp]
-            // console.log(this.sourceData)
+            console.log(this.sourceData)
           })
         })
       }
@@ -90,34 +90,7 @@ export class ReserveUsersViewComponent implements OnInit {
 
   }
 
-  removeUser(userId:string): void {
-    console.log(userId);
-  }
 
-  changeUserStatus(userId:string): void {
-      console.log(userId);
-    
-  }
-
-  changeGroup(userinput:string){
-    if(userinput!=""){
-      this.http.post("api/user/admin/reserve/all",{
-        "customerID":userinput
-      }).subscribe((val:any)=>{
-        console.log(val)
-        this.sourceData=val.data.data.map((curr:any)=>({
-          email:curr.email,
-          id:curr.id.id,
-          name:curr.firstName,
-          surname:curr.lastName,
-          status:curr.additionalInfo!=undefined?curr.additionalInfo.userCredentialsEnabled:false,
-          accountEnabled:curr.additionalInfo!=undefined
-        } as userInfo)) as Array<userInfo>
-        this.currentid=userinput;
-        this.canadd=true;
-      })
-    }
-  }
   
   openUserForm(): void {
     this.addUser = !this.addUser;
@@ -193,14 +166,14 @@ export class ReserveUsersViewComponent implements OnInit {
             userID:userId
           }).subscribe((val:any)=>{
             console.log(val);
-            if(val.explain=="ok") alert("User disabled");
+            if(val.explain=="ok")this.snackbar.openFromComponent(SnackbarAlertComponent,{duration: 5000, panelClass: ['green-snackbar'], data: {message:"User Disabled", icon:"check_circle"}});
           });
         }else {
           this.http.post('api/user/admin/enable',{
             userID:userId
           }).subscribe((val:any)=>{
             console.log(val);
-            if(val.explain=="ok") alert("User enabled");
+            if(val.explain=="ok")this.snackbar.openFromComponent(SnackbarAlertComponent,{duration: 5000, panelClass: ['green-snackbar'], data: {message:"User Enabled", icon:"check_circle"}});
           });
         }
       }  

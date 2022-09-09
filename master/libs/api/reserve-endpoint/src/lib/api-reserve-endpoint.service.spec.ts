@@ -1,3 +1,4 @@
+import { ApiApiTestingModule, ApiApiTestingService } from '@lora/api/testing';
 import { ThingsboardThingsboardClientModule, ThingsboardThingsboardClientService } from '@lora/thingsboard-client';
 import { Test } from '@nestjs/testing';
 import { ApiReserveEndpointService } from './api-reserve-endpoint.service';
@@ -5,15 +6,17 @@ import { ApiReserveEndpointService } from './api-reserve-endpoint.service';
 describe('ApiReserveEndpointService', () => {
   let service: ApiReserveEndpointService;
   let thingsboardClient: ThingsboardThingsboardClientService;
+  let tests: ApiApiTestingService;
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     const module = await Test.createTestingModule({
       providers: [ApiReserveEndpointService],
-      imports: [ThingsboardThingsboardClientModule]
+      imports: [ThingsboardThingsboardClientModule, ApiApiTestingModule]
     }).compile();
 
     service = module.get(ApiReserveEndpointService);
     thingsboardClient = module.get(ThingsboardThingsboardClientService);
+    tests = module.get(ApiApiTestingService);
   });
 
   it('should be defined', () => {
@@ -458,5 +461,346 @@ describe('ApiReserveEndpointService', () => {
       
     }))
   });*/
+
+  it('create reserve -> no token', async () => {
+    delete tests.reserveEndpointExample.token;
+    expect(await service.processReserveCreate(tests.reserveEndpointExample)).toMatchObject({
+      status: 401,
+      explanation: 'token missing',
+    });
+
+    tests.reserveEndpointExample.token = '';
+    expect(await service.processReserveCreate(tests.reserveEndpointExample)).toMatchObject({
+      status: 401,
+      explanation: 'token missing',
+    });
+  });
+
+  it('create reserve -> no reserve name', async () => {
+    delete tests.reserveEndpointExample.NameOfReserve;
+    expect(await service.processReserveCreate(tests.reserveEndpointExample)).toMatchObject({
+      status: 400,
+      explanation: 'Reserve Name missing',
+    });
+
+    tests.reserveEndpointExample.NameOfReserve = '';
+    expect(await service.processReserveCreate(tests.reserveEndpointExample)).toMatchObject({
+      status: 400,
+      explanation: 'Reserve Name missing',
+    });
+  });
+
+  it('create reserve -> no reserve email', async () => {
+    delete tests.reserveEndpointExample.email;
+    expect(await service.processReserveCreate(tests.reserveEndpointExample)).toMatchObject({
+      status: 400,
+      explanation: 'Email Address missing, this can be the owner\'s or reserve\'s email',
+    });
+
+    tests.reserveEndpointExample.email = '';
+    expect(await service.processReserveCreate(tests.reserveEndpointExample)).toMatchObject({
+      status: 400,
+      explanation: 'Email Address missing, this can be the owner\'s or reserve\'s email',
+    });
+  });
+
+  it('create reserve -> fail', async () => {
+    jest
+    .spyOn(thingsboardClient, 'createReserve')
+    .mockImplementationOnce(() => Promise.resolve({status:"fail", explanation:"ECONNREFUSED"}));
+    tests.tbFailExplanation.explanation = 'ECONNREFUSED';
+    expect(await service.processReserveCreate(tests.reserveEndpointExample)).toMatchObject(tests.tbFailExplanation)
+  }); 
+
+  it('create reserve -> pass', async () => {
+    jest
+    .spyOn(thingsboardClient, 'createReserve')
+    .mockImplementationOnce(() => Promise.resolve({status:"ok", explanation:"call finished"}));
+    tests.tbSuccessExplanation.explanation = 'reserve created';
+    expect(await service.processReserveCreate(tests.reserveEndpointExample)).toMatchObject(tests.tbSuccessExplanation)
+  }); 
+  /////////////////////////////////////////////////////////////////////////////////////////////
+  it('remove reserve -> no token', async () => {
+    delete tests.reserveEndpointExample.token;
+    expect(await service.processReserveRemove(tests.reserveEndpointExample)).toMatchObject({
+      status: 401,
+      explanation: 'token missing',
+    });
+
+    tests.reserveEndpointExample.token = '';
+    expect(await service.processReserveRemove(tests.reserveEndpointExample)).toMatchObject({
+      status: 401,
+      explanation: 'token missing',
+    });
+  });
+
+  it('remove reserve -> no reserve name', async () => {
+    delete tests.reserveEndpointExample.reserveID;
+    expect(await service.processReserveRemove(tests.reserveEndpointExample)).toMatchObject({
+      status: 400,
+      explanation: 'Reserve ID missing',
+    });
+
+    tests.reserveEndpointExample.reserveID = '';
+    expect(await service.processReserveRemove(tests.reserveEndpointExample)).toMatchObject({
+      status: 400,
+      explanation: 'Reserve ID missing',
+    });
+  });
+
+  it('remove reserve -> fail', async () => {
+    jest
+    .spyOn(thingsboardClient, 'removeReserve')
+    .mockImplementationOnce(() => Promise.resolve({status:"fail", explanation:"ECONNREFUSED"}));
+    tests.tbFailExplanation.explanation = 'ECONNREFUSED';
+    expect(await service.processReserveRemove(tests.reserveEndpointExample)).toMatchObject(tests.tbFailExplanation)
+  }); 
+
+  it('remove reserve -> pass', async () => {
+    jest
+    .spyOn(thingsboardClient, 'removeReserve')
+    .mockImplementationOnce(() => Promise.resolve({status:"ok", explanation:"call finished"}));
+    tests.tbSuccessExplanation.explanation = 'reserve removed';
+    expect(await service.processReserveRemove(tests.reserveEndpointExample)).toMatchObject(tests.tbSuccessExplanation)
+  }); 
+
+  /////////////////////////////////////////////////////////////////////////////////////////////
+  it('set reserve -> no token', async () => {
+    delete tests.reserveEndpointExample.token;
+    expect(await service.processReserveSet(tests.reserveEndpointExample)).toMatchObject({
+      status: 401,
+      explanation: 'token missing',
+    });
+
+    tests.reserveEndpointExample.token = '';
+    expect(await service.processReserveSet(tests.reserveEndpointExample)).toMatchObject({
+      status: 401,
+      explanation: 'token missing',
+    });
+  });
+
+  it('set reserve -> no reserve id', async () => {
+    delete tests.reserveEndpointExample.reserveID;
+    expect(await service.processReserveSet(tests.reserveEndpointExample)).toMatchObject({
+      status: 400,
+      explanation: 'Reserve ID missing',
+    });
+
+    tests.reserveEndpointExample.reserveID = '';
+    expect(await service.processReserveSet(tests.reserveEndpointExample)).toMatchObject({
+      status: 400,
+      explanation: 'Reserve ID missing',
+    });
+  });
+
+  it('set reserve -> fail', async () => {
+    jest
+    .spyOn(thingsboardClient, 'updateReservePerimeter')
+    .mockImplementationOnce(() => Promise.resolve({status:"fail", explanation:"ECONNREFUSED"}));
+    tests.tbFailExplanation.explanation = 'ECONNREFUSED';
+    expect(await service.processReserveSet(tests.reserveEndpointExample)).toMatchObject(tests.tbFailExplanation)
+  }); 
+
+  it('set reserve -> pass', async () => {
+    jest
+    .spyOn(thingsboardClient, 'updateReservePerimeter')
+    .mockImplementationOnce(() => Promise.resolve({status:"ok", explanation:"call finished"}));
+    tests.tbSuccessExplanation.explanation = 'reserve updated';
+    expect(await service.processReserveSet(tests.reserveEndpointExample)).toMatchObject(tests.tbSuccessExplanation)
+  }); 
+
+
+  /////////////////////////////////////////////////////////////////////////////////////////////
+  it('reserve info -> no token', async () => {
+    delete tests.reserveEndpointExample.token;
+    expect(await service.processReserveInfo(tests.reserveEndpointExample)).toMatchObject({
+      status: 401,
+      explanation: 'token missing',
+    });
+
+    tests.reserveEndpointExample.token = '';
+    expect(await service.processReserveInfo(tests.reserveEndpointExample)).toMatchObject({
+      status: 401,
+      explanation: 'token missing',
+    });
+  });
+
+  it('reserve info -> no reserve id', async () => {
+    delete tests.reserveEndpointExample.reserveID;
+    expect(await service.processReserveInfo(tests.reserveEndpointExample)).toMatchObject({
+      status: 400,
+      explanation: 'Reserve ID missing',
+    });
+
+    tests.reserveEndpointExample.reserveID = '';
+    expect(await service.processReserveInfo(tests.reserveEndpointExample)).toMatchObject({
+      status: 400,
+      explanation: 'Reserve ID missing',
+    });
+  });
+
+  it('reserve info -> fail', async () => {
+    jest
+    .spyOn(thingsboardClient, 'CustomerInfo')
+    .mockImplementationOnce(() => Promise.resolve({status:"fail", explanation:"ECONNREFUSED"}));
+    tests.tbFailExplanation.explanation = 'ECONNREFUSED';
+    expect(await service.processReserveInfo(tests.reserveEndpointExample)).toMatchObject(tests.tbFailExplanation)
+  }); 
+
+  it('reserve info -> pass', async () => {
+    jest
+    .spyOn(thingsboardClient, 'CustomerInfo')
+    .mockImplementationOnce(() => Promise.resolve({status:"ok", explanation:"call finished"}));
+    tests.tbSuccessExplanation.explanation = 'call finished';
+    expect(await service.processReserveInfo(tests.reserveEndpointExample)).toMatchObject(tests.tbSuccessExplanation)
+  }); 
+  /////////////////////////////////////////////////////////////////////////////////////////////
+  it('reserve list -> no token', async () => {
+    delete tests.reserveEndpointExample.token;
+    expect(await service.processReserveList(tests.reserveEndpointExample)).toMatchObject({
+      status: 401,
+      explanation: 'token missing',
+    });
+
+    tests.reserveEndpointExample.token = '';
+    expect(await service.processReserveList(tests.reserveEndpointExample)).toMatchObject({
+      status: 401,
+      explanation: 'token missing',
+    });
+  });
+
+  it('reserve list -> fail', async () => {
+    jest
+    .spyOn(thingsboardClient, 'getReserveList')
+    .mockImplementationOnce(() => Promise.resolve({status:"fail", explanation:"ECONNREFUSED"}));
+    tests.tbFailExplanation.explanation = 'ECONNREFUSED';
+    expect(await service.processReserveList(tests.reserveEndpointExample)).toMatchObject(tests.tbFailExplanation)
+  }); 
+
+  it('reserve list -> pass', async () => {
+    jest
+    .spyOn(thingsboardClient, 'getReserveList')
+    .mockImplementationOnce(() => Promise.resolve({status:"ok", explanation:"call finished"}));
+    tests.tbSuccessExplanation.explanation = 'call finished';
+    expect(await service.processReserveList(tests.reserveEndpointExample)).toMatchObject(tests.tbSuccessExplanation)
+  }); 
+  /////////////////////////////////////////////////////////////////////////////////////////////
+  it('reserve update -> no token', async () => {
+    delete tests.reserveEndpointExample.token;
+    expect(await service.processReserveUpdate(tests.reserveEndpointExample)).toMatchObject({
+      status: 401,
+      explanation: 'token missing',
+    });
+
+    tests.reserveEndpointExample.token = '';
+    expect(await service.processReserveUpdate(tests.reserveEndpointExample)).toMatchObject({
+      status: 401,
+      explanation: 'token missing',
+    });
+  });
+
+  it('reserve update -> no reserve ID', async () => {
+    delete tests.reserveEndpointExample.reserveID;
+    expect(await service.processReserveUpdate(tests.reserveEndpointExample)).toMatchObject({
+      status: 400,
+      explanation: 'reserve id missing',
+    });
+
+    tests.reserveEndpointExample.reserveID = '';
+    expect(await service.processReserveUpdate(tests.reserveEndpointExample)).toMatchObject({
+      status: 400,
+      explanation: 'reserve id missing',
+    });
+  });
+
+  it('reserve update -> no reserve name', async () => {
+    delete tests.reserveEndpointExample.NameOfReserve;
+    expect(await service.processReserveUpdate(tests.reserveEndpointExample)).toMatchObject({
+      status: 400,
+      explanation: 'Reserve Name missing',
+    });
+
+    tests.reserveEndpointExample.NameOfReserve = '';
+    expect(await service.processReserveUpdate(tests.reserveEndpointExample)).toMatchObject({
+      status: 400,
+      explanation: 'Reserve Name missing',
+    });
+  });
+
+  it('reserve update -> no reserve email', async () => {
+    delete tests.reserveEndpointExample.email;
+    expect(await service.processReserveUpdate(tests.reserveEndpointExample)).toMatchObject({
+      status: 400,
+      explanation: 'Email Address missing, this can be the owner\'s or reserve\'s email',
+    });
+
+    tests.reserveEndpointExample.email = '';
+    expect(await service.processReserveUpdate(tests.reserveEndpointExample)).toMatchObject({
+      status: 400,
+      explanation: 'Email Address missing, this can be the owner\'s or reserve\'s email',
+    });
+  });
+
+  it('reserve update -> fail', async () => {
+    jest
+    .spyOn(thingsboardClient, 'updateReserveInfo')
+    .mockImplementationOnce(() => Promise.resolve({status:"fail", explanation:"ECONNREFUSED"}));
+    tests.tbFailExplanation.explanation = 'ECONNREFUSED';
+    expect(await service.processReserveUpdate(tests.reserveEndpointExample)).toMatchObject(tests.tbFailExplanation)
+  }); 
+
+  it('reserve update -> pass', async () => {
+    jest
+    .spyOn(thingsboardClient, 'updateReserveInfo')
+    .mockImplementationOnce(() => Promise.resolve({status:"ok", explanation:"call finished"}));
+    tests.tbSuccessExplanation.explanation = 'call finished';
+    expect(await service.processReserveUpdate(tests.reserveEndpointExample)).toMatchObject(tests.tbSuccessExplanation)
+  }); 
+  /////////////////////////////////////////////////////////////////////////////////////////////
+  it('reserve details -> no token', async () => {
+    delete tests.reserveEndpointExample.token;
+    expect(await service.processReserveDetails(tests.reserveEndpointExample)).toMatchObject({
+      status: 401,
+      explanation: 'token missing',
+    });
+
+    tests.reserveEndpointExample.token = '';
+    expect(await service.processReserveDetails(tests.reserveEndpointExample)).toMatchObject({
+      status: 401,
+      explanation: 'token missing',
+    });
+  });
+
+  it('reserve details -> no reserve id', async () => {
+    delete tests.reserveEndpointExample.reserveID;
+    expect(await service.processReserveDetails(tests.reserveEndpointExample)).toMatchObject({
+      status: 400,
+      explanation: 'Reserve ID missing',
+    });
+
+    tests.reserveEndpointExample.reserveID = '';
+    expect(await service.processReserveDetails(tests.reserveEndpointExample)).toMatchObject({
+      status: 400,
+      explanation: 'Reserve ID missing',
+    });
+  });
+
+  it('reserve details -> fail', async () => {
+    jest
+    .spyOn(thingsboardClient, 'CustomerInfo')
+    .mockImplementationOnce(() => Promise.resolve({status:"fail", explanation:"ECONNREFUSED"}));
+    tests.tbFailExplanation.explanation = 'ECONNREFUSED';
+    expect(await service.processReserveDetails(tests.reserveEndpointExample)).toMatchObject(tests.tbFailExplanation)
+  }); 
+
+  it('reserve details -> pass', async () => {
+    jest
+    .spyOn(thingsboardClient, 'CustomerInfo')
+    .mockImplementationOnce(() => Promise.resolve({status:"ok", explanation:"call finished", data:tests.customerResponse}));
+    tests.tbSuccessExplanation.explanation = 'call finished';
+    expect(await service.processReserveDetails(tests.reserveEndpointExample)).toMatchObject(tests.tbSuccessExplanation)
+  }); 
+  /////////////////////////////////////////////////////////////////////////////////////////////
+
 
 });

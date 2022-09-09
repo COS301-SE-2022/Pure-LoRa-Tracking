@@ -3,21 +3,27 @@ import {
   ThingsboardThingsboardClientService,
 } from '@lora/thingsboard-client';
 import { HttpService } from '@nestjs/axios';
-import { Test } from '@nestjs/testing';
+import { Test, TestingModule } from '@nestjs/testing';
 import { ApiDeviceEndpointService } from './api-device-endpoint.service';
 import { AxiosResponse } from 'axios';
 import { of } from 'rxjs';
-import { deviceInfos } from '@master/shared-interfaces';
 import { ChirpstackChirpstackGatewayModule } from '@lora/chirpstack-gateway';
-import { ChirpstackChirpstackSensorModule } from '@lora/chirpstack-sensor';
+import {
+  ChirpstackChirpstackSensorModule,
+  ChirpstackChirpstackSensorService,
+} from '@lora/chirpstack-sensor';
+import { ApiApiTestingService, ApiApiTestingModule } from '@lora/api/testing';
+import { HttpException, NotFoundException } from '@nestjs/common';
 
 const describeLive =
   process.env.PURELORABUILD == 'DEV' ? describe : describe.skip;
 
 describe('ApiDeviceEndpointService', () => {
   let service: ApiDeviceEndpointService;
+  let tests: ApiApiTestingService;
   let httpService: HttpService;
   let tbClient: ThingsboardThingsboardClientService;
+  let csSensor: ChirpstackChirpstackSensorService;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
@@ -25,13 +31,16 @@ describe('ApiDeviceEndpointService', () => {
         ThingsboardThingsboardClientModule,
         ChirpstackChirpstackGatewayModule,
         ChirpstackChirpstackSensorModule,
+        ApiApiTestingModule,
       ],
       providers: [ApiDeviceEndpointService],
     }).compile();
 
     service = module.get(ApiDeviceEndpointService);
     httpService = module.get(HttpService);
+    tests = module.get(ApiApiTestingService);
     tbClient = module.get(ThingsboardThingsboardClientService);
+    csSensor = module.get(ChirpstackChirpstackSensorService);
 
     process.env.TB_URL = 'http://127.0.0.1:9090';
     process.env.CHIRPSTACK_API =
@@ -156,6 +165,243 @@ describe('ApiDeviceEndpointService', () => {
 
     console.log(result);
     expect(result).toBeDefined();
+  });
+
+  it('processDeviceInfos -> empty token', async () => {
+    tests.deviceInfosExample.token = '';
+    expect(
+      await service.processDeviceInfos(tests.deviceInfosExample)
+    ).toMatchObject({
+      status: 401,
+      explanation: 'no token found',
+    });
+  });
+
+  it('processDeviceInfos -> success', async () => {
+    jest.spyOn(tbClient, 'getDeviceInfos').mockImplementationOnce(() =>
+      Promise.resolve({
+        status: 'ok',
+        explanation: 'call finished',
+        data: [],
+      })
+    );
+    expect(
+      await service.processDeviceInfos(tests.deviceInfosExample)
+    ).toMatchObject(tests.deviceInfosResponseExample);
+  });
+
+  it('processDeviceAddSensor -> empty token', async () => {
+    tests.addSensorExampleInput.token = '';
+    expect(
+      await service.processDeviceAddsensor(tests.addSensorExampleInput)
+    ).toMatchObject({
+      status: 401,
+      explanation: 'no token found',
+    });
+  });
+
+  it('processDeviceAddSensor -> undefined customerID', async () => {
+    delete tests.addSensorExampleInput.customerID;
+    expect(
+      await service.processDeviceAddsensor(tests.addSensorExampleInput)
+    ).toMatchObject({
+      status: 400,
+      explanation: 'no customer ID found',
+    });
+  });
+
+  it('processDeviceAddSensor -> undefined hardwareName', async () => {
+    delete tests.addSensorExampleInput.hardwareName;
+    expect(
+      await service.processDeviceAddsensor(tests.addSensorExampleInput)
+    ).toMatchObject({
+      status: 400,
+      explanation: 'no hardware name found',
+    });
+  });
+
+  it('processDeviceAddSensor -> undefined labelName', async () => {
+    delete tests.addSensorExampleInput.labelName;
+    expect(
+      await service.processDeviceAddsensor(tests.addSensorExampleInput)
+    ).toMatchObject({
+      status: 400,
+      explanation: 'no label name found',
+    });
+  });
+
+  it('processDeviceAddSensor -> undefined deviceProfileId', async () => {
+    delete tests.addSensorExampleInput.deviceProfileId;
+    expect(
+      await service.processDeviceAddsensor(tests.addSensorExampleInput)
+    ).toMatchObject({
+      status: 400,
+      explanation: 'no device Profile ID name found',
+    });
+  });
+
+  it('processDeviceAddSensor -> ECONNREFUSED', async () => {
+    jest
+      .spyOn(tbClient, 'addDeviceToReserve')
+      .mockImplementationOnce(() =>
+        Promise.resolve({ status: 'fail', explanation: 'ECONNREFUSED' })
+      );
+
+    expect(
+      await service.processDeviceAddsensor(tests.addSensorExampleInput)
+    ).toMatchObject({
+      status: 400,
+      explanation: 'ECONNREFUSED',
+    });
+  });
+
+  it('processDeviceAddSensor -> explanation undefined', async () => {
+    jest
+      .spyOn(tbClient, 'addDeviceToReserve')
+      .mockImplementationOnce(() => Promise.resolve({ status: 'ok' }));
+
+    jest
+      .spyOn(tbClient, 'RemoveDeviceFromReserve')
+      .mockImplementationOnce(() => Promise.resolve({ status: 'ok' }));
+
+    expect(
+      await service.processDeviceAddsensor(tests.addSensorExampleInput)
+    ).toMatchObject({
+      status: 400,
+      explanation: 'access token failure',
+    });
+  });
+
+  it('processDeviceAddSensor -> success', async () => {
+    jest.spyOn(tbClient, 'addDeviceToReserve').mockImplementationOnce(() =>
+      Promise.resolve({
+        status: 'ok',
+        explanation: 'call finished',
+        data: [],
+      })
+    );
+
+    jest
+      .spyOn(tbClient, 'RemoveDeviceFromReserve')
+      .mockImplementationOnce(() => Promise.resolve({ status: 'ok' }));
+
+    jest
+      .spyOn(csSensor, 'addDevice')
+      .mockImplementationOnce(() => Promise.resolve({ status: 'ok' }));
+
+    jest
+      .spyOn(tbClient, 'RemoveDeviceFromReserve')
+      .mockImplementationOnce(() => Promise.resolve({ status: 'ok' }));
+
+    expect(
+      await service.processDeviceAddsensor(tests.addSensorExampleInput)
+    ).toMatchObject({
+      status: 200,
+      explanation: 'ok',
+      data: [],
+    });
+  });
+
+  it('processDeviceAddGateway -> empty token', async () => {
+    tests.addSensorExampleInput.token = '';
+    expect(
+      await service.processDeviceAddGateway(tests.addSensorExampleInput)
+    ).toMatchObject({
+      status: 401,
+      explanation: 'no token found',
+    });
+  });
+
+  it('processDeviceAddGateway -> undefined custID', async () => {
+    delete tests.addSensorExampleInput.customerID;
+    expect(
+      await service.processDeviceAddGateway(tests.addSensorExampleInput)
+    ).toMatchObject({
+      status: 400,
+      explanation: 'no customer ID found',
+    });
+  });
+
+  it('processDeviceAddGateway -> undefined hdwName', async () => {
+    delete tests.addSensorExampleInput.hardwareName;
+    expect(
+      await service.processDeviceAddGateway(tests.addSensorExampleInput)
+    ).toMatchObject({
+      status: 400,
+      explanation: 'no hardware name found',
+    });
+  });
+
+  it('processDeviceAddGateway -> undefined lblName', async () => {
+    delete tests.addSensorExampleInput.labelName;
+    expect(
+      await service.processDeviceAddGateway(tests.addSensorExampleInput)
+    ).toMatchObject({
+      status: 400,
+      explanation: 'no label name found',
+    });
+  });
+
+  it('processDeviceAddGateway -> ECONNREFUSED', async () => {
+    jest
+      .spyOn(tbClient, 'addDeviceToReserve')
+      .mockImplementationOnce(() =>
+        Promise.resolve({ status: 'fail', explanation: 'ECONNREFUSED' })
+      );
+
+    expect(
+      await service.processDeviceAddGateway(tests.addSensorExampleInput)
+    ).toMatchObject({
+      status: 400,
+      explanation: 'ECONNREFUSED',
+    });
+  });
+
+  it('processDeviceAddGateway -> explanation undefined', async () => {
+    jest
+      .spyOn(tbClient, 'addDeviceToReserve')
+      .mockImplementationOnce(() => Promise.resolve({ status: 'ok' }));
+
+    jest
+      .spyOn(tbClient, 'RemoveDeviceFromReserve')
+      .mockImplementationOnce(() => Promise.resolve({ status: 'ok' }));
+
+    expect(
+      await service.processDeviceAddGateway(tests.addSensorExampleInput)
+    ).toMatchObject({
+      status: 400,
+      explanation: 'access token failure',
+    });
+  });
+
+  it('processDeviceAddGateway -> success', async () => {
+    jest.spyOn(tbClient, 'addDeviceToReserve').mockImplementationOnce(() =>
+      Promise.resolve({
+        status: 'ok',
+        explanation: 'call finished',
+        data: [],
+      })
+    );
+
+    jest
+      .spyOn(tbClient, 'RemoveDeviceFromReserve')
+      .mockImplementationOnce(() => Promise.resolve({ status: 'ok' }));
+
+    jest
+      .spyOn(csSensor, 'addDevice')
+      .mockImplementationOnce(() => Promise.resolve({ status: 'ok' }));
+
+    jest
+      .spyOn(tbClient, 'RemoveDeviceFromReserve')
+      .mockImplementationOnce(() => Promise.resolve({ status: 'ok' }));
+
+    expect(
+      await service.processDeviceAddGateway(tests.addSensorExampleInput)
+    ).toMatchObject({
+      status: 200,
+      explanation: 'ok',
+      data: [],
+    });
   });
 
   // it('should process a sensor device, add it to a specified reserve, and return a confirmation message', async () => {

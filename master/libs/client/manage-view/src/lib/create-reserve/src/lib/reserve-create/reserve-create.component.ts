@@ -23,8 +23,7 @@ export class ReserveCreateComponent implements OnInit {
     });
   }
 
-  createReserve(form:any):void {
-    console.log(JSON.stringify(form.value,null,6));
+  createReserve():void {
       if(this.mapgeojson!=""){
       //api call
       this.http.post("/api/reserve/admin/create",{
@@ -54,8 +53,9 @@ export class ReserveCreateComponent implements OnInit {
 
   async fileSelected(event:any): Promise<void> {
     const file: File = event?.target.files[0];
+    console.log(file);
     if (file){
-      console.log(file.text());
+      console.log(await file.text());
       this.mapgeojson=await file.text();
     }
   }
