@@ -157,6 +157,7 @@ export class AiParticleFilterService {
         //this.printGeoJSONPoints(points);
         //this.printGeoJSONPoints(newPoints);
         this.particles = newPoints;
+        return newPoints;
     };
 
 
