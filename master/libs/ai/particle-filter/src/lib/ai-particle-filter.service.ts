@@ -129,10 +129,27 @@ export class AiParticleFilterService {
     /*
     TODO Liam
     find a library or algorithm to sample correctly for weighted point
+    credit: https://www.30secondsofcode.org/js/s/weighted-sample
     */
-    generateNewSampleFromWeights(points: [number, number][], weights: [number]): [number, number][] {
-        return null;
-    }
+    async generateNewSampleFromWeights(points, weights: number[]): Promise<[number, number][]> {
+        let roll = 0;
+        const newPoints = new Array<[number, number]>();
+        while (newPoints.length != weights.length) {
+            roll = Math.random();
+            newPoints.push(points[
+                weights
+                    .reduce(
+                        (acc, w, i) => (i === 0 ? [w] : [...acc, acc[acc.length - 1] + w]),
+                        []
+                    )
+                    .findIndex((v, i, s) => roll >= (i === 0 ? 0 : s[i - 1]) && roll < v)
+            ]);
+        }
+        //this.printGeoJSONPoints(points);
+        //this.printGeoJSONPoints(newPoints);
+        return newPoints;
+    };
+
 
     /*
     TODO Teddy
