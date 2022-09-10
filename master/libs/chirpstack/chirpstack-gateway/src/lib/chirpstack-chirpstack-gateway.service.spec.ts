@@ -69,6 +69,18 @@ describe('ChirpstackChirpstackGatewayService', () => {
 
       const data = await service.listGateways(authtoken);
       expect(data).toBeInstanceOf(gatewayMessages.ListGatewayResponse);
+
+      jest
+        .spyOn(service.gatewayServiceClient, 'list')
+        .mockImplementationOnce(
+          (listGatewayRequest, metadata, callback: any) => {
+            callback("TEST_ERROR", null);
+            return null;
+          }
+        );
+      
+      await expect(service.listGateways(authtoken)).rejects.toEqual("TEST_ERROR");
+      
     });
 
     it('should delete a gateway', async () => {
@@ -83,12 +95,14 @@ describe('ChirpstackChirpstackGatewayService', () => {
         .mockImplementationOnce(
           (deleteGatewayRequest, metadata, callback: any) => {
             expect(deleteGatewayRequest.getId()).toBe(gatewayId);
+            expect(metadata).toBe(authtoken);
             callback(null, response);
             return null;
           }
         );
 
       const data = await service.removeGateway(authtoken, gatewayId);
+      expect(service.gatewayServiceClient.delete).toBeCalled();
       expect(data).toBe(response);
     });
 

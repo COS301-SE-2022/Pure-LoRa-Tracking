@@ -74,16 +74,17 @@ export class ChirpstackChirpstackGatewayService {
 
     createGatewayRequest.setGateway(gateway);
 
-    return new Promise((res, rej) => {
-      this.gatewayServiceClient.create(
-        createGatewayRequest,
-        this.metadata,
-        (error, data) => {
-          if (data) res(data);
-          else rej(error);
-        }
-      );
-    });
+    // return new Promise((res, rej) => {
+    this.gatewayServiceClient.create(
+      createGatewayRequest,
+      this.metadata,
+      () => {}
+      // (error, data) => {
+      //   if (data) res(data);
+      //   else rej(error);
+      // }
+    );
+    // });
   }
 
   async setGatewayLocation(
