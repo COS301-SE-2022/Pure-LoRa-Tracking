@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { AddGatewayDevice, AddSensorDevice } from '@master/shared-interfaces';
 import {TokenManagerService} from "@master/client/user-storage-controller"
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {deviceOptionList} from "@master/shared-interfaces"
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackbarAlertComponent } from '@master/client/shared-ui/components-ui';
@@ -14,15 +14,15 @@ import { SnackbarAlertComponent } from '@master/client/shared-ui/components-ui';
 
 export class DeviceAddComponent implements OnInit {
   
-  typeGroup!: FormGroup;
-  descriptionGroup!: FormGroup;
-  infoGroup!: FormGroup;
-  gatewayGroup!:FormGroup;
-  sensorGroup!:FormGroup;
+  typeGroup!: UntypedFormGroup;
+  descriptionGroup!: UntypedFormGroup;
+  infoGroup!: UntypedFormGroup;
+  gatewayGroup!:UntypedFormGroup;
+  sensorGroup!:UntypedFormGroup;
   profilelist:Array<deviceOptionList>=[];
   deviceprofilelist:Array<{id: string, name: string}>=[];
   deviceType = "";
-  constructor(private _formBuilder: FormBuilder,private http:HttpClient,private tokenmanager:TokenManagerService,private snackbar:MatSnackBar) {}
+  constructor(private _formBuilder: UntypedFormBuilder,private http:HttpClient,private tokenmanager:TokenManagerService,private snackbar:MatSnackBar) {}
 
   ngOnInit(): void {
     this.typeGroup = this._formBuilder.group({

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { FormControl,FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormControl,UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'master-gateway-edit',
@@ -15,9 +15,9 @@ gateway={
 }
   id:string|null;
   devEUI:string|null;
-  gatewayInfo: FormGroup = new FormGroup({});
+  gatewayInfo: UntypedFormGroup = new UntypedFormGroup({});
 
-  constructor(private router: Router,private activeRoute:ActivatedRoute,private http:HttpClient,private formBuilder: FormBuilder) {
+  constructor(private router: Router,private activeRoute:ActivatedRoute,private http:HttpClient,private formBuilder: UntypedFormBuilder) {
     this.id="";
     this.devEUI=null;
     this.activeRoute.paramMap.subscribe( params => { 

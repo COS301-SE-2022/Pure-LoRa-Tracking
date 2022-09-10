@@ -11,24 +11,23 @@ import { SnackbarAlertComponent } from './snackbar-alert/snackbar-alert.componen
 export const clientSharedUiComponentsUiRoutes: Route[] = [];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    RouterModule,
-    ClientSharedUiMaterialUiModule,
-    MatDialogModule,
-  ],
-  declarations: [
-    HeaderUiComponent,
-    DialogConfirmationComponent,
-    SensorDetailViewComponent,
-    SnackbarAlertComponent,
-  ],
-  exports: [
-    HeaderUiComponent,
-    DialogConfirmationComponent,
-    SensorDetailViewComponent,
-    SnackbarAlertComponent,
-  ],
-  entryComponents: [DialogConfirmationComponent],
+    imports: [
+        CommonModule,
+        RouterModule,
+        ClientSharedUiMaterialUiModule,
+        MatDialogModule,
+    ],
+    declarations: [
+        HeaderUiComponent,
+        DialogConfirmationComponent,
+        SensorDetailViewComponent,
+        SnackbarAlertComponent,
+    ],
+    exports: [
+        HeaderUiComponent,
+        DialogConfirmationComponent,
+        SensorDetailViewComponent,
+        SnackbarAlertComponent,
+    ]
 })
 export class ClientSharedUiComponentsUiModule {}

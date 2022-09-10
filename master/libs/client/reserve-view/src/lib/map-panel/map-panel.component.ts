@@ -1,7 +1,7 @@
 import { EventEmitter, Output } from '@angular/core';
 import { Input } from '@angular/core';
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'master-map-panel',
@@ -21,9 +21,9 @@ export class MapPanelComponent {
     this.ShowPolygon.emit(true);
   }
 
-  daterange = new FormGroup({
-    startdateform: new FormControl(new Date(),[Validators.required]),
-    enddateform: new FormControl(new Date(),[Validators.required]),
+  daterange = new UntypedFormGroup({
+    startdateform: new UntypedFormControl(new Date(),[Validators.required]),
+    enddateform: new UntypedFormControl(new Date(),[Validators.required]),
   });
   
 
