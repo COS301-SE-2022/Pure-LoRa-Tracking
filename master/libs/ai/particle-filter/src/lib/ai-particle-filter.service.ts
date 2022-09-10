@@ -102,5 +102,37 @@ export class AiParticleFilterService {
         return null;
     }
 
+    /*
+    TODO Liam
+    find a library or algorithm to sample correctly for weighted point
+    */
+    generateNewSampleFromWeights(points:[number, number][], weights:[number]) : [number, number][] {
+        return null;
+    }
+
+    /*
+    TODO Teddy
+    compute degeneracy, 
+    1 / var(W) == 1 / sum of each weight squared
+    see python
+    */
+    computeDegeneracy(weights:[number]) : number {
+        return null;
+    }
+
+    /*
+    TODO Liam
+    resampling techniques
+    */
+
+
+    /*
+    TODO Liam
+    */
+    particleFilter() : [number, number] {
+        return null;
+    }
+
+
 
 }
