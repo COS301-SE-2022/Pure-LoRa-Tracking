@@ -258,7 +258,7 @@ describe('ApiDeviceEndpointService', () => {
   it('processDeviceAddSensor -> explanation undefined', async () => {
     jest
       .spyOn(tbClient, 'addDeviceToReserve')
-      .mockImplementationOnce(() => Promise.resolve({ status: 'ok' }));
+      .mockImplementationOnce(() => Promise.resolve({ status: 'ok', data: { deviceCreate: "602f8bc0-2d6c-11ed-9534-618109dbd02c" }}));
 
     jest
       .spyOn(tbClient, 'RemoveDeviceFromReserve')
@@ -360,7 +360,7 @@ describe('ApiDeviceEndpointService', () => {
   it('processDeviceAddGateway -> explanation undefined', async () => {
     jest
       .spyOn(tbClient, 'addDeviceToReserve')
-      .mockImplementationOnce(() => Promise.resolve({ status: 'ok' }));
+      .mockImplementationOnce(() => Promise.resolve({ status: 'ok', data: { deviceCreate: "602f8bc0-2d6c-11ed-9534-618109dbd02c" }}));
 
     jest
       .spyOn(tbClient, 'RemoveDeviceFromReserve')
