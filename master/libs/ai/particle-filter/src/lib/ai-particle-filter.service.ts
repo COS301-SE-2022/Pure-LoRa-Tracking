@@ -70,9 +70,33 @@ export class AiParticleFilterService {
     /*
     TODO Liam
     the filter WILL NOT work without this method
+
+    Mozilla gurantees uniform dist from Math.random
     */
-    randomWalk(): [number, number][] {
-        return null;
+    randomWalk(points: [number, number][]): [number, number][] {
+        const newPoints = new Array<[number, number]>();
+        points.forEach(point => {
+
+            const randOne = Math.random() * (0.001 - 0.0001) + 0.0001;
+            const randTwo = Math.random() * (0.001 - 0.0001) + 0.0001;
+            const choice = Math.floor(Math.random() * (4 - 0) + 0);
+
+            switch (choice) {
+                case 0:
+                    newPoints.push([point[0] + randOne, point[1] + randTwo])
+                    break;
+                case 1:
+                    newPoints.push([point[0] + randOne, point[1] - randTwo])
+                    break;
+                case 2:
+                    newPoints.push([point[0] - randOne, point[1] + randTwo])
+                    break;
+                default:
+                    newPoints.push([point[0] - randOne, point[1] - randTwo])
+                    break;
+            }
+        })
+        return newPoints;
     }
 
 
@@ -90,7 +114,7 @@ export class AiParticleFilterService {
     This method gives 1 / euclidean distance
     See weight distance euclidean in python
     */
-    weightDistanceEuclidean(OriginalPoint:[number], RandomParticle:[number]) : number {
+    weightDistanceEuclidean(OriginalPoint: [number], RandomParticle: [number]): number {
         return null;
     }
 
@@ -98,7 +122,7 @@ export class AiParticleFilterService {
     TODO Teddy
     Make the weights array add up to one by dividing each entry by the total of the array
     */
-    normalizeWeights(weights:[number]) : [number] {
+    normalizeWeights(weights: [number]): [number] {
         return null;
     }
 
@@ -106,7 +130,7 @@ export class AiParticleFilterService {
     TODO Liam
     find a library or algorithm to sample correctly for weighted point
     */
-    generateNewSampleFromWeights(points:[number, number][], weights:[number]) : [number, number][] {
+    generateNewSampleFromWeights(points: [number, number][], weights: [number]): [number, number][] {
         return null;
     }
 
@@ -116,7 +140,7 @@ export class AiParticleFilterService {
     1 / var(W) == 1 / sum of each weight squared
     see python
     */
-    computeDegeneracy(weights:[number]) : number {
+    computeDegeneracy(weights: [number]): number {
         return null;
     }
 
@@ -129,7 +153,7 @@ export class AiParticleFilterService {
     /*
     TODO Liam
     */
-    particleFilter() : [number, number] {
+    particleFilter(): [number, number] {
         return null;
     }
 
