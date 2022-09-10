@@ -1,18 +1,20 @@
 import { LocationModule } from '@lora/location';
 import { ThingsboardThingsboardClientModule } from '@lora/thingsboard-client';
 import { Test } from '@nestjs/testing';
-import { AiParticleFilterService } from './ai-particle-filter.service';
+import { AiParticleFilterService, particleFilterStratifiedService } from './ai-particle-filter.service';
 
 describe('AiParticleFilterService', () => {
   let service: AiParticleFilterService;
+  let stratifiedService : particleFilterStratifiedService;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
       imports: [LocationModule, ThingsboardThingsboardClientModule],
-      providers: [AiParticleFilterService],
+      providers: [AiParticleFilterService, particleFilterStratifiedService],
     }).compile();
 
     service = module.get(AiParticleFilterService);
+    stratifiedService = module.get(particleFilterStratifiedService);
 
     service.configureInitialParameters(initialParameters)
 

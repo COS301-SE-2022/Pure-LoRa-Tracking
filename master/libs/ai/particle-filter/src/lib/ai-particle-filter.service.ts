@@ -11,12 +11,12 @@ export class AiParticleFilterService {
     private particles: number[][];
     private gatewayLocations: [number, number][];
     private reservePolygon: [number, number][];
-    private numberOfSamples : number;
-    private numberOfSamplingIterations : number;
-    private weights : number[];
+    private numberOfSamples: number;
+    private numberOfSamplingIterations: number;
+    private weights: number[];
 
 
-    constructor(private locationComputations: LocationService) {
+    constructor(public locationComputations: LocationService) {
         this.reservePolygon = new Array<[number, number]>();
         this.gatewayLocations = new Array<[number, number]>();
         this.particles = new Array<number[]>();
@@ -25,7 +25,7 @@ export class AiParticleFilterService {
     configureInitialParameters(initialParameters: {
         reservePolygon: { latitude: number, longitude: number }[],
         gateways: { latitude: number, longitude: number }[],
-        numberOfSamples : number,
+        numberOfSamples: number,
     }) {
         initialParameters.gateways.forEach((gateway) => {
             this.gatewayLocations.push([gateway.longitude, gateway.latitude])
@@ -72,7 +72,7 @@ export class AiParticleFilterService {
     See python code for method, final distance should be in meters
     write code here for 1-2 commits, write test for 1 commit
     */
-    distanceBetweenCoords(pointOne: [number, number], pointTwo: [number, number]): [number] {
+    distanceBetweenCoords(pointOne: [number, number], pointTwo: [number, number]): number[] {
         return null;
     }
 
@@ -80,7 +80,7 @@ export class AiParticleFilterService {
     the filter WILL NOT work without this method
     Mozilla gurantees uniform dist from Math.random
     */
-    randomWalk(points = this.particles): [number, number][] {
+    randomWalk(points = this.particles): number[][] {
         const newPoints = new Array<[number, number]>();
         points.forEach(point => {
 
@@ -111,7 +111,7 @@ export class AiParticleFilterService {
     TODO Teddy
     please be thorough, this method is crucial
     */
-    weightsMeasuredRelativeToOriginal(originalPoint:number[]): [number] {
+    weightsMeasuredRelativeToOriginal(originalPoint: number[]): number[] {
         return null;
     }
 
@@ -138,9 +138,9 @@ export class AiParticleFilterService {
     credit: https://www.30secondsofcode.org/js/s/weighted-sample
     */
     async generateNewSampleFromWeights(points = this.particles, weights = this.weights): Promise<number[][]> {
-        if(points.length != weights.length)
-            throw Error('Point and Weight dimension incorrect: P-'+points.length.toString()+' W-'+weights.length.toString())
-            
+        if (points.length != weights.length)
+            throw Error('Point and Weight dimension incorrect: P-' + points.length.toString() + ' W-' + weights.length.toString())
+
         let roll = 0;
         const newPoints = new Array<number[]>();
         while (newPoints.length != weights.length) {
@@ -159,9 +159,9 @@ export class AiParticleFilterService {
         this.particles = newPoints;
         return newPoints;
     };
-    
+
     /* one line flex */
-    predictParticleLocation() : number[] {
+    predictParticleLocation(): number[] {
         return this.particles[this.weights.indexOf(Math.max(...this.weights))];
     }
 
@@ -178,14 +178,42 @@ export class AiParticleFilterService {
 
     /*
     TODO Liam
-    resampling techniques
+    resampling techniques,
+    uniform resample a proportion
     */
+    resampleParticles?(howMany?: number) {
+        const newParticles = new Array<number[]>()
+        const polygon = {
+            type: 'Feature',
+            properties: {},
+            geometry: {
+                type: "Polygon",
+                "coordinates": [
+                    this.reservePolygon
+                ]
+            }
+        }
 
+        for (let i = 0; i < howMany && i < this.numberOfSamples; i++) {
+            newParticles.push(randomPositionInPolygon(polygon))
+        }
+
+        for (let i = howMany; i < this.numberOfSamples; i++) {
+            newParticles.push(this.particles[i])
+        }
+        this.particles = newParticles;
+    }
+
+    resetWeights() {
+        for (let i = 0; i < this.numberOfSamples; i++) {
+            this.weights[i] = 1 / this.numberOfSamples;
+        }
+    }
 
     /*
     to be extended into template 
     */
-    async particleFilter(reading:{latitude:number, longitude:number}) : Promise<number[]> {
+    async particleFilter(reading: { latitude: number, longitude: number }): Promise<number[]> {
         const readingPoint = [reading.longitude, reading.latitude];
 
         // random walk
@@ -193,10 +221,10 @@ export class AiParticleFilterService {
 
         // train to point
         for (let i = 0; i < this.numberOfSamplingIterations; i++) {
-            
+
             // perform measurement and set weighting
             this.weightsMeasuredRelativeToOriginal(readingPoint);
-            
+
             // normalize weights
             this.normalizeWeights();
 
@@ -204,14 +232,24 @@ export class AiParticleFilterService {
             const degeneracy = this.computeDegeneracy();
 
             // reset sample by resampling methods
-            if(degeneracy < this.numberOfSamples / 4) {
-                throw Error("Liam please implement");
-            
+            if (degeneracy < this.numberOfSamples / 4) {
+
+                // throw Error("Liam please test");
+                this.resampleParticles(Math.floor(this.numberOfSamples / 8))
+
+
             } else {
                 // resample by weights
-                await this.generateNewSampleFromWeights() 
+                await this.generateNewSampleFromWeights()
             }
         }
         return this.predictParticleLocation();
+    }
+}
+
+@Injectable()
+export class particleFilterStratifiedService extends AiParticleFilterService {
+    constructor(locationComputations: LocationService) {
+        super(locationComputations);
     }
 }
