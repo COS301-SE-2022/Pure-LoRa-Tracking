@@ -231,12 +231,15 @@ export class AiParticleFilterService {
             // compute degeneracy
             const degeneracy = this.computeDegeneracy();
 
-            // reset sample by resampling methods
+            // check for sample reset
             if (degeneracy < this.numberOfSamples / 4) {
 
                 // throw Error("Liam please test");
+                // reset sample by resampling methods
                 this.resampleParticles(Math.floor(this.numberOfSamples / 8))
 
+                // reset weights after complete resample
+                this.resetWeights()
 
             } else {
                 // resample by weights
@@ -251,5 +254,9 @@ export class AiParticleFilterService {
 export class particleFilterStratifiedService extends AiParticleFilterService {
     constructor(locationComputations: LocationService) {
         super(locationComputations);
+    }
+
+    resampleParticles(howMany?: number): void {
+        return null;
     }
 }
