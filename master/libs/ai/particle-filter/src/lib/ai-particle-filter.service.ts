@@ -121,7 +121,7 @@ export class AiParticleFilterService {
     This method gives 1 / euclidean distance
     See weight distance euclidean in python
     */
-    weightDistanceEuclidean(OriginalPoint: [number], RandomParticle: [number]): number {
+    weightDistanceEuclidean?(OriginalPoint: [number], RandomParticle: [number]): number {
         return null;
     }
 
@@ -169,7 +169,7 @@ export class AiParticleFilterService {
     /*
     TODO Teddy
     compute degeneracy, 
-    1 / var(W) == 1 / sum of each weight squared
+    1 / var(W) == 1 / sum of (each weight squared)
     see python
     */
     computeDegeneracy(): number {
