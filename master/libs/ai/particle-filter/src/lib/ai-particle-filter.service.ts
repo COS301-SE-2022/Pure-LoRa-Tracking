@@ -8,15 +8,24 @@ export class AiParticleFilterService {
         env file for config parameters? 
     */
 
+    private particles: [number, number][];
+    private gatewayLocations: [number, number][];
+    private reservePolygon: [number, number][];
+    private numberOfSamples : number;
+    private numberOfSamplingIterations : number;
+    private weights : number[];
+
+
     constructor(private locationComputations: LocationService) {
         this.reservePolygon = new Array<[number, number]>();
         this.gatewayLocations = new Array<[number, number]>();
         this.particles = new Array<[number, number]>();
     }
 
-    addInitialParamters(initialParameters: {
+    configureInitialParameters(initialParameters: {
         reservePolygon: { latitude: number, longitude: number }[],
-        gateways: { latitude: number, longitude: number }[]
+        gateways: { latitude: number, longitude: number }[],
+        numberOfSamples : number,
     }) {
         initialParameters.gateways.forEach((gateway) => {
             this.gatewayLocations.push([gateway.longitude, gateway.latitude])
@@ -24,12 +33,12 @@ export class AiParticleFilterService {
         initialParameters.reservePolygon.forEach((location) => {
             this.reservePolygon.push([location.longitude, location.latitude]);
         })
-    }
 
-    private particles: [number, number][];
-    private gatewayLocations: [number, number][];
-    private weights: [number];
-    private reservePolygon: [number, number][];
+        this.generatePolygonSamples(initialParameters.numberOfSamples)
+
+        this.numberOfSamples = initialParameters.numberOfSamples;
+        this.numberOfSamplingIterations = 40;
+    }
 
     generatePolygonSamples(howMany: number): boolean {
         const polygon = {
@@ -68,12 +77,10 @@ export class AiParticleFilterService {
     }
 
     /*
-    TODO Liam
     the filter WILL NOT work without this method
-
     Mozilla gurantees uniform dist from Math.random
     */
-    randomWalk(points: [number, number][]): [number, number][] {
+    randomWalk(points = this.particles): [number, number][] {
         const newPoints = new Array<[number, number]>();
         points.forEach(point => {
 
@@ -104,7 +111,7 @@ export class AiParticleFilterService {
     TODO Teddy
     please be thorough, this method is crucial
     */
-    weightsMeasuredRelativeToOriginal(): [number] {
+    weightsMeasuredRelativeToOriginal(originalPoint:number[]): [number] {
         return null;
     }
 
@@ -122,16 +129,18 @@ export class AiParticleFilterService {
     TODO Teddy
     Make the weights array add up to one by dividing each entry by the total of the array
     */
-    normalizeWeights(weights: [number]): [number] {
+    normalizeWeights(): [number] {
         return null;
     }
 
     /*
-    TODO Liam
     find a library or algorithm to sample correctly for weighted point
     credit: https://www.30secondsofcode.org/js/s/weighted-sample
     */
-    async generateNewSampleFromWeights(points, weights: number[]): Promise<[number, number][]> {
+    async generateNewSampleFromWeights(points = this.particles, weights = this.weights): Promise<[number, number][]> {
+        if(points.length != weights.length)
+            throw Error('Point and Weight dimension incorrect: P-'+points.length.toString()+' W-'+weights.length.toString())
+            
         let roll = 0;
         const newPoints = new Array<[number, number]>();
         while (newPoints.length != weights.length) {
@@ -147,7 +156,7 @@ export class AiParticleFilterService {
         }
         //this.printGeoJSONPoints(points);
         //this.printGeoJSONPoints(newPoints);
-        return newPoints;
+        this.particles = newPoints;
     };
 
 
@@ -157,7 +166,7 @@ export class AiParticleFilterService {
     1 / var(W) == 1 / sum of each weight squared
     see python
     */
-    computeDegeneracy(weights: [number]): number {
+    computeDegeneracy(): number {
         return null;
     }
 
@@ -169,11 +178,34 @@ export class AiParticleFilterService {
 
     /*
     TODO Liam
+    to be extended into template 
     */
-    particleFilter(): [number, number] {
+    particleFilter(reading:{latitude:number, longitude:number}): [number, number] {
+        const readingPoint = [reading.longitude, reading.latitude];
+
+        // random walk
+        this.randomWalk();
+
+        // train to point
+        for (let i = 0; i < this.numberOfSamplingIterations; i++) {
+            // perform measurement and set weighting
+            this.weightsMeasuredRelativeToOriginal(readingPoint);
+            
+            // normalize weights
+            this.normalizeWeights();
+
+            // compute degeneracy
+            const degeneracy = this.computeDegeneracy();
+
+            // reset sample by resampling methods
+            if(degeneracy < this.numberOfSamples / 4) {
+                throw Error("Liam please implement");
+            
+            } else {
+                // resample by weights
+                this.generateNewSampleFromWeights() 
+            }
+        }
         return null;
     }
-
-
-
 }

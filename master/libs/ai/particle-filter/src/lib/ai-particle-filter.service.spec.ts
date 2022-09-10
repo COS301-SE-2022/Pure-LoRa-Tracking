@@ -1,8 +1,6 @@
 import { LocationModule } from '@lora/location';
 import { ThingsboardThingsboardClientModule } from '@lora/thingsboard-client';
-import { getModelToken } from '@nestjs/mongoose';
 import { Test } from '@nestjs/testing';
-import { point } from 'leaflet';
 import { AiParticleFilterService } from './ai-particle-filter.service';
 
 describe('AiParticleFilterService', () => {
@@ -16,7 +14,7 @@ describe('AiParticleFilterService', () => {
 
     service = module.get(AiParticleFilterService);
 
-    service.addInitialParamters(initialParameters)
+    service.configureInitialParameters(initialParameters)
 
   });
 
@@ -28,13 +26,14 @@ describe('AiParticleFilterService', () => {
     expect(service.generatePolygonSamples(1000)).toBe(true);
   });
 
-  it('should generate a random point', async() => {
+  it('should generate a new set of points', async() => {
     await service.generateNewSampleFromWeights(ExamplePoints, weights)
   });
 });
 
 
 const initialParameters = {
+  numberOfSamples : 100,
   reservePolygon: [
     {
       longitude: 28.25060248374939,
