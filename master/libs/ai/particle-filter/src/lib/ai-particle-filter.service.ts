@@ -12,7 +12,7 @@ export class AiParticleFilterService {
         this.reservePolygon = new Array<[number, number]>();
         this.gatewayLocations = new Array<[number, number]>();
         this.particles = new Array<[number, number]>();
-     }
+    }
 
     addInitialParamters(initialParameters: {
         reservePolygon: { latitude: number, longitude: number }[],
@@ -31,7 +31,7 @@ export class AiParticleFilterService {
     private weights: [number];
     private reservePolygon: [number, number][];
 
-    generatePolygonSamples(howMany: number) {
+    generatePolygonSamples(howMany: number): boolean {
         const polygon = {
             type: 'Feature',
             properties: {},
@@ -45,15 +45,62 @@ export class AiParticleFilterService {
         for (let i = 0; i < howMany; i++) {
             this.particles.push(randomPositionInPolygon(polygon))
         }
+        return true;
     }
 
-    
+
     /* TODO add color parameter */
-    printGeoJSONPoints(points:[number, number][]) {
+    printGeoJSONPoints(points: [number, number][]) {
         let sline = ''
-        points.forEach((point:[number, number]) => {
-            sline += ('{"type": "Feature","properties": {},"geometry": {"type": "Point","coordinates": ['+point[0].toString()+','+point[1].toString()+']}},')
+        points.forEach((point: [number, number]) => {
+            sline += ('{"type": "Feature","properties": {},"geometry": {"type": "Point","coordinates": [' + point[0].toString() + ',' + point[1].toString() + ']}},')
         })
         console.log(sline)
     }
+
+    /* 
+    TODO Teddy 
+    See python code for method, final distance should be in meters
+    write code here for 1-2 commits, write test for 1 commit
+    */
+    distanceBetweenCoords(pointOne: [number, number], pointTwo: [number, number]): [number] {
+        return null;
+    }
+
+    /*
+    TODO Liam
+    the filter WILL NOT work without this method
+    */
+    randomWalk(): [number, number][] {
+        return null;
+    }
+
+
+    /*
+    TODO Teddy
+    please be thorough, this method is crucial
+    */
+    weightsMeasuredRelativeToOriginal(): [number] {
+        return null;
+    }
+
+    /*
+    TODO Teddy
+    This is going to form part of the template for the particle filter
+    This method gives 1 / euclidean distance
+    See weight distance euclidean in python
+    */
+    weightDistanceEuclidean(OriginalPoint:[number], RandomParticle:[number]) : number {
+        return null;
+    }
+
+    /* 
+    TODO Teddy
+    Make the weights array add up to one by dividing each entry by the total of the array
+    */
+    normalizeWeights(weights:[number]) : [number] {
+        return null;
+    }
+
+
 }

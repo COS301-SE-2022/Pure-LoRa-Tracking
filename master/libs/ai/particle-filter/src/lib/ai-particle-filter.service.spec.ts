@@ -24,7 +24,7 @@ describe('AiParticleFilterService', () => {
   });
 
   it('should generate a random point', () => {
-    service.generatePolygonSamples(1000)
+    expect(service.generatePolygonSamples(1000)).toBe(true);
   });
 });
 
