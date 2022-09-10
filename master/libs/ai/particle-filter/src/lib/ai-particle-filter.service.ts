@@ -159,6 +159,11 @@ export class AiParticleFilterService {
         this.particles = newPoints;
         return newPoints;
     };
+    
+    /* one line flex */
+    predictParticleLocation() : number[] {
+        return this.particles[this.weights.indexOf(Math.max(...this.weights))];
+    }
 
 
     /*
@@ -178,10 +183,9 @@ export class AiParticleFilterService {
 
 
     /*
-    TODO Liam
     to be extended into template 
     */
-    particleFilter(reading:{latitude:number, longitude:number}): [number, number] {
+    particleFilter(reading:{latitude:number, longitude:number}): number[] {
         const readingPoint = [reading.longitude, reading.latitude];
 
         // random walk
@@ -207,6 +211,6 @@ export class AiParticleFilterService {
                 this.generateNewSampleFromWeights() 
             }
         }
-        return null;
+        return this.predictParticleLocation();
     }
 }
