@@ -74,20 +74,19 @@ export class ChirpstackChirpstackGatewayService {
 
     createGatewayRequest.setGateway(gateway);
 
-    // return new Promise((res, rej) => {
-    this.gatewayServiceClient.create(
-      createGatewayRequest,
-      this.metadata,
-      () => {}
-      // (error, data) => {
-      //   if (data) res(data);
-      //   else rej(error);
-      // }
-    );
-    // });
+    return new Promise((res, rej) => {
+      this.gatewayServiceClient.create(
+        createGatewayRequest,
+        this.metadata,
+        (error, data) => {
+          if (data) res(data);
+          else rej(error);
+        }
+      );
+    });
   }
 
-  async setGatewayLocation(
+  setGatewayLocation(
     authtoken: string, 
     gatewayId: string,
     latitude: number,
@@ -102,6 +101,8 @@ export class ChirpstackChirpstackGatewayService {
       getGatewayRequest,
       this.metadata,
       (error, data) => {
+        console.log("GATEWAY-error: ");
+        console.log(error);
         if (data) {
           const updateGatewayRequest = new gatewayMessages.UpdateGatewayRequest();  
           const gateWay = data.getGateway();
@@ -122,18 +123,16 @@ export class ChirpstackChirpstackGatewayService {
     );
   }
 
-  async removeGateway(authtoken: string, gatewayId: string) {
+  removeGateway(authtoken: string, gatewayId: string) {
     this.metadata.set('authorization', 'Bearer ' + authtoken);
 
     const deleteGatewayRequest = new gatewayMessages.DeleteGatewayRequest();
     deleteGatewayRequest.setId(gatewayId);
-
     
     this.gatewayServiceClient.delete(
       deleteGatewayRequest,
       this.metadata,
       () => {}      
     );
-   
   }
 }

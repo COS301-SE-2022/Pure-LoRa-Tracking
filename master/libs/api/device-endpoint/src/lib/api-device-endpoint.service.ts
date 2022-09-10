@@ -244,15 +244,16 @@ export class ApiDeviceEndpointService {
     const isGateway = body.isGateway;
     const devID = body.devEUI;
     if (isGateway) {
-      await this.chirpstackGateway.removeGateway(
-        process.env.CHIRPSTACK_API,
-        devID
-      ).catch((_) => {
+      try {
+        this.chirpstackGateway.removeGateway(
+          process.env.CHIRPSTACK_API,
+          devID)
+      } catch(Exception) {
         return {
           status: 400,
           explanation: "Failed to remove device"
         }
-      });
+      };
     } else {
       await this.chirpstackSensor.removeDevice(
         process.env.CHIRPSTACK_API,
