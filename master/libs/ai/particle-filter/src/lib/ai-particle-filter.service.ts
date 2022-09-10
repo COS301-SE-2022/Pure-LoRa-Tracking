@@ -8,7 +8,7 @@ export class AiParticleFilterService {
         env file for config parameters? 
     */
 
-    private particles: [number, number][];
+    private particles: number[][];
     private gatewayLocations: [number, number][];
     private reservePolygon: [number, number][];
     private numberOfSamples : number;
@@ -19,7 +19,7 @@ export class AiParticleFilterService {
     constructor(private locationComputations: LocationService) {
         this.reservePolygon = new Array<[number, number]>();
         this.gatewayLocations = new Array<[number, number]>();
-        this.particles = new Array<[number, number]>();
+        this.particles = new Array<number[]>();
     }
 
     configureInitialParameters(initialParameters: {
@@ -137,12 +137,12 @@ export class AiParticleFilterService {
     find a library or algorithm to sample correctly for weighted point
     credit: https://www.30secondsofcode.org/js/s/weighted-sample
     */
-    async generateNewSampleFromWeights(points = this.particles, weights = this.weights): Promise<[number, number][]> {
+    async generateNewSampleFromWeights(points = this.particles, weights = this.weights): Promise<number[][]> {
         if(points.length != weights.length)
             throw Error('Point and Weight dimension incorrect: P-'+points.length.toString()+' W-'+weights.length.toString())
             
         let roll = 0;
-        const newPoints = new Array<[number, number]>();
+        const newPoints = new Array<number[]>();
         while (newPoints.length != weights.length) {
             roll = Math.random();
             newPoints.push(points[
@@ -185,7 +185,7 @@ export class AiParticleFilterService {
     /*
     to be extended into template 
     */
-    particleFilter(reading:{latitude:number, longitude:number}): number[] {
+    async particleFilter(reading:{latitude:number, longitude:number}) : Promise<number[]> {
         const readingPoint = [reading.longitude, reading.latitude];
 
         // random walk
@@ -193,6 +193,7 @@ export class AiParticleFilterService {
 
         // train to point
         for (let i = 0; i < this.numberOfSamplingIterations; i++) {
+            
             // perform measurement and set weighting
             this.weightsMeasuredRelativeToOriginal(readingPoint);
             
@@ -208,7 +209,7 @@ export class AiParticleFilterService {
             
             } else {
                 // resample by weights
-                this.generateNewSampleFromWeights() 
+                await this.generateNewSampleFromWeights() 
             }
         }
         return this.predictParticleLocation();

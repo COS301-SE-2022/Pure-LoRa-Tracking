@@ -27,7 +27,7 @@ describe('AiParticleFilterService', () => {
   });
 
   it('should generate a new set of points', async() => {
-    await service.generateNewSampleFromWeights(ExamplePoints, weights)
+    //console.log(await service.generateNewSampleFromWeights(ExamplePoints, weights))
   });
 });
 
