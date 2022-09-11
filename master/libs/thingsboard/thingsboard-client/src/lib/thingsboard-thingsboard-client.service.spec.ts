@@ -5,7 +5,6 @@ import { ThingsboardThingsboardUserModule } from '@lora/thingsboard-user';
 import { Test } from '@nestjs/testing';
 import { HttpService } from '@nestjs/axios';
 import { ThingsboardThingsboardClientService } from './thingsboard-thingsboard-client.service';
-import { AxiosResponse } from 'axios';
 import { of, throwError } from 'rxjs';
 import { ThingsboardThingsboardAdminModule } from '@lora/thingsboard/admin';
 import { ThingsboardThingsboardReserveModule } from '@lora/thingsboard/reserve';
@@ -13,6 +12,8 @@ import {
   ThingsboardThingsboardTestsModule,
   ThingsboardThingsboardTestsService,
 } from '@lora/thingsboard/tests';
+import { ServiceBusModule } from '@lora/serviceBus';
+import { isMapIterator } from 'util/types';
 
 describe('ThingsboardThingsboardClientService', () => {
   let service: ThingsboardThingsboardClientService;
@@ -30,6 +31,7 @@ describe('ThingsboardThingsboardClientService', () => {
         ThingsboardThingsboardAdminModule,
         ThingsboardThingsboardReserveModule,
         ThingsboardThingsboardTestsModule,
+        ServiceBusModule
       ],
     }).compile();
 
@@ -817,7 +819,7 @@ it(' -> HTTP ERROR', async () => {
 
   /*it('live test for stuff', async ()=> {
     await service.loginUser('reserveadmin@reserve.com','reserve');
-    console.log(await service.addDeviceToReserve('427430f0-0845-11ed-bc6e-a50062f6cdba', null));
+    console.log(await service.addDeviceToReserve('427430f0-0845-11ed-bc6e-a50062f6cdba', {hardwareID:'abc', isGateway:false, labelName:'tester'}));
   })*/
 
   //////////////////////////////////////////////////////////////////////////////////////////
@@ -2021,6 +2023,11 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
   });
 
   //////////////////////////////////////////////////////////////////////
+
+  it('live test for assign device', async() => {
+    await service.loginUser('reserveadmin@reserve.com', 'reserve');
+    await service.assignDeviceToReserve('a0436390-0845-11ed-bc6e-a50062f6cdba', '123');
+  })
 
   it('assign device -> user fail', async () => {
     jest
