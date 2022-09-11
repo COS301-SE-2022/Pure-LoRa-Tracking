@@ -815,6 +815,11 @@ it(' -> HTTP ERROR', async () => {
     });
   });
 
+  /*it('live test for stuff', async ()=> {
+    await service.loginUser('reserveadmin@reserve.com','reserve');
+    console.log(await service.addDeviceToReserve('427430f0-0845-11ed-bc6e-a50062f6cdba', null));
+  })*/
+
   //////////////////////////////////////////////////////////////////////////////////////////
   it('delete device -> login fail', async () => {
     expect(await service.RemoveDeviceFromReserve('1')).toMatchObject({

@@ -507,6 +507,8 @@ export class ThingsboardThingsboardClientService {
       deviceCreate.data.id.id
     );
 
+    // TODO forward to mongo here
+
     return {
       status: 'ok',
       data: deviceCreate,
@@ -1064,6 +1066,8 @@ export class ThingsboardThingsboardClientService {
         explanation: response.explanation,
       };
 
+    // TODO update perimeter in mongo here
+
     return {
       status: 'ok',
       explanation: 'call finished',
@@ -1538,6 +1542,8 @@ export class ThingsboardThingsboardClientService {
         status: 'fail',
         explanation: resp.explanation
       }
+
+    // TODO update reserve in mongo here
 
     return {
       status: 'ok',
