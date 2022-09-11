@@ -8,10 +8,10 @@ export class AiParticleFilterService {
         env file for config parameters? 
     */
 
-    private particles: number[][];
+    protected particles: number[][];
     private gatewayLocations: [number, number][];
     private reservePolygon: [number, number][];
-    private numberOfSamples: number;
+    protected numberOfSamples: number;
     private numberOfSamplingIterations: number;
     private weights: number[];
 
@@ -129,13 +129,15 @@ export class AiParticleFilterService {
     TODO Teddy
     Make the weights array add up to one by dividing each entry by the total of the array
     */
-    normalizeWeights(): [number] {
+    normalizeWeights() {
+
+        // this.weights = normalized array 
         return null;
     }
 
     /*
     TODO Teddy
-    Cumulative sum of normalized weights i.e. index i = the sum of indexes 0..i
+    Cumulative sum of normalized weights i.e. index i = the sum of indexes 0..i of normalized weights
     the last index should be 1 or approximately 1
     */ 
     cumulativeWeights() : number[] {
@@ -265,7 +267,24 @@ export class particleFilterStratifiedService extends AiParticleFilterService {
         super(locationComputations);
     }
 
+    // consider : https://github.com/stdlib-js/random-base-uniform
     resampleParticles(howMany?: number): void {
-        return null;
+        const cdf = this.cumulativeWeights();
+        const newParticles = new Array<number[]>();
+
+        let n = 0;
+        let m = 1;
+
+        while(n < this.numberOfSamples) {
+            const u0 = Math.random() * (((1/this.numberOfSamples)+0.000000000001) - 0.000000000001) + 0.000000000001;
+            const u = u0 + 1 / this.numberOfSamples;
+
+            while(cdf[m]<u) {
+                m += 1
+            }
+            n += 1
+            newParticles.push(this.particles[m])
+        }
+        this.particles = newParticles;
     }
 }
