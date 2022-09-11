@@ -5,9 +5,10 @@ import { ProcessingApiProcessingBusService } from '@processing/bus';
 export class AppService {
   constructor(private serviceBus: ProcessingApiProcessingBusService) { };
 
-  async processPerimeterRequest(body: { location?: any, name?: string, device?: string, newName?: string }) {
+  async processPerimeterRequest(body: { location?: any, name?: string, device?: string, newName?: string }) : Promise<string> {
+    console.log(body);
     if (body.name == undefined) {
-      return { data: "NO NAME FAIL" }
+      return "NO NAME FAIL"
     }
     if (body.device != undefined) {
       this.serviceBus.saveDevicePerimeterToDB({ location: body.location.features[0].geometry.coordinates, name: body.name, device: body.device })
@@ -16,7 +17,7 @@ export class AppService {
     } else if (body.newName != undefined) {
       this.serviceBus.updateDeviceReserveName({ name: body.name, newName: body.newName })
     } else {
-      return { data: "NOOP" }
+      return  "NOOP" 
     }
   }
 }

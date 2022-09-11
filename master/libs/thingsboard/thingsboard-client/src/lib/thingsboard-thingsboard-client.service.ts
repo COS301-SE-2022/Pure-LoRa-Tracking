@@ -509,9 +509,10 @@ export class ThingsboardThingsboardClientService {
       deviceCreate.data.id.id
     );
 
-
-    const mongoPair = { location: CustInfo.data.additionalInfo.location, device: AccessToken.data.credentialsId, name: CustInfo.data.title };
-    this.serviceBus.sendMongoDevicePerimeter(mongoPair);
+    if (deviceDetails.isGateway == false) {
+      const mongoPair = { location: CustInfo.data.additionalInfo.location, device: AccessToken.data.credentialsId, name: CustInfo.data.title };
+      this.serviceBus.sendMongoDevicePerimeter(mongoPair);
+    }
 
 
     return {
@@ -1072,7 +1073,7 @@ export class ThingsboardThingsboardClientService {
         explanation: response.explanation,
       };
 
-    const mongoPair = {name: info.data.title, location : location};
+    const mongoPair = { name: info.data.title, location: location };
     this.serviceBus.sendMongoDevicePerimeter(mongoPair);
 
     return {
@@ -1390,7 +1391,7 @@ export class ThingsboardThingsboardClientService {
         furtherExplain: response.explanation,
       };
 
-    this.serviceBus.sendMongoDevicePerimeter({name:info.data.title, newName:details.NameOfReserve})
+    this.serviceBus.sendMongoDevicePerimeter({ name: info.data.title, newName: details.NameOfReserve })
 
     return {
       status: 'ok',
