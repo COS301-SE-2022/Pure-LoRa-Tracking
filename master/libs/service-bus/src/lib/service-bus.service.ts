@@ -8,7 +8,7 @@ export class ServiceBusService {
 
     async sendMongoDevicePerimeter(data: { device?: any, location?: any, name?: string, newName?:string}) {
         const resp = await firstValueFrom(
-            this.httpService.get("localhost:4444/api/ai/perimeter", {
+            this.httpService.post('http://localhost:4444/api/ai/perimeter', {
                 data
             })
         ).catch((error) => {

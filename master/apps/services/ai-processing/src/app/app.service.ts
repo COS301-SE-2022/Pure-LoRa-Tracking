@@ -11,9 +11,9 @@ export class AppService {
       return "NO NAME FAIL"
     }
     if (body.device != undefined) {
-      this.serviceBus.saveDevicePerimeterToDB({ location: body.location.features[0].geometry.coordinates, name: body.name, device: body.device })
+      this.serviceBus.saveDevicePerimeterToDB({ perimeter: body.location.features[0].geometry.coordinates[0], name: body.name, deviceID: body.device })
     } else if (body.location != undefined) {
-      this.serviceBus.updateDevicePerimeter({ location: body.location.features[0].geometry.coordinates, name: body.name })
+      this.serviceBus.updateDevicePerimeter({ perimeter: body.location.features[0].geometry.coordinates[0], name: body.name })
     } else if (body.newName != undefined) {
       this.serviceBus.updateDeviceReserveName({ name: body.name, newName: body.newName })
     } else {

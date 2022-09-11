@@ -1,4 +1,4 @@
-import { Document, Schema as MongooseSchema } from 'mongoose';
+import mongoose, { Document, Schema as MongooseSchema } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
 export type AverageInputDocument = AverageInput & Document;
@@ -42,8 +42,8 @@ export class DevicePerimeter {
     @Prop({ required: true, unique: true })
     deviceID: string;
 
-    @Prop({ required: true })
-    location: number[]
+    @Prop({required:true})
+    perimeter: number[]
 
     @Prop({ required: true })
     name: string;

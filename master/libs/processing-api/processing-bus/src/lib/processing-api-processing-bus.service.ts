@@ -19,13 +19,19 @@ export class ProcessingApiProcessingBusService {
     }
 
     /* forward new device and perimeter to relevant mongo table */
-    async saveDevicePerimeterToDB(body: { location: any, name: string, device: string}) {return null;}
+    async saveDevicePerimeterToDB(body: { perimeter: number[], name: string, deviceID: string}) {
+        this.database.insertDevicePerimeter(body)
+    }
 
     /* forward new perimeter to all device in table */
-    async updateDevicePerimeter(body: { location: any, name: string }) {return null;}
+    async updateDevicePerimeter(body: { perimeter: number[], name: string }) {
+        this.database.updateDevicePerimeter(body)
+    }
 
     /* forward new name of reserve to all devices associated */
-    async updateDeviceReserveName(body: { name: string, newName:string }) {return null;}
+    async updateDeviceReserveName(body: { name: string, newName:string }) {
+        this.database.updateDevicePerimeterName(body);
+    }
 
     /* request delete device data from db service */
     async deleteDeviceData(data:{timestamp:number, deviceEUI:string}) {

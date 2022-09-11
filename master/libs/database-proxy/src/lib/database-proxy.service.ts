@@ -61,6 +61,6 @@ export class DatabaseProxyService {
     }
 
     public async updateDevicePerimeter(data:{perimeter:number[], name:string}) {
-        return await this.DevicePerimeterModel.updateMany({name:data.name}, { $set: { location:data.perimeter } }).exec 
+        return await this.DevicePerimeterModel.updateMany({name:data.name}, { $set: { perimeter:data.perimeter } }).exec 
     } 
 }
