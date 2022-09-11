@@ -6,11 +6,12 @@ import { ThingsboardThingsboardTelemetryModule } from '@lora/thingsboard-telemet
 import { ThingsboardThingsboardAssetModule } from '@lora/thingsboard-asset';
 import { ThingsboardThingsboardAdminModule } from '@lora/thingsboard/admin';
 import { ThingsboardThingsboardReserveModule } from '@lora/thingsboard/reserve';
+import { ServiceBusModule } from 'libs/service-bus/src';
 
 @Global()
 @Module({
   controllers: [],
-  imports : [ThingsboardThingsboardUserModule, ThingsboardThingsboardDeviceModule, ThingsboardThingsboardTelemetryModule, 
+  imports : [ServiceBusModule,ThingsboardThingsboardUserModule, ThingsboardThingsboardDeviceModule, ThingsboardThingsboardTelemetryModule, 
                     ThingsboardThingsboardAssetModule, ThingsboardThingsboardAdminModule, ThingsboardThingsboardReserveModule],
   providers: [ThingsboardThingsboardClientService],
   exports: [ThingsboardThingsboardClientService],

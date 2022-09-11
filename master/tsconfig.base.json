@@ -50,6 +50,7 @@
       "@lora/processing/api/router": [
         "libs/processing-api/router/src/index.ts"
       ],
+      "@lora/serviceBus": ["libs/service-bus/src/index.ts"],
       "@lora/thingsboard-asset": [
         "libs/thingsboard/thingsboard-asset/src/index.ts"
       ],
