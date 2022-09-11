@@ -20,6 +20,7 @@ export class AiParticleFilterService {
         this.reservePolygon = new Array<[number, number]>();
         this.gatewayLocations = new Array<[number, number]>();
         this.particles = new Array<number[]>();
+        this.weights = new Array<number>();
     }
 
     configureInitialParameters(initialParameters: {
@@ -38,6 +39,8 @@ export class AiParticleFilterService {
 
         this.numberOfSamples = initialParameters.numberOfSamples;
         this.numberOfSamplingIterations = 40;
+
+        this.resetWeights();
     }
 
     generatePolygonSamples(howMany: number): boolean {
@@ -120,6 +123,7 @@ export class AiParticleFilterService {
     This is going to form part of the template for the particle filter
     This method gives 1 / euclidean distance
     See weight distance euclidean in python
+    default
     */
     weightDistanceEuclidean?(OriginalPoint: [number], RandomParticle: [number]): number {
         return null;
@@ -187,11 +191,6 @@ export class AiParticleFilterService {
         return null;
     }
 
-    /*
-    TODO Liam
-    resampling techniques,
-    uniform resample a proportion
-    */
     resampleParticles?(howMany?: number) {
         const newParticles = new Array<number[]>()
         const polygon = {
