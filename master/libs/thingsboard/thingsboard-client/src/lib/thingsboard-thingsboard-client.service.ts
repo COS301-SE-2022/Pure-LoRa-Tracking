@@ -510,7 +510,7 @@ export class ThingsboardThingsboardClientService {
     );
 
 
-    const mongoPair = { location: CustInfo.data.additionalInfo.location, device: AccessToken.data.credentialsId, name: CustInfo.data.name };
+    const mongoPair = { location: CustInfo.data.additionalInfo.location, device: AccessToken.data.credentialsId, name: CustInfo.data.title };
     this.serviceBus.sendMongoDevicePerimeter(mongoPair);
 
 
@@ -1390,6 +1390,8 @@ export class ThingsboardThingsboardClientService {
         furtherExplain: response.explanation,
       };
 
+    this.serviceBus.sendMongoDevicePerimeter({name:info.data.title, newName:details.NameOfReserve})
+
     return {
       status: 'ok',
       explanation: 'call finished',
@@ -1553,7 +1555,7 @@ export class ThingsboardThingsboardClientService {
     const CustInfo = await this.reserveService.CustomerInfo(reserveID);
     this.deviceService.setToken(this.token);
     const AccessToken = await this.deviceService.GetAccessToken(deviceID);
-    const mongoPair = { device: AccessToken.data.credentialsId, name: CustInfo.data.name };
+    const mongoPair = { device: AccessToken.data.credentialsId, name: CustInfo.data.title };
     this.serviceBus.sendMongoDevicePerimeter(mongoPair);
 
     return {

@@ -1,23 +1,17 @@
 import { Test } from '@nestjs/testing';
+import { ProcessingApiProcessingBusModule } from '@processing/bus';
 
 import { AppService } from './app.service';
 
 describe('AppService', () => {
   let service: AppService;
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     const app = await Test.createTestingModule({
+      imports :[ProcessingApiProcessingBusModule],
       providers: [AppService],
     }).compile();
 
     service = app.get<AppService>(AppService);
-  });
-
-  describe('getData', () => {
-    it('should return "Welcome to ai-processing!"', () => {
-      expect(service.getData()).toEqual({
-        message: 'Welcome to ai-processing!',
-      });
-    });
   });
 });
