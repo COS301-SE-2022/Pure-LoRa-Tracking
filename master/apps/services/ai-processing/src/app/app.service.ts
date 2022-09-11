@@ -10,9 +10,9 @@ export class AppService {
       return { data: "NO NAME FAIL" }
     }
     if (body.device != undefined) {
-      this.serviceBus.saveDevicePerimeterToDB({ location: body.location, name: body.name, device: body.device })
+      this.serviceBus.saveDevicePerimeterToDB({ location: body.location.features[0].geometry.coordinates, name: body.name, device: body.device })
     } else if (body.location != undefined) {
-      this.serviceBus.updateDevicePerimeter({ location: body.location, name: body.name })
+      this.serviceBus.updateDevicePerimeter({ location: body.location.features[0].geometry.coordinates, name: body.name })
     } else if (body.newName != undefined) {
       this.serviceBus.updateDeviceReserveName({ name: body.name, newName: body.newName })
     } else {

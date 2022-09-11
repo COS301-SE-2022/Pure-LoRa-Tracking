@@ -1901,6 +1901,11 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
     });
   });
 
+  /*it('live customer info test', async()=> {
+    await service.loginUser('reserveadmin@reserve.com', 'reserve');
+    console.log((await service.CustomerInfo('427430f0-0845-11ed-bc6e-a50062f6cdba')).data.additionalInfo.location.features[0].geometry.coordinates)
+  })*/
+
   //////////////////////////////////////////////////////////////////////
 
   it('remove reserve -> pass', async () => {
