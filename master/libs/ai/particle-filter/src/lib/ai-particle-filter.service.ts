@@ -134,6 +134,15 @@ export class AiParticleFilterService {
     }
 
     /*
+    TODO Teddy
+    Cumulative sum of normalized weights i.e. index i = the sum of indexes 0..i
+    the last index should be 1 or approximately 1
+    */ 
+    cumulativeWeights() : number[] {
+        return null;
+    }
+    
+    /*
     find a library or algorithm to sample correctly for weighted point
     credit: https://www.30secondsofcode.org/js/s/weighted-sample
     */
