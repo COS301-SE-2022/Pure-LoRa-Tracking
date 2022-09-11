@@ -288,3 +288,30 @@ export class particleFilterStratifiedService extends AiParticleFilterService {
         this.particles = newParticles;
     }
 }
+
+@Injectable()
+export class particleFilterMultinomialService extends AiParticleFilterService {
+    constructor(locationComputations: LocationService) {
+        super(locationComputations);
+    }
+
+    // consider : https://github.com/stdlib-js/random-base-uniform
+    resampleParticles(howMany?: number): void {
+        const cdf = this.cumulativeWeights();
+        const newParticles = new Array<number[]>();
+
+        let n = 0;
+
+        while(n < this.numberOfSamples) {
+            const u = Math.random() * ((1+0.000000000001) - 0.000000000001) + 0.000000000001;
+            let m = 1;
+
+            while(cdf[m]<u) {
+                m += 1
+            }
+            n += 1
+            newParticles.push(this.particles[m])
+        }
+        this.particles = newParticles;
+    }
+}
