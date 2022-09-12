@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { AddGatewayDevice, AddSensorDevice } from '@master/shared-interfaces';
+import { AddGatewayDevice, AddSensorDevice, ActivationKeys } from '@master/shared-interfaces';
 import {TokenManagerService} from "@master/client/user-storage-controller"
 import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {deviceOptionList} from "@master/shared-interfaces"
@@ -20,8 +20,12 @@ export class DeviceAddComponent implements OnInit {
   gatewayGroup!:UntypedFormGroup;
   sensorGroup!:UntypedFormGroup;
   profilelist:Array<deviceOptionList>=[];
-  deviceprofilelist:Array<{id: string, name: string}>=[];
+  deviceprofilelist: Array<{ id: string, name: string, isOTAA: boolean, macVerion: string }>=[];
   deviceType = "";
+  isABP = false;
+  lora1_0 = false;
+  lora1_1 = false;
+
   constructor(private _formBuilder: UntypedFormBuilder,private http:HttpClient,private tokenmanager:TokenManagerService,private snackbar:MatSnackBar) {}
 
   ngOnInit(): void {
@@ -30,7 +34,6 @@ export class DeviceAddComponent implements OnInit {
     });
     this.descriptionGroup = this._formBuilder.group({
       name: ['', Validators.required],
-      desc: ['', Validators.required],
       profilegroup: ['', Validators.required],
     });
     this.gatewayGroup = this._formBuilder.group({
@@ -41,8 +44,14 @@ export class DeviceAddComponent implements OnInit {
     });
     this.sensorGroup=this._formBuilder.group({
       eui: ['', Validators.required],
-      applicationkey: ['', Validators.required],
       deviceProfile: ['', Validators.required],
+
+      devAddr: ['', Validators.required],
+      nwkSkey: ['', Validators.required],
+      appSkey: ['', Validators.required],
+
+      appKey: ['', Validators.required],
+      nwkKey: ['', Validators.required],     
     })
 
     this.http.post("/api/user/admin/groups",{
@@ -59,36 +68,52 @@ export class DeviceAddComponent implements OnInit {
     })
 
     this.http.post("api/device/admin/sensor/info/profiles",{}).subscribe((val:any)=>{
-      this.deviceprofilelist = val.data as Array<{id: string, name: string}>;
+      this.deviceprofilelist = val.data as Array<{ id: string, name: string, isOTAA: boolean,macVerion: string }>;
+      console.log(this.deviceprofilelist);
     })
   }
 
   create(){
     if(this.deviceType=="sensor"){
+      const keyAct = {
+        isABP: this.isABP,
+        lora1_1: this.lora1_1,
+        devAddr: this.sensorGroup.get("devAddr")?.value,
+        appSKey: this.sensorGroup.get("appSKey")?.value,
+        nwkSEncKey: this.sensorGroup.get("nwkSkey")?.value,
+        
+        // fNwkSIntKey: this.sensorGroup.get("fNwkSIntKey")?.value,
+        // sNwkSIntKey: this.sensorGroup.get("sNwkSIntKey")?.value,
+        
+        appKey: this.sensorGroup.get("appKey")?.value,
+        nwkKey: this.sensorGroup.get("nwkKey")?.value,
+      } as ActivationKeys
+
       const obj = {
-        customerID:this.descriptionGroup.get("profilegroup")?.value,
-        hardwareName:this.sensorGroup.get("eui")?.value,
-        labelName:this.descriptionGroup.get("name")?.value,
+        customerID: this.descriptionGroup.get("profilegroup")?.value,
+        hardwareName: this.sensorGroup.get("eui")?.value,
+        labelName: this.descriptionGroup.get("name")?.value,
       } as AddSensorDevice
       this.http.post("api/device/admin/add/sensor",{
-        customerID:this.descriptionGroup.get("profilegroup")?.value,
-        hardwareName:this.sensorGroup.get("eui")?.value,
-        labelName:this.descriptionGroup.get("name")?.value,
-        deviceProfileId:this.sensorGroup.get("deviceProfile")?.value,
+        customerID: this.descriptionGroup.get("profilegroup")?.value,
+        hardwareName: this.sensorGroup.get("eui")?.value,
+        labelName: this.descriptionGroup.get("name")?.value,
+        deviceProfileId: this.sensorGroup.get("deviceProfile")?.value,
+        activationKeys: keyAct
       }).subscribe(val=>{
         console.log(val);
       })
     }
     else if(this.deviceType=="gateway"){
       const obj = {
-        customerID:this.descriptionGroup.get("profilegroup")?.value,
-        hardwareName:this.gatewayGroup.get("gatewayid")?.value,
-        labelName:this.descriptionGroup.get("name")?.value,
+        customerID: this.descriptionGroup.get("profilegroup")?.value,
+        hardwareName: this.gatewayGroup.get("gatewayid")?.value,
+        labelName: this.descriptionGroup.get("name")?.value,
       } as AddGatewayDevice
       this.http.post("api/device/admin/add/gateway",{
-        customerID:this.descriptionGroup.get("profilegroup")?.value,
-        hardwareName:this.gatewayGroup.get("gatewayid")?.value,
-        labelName:this.descriptionGroup.get("name")?.value,
+        customerID: this.descriptionGroup.get("profilegroup")?.value,
+        hardwareName: this.gatewayGroup.get("gatewayid")?.value,
+        labelName: this.descriptionGroup.get("name")?.value,
       }).subscribe((val:any)=>{
         console.log(val)
         if(val.status==200){
@@ -111,7 +136,30 @@ export class DeviceAddComponent implements OnInit {
       })
     }
 
-
-
   }
+  
+  changeProfile(selected: any) {
+    
+    const obj = this.deviceprofilelist.find(x => x.id == selected.value)
+    this.isABP = false;
+    this.lora1_0 = false;
+    this.lora1_1 = false;
+    
+    if (obj?.isOTAA) {
+      this.isABP = false;
+
+      // this.lora1_0 = (obj?.macVerion.startsWith("1.0")
+      if (obj?.macVerion.startsWith("1.0")) 
+        this.lora1_0 = true;
+      else 
+        this.lora1_0 = false;
+
+      if (obj?.macVerion.startsWith("1.1")) 
+        this.lora1_1 = true;
+      else 
+        this.lora1_1 = false;
+    }
+    else this.isABP = true;
+  }
+
 }

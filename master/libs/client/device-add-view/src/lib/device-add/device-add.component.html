@@ -28,16 +28,11 @@
             </mat-form-field>
             <br>
             <mat-form-field appearance="fill">
-              <mat-label>Device Description</mat-label>
-              <input matInput placeholder="Description" formControlName="desc" required>
+              <mat-label>Reserve</mat-label>
+              <mat-select formControlName="profilegroup">
+                  <mat-option *ngFor="let curr of profilelist" [value]="curr.deviceID">{{curr.name}}</mat-option>
+              </mat-select>
             </mat-form-field>
-            <br>
-                <mat-form-field appearance="fill">
-                  <mat-label>Reserve</mat-label>
-                  <mat-select formControlName="profilegroup">
-                      <mat-option *ngFor="let curr of profilelist" [value]="curr.deviceID">{{curr.name}}</mat-option>
-                  </mat-select>
-                </mat-form-field>
             <div>
               <button mat-button matStepperPrevious>Back</button>
               <button mat-button matStepperNext [disabled]="descriptionGroup.invalid">Next</button>
@@ -57,16 +52,45 @@
                 </mat-form-field>
                 <br>
                 <mat-form-field appearance="fill">
-                  <mat-label>Application Key</mat-label>
-                  <input matInput placeholder="Application Key" formControlName="applicationkey" required>
-                </mat-form-field>
-                <br>
-                <mat-form-field appearance="fill">
                   <mat-label>Device Profile</mat-label>
-                  <mat-select formControlName="deviceProfile">
+                  <mat-select formControlName="deviceProfile" (selectionChange)="changeProfile($event)" #selected>
                     <mat-option *ngFor="let curr of deviceprofilelist" [value]="curr.id">{{curr.name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
+                <br>
+                
+                <div *ngIf="isABP">
+                  <mat-form-field appearance="fill">
+                    <mat-label>Device address</mat-label>
+                    <input matInput placeholder="Device address" formControlName="devAddr" required>
+                  </mat-form-field>
+                  <br>
+                  <mat-form-field appearance="fill">
+                    <mat-label>Network Session Key</mat-label>
+                    <input matInput placeholder="Network Session Key" formControlName="nwkSkey" required>
+                  </mat-form-field>
+                  <br>
+                  <mat-form-field appearance="fill">
+                    <mat-label>Application Session Key</mat-label>
+                    <input matInput placeholder="Application Session Key" formControlName="appSkey" required>
+                  </mat-form-field>
+                  <br>
+                </div>
+                
+                <div *ngIf="lora1_0">
+                  <mat-form-field appearance="fill">
+                    <mat-label>Network Key</mat-label>
+                    <input matInput placeholder="Network Key" formControlName="nwkKey" required>
+                  </mat-form-field>
+                  <br>
+                </div>
+                <div *ngIf="lora1_0 || lora1_1">
+                  <mat-form-field appearance="fill">
+                    <mat-label>Application Key</mat-label>
+                    <input matInput placeholder="Application Key" formControlName="appKey" required>
+                  </mat-form-field>
+                  <br>
+                </div>
 
               </form>
             </div>
