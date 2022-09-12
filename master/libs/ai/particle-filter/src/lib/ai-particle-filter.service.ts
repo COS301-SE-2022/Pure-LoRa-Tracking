@@ -75,8 +75,12 @@ export class AiParticleFilterService {
     See python code for method, final distance should be in meters
     write code here for 1-2 commits, write test for 1 commit
     */
-    distanceBetweenCoords(pointOne: [number, number], pointTwo: [number, number]): number[] {
-        return null;
+    distanceBetweenCoords(pointOne: [number, number], pointTwo: [number, number]): number {
+        const p = 0.017453292519943295;
+        const a = 0.5 - Math.cos((pointTwo[0] - pointOne[0]) * p) / 2 + Math.cos(pointOne[0] * p) 
+                  * Math.cos(pointTwo[0] * p) * (1 - Math.cos((pointTwo[1] - pointOne[1]) *p)) / 2;
+
+        return 12742 * Math.sin(Math.sqrt(a)) * 1000;
     }
 
     /*
