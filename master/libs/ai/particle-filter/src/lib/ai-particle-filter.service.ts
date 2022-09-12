@@ -130,7 +130,19 @@ export class AiParticleFilterService {
     default
     */
     weightDistanceEuclidean?(OriginalPoint: [number], RandomParticle: [number]): number {
-        return null;
+        let sums = 0;
+        
+        for (let i = 0; i < OriginalPoint.length; i++){
+            sums += (OriginalPoint[i] - RandomParticle[i])**2;
+        }
+        
+        const divisor = Math.sqrt(sums);
+        
+        if (divisor < 0.000001){
+            return 100000;
+        }
+
+        return 1 / divisor;
     }
 
     /* 
