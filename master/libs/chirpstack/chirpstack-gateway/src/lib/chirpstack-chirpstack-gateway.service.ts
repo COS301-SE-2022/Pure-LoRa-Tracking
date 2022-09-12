@@ -101,8 +101,6 @@ export class ChirpstackChirpstackGatewayService {
       getGatewayRequest,
       this.metadata,
       (error, data) => {
-        console.log("GATEWAY-error: ");
-        console.log(error);
         if (data) {
           const updateGatewayRequest = new gatewayMessages.UpdateGatewayRequest();  
           const gateWay = data.getGateway();

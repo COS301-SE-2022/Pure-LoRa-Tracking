@@ -224,7 +224,23 @@ describe('ChirpstackChirpstackSensorService', () => {
         'test_token',
         'test',
         '70b3d5000000000b',
-        'cb71e932-cd57-44a0-b5ab-aebb6b377541'
+        'cb71e932-cd57-44a0-b5ab-aebb6b377541'        
+      );
+      console.log(data);
+      expect(data).toBeDefined();
+    });
+
+    it('should activate the device', async () => {
+      const data = await service.activateDevice(
+        authtoken,
+        "70b3d5000000000b", 
+        {
+          isABP: true,
+          lora1_1: false,
+          devAddr: "01c93656",
+          appSKey: "DFD761F3367B36F85762B9AEFD17DC72",
+          nwkSEncKey: "4A9851A0719D178F9655343206620713"
+        }
       );
       console.log(data);
       expect(data).toBeDefined();
