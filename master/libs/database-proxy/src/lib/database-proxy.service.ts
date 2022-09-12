@@ -1,12 +1,13 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { AverageInput, AverageInputDocument, DataDocument, DataInput } from '../database-interfaces.interface';
+import { AverageInput, AverageInputDocument, DataDocument, DataInput, DevicePerimeter, DevicePerimeterDocument } from '../database-interfaces.interface';
 
 @Injectable()
 export class DatabaseProxyService {
     constructor(@InjectModel(AverageInput.name) private AverageModel: Model<AverageInputDocument>,
-        @InjectModel(DataInput.name) private DataModel: Model<DataDocument>
+        @InjectModel(DataInput.name) private DataModel: Model<DataDocument>,
+        @InjectModel(DevicePerimeter.name) private DevicePerimeterModel: Model<DevicePerimeterDocument>
     ) { }
 
 
@@ -49,4 +50,17 @@ export class DatabaseProxyService {
     public async deleteDeviceData(deviceEUI:string, timestamp:number) {
         return await this.DataModel.findOneAndDelete({deviceEUI:deviceEUI, timestamp:timestamp});
     }
+
+    public async insertDevicePerimeter(data:{deviceID:string, perimeter:number[], name:string}) {
+        const Insert = new this.DevicePerimeterModel(data);
+        return await Insert.save();
+    }
+
+    public async updateDevicePerimeterName(data:{name:string, newName:string}) {
+        return await this.DevicePerimeterModel.updateMany({name:data.name}, { $set: { name:data.newName } }).exec()   
+    }
+
+    public async updateDevicePerimeter(data:{perimeter:number[], name:string}) {
+        return await this.DevicePerimeterModel.updateMany({name:data.name}, { $set: { perimeter:data.perimeter } }).exec 
+    } 
 }
