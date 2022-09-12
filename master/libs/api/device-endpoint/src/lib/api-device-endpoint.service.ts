@@ -19,7 +19,6 @@ import {
   UnassignDevice,
 } from './../api-device.interface';
 import { Injectable } from '@nestjs/common';
-import { DeviceProfile } from '@chirpstack/chirpstack-api/as/external/api/profiles_pb';
 
 @Injectable()
 export class ApiDeviceEndpointService {
@@ -114,11 +113,11 @@ export class ApiDeviceEndpointService {
       }
     }
 
-    const chirpPromise = await this.chirpstackSensor.addDevice(
+    await this.chirpstackSensor.addDevice(
       process.env.CHIRPSTACK_API,
       resp.data.deviceToken,
-      body.labelName,
-      body.hardwareName,
+      body.labelName,            // Name
+      body.hardwareName,         // EUI
       body.deviceProfileId
     ).catch((err) => {
       this.thingsboardClient.RemoveDeviceFromReserve(resp.data.deviceCreate);
@@ -127,6 +126,15 @@ export class ApiDeviceEndpointService {
         explanation: "access token failure"
       } 
     });
+
+    await this.chirpstackSensor.activateDevice(
+      process.env.CHIRPSTACK_API,
+      "70b3d50000000033",
+      {
+        isABP: true,
+        lora1_1: true,
+      }
+    )
 
     return {
       status: 200,
