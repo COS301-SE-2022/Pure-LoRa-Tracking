@@ -51,4 +51,8 @@ describe('DatabaseProxyService', () => {
   it('should delete device data', async ()=> {
     //console.table(service.deleteDeviceData('254', 1662112541314));
   })
+
+  it(('return device info for perimeter'), async() => {
+    //console.log(await service.getDevicePerimeter("Yb6RZyFqwBYbj2Xjp5HH"))
+  })
 });
