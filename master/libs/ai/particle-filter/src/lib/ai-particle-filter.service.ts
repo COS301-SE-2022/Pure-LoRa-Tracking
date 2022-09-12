@@ -129,7 +129,7 @@ export class AiParticleFilterService {
     See weight distance euclidean in python
     default
     */
-    weightDistanceEuclidean?(OriginalPoint: [number], RandomParticle: [number]): number {
+    weightDistanceEuclidean?(OriginalPoint: number[], RandomParticle: number[]): number {
         let sums = 0;
         
         for (let i = 0; i < OriginalPoint.length; i++){
