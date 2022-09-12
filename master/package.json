@@ -65,7 +65,7 @@
     "@nrwl/linter": "14.1.4",
     "@nrwl/nest": "14.1.4",
     "@nrwl/node": "14.1.4",
-    "@nrwl/nx-cloud": "latest",
+    "@nrwl/nx-cloud": "14.6.1",
     "@nrwl/workspace": "14.1.4",
     "@types/googlemaps": "^3.43.3",
     "@types/jest": "27.4.1",
