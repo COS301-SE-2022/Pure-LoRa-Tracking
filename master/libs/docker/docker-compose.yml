@@ -111,9 +111,14 @@ services:
       - "7070:7070"
       - "5683-5688:5683-5688/udp"
     environment:
-      TB_QUEUE_TYPE: in-memory # while-testing
+      TB_QUEUE_TYPE: rabbitmq # while-testing
       PURELORABUILD: ${PURELORABUILD-''}
       JWT_TOKEN_SIGNING_KEY: 53ff38ebc9f89fdb047fa366909e5b610477f1a3
+      TB_QUEUE_RABBIT_MQ_PORT: 5672
+      TB_QUEUE_RABBIT_MQ_USERNAME: guest
+      TB_QUEUE_RABBIT_MQ_PASSWORD: guest
+      TB_QUEUE_RABBIT_MQ_HOST: rabbitmq 
+      #TB_QUEUE_RABBIT_MQ_AUTOMATIC_RECOVERY_ENABLED: true
       # SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/thingsboard
       # SPRING_DATASOURCE_PASSWORD: postgres
       # SPRING_DATASOURCE_USERNAME: postgres
@@ -123,6 +128,8 @@ services:
       - ./configs/postgreSQL/thingsboard.sh:/thingsboard.sh
       - ./configs/dev_db/thingsboard:/dev_db/thingsboard
     command: /thingsboard.sh # hijack entrypoint
+    depends_on:
+      - rabbitmq
 #    networks:
 #      - thingsboards
 

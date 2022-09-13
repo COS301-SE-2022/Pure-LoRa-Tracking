@@ -179,7 +179,7 @@ export class MessageQueueService {
         console.log("service has received ",data);
         setTimeout(() => {
             console.log("Service has finished ",data);
-            observer.next(true);
+            observer.next(true);//After proceesing has been completed
         }, 10000);
     }
 }
