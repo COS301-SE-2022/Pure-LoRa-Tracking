@@ -135,4 +135,9 @@ export class SensorActivityComponent{
   ChangeData(event:any){
 
   }
+
+
+  GETDATATEMP(){
+
+  }
 }
