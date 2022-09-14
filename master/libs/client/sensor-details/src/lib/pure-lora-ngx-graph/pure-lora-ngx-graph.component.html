@@ -1,0 +1,42 @@
+<div id="chart-container" [ngSwitch]="graphOption.value">
+    <ngx-charts-line-chart
+    *ngSwitchCase="'heartrate'"
+    [legend]="legend"
+    [showXAxisLabel]="showXAxisLabel"
+    [showYAxisLabel]="showYAxisLabel"
+    [xAxis]="xAxis"
+    [yAxis]="yAxis"
+    [xAxisLabel]="xAxisLabel"
+    [yAxisLabel]="yAxisLabel"
+    [timeline]=true
+    [results]="graphdata"
+    [autoScale]=true
+    >
+    </ngx-charts-line-chart>
+    <ngx-charts-line-chart
+    *ngSwitchCase="'temperature'"
+    [legend]="legend"
+    [showXAxisLabel]="showXAxisLabel"
+    [showYAxisLabel]="showYAxisLabel"
+    [xAxis]="xAxis"
+    [yAxis]="yAxis"
+    [xAxisLabel]="xAxisLabel"
+    [yAxisLabel]="'Degrees Celsius (&deg;C)'"
+    [timeline]=true
+    [results]="graphdata"
+    [autoScale]=true
+    >
+    </ngx-charts-line-chart>
+    <ngx-charts-bar-vertical
+    *ngSwitchCase="'signals'"
+    [legend]="legend"
+    [showXAxisLabel]="showXAxisLabel"
+    [showYAxisLabel]="showYAxisLabel"
+    [xAxis]="xAxis"
+    [yAxis]="yAxis"
+    [xAxisLabel]="xAxisLabel"
+    [yAxisLabel]="'Signals Received'"
+    [results]="graphdata"
+    >
+    </ngx-charts-bar-vertical>
+</div>

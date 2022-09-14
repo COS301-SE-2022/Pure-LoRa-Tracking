@@ -19,6 +19,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { ReactiveFormsModule } from '@angular/forms';
+import { PureLoraNgxGraphComponent } from './pure-lora-ngx-graph/pure-lora-ngx-graph.component';
 
 export const clientSensorDetailsRoutes: Route[] = [];
 
@@ -46,6 +47,7 @@ export const clientSensorDetailsRoutes: Route[] = [];
     SensorActivityComponent,
     SensorCommunicationComponent,
     CommunicationDataComponent,
+    PureLoraNgxGraphComponent,
   ],
   exports: [
     SensorViewDetailComponent,

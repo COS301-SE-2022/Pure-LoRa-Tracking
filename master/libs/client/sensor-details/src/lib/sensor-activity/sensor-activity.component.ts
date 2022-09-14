@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { string } from '@tensorflow/tfjs-node';
 @Component({
   selector: 'master-sensor-activity',
   templateUrl: './sensor-activity.component.html',
@@ -7,7 +8,14 @@ import { FormControl } from '@angular/forms';
 })
 export class SensorActivityComponent {
 
+
+  constructor() {
+  
+  }
+
+  currentGraph="";
   graphOption = new FormControl();
+  graphType = new FormControl();
    // view: [number,number]= [400, 200];
 
   // options
