@@ -1,7 +1,7 @@
 <div>
 <mat-form-field>
     <label>Value</label>
-    <mat-select [formControl]="graphOption" [(value)]="currentGraph" (selectionChange)="">
+    <mat-select [formControl]="graphOption" [(value)]="currentGraph" (selectionChange)="ChangeData($event)">
         <mat-option value="temperature">Temperature</mat-option>
         <mat-option value="heartrate">Heart Rate</mat-option>
         <mat-option value="signals">Signal Frequency</mat-option>

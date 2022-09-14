@@ -1,15 +1,24 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { DeviceNotifierService } from '@master/client/shared-services';
 import { string } from '@tensorflow/tfjs-node';
 @Component({
   selector: 'master-sensor-activity',
   templateUrl: './sensor-activity.component.html',
   styleUrls: ['./sensor-activity.component.scss'],
 })
-export class SensorActivityComponent {
+export class SensorActivityComponent{
 
+  private sensorEUI="";
+  @Input()
+  public get SensorEUI() : string {
+    return this.sensorEUI;
+  }
+  public set SensorEUI(v : string) {
+    this.sensorEUI = v;
+  }
 
-  constructor() {
+  constructor(private notifier:DeviceNotifierService) {
   
   }
 
@@ -117,4 +126,13 @@ export class SensorActivityComponent {
       "name": new Date("2020-05-22"),
     },
   ]}];  
+
+
+  getData(deveui:string){
+    
+  }
+
+  ChangeData(event:any){
+
+  }
 }

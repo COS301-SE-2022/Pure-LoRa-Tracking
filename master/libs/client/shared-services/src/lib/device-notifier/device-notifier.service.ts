@@ -1,5 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, Timestamp } from 'rxjs';
+import { StartEndTimestamps } from '@master/shared-interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,22 @@ export class DeviceNotifierService {
   public LocatedGateway:Subject<string>=new Subject<string>();
   public ResetSensor:EventEmitter<void>=new EventEmitter();
   public Pantomap:EventEmitter<void>=new EventEmitter();
+  public StartEndTimestamps:BehaviorSubject<StartEndTimestamps>=new BehaviorSubject<StartEndTimestamps>({
+    startTime:0,
+    endTime:0
+  })
+
+  getTimeStampsValue():StartEndTimestamps{
+    return this.StartEndTimestamps.getValue();
+  }
+
+  getTimeStamps():Observable<StartEndTimestamps>{
+    return this.StartEndTimestamps.asObservable();
+  }
+
+  setStartEndTime(newtimes:StartEndTimestamps):void{
+    this.StartEndTimestamps.next(newtimes);
+  }
 
   getSensorDeleted():Observable<string>{
     return this.SensorDeleted.asObservable();
