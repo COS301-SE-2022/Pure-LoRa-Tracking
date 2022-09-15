@@ -1,7 +1,7 @@
 import { LocationModule } from '@lora/location';
 import { ThingsboardThingsboardClientModule } from '@lora/thingsboard-client';
 import { Test } from '@nestjs/testing';
-import { AiParticleFilterService, particleFilterStratifiedService } from './ai-particle-filter.service';
+import { AiParticleFilterService, particleFilterMultinomialService, particleFilterStratifiedService } from './ai-particle-filter.service';
 
 describe('AiParticleFilterService', () => {
   let service: AiParticleFilterService;
@@ -53,18 +53,51 @@ describe('AiParticleFilterService', () => {
   it('should obtain the cumulative weights array', () => {
     service.normalizeWeights();
     const cumulativeWeightsArr  = service.cumulativeWeights();
+    //console.table(cumulativeWeightsArr);
     expect(Math.round(cumulativeWeightsArr[cumulativeWeightsArr.length - 1])).toEqual(1);
   })
 
-  it('should compute and return degeneracy', () => {
+  /*it('should compute and return degeneracy', () => {
     service.normalizeWeights();
     expect(Math.round(service.computeDegeneracy())).toEqual(100);
+  })*/
+});
+
+/**************************************************************/
+
+describe('Live Particle filter test', () => {
+  let service: AiParticleFilterService;
+  let stratifiedService : particleFilterStratifiedService;
+  let multinomialService : particleFilterMultinomialService;
+
+  beforeAll(async () => {
+    const module = await Test.createTestingModule({
+      imports: [LocationModule, ThingsboardThingsboardClientModule],
+      providers: [AiParticleFilterService, particleFilterStratifiedService, particleFilterMultinomialService],
+    }).compile();
+
+    service = module.get(AiParticleFilterService);
+    stratifiedService = module.get(particleFilterStratifiedService);
+    multinomialService = module.get(particleFilterMultinomialService);
+
+    service.configureInitialParameters(initialParameters);
+    stratifiedService.configureInitialParameters(initialParameters);
+    multinomialService.configureInitialParameters(initialParameters);
+
+  });
+
+  it('particle filtration', async()=> {
+    const results = []
+    for (let i = 0; i < sensorSet.length; i++) {
+      results.push(await multinomialService.particleFilter(sensorSet[i]))
+    }
+    multinomialService.printGeoJSONPoints(results)
   })
 });
 
 
 const initialParameters = {
-  numberOfSamples : 100,
+  numberOfSamples : 250,
   reservePolygon: [
     {
       longitude: 28.25060248374939,
@@ -111,6 +144,53 @@ const initialParameters = {
     }
   ]
 }
+
+const sensorSet = [
+  {
+    longitude : 28.250248432159424,
+    latitude: -25.749390846626067
+  },
+  {
+    longitude :  28.24955105781555,
+    latitude:-25.749313538654487
+  },
+  {
+    longitude : 28.248800039291382,
+    latitude:-25.749265221146686
+  },
+  {
+    longitude :  28.24913263320923,
+    latitude:-25.749004306265018
+  },
+  {
+    longitude : 28.249422311782837,
+    latitude:-25.748704736620095
+  },
+  {
+    longitude : 28.249701261520386,
+    latitude:-25.74850180191528
+  },
+  {
+    longitude :  28.25006604194641,
+    latitude:-25.748695073070593
+  },
+  {
+    longitude :  28.250291347503662,
+    latitude:-25.74901396978938
+  },
+  {
+    longitude : 28.24986219406128,
+    latitude:-25.74901396978938
+  },
+  {
+    longitude :  28.249958753585815,
+    latitude:-25.749158922560373
+  },
+  {
+    longitude :  28.249980211257935,
+    latitude:-25.749487481519804
+  }
+]
 
 const weights: number[] = [0.03634106204886277, 0.005515475139030194, 0.008582752156113087, 0.004658745318495412, 0.009450831238740288, 0.005941863796791885, 0.02939547007304125, 0.009973897678295752, 0.015641957849871407, 0.00977756853679488, 0.018089061638156333, 0.01363210390361345, 0.015123647152721787, 0.009045249470687992, 0.011263275162486713, 0.005067353400634089, 0.012203452535964287, 0.006528463507162151, 0.010495745633367769, 0.003774810609935363, 0.005413837784288387, 0.008555989225346504, 0.005369232286752611, 0.012444011874070035, 0.004851918717281434, 0.022619659252413247, 0.009651621661657443, 0.0058706526125281095, 0.003980376626551637, 0.005947379405903262, 0.013563881648225539, 0.01800924488419992, 0.007789416118953211, 0.005715056149454826, 0.006962525791657474, 0.010712832728587534, 0.028299488183101955, 0.011468269958122662, 0.015487556698275692, 0.00499157432233123, 0.008561602511523929, 0.006597461262417016, 0.004094048427566158, 0.007917432158684363, 0.01336652677276983, 0.012125052773743872, 0.007729755300058014, 0.003312453894317452, 0.010583489207603443, 0.0071189497539411485, 0.006716944334416466, 0.004036255560115604, 0.006026875575480949, 0.04438685315105735, 0.00603400153107056, 0.014990490139163737, 0.022256956405599406, 0.010436754118076878, 0.0030574200384097684, 0.011183693948461505, 0.011894020244262775, 0.007919849666815179, 0.007007687184202172, 0.009951479429634024, 0.003369335688558055, 0.010879933111763707, 0.007850223243745322, 0.0048468234999735, 0.009231372384838808, 0.006732089324335536, 0.007873258839020143, 0.009583937018569235, 0.007693071257334929, 0.0043631240305504635, 0.012056823988203636, 0.015943814828202247, 0.007601514046897373, 0.006091185251073935, 0.005284042496990808, 0.004561513869741089, 0.010915279805296675, 0.007910957158640736, 0.0037598257755845246, 0.020979863072781758, 0.005415145513916795, 0.013979117489202261, 0.01025424767819997, 0.0191125602910837, 0.006277476821668242, 0.0041004805931501515, 0.005441146061692569, 0.005146147600998058, 0.015752611582766102, 0.005315197139279285, 0.007702615540631238, 0.011470195716329918, 0.009063837995618329, 0.007370519780686548, 0.004239125547304626, 0.006318219785508573];
 
