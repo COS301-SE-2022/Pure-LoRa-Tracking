@@ -86,13 +86,13 @@ describe('Live Particle filter test', () => {
 
   });
 
-  it('particle filtration', async()=> {
+  /*it('particle filtration', async()=> {
     const results = []
     for (let i = 0; i < sensorSet.length; i++) {
       results.push(await multinomialService.particleFilter(sensorSet[i]))
     }
     multinomialService.printGeoJSONPoints(results)
-  })
+  })*/
 });
 
 
