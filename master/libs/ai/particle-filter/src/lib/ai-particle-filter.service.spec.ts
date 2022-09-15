@@ -39,6 +39,10 @@ describe('AiParticleFilterService', () => {
   it('should calculate the Euclidiean weight distance between two coordinates', () => {
     expect(service.weightDistanceEuclidean([0.03634106204886277], [0.009450831238740288])).toEqual(37.188226722976395);
   })
+
+  it('should calculate the weights measured relative to a sensor', () => {
+    expect(service.weightsMeasuredRelativeToOriginal(ExamplePoints[0]).length).toEqual(initialParameters.numberOfSamples);
+  })
 });
 
 
