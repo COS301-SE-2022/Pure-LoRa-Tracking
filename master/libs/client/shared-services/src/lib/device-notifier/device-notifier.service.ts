@@ -34,7 +34,7 @@ export class DeviceNotifierService {
   }
 
   isTimeSet():boolean{
-    return this.StartEndTimestamps.getValue().startTime==0 && this.StartEndTimestamps.getValue().endTime==0;
+    return !(this.StartEndTimestamps.getValue().startTime==0 && this.StartEndTimestamps.getValue().endTime==0);
   }
 
   resetTime():void{
