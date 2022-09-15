@@ -119,7 +119,18 @@ export class AiParticleFilterService {
     please be thorough, this method is crucial
     */
     weightsMeasuredRelativeToOriginal(originalPoint: number[]): number[] {
-        return null;
+        const n = this.particles.length;
+        delete this.weights;
+        this.weights = new Array<number>()
+
+        for (let i = 0; i < n; i++){
+            const randomParticlesToCompare = [];
+            for (let j = 0; j < this.gatewayLocations.length; j++){
+                randomParticlesToCompare.push(this.distanceBetweenCoords([this.particles[i][0], this.particles[i][1]], this.gatewayLocations[j]));
+            }
+            this.weights.push(this.weightDistanceEuclidean(originalPoint, randomParticlesToCompare));
+        }
+        return this.weights;
     }
 
     /*
