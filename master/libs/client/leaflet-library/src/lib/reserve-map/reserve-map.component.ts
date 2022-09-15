@@ -11,19 +11,7 @@ import { antPath } from "leaflet-ant-path"
 import { DeviceNotifierService } from '@master/client/shared-services';
 import { SnackbarAlertComponent } from '@master/client/shared-ui/components-ui';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { icon, Marker } from 'leaflet';
-//this fixes the marker shadow issue
-const iconDefault = icon({
-  iconRetinaUrl:'assets/marker-icon-2x.png',
-  iconUrl:'assets/marker-icon.png',
-  shadowUrl:'assets/marker-shadow.png',
-  iconSize: [25, 41],
-  tooltipAnchor: [16, -26],
-  popupAnchor: [1, -50],
-  iconAnchor: [10, 40],
-  shadowSize: [31, 31]
-});
-Marker.prototype.options.icon = iconDefault;
+import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css';
 
 @Component({
   selector: 'master-reserve-map',
