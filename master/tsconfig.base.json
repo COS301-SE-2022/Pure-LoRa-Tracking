@@ -40,6 +40,7 @@
         "libs/chirpstack/chirpstack-sensor/src/index.ts"
       ],
       "@lora/database": ["libs/database-proxy/src/index.ts"],
+      "@lora/db-proxy": ["libs/database/db-proxy/src/index.ts"],
       "@lora/device-endpoint": ["libs/api/device-endpoint/src/index.ts"],
       "@lora/hardware-grpc": ["libs/api/hardware-grpc/src/index.ts"],
       "@lora/location": ["libs/location/src/index.ts"],
@@ -50,6 +51,7 @@
       "@lora/processing/api/router": [
         "libs/processing-api/router/src/index.ts"
       ],
+      "@lora/serviceBus": ["libs/service-bus/src/index.ts"],
       "@lora/thingsboard-asset": [
         "libs/thingsboard/thingsboard-asset/src/index.ts"
       ],
@@ -143,7 +145,8 @@
       "@master/middleware/cookie-management": [
         "libs/middleware/cookie-management/src/index.ts"
       ],
-      "@master/shared-interfaces": ["libs/shared-interfaces/src/index.ts"]
+      "@master/shared-interfaces": ["libs/shared-interfaces/src/index.ts"],
+      "@processing/bus": ["libs/processing-api/processing-bus/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
