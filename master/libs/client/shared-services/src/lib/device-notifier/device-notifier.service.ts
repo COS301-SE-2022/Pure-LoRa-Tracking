@@ -33,6 +33,17 @@ export class DeviceNotifierService {
     this.StartEndTimestamps.next(newtimes);
   }
 
+  isTimeSet():boolean{
+    return this.StartEndTimestamps.getValue().startTime==0 && this.StartEndTimestamps.getValue().endTime==0;
+  }
+
+  resetTime():void{
+    this.StartEndTimestamps.next({
+      startTime:0,
+      endTime:0
+    });
+  }
+
   getSensorDeleted():Observable<string>{
     return this.SensorDeleted.asObservable();
   }
