@@ -49,13 +49,13 @@ export class SensorActivityComponent{
   constructor(private notifier:DeviceNotifierService) {
     //make api call
     this.sensordata=this.GETDATATEMP();
-
+    //set first
     if(this.sensordata.length>0&&this.sensordata[0].data!=undefined){
-      this.currentbardata=this.sensordata[0].data;
-      this.currentlinedata={
-        name:this.sensordata[0].graphname,
-        series:this.sensordata[0].data
-      }
+      // this.currentbardata=this.sensordata[0].data;
+      // this.currentlinedata={
+      //   name:this.sensordata[0].graphname,
+      //   series:this.sensordata[0].data
+      // }
     }
 
   }
@@ -75,7 +75,7 @@ export class SensorActivityComponent{
   showYAxisLabel = true;
   showXAxisLabel = true;
   xAxisLabel = 'Date';
-  yAxisLabel = 'Beats Per Minute (bpm)';
+  yAxisLabel = '';
   timeline = true;
   yScaleMin = 0;
   
@@ -89,6 +89,15 @@ export class SensorActivityComponent{
 
   ChangeData(event:any){
     console.log(event.value);
+    const curr=this.sensordata.find(x=>x.graphname==event.value);
+    if(curr!=undefined){
+      this.yAxisLabel=curr.graphname;
+      this.currentbardata=curr.data;
+      this.currentlinedata={
+        name:curr.graphname,
+        series:curr.data
+      }
+    }
   }
 
 
