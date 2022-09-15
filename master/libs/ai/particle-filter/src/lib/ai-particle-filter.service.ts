@@ -126,7 +126,7 @@ export class AiParticleFilterService {
             for (let j = 0; j < this.gatewayLocations.length; j++){
                 randomParticlesToCompare.push(this.distanceBetweenCoords([this.particles[i][0], this.particles[i][1]], this.gatewayLocations[j]));
             }
-            this.weights.push(this.weightDistanceEuclidean(originalPoint, randomParticlesToCompare));
+            this.weights[i] = this.weightDistanceEuclidean(originalPoint, randomParticlesToCompare);
         }
         return this.weights;
     }
