@@ -43,6 +43,12 @@ describe('AiParticleFilterService', () => {
   it('should calculate the weights measured relative to a sensor', () => {
     expect(service.weightsMeasuredRelativeToOriginal(ExamplePoints[0]).length).toEqual(initialParameters.numberOfSamples);
   })
+
+  it('should normalize weights', () => {
+    const weights = service.normalizeWeights();
+    const sum  = Math.round(weights.reduce((cumulative, a) => cumulative + a, 0));
+    expect(sum).toEqual(1);
+  })
 });
 
 
