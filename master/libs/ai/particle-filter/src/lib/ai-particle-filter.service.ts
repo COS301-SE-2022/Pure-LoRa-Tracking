@@ -223,7 +223,14 @@ export class AiParticleFilterService {
     see python
     */
     computeDegeneracy(): number {
-        return null;
+        let nEffective = 0;
+        const n = this.weights.length;
+        
+        for (let i = 0; i < n; i++){
+            nEffective += this.weights[i]**2;
+        }
+        
+        return 1 / nEffective;
     }
 
     resampleParticles?(howMany?: number) {
