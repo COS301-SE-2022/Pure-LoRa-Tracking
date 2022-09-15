@@ -70,11 +70,6 @@ export class AiParticleFilterService {
         console.log(sline)
     }
 
-    /* 
-    TODO Teddy 
-    See python code for method, final distance should be in meters
-    write code here for 1-2 commits, write test for 1 commit
-    */
     distanceBetweenCoords(pointOne: [number, number], pointTwo: [number, number]): number {
         const p = 0.017453292519943295;
         const a = 0.5 - Math.cos((pointTwo[0] - pointOne[0]) * p) / 2 + Math.cos(pointOne[0] * p) 
@@ -113,11 +108,6 @@ export class AiParticleFilterService {
         return newPoints;
     }
 
-
-    /*
-    TODO Teddy
-    please be thorough, this method is crucial
-    */
     weightsMeasuredRelativeToOriginal(originalPoint: number[]): number[] {
         const n = this.particles.length;
 
@@ -131,13 +121,6 @@ export class AiParticleFilterService {
         return this.weights;
     }
 
-    /*
-    TODO Teddy
-    This is going to form part of the template for the particle filter
-    This method gives 1 / euclidean distance
-    See weight distance euclidean in python
-    default
-    */
     weightDistanceEuclidean?(OriginalPoint: number[], RandomParticle: number[]): number {
         let sums = 0;
         
@@ -154,10 +137,6 @@ export class AiParticleFilterService {
         return 1 / divisor;
     }
 
-    /* 
-    TODO Teddy
-    Make the weights array add up to one by dividing each entry by the total of the array
-    */
     normalizeWeights() {
         const n = this.weights.length;
         const sum = this.weights.reduce((cumulative, a) => cumulative + a, 0);
@@ -167,11 +146,6 @@ export class AiParticleFilterService {
         return this.weights;
     }
 
-    /*
-    TODO Teddy
-    Cumulative sum of normalized weights i.e. index i = the sum of indexes 0..i of normalized weights
-    the last index should be 1 or approximately 1
-    */ 
     cumulativeWeights() : number[] {
         let cumulativeWeightArray = [], weightShadowArray = [];
         
@@ -215,13 +189,6 @@ export class AiParticleFilterService {
         return this.particles[this.weights.indexOf(Math.max(...this.weights))];
     }
 
-
-    /*
-    TODO Teddy
-    compute degeneracy, 
-    1 / var(W) == 1 / sum of (each weight squared)
-    see python
-    */
     computeDegeneracy(): number {
         let nEffective = 0;
         const n = this.weights.length;
