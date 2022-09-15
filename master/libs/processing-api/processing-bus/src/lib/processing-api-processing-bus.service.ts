@@ -33,6 +33,10 @@ export class ProcessingApiProcessingBusService {
         this.database.updateDevicePerimeterName(body);
     }
 
+    async getDevicePerimeter(deviceID: string) {
+        this.database.getDevicePerimeter(deviceID);
+    }
+
     /* request delete device data from db service */
     async deleteDeviceData(data:{timestamp:number, deviceEUI:string}) {
         try {
