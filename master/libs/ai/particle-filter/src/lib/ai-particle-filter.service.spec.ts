@@ -49,6 +49,12 @@ describe('AiParticleFilterService', () => {
     const sum  = Math.round(weights.reduce((cumulative, a) => cumulative + a, 0));
     expect(sum).toEqual(1);
   })
+
+  it('should obtain the cumulative weights array', () => {
+    service.normalizeWeights();
+    const cumulativeWeightsArr  = service.cumulativeWeights();
+    expect(Math.round(cumulativeWeightsArr[cumulativeWeightsArr.length - 1])).toEqual(1);
+  })
 });
 
 
