@@ -173,7 +173,14 @@ export class AiParticleFilterService {
     the last index should be 1 or approximately 1
     */ 
     cumulativeWeights() : number[] {
-        return null;
+        let cumulativeWeightArray = [], weightShadowArray = [];
+        
+        for (let i = 0; i < this.weights.length; i++){
+            weightShadowArray.push(this.weights[i]);
+            cumulativeWeightArray.push(weightShadowArray.reduce((cumulative, a) => cumulative + a, 0));
+        }
+
+        return cumulativeWeightArray;
     }
     
     /*
