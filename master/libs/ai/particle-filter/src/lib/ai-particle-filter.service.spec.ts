@@ -55,6 +55,11 @@ describe('AiParticleFilterService', () => {
     const cumulativeWeightsArr  = service.cumulativeWeights();
     expect(Math.round(cumulativeWeightsArr[cumulativeWeightsArr.length - 1])).toEqual(1);
   })
+
+  it('should compute and return degeneracy', () => {
+    service.normalizeWeights();
+    expect(Math.round(service.computeDegeneracy())).toEqual(100);
+  })
 });
 
 
