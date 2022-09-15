@@ -120,8 +120,6 @@ export class AiParticleFilterService {
     */
     weightsMeasuredRelativeToOriginal(originalPoint: number[]): number[] {
         const n = this.particles.length;
-        delete this.weights;
-        this.weights = new Array<number>()
 
         for (let i = 0; i < n; i++){
             const randomParticlesToCompare = [];
@@ -161,9 +159,12 @@ export class AiParticleFilterService {
     Make the weights array add up to one by dividing each entry by the total of the array
     */
     normalizeWeights() {
-
-        // this.weights = normalized array 
-        return null;
+        const n = this.weights.length;
+        const sum = this.weights.reduce((cumulative, a) => cumulative + a, 0);
+        for(let i = 0; i < n; i++){
+            this.weights[i] = this.weights[i] / sum;
+        }
+        return this.weights;
     }
 
     /*
