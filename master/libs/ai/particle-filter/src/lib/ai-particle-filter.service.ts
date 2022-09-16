@@ -1,12 +1,15 @@
 import { AiProcessingStrategyService } from '@lora/ai/strategy';
 import { LocationService } from '@lora/location';
 import { Injectable } from '@nestjs/common';
+import { ProcessingApiProcessingBusService } from '@processing/bus';
 import randomPositionInPolygon = require('random-position-in-polygon');
 @Injectable()
 export class AiParticleFilterService extends AiProcessingStrategyService {
 
     async processData(data: any): Promise<boolean> {
         console.log("Particle filter strategy")
+        const result = await this.particleFilter(data.reading);
+        this.serviceBus.sendProcessedDatatoTB(data.deviceID, {result:{latitude:result[1], longitude:result[0]}, processingType:"pf"});
         return false;
     }
 
@@ -22,8 +25,8 @@ export class AiParticleFilterService extends AiProcessingStrategyService {
     private weights: number[];
 
 
-    constructor(public locationComputations: LocationService) {
-        super();
+    constructor(public locationComputations: LocationService, protected serviceBus : ProcessingApiProcessingBusService) {
+        super(serviceBus);
         this.reservePolygon = new Array<[number, number]>();
         this.gatewayLocations = new Array<[number, number]>();
         this.particles = new Array<number[]>();
@@ -294,8 +297,8 @@ export class AiParticleFilterService extends AiProcessingStrategyService {
 
 @Injectable()
 export class particleFilterStratifiedService extends AiParticleFilterService {
-    constructor(locationComputations: LocationService) {
-        super(locationComputations);
+    constructor(locationComputations: LocationService, protected serviceBus : ProcessingApiProcessingBusService) {
+        super(locationComputations, serviceBus);
     }
 
     // consider : https://github.com/stdlib-js/random-base-uniform
@@ -322,8 +325,8 @@ export class particleFilterStratifiedService extends AiParticleFilterService {
 
 @Injectable()
 export class particleFilterMultinomialService extends AiParticleFilterService {
-    constructor(locationComputations: LocationService) {
-        super(locationComputations);
+    constructor(locationComputations: LocationService, protected serviceBus : ProcessingApiProcessingBusService) {
+        super(locationComputations, serviceBus);
     }
 
     // consider : https://github.com/stdlib-js/random-base-uniform

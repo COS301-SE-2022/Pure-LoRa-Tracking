@@ -36,7 +36,7 @@ export class AppService {
     /* perform process */
     const resLatLong = await this.serviceBus.LocationServiceProcess(deviceData, deviceData.deviceEUI);
     await device.strategy.processData(deviceData.RSSI);
-    
+
 
     /* call next */
     next.next(true);
@@ -49,7 +49,7 @@ export class AppService {
     if (find == undefined) {
 
       // add device to processing list
-      device = { strategy: new particleFilterMultinomialService(this.serviceBus.locationService), deviceEUI: deviceData.deviceEUI };
+      device = { strategy: new particleFilterMultinomialService(this.serviceBus.locationService, this.serviceBus), deviceEUI: deviceData.deviceEUI };
       this.deviceProcessing.push(device);
 
       // get init parameters
