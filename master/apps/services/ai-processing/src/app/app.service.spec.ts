@@ -1,3 +1,5 @@
+import { AiProcessingStrategyModule } from '@lora/ai/strategy';
+import { LocationModule } from '@lora/location';
 import { Test } from '@nestjs/testing';
 import { ProcessingApiProcessingBusModule } from '@processing/bus';
 
@@ -8,7 +10,7 @@ describe('AppService', () => {
 
   beforeEach(async () => {
     const app = await Test.createTestingModule({
-      imports :[ProcessingApiProcessingBusModule],
+      imports :[ProcessingApiProcessingBusModule, AiProcessingStrategyModule, LocationModule],
       providers: [AppService],
     }).compile();
 

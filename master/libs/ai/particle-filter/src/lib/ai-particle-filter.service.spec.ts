@@ -1,3 +1,4 @@
+import { AiProcessingStrategyService } from '@lora/ai/strategy';
 import { LocationModule } from '@lora/location';
 import { ThingsboardThingsboardClientModule } from '@lora/thingsboard-client';
 import { Test } from '@nestjs/testing';
@@ -10,7 +11,7 @@ describe('AiParticleFilterService', () => {
   beforeEach(async () => {
     const module = await Test.createTestingModule({
       imports: [LocationModule, ThingsboardThingsboardClientModule],
-      providers: [AiParticleFilterService, particleFilterStratifiedService],
+      providers: [AiParticleFilterService, particleFilterStratifiedService, AiProcessingStrategyService],
     }).compile();
 
     service = module.get(AiParticleFilterService);

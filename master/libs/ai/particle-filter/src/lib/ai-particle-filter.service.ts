@@ -1,8 +1,14 @@
+import { AiProcessingStrategyService } from '@lora/ai/strategy';
 import { LocationService } from '@lora/location';
 import { Injectable } from '@nestjs/common';
 import randomPositionInPolygon = require('random-position-in-polygon');
 @Injectable()
-export class AiParticleFilterService {
+export class AiParticleFilterService extends AiProcessingStrategyService {
+
+    async processData(data: any): Promise<boolean> {
+        console.log("Particle filter strategy")
+        return false;
+    }
 
     /* considerations: 
         env file for config parameters? 
@@ -17,6 +23,7 @@ export class AiParticleFilterService {
 
 
     constructor(public locationComputations: LocationService) {
+        super();
         this.reservePolygon = new Array<[number, number]>();
         this.gatewayLocations = new Array<[number, number]>();
         this.particles = new Array<number[]>();

@@ -34,7 +34,7 @@ export class ProcessingApiProcessingBusService {
     }
 
     async getDevicePerimeter(deviceID: string) {
-        this.database.getDevicePerimeter(deviceID);
+        return this.database.getDevicePerimeter(deviceID);
     }
 
     /* request delete device data from db service */
