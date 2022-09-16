@@ -1,5 +1,5 @@
 import { particleFilterMultinomialService } from '@lora/ai/particle-filter';
-import { AiProcessingStrategyModule, AiProcessingStrategyService } from '@lora/ai/strategy';
+import { AiProcessingStrategyService } from '@lora/ai/strategy';
 import { LocationService } from '@lora/location';
 import { Injectable } from '@nestjs/common';
 import { ProcessingApiProcessingBusService } from '@processing/bus';
@@ -34,7 +34,7 @@ export class AppService {
     const device = await this.resolveDevice(deviceData);
 
     /* perform process */
-    const finished = await device.strategy.processData(deviceData.RSSI);
+    await device.strategy.processData(deviceData.RSSI);
 
     /* call next */
     next.next(true);

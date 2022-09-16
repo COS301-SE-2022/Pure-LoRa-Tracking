@@ -1,21 +1,60 @@
+import { AiProcessingStrategyService } from '@lora/ai/strategy';
 import { Injectable } from '@nestjs/common';
 import tf = require('@tensorflow/tfjs-node');
 
 @Injectable()
-export class AiHeatmapAverageService {
+export class AiHeatmapAverageService extends AiProcessingStrategyService {
   private EarthRadius = 6371;
   private model: tf.Sequential;
   private targetEpochs = 3;
+  private filePath: string;
+  private currentFive: {latitude:number, longitude:number}[];
 
   /*
         1) get model
         2) build dataset
         3) train
         4) store result
-    */
+  */
 
   constructor() {
+    super();
     this.buildModel();
+    this.filePath = ``;
+    this.currentFive = new Array<{latitude:number, longitude:number}>();
+  }
+
+  configureInitialParameters(initialParameters: {deviceID:string}) {
+      this.filePath = `file://libs/ai/Models/averaging/${initialParameters.deviceID}.json`;
+  }
+
+    /*
+    1) Load model by device name
+    2) Receive reading and push to rolling array
+    3) Normalize
+    4) Train
+    5) Predict
+    6) Denormalize
+    7) Send result to TB via bus
+  */
+  async processData(data:{deviceID:string, reading:{latitude:number, longitude:number}}) : Promise<boolean> {
+    //const isPrevModel = await this.loadModel(this.filePath);
+
+    this.currentFive.shift;
+    this.currentFive.push(data.reading);
+
+    const normalizedFive = this.normalizePoints(this.deconstructData(this.currentFive));
+    const normalizedReading = this.normalizePoints(this.deconstructData([data.reading]));
+    this.fitModel(normalizedFive, normalizedReading);
+    const result = this.deNormalizePoints(await this.predictData(normalizedReading));
+
+    //Send result to TB via bus.
+    
+    /*if (isPrevModel){
+      
+    }*/
+
+    return false;
   }
 
   normalizePoints(dataSet: number[]): number[] {
@@ -74,7 +113,7 @@ export class AiHeatmapAverageService {
 
   async fitModel(learningData, trueData) {
     await this.model.fit(
-      tf.tensor(learningData, [1, 20]),
+      tf.tensor(learningData, [1, 10]),
       tf.tensor(trueData, [1, 2]),
       {
         epochs: this.targetEpochs,
@@ -95,7 +134,7 @@ export class AiHeatmapAverageService {
     return this.deNormalizePoints(
       (
         (await (
-          this.model.predict(tf.tensor(inputData, [1, 20])) as tf.Tensor
+          this.model.predict(tf.tensor(inputData, [1, 10])) as tf.Tensor
         ).array()) as number[][]
       )[0]
     );
