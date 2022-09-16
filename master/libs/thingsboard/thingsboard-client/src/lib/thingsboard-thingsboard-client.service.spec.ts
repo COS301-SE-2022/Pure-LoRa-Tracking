@@ -492,6 +492,7 @@ it(' -> HTTP ERROR', async () => {
   });
   //////////////////////////////////////////////////////////////////////////////////////////
   it('device info -> login fail', async () => {
+    service.setToken("");
     expect(await service.getDeviceInfos()).toMatchObject({
       status: 'fail',
       explanation: 'token invalid',
