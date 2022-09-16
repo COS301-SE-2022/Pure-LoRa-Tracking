@@ -191,8 +191,6 @@ export class AiParticleFilterService {
                     .findIndex((v, i, s) => roll >= (i === 0 ? 0 : s[i - 1]) && roll < v)
             ]);
         }
-        //this.printGeoJSONPoints(points);
-        //this.printGeoJSONPoints(newPoints);
         this.particles = newPoints;
         return newPoints;
     };
