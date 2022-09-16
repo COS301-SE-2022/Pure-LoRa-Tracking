@@ -1,11 +1,12 @@
 import { DatabaseProxyService } from '@lora/database';
+import { LocationService } from '@lora/location';
 import { ThingsboardThingsboardClientService } from '@lora/thingsboard-client';
 import { Injectable, Logger } from '@nestjs/common';
 
 @Injectable()
 export class ProcessingApiProcessingBusService {
 
-    constructor(private database: DatabaseProxyService, private thingsboardClient: ThingsboardThingsboardClientService) { }
+    constructor(private database: DatabaseProxyService, private thingsboardClient: ThingsboardThingsboardClientService, public locationService: LocationService) { }
 
     /* forward to message queue for processing/splitting */
     async forwardChirpstackData(data: { timestamp: number, deviceEUI: string, data: string, eventtype: string }): Promise<boolean> {
@@ -48,7 +49,21 @@ export class ProcessingApiProcessingBusService {
         }
     }
 
-    async sendProcessedDatatoTB(accessToken:string, data: { result: { latitude: number, longitude: number }, processingType: string }) {
-        this.thingsboardClient.v1SendTelemetry(accessToken, {...data, timestamp: + new Date()});
+    async sendProcessedDatatoTB(accessToken: string, data: { result: { latitude: number, longitude: number }, processingType: string }) {
+        try {
+            this.thingsboardClient.v1SendTelemetry(accessToken, { ...data, timestamp: + new Date() });
+        } catch (error) {
+            Logger.log('TB Send Error');
+            Logger.log(error);
+        }
+    }
+
+    async LocationServiceProcess(data: any, deviceToken: string) {
+        try {
+            return this.locationService.calculateLocation(data, deviceToken);
+        } catch (error) {
+            Logger.log('Location Service Error');
+            Logger.log(error);
+        }
     }
 }

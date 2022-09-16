@@ -8,7 +8,7 @@ import { ProcessingApiProcessingBusService } from '@processing/bus';
 export class AppService {
   private deviceProcessing: { strategy: AiProcessingStrategyService, deviceEUI: string }[];
 
-  constructor(private serviceBus: ProcessingApiProcessingBusService, private locationComputations: LocationService) {
+  constructor(private serviceBus: ProcessingApiProcessingBusService) {
     this.deviceProcessing = new Array<{ strategy: AiProcessingStrategyService, deviceEUI: string }>();
   };
 
@@ -34,7 +34,9 @@ export class AppService {
     const device = await this.resolveDevice(deviceData);
 
     /* perform process */
+    const resLatLong = await this.serviceBus.LocationServiceProcess(deviceData, deviceData.deviceEUI);
     await device.strategy.processData(deviceData.RSSI);
+    
 
     /* call next */
     next.next(true);
@@ -47,7 +49,7 @@ export class AppService {
     if (find == undefined) {
 
       // add device to processing list
-      device = { strategy: new particleFilterMultinomialService(this.locationComputations), deviceEUI: deviceData.deviceEUI };
+      device = { strategy: new particleFilterMultinomialService(this.serviceBus.locationService), deviceEUI: deviceData.deviceEUI };
       this.deviceProcessing.push(device);
 
       // get init parameters

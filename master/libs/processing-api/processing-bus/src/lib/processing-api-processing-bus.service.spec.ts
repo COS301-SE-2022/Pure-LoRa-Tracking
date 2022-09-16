@@ -1,4 +1,5 @@
 import { DatabaseProxyModule } from '@lora/database';
+import { LocationModule } from '@lora/location';
 import { ThingsboardThingsboardClientModule } from '@lora/thingsboard-client';
 import { Test } from '@nestjs/testing';
 import { ProcessingApiProcessingBusService } from './processing-api-processing-bus.service';
@@ -8,7 +9,7 @@ describe('ProcessingApiProcessingBusService', () => {
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      imports :[DatabaseProxyModule, ThingsboardThingsboardClientModule],
+      imports :[DatabaseProxyModule, ThingsboardThingsboardClientModule, LocationModule],
       providers: [ProcessingApiProcessingBusService],
     }).compile();
 
