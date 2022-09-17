@@ -40,8 +40,13 @@ export class AiHeatmapAverageService extends AiProcessingStrategyService {
   async processData(data:{deviceID:string, reading:{latitude:number, longitude:number}}) : Promise<boolean> {
     //const isPrevModel = await this.loadModel(this.filePath);
 
-    this.currentFive.shift;
+    if(this.currentFive.length > 5)
+      this.currentFive.shift;
+    
     this.currentFive.push(data.reading);
+
+    if(this.currentFive.length == 5)
+    return false;
 
     const normalizedFive = this.normalizePoints(this.deconstructData(this.currentFive));
     const normalizedReading = this.normalizePoints(this.deconstructData([data.reading]));
