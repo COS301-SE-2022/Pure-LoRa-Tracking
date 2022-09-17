@@ -46,17 +46,17 @@ export class DeviceAddComponent implements OnInit {
       eui: ['', Validators.required],
       deviceProfile: ['', Validators.required],
       
-      devAddr: ['', Validators.required],
-      nwkSkey: ['', Validators.required],
+      devAddr: [''],
+      nwkSkey: [''],
 
-      nwkSEncKey: ['', Validators.required],
-      sNwkSIntKey: ['', Validators.required],
-      fNwkSIntKey: ['', Validators.required],
+      nwkSEncKey: [''],
+      sNwkSIntKey: [''],
+      fNwkSIntKey: [''],
 
-      appSkey: ['', Validators.required],      
+      appSkey: [''],      
 
-      nwkKey: ['', Validators.required],     
-      appKey: ['', Validators.required],
+      nwkKey: [''],     
+      appKey: [''],
     })
 
     this.http.post("/api/user/admin/groups",{
@@ -150,22 +150,57 @@ export class DeviceAddComponent implements OnInit {
     this.lora1_0 = false;
     this.lora1_1 = false;
     
-    if (obj?.isOTAA) {
-      this.isABP = false;
-    }
-    else this.isABP = true;
-    // this.lora1_0 = (obj?.macVerion.startsWith("1.0")
-    if (obj?.macVerion.startsWith("1.0")) 
+    this.sensorGroup.controls['appKey'].clearValidators();
+    this.sensorGroup.controls['nwkKey'].clearValidators();
+    this.sensorGroup.controls['devAddr'].clearValidators();
+    this.sensorGroup.controls['appSkey'].clearValidators();
+    this.sensorGroup.controls['nwkSkey'].clearValidators();
+    this.sensorGroup.controls['nwkSEncKey'].clearValidators();
+    this.sensorGroup.controls['sNwkSIntKey'].clearValidators();
+    this.sensorGroup.controls['fNwkSIntKey'].clearValidators();
+
+
+    if (obj?.macVerion.startsWith("1.0"))
       this.lora1_0 = true;
-    else 
+    else
       this.lora1_0 = false;
 
-    if (obj?.macVerion.startsWith("1.1")) 
+    if (obj?.macVerion.startsWith("1.1"))
       this.lora1_1 = true;
-    else 
+    else
       this.lora1_1 = false;
+
+    if (obj?.isOTAA) {
+      this.isABP = false;
+      this.sensorGroup.controls['appKey'].setValidators([Validators.required]);
+      
+      if (this.lora1_1) {
+        this.sensorGroup.controls['nwkKey'].setValidators([Validators.required]);
+      }
+    } else {
+      this.isABP = true;
+
+      this.sensorGroup.controls['devAddr'].setValidators([Validators.required]);
+      this.sensorGroup.controls['appSkey'].setValidators([Validators.required]);
+      if (this.lora1_0) {
+        this.sensorGroup.controls['nwkSkey'].setValidators([Validators.required]);
+      }
+
+      if (this.lora1_1) {
+        this.sensorGroup.controls['nwkSEncKey'].setValidators([Validators.required]);
+        this.sensorGroup.controls['sNwkSIntKey'].setValidators([Validators.required]);
+        this.sensorGroup.controls['fNwkSIntKey'].setValidators([Validators.required]);
+      }
+    }
     
-    // this.descriptionGroup.get("profilegroup")
+    this.sensorGroup.controls['appKey'].updateValueAndValidity();
+    this.sensorGroup.controls['nwkKey'].updateValueAndValidity();
+    this.sensorGroup.controls['devAddr'].updateValueAndValidity();
+    this.sensorGroup.controls['appSkey'].updateValueAndValidity();
+    this.sensorGroup.controls['nwkSkey'].updateValueAndValidity();
+    this.sensorGroup.controls['nwkSEncKey'].updateValueAndValidity();
+    this.sensorGroup.controls['sNwkSIntKey'].updateValueAndValidity();
+    this.sensorGroup.controls['fNwkSIntKey'].updateValueAndValidity();
   }
 
 }
