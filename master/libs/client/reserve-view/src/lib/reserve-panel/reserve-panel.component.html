@@ -1,11 +1,14 @@
 <mat-card color='$primary' *ngIf="openSensor === false">
     <mat-card-header class="headerText">
         <mat-card-title >
-            <mat-select [(value)]="selectedReserve" (selectionChange)="reserveChanged()">
-                <mat-option [value]="option.id" *ngFor="let option of reserveList">
-                    {{option.name}}
-                </mat-option>
-            </mat-select>
+            <mat-form-field class="reserve-select-field">
+                <mat-select [(value)]="selectedReserve" (selectionChange)="reserveChanged()" class="reserve-select">
+                    <mat-option [value]="option.id" *ngFor="let option of reserveList">
+                        {{option.name}}
+                    </mat-option>
+                </mat-select>
+                <mat-icon class="material-icons-outlined" matSuffix id="switchIcon">arrow_drop_down</mat-icon>
+            </mat-form-field>
         </mat-card-title>
     </mat-card-header>
     <mat-divider></mat-divider>
@@ -28,11 +31,14 @@
           <button id="addBtn" mat-raised-button routerLink="add">Add<mat-icon>add</mat-icon></button>
         </mat-action-list>
         
-    <mat-card-content id="card-content">
+    <mat-card-content id="card-content">  
         <cdk-virtual-scroll-viewport itemSize="0">
         <mat-selection-list dense #devicesList [multiple]="true" >
             <div *ngIf="deviceType==='sensors' || deviceType==='all' && Devices.length>0">
-                <mat-list-option *ngFor="let sensorItem of filteredSensors" [value]="sensorItem.deviceID" [style.background-color]="getSelectedStyle(sensorItem.deviceID)" (click)="selectedSensor(sensorItem.deviceID)" >
+                <mat-accordion class="device-list">
+                    <master-device-list-item *ngFor="let deviceItem of Devices" [device]="deviceItem" (openDeviceView)="viewSensor($event)" (locateDevice)="selectedSensor($event)" (itemExpanded)="selectedSensor(deviceItem.deviceID)"></master-device-list-item>
+                </mat-accordion> 
+                <!-- <mat-list-option *ngFor="let sensorItem of filteredSensors" [value]="sensorItem.deviceID" [style.background-color]="getSelectedStyle(sensorItem.deviceID)" (click)="selectedSensor(sensorItem.deviceID)" >
                     <mat-icon mat-list-icon>memory</mat-icon>
                     <div class="listItemWrap">
                         <div class="itemText">    
@@ -40,12 +46,11 @@
                             <div mat-line>id: {{sensorItem.deviceID}} </div>
                         </div>
                 
-                        <button mat-icon-button id="actionBtn" (click)="viewSensor(sensorItem.deviceID,sensorItem.deviceName)">
+                         <button mat-icon-button id="actionBtn" (click)="viewSensor(sensorItem.deviceID,sensorItem.deviceName)">
                             <mat-icon>chevron_right</mat-icon>
-                            <!-- <button mat-button>Delete sensor</button> -->
                         </button>
                     </div>
-                </mat-list-option>
+                </mat-list-option> -->
             </div>
             <div *ngIf="deviceType==='gateways' || deviceType==='all' && GateWays.length>0" >
                 <mat-list-option *ngFor="let gatewayItem of filteredGateways" [value]="gatewayItem.id" [style.background-color]="getSelectedStyle(gatewayItem.id)" (click)="selectedGateway(gatewayItem.id)">

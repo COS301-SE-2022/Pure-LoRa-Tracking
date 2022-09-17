@@ -9,7 +9,8 @@ export interface userLoginResponse {
     token?: string,
     refreshToken?: string,
     userID?: string,
-    reserveID?: string
+    reserveID?: string,
+    reserves? : {reserveName:string, reserveID:string}[]
 }
 
 export interface refreshTokenLogin{

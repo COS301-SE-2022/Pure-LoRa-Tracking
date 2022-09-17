@@ -4,6 +4,8 @@ import { AddGatewayDevice, AddSensorDevice } from '@master/shared-interfaces';
 import {TokenManagerService} from "@master/client/user-storage-controller"
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {deviceOptionList} from "@master/shared-interfaces"
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { SnackbarAlertComponent } from '@master/client/shared-ui/components-ui';
 @Component({
   selector: 'master-add-device',
   templateUrl: './device-add.component.html',
@@ -20,8 +22,7 @@ export class DeviceAddComponent implements OnInit {
   profilelist:Array<deviceOptionList>=[];
   deviceprofilelist:Array<{id: string, name: string}>=[];
   deviceType = "";
-  token="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZlYWRtaW5AcmVzZXJ2ZS5jb20iLCJzY29wZXMiOlsiVEVOQU5UX0FETUlOIl0sInVzZXJJZCI6ImQ2MzcyZTMwLWRmZTgtMTFlYy1iZGIzLTc1MGNlN2VkMjQ1MSIsImVuYWJsZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiJjZDJkZjJiMC1kZmU4LTExZWMtYmRiMy03NTBjZTdlZDI0NTEiLCJjdXN0b21lcklkIjoiMTM4MTQwMDAtMWRkMi0xMWIyLTgwODAtODA4MDgwODA4MDgwIiwiaXNzIjoidGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE2NTQ4MjM4MjAsImV4cCI6MTY1NDgzMjgyMH0.7znHjokdbaR-O77imOcuokkp5lJTN03QsowagHuUvVD7vE8gzVuaFSb62GnLIOJIK2UtbfuZ70h7El9jabs-Xw"
-  constructor(private _formBuilder: FormBuilder,private http:HttpClient,private tokenmanager:TokenManagerService) {}
+  constructor(private _formBuilder: FormBuilder,private http:HttpClient,private tokenmanager:TokenManagerService,private snackbar:MatSnackBar) {}
 
   ngOnInit(): void {
     this.typeGroup = this._formBuilder.group({
@@ -45,11 +46,10 @@ export class DeviceAddComponent implements OnInit {
     })
 
     this.http.post("/api/user/admin/groups",{
-      "token":this.token
     }).subscribe((val:any)=>{
       console.log(val);
       if(val.status==200){
-        val.data.forEach((curr:any)=>{
+        val.data.data.forEach((curr:any)=>{
           this.profilelist.push({
             deviceID:curr.id.id,
             name:curr.title
@@ -58,7 +58,7 @@ export class DeviceAddComponent implements OnInit {
       }
     })
 
-    this.http.post("api/device/sensor/info/profiles",{}).subscribe((val:any)=>{
+    this.http.post("api/device/admin/sensor/info/profiles",{}).subscribe((val:any)=>{
       this.deviceprofilelist = val.data as Array<{id: string, name: string}>;
     })
   }
@@ -70,8 +70,7 @@ export class DeviceAddComponent implements OnInit {
         hardwareName:this.sensorGroup.get("eui")?.value,
         labelName:this.descriptionGroup.get("name")?.value,
       } as AddSensorDevice
-      this.http.post("api/device/add/sensor",{
-        token:this.token,
+      this.http.post("api/device/admin/add/sensor",{
         customerID:this.descriptionGroup.get("profilegroup")?.value,
         hardwareName:this.sensorGroup.get("eui")?.value,
         labelName:this.descriptionGroup.get("name")?.value,
@@ -86,8 +85,7 @@ export class DeviceAddComponent implements OnInit {
         hardwareName:this.gatewayGroup.get("gatewayid")?.value,
         labelName:this.descriptionGroup.get("name")?.value,
       } as AddGatewayDevice
-      this.http.post("api/device/add/gateway",{
-        token:this.token,
+      this.http.post("api/device/admin/add/gateway",{
         customerID:this.descriptionGroup.get("profilegroup")?.value,
         hardwareName:this.gatewayGroup.get("gatewayid")?.value,
         labelName:this.descriptionGroup.get("name")?.value,
@@ -95,15 +93,17 @@ export class DeviceAddComponent implements OnInit {
         console.log(val)
         if(val.status==200){
           console.log("test");
-          this.http.post("api/device/gateway/info/location/add",{
-            token:this.token,
-            deviceID:val.data,
+          this.http.post("api/device/admin/gateway/info/location/add",{
+            deviceID:val.data.data.id.id,
             locationParameters:{
               latitude: this.gatewayGroup.get("gatlang")?.value,
               longitude: this.gatewayGroup.get("gatlong")?.value,
             }
-          }).subscribe(curr=>{
+          }).subscribe((curr:any)=>{
             console.log(curr);
+            if(curr.explanation=="call finished"){
+              this.snackbar.openFromComponent(SnackbarAlertComponent,{duration: 5000, panelClass: ['green-snackbar'], data: {message:"Device Added", icon:"check_circle"}});
+            }
           })
         }
 

@@ -1,0 +1,45 @@
+{
+  "sourceRoot": "libs/ai/mock-generator/triangulation/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/ai/mock-generator/triangulation",
+        "tsConfig": "libs/ai/mock-generator/triangulation/tsconfig.lib.json",
+        "packageJson": "libs/ai/mock-generator/triangulation/package.json",
+        "main": "libs/ai/mock-generator/triangulation/src/index.ts",
+        "assets": ["libs/ai/mock-generator/triangulation/*.md"]
+      }
+    },
+    "publish": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "node tools/scripts/publish.mjs ai-mock-generator-triangulation {args.ver} {args.tag}"
+      },
+      "dependsOn": [
+        {
+          "projects": "self",
+          "target": "build"
+        }
+      ]
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/ai/mock-generator/triangulation/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/ai/mock-generator/triangulation"],
+      "options": {
+        "jestConfig": "libs/ai/mock-generator/triangulation/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

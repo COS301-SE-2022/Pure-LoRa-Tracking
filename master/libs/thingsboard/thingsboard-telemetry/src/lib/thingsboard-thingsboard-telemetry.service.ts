@@ -13,7 +13,7 @@ export class ThingsboardThingsboardTelemetryService {
   setToken(token: string): void {
     this.headersReq = {
       'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + this.token,
+      Authorization: 'Bearer ' + token,
     };
   }
 
@@ -187,9 +187,9 @@ export class ThingsboardThingsboardTelemetryService {
         this.ThingsBoardURL + '/v1/' + accessToken + '/telemetry',
         {
           timestamp: +new Date(),
-          DeviceData: TelemetryJSON,
+          ...TelemetryJSON
         },
-        { headers: this.headersReq }
+        { }
       )
     ).catch((error) => {
       if (error.response == undefined) return { status: 500 };

@@ -33,7 +33,7 @@ export class ThingsboardThingsboardTestsService {
     "firstName": "John",
     "lastName": "Doe",
     "additionalInfo": {
-      "reserves":["1"]
+      "reserves":[{"reserveName":"reserve","reserveID":"1"}]
     }
   }
 
@@ -78,7 +78,7 @@ export class ThingsboardThingsboardTestsService {
     "authority": "SYS_ADMIN",
     "firstName": "John",
     "lastName": "Doe",
-    "additionalInfo": {}
+    "additionalInfo": {reserves:[]}
   }
 
   UsersExample = {
@@ -208,7 +208,7 @@ export class ThingsboardThingsboardTestsService {
         zip: '10004',
         phone: '+1(415)777-7777',
         email: 'example@company.com',
-        additionalInfo: {reserves:[]},
+        additionalInfo: {reserves:[{tenantID:"123", reserveID:"aws", reserveName:"losdj"}]},
         tenantProfileName: 'Default',
       },
     ],
@@ -304,7 +304,7 @@ export class ThingsboardThingsboardTestsService {
           "entityType": "TENANT"
         },
         "customerId": {
-          "id": "784f394c-42b6-435a-983c-b7beff2784f9",
+          "id": "13814000-1dd2-11b2-8080-808080808080",
           "entityType": "CUSTOMER"
         },
         "name": "A4B72CCDFF33",
@@ -470,8 +470,13 @@ export class ThingsboardThingsboardTestsService {
       latitude : [{value:3, ts:22}, {value:4, ts:22}],
   }
 
-  DeviceAttributeExample = {
+  /*DeviceAttributeExample = {
     "result": {latitude:-22,longitude:-23},
+    "setOrExpired": true
+  }*/
+
+  DeviceAttributeExample = {
+    "data": [{latitude:-22,longitude:-23}],
     "setOrExpired": true
   }
 

@@ -158,7 +158,7 @@ export class ThingsboardThingsboardUserService {
       Authorization: 'Bearer ' + token,
     };
     const resp = await firstValueFrom(
-      this.httpService.get(this.ThingsBoardURL + '/auth/user/' + userID, {
+      this.httpService.get(this.ThingsBoardURL + '/user/' + userID, {
         headers: headersReq,
       })
     ).catch((error) => {
@@ -227,7 +227,7 @@ export class ThingsboardThingsboardUserService {
     authority: 'TENANT_ADMIN' | 'CUSTOMER_USER',
     firstName: string,
     lastName: string,
-    reserves: string[]
+    reserves: {reserveName:string, reserveID:string}[]
   ): Promise<UserResponse> {
     const headersReq = {
       'Content-Type': 'application/json',
@@ -287,7 +287,7 @@ export class ThingsboardThingsboardUserService {
     email: string,
     firstName: string,
     lastName: string,
-    reserves: string[]
+    reserves: {reserveName:string, reserveID:string}[]
   ): Promise<UserResponse> {
     const headersReq = {
       'Content-Type': 'application/json',
@@ -609,7 +609,7 @@ export interface UserResponse {
     firstName?: string;
     lastName?: string;
     additionalInfo?: {
-      reserves?: string[];
+      reserves?: {reserveName:string, reserveID:string}[];
     };
   };
   type?: string;

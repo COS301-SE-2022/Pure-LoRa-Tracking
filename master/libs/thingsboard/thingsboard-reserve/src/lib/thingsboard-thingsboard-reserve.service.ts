@@ -20,14 +20,14 @@ export class ThingsboardThingsboardReserveService {
     email: string,
     title: string,
     location?: {
-      location: {
-        latitude: number;
-        longitude: number;
+      features: {
+        type: string;
+        properties: any;
+        geometry: {
+          type: string;
+          coordinates: [number, number][][];
+        };
       }[];
-      center: {
-        latitude: number;
-        longitude: number;
-      };
     }
   ): Promise<CustomerInfoResponse> {
     const resp = await firstValueFrom(
@@ -122,10 +122,10 @@ export class ThingsboardThingsboardReserveService {
         this.httpService.post(
           this.ThingsBoardURL + "/customer",
           {
-            externalId: {
-              id : exID,
-              entityType: 'CUSTOMER'
-            },
+            // externalId: {
+            //   id : exID,
+            //   entityType: 'CUSTOMER'
+            // },
             id: {
               id: id,
               entityType: 'CUSTOMER',

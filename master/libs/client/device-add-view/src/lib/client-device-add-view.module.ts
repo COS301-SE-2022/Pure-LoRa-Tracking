@@ -7,11 +7,12 @@ import {ReactiveFormsModule } from '@angular/forms';
 import {FormsModule} from '@angular/forms';
 import { DeviceViewRoutingModule } from './device-add/device-add-routing.module';
 import {ClientSharedUiComponentsUiModule} from '@master/client/shared-ui/components-ui';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import {HttpClientModule} from "@angular/common/http"
 export const clientDeviceAddViewRoutes: Route[] = [];
 
 @NgModule({
-  imports: [CommonModule, RouterModule, ClientSharedUiMaterialUiModule,ReactiveFormsModule,DeviceViewRoutingModule,ClientSharedUiComponentsUiModule, FormsModule,HttpClientModule],
+  imports: [CommonModule, RouterModule, ClientSharedUiMaterialUiModule,ReactiveFormsModule,DeviceViewRoutingModule,ClientSharedUiComponentsUiModule, FormsModule,HttpClientModule,MatSnackBarModule],
   declarations: [DeviceAddComponent],
   exports: [DeviceAddComponent],
 })

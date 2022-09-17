@@ -11,10 +11,10 @@ export class ApiMapEndpointController {
     return "Map Reachable"
   }
 
-  @Post('latest')
+  /*@Post('latest')
   LatestRepsonse(@Body() content : MapApiLatest) : MapApiLatestResponse {
     return this.apiMapEndpointService.LatestProcess(content);
-  }
+  }*/
 
   @Post('reserve')
   async ReserveRepsonse(@Body() content : MapApiReserve) : Promise<MapApiReserveResponse> {

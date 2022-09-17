@@ -1,0 +1,28 @@
+<master-header-nav></master-header-nav>
+<div id="content-container">
+    <mat-drawer-container autosize id="drawer-container">
+        <mat-drawer mode="side" opened>
+            <div id="manage-drawer">
+                <button mat-button class="nav-buttons" color="primary"  [routerLink]="[{outlets:{managecontent:['profile']}}]" routerLinkActive="">
+                    <mat-icon class="btn-icon">person</mat-icon> 
+                    <span>Profile</span>
+                </button>
+                <button  mat-button class="nav-buttons" color="primary"  [routerLink]="[{outlets:{managecontent:['users']}}]">
+                    <mat-icon class="btn-icon">groups</mat-icon> 
+                    <span>Users</span>
+                </button>
+                <button  mat-button class="nav-buttons" color="primary" [routerLink]="[{outlets:{managecontent:['reserves']}}]">
+                    <mat-icon class="btn-icon">nature_people</mat-icon> 
+                    <span>Reserves</span>
+                </button>
+                <button  mat-button class="nav-buttons" color="primary" [routerLink]="[{outlets:{managecontent:['manage-devices']}}]">
+                    <mat-icon class="btn-icon">hub</mat-icon> 
+                    <span>Devices</span>
+                </button>
+            </div>
+        </mat-drawer>
+        <mat-drawer-content>
+            <router-outlet name="managecontent"></router-outlet>
+        </mat-drawer-content>
+    </mat-drawer-container>
+</div>

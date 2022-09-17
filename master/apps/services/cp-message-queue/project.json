@@ -1,0 +1,51 @@
+{
+  "sourceRoot": "apps/services/cp-message-queue/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/node:webpack",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/services/cp-message-queue",
+        "main": "apps/services/cp-message-queue/src/main.ts",
+        "tsConfig": "apps/services/cp-message-queue/tsconfig.app.json",
+        "assets": ["apps/services/cp-message-queue/src/assets"]
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false,
+          "fileReplacements": [
+            {
+              "replace": "apps/services/cp-message-queue/src/environments/environment.ts",
+              "with": "apps/services/cp-message-queue/src/environments/environment.prod.ts"
+            }
+          ]
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/node:node",
+      "options": {
+        "buildTarget": "services-cp-message-queue:build"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/services/cp-message-queue/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/services/cp-message-queue"],
+      "options": {
+        "jestConfig": "apps/services/cp-message-queue/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

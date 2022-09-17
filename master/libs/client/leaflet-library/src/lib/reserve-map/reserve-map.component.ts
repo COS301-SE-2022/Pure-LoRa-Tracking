@@ -1,13 +1,16 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, Input, OnChanges, SimpleChanges, } from '@angular/core';
-import { MapApiHistoricalData, MapApiHistoricalResponse, MapApiLatestResponse, MapApiReserveResponse, MapHistoricalPoints, MapRender, MarkerView, ViewMapType, Device} from '@master/shared-interfaces';
+import { MapApiHistoricalData, MapApiHistoricalResponse, MapApiLatestResponse, MapApiReserveResponse, MapHistoricalPoints, MapRender, MarkerView, ViewMapType, Device, Gateway} from '@master/shared-interfaces';
 import * as L from 'leaflet';
+import * as geojson from 'geojson';
 // This library does not declare a module type, we we need to ignore this
 // error for a successful import
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { antPath } from "leaflet-ant-path"
 import { DeviceNotifierService } from '@master/client/shared-services';
+import { SnackbarAlertComponent } from '@master/client/shared-ui/components-ui';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'master-reserve-map',
@@ -31,15 +34,16 @@ export class ReserveMapComponent implements OnInit, OnChanges {
   public currentHistoricalId: number;
   public currentantpath: any = null;
   // private mapmarkers: Array<L.Marker<any>> = [];
-  public mappolygons: L.Polygon;
+  public mappolygons: L.GeoJSON;
   public historicalpath: Array<MapHistoricalPoints> = [];
+  public gatewayMarkers:Array<{gatewayID:string,marker:L.Marker}>=[];
   private bluecirlceicon: L.Icon = new L.Icon({
     iconUrl: "assets/MapIcons/BaseCircle.png",
     iconSize: [20, 20]
   });
 
 
-  constructor(private notifier: DeviceNotifierService) {
+  constructor(private notifier: DeviceNotifierService, private locationAlert: MatSnackBar) {
     //set default map options
     this.MapRenderInput = MapRender.ALL;
     this.ViewMapTypeInput = ViewMapType.NORMAL_OPEN_STREET_VIEW;
@@ -48,7 +52,7 @@ export class ReserveMapComponent implements OnInit, OnChanges {
     this.ShowPolygon = true;
     this.HistoricalMode = false;
     // this.HistoricalDataID=-1;
-    this.mappolygons = new L.Polygon([]);
+    this.mappolygons = new L.GeoJSON();
     this.currentHistoricalId = -1;
     this.notifier.getSensorDeleted().subscribe(deletedid => {
       const obj=this.historicalpath.find(val => val.deviceID==deletedid);
@@ -66,7 +70,16 @@ export class ReserveMapComponent implements OnInit, OnChanges {
       console.log("Reset data");
       this.resetData();
     })
+    this.notifier.getGatewayLocated().subscribe(deviceid=>{
+      console.log("Showing gateway for "+deviceid)
+      this.showGateway(deviceid);
+    });
+    this.notifier.getPanToMap().subscribe(()=>{
+      console.log();
+      if (this.mainmap != null && this.mappolygons != null) this.mainmap.fitBounds(this.mappolygons.getBounds())
+    })
 
+    
   }
 
   ngOnInit(): void {
@@ -107,10 +120,7 @@ export class ReserveMapComponent implements OnInit, OnChanges {
     if (this.Reserve?.data != null) {
       if (this.mainmap != null) this.mainmap.remove();//if change to main map reload
       this.mainmap = L.map('map', {
-        center: [
-          parseFloat(this.Reserve?.data?.center.latitude),
-          parseFloat(this.Reserve?.data?.center.longitude),
-        ],
+        center:[0,0],
         zoom: 18,
       });
     }
@@ -156,30 +166,33 @@ export class ReserveMapComponent implements OnInit, OnChanges {
   //POLYGONS
 
   public loadPolygons(): void {
+    console.log(this.Reserve);
     if (this.Reserve?.data != null) {
       //load the polygon points
       if (
-        this.Reserve.data.location != null &&
-        this.Reserve.data.location.length > 2
+        this.Reserve.data.location != null
       ) {
-        this.mappolygons = L.polygon(this.Reserve.data.location.map((val) => [
-          parseFloat(val.latitude),
-          parseFloat(val.longitude),
-        ]) as unknown as L.LatLngExpression[])
+        // this.mappolygons = L.polygon(this.Reserve.data.location.map((val) => [
+        //   parseFloat(val.latitude),
+        //   parseFloat(val.longitude),
+        // ]) as unknown as L.LatLngExpression[])
+        console.log('this.Reserve :>> ', this.Reserve);
+        this.mappolygons=L.geoJSON(this.Reserve.data.location);
+        //pan to map at the beggining
+        if (this.mainmap != null && this.mappolygons != null) this.mainmap.fitBounds(this.mappolygons.getBounds())
       }
     }
   }
 
   public showpolygon(): void {
-    if (!this.mappolygons.isEmpty() && this.mainmap != null) {
+    if (this.mainmap != null) {
       this.mappolygons.addTo(this.mainmap);
     }
   }
 
   public hidepolygon(): void {
-    if (!this.mappolygons.isEmpty()) {
-      this.mappolygons.remove();
-    }
+    //this
+    this.mappolygons.remove();
   }
 
 
@@ -201,7 +214,7 @@ export class ReserveMapComponent implements OnInit, OnChanges {
     const latlngs = this.historicalpath.find(val => val.deviceID == deviceID)
     if (latlngs != null) {
       if (!latlngs.polyline.getBounds().isValid()) {
-        alert("No location data found");
+        this.openLocationAlert();
       }
       else {
         const path = antPath(latlngs.polyline.getLatLngs(), {
@@ -283,4 +296,46 @@ export class ReserveMapComponent implements OnInit, OnChanges {
       mapdata.markers.forEach(val => val.addTo(this.mainmap))
     }
   }
+
+
+  private openLocationAlert() {
+    this.locationAlert.openFromComponent(SnackbarAlertComponent,{duration: 5000, panelClass: ['orange-snackbar'], data: {message:"No Location data found.", icon:"error_outline"}});
+  }
+
+  public loadGateways(Gateways:Gateway[]){
+    Gateways.forEach(curr=>{
+      if(curr.location!=undefined){
+        const tempmarker=L.marker([curr.location.latitude,curr.location.longitude]);
+        this.gatewayMarkers.push({
+          gatewayID:curr.id,
+          marker:tempmarker.addTo(this.mainmap).bindTooltip(curr.name, { permanent: true, offset: [1, 0] })
+        })
+      }
+    })
+  }
+
+  public showGateway(deviceID:string){
+    const device=this.gatewayMarkers.find(curr=>curr.gatewayID==deviceID);
+
+    if(device!=undefined){
+      if(this.mainmap!=null) this.mainmap.panTo(device.marker.getLatLng());
+    }
+    else{
+      alert("No location data found");
+    }
+  }
+
+  //reset all data
+  public changeReserve(){
+    this.mappolygons.remove();
+    // this.mappolygons=L.polygon([]);
+    this.historicalpath.forEach(val => {
+      val.markers.forEach(curr => curr.remove())
+      val.polyline.remove();
+    })
+    this.historicalpath=[];
+    this.gatewayMarkers.forEach(curr=>curr.marker.remove());
+    this.gatewayMarkers=[];
+  }
+
 }

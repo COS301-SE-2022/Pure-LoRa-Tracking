@@ -24,7 +24,7 @@ describe('MapCallerService', () => {
   describe("getReserve", ()=>{
     it("Should return a promise with the correct value",async ()=>{
       jest.spyOn(client,"post").mockImplementation(()=>of(true))
-      expect(await service.getReserve("sd","sd")).toEqual(true);
+      expect(await service.getReserve()).toEqual(true);
     })
   })
 
@@ -39,6 +39,27 @@ describe('MapCallerService', () => {
     it("Should return a promise with the correct value",async ()=>{
       jest.spyOn(client,"post").mockImplementation(()=>of(true))
       expect(await service.getHistorical("sd","sd",[])).toEqual(true);
+    })
+  })
+  
+  describe("getHistoricalWithTime", ()=>{
+    it("Should return a promise with the correct value",async ()=>{
+      jest.spyOn(client,"post").mockImplementation(()=>of(true))
+      expect(await service.getHistoricalWithTime("sd","sd",[],0,0)).toEqual(true);
+    })
+  })
+
+  // describe("getGateways", ()=>{
+  //   it("Should return a promise with the correct value",async ()=>{
+  //     jest.spyOn(client,"post").mockImplementation(()=>of(true))
+  //     expect(await service.getGateways("sd")).toEqual(true);
+  //   })
+  // })
+
+  describe("removeDevice", ()=>{
+    it("Should return a promise with the correct value",async ()=>{
+      jest.spyOn(client,"post").mockImplementation(()=>of(true))
+      expect(await service.removeDevice("sd","sd",true)).toEqual(true);
     })
   })
 
