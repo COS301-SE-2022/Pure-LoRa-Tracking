@@ -1552,6 +1552,7 @@ export class ThingsboardThingsboardClientService {
         explanation: resp.explanation
       }
 
+    this.telemetryService.clearTelemetry(resp.data.id.id);
     this.reserveService.setToken(this.token);
     const CustInfo = await this.reserveService.CustomerInfo(reserveID);
     this.deviceService.setToken(this.token);
