@@ -1,26 +1,29 @@
+import { DatabaseProxyModule } from '@lora/database';
 import { Test } from '@nestjs/testing';
-import { ProcessingApiProcessingBusModule } from '@processing/bus';
+import { ProcessingApiProcessingBusService } from './processing-api-processing-bus.service';
 
-import { AppService } from './app.service';
-
-describe('AppService', () => {
-  let service: AppService;
+describe('ProcessingApiProcessingBusService', () => {
+  let service: ProcessingApiProcessingBusService;
 
   beforeEach(async () => {
-    const app = await Test.createTestingModule({
-      imports :[ProcessingApiProcessingBusModule],
-      providers: [AppService],
+    const module = await Test.createTestingModule({
+      imports :[DatabaseProxyModule],
+      providers: [ProcessingApiProcessingBusService],
     }).compile();
 
-    service = app.get<AppService>(AppService);
+    service = module.get(ProcessingApiProcessingBusService);
   });
 
-  it('should store the info in the db', ()=> {
-    service.processPerimeterRequest(exampleData)
-  })
+  it('should be defined', () => {
+    expect(service).toBeTruthy();
+  });
+
+ /* it('should insert the record', () => {
+    service.saveDevicePerimeterToDB(exampleInput)
+  })*/
 });
 
-const exampleData = {
+const exampleInput = {
   location: {
     features: [
       {

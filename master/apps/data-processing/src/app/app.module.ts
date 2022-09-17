@@ -7,7 +7,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 @Module({
   imports: [
     ProcessingApiRouterModule,
-    ScheduleModule.forRoot(),
+    //ScheduleModule.forRoot(),
     ConfigModule.forRoot(),
     DatabaseProxyModule,
   ],
