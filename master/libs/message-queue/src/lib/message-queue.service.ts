@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import amqp, { AmqpConnectionManager, Channel, ChannelWrapper } from "amqp-connection-manager"
 import { ProcessingApiProcessingBusService } from '@processing/bus';
 import type * as amqplib from 'amqplib';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 @Injectable()
 export class MessageQueueService {
@@ -11,7 +11,8 @@ export class MessageQueueService {
     private readychannel:ChannelWrapper|null;
     private readygetchannel:ChannelWrapper|null;
     private queueready=false;
-    private serviceready=new BehaviorSubject<boolean>(true);//this almost acts like a lock
+    private serviceready=new Subject<string>();//this almost acts like a lock
+    private processlist=new Map<string,boolean>();
 
     constructor(private processbus:ProcessingApiProcessingBusService) {
         //singleton, sorry Dr Marshall
@@ -111,11 +112,21 @@ export class MessageQueueService {
 
         //READY CONSUMER
         readyConsumerChannel.consume("PURELORA_READYQUEUE",(curr)=>{
-            if(this.serviceready.getValue()){
-                //service is ready
-                this.serviceready.next(false);//set and run
+            //check if we can send this to the service
+            const routingkey=curr.fields.routingKey;
+            const deveui=routingkey.substring(routingkey.indexOf("device.")+7,routingkey.indexOf(".event"));
+            readyConsumerChannel.ack(curr);
+            if(this.processlist.get(deveui)!=false){
+                //we can send it through to the service
                 this.sendToService(curr.content.toString(),this.serviceready);//send in data for now
-                readyConsumerChannel.ack(curr);
+                this.processlist.set(deveui,false);
+            }
+            else{
+                //if its set we add back to the ready q and try later
+                readyConsumerChannel.sendToQueue("PURELORA_READYQUEUE",{
+                    deveui:deveui,
+                    data:curr.content.toString()//check the interface of this
+                })
             }
         },{
             prefetch:1
@@ -123,15 +134,17 @@ export class MessageQueueService {
 
         //OBSERVER
         this.serviceready.asObservable().subscribe(async (curr)=>{
-            if(curr){
-                const data=await this.readygetchannel?.get("PURELORA_READYQUEUE");
-                if(data!=false&&data!=undefined){
-                    console.log(data.content);
-                    this.serviceready.next(false);//set and run
-                    const tosend=JSON.parse(data.content);
-                    this.sendToService(tosend.data,this.serviceready)
-                }
-            }
+            this.processlist.delete(curr);
+
+            // if(curr){
+            //     const data=await this.readygetchannel?.get("PURELORA_READYQUEUE");
+            //     if(data!=false&&data!=undefined){
+            //         console.log(data.content);
+            //         this.serviceready.next(false);//set and run
+            //         const tosend=JSON.parse(data.content);
+            //         this.sendToService(tosend.data,this.serviceready)
+            //     }
+            // }
         })
 
     }
@@ -175,11 +188,12 @@ export class MessageQueueService {
         }   
     }
 
-    sendToService(data:any,observer:BehaviorSubject<boolean>){
+    sendToService(data:any,observer:Subject<string>){
         console.log("service has received ",data);
+        const deveui="thing";
         setTimeout(() => {
             console.log("Service has finished ",data);
-            observer.next(true);//After proceesing has been completed
+            observer.next(deveui);//After proceesing has been completed
         }, 10000);
     }
 }
