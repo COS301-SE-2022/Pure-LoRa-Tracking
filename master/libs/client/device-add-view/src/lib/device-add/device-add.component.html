@@ -72,17 +72,12 @@
                     <input matInput placeholder="Network Session Key" formControlName="nwkSkey" required>
                   </mat-form-field>
                   <br>
-                  <mat-form-field appearance="fill">
-                    <mat-label>Application Session Key</mat-label>
-                    <input matInput placeholder="Application Session Key" formControlName="appSkey" required>
-                  </mat-form-field>
-                  <br>
                 </div>
 
                 <div *ngIf="lora1_1">
                   <mat-form-field appearance="fill">
                     <mat-label>Network Session Encryption Key</mat-label>
-                    <input matInput placeholder="Device address" formControlName="nwkSEncKey" required>
+                    <input matInput placeholder="Network Session Encryption Key" formControlName="nwkSEncKey" required>
                   </mat-form-field>
                   <br>
                   <mat-form-field appearance="fill">
@@ -96,21 +91,29 @@
                   </mat-form-field>
                   <br>
                 </div>
+
+                <mat-form-field appearance="fill">
+                  <mat-label>Application Session Key</mat-label>
+                  <input matInput placeholder="Application Session Key" formControlName="appSkey" required>
+                </mat-form-field>
+                <br>
               </div>
               
-              <div *ngIf="lora1_0">
-                <mat-form-field appearance="fill">
-                  <mat-label>Network Key</mat-label>
-                  <input matInput placeholder="Network Key" formControlName="nwkKey" required>
-                </mat-form-field>
-                <br>
-              </div>
-              <div *ngIf="lora1_0 || lora1_1">
-                <mat-form-field appearance="fill">
-                  <mat-label>Application Key</mat-label>
-                  <input matInput placeholder="Application Key" formControlName="appKey" required>
-                </mat-form-field>
-                <br>
+              <div *ngIf="!isABP">
+                <div *ngIf="lora1_1">
+                  <mat-form-field appearance="fill">
+                    <mat-label>Network Key</mat-label>
+                    <input matInput placeholder="Network Key" formControlName="nwkKey" required>
+                  </mat-form-field>
+                  <br>
+                </div>
+                <div>
+                  <mat-form-field appearance="fill">
+                    <mat-label>Application Key</mat-label>
+                    <input matInput placeholder="Application Key" formControlName="appKey" required>
+                  </mat-form-field>
+                  <br>
+                </div>
               </div>
 
             </form>

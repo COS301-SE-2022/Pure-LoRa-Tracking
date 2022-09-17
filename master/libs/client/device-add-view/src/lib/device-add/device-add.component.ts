@@ -48,10 +48,15 @@ export class DeviceAddComponent implements OnInit {
       
       devAddr: ['', Validators.required],
       nwkSkey: ['', Validators.required],
-      appSkey: ['', Validators.required],
 
-      appKey: ['', Validators.required],
+      nwkSEncKey: ['', Validators.required],
+      sNwkSIntKey: ['', Validators.required],
+      fNwkSIntKey: ['', Validators.required],
+
+      appSkey: ['', Validators.required],      
+
       nwkKey: ['', Validators.required],     
+      appKey: ['', Validators.required],
     })
 
     this.http.post("/api/user/admin/groups",{
@@ -160,7 +165,7 @@ export class DeviceAddComponent implements OnInit {
     else 
       this.lora1_1 = false;
     
-    
+    // this.descriptionGroup.get("profilegroup")
   }
 
 }
