@@ -18,11 +18,11 @@ export class AiParticleFilterService extends AiProcessingStrategyService {
     */
 
     protected particles: number[][];
-    private gatewayLocations: [number, number][];
+    protected gatewayLocations: [number, number][];
     private reservePolygon: [number, number][];
     protected numberOfSamples: number;
     private numberOfSamplingIterations: number;
-    private weights: number[];
+    protected weights: number[];
 
 
     constructor(public locationComputations: LocationService, protected serviceBus : ProcessingApiProcessingBusService) {
@@ -98,6 +98,14 @@ export class AiParticleFilterService extends AiProcessingStrategyService {
         return 12742 * Math.sin(Math.sqrt(a)) * 1000;
     }
 
+    RssiToMeters(rssi:number[]): number[] {
+        const rssiArray = new Array<number>();
+        rssi.forEach((rssi)=> {
+            rssiArray.push(this.locationComputations.rssiToMeters(rssi));
+        })
+        return rssiArray; 
+    }
+
     /*
     the filter WILL NOT work without this method
     Mozilla gurantees uniform dist from Math.random
@@ -128,7 +136,7 @@ export class AiParticleFilterService extends AiProcessingStrategyService {
         this.particles = newPoints;
     }
 
-    weightsMeasuredRelativeToOriginal(originalPoint: number[]): number[] {
+    weightsMeasuredRelativeToOriginal?(originalPoint: number[]): number[] {
         const n = this.particles.length;
         const originalPointMeasure = []
         for (let k = 0; k < this.gatewayLocations.length; k++)
@@ -347,5 +355,26 @@ export class particleFilterMultinomialService extends AiParticleFilterService {
             newParticles.push(this.particles[m])
         }
         this.particles = newParticles;
+    }
+}
+
+@Injectable()
+export class particleFilterRSSIMultinomialService extends particleFilterMultinomialService {
+    constructor(locationComputations: LocationService, protected serviceBus : ProcessingApiProcessingBusService) {
+        super(locationComputations, serviceBus);
+    }
+
+    weightsMeasuredRelativeToOriginal(originalPoint: number[]): number[] {
+        const n = this.particles.length;
+        const originalPointMeasure = this.RssiToMeters(originalPoint);
+
+        for (let i = 0; i < n; i++) {
+            const randomParticlesToCompare = [];
+            for (let j = 0; j < this.gatewayLocations.length; j++) {
+                randomParticlesToCompare.push(this.distanceBetweenCoords(this.particles[i], this.gatewayLocations[j]));
+            }
+            this.weights[i] = this.weightDistanceEuclidean(originalPointMeasure, randomParticlesToCompare);
+        }
+        return this.weights;
     }
 }

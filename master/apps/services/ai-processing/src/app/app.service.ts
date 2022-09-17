@@ -1,4 +1,4 @@
-import { particleFilterMultinomialService } from '@lora/ai/particle-filter';
+import { particleFilterMultinomialService, particleFilterRSSIMultinomialService } from '@lora/ai/particle-filter';
 import { AiProcessingStrategyService } from '@lora/ai/strategy';
 import { LocationService } from '@lora/location';
 import { Injectable } from '@nestjs/common';
@@ -6,10 +6,10 @@ import { ProcessingApiProcessingBusService } from '@processing/bus';
 
 @Injectable()
 export class AppService {
-  private deviceProcessing: { strategy: AiProcessingStrategyService, deviceEUI: string }[];
+  private deviceProcessing: { strategy: AiProcessingStrategyService[], deviceEUI: string }[];
 
   constructor(private serviceBus: ProcessingApiProcessingBusService) {
-    this.deviceProcessing = new Array<{ strategy: AiProcessingStrategyService, deviceEUI: string }>();
+    this.deviceProcessing = new Array<{ strategy: AiProcessingStrategyService[], deviceEUI: string }>();
   };
 
   async processPerimeterRequest(body: { location?: any, name?: string, device?: string, newName?: string }): Promise<string> {
@@ -35,22 +35,29 @@ export class AppService {
 
     /* perform process */
     const resLatLong = await this.serviceBus.LocationServiceProcess(deviceData, deviceData.deviceEUI);
-    await device.strategy.processData(deviceData.RSSI);
+    //device.strategy.forEach((strategy:AiProcessingStrategyService) => {strategy.processData(deviceData.RSSI)});
 
+    device.strategy[0].processData(deviceData.RSSI);
+    device.strategy[1].processData(resLatLong);
 
     /* call next */
     next.next(true);
 
   }
 
-  async resolveDevice(deviceData: deviceData) : Promise< { strategy: AiProcessingStrategyService, deviceEUI: string }> {
+  async resolveDevice(deviceData: deviceData) : Promise< { strategy: AiProcessingStrategyService[], deviceEUI: string }> {
     const find = this.deviceProcessing.find(x => x.deviceEUI == deviceData.deviceEUI);
-    let device:  { strategy: AiProcessingStrategyService, deviceEUI: string };
+    let device:  { strategy: AiProcessingStrategyService[], deviceEUI: string };
     if (find == undefined) {
 
       // add device to processing list
-      device = { strategy: new particleFilterMultinomialService(this.serviceBus.locationService, this.serviceBus), deviceEUI: deviceData.deviceEUI };
+      device = { strategy: new Array<AiProcessingStrategyService>(), deviceEUI: deviceData.deviceEUI };
       this.deviceProcessing.push(device);
+
+      // add relevant strategies
+      // TODO add relevant strategies as they become available
+      device.strategy.push(new particleFilterRSSIMultinomialService(this.serviceBus.locationService, this.serviceBus));
+      device.strategy.push(new particleFilterMultinomialService(this.serviceBus.locationService, this.serviceBus));
 
       // get init parameters
       const perimeter = await this.serviceBus.getDevicePerimeter(deviceData.deviceEUI);
@@ -59,7 +66,11 @@ export class AppService {
         gateways: { latitude: number, longitude: number }[],
         numberOfSamples: number,
       } = {reservePolygon:perimeter.perimeter, gateways:deviceData.gateways, numberOfSamples:250};
-      device.strategy.configureInitialParameters(pfInit);
+
+      // initialize strategies
+      device.strategy[0].configureInitialParameters(pfInit);
+      device.strategy[1].configureInitialParameters(pfInit);
+
     }
     else  {
       device = find;
