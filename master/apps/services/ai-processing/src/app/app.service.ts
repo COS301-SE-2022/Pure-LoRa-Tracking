@@ -41,7 +41,7 @@ export class AppService {
     device.strategy[1].processData(resLatLong);
 
     /* call next */
-    next.next(true);
+    next.next(deviceData.deviceEUI);
 
   }
 
