@@ -2,6 +2,7 @@ import { AiProcessingStrategyService } from '@lora/ai/strategy';
 import { LocationModule } from '@lora/location';
 import { ThingsboardThingsboardClientModule } from '@lora/thingsboard-client';
 import { Test } from '@nestjs/testing';
+import { ProcessingApiProcessingBusModule } from '@processing/bus';
 import { AiParticleFilterService, particleFilterMultinomialService, particleFilterStratifiedService } from './ai-particle-filter.service';
 
 describe('AiParticleFilterService', () => {
@@ -10,7 +11,7 @@ describe('AiParticleFilterService', () => {
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      imports: [LocationModule, ThingsboardThingsboardClientModule],
+      imports: [LocationModule, ThingsboardThingsboardClientModule, ProcessingApiProcessingBusModule],
       providers: [AiParticleFilterService, particleFilterStratifiedService, AiProcessingStrategyService],
     }).compile();
 
@@ -66,14 +67,14 @@ describe('AiParticleFilterService', () => {
 
 /**************************************************************/
 
-/*describe('Live Particle filter test', () => {
+describe('Live Particle filter test', () => {
   let service: AiParticleFilterService;
   let stratifiedService : particleFilterStratifiedService;
   let multinomialService : particleFilterMultinomialService;
 
   beforeAll(async () => {
     const module = await Test.createTestingModule({
-      imports: [LocationModule, ThingsboardThingsboardClientModule],
+      imports: [LocationModule, ThingsboardThingsboardClientModule, ProcessingApiProcessingBusModule],
       providers: [AiParticleFilterService, particleFilterStratifiedService, particleFilterMultinomialService],
     }).compile();
 
@@ -94,7 +95,7 @@ describe('AiParticleFilterService', () => {
     }
     multinomialService.printGeoJSONPoints(results)
   })
-});*/
+});
 
 
 const initialParameters = {
