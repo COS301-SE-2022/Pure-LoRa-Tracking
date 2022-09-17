@@ -45,7 +45,7 @@ export class DeviceAddComponent implements OnInit {
     this.sensorGroup=this._formBuilder.group({
       eui: ['', Validators.required],
       deviceProfile: ['', Validators.required],
-
+      
       devAddr: ['', Validators.required],
       nwkSkey: ['', Validators.required],
       appSkey: ['', Validators.required],
@@ -82,8 +82,8 @@ export class DeviceAddComponent implements OnInit {
         appSKey: this.sensorGroup.get("appSKey")?.value,
         nwkSEncKey: this.sensorGroup.get("nwkSkey")?.value,
         
-        // fNwkSIntKey: this.sensorGroup.get("fNwkSIntKey")?.value,
-        // sNwkSIntKey: this.sensorGroup.get("sNwkSIntKey")?.value,
+        fNwkSIntKey: this.sensorGroup.get("fNwkSIntKey")?.value,
+        sNwkSIntKey: this.sensorGroup.get("sNwkSIntKey")?.value,
         
         appKey: this.sensorGroup.get("appKey")?.value,
         nwkKey: this.sensorGroup.get("nwkKey")?.value,
@@ -147,19 +147,20 @@ export class DeviceAddComponent implements OnInit {
     
     if (obj?.isOTAA) {
       this.isABP = false;
-
-      // this.lora1_0 = (obj?.macVerion.startsWith("1.0")
-      if (obj?.macVerion.startsWith("1.0")) 
-        this.lora1_0 = true;
-      else 
-        this.lora1_0 = false;
-
-      if (obj?.macVerion.startsWith("1.1")) 
-        this.lora1_1 = true;
-      else 
-        this.lora1_1 = false;
     }
     else this.isABP = true;
+    // this.lora1_0 = (obj?.macVerion.startsWith("1.0")
+    if (obj?.macVerion.startsWith("1.0")) 
+      this.lora1_0 = true;
+    else 
+      this.lora1_0 = false;
+
+    if (obj?.macVerion.startsWith("1.1")) 
+      this.lora1_1 = true;
+    else 
+      this.lora1_1 = false;
+    
+    
   }
 
 }
