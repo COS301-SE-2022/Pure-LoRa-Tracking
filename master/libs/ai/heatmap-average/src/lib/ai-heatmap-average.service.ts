@@ -1,5 +1,6 @@
 import { AiProcessingStrategyService } from '@lora/ai/strategy';
 import { Injectable } from '@nestjs/common';
+import { ProcessingApiProcessingBusService } from '@processing/bus';
 import tf = require('@tensorflow/tfjs-node');
 
 @Injectable()
@@ -17,8 +18,8 @@ export class AiHeatmapAverageService extends AiProcessingStrategyService {
         4) store result
   */
 
-  constructor() {
-    super();
+  constructor(protected serviceBus: ProcessingApiProcessingBusService) {
+    super(serviceBus);
     this.buildModel();
     this.filePath = ``;
     this.currentFive = new Array<{latitude:number, longitude:number}>();
