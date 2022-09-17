@@ -11,6 +11,7 @@ import { ClientLeafletLibraryModule } from '@master/client/leaflet-library';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DeviceListItemComponent } from './device-list-item/device-list-item.component';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { GatewayListItemComponent } from './gateway-list-item/gateway-list-item.component';
 
 export const clientReserveViewRoutes: Route[] = [];
 
@@ -23,13 +24,14 @@ export const clientReserveViewRoutes: Route[] = [];
     ClientSharedUiComponentsUiModule,
     ClientLeafletLibraryModule,
     ReactiveFormsModule,
-    MatExpansionModule
+    MatExpansionModule,
   ],
   declarations: [
     ReserveViewComponent,
     ReservePanelComponent,
     MapPanelComponent,
     DeviceListItemComponent,
+    GatewayListItemComponent,
   ],
   exports: [
     ReserveViewComponent,
