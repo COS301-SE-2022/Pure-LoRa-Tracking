@@ -4,10 +4,13 @@
             <mat-icon>
                 cell_tower
             </mat-icon>
+            {{gateway.name}}
         </mat-panel-title>
     </mat-expansion-panel-header>
     <div>
-        <!-- Gateway expand content -->
+        <p>EUI: {{gateway.eui}}</p>
+        <p>ID: {{gateway.id}} </p>
+        <p>Animal: --</p>
     </div>
     <mat-action-row>
         <button mat-button color="accent">
