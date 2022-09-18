@@ -1,8 +1,9 @@
 import { particleFilterMultinomialService, particleFilterRSSIMultinomialService } from '@lora/ai/particle-filter';
 import { AiProcessingStrategyService } from '@lora/ai/strategy';
-import { LocationService } from '@lora/location';
 import { Injectable } from '@nestjs/common';
 import { ProcessingApiProcessingBusService } from '@processing/bus';
+import { UplinkEvent } from '@chirpstack/chirpstack-api/as/integration/integration_pb';
+import { UplinkRXInfo } from '@chirpstack/chirpstack-api/gw/gw_pb';
 
 @Injectable()
 export class AppService {
@@ -28,20 +29,34 @@ export class AppService {
     }
   }
 
-  async forwardData(deviceData: deviceData, next) {
+  async forwardData(uplinkData: UplinkEvent, next) {
+
+    /* filter faulty results */
+    let gatewayData = uplinkData.getRxInfoList();
+    gatewayData = gatewayData.filter(gateway =>
+      gateway.hasLocation() == true &&
+      gateway.getLocation().getLatitude() != 0 &&
+      gateway.getLocation().getLongitude() != 0
+    );
+
+    /* convert to AI readable format */
+    const deviceData = this.convertRXData(gatewayData);
+    deviceData.deviceEUI = uplinkData.getTagsMap().get("deviceToken");
 
     /* resolve device */
     const device = await this.resolveDevice(deviceData);
 
     /* perform process */
     const resLatLong = await this.serviceBus.LocationServiceProcess(deviceData, deviceData.deviceEUI);
-    //device.strategy.forEach((strategy:AiProcessingStrategyService) => {strategy.processData(deviceData.RSSI)});
-
-    device.strategy[0].processData(deviceData.RSSI);
+    
+    // rssi PF
+    device.strategy[0].processData({rssi:deviceData.RSSI, gateways:deviceData.gateways});
+    
+    // lat long PF
     device.strategy[1].processData(resLatLong);
 
     /* call next */
-    next.next(deviceData.deviceEUI);
+    next.next(uplinkData.getDevEui.toString());
 
   }
 
@@ -77,6 +92,17 @@ export class AppService {
     }
     return device;
   }
+
+  convertRXData(data:UplinkRXInfo[]) : { deviceEUI: string, RSSI: number[], gateways: {longitude:number, latitude:number}[] } {
+    let deviceData : { deviceEUI: string, RSSI: number[], gateways: {longitude:number, latitude:number}[] }; 
+    data.forEach(reading => {
+      deviceData.RSSI.push(reading.getRssi());
+      const location = {longitude:reading.getLocation().getLongitude(), latitude:reading.getLocation().getLatitude()};
+      deviceData.gateways.push(location);
+    });
+
+    return deviceData;
+  }
 }
 
-interface deviceData { deviceEUI: string, RSSI: number[], gateways:[] }
+interface deviceData { deviceEUI: string, RSSI: number[], gateways:{longitude:number, latitude:number}[] }
