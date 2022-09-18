@@ -1,5 +1,6 @@
+import { DatabaseProxyModule } from '@lora/database';
 import { Test } from '@nestjs/testing';
-import { ProcessingApiProcessingBusService } from '@processing/bus';
+import { ProcessingApiProcessingBusModule, ProcessingApiProcessingBusService } from '@processing/bus';
 import exp = require('constants');
 import { AiHeatmapAverageService } from './ai-heatmap-average.service';
 
@@ -10,7 +11,7 @@ describe('AiHeatmapAverageService', () => {
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      imports: [ProcessingApiProcessingBusService],
+      imports: [ProcessingApiProcessingBusModule],
       providers: [AiHeatmapAverageService],
     }).compile();
 

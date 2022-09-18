@@ -1,13 +1,14 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { Cron } from '@nestjs/schedule';
 import { AiHeatmapAverageService } from '@lora/ai/average';
 import { AiMockGeneratorAveragingDataGeneratorService } from '@lora/ai/mock-generator/average';
+import { ProcessingApiProcessingBusService } from '@processing/bus';
 
 @Injectable()
 export class AiMockDataTrainerService {
+  constructor(private processingBus: ProcessingApiProcessingBusService){}
   private readonly logger = new Logger(AiMockDataTrainerService.name);
   private aiHeatMapService: AiHeatmapAverageService =
-    new AiHeatmapAverageService();
+    new AiHeatmapAverageService(this.processingBus);
   private aiMockDataGenerator: AiMockGeneratorAveragingDataGeneratorService =
     new AiMockGeneratorAveragingDataGeneratorService();
   private nEntries = 5;
