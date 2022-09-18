@@ -53,7 +53,10 @@
                 </mat-list-option> -->
             </div>
             <div *ngIf="deviceType==='gateways' || deviceType==='all' && GateWays.length>0" >
-                <mat-list-option *ngFor="let gatewayItem of filteredGateways" [value]="gatewayItem.id" [style.background-color]="getSelectedStyle(gatewayItem.id)" (click)="selectedGateway(gatewayItem.id)">
+                <mat-accordion>
+                    <master-gateway-list-item *ngFor="let gatewayItem of GateWays" [gateway]="gatewayItem" (locateGateway)="selectedGateway($event)" (gatewayExpanded)="selectedGateway(gatewayItem.id)"></master-gateway-list-item>
+                </mat-accordion>
+                <!-- <mat-list-option *ngFor="let gatewayItem of filteredGateways" [value]="gatewayItem.id" [style.background-color]="getSelectedStyle(gatewayItem.id)" (click)="selectedGateway(gatewayItem.id)">
                     <mat-icon mat-list-icon>cell_tower</mat-icon>
                     <div class="listItemWrap">
                         <div class="itemText">    
@@ -65,7 +68,7 @@
                             <mat-icon>chevron_right</mat-icon>
                         </button>
                     </div>
-                </mat-list-option>
+                </mat-list-option> -->
             </div>
         </mat-selection-list>
         </cdk-virtual-scroll-viewport>
