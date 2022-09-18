@@ -9,7 +9,7 @@ export class AiParticleFilterService extends AiProcessingStrategyService {
     async processData(reading: any): Promise<boolean> {
         console.log("Particle filter strategy")
         const result = await this.particleFilter(reading);
-        this.serviceBus.sendProcessedDatatoTB(reading.deviceEUI, { result: { latitude: result[1], longitude: result[0] }, processingType: "pf" });
+        this.serviceBus.sendProcessedDatatoTB(reading.deviceToken, { result: { latitude: result[1], longitude: result[0] }, processingType: this.pType});
         return false;
     }
 
@@ -23,6 +23,7 @@ export class AiParticleFilterService extends AiProcessingStrategyService {
     protected numberOfSamples: number;
     protected numberOfSamplingIterations: number;
     protected weights: number[];
+    protected pType  = "PF"
 
 
     constructor(public locationComputations: LocationService, protected serviceBus: ProcessingApiProcessingBusService) {
@@ -308,6 +309,7 @@ export class AiParticleFilterService extends AiProcessingStrategyService {
 export class particleFilterStratifiedService extends AiParticleFilterService {
     constructor(locationComputations: LocationService, protected serviceBus: ProcessingApiProcessingBusService) {
         super(locationComputations, serviceBus);
+        this.pType = "PF_LOC_STRAT";
     }
 
     // consider : https://github.com/stdlib-js/random-base-uniform
@@ -336,6 +338,7 @@ export class particleFilterStratifiedService extends AiParticleFilterService {
 export class particleFilterMultinomialService extends AiParticleFilterService {
     constructor(locationComputations: LocationService, protected serviceBus: ProcessingApiProcessingBusService) {
         super(locationComputations, serviceBus);
+        this.pType = "PF_LOC_MULTI";
     }
 
     // consider : https://github.com/stdlib-js/random-base-uniform
@@ -363,6 +366,7 @@ export class particleFilterMultinomialService extends AiParticleFilterService {
 export class particleFilterRSSIMultinomialService extends particleFilterMultinomialService {
     constructor(locationComputations: LocationService, protected serviceBus: ProcessingApiProcessingBusService) {
         super(locationComputations, serviceBus);
+        this.pType = "PF_RSSI_MULTI";
     }
 
     weightsMeasuredRelativeToOriginal(originalPoint: number[]): number[] {

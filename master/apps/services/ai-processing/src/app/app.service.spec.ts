@@ -1,4 +1,3 @@
-import { particleFilterMultinomialService, particleFilterRSSIMultinomialService } from '@lora/ai/particle-filter';
 import { AiProcessingStrategyModule, AiProcessingStrategyService } from '@lora/ai/strategy';
 import { LocationModule, LocationService } from '@lora/location';
 import { Test } from '@nestjs/testing';
@@ -25,6 +24,10 @@ describe('AppService', () => {
     stratArray = new Array<AiProcessingStrategyService>()
     
   });
+
+  it("should exist", ()=> {
+    expect(service).toBeTruthy();
+  })
 
   /*it('should store the info in the db', ()=> {
     service.processPerimeterRequest(exampleData)

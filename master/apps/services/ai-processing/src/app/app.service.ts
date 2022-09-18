@@ -7,10 +7,10 @@ import { UplinkRXInfo } from '@chirpstack/chirpstack-api/gw/gw_pb';
 
 @Injectable()
 export class AppService {
-  private deviceProcessing: { strategy: AiProcessingStrategyService[], deviceEUI: string }[];
+  private deviceProcessing: { strategy: AiProcessingStrategyService[], deviceToken: string }[];
 
   constructor(private serviceBus: ProcessingApiProcessingBusService) {
-    this.deviceProcessing = new Array<{ strategy: AiProcessingStrategyService[], deviceEUI: string }>();
+    this.deviceProcessing = new Array<{ strategy: AiProcessingStrategyService[], deviceToken: string }>();
   };
 
   async processPerimeterRequest(body: { location?: any, name?: string, device?: string, newName?: string }): Promise<string> {
@@ -39,34 +39,38 @@ export class AppService {
       gateway.getLocation().getLongitude() != 0
     );
 
+    /* zero gateway fail */
+    if (gatewayData.length == 0)
+      next.next(uplinkData.getDevEui.toString());
+
     /* convert to AI readable format */
     const deviceData = this.convertRXData(gatewayData);
-    deviceData.deviceEUI = uplinkData.getTagsMap().get("deviceToken");
+    deviceData.deviceToken = uplinkData.getTagsMap().get("deviceToken");
 
     /* resolve device */
     const device = await this.resolveDevice(deviceData);
 
     /* perform process */
-    const resLatLong = await this.serviceBus.LocationServiceProcess(deviceData, deviceData.deviceEUI);
-    
+    const resLatLong = await this.serviceBus.LocationServiceProcess(deviceData, deviceData.deviceToken);
+
     // rssi PF
-    device.strategy[0].processData({rssi:deviceData.RSSI, gateways:deviceData.gateways});
-    
+    await device.strategy[0].processData({ rssi: deviceData.RSSI, gateways: deviceData.gateways});
+
     // lat long PF
-    device.strategy[1].processData(resLatLong);
+    await device.strategy[1].processData({ latitude: resLatLong.latitude, longitude: resLatLong.longitude});
 
     /* call next */
     next.next(uplinkData.getDevEui.toString());
 
   }
 
-  async resolveDevice(deviceData: deviceData) : Promise< { strategy: AiProcessingStrategyService[], deviceEUI: string }> {
-    const find = this.deviceProcessing.find(x => x.deviceEUI == deviceData.deviceEUI);
-    let device:  { strategy: AiProcessingStrategyService[], deviceEUI: string };
+  async resolveDevice(deviceData: deviceData): Promise<{ strategy: AiProcessingStrategyService[], deviceToken: string }> {
+    const find = this.deviceProcessing.find(x => x.deviceToken == deviceData.deviceToken);
+    let device: { strategy: AiProcessingStrategyService[], deviceToken: string };
     if (find == undefined) {
 
       // add device to processing list
-      device = { strategy: new Array<AiProcessingStrategyService>(), deviceEUI: deviceData.deviceEUI };
+      device = { strategy: new Array<AiProcessingStrategyService>(), deviceToken: deviceData.deviceToken };
       this.deviceProcessing.push(device);
 
       // add relevant strategies
@@ -75,29 +79,29 @@ export class AppService {
       device.strategy.push(new particleFilterMultinomialService(this.serviceBus.locationService, this.serviceBus));
 
       // get init parameters
-      const perimeter = await this.serviceBus.getDevicePerimeter(deviceData.deviceEUI);
+      const perimeter = await this.serviceBus.getDevicePerimeter(deviceData.deviceToken);
       const pfInit: {
         reservePolygon: number[],
         gateways: { latitude: number, longitude: number }[],
         numberOfSamples: number,
-      } = {reservePolygon:perimeter.perimeter, gateways:deviceData.gateways, numberOfSamples:250};
+      } = { reservePolygon: perimeter.perimeter, gateways: deviceData.gateways, numberOfSamples: 250 };
 
       // initialize strategies
       device.strategy[0].configureInitialParameters(pfInit);
       device.strategy[1].configureInitialParameters(pfInit);
 
     }
-    else  {
+    else {
       device = find;
     }
     return device;
   }
 
-  convertRXData(data:UplinkRXInfo[]) : { deviceEUI: string, RSSI: number[], gateways: {longitude:number, latitude:number}[] } {
-    let deviceData : { deviceEUI: string, RSSI: number[], gateways: {longitude:number, latitude:number}[] }; 
+  convertRXData(data: UplinkRXInfo[]): { deviceToken: string, RSSI: number[], gateways: { longitude: number, latitude: number }[] } {
+    let deviceData: { deviceToken: string, RSSI: number[], gateways: { longitude: number, latitude: number }[] };
     data.forEach(reading => {
       deviceData.RSSI.push(reading.getRssi());
-      const location = {longitude:reading.getLocation().getLongitude(), latitude:reading.getLocation().getLatitude()};
+      const location = { longitude: reading.getLocation().getLongitude(), latitude: reading.getLocation().getLatitude() };
       deviceData.gateways.push(location);
     });
 
@@ -105,4 +109,4 @@ export class AppService {
   }
 }
 
-interface deviceData { deviceEUI: string, RSSI: number[], gateways:{longitude:number, latitude:number}[] }
+interface deviceData { deviceToken: string, RSSI: number[], gateways: { longitude: number, latitude: number }[] }
