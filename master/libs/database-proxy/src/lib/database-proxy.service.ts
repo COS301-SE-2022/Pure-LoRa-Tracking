@@ -77,4 +77,8 @@ export class DatabaseProxyService {
         return data.at(0);
     }
 
+    public async deleteReadyAt(objectID:string){
+        return await this.ReadyModel.findByIdAndDelete(objectID);
+    }
+
 }

@@ -80,4 +80,13 @@ export class ProcessingApiProcessingBusService {
         }
     }
 
+    async deleteReadyAt(deviceID:string){
+        try {
+            return await this.database.deleteReadyAt(deviceID);
+        } catch(error) {
+            Logger.log('Error');
+            Logger.log(error);
+        }
+    }
+
 }
