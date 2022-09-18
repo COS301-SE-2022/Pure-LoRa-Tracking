@@ -214,7 +214,6 @@ export class ThingsboardThingsboardDeviceService {
   }
 
   //////////////////////////////////////////////////////////////////////////
-  /* TODO change to response */
   async removeDeviceFromCustomer(deviceID: string): Promise<deviceResponse> {
     const url = this.ThingsBoardURL + '/customer/device/' + deviceID;
 
