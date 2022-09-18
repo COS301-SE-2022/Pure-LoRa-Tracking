@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import amqp, { AmqpConnectionManager, Channel, ChannelWrapper } from "amqp-connection-manager"
 import { ProcessingApiProcessingBusService } from '@processing/bus';
 import type * as amqplib from 'amqplib';
-import { BehaviorSubject, Subject } from 'rxjs';
-
+import { BehaviorSubject, buffer, Subject } from 'rxjs';
+import { UplinkEvent } from '@chirpstack/chirpstack-api/as/integration/integration_pb';
 
 
 @Injectable()
@@ -19,7 +19,8 @@ export class MessageQueueService {
     constructor(private processbus:ProcessingApiProcessingBusService) {
         //singleton, sorry Dr Marshall
         if (MessageQueueService.amqpconnection == null) {
-            const connec = MessageQueueService.amqpconnection = amqp.connect([`amqp://${process.env.RABBITMQ_USERNAME}:${process.env.RABBITMQ_PASSWORD}@localhost:5672`]);
+            MessageQueueService.amqpconnection = amqp.connect([`amqp://${process.env.RABBITMQ_USERNAME}:${process.env.RABBITMQ_PASSWORD}@localhost:5672`]);
+            const connec = MessageQueueService.amqpconnection;
             connec.on("connectFailed", (err: any, url: any) => {
                 console.log("Connect failed ", err);
             });
@@ -28,6 +29,9 @@ export class MessageQueueService {
             });
             connec.on("connect", ({ connection: r, url: url }) => {
                 console.log("connected to ", url);
+            });
+            connec.on("disconnect", ({ err: r }) => {
+                console.log("Disconnect error ", r);
             });
         }
         MessageQueueService.amqpconnection?.once("connect",()=>{
@@ -81,7 +85,7 @@ export class MessageQueueService {
             
             //send to mongo
             channel.ack(msg);
-            console.log("Consumed",msg);
+            // console.log("Consumed",msg);
             const routingkey=msg.fields.routingKey;
             const deveui=routingkey.substring(routingkey.indexOf("device.")+7,routingkey.indexOf(".event"));
             // const msgdata=JSON.parse(msg.content.toString());
@@ -93,22 +97,26 @@ export class MessageQueueService {
             // }).then(curr=>{
             //     console.log(curr);
             // });
+            const uplinkData = UplinkEvent.deserializeBinary(msg.content);
+            const uplinkDataJson = JSON.stringify(uplinkData.toObject());
+
             this.processbus.forwardChirpstackData({
-                data:msg.content.toString(),
-                deviceEUI:deveui,
-                eventtype:routingkey.substring(routingkey.indexOf("event.")+6),
-                timestamp:Date.now(),
-                processed:false
+                data: uplinkDataJson,
+                deviceEUI: deveui,
+                eventtype: routingkey.substring(routingkey.indexOf("event.")+6),
+                timestamp: Date.now(),
+                processed: false
             }).then(curr=>{
                 if(curr==true){
                     //send to service
                     if(this.processlist.get(deveui)!=false){
                         //we can send
-                        this.sendToService(msg.content.toString(),this.serviceready);
+                        this.sendToService(uplinkData, this.serviceready);
+                        this.processlist.set(deveui, false);
                     }
                     else {
                         //push to ready q
-                        channel.sendToQueue("PURELORA_READYQUEUE",msg.content.toString());
+                        channel.sendToQueue("PURELORA_READYQUEUE", msg.content);
                     }
                 }
             });
@@ -123,20 +131,22 @@ export class MessageQueueService {
         //READY CONSUMER
         readyConsumerChannel.consume("PURELORA_READYQUEUE",(curr)=>{
             //check if we can send this to the service
-            const routingkey=curr.fields.routingKey;
-            const deveui=routingkey.substring(routingkey.indexOf("device.")+7,routingkey.indexOf(".event"));
+            
+            const uplinkData = UplinkEvent.deserializeBinary(curr.content);
+            const devEui = Buffer.from(uplinkData.getDevEui_asB64(), 'base64').toString('hex');
+            
+            // const deveui=routingkey.substring(routingkey.indexOf("device.")+7,routingkey.indexOf(".event"));
             readyConsumerChannel.ack(curr);
-            if(this.processlist.get(deveui)!=false){
-                //we can send it through to the service
-                this.sendToService(curr.content.toString(),this.serviceready);//send in data for now
-                this.processlist.set(deveui,false);
+            if(this.processlist.get(devEui)!=false){
+                //we can send it through to the service 
+                
+                this.sendToService(uplinkData,this.serviceready);//send in data for now
+                this.processlist.set(devEui,false);
             }
             else{
                 //if its set we add back to the ready q and try later
-                readyConsumerChannel.sendToQueue("PURELORA_READYQUEUE",{
-                    deveui:deveui,
-                    data:curr.content.toString()//check the interface of this
-                })
+                console.log(devEui);
+                readyConsumerChannel.sendToQueue("PURELORA_READYQUEUE", curr.content);
             }
         },{
             prefetch:1
@@ -150,12 +160,16 @@ export class MessageQueueService {
     }
 
 
-    sendToService(data:any,observer:Subject<string>){
-        console.log("service has received ",data);
-        const deveui="thing";
+    sendToService(uplinkData: UplinkEvent,observer:Subject<string>){
+        console.log('\x1b[33m%s\x1b[0m' , "data object", uplinkData);
+        const devEui = Buffer.from(uplinkData.getDevEui_asB64(), 'base64').toString('hex');
+        // console.log(devEui);
+
+        console.log("service has received ");
+        // const deveui="thing";
         setTimeout(() => {
-            console.log("Service has finished ",data);
-            observer.next(deveui);//After proceesing has been completed
-        }, 10000);
+            console.log("Service has finished ");
+            observer.next(devEui);//After proceesing has been completed
+        }, 30000);
     }
 }
