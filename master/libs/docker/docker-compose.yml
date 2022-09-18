@@ -95,7 +95,7 @@ services:
       - APPLICATION_SERVER__EXTERNAL_API__JWT_SECRET=verysecret
       - APPLICATION_SERVER__INTEGRATION__ENABLED=amqp
       - APPLICATION_SERVER__INTEGRATION__AMQP__URL=amqp://guest:guest@rabbitmq:5672
-      - APPLICATION_SERVER__INTEGRATION__AMQP__EVENT_ROUTING_KEY_TEMPLATE="application.{{ .ApplicationID }}.device.{{ .DevEUI }}.event.{{ .EventType }}"
+      - APPLICATION_SERVER__INTEGRATION__AMQP__EVENT_ROUTING_KEY_TEMPLATE=application.{{ .ApplicationID }}.device.{{ .DevEUI }}.event.{{ .EventType }}
     depends_on:
       - chirpstack-network-server
       - rabbitmq
