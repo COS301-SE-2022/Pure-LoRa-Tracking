@@ -116,7 +116,11 @@ export class MessageQueueService {
                     }
                     else {
                         //push to ready q
-                        channel.sendToQueue("PURELORA_READYQUEUE", msg.content);
+                        this.processbus.addToReady({
+                            deviceEUI:deveui,
+                            timestamp:Date.now(),
+                            data:uplinkDataJson
+                        })
                     }
                 }
             });
@@ -128,33 +132,40 @@ export class MessageQueueService {
 
         //might need a lock between the bottom 2
 
-        //READY CONSUMER
-        readyConsumerChannel.consume("PURELORA_READYQUEUE",(curr)=>{
-            //check if we can send this to the service
+        // //READY CONSUMER
+        // readyConsumerChannel.consume("PURELORA_READYQUEUE",(curr)=>{
+        //     //check if we can send this to the service
             
-            const uplinkData = UplinkEvent.deserializeBinary(curr.content);
-            const devEui = Buffer.from(uplinkData.getDevEui_asB64(), 'base64').toString('hex');
+        //     const uplinkData = UplinkEvent.deserializeBinary(curr.content);
+        //     const devEui = Buffer.from(uplinkData.getDevEui_asB64(), 'base64').toString('hex');
             
-            // const deveui=routingkey.substring(routingkey.indexOf("device.")+7,routingkey.indexOf(".event"));
-            readyConsumerChannel.ack(curr);
-            if(this.processlist.get(devEui)!=false){
-                //we can send it through to the service 
+        //     // const deveui=routingkey.substring(routingkey.indexOf("device.")+7,routingkey.indexOf(".event"));
+        //     readyConsumerChannel.ack(curr);
+        //     if(this.processlist.get(devEui)!=false){
+        //         //we can send it through to the service 
                 
-                this.sendToService(uplinkData,this.serviceready);//send in data for now
-                this.processlist.set(devEui,false);
-            }
-            else{
-                //if its set we add back to the ready q and try later
-                console.log(devEui);
-                readyConsumerChannel.sendToQueue("PURELORA_READYQUEUE", curr.content);
-            }
-        },{
-            prefetch:1
-        });
+        //         this.sendToService(uplinkData,this.serviceready);//send in data for now
+        //         this.processlist.set(devEui,false);
+        //     }
+        //     else{
+        //         //if its set we add back to the ready q and try later
+        //         console.log(devEui);
+        //         readyConsumerChannel.sendToQueue("PURELORA_READYQUEUE", curr.content);
+        //     }
+        // },{
+        //     prefetch:1
+        // });
 
         //OBSERVER
         this.serviceready.asObservable().subscribe(async (curr)=>{
             this.processlist.delete(curr);
+
+            //ready to be processed by the database. check if any are waiting
+            if(await this.processbus.checkCountReady(curr)>0){
+                console.log("Found Data, sending to latest to server");
+                console.log(await this.processbus.getLastReady(curr))
+            }
+
         })
 
     }

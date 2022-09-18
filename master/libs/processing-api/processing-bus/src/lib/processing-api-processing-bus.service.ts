@@ -53,5 +53,31 @@ export class ProcessingApiProcessingBusService {
         }
     }
 
+    async addToReady(data:{deviceEUI:string,timestamp:number,data:string}){
+        try {
+            return await this.database.addToReady(data);
+        } catch(error) {
+            Logger.log('Error');
+            Logger.log(error);
+        }
+    }
+
+    async checkCountReady(deviceEUI:string){
+        try {
+            return await this.database.checkNumReady(deviceEUI);
+        } catch(error) {
+            Logger.log('Error');
+            Logger.log(error);
+        }
+    }
+
+    async getLastReady(deviceEUI:string){
+        try {
+            return await this.database.getLatestReady(deviceEUI);
+        } catch(error) {
+            Logger.log('Error');
+            Logger.log(error);
+        }
+    }
 
 }

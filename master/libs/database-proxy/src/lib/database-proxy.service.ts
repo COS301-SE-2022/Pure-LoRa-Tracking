@@ -1,12 +1,14 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { AverageInput, AverageInputDocument, DataDocument, DataInput } from '../database-interfaces.interface';
+import { AverageInput, AverageInputDocument, DataDocument, DataInput, ReadyProcess, ReadyProcessDocument } from '../database-interfaces.interface';
 
 @Injectable()
 export class DatabaseProxyService {
-    constructor(@InjectModel(AverageInput.name) private AverageModel: Model<AverageInputDocument>,
-        @InjectModel(DataInput.name) private DataModel: Model<DataDocument>
+    constructor(
+        @InjectModel(AverageInput.name) private AverageModel: Model<AverageInputDocument>,
+        @InjectModel(DataInput.name) private DataModel: Model<DataDocument>,
+        @InjectModel(ReadyProcess.name) private ReadyModel: Model<ReadyProcessDocument>,
     ) { }
 
 
@@ -24,40 +26,55 @@ export class DatabaseProxyService {
         return this.AverageModel.find({ deviceID: deviceID }).exec();
     }
 
-    public async saveRSSIinfos(data: { timestamp: number, deviceEUI: string, data: string, eventtype: string, processed:false }) {
+    public async saveRSSIinfos(data: { timestamp: number, deviceEUI: string, data: string, eventtype: string, processed: false }) {
         //console.log("Insert Raw:\n");
         //console.table(data);
-        const transfer=data;
+        const transfer = data;
         const Insert = new this.DataModel(data);
         return await Insert.save();
     }
 
     public async fetchRSSIinfos(deviceEUI: string, numberOfRecords: number): Promise<DataInput[]> {
         Logger.log(`Fetch ${numberOfRecords}\n`);
-        const data = await this.DataModel.find({deviceEUI:deviceEUI,processed:false}).sort({timestamp:1}).limit(numberOfRecords).exec();
+        const data = await this.DataModel.find({ deviceEUI: deviceEUI, processed: false }).sort({ timestamp: 1 }).limit(numberOfRecords).exec();
         const res = new Array<DataInput>();
         data.forEach(item => {
             res.push({
-                data : item.data,
-                deviceEUI : item.deviceEUI,
-                eventtype : item.eventtype,
-                timestamp : item.timestamp,
-                processed : item.processed
+                data: item.data,
+                deviceEUI: item.deviceEUI,
+                eventtype: item.eventtype,
+                timestamp: item.timestamp,
+                processed: item.processed
             })
         })
         return res;
     }
 
-    public async markAsProcessed(data:{deviceEUI:string,timestamp:string}[]):Promise<void>{
-        data.forEach(async (curr)=>{
+    public async markAsProcessed(data: { deviceEUI: string, timestamp: string }[]): Promise<void> {
+        data.forEach(async (curr) => {
             // await this.DataModel.find({deviceEUI:curr.deviceEUI,timestamp:curr.timestamp}).set({processed:true});
-            await this.DataModel.findOneAndUpdate({deviceEUI:curr.deviceEUI,timestamp:curr.timestamp},{processed:true});
-            
+            await this.DataModel.findOneAndUpdate({ deviceEUI: curr.deviceEUI, timestamp: curr.timestamp }, { processed: true });
+
         })
         return;
     }
 
-    public async deleteDeviceData(deviceEUI:string, timestamp:number) {
-        return await this.DataModel.findOneAndDelete({deviceEUI:deviceEUI, timestamp:timestamp});
+    public async deleteDeviceData(deviceEUI: string, timestamp: number) {
+        return await this.DataModel.findOneAndDelete({ deviceEUI: deviceEUI, timestamp: timestamp });
     }
+
+    public async addToReady(data:{deviceEUI:string,timestamp:number,data:string}){
+        const Insert=new this.ReadyModel(data);
+        return await Insert.save();
+    }
+
+    public async checkNumReady(deviceEUI:string){
+        return await this.ReadyModel.find({deviceEUI:deviceEUI}).count();
+    }
+
+    public async getLatestReady(deviceEUI:string){
+        const data=await this.ReadyModel.find({deviceEUI:deviceEUI}).sort({timestamp:1}).limit(1).exec();
+        return data.at(0);
+    }
+
 }

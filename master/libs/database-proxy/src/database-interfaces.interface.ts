@@ -3,6 +3,8 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
 export type AverageInputDocument = AverageInput & Document;
 export type DataDocument = DataInput & Document;
+export type ReadyProcessDocument = ReadyProcess & Document;
+
 
 class Coordinate {
     @Prop({required:true, type:Number})
@@ -39,5 +41,19 @@ export class DataInput {
     processed : boolean;
 }
 
+
+@Schema()
+export class ReadyProcess{
+    @Prop({required:true})
+    timestamp : number;
+
+    @Prop({required:true})
+    deviceEUI : string;
+
+    @Prop({required:true})
+    data : string;
+
+}
 export const AverageInputSchema = SchemaFactory.createForClass(AverageInput)
 export const DataInputSchema = SchemaFactory.createForClass(DataInput)
+export const ReadyProcessSchema = SchemaFactory.createForClass(ReadyProcess)
