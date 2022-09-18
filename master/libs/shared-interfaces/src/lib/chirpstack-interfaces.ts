@@ -4,7 +4,8 @@ export interface ActivationKeys {
 
     devAddr ?: string;
     appSKey ?: string;
-    nwkSEncKey ?: string; // Network session key
+    nwkSKey ?: string; 
+    nwkSEncKey ?: string; // Network session key at backend
 
     fNwkSIntKey ?: string;
     sNwkSIntKey ?: string;

@@ -84,21 +84,18 @@ export class DeviceAddComponent implements OnInit {
         isABP: this.isABP,
         lora1_1: this.lora1_1,
         devAddr: this.sensorGroup.get("devAddr")?.value,
-        appSKey: this.sensorGroup.get("appSKey")?.value,
-        nwkSEncKey: this.sensorGroup.get("nwkSkey")?.value,
+        appSKey: this.sensorGroup.get("appSkey")?.value,
+
+        nwkSKey: this.sensorGroup.get("nwkSkey")?.value,
+        nwkSEncKey: this.sensorGroup.get("nwkSEncKey")?.value,
         
         fNwkSIntKey: this.sensorGroup.get("fNwkSIntKey")?.value,
         sNwkSIntKey: this.sensorGroup.get("sNwkSIntKey")?.value,
         
         appKey: this.sensorGroup.get("appKey")?.value,
         nwkKey: this.sensorGroup.get("nwkKey")?.value,
-      } as ActivationKeys
+      } as ActivationKeys;
 
-      const obj = {
-        customerID: this.descriptionGroup.get("profilegroup")?.value,
-        hardwareName: this.sensorGroup.get("eui")?.value,
-        labelName: this.descriptionGroup.get("name")?.value,
-      } as AddSensorDevice
       this.http.post("api/device/admin/add/sensor",{
         customerID: this.descriptionGroup.get("profilegroup")?.value,
         hardwareName: this.sensorGroup.get("eui")?.value,
@@ -172,24 +169,24 @@ export class DeviceAddComponent implements OnInit {
 
     if (obj?.isOTAA) {
       this.isABP = false;
-      this.sensorGroup.controls['appKey'].setValidators([Validators.required]);
+      this.sensorGroup.controls['appKey'].setValidators([Validators.required, Validators.pattern('[0-9a-fA-F]{32}')]);
       
       if (this.lora1_1) {
-        this.sensorGroup.controls['nwkKey'].setValidators([Validators.required]);
+        this.sensorGroup.controls['nwkKey'].setValidators([Validators.required, Validators.pattern('[0-9a-fA-F]{32}')]);
       }
     } else {
       this.isABP = true;
-
-      this.sensorGroup.controls['devAddr'].setValidators([Validators.required]);
-      this.sensorGroup.controls['appSkey'].setValidators([Validators.required]);
+      
+      this.sensorGroup.controls['devAddr'].setValidators([Validators.required, Validators.pattern('[0-9a-fA-F]{8}')]);
+      this.sensorGroup.controls['appSkey'].setValidators([Validators.required, Validators.pattern('[0-9a-fA-F]{32}')]);
       if (this.lora1_0) {
-        this.sensorGroup.controls['nwkSkey'].setValidators([Validators.required]);
+        this.sensorGroup.controls['nwkSkey'].setValidators([Validators.required, Validators.pattern('[0-9a-fA-F]{32}')]);
       }
 
       if (this.lora1_1) {
-        this.sensorGroup.controls['nwkSEncKey'].setValidators([Validators.required]);
-        this.sensorGroup.controls['sNwkSIntKey'].setValidators([Validators.required]);
-        this.sensorGroup.controls['fNwkSIntKey'].setValidators([Validators.required]);
+        this.sensorGroup.controls['nwkSEncKey'].setValidators([Validators.required, Validators.pattern('[0-9a-fA-F]{32}')]);
+        this.sensorGroup.controls['sNwkSIntKey'].setValidators([Validators.required, Validators.pattern('[0-9a-fA-F]{32}')]);
+        this.sensorGroup.controls['fNwkSIntKey'].setValidators([Validators.required, Validators.pattern('[0-9a-fA-F]{32}')]);
       }
     }
     
