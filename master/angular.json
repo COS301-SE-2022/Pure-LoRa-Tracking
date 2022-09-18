@@ -1,12 +1,12 @@
 {
   "version": 2,
   "projects": {
-    "ai-ai-triangulation": "libs/ai/ai-triangulation",
     "ai-heatmap-average": "libs/ai/heatmap-average",
     "ai-mock-data-trainer": "libs/ai/mock-data-trainer",
     "ai-mock-generator-averaging-data-generator": "libs/ai/mock-generator/averaging-data-generator",
     "ai-mock-generator-triangulation": "libs/ai/mock-generator/triangulation",
     "ai-particle-filter": "libs/ai/particle-filter",
+    "ai-processing-strategy": "libs/ai/processing-strategy",
     "api": "apps/api",
     "api-api-router": "libs/api/api-router",
     "api-api-testing": "libs/api/api-testing",
