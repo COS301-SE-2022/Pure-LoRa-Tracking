@@ -1,22 +1,22 @@
 {
-  "sourceRoot": "libs/ai/ai-triangulation/src",
+  "sourceRoot": "libs/ai/particle-filter/src",
   "projectType": "library",
   "targets": {
     "build": {
       "executor": "@nrwl/js:tsc",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/libs/ai/ai-triangulation",
-        "tsConfig": "libs/ai/ai-triangulation/tsconfig.lib.json",
-        "packageJson": "libs/ai/ai-triangulation/package.json",
-        "main": "libs/ai/ai-triangulation/src/index.ts",
-        "assets": ["libs/ai/ai-triangulation/*.md"]
+        "outputPath": "dist/libs/ai/particle-filter",
+        "tsConfig": "libs/ai/particle-filter/tsconfig.lib.json",
+        "packageJson": "libs/ai/particle-filter/package.json",
+        "main": "libs/ai/particle-filter/src/index.ts",
+        "assets": ["libs/ai/particle-filter/*.md"]
       }
     },
     "publish": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "command": "node tools/scripts/publish.mjs ai-ai-triangulation {args.ver} {args.tag}"
+        "command": "node tools/scripts/publish.mjs ai-particle-filter {args.ver} {args.tag}"
       },
       "dependsOn": [
         {
@@ -29,14 +29,14 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["libs/ai/ai-triangulation/**/*.ts"]
+        "lintFilePatterns": ["libs/ai/particle-filter/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/ai/ai-triangulation"],
+      "outputs": ["coverage/libs/ai/particle-filter"],
       "options": {
-        "jestConfig": "libs/ai/ai-triangulation/jest.config.ts",
+        "jestConfig": "libs/ai/particle-filter/jest.config.ts",
         "passWithNoTests": true
       }
     }
