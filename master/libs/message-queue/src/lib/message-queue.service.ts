@@ -101,7 +101,15 @@ export class MessageQueueService {
                 processed:false
             }).then(curr=>{
                 if(curr==true){
-                    this.checkToSend(deveui)
+                    //send to service
+                    if(this.processlist.get(deveui)!=false){
+                        //we can send
+                        this.sendToService(msg.content.toString(),this.serviceready);
+                    }
+                    else {
+                        //push to ready q
+                        channel.sendToQueue("PURELORA_READYQUEUE",msg.content.toString());
+                    }
                 }
             });
             
@@ -137,58 +145,10 @@ export class MessageQueueService {
         //OBSERVER
         this.serviceready.asObservable().subscribe(async (curr)=>{
             this.processlist.delete(curr);
-
-            // if(curr){
-            //     const data=await this.readygetchannel?.get("PURELORA_READYQUEUE");
-            //     if(data!=false&&data!=undefined){
-            //         console.log(data.content);
-            //         this.serviceready.next(false);//set and run
-            //         const tosend=JSON.parse(data.content);
-            //         this.sendToService(tosend.data,this.serviceready)
-            //     }
-            // }
         })
 
     }
 
-
-    async checkToSend(deveui:string){
-        const sometime=10000;//10 seconds
-        const data=await this.processbus.getRssiInfo(deveui,parseInt(process.env.AVGAMOUNT));
-        console.log(process.env.AVGAMOUNT)
-        if(data.length==0){
-            //nothing in the array, should maybe show an error
-        }
-        else if(data.length>=parseInt(process.env.AVGAMOUNT)){
-            //enough data to check
-            let ready=true;
-            for(let i=0;i<data.length-1;i++){
-                if(data[i].timestamp-data[i+1].timestamp>=sometime){
-                    console.log("Deleteing ",data[i]);
-                    await this.processbus.deleteDeviceData({"deviceEUI":data[i].deviceEUI,"timestamp":data[i].timestamp});
-                    ready=false;
-                }
-            }
-            
-            //if there is enough to send to the ready queue
-            if(ready){ 
-                console.log("Processing and sending");
-                //mark last 3 as processed
-                this.processbus.markProcessed(data.map(curr=>{return {deviceEUI:curr.deviceEUI,timestamp:curr.timestamp}}));
-                //send to ready queue
-                this.readychannel.sendToQueue("PURELORA_READYQUEUE",JSON.stringify({
-                    deviceEUI:deveui,
-                    data:data
-                }));
-            }
-            //check if there is more to be processed, if delete is false then this will loop infinitely.
-            // check this and maybe update and add a timeout
-            // const other=await this.processbus.getRssiInfo(deveui,parseInt(process.env.AVGAMOUNT));
-            // if(other.length>=parseInt(process.env.AVGAMOUNT)){
-            //     this.checkToSend(deveui);
-            // }
-        }   
-    }
 
     sendToService(data:any,observer:Subject<string>){
         console.log("service has received ",data);
