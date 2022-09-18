@@ -73,7 +73,9 @@ export class ProcessingApiProcessingBusService {
 
     async getLastReady(deviceEUI:string){
         try {
-            return await this.database.getLatestReady(deviceEUI);
+            const data = await this.database.getLatestReady(deviceEUI);
+            await this.database.deleteReadyAt(data._id?.toString());
+            return data;
         } catch(error) {
             Logger.log('Error');
             Logger.log(error);

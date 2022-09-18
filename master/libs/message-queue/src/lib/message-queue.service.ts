@@ -99,6 +99,7 @@ export class MessageQueueService {
             // });
             const uplinkData = UplinkEvent.deserializeBinary(msg.content);
             const uplinkDataJson = JSON.stringify(uplinkData.toObject());
+            const uplinkStore = JSON.stringify(msg.content);
 
             this.processbus.forwardChirpstackData({
                 data: uplinkDataJson,
@@ -117,9 +118,9 @@ export class MessageQueueService {
                     else {
                         //push to ready q
                         this.processbus.addToReady({
-                            deviceEUI:deveui,
-                            timestamp:Date.now(),
-                            data:uplinkDataJson
+                            deviceEUI: deveui,
+                            timestamp: Date.now(),
+                            data: uplinkStore
                         })
                     }
                 }
@@ -161,9 +162,12 @@ export class MessageQueueService {
             this.processlist.delete(curr);
 
             //ready to be processed by the database. check if any are waiting
-            if(await this.processbus.checkCountReady(curr)>0){
+            if (await this.processbus.checkCountReady(curr) > 0) {
                 console.log("Found Data, sending to latest to server");
-                console.log(await this.processbus.getLastReady(curr))
+                const data = await this.processbus.getLastReady(curr); 
+                const uplinkData = UplinkEvent.deserializeBinary(Buffer.from(JSON.parse(data.data).data));
+                this.sendToService(uplinkData, this.serviceready);
+                this.processlist.set(curr, false);
             }
 
         })
@@ -172,7 +176,7 @@ export class MessageQueueService {
 
 
     sendToService(uplinkData: UplinkEvent,observer:Subject<string>){
-        console.log('\x1b[33m%s\x1b[0m' , "data object", uplinkData);
+        // console.log('\x1b[33m%s\x1b[0m' , "data object", uplinkData);
         const devEui = Buffer.from(uplinkData.getDevEui_asB64(), 'base64').toString('hex');
         // console.log(devEui);
 
