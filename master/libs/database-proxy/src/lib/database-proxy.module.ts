@@ -1,7 +1,7 @@
 import { Module, Global } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { DatabaseProxyService } from './database-proxy.service';
-import { AverageInput, AverageInputSchema, DataInput, DataInputSchema, ReadyProcess, ReadyProcessSchema, DevicePerimeter, DevicePerimeterSchema, } from '../database-interfaces.interface';
+import { AverageInput, AverageInputSchema, DataInput, DataInputSchema, ReadyProcess, ReadyProcessSchema, DevicePerimeter, DevicePerimeterSchema } from '../database-interfaces.interface';
 
 @Global()
 @Module({

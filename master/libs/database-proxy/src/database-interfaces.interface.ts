@@ -69,3 +69,4 @@ export class DevicePerimeter {
 export const AverageInputSchema = SchemaFactory.createForClass(AverageInput)
 export const DataInputSchema = SchemaFactory.createForClass(DataInput)
 export const ReadyProcessSchema = SchemaFactory.createForClass(ReadyProcess)
+export const DevicePerimeterSchema = SchemaFactory.createForClass(DevicePerimeter)
