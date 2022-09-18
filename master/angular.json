@@ -1,6 +1,7 @@
 {
   "version": 2,
   "projects": {
+    "ai-ai-processing": "libs/ai/ai-processing",
     "ai-heatmap-average": "libs/ai/heatmap-average",
     "ai-mock-data-trainer": "libs/ai/mock-data-trainer",
     "ai-mock-generator-averaging-data-generator": "libs/ai/mock-generator/averaging-data-generator",

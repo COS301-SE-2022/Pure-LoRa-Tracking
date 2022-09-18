@@ -25,6 +25,7 @@
         "libs/ai/mock-generator/triangulation/src/index.ts"
       ],
       "@lora/ai/particle-filter": ["libs/ai/particle-filter/src/index.ts"],
+      "@lora/ai/processing": ["libs/ai/ai-processing/src/index.ts"],
       "@lora/ai/strategy": ["libs/ai/processing-strategy/src/index.ts"],
       "@lora/ai/triangulation": ["libs/ai/ai-triangulation/src/index.ts"],
       "@lora/api/login": ["libs/api/login-endpoint/src/index.ts"],
