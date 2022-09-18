@@ -6,10 +6,10 @@ import randomPositionInPolygon = require('random-position-in-polygon');
 @Injectable()
 export class AiParticleFilterService extends AiProcessingStrategyService {
 
-    async processData(data: any): Promise<boolean> {
+    async processData(reading: any): Promise<boolean> {
         console.log("Particle filter strategy")
-        const result = await this.particleFilter(data.reading);
-        this.serviceBus.sendProcessedDatatoTB(data.deviceID, { result: { latitude: result[1], longitude: result[0] }, processingType: "pf" });
+        const result = await this.particleFilter(reading);
+        this.serviceBus.sendProcessedDatatoTB(reading.deviceEUI, { result: { latitude: result[1], longitude: result[0] }, processingType: "pf" });
         return false;
     }
 
