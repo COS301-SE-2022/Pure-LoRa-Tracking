@@ -54,7 +54,7 @@ export class AiAiProcessingService {
         // const device = await this.resolveDevice(deviceData);
 
         /* perform process */
-        const resLatLong = await this.serviceBus.LocationServiceProcess(deviceData, deviceData.deviceToken);
+        const resLatLong = await this.serviceBus.LocationServiceProcess(uplinkData.getRxInfoList(), deviceData.deviceToken);
 
         // rssi PF
         // await device.strategy[0].processData({ rssi: deviceData.RSSI, gateways: deviceData.gateways});
@@ -101,7 +101,11 @@ export class AiAiProcessingService {
     }
 
     convertRXData(data: UplinkRXInfo[]): { deviceToken: string, RSSI: number[], gateways: { longitude: number, latitude: number }[] } {
-        let deviceData: { deviceToken: string, RSSI: number[], gateways: { longitude: number, latitude: number }[] };
+        console.log(data);
+        const deviceData = { deviceToken: '', RSSI: [], gateways: [] };
+        deviceData.gateways = new Array<{ longitude: number, latitude: number }>();
+        deviceData.RSSI = new Array<number>();
+
         data.forEach(reading => {
             deviceData.RSSI.push(reading.getRssi());
             const location = { longitude: reading.getLocation().getLongitude(), latitude: reading.getLocation().getLatitude() };

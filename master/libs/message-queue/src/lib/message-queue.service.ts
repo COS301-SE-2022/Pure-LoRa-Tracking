@@ -4,6 +4,7 @@ import { ProcessingApiProcessingBusService } from '@processing/bus';
 import type * as amqplib from 'amqplib';
 import { BehaviorSubject, buffer, Subject } from 'rxjs';
 import { UplinkEvent } from '@chirpstack/chirpstack-api/as/integration/integration_pb';
+import { AiAiProcessingService } from '@lora/ai/processing';
 
 
 @Injectable()
@@ -16,7 +17,7 @@ export class MessageQueueService {
     private serviceready=new Subject<string>();//this almost acts like a lock
     private processlist=new Map<string,boolean>();
 
-    constructor(private processbus:ProcessingApiProcessingBusService) {
+    constructor(private processbus:ProcessingApiProcessingBusService, private aiProcessing: AiAiProcessingService) {
         //singleton, sorry Dr Marshall
         if (MessageQueueService.amqpconnection == null) {
             MessageQueueService.amqpconnection = amqp.connect([`amqp://${process.env.RABBITMQ_USERNAME}:${process.env.RABBITMQ_PASSWORD}@localhost:5672`]);
@@ -112,7 +113,7 @@ export class MessageQueueService {
                     //send to service
                     if(this.processlist.get(deveui)!=false){
                         //we can send
-                        this.sendToService(uplinkData, this.serviceready);
+                        this.aiProcessing.forwardData(uplinkData, this.serviceready);
                         this.processlist.set(deveui, false);
                     }
                     else {
@@ -166,7 +167,7 @@ export class MessageQueueService {
                 console.log("Found Data, sending to latest to server");
                 const data = await this.processbus.getLastReady(curr); 
                 const uplinkData = UplinkEvent.deserializeBinary(Buffer.from(JSON.parse(data.data).data));
-                this.sendToService(uplinkData, this.serviceready);
+                this.aiProcessing.forwardData(uplinkData, this.serviceready);
                 this.processlist.set(curr, false);
             }
 
