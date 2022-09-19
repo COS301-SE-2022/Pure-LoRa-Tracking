@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AddGatewayDevice, AddSensorDevice, ActivationKeys } from '@master/shared-interfaces';
 import {TokenManagerService} from "@master/client/user-storage-controller"
 import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
@@ -26,7 +26,7 @@ export class DeviceAddComponent implements OnInit {
   lora1_0 = false;
   lora1_1 = false;
 
-  constructor(private _formBuilder: UntypedFormBuilder,private http:HttpClient,private tokenmanager:TokenManagerService,private snackbar:MatSnackBar) {}
+  constructor(private cd: ChangeDetectorRef, private _formBuilder: UntypedFormBuilder,private http:HttpClient,private tokenmanager:TokenManagerService,private snackbar:MatSnackBar) {}
 
   ngOnInit(): void {
     this.typeGroup = this._formBuilder.group({
@@ -37,13 +37,13 @@ export class DeviceAddComponent implements OnInit {
       profilegroup: ['', Validators.required],
     });
     this.gatewayGroup = this._formBuilder.group({
-      gatewayid: ['', Validators.required],
+      gatewayid: ['', Validators.pattern('^[0-9a-fA-F]{16}$')],
       // networkserver: ['', Validators.required],
       gatlang: ['', Validators.required],
       gatlong: ['', Validators.required],
     });
     this.sensorGroup=this._formBuilder.group({
-      eui: ['', Validators.required],
+      eui: ['', Validators.pattern('^[0-9a-fA-F]{16}$')],
       deviceProfile: ['', Validators.required],
       
       devAddr: [''],
@@ -169,24 +169,24 @@ export class DeviceAddComponent implements OnInit {
 
     if (obj?.isOTAA) {
       this.isABP = false;
-      this.sensorGroup.controls['appKey'].setValidators([Validators.required, Validators.pattern('[0-9a-fA-F]{32}')]);
+      this.sensorGroup.controls['appKey'].setValidators([Validators.pattern('^[0-9a-fA-F]{32}$')]);
       
       if (this.lora1_1) {
-        this.sensorGroup.controls['nwkKey'].setValidators([Validators.required, Validators.pattern('[0-9a-fA-F]{32}')]);
+        this.sensorGroup.controls['nwkKey'].setValidators([Validators.pattern('^[0-9a-fA-F]{32}$')]);
       }
     } else {
       this.isABP = true;
       
-      this.sensorGroup.controls['devAddr'].setValidators([Validators.required, Validators.pattern('[0-9a-fA-F]{8}')]);
-      this.sensorGroup.controls['appSkey'].setValidators([Validators.required, Validators.pattern('[0-9a-fA-F]{32}')]);
+      this.sensorGroup.controls['devAddr'].setValidators([Validators.pattern('^[0-9a-fA-F]{8}$')]);
+      this.sensorGroup.controls['appSkey'].setValidators([Validators.pattern('^[0-9a-fA-F]{32}$')]);
       if (this.lora1_0) {
-        this.sensorGroup.controls['nwkSkey'].setValidators([Validators.required, Validators.pattern('[0-9a-fA-F]{32}')]);
+        this.sensorGroup.controls['nwkSkey'].setValidators([Validators.pattern('^[0-9a-fA-F]{32}$')]);
       }
 
       if (this.lora1_1) {
-        this.sensorGroup.controls['nwkSEncKey'].setValidators([Validators.required, Validators.pattern('[0-9a-fA-F]{32}')]);
-        this.sensorGroup.controls['sNwkSIntKey'].setValidators([Validators.required, Validators.pattern('[0-9a-fA-F]{32}')]);
-        this.sensorGroup.controls['fNwkSIntKey'].setValidators([Validators.required, Validators.pattern('[0-9a-fA-F]{32}')]);
+        this.sensorGroup.controls['nwkSEncKey'].setValidators([Validators.pattern('^[0-9a-fA-F]{32}$')]);
+        this.sensorGroup.controls['sNwkSIntKey'].setValidators([Validators.pattern('^[0-9a-fA-F]{32}$')]);
+        this.sensorGroup.controls['fNwkSIntKey'].setValidators([Validators.pattern('^[0-9a-fA-F]{32}$')]);
       }
     }
     
@@ -198,6 +198,13 @@ export class DeviceAddComponent implements OnInit {
     this.sensorGroup.controls['nwkSEncKey'].updateValueAndValidity();
     this.sensorGroup.controls['sNwkSIntKey'].updateValueAndValidity();
     this.sensorGroup.controls['fNwkSIntKey'].updateValueAndValidity();
+
+    this.cd.detectChanges();
   }
 
+  stripspaces(data: any) {
+    const target = data.target.getAttribute('formcontrolname');
+    this.sensorGroup.get(target)?.setValue(data.target.value.replaceAll(' ','').toUpperCase());
+    this.gatewayGroup.get(target)?.setValue(data.target.value.replaceAll(' ','').toUpperCase());
+  }
 }
