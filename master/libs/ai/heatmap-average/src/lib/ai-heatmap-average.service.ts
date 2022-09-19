@@ -7,9 +7,12 @@ import tf = require('@tensorflow/tfjs-node');
 export class AiHeatmapAverageService extends AiProcessingStrategyService {
   private EarthRadius = 6371;
   private model: tf.Sequential;
-  private targetEpochs = 3;
-  private filePath: string;
-  private currentFive: {latitude:number, longitude:number}[];
+  private targetEpochs = 15;
+  private loadFilePath: string;
+  private saveFilePath: string;
+  private deviceToken: string;
+  private defaultModelLoadPath = 'file://libs/ai/Models/averaging/';
+  private currentFive: { latitude: number; longitude: number }[];
 
   /*
         1) get model
@@ -21,15 +24,24 @@ export class AiHeatmapAverageService extends AiProcessingStrategyService {
   constructor(protected serviceBus: ProcessingApiProcessingBusService) {
     super(serviceBus);
     this.buildModel();
-    this.filePath = ``;
-    this.currentFive = new Array<{latitude:number, longitude:number}>();
+    this.loadFilePath = ``;
+    this.saveFilePath = ``;
+    this.currentFive = new Array<{ latitude: number; longitude: number }>();
   }
 
-  configureInitialParameters(initialParameters: {deviceID:string}) {
-      this.filePath = `file://libs/ai/Models/averaging/${initialParameters.deviceID}.json`;
+  async configureInitialParameters(initialParameters: { deviceID: string }) {
+    this.deviceToken = initialParameters.deviceID;
+    this.saveFilePath = `file://libs/ai/Models/averaging/${initialParameters.deviceID}/`;
+    this.loadFilePath = this.saveFilePath + 'model.json';
+    const isPrevModel = await this.loadModel(this.loadFilePath);
+
+    //No model for current device.
+    if (!isPrevModel) {
+      await this.loadModel(this.defaultModelLoadPath);
+    }
   }
 
-    /*
+  /*
     1) Load model by device name
     2) Receive reading and push to rolling array
     3) Normalize
@@ -38,29 +50,40 @@ export class AiHeatmapAverageService extends AiProcessingStrategyService {
     6) Denormalize
     7) Send result to TB via bus
   */
-  async processData(data:{deviceID:string, reading:{latitude:number, longitude:number}}) : Promise<boolean> {
-    //const isPrevModel = await this.loadModel(this.filePath);
+  async processData(data: {
+    deviceID: string;
+    reading: { latitude: number; longitude: number };
+  }): Promise<boolean> {
+    if (this.currentFive.length >= 5) this.currentFive.shift();
 
-    if(this.currentFive.length > 5)
-      this.currentFive.shift;
-    
     this.currentFive.push(data.reading);
 
-    if(this.currentFive.length == 5)
-    return false;
+    if (this.currentFive.length != 5) return false;
 
-    const normalizedFive = this.normalizePoints(this.deconstructData(this.currentFive));
-    const normalizedReading = this.normalizePoints(this.deconstructData([data.reading]));
+    const normalizedFive = this.normalizePoints(
+      this.deconstructData(this.currentFive)
+    );
+    const normalizedReading = this.normalizePoints(
+      this.deconstructData([data.reading])
+    );
+
     this.fitModel(normalizedFive, normalizedReading);
-    const result = this.deNormalizePoints(await this.predictData(normalizedReading));
+    const result = await this.predictData(normalizedFive);
 
-    //Send result to TB via bus.
-    
-    /*if (isPrevModel){
-      
-    }*/
+    /* Show results
+    console.log(this.currentFive);
+    console.log(data.reading);
+    console.log(result);
+    */
 
-    return false;
+    this.serviceBus.sendProcessedDatatoTB(this.deviceToken, {
+      processingType: 'ANN',
+      result: { longitude: result[0], latitude: result[1] },
+    });
+
+    this.saveModel(this.saveFilePath);
+
+    return true;
   }
 
   normalizePoints(dataSet: number[]): number[] {
@@ -88,7 +111,7 @@ export class AiHeatmapAverageService extends AiProcessingStrategyService {
   async buildModel() {
     this.model = tf.sequential();
     this.model.add(
-      tf.layers.dense({ inputShape: [20], units: 8, activation: 'sigmoid' })
+      tf.layers.dense({ inputShape: [10], units: 8, activation: 'sigmoid' })
     );
     this.model.add(tf.layers.dense({ units: 2, activation: 'softmax' }));
     this.model.compile({
@@ -123,6 +146,7 @@ export class AiHeatmapAverageService extends AiProcessingStrategyService {
       tf.tensor(trueData, [1, 2]),
       {
         epochs: this.targetEpochs,
+        verbose: 0,
         /*callbacks: {
           onEpochEnd: async (epoch, logs) => {
             console.log('Epoch ' + epoch);
