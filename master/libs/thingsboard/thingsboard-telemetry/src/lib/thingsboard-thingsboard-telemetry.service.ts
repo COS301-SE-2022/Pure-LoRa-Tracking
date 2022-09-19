@@ -90,7 +90,7 @@ export class ThingsboardThingsboardTelemetryService {
       DeviceProfile +
       '/' +
       DeviceID +
-      '/keys/attributes';
+      '/keys/timeseries';
 
     const keyResponse = await lastValueFrom(
       this.httpService.get(url, { headers: this.headersReq })
