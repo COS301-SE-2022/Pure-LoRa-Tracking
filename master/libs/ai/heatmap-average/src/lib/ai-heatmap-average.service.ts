@@ -11,7 +11,7 @@ export class AiHeatmapAverageService extends AiProcessingStrategyService {
   private loadFilePath: string;
   private saveFilePath: string;
   private deviceToken: string;
-  private defaultModelLoadPath: string = 'file://libs/ai/Models/averaging/';
+  private defaultModelLoadPath = 'file://libs/ai/Models/averaging/';
   private currentFive: { latitude: number; longitude: number }[];
 
   /*
