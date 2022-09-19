@@ -2416,7 +2416,7 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
       .spyOn(httpService, 'get')
       .mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
 
-    //Validate token
+    //Validate device
     jest
       .spyOn(httpService, 'get')
       .mockImplementationOnce(() => of(tests.axiosDeviceSuccessExample));
@@ -2429,6 +2429,33 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
     jest
       .spyOn(httpService, 'get')
       .mockImplementationOnce(() => of(tests.axiosDeviceSuccessExample));
+
+    console.log(await service.getDeviceSensorData('DEVID', 0, 1));
+  });
+
+  it('should get device sensor -> bad token', async () => {
+    //Validate token
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() =>
+        of(tests.axiosTokenVerificationFailureExample)
+      );
+
+    console.log(await service.getDeviceSensorData('DEVID', 0, 1));
+  });
+
+  it('should get device sensor -> bad device', async () => {
+    //Validate token
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
+
+    //Validate device
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() =>
+        of(tests.axiosTokenVerificationFailureExample)
+      );
 
     console.log(await service.getDeviceSensorData('DEVID', 0, 1));
   });
