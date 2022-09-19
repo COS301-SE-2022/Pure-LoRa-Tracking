@@ -109,32 +109,46 @@ describe('ThingsboardThingsboardTelemetryService', () => {
   ////////////////////////////////////////////////////////////////////////////////
 
   it('get sensor data -> return info', async () => {
-    //const data = await loginService.login(tests.user, tests.userPassword);
-    //service.setToken(data.token);
+    /*
     service.setToken(
       'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZlYWRtaW5AcmVzZXJ2ZS5jb20iLCJzY29wZXMiOlsiVEVOQU5UX0FETUlOIl0sInVzZXJJZCI6ImQ2MzcyZTMwLWRmZTgtMTFlYy1iZGIzLTc1MGNlN2VkMjQ1MSIsImVuYWJsZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiJjZDJkZjJiMC1kZmU4LTExZWMtYmRiMy03NTBjZTdlZDI0NTEiLCJjdXN0b21lcklkIjoiMTM4MTQwMDAtMWRkMi0xMWIyLTgwODAtODA4MDgwODA4MDgwIiwiaXNzIjoidGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE2NjM1OTU0MTUsImV4cCI6MTY2MzYwNDQxNX0.qylikFxTmdm0Ur4hTxo6p7jAcQ_-brgj1oJ-GfF69pSUUOMqL0zmNkooTiKQ3oXBG26zNp6nB8yY-Uv0rujP9w'
     );
-    //jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.axiosTelemetrySuccessExample));
-    const res = await service.getSensorData(
-      '1ecd2e60-dfe9-11ec-bdb3-750ce7ed2451',
-      'DEVICE',
-      0,
-      1663591396352
-    );
+    */
+    /*
+   const res = await service.getSensorData(
+     '1ecd2e60-dfe9-11ec-bdb3-750ce7ed2451',
+     'DEVICE',
+     0,
+     1663591396352
+     );
+     console.log(JSON.stringify(res));
+     expect(res).toBeDefined();
+     */
 
-    console.log(res);
-    expect(res).toBeDefined();
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() => of(tests.axiosTelemetrySuccessExample));
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() => of(tests.axiosTelemetrySuccessExample));
+
+    expect(
+      await service.getSensorData('deviceID', 'deviceType', 1663600326)
+    ).toMatchObject(tests.SuccessResponse);
   });
 
-  /*it('get sensor data -> return info, no time start', async () => {
+  it('get sensor data -> return info, no time start', async () => {
     service.setToken('token');
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() => of(tests.axiosTelemetrySuccessExample));
     jest
       .spyOn(httpService, 'get')
       .mockImplementationOnce(() => of(tests.axiosTelemetrySuccessExample));
     expect(await service.getSensorData('deviceID', 'deviceType')).toMatchObject(
       tests.SuccessResponse
     );
-  });*/
+  });
 
   it('get sensor data -> ECONNREFUSED', async () => {
     service.setToken('token');
