@@ -7,20 +7,23 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
+import { GatewayActivityComponent } from './gateway-activity/gateway-activity.component';
+// import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 export const clientGatewayDetailRoutes: Route[] = [];
 
 @NgModule({
   imports: [
-    CommonModule, 
+    CommonModule,
     RouterModule,
     MatCardModule,
     MatDividerModule,
     MatButtonModule,
     MatIconModule,
-    MatTabsModule
+    MatTabsModule,
+    //NgxChartsModule
   ],
-  declarations: [GatewayViewDetailComponent],
-  exports: [GatewayViewDetailComponent],
+  declarations: [GatewayViewDetailComponent, GatewayActivityComponent],
+  exports: [GatewayViewDetailComponent, GatewayActivityComponent],
 })
 export class ClientGatewayDetailModule {}
