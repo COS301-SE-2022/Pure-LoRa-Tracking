@@ -83,6 +83,14 @@ export class ThingsboardThingsboardTelemetryService {
   ): Promise<SensorDataResponse> {
     let url = '';
 
+    if (timeStop == undefined) {
+      timeStop = new Date().getTime();
+    }
+
+    if (timeStart == undefined) {
+      timeStart = new Date(timeStop - 24 * 60 * 60 * 1000).getTime();
+    }
+
     //Get key attributes.
     url =
       this.ThingsBoardURL +
