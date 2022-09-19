@@ -1,5 +1,8 @@
 import { ApiApiTestingModule, ApiApiTestingService } from '@lora/api/testing';
-import { ThingsboardThingsboardClientModule, ThingsboardThingsboardClientService } from '@lora/thingsboard-client';
+import {
+  ThingsboardThingsboardClientModule,
+  ThingsboardThingsboardClientService,
+} from '@lora/thingsboard-client';
 import { Test } from '@nestjs/testing';
 import { of } from 'rxjs';
 import { ApiUserEndpointService } from './api-user-endpoint.service';
@@ -50,7 +53,7 @@ describe('ApiUserEndpointService', () => {
     }))*/
   });
 
-  it("get user info", async () => {
+  it('get user info', async () => {
     // console.log(
     //   (await service.UserInfoProcess({token:'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZldXNlcnR3b0ByZXNlcnZlLmNvbSIsInNjb3BlcyI6WyJDVVNUT01FUl9VU0VSIl0sInVzZXJJZCI6ImQ4ZDRiZjMwLTA3NzYtMTFlZC1iMWU0LWVkZDUzMjRhY2YwNSIsImZpcnN0TmFtZSI6InJlc2VydmUgdXNlciB0d28iLCJsYXN0TmFtZSI6InJlc2VydmUiLCJlbmFibGVkIjp0cnVlLCJpc1B1YmxpYyI6ZmFsc2UsInRlbmFudElkIjoiY2QyZGYyYjAtZGZlOC0xMWVjLWJkYjMtNzUwY2U3ZWQyNDUxIiwiY3VzdG9tZXJJZCI6IjRiY2VjZTQwLWUxZDktMTFlYy1hOWI2LWJiYjliYWQzZGYzOSIsImlzcyI6InRoaW5nc2JvYXJkLmlvIiwiaWF0IjoxNjU4MjQ0MzEwLCJleHAiOjE2NTgyNTMzMTB9.ZvlY6mW8DKBJrp9oF6Adki6ZsWzvxasDVu1KKC0RZYtWojlekkwydn4w6dyX57gG_R3bI5XJPQKwVHfReHS03Q'})).data.additionalInfo
     // )
@@ -73,13 +76,17 @@ describe('ApiUserEndpointService', () => {
 
   it('add user -> missing token', async () => {
     delete tests.userEndpointExample.token;
-    expect(await service.AddUserProcess(tests.userEndpointExample)).toMatchObject({
+    expect(
+      await service.AddUserProcess(tests.userEndpointExample)
+    ).toMatchObject({
       status: 401,
       explain: 'token missing',
     });
 
     tests.userEndpointExample.token = '';
-    expect(await service.AddUserProcess(tests.userEndpointExample)).toMatchObject({
+    expect(
+      await service.AddUserProcess(tests.userEndpointExample)
+    ).toMatchObject({
       status: 401,
       explain: 'token missing',
     });
@@ -87,13 +94,17 @@ describe('ApiUserEndpointService', () => {
 
   it('add user -> missing customer ID', async () => {
     delete tests.userEndpointExample.customerID;
-    expect(await service.AddUserProcess(tests.userEndpointExample)).toMatchObject({
+    expect(
+      await service.AddUserProcess(tests.userEndpointExample)
+    ).toMatchObject({
       status: 400,
       explain: 'customerID not defined',
     });
 
     tests.userEndpointExample.customerID = '';
-    expect(await service.AddUserProcess(tests.userEndpointExample)).toMatchObject({
+    expect(
+      await service.AddUserProcess(tests.userEndpointExample)
+    ).toMatchObject({
       status: 400,
       explain: 'customerID not defined',
     });
@@ -101,7 +112,9 @@ describe('ApiUserEndpointService', () => {
 
   it('add user -> missing userinfo', async () => {
     delete tests.userEndpointExample.userInfo;
-    expect(await service.AddUserProcess(tests.userEndpointExample)).toMatchObject({
+    expect(
+      await service.AddUserProcess(tests.userEndpointExample)
+    ).toMatchObject({
       status: 400,
       explain: 'userInfo not defined',
     });
@@ -109,13 +122,17 @@ describe('ApiUserEndpointService', () => {
 
   it('add user -> missing email', async () => {
     delete tests.userEndpointExample.userInfo.email;
-    expect(await service.AddUserProcess(tests.userEndpointExample)).toMatchObject({
+    expect(
+      await service.AddUserProcess(tests.userEndpointExample)
+    ).toMatchObject({
       status: 400,
       explain: 'no user email found',
     });
 
     tests.userEndpointExample.userInfo.email = '';
-    expect(await service.AddUserProcess(tests.userEndpointExample)).toMatchObject({
+    expect(
+      await service.AddUserProcess(tests.userEndpointExample)
+    ).toMatchObject({
       status: 400,
       explain: 'no user email found',
     });
@@ -123,13 +140,17 @@ describe('ApiUserEndpointService', () => {
 
   it('add user -> missing first name', async () => {
     delete tests.userEndpointExample.userInfo.firstName;
-    expect(await service.AddUserProcess(tests.userEndpointExample)).toMatchObject({
+    expect(
+      await service.AddUserProcess(tests.userEndpointExample)
+    ).toMatchObject({
       status: 400,
       explain: 'no first name found',
     });
 
     tests.userEndpointExample.userInfo.firstName = '';
-    expect(await service.AddUserProcess(tests.userEndpointExample)).toMatchObject({
+    expect(
+      await service.AddUserProcess(tests.userEndpointExample)
+    ).toMatchObject({
       status: 400,
       explain: 'no first name found',
     });
@@ -137,13 +158,17 @@ describe('ApiUserEndpointService', () => {
 
   it('add user -> missing last name', async () => {
     delete tests.userEndpointExample.userInfo.lastName;
-    expect(await service.AddUserProcess(tests.userEndpointExample)).toMatchObject({
+    expect(
+      await service.AddUserProcess(tests.userEndpointExample)
+    ).toMatchObject({
       status: 400,
       explain: 'no last name found',
     });
 
     tests.userEndpointExample.userInfo.lastName = '';
-    expect(await service.AddUserProcess(tests.userEndpointExample)).toMatchObject({
+    expect(
+      await service.AddUserProcess(tests.userEndpointExample)
+    ).toMatchObject({
       status: 400,
       explain: 'no last name found',
     });
@@ -151,43 +176,59 @@ describe('ApiUserEndpointService', () => {
 
   it('add user -> missing reserve', async () => {
     delete tests.userEndpointExample.reserves;
-    expect(await service.AddUserProcess(tests.userEndpointExample)).toMatchObject({
+    expect(
+      await service.AddUserProcess(tests.userEndpointExample)
+    ).toMatchObject({
       status: 400,
-      explain: 'no reserves found, there must at least be one'
+      explain: 'no reserves found, there must at least be one',
     });
 
     tests.userEndpointExample.reserves = [];
-    expect(await service.AddUserProcess(tests.userEndpointExample)).toMatchObject({
+    expect(
+      await service.AddUserProcess(tests.userEndpointExample)
+    ).toMatchObject({
       status: 400,
-      explain: 'no reserves found, there must at least be one'
+      explain: 'no reserves found, there must at least be one',
     });
   });
 
   it('add user -> user added to reserve', async () => {
     jest
-    .spyOn(tbClient, 'addUserToReserve')
-    .mockImplementationOnce(() => Promise.resolve({status:"ok", explanation:"call finished"}));
+      .spyOn(tbClient, 'addUserToReserve')
+      .mockImplementationOnce(() =>
+        Promise.resolve({ status: 'ok', explanation: 'call finished' })
+      );
     tests.tbSuccess.explain = 'ok';
-    expect(await service.AddUserProcess(tests.userEndpointExample)).toMatchObject(tests.tbSuccess)
-  }); 
+    expect(
+      await service.AddUserProcess(tests.userEndpointExample)
+    ).toMatchObject(tests.tbSuccess);
+  });
 
   it('add user -> fail user added to reserve', async () => {
     jest
-    .spyOn(tbClient, 'addUserToReserve')
-    .mockImplementationOnce(() => Promise.resolve({status:"fail", explanation:"ECONNREFUSED"}));
-    expect(await service.AddUserProcess(tests.userEndpointExample)).toMatchObject(tests.tbFail)
+      .spyOn(tbClient, 'addUserToReserve')
+      .mockImplementationOnce(() =>
+        Promise.resolve({ status: 'fail', explanation: 'ECONNREFUSED' })
+      );
+    expect(
+      await service.AddUserProcess(tests.userEndpointExample)
+    ).toMatchObject(tests.tbFail);
   });
 
   ///////////////////////////////////////////////////////////////////////////////////
   it('change reserve -> missing token', async () => {
     delete tests.userEndpointExample.token;
-    expect(await service.UserChangeReserveProcess(tests.userEndpointExample)).toMatchObject({
+    expect(
+      await service.UserChangeReserveProcess(tests.userEndpointExample)
+    ).toMatchObject({
       status: 401,
       explain: 'token missing',
     });
 
     tests.userEndpointExample.token = '';
-    expect(await service.UserChangeReserveProcess(tests.userEndpointExample)).toMatchObject({
+    expect(
+      await service.UserChangeReserveProcess(tests.userEndpointExample)
+    ).toMatchObject({
       status: 401,
       explain: 'token missing',
     });
@@ -195,13 +236,17 @@ describe('ApiUserEndpointService', () => {
 
   it('change reserve -> missing refreshToken', async () => {
     delete tests.userEndpointExample.refreshToken;
-    expect(await service.UserChangeReserveProcess(tests.userEndpointExample)).toMatchObject({
+    expect(
+      await service.UserChangeReserveProcess(tests.userEndpointExample)
+    ).toMatchObject({
       status: 400,
       explain: 'refreshToken not defined',
     });
 
     tests.userEndpointExample.refreshToken = '';
-    expect(await service.UserChangeReserveProcess(tests.userEndpointExample)).toMatchObject({
+    expect(
+      await service.UserChangeReserveProcess(tests.userEndpointExample)
+    ).toMatchObject({
       status: 400,
       explain: 'refreshToken not defined',
     });
@@ -209,13 +254,17 @@ describe('ApiUserEndpointService', () => {
 
   it('change reserve -> missing reserveID', async () => {
     delete tests.userEndpointExample.reserveID;
-    expect(await service.UserChangeReserveProcess(tests.userEndpointExample)).toMatchObject({
+    expect(
+      await service.UserChangeReserveProcess(tests.userEndpointExample)
+    ).toMatchObject({
       status: 400,
       explain: 'reserveID not defined',
     });
 
     tests.userEndpointExample.reserveID = '';
-    expect(await service.UserChangeReserveProcess(tests.userEndpointExample)).toMatchObject({
+    expect(
+      await service.UserChangeReserveProcess(tests.userEndpointExample)
+    ).toMatchObject({
       status: 400,
       explain: 'reserveID not defined',
     });
@@ -223,36 +272,58 @@ describe('ApiUserEndpointService', () => {
 
   it('change reserve -> pass', async () => {
     jest
-    .spyOn(tbClient, 'changeReserveForUser')
-    .mockImplementationOnce(() => Promise.resolve({status:"ok", explanation:"call finished"}));
-    jest
-    .spyOn(tbClient, 'refresh')
-    .mockImplementationOnce(() => Promise.resolve({status:"ok", explanation:"call finished", token:"12", refreshToken:'123'}));
+      .spyOn(tbClient, 'changeReserveForUser')
+      .mockImplementationOnce(() =>
+        Promise.resolve({ status: 'ok', explanation: 'call finished' })
+      );
+    jest.spyOn(tbClient, 'refresh').mockImplementationOnce(() =>
+      Promise.resolve({
+        status: 'ok',
+        explanation: 'call finished',
+        token: '12',
+        refreshToken: '123',
+      })
+    );
     delete tests.tbSuccess.explain;
-    expect(await service.UserChangeReserveProcess(tests.userEndpointExample)).toMatchObject(tests.tbSuccess)
-  }); 
+    expect(
+      await service.UserChangeReserveProcess(tests.userEndpointExample)
+    ).toMatchObject(tests.tbSuccess);
+  });
 
   it('change reserve -> fail', async () => {
     jest
-    .spyOn(tbClient, 'changeReserveForUser')
-    .mockImplementationOnce(() => Promise.resolve({status:"fail", explanation:"ECONNREFUSED"}));
-    jest
-    .spyOn(tbClient, 'refresh')
-    .mockImplementationOnce(() => Promise.resolve({status:"ok", explanation:"call finished", token:"12", refreshToken:'123'}));
-    tests.tbFail.explain = 'Server failed with: ECONNREFUSED'
-    expect(await service.UserChangeReserveProcess(tests.userEndpointExample)).toMatchObject(tests.tbFail)
+      .spyOn(tbClient, 'changeReserveForUser')
+      .mockImplementationOnce(() =>
+        Promise.resolve({ status: 'fail', explanation: 'ECONNREFUSED' })
+      );
+    jest.spyOn(tbClient, 'refresh').mockImplementationOnce(() =>
+      Promise.resolve({
+        status: 'ok',
+        explanation: 'call finished',
+        token: '12',
+        refreshToken: '123',
+      })
+    );
+    tests.tbFail.explain = 'Server failed with: ECONNREFUSED';
+    expect(
+      await service.UserChangeReserveProcess(tests.userEndpointExample)
+    ).toMatchObject(tests.tbFail);
   });
 
   ///////////////////////////////////////////////////////////////////////////////////
   it('remove user -> missing token', async () => {
     delete tests.userEndpointExample.token;
-    expect(await service.RemoveUserProcess(tests.userEndpointExample)).toMatchObject({
+    expect(
+      await service.RemoveUserProcess(tests.userEndpointExample)
+    ).toMatchObject({
       status: 401,
       explain: 'token missing',
     });
 
     tests.userEndpointExample.token = '';
-    expect(await service.RemoveUserProcess(tests.userEndpointExample)).toMatchObject({
+    expect(
+      await service.RemoveUserProcess(tests.userEndpointExample)
+    ).toMatchObject({
       status: 401,
       explain: 'token missing',
     });
@@ -260,13 +331,17 @@ describe('ApiUserEndpointService', () => {
 
   it('remove user -> missing user id', async () => {
     delete tests.userEndpointExample.userID;
-    expect(await service.RemoveUserProcess(tests.userEndpointExample)).toMatchObject({
+    expect(
+      await service.RemoveUserProcess(tests.userEndpointExample)
+    ).toMatchObject({
       status: 400,
       explain: 'userID not defined',
     });
 
     tests.userEndpointExample.userID = '';
-    expect(await service.RemoveUserProcess(tests.userEndpointExample)).toMatchObject({
+    expect(
+      await service.RemoveUserProcess(tests.userEndpointExample)
+    ).toMatchObject({
       status: 400,
       explain: 'userID not defined',
     });
@@ -274,29 +349,41 @@ describe('ApiUserEndpointService', () => {
 
   it('remove user -> fail', async () => {
     jest
-    .spyOn(tbClient, 'removeReserveUser')
-    .mockImplementationOnce(() => Promise.resolve({status:"fail", explanation:"ECONNREFUSED"}));
-    expect(await service.RemoveUserProcess(tests.userEndpointExample)).toMatchObject(tests.tbFail)
+      .spyOn(tbClient, 'removeReserveUser')
+      .mockImplementationOnce(() =>
+        Promise.resolve({ status: 'fail', explanation: 'ECONNREFUSED' })
+      );
+    expect(
+      await service.RemoveUserProcess(tests.userEndpointExample)
+    ).toMatchObject(tests.tbFail);
   });
 
   it('remove user -> pass', async () => {
     jest
-    .spyOn(tbClient, 'removeReserveUser')
-    .mockImplementationOnce(() => Promise.resolve({status:"ok", explanation:"call finished"}));
-    tests.tbSuccess.explain = 'ok'
-    expect(await service.RemoveUserProcess(tests.userEndpointExample)).toMatchObject(tests.tbSuccess)
+      .spyOn(tbClient, 'removeReserveUser')
+      .mockImplementationOnce(() =>
+        Promise.resolve({ status: 'ok', explanation: 'call finished' })
+      );
+    tests.tbSuccess.explain = 'ok';
+    expect(
+      await service.RemoveUserProcess(tests.userEndpointExample)
+    ).toMatchObject(tests.tbSuccess);
   });
 
   ///////////////////////////////////////////////////////////////////////////////////
   it('disable user -> missing token', async () => {
     delete tests.userEndpointExample.token;
-    expect(await service.DisableUserProcess(tests.userEndpointExample)).toMatchObject({
+    expect(
+      await service.DisableUserProcess(tests.userEndpointExample)
+    ).toMatchObject({
       status: 401,
       explain: 'token missing',
     });
 
     tests.userEndpointExample.token = '';
-    expect(await service.DisableUserProcess(tests.userEndpointExample)).toMatchObject({
+    expect(
+      await service.DisableUserProcess(tests.userEndpointExample)
+    ).toMatchObject({
       status: 401,
       explain: 'token missing',
     });
@@ -304,13 +391,17 @@ describe('ApiUserEndpointService', () => {
 
   it('disable user -> missing user id', async () => {
     delete tests.userEndpointExample.userID;
-    expect(await service.DisableUserProcess(tests.userEndpointExample)).toMatchObject({
+    expect(
+      await service.DisableUserProcess(tests.userEndpointExample)
+    ).toMatchObject({
       status: 400,
       explain: 'userID not defined',
     });
 
     tests.userEndpointExample.userID = '';
-    expect(await service.DisableUserProcess(tests.userEndpointExample)).toMatchObject({
+    expect(
+      await service.DisableUserProcess(tests.userEndpointExample)
+    ).toMatchObject({
       status: 400,
       explain: 'userID not defined',
     });
@@ -318,30 +409,42 @@ describe('ApiUserEndpointService', () => {
 
   it('disable user -> pass', async () => {
     jest
-    .spyOn(tbClient, 'disableUser')
-    .mockImplementationOnce(() => Promise.resolve({status:"ok", explanation:"call finished"}));
-    tests.tbSuccess.explain = 'ok'
-    expect(await service.DisableUserProcess(tests.userEndpointExample)).toMatchObject(tests.tbSuccess)
+      .spyOn(tbClient, 'disableUser')
+      .mockImplementationOnce(() =>
+        Promise.resolve({ status: 'ok', explanation: 'call finished' })
+      );
+    tests.tbSuccess.explain = 'ok';
+    expect(
+      await service.DisableUserProcess(tests.userEndpointExample)
+    ).toMatchObject(tests.tbSuccess);
   });
 
   it('disable user -> fail', async () => {
     jest
-    .spyOn(tbClient, 'disableUser')
-    .mockImplementationOnce(() => Promise.resolve({status:"fail", explanation:"ECONNREFUSED"}));
-    tests.tbSuccess.explain = 'ok'
-    expect(await service.DisableUserProcess(tests.userEndpointExample)).toMatchObject(tests.tbFail)
+      .spyOn(tbClient, 'disableUser')
+      .mockImplementationOnce(() =>
+        Promise.resolve({ status: 'fail', explanation: 'ECONNREFUSED' })
+      );
+    tests.tbSuccess.explain = 'ok';
+    expect(
+      await service.DisableUserProcess(tests.userEndpointExample)
+    ).toMatchObject(tests.tbFail);
   });
 
   ///////////////////////////////////////////////////////////////////////////////////
   it('enable user -> missing token', async () => {
     delete tests.userEndpointExample.token;
-    expect(await service.EnableUserProcess(tests.userEndpointExample)).toMatchObject({
+    expect(
+      await service.EnableUserProcess(tests.userEndpointExample)
+    ).toMatchObject({
       status: 401,
       explain: 'token missing',
     });
 
     tests.userEndpointExample.token = '';
-    expect(await service.EnableUserProcess(tests.userEndpointExample)).toMatchObject({
+    expect(
+      await service.EnableUserProcess(tests.userEndpointExample)
+    ).toMatchObject({
       status: 401,
       explain: 'token missing',
     });
@@ -349,13 +452,17 @@ describe('ApiUserEndpointService', () => {
 
   it('enable user -> missing user id', async () => {
     delete tests.userEndpointExample.userID;
-    expect(await service.EnableUserProcess(tests.userEndpointExample)).toMatchObject({
+    expect(
+      await service.EnableUserProcess(tests.userEndpointExample)
+    ).toMatchObject({
       status: 400,
       explain: 'userID not defined',
     });
 
     tests.userEndpointExample.userID = '';
-    expect(await service.EnableUserProcess(tests.userEndpointExample)).toMatchObject({
+    expect(
+      await service.EnableUserProcess(tests.userEndpointExample)
+    ).toMatchObject({
       status: 400,
       explain: 'userID not defined',
     });
@@ -363,30 +470,42 @@ describe('ApiUserEndpointService', () => {
 
   it('enable user -> pass', async () => {
     jest
-    .spyOn(tbClient, 'enableUser')
-    .mockImplementationOnce(() => Promise.resolve({status:"ok", explanation:"call finished"}));
-    tests.tbSuccess.explain = 'ok'
-    expect(await service.EnableUserProcess(tests.userEndpointExample)).toMatchObject(tests.tbSuccess)
+      .spyOn(tbClient, 'enableUser')
+      .mockImplementationOnce(() =>
+        Promise.resolve({ status: 'ok', explanation: 'call finished' })
+      );
+    tests.tbSuccess.explain = 'ok';
+    expect(
+      await service.EnableUserProcess(tests.userEndpointExample)
+    ).toMatchObject(tests.tbSuccess);
   });
 
   it('enable user -> fail', async () => {
     jest
-    .spyOn(tbClient, 'enableUser')
-    .mockImplementationOnce(() => Promise.resolve({status:"fail", explanation:"ECONNREFUSED"}));
-    tests.tbSuccess.explain = 'ok'
-    expect(await service.EnableUserProcess(tests.userEndpointExample)).toMatchObject(tests.tbFail)
+      .spyOn(tbClient, 'enableUser')
+      .mockImplementationOnce(() =>
+        Promise.resolve({ status: 'fail', explanation: 'ECONNREFUSED' })
+      );
+    tests.tbSuccess.explain = 'ok';
+    expect(
+      await service.EnableUserProcess(tests.userEndpointExample)
+    ).toMatchObject(tests.tbFail);
   });
 
   ///////////////////////////////////////////////////////////////////////////////////
   it('user info -> missing token', async () => {
     delete tests.userEndpointExample.token;
-    expect(await service.UserInfoProcess(tests.userEndpointExample)).toMatchObject({
+    expect(
+      await service.UserInfoProcess(tests.userEndpointExample)
+    ).toMatchObject({
       status: 401,
       explain: 'token missing',
     });
 
     tests.userEndpointExample.token = '';
-    expect(await service.UserInfoProcess(tests.userEndpointExample)).toMatchObject({
+    expect(
+      await service.UserInfoProcess(tests.userEndpointExample)
+    ).toMatchObject({
       status: 401,
       explain: 'token missing',
     });
@@ -394,41 +513,61 @@ describe('ApiUserEndpointService', () => {
 
   it('user info -> pass', async () => {
     jest
-    .spyOn(tbClient, 'getUserInfoByID')
-    .mockImplementationOnce(() => Promise.resolve({status:"ok", explanation:"call finished"}));
-    expect(await service.UserInfoProcess(tests.userEndpointExample)).toMatchObject(tests.tbSuccess)
-    tests.tbSuccess.explain = 'call finished'
+      .spyOn(tbClient, 'getUserInfoByID')
+      .mockImplementationOnce(() =>
+        Promise.resolve({ status: 'ok', explanation: 'call finished' })
+      );
+    expect(
+      await service.UserInfoProcess(tests.userEndpointExample)
+    ).toMatchObject(tests.tbSuccess);
+    tests.tbSuccess.explain = 'call finished';
     delete tests.userEndpointExample.userID;
 
     jest
-    .spyOn(tbClient, 'getUserInfoFromToken')
-    .mockImplementationOnce(() => Promise.resolve({status:"ok", explanation:"call finished"}));
-    expect(await service.UserInfoProcess(tests.userEndpointExample)).toMatchObject(tests.tbSuccess)
+      .spyOn(tbClient, 'getUserInfoFromToken')
+      .mockImplementationOnce(() =>
+        Promise.resolve({ status: 'ok', explanation: 'call finished' })
+      );
+    expect(
+      await service.UserInfoProcess(tests.userEndpointExample)
+    ).toMatchObject(tests.tbSuccess);
   });
 
   it('user info -> fail', async () => {
     jest
-    .spyOn(tbClient, 'getUserInfoByID')
-    .mockImplementationOnce(() => Promise.resolve({status:"fail", explanation:"ECONNREFUSED"}));
-    expect(await service.UserInfoProcess(tests.userEndpointExample)).toMatchObject(tests.tbFail)
-    tests.tbSuccess.explain = 'call finished'
+      .spyOn(tbClient, 'getUserInfoByID')
+      .mockImplementationOnce(() =>
+        Promise.resolve({ status: 'fail', explanation: 'ECONNREFUSED' })
+      );
+    expect(
+      await service.UserInfoProcess(tests.userEndpointExample)
+    ).toMatchObject(tests.tbFail);
+    tests.tbSuccess.explain = 'call finished';
     delete tests.userEndpointExample.userID;
 
     jest
-    .spyOn(tbClient, 'getUserInfoFromToken')
-    .mockImplementationOnce(() => Promise.resolve({status:"fail", explanation:"ECONNREFUSED"}));
-    expect(await service.UserInfoProcess(tests.userEndpointExample)).toMatchObject(tests.tbFail)
+      .spyOn(tbClient, 'getUserInfoFromToken')
+      .mockImplementationOnce(() =>
+        Promise.resolve({ status: 'fail', explanation: 'ECONNREFUSED' })
+      );
+    expect(
+      await service.UserInfoProcess(tests.userEndpointExample)
+    ).toMatchObject(tests.tbFail);
   });
   ///////////////////////////////////////////////////////////////////////////////////
   it('update user -> missing token', async () => {
     delete tests.userEndpointExample.token;
-    expect(await service.UserInfoUpdateProcess(tests.userEndpointExample)).toMatchObject({
+    expect(
+      await service.UserInfoUpdateProcess(tests.userEndpointExample)
+    ).toMatchObject({
       status: 401,
       explain: 'token missing',
     });
 
     tests.userEndpointExample.token = '';
-    expect(await service.UserInfoUpdateProcess(tests.userEndpointExample)).toMatchObject({
+    expect(
+      await service.UserInfoUpdateProcess(tests.userEndpointExample)
+    ).toMatchObject({
       status: 401,
       explain: 'token missing',
     });
@@ -436,13 +575,17 @@ describe('ApiUserEndpointService', () => {
 
   it('update user -> missing user id', async () => {
     delete tests.userEndpointExample.userID;
-    expect(await service.UserInfoUpdateProcess(tests.userEndpointExample)).toMatchObject({
+    expect(
+      await service.UserInfoUpdateProcess(tests.userEndpointExample)
+    ).toMatchObject({
       status: 400,
       explain: 'userID not defined',
     });
 
     tests.userEndpointExample.userID = '';
-    expect(await service.UserInfoUpdateProcess(tests.userEndpointExample)).toMatchObject({
+    expect(
+      await service.UserInfoUpdateProcess(tests.userEndpointExample)
+    ).toMatchObject({
       status: 400,
       explain: 'userID not defined',
     });
@@ -450,13 +593,17 @@ describe('ApiUserEndpointService', () => {
 
   it('update user -> missing firstname', async () => {
     delete tests.userEndpointExample.userInfo.firstName;
-    expect(await service.UserInfoUpdateProcess(tests.userEndpointExample)).toMatchObject({
+    expect(
+      await service.UserInfoUpdateProcess(tests.userEndpointExample)
+    ).toMatchObject({
       status: 400,
       explain: 'firstname not defined',
     });
 
     tests.userEndpointExample.userInfo.firstName = '';
-    expect(await service.UserInfoUpdateProcess(tests.userEndpointExample)).toMatchObject({
+    expect(
+      await service.UserInfoUpdateProcess(tests.userEndpointExample)
+    ).toMatchObject({
       status: 400,
       explain: 'firstname not defined',
     });
@@ -464,13 +611,17 @@ describe('ApiUserEndpointService', () => {
 
   it('update user -> missing lastname', async () => {
     delete tests.userEndpointExample.userInfo.lastName;
-    expect(await service.UserInfoUpdateProcess(tests.userEndpointExample)).toMatchObject({
+    expect(
+      await service.UserInfoUpdateProcess(tests.userEndpointExample)
+    ).toMatchObject({
       status: 400,
       explain: 'lastname not defined',
     });
 
     tests.userEndpointExample.userInfo.lastName = '';
-    expect(await service.UserInfoUpdateProcess(tests.userEndpointExample)).toMatchObject({
+    expect(
+      await service.UserInfoUpdateProcess(tests.userEndpointExample)
+    ).toMatchObject({
       status: 400,
       explain: 'lastname not defined',
     });
@@ -478,30 +629,42 @@ describe('ApiUserEndpointService', () => {
 
   it('update user -> fail', async () => {
     jest
-    .spyOn(tbClient, 'updateUser')
-    .mockImplementationOnce(() => Promise.resolve({status:"fail", explanation:"ECONNREFUSED"}));
-    tests.tbSuccess.explain = 'ok'
-    expect(await service.UserInfoUpdateProcess(tests.userEndpointExample)).toMatchObject(tests.tbFail)
+      .spyOn(tbClient, 'updateUser')
+      .mockImplementationOnce(() =>
+        Promise.resolve({ status: 'fail', explanation: 'ECONNREFUSED' })
+      );
+    tests.tbSuccess.explain = 'ok';
+    expect(
+      await service.UserInfoUpdateProcess(tests.userEndpointExample)
+    ).toMatchObject(tests.tbFail);
   });
 
   it('update user -> pass', async () => {
     jest
-    .spyOn(tbClient, 'updateUser')
-    .mockImplementationOnce(() => Promise.resolve({status:"ok", explanation:"call finished"}));
-    expect(await service.UserInfoUpdateProcess(tests.userEndpointExample)).toMatchObject(tests.tbSuccess)
+      .spyOn(tbClient, 'updateUser')
+      .mockImplementationOnce(() =>
+        Promise.resolve({ status: 'ok', explanation: 'call finished' })
+      );
+    expect(
+      await service.UserInfoUpdateProcess(tests.userEndpointExample)
+    ).toMatchObject(tests.tbSuccess);
   });
 
   ///////////////////////////////////////////////////////////////////////////////////
 
   it('admin all reserve users -> missing token', async () => {
     delete tests.userEndpointExample.token;
-    expect(await service.AdminAllReserveUsersProcess(tests.userEndpointExample)).toMatchObject({
+    expect(
+      await service.AdminAllReserveUsersProcess(tests.userEndpointExample)
+    ).toMatchObject({
       status: 401,
       explain: 'token missing',
     });
 
     tests.userEndpointExample.token = '';
-    expect(await service.AdminAllReserveUsersProcess(tests.userEndpointExample)).toMatchObject({
+    expect(
+      await service.AdminAllReserveUsersProcess(tests.userEndpointExample)
+    ).toMatchObject({
       status: 401,
       explain: 'token missing',
     });
@@ -509,13 +672,17 @@ describe('ApiUserEndpointService', () => {
 
   it('admin all reserve users -> missing customer ID', async () => {
     delete tests.userEndpointExample.customerID;
-    expect(await service.AdminAllReserveUsersProcess(tests.userEndpointExample)).toMatchObject({
+    expect(
+      await service.AdminAllReserveUsersProcess(tests.userEndpointExample)
+    ).toMatchObject({
       status: 400,
       explain: 'customerID not defined',
     });
 
     tests.userEndpointExample.customerID = '';
-    expect(await service.AdminAllReserveUsersProcess(tests.userEndpointExample)).toMatchObject({
+    expect(
+      await service.AdminAllReserveUsersProcess(tests.userEndpointExample)
+    ).toMatchObject({
       status: 400,
       explain: 'customerID not defined',
     });
@@ -523,31 +690,43 @@ describe('ApiUserEndpointService', () => {
 
   it('admin all reserve users -> pass', async () => {
     jest
-    .spyOn(tbClient, 'AdminGetUsersFromReserve')
-    .mockImplementationOnce(() => Promise.resolve({status:"ok", explanation:"call finished"}));
+      .spyOn(tbClient, 'AdminGetUsersFromReserve')
+      .mockImplementationOnce(() =>
+        Promise.resolve({ status: 'ok', explanation: 'call finished' })
+      );
     tests.tbSuccess.explain = 'ok';
-    expect(await service.AdminAllReserveUsersProcess(tests.userEndpointExample)).toMatchObject(tests.tbSuccess)
+    expect(
+      await service.AdminAllReserveUsersProcess(tests.userEndpointExample)
+    ).toMatchObject(tests.tbSuccess);
   });
 
   it('admin all reserve users -> fail', async () => {
     jest
-    .spyOn(tbClient, 'AdminGetUsersFromReserve')
-    .mockImplementationOnce(() => Promise.resolve({status:"fail", explanation:"ECONNREFUSED"}));
+      .spyOn(tbClient, 'AdminGetUsersFromReserve')
+      .mockImplementationOnce(() =>
+        Promise.resolve({ status: 'fail', explanation: 'ECONNREFUSED' })
+      );
     tests.tbFail.explain = 'Server failed with: ECONNREFUSED';
-    expect(await service.AdminAllReserveUsersProcess(tests.userEndpointExample)).toMatchObject(tests.tbFail)
+    expect(
+      await service.AdminAllReserveUsersProcess(tests.userEndpointExample)
+    ).toMatchObject(tests.tbFail);
   });
 
   ///////////////////////////////////////////////////////////////////////////////////
 
   it('admin groups process -> missing token', async () => {
     delete tests.userEndpointExample.token;
-    expect(await service.AdminGroupsProcess(tests.userEndpointExample)).toMatchObject({
+    expect(
+      await service.AdminGroupsProcess(tests.userEndpointExample)
+    ).toMatchObject({
       status: 401,
       explain: 'token missing',
     });
 
     tests.userEndpointExample.token = '';
-    expect(await service.AdminGroupsProcess(tests.userEndpointExample)).toMatchObject({
+    expect(
+      await service.AdminGroupsProcess(tests.userEndpointExample)
+    ).toMatchObject({
       status: 401,
       explain: 'token missing',
     });
@@ -555,15 +734,41 @@ describe('ApiUserEndpointService', () => {
 
   it('admin groups process -> fail', async () => {
     jest
-    .spyOn(tbClient, 'AdminGetCustomers')
-    .mockImplementationOnce(() => Promise.resolve({status:"fail", explanation:"ECONNREFUSED"}));
-    expect(await service.AdminGroupsProcess(tests.userEndpointExample)).toMatchObject(tests.tbFail)
+      .spyOn(tbClient, 'AdminGetCustomers')
+      .mockImplementationOnce(() =>
+        Promise.resolve({ status: 'fail', explanation: 'ECONNREFUSED' })
+      );
+    expect(
+      await service.AdminGroupsProcess(tests.userEndpointExample)
+    ).toMatchObject(tests.tbFail);
   });
 
   it('admin groups process -> pass', async () => {
     jest
+      .spyOn(tbClient, 'AdminGetCustomers')
+      .mockImplementationOnce(() =>
+        Promise.resolve({ status: 'ok', explanation: 'call finished' })
+      );
+    expect(
+      await service.AdminGroupsProcess(tests.userEndpointExample)
+    ).toMatchObject(tests.tbSuccess);
+  });
+
+  it('get sensor data -> pass', async () => {
+    /*jest
     .spyOn(tbClient, 'AdminGetCustomers')
     .mockImplementationOnce(() => Promise.resolve({status:"ok", explanation:"call finished"}));
-    expect(await service.AdminGroupsProcess(tests.userEndpointExample)).toMatchObject(tests.tbSuccess)
+    expect(await service.AdminGroupsProcess(tests.userEndpointExample)).toMatchObject(tests.tbSuccess)*/
+    console.log(
+      JSON.stringify(
+        await service.UserGetDeviceSensorData({
+          token:
+            'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZlYWRtaW5AcmVzZXJ2ZS5jb20iLCJzY29wZXMiOlsiVEVOQU5UX0FETUlOIl0sInVzZXJJZCI6ImQ2MzcyZTMwLWRmZTgtMTFlYy1iZGIzLTc1MGNlN2VkMjQ1MSIsImVuYWJsZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiJjZDJkZjJiMC1kZmU4LTExZWMtYmRiMy03NTBjZTdlZDI0NTEiLCJjdXN0b21lcklkIjoiMTM4MTQwMDAtMWRkMi0xMWIyLTgwODAtODA4MDgwODA4MDgwIiwiaXNzIjoidGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE2NjM2MTgyMTksImV4cCI6MTY2MzYyNzIxOX0.xVGJvQaqQdP6EwVWRUgoUMeWBaAhaX_WnPnUhmBkoCpDsLwBPQs824Vy-dXQI6zRF9ICSck9VREcsQlTzUiYWA',
+          DevicUEID: '1ecd2e60-dfe9-11ec-bdb3-750ce7ed2451',
+          timeStart: 0,
+          timeStop: 1663591396352,
+        })
+      )
+    );
   });
 });
