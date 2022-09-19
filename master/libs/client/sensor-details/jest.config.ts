@@ -1,7 +1,7 @@
 /* eslint-disable */
 export default {
   displayName: 'client-sensor-details',
-  preset: '../../../jest.preset.ts',
+  preset: '../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {
     'ts-jest': {
