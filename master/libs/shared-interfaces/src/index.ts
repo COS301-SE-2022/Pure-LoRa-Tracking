@@ -5,3 +5,4 @@ export * from './device-endpoint.interface'
 export * from './lib/input-interfaces'
 export * from './lib/testing-interfaces'
 export * from './lib/chirpstack-interfaces';
+export * from './lib/obeserver-interfaces'

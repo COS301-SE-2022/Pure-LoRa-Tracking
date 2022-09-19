@@ -25,6 +25,7 @@
         "libs/ai/mock-generator/triangulation/src/index.ts"
       ],
       "@lora/ai/particle-filter": ["libs/ai/particle-filter/src/index.ts"],
+      "@lora/ai/strategy": ["libs/ai/processing-strategy/src/index.ts"],
       "@lora/ai/triangulation": ["libs/ai/ai-triangulation/src/index.ts"],
       "@lora/api/login": ["libs/api/login-endpoint/src/index.ts"],
       "@lora/api/mapEndpoint": ["libs/api/map-endpoint/src/index.ts"],
@@ -126,6 +127,9 @@
         "libs/client/map-apicaller/src/index.ts"
       ],
       "@master/client/reserve-view": ["libs/client/reserve-view/src/index.ts"],
+      "@master/client/sensor-details": [
+        "libs/client/sensor-details/src/index.ts"
+      ],
       "@master/client/shared-services": [
         "libs/client/shared-services/src/index.ts"
       ],

@@ -1,0 +1,69 @@
+.headerText {
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: flex-end;
+    padding-top: 0;
+}
+
+#field-list {
+    margin-top: 5%;
+}
+
+.field-label {
+    color: grey;
+    font-size: x-small;
+}
+
+.actionButtons{
+    background-color: transparent;
+    border: 1px solid black;
+    margin: 0.5%;
+}
+
+
+mat-card{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    margin-bottom: 1rem;
+}
+
+#card-content{ 
+    flex-grow: 1;
+}
+
+mat-tab-group.mat-tab-group.sensor-tabs.mat-primary{
+    height: 100%;
+}
+
+.mat-card .mat-divider-horizontal{
+    position: relative;
+}
+
+#backButton{
+    order: 4;
+}
+
+#spacer{
+    order: 2;
+    flex: 1 1 auto;
+}
+
+#locateButton{
+    background-color: transparent;
+    color: var(--color-bright-accent);
+    // margin: 0.5%;
+    order: 1;
+}
+
+#sensor-title-text{
+    margin: 0;
+}
+
+#sensorCard {
+    padding-top: 0.2em;
+}
+
+#locateIcon{
+    margin-left: 0.2em;
+}

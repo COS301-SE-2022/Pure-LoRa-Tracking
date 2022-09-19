@@ -1,0 +1,45 @@
+{
+  "sourceRoot": "libs/ai/processing-strategy/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/ai/processing-strategy",
+        "tsConfig": "libs/ai/processing-strategy/tsconfig.lib.json",
+        "packageJson": "libs/ai/processing-strategy/package.json",
+        "main": "libs/ai/processing-strategy/src/index.ts",
+        "assets": ["libs/ai/processing-strategy/*.md"]
+      }
+    },
+    "publish": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "node tools/scripts/publish.mjs ai-processing-strategy {args.ver} {args.tag}"
+      },
+      "dependsOn": [
+        {
+          "projects": "self",
+          "target": "build"
+        }
+      ]
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/ai/processing-strategy/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/ai/processing-strategy"],
+      "options": {
+        "jestConfig": "libs/ai/processing-strategy/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}
