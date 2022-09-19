@@ -36,6 +36,7 @@ describe('AiHeatmapAverageService', () => {
     console.log(await service.predictData(ToPredictData))
   });*/
 
+  /*
   it('tf -> save, load', async () => {
     const saveModelResult = await service.saveModel(saveFilePath);
     const loadModelResult = await service.loadModel(loadFilePath);
@@ -92,7 +93,7 @@ describe('AiHeatmapAverageService', () => {
     service.saveModel('file://libs/ai/Models/averaging/');
 
     expect(result).toEqual(true);
-  });
+  });*/
 });
 
 const learning = {
