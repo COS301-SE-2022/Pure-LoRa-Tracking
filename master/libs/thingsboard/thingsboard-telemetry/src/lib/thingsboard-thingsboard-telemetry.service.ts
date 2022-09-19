@@ -6,7 +6,7 @@ import { lastValueFrom } from 'rxjs';
 @Injectable()
 export class ThingsboardThingsboardTelemetryService {
   private token: string;
-  private ThingsBoardURL = process.env.TB_URL || 'http://localhost:8080/api';
+  private ThingsBoardURL = process.env.TB_URL || 'http://localhost:9090/api';
   constructor(private httpService: HttpService) {}
   private headersReq = {};
 
@@ -80,8 +80,44 @@ export class ThingsboardThingsboardTelemetryService {
     DeviceProfile: string,
     timeStart?: number,
     timeStop?: number
-  ): Promise<TelemetryResponse> {
+  ): Promise<SensorDataResponse> {
     let url = '';
+
+    //Get key attributes.
+    url =
+      this.ThingsBoardURL +
+      '/plugins/telemetry/' +
+      DeviceProfile +
+      '/' +
+      DeviceID +
+      '/keys/attributes';
+
+    const keyResponse = await lastValueFrom(
+      this.httpService.get(url, { headers: this.headersReq })
+    ).catch((error) => {
+      if (error.response == undefined) return error.code;
+      return error;
+    });
+
+    if (keyResponse == 'ECONNREFUSED')
+      return {
+        status: 500,
+        explanation: keyResponse,
+      };
+    else if (keyResponse.status != 200) {
+      return {
+        status: keyResponse.response.status,
+        explanation: keyResponse.response.data.message,
+      };
+    }
+
+    let keys = '';
+
+    for (let i = 0; i < keyResponse.data.length - 1; i++)
+      keys += keyResponse.data[i] + ',';
+
+    keys += keyResponse.data[keyResponse.data.length - 1];
+
     if (timeStart != undefined) {
       url =
         this.ThingsBoardURL +
@@ -94,7 +130,8 @@ export class ThingsboardThingsboardTelemetryService {
         timeStart +
         '&endTs=' +
         timeStop +
-        '&keys=ts,latitude,longitude';
+        '&keys=' +
+        keys;
     } else {
       url =
         this.ThingsBoardURL +
@@ -104,6 +141,7 @@ export class ThingsboardThingsboardTelemetryService {
         DeviceID +
         '/values/timeseries';
     }
+
     const resp = await lastValueFrom(
       this.httpService.get(url, { headers: this.headersReq })
     ).catch((error) => {
@@ -124,9 +162,7 @@ export class ThingsboardThingsboardTelemetryService {
     return {
       status: resp.status,
       explanation: 'ok',
-      data: {
-        telemetryResults: resp.data,
-      },
+      data: resp.data,
     };
   }
 
@@ -244,9 +280,9 @@ export class ThingsboardThingsboardTelemetryService {
         this.ThingsBoardURL + '/v1/' + accessToken + '/telemetry',
         {
           timestamp: +new Date(),
-          ...TelemetryJSON
+          ...TelemetryJSON,
         },
-        { }
+        {}
       )
     ).catch((error) => {
       if (error.response == undefined) return { status: 500 };
@@ -268,4 +304,10 @@ export interface TelemetryResponse {
   data?: {
     telemetryResults?: TelemetryResult[];
   };
+}
+
+export interface SensorDataResponse {
+  status: number;
+  explanation: string;
+  data?: any;
 }
