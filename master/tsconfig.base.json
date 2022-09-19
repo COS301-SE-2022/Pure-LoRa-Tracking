@@ -127,6 +127,9 @@
         "libs/client/map-apicaller/src/index.ts"
       ],
       "@master/client/reserve-view": ["libs/client/reserve-view/src/index.ts"],
+      "@master/client/sensor-details": [
+        "libs/client/sensor-details/src/index.ts"
+      ],
       "@master/client/shared-services": [
         "libs/client/shared-services/src/index.ts"
       ],

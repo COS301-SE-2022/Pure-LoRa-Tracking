@@ -20,6 +20,11 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 export const clientManageViewRoutes: Route[] = [
   {
+    path: '', 
+    outlet: 'managecontent',
+    redirectTo:'profile'
+  }
+  ,{
     path: 'profile', 
     outlet: 'managecontent',
     loadChildren: ()=> import('@master/client/manage-view/src/lib/profile-view').then(m => m.ClientManageViewSrcLibProfileViewModule),

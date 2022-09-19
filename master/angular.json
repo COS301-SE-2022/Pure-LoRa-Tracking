@@ -35,6 +35,7 @@
     "client-manage-view-src-lib-users-view": "libs/client/manage-view/src/lib/users-view",
     "client-map-apicaller": "libs/client/map-apicaller",
     "client-reserve-view": "libs/client/reserve-view",
+    "client-sensor-details": "libs/client/sensor-details",
     "client-shared-services": "libs/client/shared-services",
     "client-shared-ui-components-ui": "libs/client/shared-ui/components-ui",
     "client-shared-ui-material-ui": "libs/client/shared-ui/material-ui",
