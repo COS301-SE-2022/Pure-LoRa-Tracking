@@ -1,7 +1,7 @@
 import { Logger } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Test } from '@nestjs/testing';
-import { AverageInput, AverageInputSchema, DataInput, DataInputSchema } from '../database-interfaces.interface';
+import { AverageInput, AverageInputSchema, DataInput, DataInputSchema, DevicePerimeter, DevicePerimeterSchema } from '../database-interfaces.interface';
 import { DatabaseProxyService } from './database-proxy.service';
 
 describe('DatabaseProxyService', () => {
@@ -12,7 +12,8 @@ describe('DatabaseProxyService', () => {
       imports : [Logger, MongooseModule.forRoot('mongodb://localhost/lora'),
       MongooseModule.forFeature([
         {name:DataInput.name, schema:DataInputSchema},
-      {name:AverageInput.name, schema:AverageInputSchema}
+      {name:AverageInput.name, schema:AverageInputSchema},
+      {name:DevicePerimeter.name, schema:DevicePerimeterSchema}
     ])],
       providers: [DatabaseProxyService],
     }).compile();
@@ -49,5 +50,9 @@ describe('DatabaseProxyService', () => {
 
   it('should delete device data', async ()=> {
     //console.table(service.deleteDeviceData('254', 1662112541314));
+  })
+
+  it(('return device info for perimeter'), async() => {
+    //console.log(await service.getDevicePerimeter("Yb6RZyFqwBYbj2Xjp5HH"))
   })
 });

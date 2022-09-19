@@ -1,6 +1,6 @@
 module.exports = {
-  displayName: 'ai-ai-triangulation',
-  preset: '../../../jest.preset.ts',
+  displayName: 'service-bus',
+  preset: '../../jest.preset.ts',
   globals: {
     'ts-jest': {
       tsconfig: '<rootDir>/tsconfig.spec.json',
@@ -11,5 +11,5 @@ module.exports = {
     '^.+\\.[tj]s$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageDirectory: '../../../coverage/libs/ai/ai-triangulation',
+  coverageDirectory: '../../coverage/libs/service-bus',
 };
