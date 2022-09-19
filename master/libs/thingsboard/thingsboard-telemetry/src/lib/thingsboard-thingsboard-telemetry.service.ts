@@ -130,29 +130,19 @@ export class ThingsboardThingsboardTelemetryService {
 
     keys += newarr[newarr.length - 1];
 
-    if (timeStart != undefined) {
-      url =
-        this.ThingsBoardURL +
-        '/plugins/telemetry/' +
-        DeviceProfile +
-        '/' +
-        DeviceID +
-        '/values/timeseries' +
-        '?startTs=' +
-        timeStart +
-        '&endTs=' +
-        timeStop +
-        '&keys=' +
-        keys;
-    } else {
-      url =
-        this.ThingsBoardURL +
-        '/plugins/telemetry/' +
-        DeviceProfile +
-        '/' +
-        DeviceID +
-        '/values/timeseries';
-    }
+    url =
+      this.ThingsBoardURL +
+      '/plugins/telemetry/' +
+      DeviceProfile +
+      '/' +
+      DeviceID +
+      '/values/timeseries' +
+      '?startTs=' +
+      timeStart +
+      '&endTs=' +
+      timeStop +
+      '&keys=' +
+      keys;
 
     const resp = await lastValueFrom(
       this.httpService.get(url, { headers: this.headersReq })
