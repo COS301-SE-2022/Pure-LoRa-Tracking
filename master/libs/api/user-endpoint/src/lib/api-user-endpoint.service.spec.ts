@@ -6,7 +6,6 @@ import {
 import { Test } from '@nestjs/testing';
 import { of } from 'rxjs';
 import { ApiUserEndpointService } from './api-user-endpoint.service';
-
 describe('ApiUserEndpointService', () => {
   let service: ApiUserEndpointService;
   let tests: ApiApiTestingService;
@@ -755,10 +754,7 @@ describe('ApiUserEndpointService', () => {
   });
 
   it('get sensor data -> pass', async () => {
-    /*jest
-    .spyOn(tbClient, 'AdminGetCustomers')
-    .mockImplementationOnce(() => Promise.resolve({status:"ok", explanation:"call finished"}));
-    expect(await service.AdminGroupsProcess(tests.userEndpointExample)).toMatchObject(tests.tbSuccess)*/
+    /*
     console.log(
       JSON.stringify(
         await service.UserGetDeviceSensorData({
@@ -769,6 +765,6 @@ describe('ApiUserEndpointService', () => {
           timeStop: 1663591396352,
         })
       )
-    );
+    );*/
   });
 });
