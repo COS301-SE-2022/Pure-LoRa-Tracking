@@ -36,7 +36,7 @@
         <mat-selection-list dense #devicesList [multiple]="true" >
             <div *ngIf="deviceType==='sensors' || deviceType==='all' && Devices.length>0">
                 <mat-accordion class="device-list">
-                    <master-device-list-item *ngFor="let deviceItem of Devices" [device]="deviceItem" (openDeviceView)="viewSensor($event)" (locateDevice)="selectedSensor($event)" (itemExpanded)="selectedSensor(deviceItem.deviceID)"></master-device-list-item>
+                    <master-device-list-item *ngFor="let deviceItem of Devices" [device]="deviceItem" (openDeviceView)="viewSensor($event)" (locateDevice)="selectedSensor($event)" ></master-device-list-item>
                 </mat-accordion> 
                 <!-- <mat-list-option *ngFor="let sensorItem of filteredSensors" [value]="sensorItem.deviceID" [style.background-color]="getSelectedStyle(sensorItem.deviceID)" (click)="selectedSensor(sensorItem.deviceID)" >
                     <mat-icon mat-list-icon>memory</mat-icon>
