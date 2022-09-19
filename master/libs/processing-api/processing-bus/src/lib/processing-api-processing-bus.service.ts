@@ -9,7 +9,7 @@ export class ProcessingApiProcessingBusService {
     constructor(private database: DatabaseProxyService, private thingsboardClient: ThingsboardThingsboardClientService, public locationService: LocationService) { }
 
     /* forward to message queue for processing/splitting */
-    async forwardChirpstackData(data: { timestamp: number, deviceEUI: string, data: string, eventtype: string }): Promise<boolean> {
+    async forwardChirpstackData(data: { timestamp: number, deviceEUI: string, data: string, eventtype: string ,processed:false}): Promise<boolean> {
         try {
             this.database.saveRSSIinfos(data);
         } catch (Error) {
@@ -39,6 +39,31 @@ export class ProcessingApiProcessingBusService {
         return this.database.getDevicePerimeter(deviceID);
     }
 
+    /* get the last data points */
+    //TODO change this to the devicedata input
+    async getRssiInfo(deviceEUI: string, numberOfRecords: number):Promise<any>{
+        try {
+            return await this.database.fetchRSSIinfos(deviceEUI,numberOfRecords);
+        } catch(error) {
+            Logger.log('Delete Error');
+            Logger.log(error);
+        }
+        return false;
+    }
+
+    /* mark points as proccessed */
+    async markProcessed(data:{deviceEUI:string,timestamp:string}[]):Promise<void>{
+        console.log("Process mark ",data);
+        try {
+            await this.database.markAsProcessed(data);
+            return;
+        } catch(error) {
+            Logger.log('Delete Error');
+            Logger.log(error);
+        }
+        return;
+    }
+
     /* request delete device data from db service */
     async deleteDeviceData(data: { timestamp: number, deviceEUI: string }) {
         try {
@@ -48,6 +73,45 @@ export class ProcessingApiProcessingBusService {
             Logger.log(error);
         }
     }
+
+    async addToReady(data:{deviceEUI:string,timestamp:number,data:string}){
+        try {
+            return await this.database.addToReady(data);
+        } catch(error) {
+            Logger.log('Error');
+            Logger.log(error);
+        }
+    }
+
+    async checkCountReady(deviceEUI:string){
+        try {
+            return await this.database.checkNumReady(deviceEUI);
+        } catch(error) {
+            Logger.log('Error');
+            Logger.log(error);
+        }
+    }
+
+    async getLastReady(deviceEUI:string){
+        try {
+            const data = await this.database.getLatestReady(deviceEUI);
+            await this.database.deleteReadyAt(data._id?.toString());
+            return data;
+        } catch(error) {
+            Logger.log('Error');
+            Logger.log(error);
+        }
+    }
+
+    async deleteReadyAt(deviceID:string){
+        try {
+            return await this.database.deleteReadyAt(deviceID);
+        } catch(error) {
+            Logger.log('Error');
+            Logger.log(error);
+        }
+    }
+
 
     async sendProcessedDatatoTB(accessToken: string, data: { result: { latitude: number, longitude: number }, processingType: string }) {
         try {

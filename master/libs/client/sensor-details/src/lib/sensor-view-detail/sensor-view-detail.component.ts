@@ -2,22 +2,22 @@ import { Component, EventEmitter, Input,  Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MapCallerService } from '@master/client/map-apicaller';
 import { TokenManagerService } from '@master/client/user-storage-controller';
-import { SensorProfile,  } from '@master/shared-interfaces';
-import { DialogConfirmationComponent } from '../dialog-confirmation/dialog-confirmation.component';
+import { DialogConfirmationComponent } from '@master/client/shared-ui/components-ui';
 import { DeviceNotifierService } from '@master/client/shared-services';
-@Component({
-  selector: 'master-sensor-detail-view',
-  templateUrl: './sensor-detail-view.component.html',
-  styleUrls: ['./sensor-detail-view.component.scss'],
-})
-export class SensorDetailViewComponent {
 
+@Component({
+  selector: 'master-sensor-view-detail',
+  templateUrl: './sensor-view-detail.component.html',
+  styleUrls: ['./sensor-view-detail.component.scss'],
+})
+export class SensorViewDetailComponent {
+  
   @Input() openView = false;
   @Input() sensorInfo = {
     name: "",
     id: "",
   };
-  
+
   @Output() viewChange = new EventEmitter<boolean>();
 
   //we need the contructor for injection, does not matter if its empty
@@ -40,7 +40,7 @@ export class SensorDetailViewComponent {
   }
 
   closeSensor():void {
-    this.openView = false;
+    this.openView = false; 
     this.viewChange.emit(this.openView);
   }
 
