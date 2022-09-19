@@ -19,7 +19,7 @@ export class MapPanelComponent implements OnInit {
   endtime = "23";
 
 
-  constructor(private notifier: DeviceNotifierService) {
+  constructor(public notifier: DeviceNotifierService) {
     this.ShowPolygon.emit(true);
   }
   daterange = new FormGroup({
