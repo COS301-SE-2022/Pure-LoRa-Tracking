@@ -1,5 +1,6 @@
 import { Test } from '@nestjs/testing';
 import { ProcessingApiProcessingBusModule } from '@processing/bus';
+import { AiAiProcessingModule } from 'libs/ai/ai-processing/src';
 import { MessageQueueService } from './message-queue.service';
 
 describe('MessageQueueService', () => {
@@ -8,7 +9,7 @@ describe('MessageQueueService', () => {
   beforeEach(async () => {
     const module = await Test.createTestingModule({
       providers: [MessageQueueService],
-      imports:[ProcessingApiProcessingBusModule]
+      imports:[ProcessingApiProcessingBusModule,AiAiProcessingModule]
     }).compile();
 
     service = module.get(MessageQueueService);
