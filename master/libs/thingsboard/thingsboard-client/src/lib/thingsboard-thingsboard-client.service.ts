@@ -1143,7 +1143,8 @@ export class ThingsboardThingsboardClientService {
       login.data.authority,
       login.data.firstName,
       login.data.lastName,
-      Object.assign(login.data.additionalInfo, { reserves: reserveList })
+      Object.assign(login.data.additionalInfo, { reserves: reserveList }),
+      false
     );
 
     if (resp.status != 200)
@@ -1437,7 +1438,8 @@ export class ThingsboardThingsboardClientService {
       userinfo.data.authority,
       details.firstName,
       details.lastName,
-      additionalinfo);
+      additionalinfo,
+      details.email!=userinfo.data.email);
 
     if (resp.status != 200)
       return {

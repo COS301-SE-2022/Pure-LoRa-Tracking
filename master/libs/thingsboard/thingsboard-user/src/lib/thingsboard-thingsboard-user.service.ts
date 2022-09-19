@@ -236,7 +236,7 @@ export class ThingsboardThingsboardUserService {
 
     const resp = await firstValueFrom(
       this.httpService.post(
-        this.ThingsBoardURL + '/user?sendActivationMail=false',
+        this.ThingsBoardURL + '/user?sendActivationMail=true',
         {
           email: email,
           customerId: {
@@ -525,16 +525,18 @@ export class ThingsboardThingsboardUserService {
     authority: string,
     firstname: string,
     lastname: string,
-    additionalInfo: any
+    additionalInfo: any,
+    emailchanged:boolean
   ): Promise<UserResponse> {
     const headersReq = {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + token,
     };
-    console.log("NEW ENAIL IS ",email);
+    
+    console.log("NEW ENAIL IS "+email+ "and stuff"+emailchanged);
     const resp = await firstValueFrom(
       this.httpService.post(
-        this.ThingsBoardURL + "/user?sendActivationEmail=false",
+        this.ThingsBoardURL + emailchanged?"/user?sendActivationMail=true":"/user?sendActivationMail=false",
         {
           id: {
             id: userID,
