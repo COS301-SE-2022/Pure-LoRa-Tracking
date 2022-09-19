@@ -119,12 +119,16 @@ export class ThingsboardThingsboardTelemetryService {
       };
     }
 
+    const sorter = ['fcnt', 'rssi', 'snr'];
+    const newarr = keyResponse.data.filter(
+      (curr) => curr.startsWith('data_') || sorter.includes(curr)
+    );
+
     let keys = '';
 
-    for (let i = 0; i < keyResponse.data.length - 1; i++)
-      keys += keyResponse.data[i] + ',';
+    for (let i = 0; i < newarr.length - 1; i++) keys += newarr[i] + ',';
 
-    keys += keyResponse.data[keyResponse.data.length - 1];
+    keys += newarr[newarr.length - 1];
 
     if (timeStart != undefined) {
       url =
