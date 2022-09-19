@@ -84,7 +84,7 @@ export class SensorActivityComponent{
 
 
   getData(deveui:string){
-    
+    console.log("temp");
   }
 
   ChangeData(event:any){
