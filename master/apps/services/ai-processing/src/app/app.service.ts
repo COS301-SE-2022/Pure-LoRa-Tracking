@@ -4,12 +4,13 @@ import { Injectable } from '@nestjs/common';
 import { ProcessingApiProcessingBusService } from '@processing/bus';
 import { UplinkEvent } from '@chirpstack/chirpstack-api/as/integration/integration_pb';
 import { UplinkRXInfo } from '@chirpstack/chirpstack-api/gw/gw_pb';
+import { Subject } from 'rxjs';
 
 @Injectable()
 export class AppService {
   private deviceProcessing: { strategy: AiProcessingStrategyService[], deviceToken: string }[];
 
-  constructor(private serviceBus: ProcessingApiProcessingBusService) {
+  constructor(private serviceBus: ProcessingApiProcessingBusService) { //, private msgq: MessageQueueService
     this.deviceProcessing = new Array<{ strategy: AiProcessingStrategyService[], deviceToken: string }>();
   };
 
@@ -29,7 +30,7 @@ export class AppService {
     }
   }
 
-  async forwardData(uplinkData: UplinkEvent, next) {
+  async forwardData(uplinkData: UplinkEvent, next: Subject<string>) {
 
     /* filter faulty results */
     let gatewayData = uplinkData.getRxInfoList();
@@ -48,16 +49,16 @@ export class AppService {
     deviceData.deviceToken = uplinkData.getTagsMap().get("deviceToken");
 
     /* resolve device */
-    const device = await this.resolveDevice(deviceData);
+    // const device = await this.resolveDevice(deviceData);
 
     /* perform process */
     const resLatLong = await this.serviceBus.LocationServiceProcess(deviceData, deviceData.deviceToken);
 
     // rssi PF
-    await device.strategy[0].processData({ rssi: deviceData.RSSI, gateways: deviceData.gateways});
+    // await device.strategy[0].processData({ rssi: deviceData.RSSI, gateways: deviceData.gateways});
 
     // lat long PF
-    await device.strategy[1].processData({ latitude: resLatLong.latitude, longitude: resLatLong.longitude});
+    // await device.strategy[1].processData({ latitude: resLatLong.latitude, longitude: resLatLong.longitude});
 
     /* call next */
     next.next(uplinkData.getDevEui.toString());

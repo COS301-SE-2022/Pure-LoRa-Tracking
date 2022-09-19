@@ -1,6 +1,7 @@
 {
   "version": 2,
   "projects": {
+    "ai-ai-processing": "libs/ai/ai-processing",
     "ai-heatmap-average": "libs/ai/heatmap-average",
     "ai-mock-data-trainer": "libs/ai/mock-data-trainer",
     "ai-mock-generator-averaging-data-generator": "libs/ai/mock-generator/averaging-data-generator",
@@ -47,6 +48,7 @@
     "location": "libs/location",
     "lora-tracking": "apps/lora-tracking",
     "lora-tracking-e2e": "apps/lora-tracking-e2e",
+    "message-queue": "libs/message-queue",
     "middleware-cookie-management": "libs/middleware/cookie-management",
     "middleware-http-logger": "libs/middleware/http-logger",
     "middleware-session-management": "libs/middleware/session-management",
