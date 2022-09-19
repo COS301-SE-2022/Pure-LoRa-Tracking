@@ -1,6 +1,6 @@
 import { Test } from '@nestjs/testing';
 import { ProcessingApiProcessingBusModule } from '@processing/bus';
-import { AiAiProcessingService } from '@lora/ai/processing';
+import { AiAiProcessingModule } from '@lora/ai/processing';
 import { MessageQueueService } from './message-queue.service';
 
 describe('MessageQueueService', () => {
