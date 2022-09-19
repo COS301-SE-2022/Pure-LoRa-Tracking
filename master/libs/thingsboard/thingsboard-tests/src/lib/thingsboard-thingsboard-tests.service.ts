@@ -594,6 +594,14 @@ export class ThingsboardThingsboardTestsService {
     },
   };
 
+  axiosTokenVerificationFailureExample = {
+    headers: {},
+    config: {},
+    status: 200,
+    statusText: 'FAIL',
+    data: {},
+  };
+
   axios401FailureExample = {
     response: {
       data: {
