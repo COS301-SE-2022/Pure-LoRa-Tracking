@@ -25,6 +25,7 @@
         "libs/ai/mock-generator/triangulation/src/index.ts"
       ],
       "@lora/ai/particle-filter": ["libs/ai/particle-filter/src/index.ts"],
+      "@lora/ai/processing": ["libs/ai/ai-processing/src/index.ts"],
       "@lora/ai/strategy": ["libs/ai/processing-strategy/src/index.ts"],
       "@lora/ai/triangulation": ["libs/ai/ai-triangulation/src/index.ts"],
       "@lora/api/login": ["libs/api/login-endpoint/src/index.ts"],
@@ -146,6 +147,7 @@
         "libs/client/users-management-view/src/index.ts"
       ],
       "@master/client/users-view": ["libs/client/users-view/src/index.ts"],
+      "@master/message-queue": ["libs/message-queue/src/index.ts"],
       "@master/middleware/cookie-management": [
         "libs/middleware/cookie-management/src/index.ts"
       ],
