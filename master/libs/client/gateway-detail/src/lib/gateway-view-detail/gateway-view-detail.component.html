@@ -1,1 +1,23 @@
-<p>gateway-view-detail works!</p>
+<mat-card>
+    <mat-card-header>
+        <button mat-button><span>Locate</span><mat-icon>my_location</mat-icon></button>
+        <span id="spacer"></span>
+        <button  mat-icon-button><mat-icon>arrow_back</mat-icon></button>
+        <mat-card-title>
+            {{gatewayInfo.name}}
+        </mat-card-title>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <mat-card-content>
+        <mat-tab-group>
+            <mat-tab label="Info">
+               <div>
+               
+               </div>
+            </mat-tab>
+            <mat-tab label="Activity">
+
+            </mat-tab>
+        </mat-tab-group>
+    </mat-card-content>
+</mat-card>
