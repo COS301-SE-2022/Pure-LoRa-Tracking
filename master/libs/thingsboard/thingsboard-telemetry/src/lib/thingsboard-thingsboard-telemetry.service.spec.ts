@@ -113,8 +113,6 @@ describe('ThingsboardThingsboardTelemetryService', () => {
     service.setToken(
       'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZlYWRtaW5AcmVzZXJ2ZS5jb20iLCJzY29wZXMiOlsiVEVOQU5UX0FETUlOIl0sInVzZXJJZCI6ImQ2MzcyZTMwLWRmZTgtMTFlYy1iZGIzLTc1MGNlN2VkMjQ1MSIsImVuYWJsZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiJjZDJkZjJiMC1kZmU4LTExZWMtYmRiMy03NTBjZTdlZDI0NTEiLCJjdXN0b21lcklkIjoiMTM4MTQwMDAtMWRkMi0xMWIyLTgwODAtODA4MDgwODA4MDgwIiwiaXNzIjoidGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE2NjM1OTU0MTUsImV4cCI6MTY2MzYwNDQxNX0.qylikFxTmdm0Ur4hTxo6p7jAcQ_-brgj1oJ-GfF69pSUUOMqL0zmNkooTiKQ3oXBG26zNp6nB8yY-Uv0rujP9w'
     );
-    */
-    /*
    const res = await service.getSensorData(
      '1ecd2e60-dfe9-11ec-bdb3-750ce7ed2451',
      'DEVICE',
@@ -148,6 +146,17 @@ describe('ThingsboardThingsboardTelemetryService', () => {
     expect(await service.getSensorData('deviceID', 'deviceType')).toMatchObject(
       tests.SuccessResponse
     );
+    /*
+    service.setToken(
+      'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZlYWRtaW5AcmVzZXJ2ZS5jb20iLCJzY29wZXMiOlsiVEVOQU5UX0FETUlOIl0sInVzZXJJZCI6ImQ2MzcyZTMwLWRmZTgtMTFlYy1iZGIzLTc1MGNlN2VkMjQ1MSIsImVuYWJsZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiJjZDJkZjJiMC1kZmU4LTExZWMtYmRiMy03NTBjZTdlZDI0NTEiLCJjdXN0b21lcklkIjoiMTM4MTQwMDAtMWRkMi0xMWIyLTgwODAtODA4MDgwODA4MDgwIiwiaXNzIjoidGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE2NjM1OTU0MTUsImV4cCI6MTY2MzYwNDQxNX0.qylikFxTmdm0Ur4hTxo6p7jAcQ_-brgj1oJ-GfF69pSUUOMqL0zmNkooTiKQ3oXBG26zNp6nB8yY-Uv0rujP9w'
+    );
+    const res = await service.getSensorData(
+      '1ecd2e60-dfe9-11ec-bdb3-750ce7ed2451',
+      'DEVICE'
+    );
+    console.log(JSON.stringify(res));
+    expect(res).toBeDefined();
+    */
   });
 
   it('get sensor data -> ECONNREFUSED', async () => {
