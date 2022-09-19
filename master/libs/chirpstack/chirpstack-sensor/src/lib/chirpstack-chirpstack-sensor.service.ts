@@ -129,7 +129,9 @@ export class ChirpstackChirpstackSensorService {
     device.setApplicationId(deviceAppl);
     // set thingsBoardDeviceId as a variable on the chirpstack "device" to identify it when data is received
     const deviceVars = device.getVariablesMap();
+    const deviceTags = device.getTagsMap();
     deviceVars.set('ThingsBoardAccessToken', thingsBoardDeviceToken); //ThingsBoardAccessToken | thingsBoardDeviceToken
+    deviceTags.set('deviceToken', thingsBoardDeviceToken);
 
     createDeviceRequest.setDevice(device);
     
@@ -160,14 +162,15 @@ export class ChirpstackChirpstackSensorService {
       deviceActivation.setDevAddr(activation.devAddr);
       
       deviceActivation.setAppSKey(activation.appSKey);
-      deviceActivation.setNwkSEncKey(activation.nwkSEncKey);
 
       if (activation.lora1_1) {
         deviceActivation.setFNwkSIntKey(activation.fNwkSIntKey);
         deviceActivation.setSNwkSIntKey(activation.sNwkSIntKey)
+        deviceActivation.setNwkSEncKey(activation.nwkSEncKey);
       } else {
         deviceActivation.setFNwkSIntKey("00000000000000000000000000000000");
         deviceActivation.setSNwkSIntKey("00000000000000000000000000000000")
+        deviceActivation.setNwkSEncKey(activation.nwkSKey);
       }
       ActivateDeviceRequest.setDeviceActivation(deviceActivation); 
 
@@ -184,28 +187,35 @@ export class ChirpstackChirpstackSensorService {
 
 
     } else {
-      const updateDeviceRequest = new deviceMessages.UpdateDeviceKeysRequest();
+      const updateDeviceKeysRequest = new deviceMessages.CreateDeviceKeysRequest();
       const deviceKeys = new deviceMessages.DeviceKeys();
-      
+      deviceKeys.setDevEui(devEUI);
+
       if (activation.lora1_1) { 
         deviceKeys.setAppKey(activation.appKey);
         deviceKeys.setNwkKey(activation.nwkKey);
       } else {
         //This should be the appkey, refer to chirpstack(v3) grpc documention wrt Lorawan 1.0.x
         deviceKeys.setNwkKey(activation.appKey); 
-        // deviceKeys.setAppKey("00000000000000000000000000000000");
       }
+      
+      updateDeviceKeysRequest.setDeviceKeys(deviceKeys);
 
-      updateDeviceRequest.setDeviceKeys(deviceKeys)
+      return new Promise((res, rej) => {
+        this.deviceServiceClient.createKeys(
+          updateDeviceKeysRequest,
+          this.metadata,
+          (error, data) => {
+            if (data) res(data);
+            else {
+              console.log(deviceKeys);
+              rej(error);
+
+            }
+          }
+        );
+      }); 
     } 
-    
-    
-    
-    // set thingsBoardDeviceId as a variable on the chirpstack "device" to identify it when data is received
-    
-
- 
-    
   }
 
   async removeDevice(authtoken: string, devEUI: string) {

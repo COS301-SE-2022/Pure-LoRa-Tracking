@@ -4,6 +4,7 @@ import {
 } from '@lora/thingsboard-client';
 import { ChirpstackChirpstackGatewayService } from '@lora/chirpstack-gateway';
 import { ChirpstackChirpstackSensorService } from '@lora/chirpstack-sensor';
+import { Injectable, Logger } from '@nestjs/common';
 
 import {
   AddGatewayDevice,
@@ -18,7 +19,7 @@ import {
   RemoveDevice,
   UnassignDevice,
 } from './../api-device.interface';
-import { Injectable } from '@nestjs/common';
+
 
 @Injectable()
 export class ApiDeviceEndpointService {
@@ -56,6 +57,7 @@ export class ApiDeviceEndpointService {
   ///////////////////////////////////////////////////////////////////////////
 
   async processDeviceAddsensor(body: AddSensorDevice): Promise<deviceResponse> {
+    let error = null;
     if (body.token == undefined || body.token == '')
       return {
         status: 401,
@@ -105,11 +107,16 @@ export class ApiDeviceEndpointService {
       };
 
     if (resp.explanation == undefined) {
+      Logger.error("Thingsboard device creation error");
       /* delete the device as we do not want a half install */
-      this.thingsboardClient.RemoveDeviceFromReserve(resp.data.deviceCreate);
+      this.thingsboardClient.RemoveDeviceFromReserve(resp.data.deviceCreate.data.id.id);
+      error = "access token failure";
+    }
+
+    if (error != null) {
       return {
         status: 400,
-        explanation: "access token failure"
+        explanation: error
       }
     }
 
@@ -119,22 +126,44 @@ export class ApiDeviceEndpointService {
       body.labelName,            // Name
       body.hardwareName,         // EUI
       body.deviceProfileId
-    ).catch((err) => {
-      this.thingsboardClient.RemoveDeviceFromReserve(resp.data.deviceCreate);
+    ).catch(async (err) => {
+      Logger.error("Chirpstack device creation failed: \n" + err);
+      
+      this.thingsboardClient.RemoveDeviceFromReserve(resp.data.deviceCreate.data.id.id);
+      
+      error = "FAILED: Chirpstack Error";
+    });
+
+    if (error != null) {
       return {
         status: 400,
-        explanation: "access token failure"
-      } 
-    });
+        explanation: error
+      }
+    }
 
     await this.chirpstackSensor.activateDevice(
       process.env.CHIRPSTACK_API,
-      "70b3d50000000033",
-      {
-        isABP: true,
-        lora1_1: true,
+      body.hardwareName,
+      body.activationKeys
+    ).catch((err) => {
+      Logger.error("Device activation failed: \n" + err);
+
+      this.thingsboardClient.RemoveDeviceFromReserve(resp.data.deviceCreate.data.id.id);
+      
+      this.chirpstackSensor.removeDevice(
+        process.env.CHIRPSTACK_API,
+        body.hardwareName
+      );
+
+      error = "FAILED: Chirpstack Activation Error";
+    });
+
+    if (error != null) {
+      return {
+        status: 400,
+        explanation: error
       }
-    )
+    }
 
     return {
       status: 200,
@@ -148,6 +177,8 @@ export class ApiDeviceEndpointService {
   async processDeviceAddGateway(
     body: AddGatewayDevice
   ): Promise<deviceResponse> {
+    let error = null;
+
     if (body.token == undefined || body.token == '')
       return {
         status: 401,
@@ -192,7 +223,7 @@ export class ApiDeviceEndpointService {
 
     if (resp.explanation == undefined) {
       /* delete the device as we do not want a half install */
-      this.thingsboardClient.RemoveDeviceFromReserve(resp.data.deviceCreate);
+      this.thingsboardClient.RemoveDeviceFromReserve(resp.data.deviceCreate.data.id.id);
       return {
         status: 400,
         explanation: "access token failure"
@@ -204,13 +235,25 @@ export class ApiDeviceEndpointService {
       resp.explanation,
       body.labelName,
       body.hardwareName,
-    ).catch((_) => {
-      this.thingsboardClient.RemoveDeviceFromReserve(resp.data.deviceCreate);
+    ).catch((err) => {
+      Logger.error("Chirpstack gateway creation failed: \n" + err);
+      
+      this.thingsboardClient.RemoveDeviceFromReserve(resp.data.deviceCreate.data.id.id);
+      
+      error = "FAILED: Chirpstack Activation Error";
+    });
+
+    if (error != null) {
       return {
         status: 400,
-        explanation: "access token failure"
+        explanation: error
       }
-    });
+    }
+
+    return {
+      status: 400,
+      explanation: "access token failure"
+    }
 
     return {
       status: 200,
