@@ -1,5 +1,6 @@
 import { Test } from '@nestjs/testing';
-import { ProcessingApiProcessingBusService } from '@processing/bus';
+import tf = require('@tensorflow/tfjs-node');
+import { ProcessingApiProcessingBusModule } from '@processing/bus';
 import exp = require('constants');
 import { AiHeatmapAverageService } from './ai-heatmap-average.service';
 
@@ -10,11 +11,12 @@ describe('AiHeatmapAverageService', () => {
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      imports: [ProcessingApiProcessingBusService],
+      imports: [ProcessingApiProcessingBusModule],
       providers: [AiHeatmapAverageService],
     }).compile();
 
     service = module.get(AiHeatmapAverageService);
+    tf.setBackend('cpu');
   });
 
   it('should be defined', () => {
@@ -35,6 +37,57 @@ describe('AiHeatmapAverageService', () => {
     const loadModelResult = await service.loadModel(loadFilePath);
     expect(saveModelResult).toEqual(loadModelResult);
     expect(loadModelResult).toEqual(true);
+  });
+
+  it('tf -> coordinate predict', async () => {
+    const loopBound = 4;
+    await service.configureInitialParameters({ deviceID: 'TEST4422' });
+    for (let i = 0; i < loopBound; i++) {
+      await service.processData({
+        deviceID: 'TEST4422',
+        reading: {
+          latitude: learning.coordinates[i].latitude,
+          longitude: learning.coordinates[i].longitude,
+        },
+      });
+    }
+
+    const result = await service.processData({
+      deviceID: 'TEST4422',
+      reading: {
+        latitude: learning.truePoint.latitude,
+        longitude: learning.truePoint.longitude,
+      },
+    });
+
+    expect(result).toEqual(true);
+  });
+
+  it('tf -> train default model', async () => {
+    const loopBound = 4;
+    service.configureInitialParameters({ deviceID: 'TEST4422' });
+
+    for (let i = 0; i < loopBound; i++) {
+      await service.processData({
+        deviceID: 'TEST4422',
+        reading: {
+          latitude: learning.coordinates[4 + i].latitude,
+          longitude: learning.coordinates[4 + i].longitude,
+        },
+      });
+    }
+
+    const result = await service.processData({
+      deviceID: 'TEST4422',
+      reading: {
+        latitude: learning.truePoint.latitude,
+        longitude: learning.truePoint.longitude,
+      },
+    });
+
+    service.saveModel('file://libs/ai/Models/averaging/');
+
+    expect(result).toEqual(true);
   });
 });
 
