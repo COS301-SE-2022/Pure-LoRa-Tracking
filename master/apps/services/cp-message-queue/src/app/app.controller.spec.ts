@@ -1,3 +1,4 @@
+import { MessageQueueModule } from '@master/message-queue';
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { AppController } from './app.controller';
@@ -8,6 +9,7 @@ describe('AppController', () => {
 
   beforeAll(async () => {
     app = await Test.createTestingModule({
+      imports:[MessageQueueModule],
       controllers: [AppController],
       providers: [AppService],
     }).compile();
