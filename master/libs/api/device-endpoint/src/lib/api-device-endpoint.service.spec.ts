@@ -7,13 +7,12 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ApiDeviceEndpointService } from './api-device-endpoint.service';
 import { AxiosResponse } from 'axios';
 import { of } from 'rxjs';
-import { ChirpstackChirpstackGatewayModule } from '@lora/chirpstack-gateway';
+import { ChirpstackChirpstackGatewayModule, ChirpstackChirpstackGatewayService } from '@lora/chirpstack-gateway';
 import {
   ChirpstackChirpstackSensorModule,
   ChirpstackChirpstackSensorService,
 } from '@lora/chirpstack-sensor';
 import { ApiApiTestingService, ApiApiTestingModule } from '@lora/api/testing';
-import { HttpException, NotFoundException } from '@nestjs/common';
 
 const describeLive =
   process.env.PURELORABUILD == 'DEV' ? describe : describe.skip;
@@ -24,6 +23,7 @@ describe('ApiDeviceEndpointService', () => {
   let httpService: HttpService;
   let tbClient: ThingsboardThingsboardClientService;
   let csSensor: ChirpstackChirpstackSensorService;
+  let csGateway: ChirpstackChirpstackGatewayService;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
@@ -41,6 +41,7 @@ describe('ApiDeviceEndpointService', () => {
     tests = module.get(ApiApiTestingService);
     tbClient = module.get(ThingsboardThingsboardClientService);
     csSensor = module.get(ChirpstackChirpstackSensorService);
+    csGateway = module.get(ChirpstackChirpstackGatewayService);
 
     process.env.TB_URL = 'http://127.0.0.1:9090';
     process.env.CHIRPSTACK_API =
@@ -258,7 +259,7 @@ describe('ApiDeviceEndpointService', () => {
   it('processDeviceAddSensor -> explanation undefined', async () => {
     jest
       .spyOn(tbClient, 'addDeviceToReserve')
-      .mockImplementationOnce(() => Promise.resolve({ status: 'ok', data: { deviceCreate: "602f8bc0-2d6c-11ed-9534-618109dbd02c" }}));
+      .mockImplementationOnce(() => Promise.resolve({ status: 'ok', data: { deviceCreate: { data: { id: { id: "602f8bc0-2d6c-11ed-9534-618109dbd02c" }}}}}));
 
     jest
       .spyOn(tbClient, 'RemoveDeviceFromReserve')
@@ -287,6 +288,10 @@ describe('ApiDeviceEndpointService', () => {
 
     jest
       .spyOn(csSensor, 'addDevice')
+      .mockImplementationOnce(() => Promise.resolve({ status: 'ok' }));
+
+    jest
+      .spyOn(csSensor, 'activateDevice')
       .mockImplementationOnce(() => Promise.resolve({ status: 'ok' }));
 
     jest
@@ -360,7 +365,7 @@ describe('ApiDeviceEndpointService', () => {
   it('processDeviceAddGateway -> explanation undefined', async () => {
     jest
       .spyOn(tbClient, 'addDeviceToReserve')
-      .mockImplementationOnce(() => Promise.resolve({ status: 'ok', data: { deviceCreate: "602f8bc0-2d6c-11ed-9534-618109dbd02c" }}));
+      .mockImplementationOnce(() => Promise.resolve({ status: 'ok', data: { deviceCreate: { data: { id: { id: "602f8bc0-2d6c-11ed-9534-618109dbd02c" }}}}}));
 
     jest
       .spyOn(tbClient, 'RemoveDeviceFromReserve')
@@ -375,11 +380,13 @@ describe('ApiDeviceEndpointService', () => {
   });
 
   it('processDeviceAddGateway -> success', async () => {
+    const Data = { deviceCreate: { data: { id: { id: "602f8bc0-2d6c-11ed-9534-618109dbd02c" } } } };
+    
     jest.spyOn(tbClient, 'addDeviceToReserve').mockImplementationOnce(() =>
       Promise.resolve({
         status: 'ok',
         explanation: 'call finished',
-        data: [],
+        data: Data,
       })
     );
 
@@ -388,7 +395,11 @@ describe('ApiDeviceEndpointService', () => {
       .mockImplementationOnce(() => Promise.resolve({ status: 'ok' }));
 
     jest
-      .spyOn(csSensor, 'addDevice')
+      .spyOn(csGateway, 'addGateway')
+      .mockImplementationOnce(() => Promise.resolve({ status: 'ok' }));
+    
+    jest
+      .spyOn(csSensor, 'activateDevice')
       .mockImplementationOnce(() => Promise.resolve({ status: 'ok' }));
 
     jest
@@ -400,7 +411,7 @@ describe('ApiDeviceEndpointService', () => {
     ).toMatchObject({
       status: 200,
       explanation: 'ok',
-      data: [],
+      data: Data,
     });
   });
 
@@ -810,12 +821,18 @@ describe('ApiDeviceEndpointService', () => {
       process.env.CHIRPSTACK_API =
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5X2lkIjoiMWIwMmZhNDAtMzI4OS00NzllLWI2NjUtM2MwMzg4YmEzZDRmIiwiYXVkIjoiYXMiLCJpc3MiOiJhcyIsIm5iZiI6MTY1Mzg1MDYwNywic3ViIjoiYXBpX2tleSJ9.epxodFKkLwrvinNBVgo0r9k4PWLxumzAGw61oKrTMrI';
 
+      console.log("Token ", tbToken);
       const result = await service.processDeviceAddsensor({
         token: tbToken.Token,
         customerID: 'ef55ff40-dfe8-11ec-bdb3-750ce7ed2451',
         hardwareName: '70b3d5705000dfb1',
         labelName: 'new_sensor_test2',
-        deviceProfileId: 'cb71e932-cd57-44a0-b5ab-aebb6b377541',
+        activationKeys: {
+          isABP: false,
+          lora1_1: false,
+          appKey: 'AABBCCDDEEFFAABBCCDDEEFFAABBCCDD',
+        },
+        deviceProfileId: 'f72c2c00-7347-4cda-a463-d03e3a2f0cb8',
       });
 
       console.log(result);

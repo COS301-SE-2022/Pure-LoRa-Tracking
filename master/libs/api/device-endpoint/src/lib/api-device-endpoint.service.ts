@@ -251,11 +251,6 @@ export class ApiDeviceEndpointService {
     }
 
     return {
-      status: 400,
-      explanation: "access token failure"
-    }
-
-    return {
       status: 200,
       explanation: 'ok',
       data: resp.data,
