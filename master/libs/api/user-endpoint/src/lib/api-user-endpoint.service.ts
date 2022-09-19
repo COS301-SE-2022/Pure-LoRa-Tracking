@@ -394,7 +394,7 @@ export class ApiUserEndpointService {
       status: 200,
       explanation: response.status,
       type: 'bar',
-      data: response.data,
+      data: response.data.data,
     };
   }
 }
