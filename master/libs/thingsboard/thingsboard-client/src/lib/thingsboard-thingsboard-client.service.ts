@@ -1404,6 +1404,7 @@ export class ThingsboardThingsboardClientService {
   async updateUser(userID: string, details: {
     firstName: string,
     lastName: string,
+    email?:string
   }, reserves?: { reserveName: string, reserveID: string }[]): Promise<thingsboardResponse> {
     const user = await this.userService.userInfo(this.token);
 
@@ -1432,7 +1433,8 @@ export class ThingsboardThingsboardClientService {
       userID,
       userinfo.data.tenantId.id,
       userinfo.data.customerId.id,
-      userinfo.data.email, userinfo.data.authority,
+      details.email==undefined?userinfo.data.email:details.email, 
+      userinfo.data.authority,
       details.firstName,
       details.lastName,
       additionalinfo);
@@ -1443,7 +1445,6 @@ export class ThingsboardThingsboardClientService {
         explanation: 'update',
         furtherExplain: resp.explanation
       }
-
     return {
       status: 'ok',
       explanation: 'call finished'

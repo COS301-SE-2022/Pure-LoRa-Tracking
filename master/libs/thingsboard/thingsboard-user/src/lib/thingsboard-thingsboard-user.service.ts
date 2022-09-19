@@ -531,7 +531,7 @@ export class ThingsboardThingsboardUserService {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + token,
     };
-
+    console.log("NEW ENAIL IS ",email);
     const resp = await firstValueFrom(
       this.httpService.post(
         this.ThingsBoardURL + "/user?sendActivationEmail=false",

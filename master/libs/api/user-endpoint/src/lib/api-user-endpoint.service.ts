@@ -324,7 +324,6 @@ export class ApiUserEndpointService {
 
     this.thingsboardClient.setToken(content.token);
     const resp = await this.thingsboardClient.updateUser(content.userID, content.userInfo, content.reserves);
-
     if (resp.status == "fail")
       return {
         status: 500,

@@ -38,6 +38,10 @@ export class ProfilesEditComponent implements OnInit {
 
   saveProfile(form:any):void {
     console.log(JSON.stringify(form.value,null,6));
+    const name=this.editProfile.get("name")?.value
+    const surname=this.editProfile.get("name")?.value
+    // if(name!=""&&this.)
+    console.log(this.editProfile.get("email")?.value);
     this.http.post("/api/user/info/details",{
       userID:this.id,
       userInfo: {
@@ -49,6 +53,9 @@ export class ProfilesEditComponent implements OnInit {
       if(val.status==200&&val.explain=="call finished"){
         this.snackbar.openFromComponent(SnackbarAlertComponent,{duration: 5000, panelClass: ['green-snackbar'], data: {message:"User Updated", icon:"check_circle"}});
         this.navigateBack();
+      }
+      else {
+        this.snackbar.openFromComponent(SnackbarAlertComponent,{duration: 5000, panelClass: ['red-snackbar'], data: {message:"Something went wrong, Please try again", icon:"error_outline"}});
       }
     });
   }

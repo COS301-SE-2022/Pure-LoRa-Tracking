@@ -73,6 +73,7 @@ export class UserEditComponent implements OnInit {
       userInfo: {
         firstName:this.userInfo.get("name")?.value,
         lastName:this.userInfo.get("surname")?.value,
+        email:this.userInfo.get("email")?.value
       },
       reserves:this.userInfo.get("reserves")?.value?.map((curr:any)=>{
         return {
