@@ -1,6 +1,7 @@
 import { Test } from '@nestjs/testing';
 import { MiddlewareSessionManagementService } from './middleware-session-management.service';
 import { ThingsboardThingsboardClientModule } from "@lora/thingsboard-client";
+import { Server, ServerResponse } from 'http';
 
 describe('MiddlewareSessionManagementService', () => {
   let service: MiddlewareSessionManagementService;
@@ -18,8 +19,17 @@ describe('MiddlewareSessionManagementService', () => {
     expect(service).toBeTruthy();
   });
 
-  // describe("Use should return",()=>{
 
+  const servermock:Partial<ServerResponse>={ 
+    statusCode:100
+  }
 
-  // })
+  function test(other:Request){
+
+  }
+
+  describe("Use should return",()=>{
+    
+    
+  })
 });
