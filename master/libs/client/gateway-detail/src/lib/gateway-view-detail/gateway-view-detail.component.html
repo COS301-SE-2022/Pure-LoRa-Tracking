@@ -1,9 +1,9 @@
-<mat-card>
-    <mat-card-header>
-        <button mat-button><span>Locate</span><mat-icon>my_location</mat-icon></button>
+<mat-card >
+    <mat-card-header class="headerText">
+        <button mat-button id="locateButton"><span>Locate</span><mat-icon id="locateIcon">my_location</mat-icon></button>
         <span id="spacer"></span>
-        <button  mat-icon-button (click)="closeGateway()"><mat-icon>arrow_back</mat-icon></button>
-        <mat-card-title>
+        <button mat-icon-button id="backButton" (click)="closeGateway()"><mat-icon>arrow_back</mat-icon></button>
+        <mat-card-title id="sensor-title-text" style="order: 3;">
             {{gatewayInfo.name}}
         </mat-card-title>
     </mat-card-header>
@@ -11,8 +11,32 @@
     <mat-card-content>
         <mat-tab-group>
             <mat-tab label="Info">
-               <div>
-               
+               <div id="field-list">
+                <p>
+                    <span class="field-label">Device EUI</span>
+                    <br>
+                    <span>{{gatewayInfo.eui}}</span>
+                </p>
+                <p>
+                    <span class="field-label">ID</span>
+                    <br>
+                    <span>{{gatewayInfo.id}}</span>
+                </p>
+                <p>
+                    <span class="field-label">Device Type</span>
+                    <br>
+                    <span>Gateway</span>
+                </p>  
+                <p>
+                    <span class="field-label">Reserve</span>
+                    <br>
+                    <span>--</span>
+                </p>
+                <p>
+                    <span class="field-label">Signals Received (Last 24 hours)</span>
+                    <br>
+                    <span>--</span>
+                </p>
                </div>
             </mat-tab>
             <mat-tab label="Activity">
