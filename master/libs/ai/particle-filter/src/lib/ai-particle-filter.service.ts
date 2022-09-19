@@ -6,10 +6,10 @@ import randomPositionInPolygon = require('random-position-in-polygon');
 @Injectable()
 export class AiParticleFilterService extends AiProcessingStrategyService {
 
-    async processData(data: any): Promise<boolean> {
+    async processData(reading: any): Promise<boolean> {
         console.log("Particle filter strategy")
-        const result = await this.particleFilter(data.reading);
-        this.serviceBus.sendProcessedDatatoTB(data.deviceID, {result:{latitude:result[1], longitude:result[0]}, processingType:"pf"});
+        const result = await this.particleFilter(reading);
+        this.serviceBus.sendProcessedDatatoTB(reading.deviceToken, { result: { latitude: result[1], longitude: result[0] }, processingType: this.pType});
         return false;
     }
 
@@ -19,13 +19,14 @@ export class AiParticleFilterService extends AiProcessingStrategyService {
 
     protected particles: number[][];
     protected gatewayLocations: [number, number][];
-    private reservePolygon: [number, number][];
+    protected reservePolygon: [number, number][];
     protected numberOfSamples: number;
-    private numberOfSamplingIterations: number;
+    protected numberOfSamplingIterations: number;
     protected weights: number[];
+    protected pType  = "PF"
 
 
-    constructor(public locationComputations: LocationService, protected serviceBus : ProcessingApiProcessingBusService) {
+    constructor(public locationComputations: LocationService, protected serviceBus: ProcessingApiProcessingBusService) {
         super(serviceBus);
         this.reservePolygon = new Array<[number, number]>();
         this.gatewayLocations = new Array<[number, number]>();
@@ -54,7 +55,7 @@ export class AiParticleFilterService extends AiProcessingStrategyService {
     }
 
     changeGateways(gateways: { latitude: number, longitude: number }[]) {
-        if (gateways.length < 3)
+        if (gateways.length < 2)
             throw ("Not enough gateways given")
         delete this.gatewayLocations;
         this.gatewayLocations = []
@@ -98,12 +99,12 @@ export class AiParticleFilterService extends AiProcessingStrategyService {
         return 12742 * Math.sin(Math.sqrt(a)) * 1000;
     }
 
-    RssiToMeters(rssi:number[]): number[] {
+    RssiToMeters(rssi: number[]): number[] {
         const rssiArray = new Array<number>();
-        rssi.forEach((rssi)=> {
+        rssi.forEach((rssi) => {
             rssiArray.push(this.locationComputations.rssiToMeters(rssi));
         })
-        return rssiArray; 
+        return rssiArray;
     }
 
     /*
@@ -258,11 +259,12 @@ export class AiParticleFilterService extends AiProcessingStrategyService {
         }
     }
 
-    /*
-    to be extended into template 
-    */
-    async particleFilter(reading: { latitude: number, longitude: number }): Promise<number[]> {
+    async particleFilter?(reading: { latitude: number, longitude: number, gateways?: { latitude: number, longitude: number }[] }): Promise<number[]> {
         const readingPoint = [reading.longitude, reading.latitude];
+
+        // adjust for given gateway set
+        if(reading.gateways != undefined)
+            this.changeGateways(reading.gateways)
 
         if (this.reservePolygon.length < 3)
             throw ('No reserve set')
@@ -305,8 +307,9 @@ export class AiParticleFilterService extends AiProcessingStrategyService {
 
 @Injectable()
 export class particleFilterStratifiedService extends AiParticleFilterService {
-    constructor(locationComputations: LocationService, protected serviceBus : ProcessingApiProcessingBusService) {
+    constructor(locationComputations: LocationService, protected serviceBus: ProcessingApiProcessingBusService) {
         super(locationComputations, serviceBus);
+        this.pType = "PF_LOC_STRAT";
     }
 
     // consider : https://github.com/stdlib-js/random-base-uniform
@@ -333,8 +336,9 @@ export class particleFilterStratifiedService extends AiParticleFilterService {
 
 @Injectable()
 export class particleFilterMultinomialService extends AiParticleFilterService {
-    constructor(locationComputations: LocationService, protected serviceBus : ProcessingApiProcessingBusService) {
+    constructor(locationComputations: LocationService, protected serviceBus: ProcessingApiProcessingBusService) {
         super(locationComputations, serviceBus);
+        this.pType = "PF_LOC_MULTI";
     }
 
     // consider : https://github.com/stdlib-js/random-base-uniform
@@ -360,8 +364,9 @@ export class particleFilterMultinomialService extends AiParticleFilterService {
 
 @Injectable()
 export class particleFilterRSSIMultinomialService extends particleFilterMultinomialService {
-    constructor(locationComputations: LocationService, protected serviceBus : ProcessingApiProcessingBusService) {
+    constructor(locationComputations: LocationService, protected serviceBus: ProcessingApiProcessingBusService) {
         super(locationComputations, serviceBus);
+        this.pType = "PF_RSSI_MULTI";
     }
 
     weightsMeasuredRelativeToOriginal(originalPoint: number[]): number[] {
@@ -376,5 +381,50 @@ export class particleFilterRSSIMultinomialService extends particleFilterMultinom
             this.weights[i] = this.weightDistanceEuclidean(originalPointMeasure, randomParticlesToCompare);
         }
         return this.weights;
+    }
+
+    async particleFilter(reading: { rssi : number[], latitude: number, longitude: number, gateways?: { latitude: number, longitude: number }[] }): Promise<number[]> {
+        const readingPoint = reading.rssi;
+
+        // adjust for given gateway set
+        if(reading.gateways != undefined)
+            this.changeGateways(reading.gateways)
+
+        if (this.reservePolygon.length < 3)
+            throw ('No reserve set')
+
+        // random walk
+        this.randomWalk();
+
+        // train to point
+        for (let i = 0; i < this.numberOfSamplingIterations; i++) {
+
+            // perform measurement and set weighting
+            this.weightsMeasuredRelativeToOriginal(readingPoint);
+
+            // normalize weights
+            this.normalizeWeights();
+
+            // compute degeneracy
+            const degeneracy = this.computeDegeneracy();
+
+            // check for sample reset
+            // eslint-disable-next-line no-constant-condition
+            if (degeneracy < this.numberOfSamples / 8) {
+
+                // throw Error("Liam please test");
+                // reset sample by resampling methods
+                this.resampleParticles(Math.floor(this.numberOfSamples / 8))
+
+                // reset weights after complete resample
+                this.resetWeights()
+
+            } else {
+                // resample by weights
+                await this.generateNewSampleFromWeights()
+            }
+        }
+        //this.printGeoJSONPoints(this.particles);
+        return this.predictParticleLocation();
     }
 }
