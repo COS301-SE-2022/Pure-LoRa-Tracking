@@ -1,7 +1,7 @@
-<mat-expansion-panel>
+<mat-expansion-panel class="remove-expand-body-padding" (opened)="itemExpand()">
     <mat-expansion-panel-header >
         <mat-panel-title>
-            <mat-icon>
+            <mat-icon class="device-icon">
                 cell_tower
             </mat-icon>
             {{gateway.name}}
@@ -10,14 +10,13 @@
     <div>
         <p>EUI: {{gateway.eui}}</p>
         <p>ID: {{gateway.id}} </p>
-        <p>Animal: --</p>
     </div>
     <mat-action-row>
         <button mat-button color="accent">
-            <span>Locate<mat-icon>my_location</mat-icon></span>
+            <span>Locate</span><mat-icon class="inner-icon">my_location</mat-icon>
         </button>
-        <button mat-button color="accent">
-            <span>Details<mat-icon>arrow_forward</mat-icon></span>
+        <button mat-button class="action-buttons" color="accent">
+            <span>Details</span><mat-icon class="inner-icon">arrow_forward</mat-icon>
         </button>
     </mat-action-row>
 </mat-expansion-panel>
