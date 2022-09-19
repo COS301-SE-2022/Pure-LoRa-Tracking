@@ -1,4 +1,5 @@
-module.exports = {
+/* eslint-disable */
+export default {
   displayName: 'ai-particle-filter',
   preset: '../../../jest.preset.ts',
   globals: {

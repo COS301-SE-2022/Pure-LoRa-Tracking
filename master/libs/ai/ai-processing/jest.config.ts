@@ -1,4 +1,5 @@
-module.exports = {
+/* eslint-disable */
+export default {
   displayName: 'ai-ai-processing',
   preset: '../../../jest.preset.ts',
   globals: {

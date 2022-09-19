@@ -1,4 +1,5 @@
-module.exports = {
+/* eslint-disable */
+export default {
   displayName: 'message-queue',
   preset: '../../jest.preset.ts',
   globals: {
