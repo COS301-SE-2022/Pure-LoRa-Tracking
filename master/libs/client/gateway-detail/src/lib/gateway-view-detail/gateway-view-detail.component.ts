@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Gateway } from '@master/shared-interfaces';
 
 @Component({
@@ -8,6 +8,9 @@ import { Gateway } from '@master/shared-interfaces';
 })
 export class GatewayViewDetailComponent implements OnInit {
   @Input() gatewayInfo: Gateway;
+  @Input() openView = false;
+
+  @Output() viewChange = new EventEmitter<boolean>();
 
   constructor() {
     this.gatewayInfo = {
@@ -22,4 +25,9 @@ export class GatewayViewDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {}
+
+  closeGateway():void {
+    this.openView = false;
+    this.viewChange.emit(this.openView);
+  }
 }

@@ -8,7 +8,7 @@ import { Gateway } from '@master/shared-interfaces';
 })
 export class GatewayListItemComponent  {
   @Input() gateway: Gateway;
-  @Output() openGatewayView = new EventEmitter<{"id":string,"name":string}>();
+  @Output() openGatewayView = new EventEmitter<{"id":string,"name":string,"eui":string}>();
   @Output() locateGateway = new EventEmitter<string>();
   @Output() gatewayExpanded = new EventEmitter();
 
@@ -29,6 +29,7 @@ export class GatewayListItemComponent  {
     this.openGatewayView.emit({
       id: this.gateway.id,
       name: this.gateway.name,
+      eui: this.gateway.eui
     })
   }
   

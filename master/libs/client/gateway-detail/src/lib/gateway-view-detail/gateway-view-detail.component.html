@@ -2,7 +2,7 @@
     <mat-card-header>
         <button mat-button><span>Locate</span><mat-icon>my_location</mat-icon></button>
         <span id="spacer"></span>
-        <button  mat-icon-button><mat-icon>arrow_back</mat-icon></button>
+        <button  mat-icon-button (click)="closeGateway()"><mat-icon>arrow_back</mat-icon></button>
         <mat-card-title>
             {{gatewayInfo.name}}
         </mat-card-title>

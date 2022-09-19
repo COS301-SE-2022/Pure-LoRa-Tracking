@@ -12,7 +12,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { DeviceListItemComponent } from './device-list-item/device-list-item.component';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { GatewayListItemComponent } from './gateway-list-item/gateway-list-item.component';
-
+import { ClientGatewayDetailModule } from '@master/client/gateway-detail';
 export const clientReserveViewRoutes: Route[] = [];
 
 @NgModule({
@@ -25,6 +25,7 @@ export const clientReserveViewRoutes: Route[] = [];
     ClientLeafletLibraryModule,
     ReactiveFormsModule,
     MatExpansionModule,
+    ClientGatewayDetailModule
   ],
   declarations: [
     ReserveViewComponent,

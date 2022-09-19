@@ -1,4 +1,4 @@
-<mat-card color='$primary' *ngIf="openSensor === false">
+<mat-card color='$primary' *ngIf="openSensor === false && openGateway === false">
     <mat-card-header class="headerText">
         <mat-card-title >
             <mat-form-field class="reserve-select-field">
@@ -54,7 +54,7 @@
             </div>
             <div *ngIf="deviceType==='gateways' || deviceType==='all' && GateWays.length>0" >
                 <mat-accordion>
-                    <master-gateway-list-item *ngFor="let gatewayItem of GateWays" [gateway]="gatewayItem" (locateGateway)="selectedGateway($event)" (gatewayExpanded)="selectedGateway(gatewayItem.id)"></master-gateway-list-item>
+                    <master-gateway-list-item *ngFor="let gatewayItem of GateWays" [gateway]="gatewayItem" (openGatewayView)="viewGateway($event)" (locateGateway)="selectedGateway($event)" (gatewayExpanded)="selectedGateway(gatewayItem.id)"></master-gateway-list-item>
                 </mat-accordion>
                 <!-- <mat-list-option *ngFor="let gatewayItem of filteredGateways" [value]="gatewayItem.id" [style.background-color]="getSelectedStyle(gatewayItem.id)" (click)="selectedGateway(gatewayItem.id)">
                     <mat-icon mat-list-icon>cell_tower</mat-icon>
@@ -76,3 +76,4 @@
 </mat-card>
 <master-sensor-detail-view *ngIf="openSensor === true" [openView]="openSensor" (viewChange)="openSensor=$event" [sensorInfo]="currentSensor" >
 </master-sensor-detail-view>
+<master-gateway-view-detail *ngIf="openGateway === true" [openView]="openGateway" (viewChange)="openGateway=$event" [gatewayInfo]="currentGateway"></master-gateway-view-detail>
