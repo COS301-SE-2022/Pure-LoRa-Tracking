@@ -39,15 +39,21 @@ export class SensorActivityComponent{
     this.sensorEUI = v;
   }
 
-  private rawgraphdata:Array<{ graphname: string, data: Array<{ name: string, value: string }> }>=[];
+  private rawgraphdata:Array<{ graphname: string, values: Array<{ name: string, value: string }> }>=[];
   @Input()
   public get RawGraphData():Array<any>{
     return this.rawgraphdata;
   }
   public set RawGraphData(v : Array<any>) {
     this.rawgraphdata = v;
-    this.sensordata=v;
-    console.log("v>>>>>",v)
+    let data:any=[];
+    v.forEach(curr=>{
+      curr.data=curr.data.filter((other:any)=>{
+        return (/\d+(\.\d+)?/).test(other.value)
+      })
+      data.push(curr);
+    })
+    this.sensordata=data;
   }
   
 
