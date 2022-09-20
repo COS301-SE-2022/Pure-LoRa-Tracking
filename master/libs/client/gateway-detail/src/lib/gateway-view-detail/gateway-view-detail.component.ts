@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component,  Input, Output, EventEmitter } from '@angular/core';
 import { Gateway } from '@master/shared-interfaces';
 
 @Component({
@@ -6,7 +6,7 @@ import { Gateway } from '@master/shared-interfaces';
   templateUrl: './gateway-view-detail.component.html',
   styleUrls: ['./gateway-view-detail.component.scss'],
 })
-export class GatewayViewDetailComponent implements OnInit {
+export class GatewayViewDetailComponent {
   @Input() gatewayInfo: Gateway;
   @Input() openView = false;
 
@@ -23,8 +23,6 @@ export class GatewayViewDetailComponent implements OnInit {
       }
     }
   }
-
-  ngOnInit(): void {}
 
   closeGateway():void {
     this.openView = false;
