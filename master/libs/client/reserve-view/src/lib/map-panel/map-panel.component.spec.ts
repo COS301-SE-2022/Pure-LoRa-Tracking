@@ -4,6 +4,7 @@ import { MapPanelComponent } from './map-panel.component';
 import {MatButtonToggleModule} from "@angular/material/button-toggle"
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
+
 describe('MapPanelComponent', () => {
   let component: MapPanelComponent;
   let fixture: ComponentFixture<MapPanelComponent>;
@@ -35,11 +36,6 @@ describe('MapPanelComponent', () => {
     beforeEach(()=>{
       jest.spyOn(component.daterange,"setValue").mockImplementation();
       jest.spyOn(component,"apply").mockImplementation();
-    })
-    it("Should reset the start and end time",()=>{
-      component.reset();
-      expect(component.starttime).toEqual("0");
-      expect(component.endtime).toEqual("23");
     })
     it("Should reset the date values",()=>{
       component.reset();

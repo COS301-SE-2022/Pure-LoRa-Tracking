@@ -9,11 +9,23 @@ services:
   # MongoDB for our server
   mongodb:
     image: mongo:5.0
+    volumes:
+      - mongodata:/data/db
     environment:
       - MONGO_INITDB_ROOT_USERNAME=lora
-      - MONGO_INITDB_ROOT_PASSWORD=''
+      - MONGO_INITDB_ROOT_PASSWORD=lora
     ports:
       - "27017:27017"
+  
+  # RabbitMQ
+  rabbitmq:
+    image: rabbitmq:3.10-management
+    volumes:
+      - ./enabled_plugins:/etc/rabbitmq/enabled_plugins
+    ports:
+      - 15672:15672
+      - 5672:5672
+
 
   # Chirpstack
   postgresql:
@@ -81,8 +93,13 @@ services:
       - APPLICATION_SERVER__INTEGRATION__MQTT__SERVER=tcp://mosquitto:1883
       - APPLICATION_SERVER__API__PUBLIC_HOST=chirpstack-application-server:8001
       - APPLICATION_SERVER__EXTERNAL_API__JWT_SECRET=verysecret
+      - APPLICATION_SERVER__INTEGRATION__ENABLED=amqp
+      - APPLICATION_SERVER__INTEGRATION__AMQP__URL=amqp://guest:guest@rabbitmq:5672
+      - APPLICATION_SERVER__INTEGRATION__AMQP__EVENT_ROUTING_KEY_TEMPLATE=application.{{ .ApplicationID }}.device.{{ .DevEUI }}.event.{{ .EventType }}
+      - APPLICATION_SERVER__INTEGRATION__MARSHALER=protobuf
     depends_on:
       - chirpstack-network-server
+      - rabbitmq
 
   
   # Thingsboard
@@ -95,9 +112,14 @@ services:
       - "7070:7070"
       - "5683-5688:5683-5688/udp"
     environment:
-      TB_QUEUE_TYPE: in-memory # while-testing
+      TB_QUEUE_TYPE: rabbitmq # while-testing
       PURELORABUILD: ${PURELORABUILD-''}
       JWT_TOKEN_SIGNING_KEY: 53ff38ebc9f89fdb047fa366909e5b610477f1a3
+      TB_QUEUE_RABBIT_MQ_PORT: 5672
+      TB_QUEUE_RABBIT_MQ_USERNAME: guest
+      TB_QUEUE_RABBIT_MQ_PASSWORD: guest
+      TB_QUEUE_RABBIT_MQ_HOST: rabbitmq 
+      #TB_QUEUE_RABBIT_MQ_AUTOMATIC_RECOVERY_ENABLED: true
       # SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/thingsboard
       # SPRING_DATASOURCE_PASSWORD: postgres
       # SPRING_DATASOURCE_USERNAME: postgres
@@ -107,6 +129,8 @@ services:
       - ./configs/postgreSQL/thingsboard.sh:/thingsboard.sh
       - ./configs/dev_db/thingsboard:/dev_db/thingsboard
     command: /thingsboard.sh # hijack entrypoint
+    depends_on:
+      - rabbitmq
 #    networks:
 #      - thingsboards
 
@@ -116,6 +140,7 @@ volumes:
   thingsboard_data:
   postgresqldata:
   redisdata:
+  mongodata:
   
 
 # networks:

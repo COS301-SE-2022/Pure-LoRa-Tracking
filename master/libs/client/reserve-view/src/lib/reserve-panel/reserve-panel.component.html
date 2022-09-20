@@ -26,9 +26,6 @@
               <mat-option value="gateways">Gateways</mat-option>
             </mat-select>
           </mat-form-field>
-
-          
-          <button id="addBtn" mat-raised-button routerLink="add">Add<mat-icon>add</mat-icon></button>
         </mat-action-list>
         
     <mat-card-content id="card-content">  
@@ -74,6 +71,10 @@
         </cdk-virtual-scroll-viewport>
     </mat-card-content>
 </mat-card>
+
 <master-sensor-detail-view *ngIf="openSensor === true" [openView]="openSensor" (viewChange)="openSensor=$event" [sensorInfo]="currentSensor" >
 </master-sensor-detail-view>
 <master-gateway-view-detail *ngIf="openGateway === true" [openView]="openGateway" (viewChange)="openGateway=$event" [gatewayInfo]="currentGateway"></master-gateway-view-detail>
+
+<!-- <master-sensor-detail-view *ngIf="openSensor === true" [openView]="openSensor" (viewChange)="openSensor=$event" [sensorInfo]="currentSensor" >
+</master-sensor-detail-view> -->
