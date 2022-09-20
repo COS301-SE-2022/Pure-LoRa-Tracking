@@ -46,7 +46,7 @@ export class SensorActivityComponent{
   }
   public set RawGraphData(v : Array<any>) {
     this.rawgraphdata = v;
-    let data:any=[];
+    const data:any=[];
     v.forEach(curr=>{
       curr.data=curr.data.filter((other:any)=>{
         return (/\d+(\.\d+)?/).test(other.value)
