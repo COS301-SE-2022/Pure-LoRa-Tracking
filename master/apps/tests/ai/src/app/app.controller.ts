@@ -6,6 +6,12 @@ import { AppService } from './app.service';
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
+  @Post('hm')
+  async processHeatmap(
+    @Body() content: heatMapTestParameters
+  ): Promise<{ status: number; data: any }> {
+    return await this.appService.processHeatmapAveragingTest(content);
+  }
 
   @Post('pf')
   async processPerimeter(
