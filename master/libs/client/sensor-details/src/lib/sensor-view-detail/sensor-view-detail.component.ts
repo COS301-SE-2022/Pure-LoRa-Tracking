@@ -14,6 +14,14 @@ import { data, string } from '@tensorflow/tfjs-node';
 })
 export class SensorViewDetailComponent implements OnInit {
 
+  aditionalInfo = {
+    lastPing: "",
+    park: "",
+    animal: "",
+    signals: 0,
+    activeSince: "",
+  }
+
   @Input() openView = false;
   @Input() sensorInfo = {
     name: "",
@@ -102,13 +110,7 @@ export class SensorViewDetailComponent implements OnInit {
 
   }
 
-  aditionalInfo = {
-    lastPing: "",
-    park: "",
-    animal: "",
-    signals: 0,
-    activeSince: "",
-  }
+
 
   closeSensor(): void {
     this.openView = false;
