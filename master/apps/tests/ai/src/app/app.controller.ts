@@ -8,7 +8,7 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Post('pf')
-  processPerimeter(@Body() content : testParamters) {this.appService.processParticleFilterTest(content)};
+  async processPerimeter(@Body() content : testParamters) : Promise<{status:number, data:any}> {return await this.appService.processParticleFilterTest(content)};
 }
 
 export interface PFprocessingParameters {
