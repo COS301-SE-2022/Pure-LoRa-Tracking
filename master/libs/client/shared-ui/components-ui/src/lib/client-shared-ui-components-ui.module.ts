@@ -5,9 +5,10 @@ import { HeaderUiComponent } from './header-ui/header-ui.component';
 import { ClientSharedUiMaterialUiModule } from '@master/client/shared-ui/material-ui';
 import { DialogConfirmationComponent } from './dialog-confirmation/dialog-confirmation.component';
 import { MatDialogModule } from '@angular/material/dialog';
-import { SensorDetailViewComponent } from './sensor-detail-view/sensor-detail-view.component';
 import { SnackbarAlertComponent } from './snackbar-alert/snackbar-alert.component';
+import { MatTabsModule } from '@angular/material/tabs';
 
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 export const clientSharedUiComponentsUiRoutes: Route[] = [];
 
 @NgModule({
@@ -16,17 +17,17 @@ export const clientSharedUiComponentsUiRoutes: Route[] = [];
     RouterModule,
     ClientSharedUiMaterialUiModule,
     MatDialogModule,
+    MatTabsModule,
+    NgxChartsModule
   ],
   declarations: [
     HeaderUiComponent,
     DialogConfirmationComponent,
-    SensorDetailViewComponent,
     SnackbarAlertComponent,
   ],
   exports: [
     HeaderUiComponent,
     DialogConfirmationComponent,
-    SensorDetailViewComponent,
     SnackbarAlertComponent,
   ],
   entryComponents: [DialogConfirmationComponent],
