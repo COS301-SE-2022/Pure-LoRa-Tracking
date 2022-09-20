@@ -18,7 +18,7 @@ import {
   RemoveDevice,
   UnassignDevice,
 } from './../api-device.interface';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { DeviceProfile } from '@chirpstack/chirpstack-api/as/external/api/profiles_pb';
 import { UserSenserDataInput } from 'libs/api/user-endpoint/src/api-user.interface';
 
