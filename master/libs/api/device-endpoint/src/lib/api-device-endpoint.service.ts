@@ -4,7 +4,6 @@ import {
 } from '@lora/thingsboard-client';
 import { ChirpstackChirpstackGatewayService } from '@lora/chirpstack-gateway';
 import { ChirpstackChirpstackSensorService } from '@lora/chirpstack-sensor';
-import { Injectable, Logger } from '@nestjs/common';
 
 import {
   AddGatewayDevice,
