@@ -34,9 +34,24 @@ export class SensorViewDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.http.post("api/device/admin/sensordata", {
+    this.loaddata();
+    this.notifier.getTimeStamps().subscribe(val=>{
+      if(this.notifier.isTimeSet())this.loaddata({start:val.startTime,end:val.endTime})
+    })
+  }
+
+  loaddata(timestamps?:{start:number,end:number}){
+    let body:{deviceEUI:string,timeStart?:number,timeStop?:number}={
       "deviceEUI": this.sensorInfo.id
-    }).subscribe((val: any) => {
+    }
+    if(timestamps!=undefined){
+      body={
+        ...body,
+        timeStart:new Date(timestamps.start).getTime(),
+        timeStop:new Date(timestamps.end).getTime(),
+      }
+    }
+    this.http.post("api/device/admin/sensordata", body).subscribe((val: any) => {
       let temp = [];
       console.log("data received ", val);
       const rawdata = val.data;
@@ -79,25 +94,11 @@ export class SensorViewDetailComponent implements OnInit {
           commsdata.push({ "date": currdate.toISOString().substring(5,10).replace("-","/"),"timestamp":parseInt(key),"time":`${currdate.getHours()}:${currdate.getMinutes()}`,"Full_Date": currdate.toString(), ...joined[key] });
         }
       }
-      commsdata=commsdata.sort((a,b)=>{return b.timestamp-a.timestamp});
+      commsdata.sort((a,b)=>{return b.timestamp-a.timestamp});
       this.rawGraphdata = temp;//setting with a temp to trigger change detection
       this.tabledata = commsdata;//setting with a temp to trigger change detection
       console.log('commsdata :>> ', commsdata);
     })
-
-
-    // const headersReq = {
-    //   'Content-Type': 'application/json',
-    //   Authorization: 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZlYWRtaW5AcmVzZXJ2ZS5jb20iLCJ1c2VySWQiOiJmNzRjYmYzMC0wODNlLTExZWQtYmM2ZS1hNTAwNjJmNmNkYmEiLCJzY29wZXMiOlsiVEVOQU5UX0FETUlOIl0sImlzcyI6InRoaW5nc2JvYXJkLmlvIiwiaWF0IjoxNjYzNjczNjg2LCJleHAiOjE2NjM2ODI2ODYsImZpcnN0TmFtZSI6InJlc2VydmUiLCJsYXN0TmFtZSI6ImFkbWluIiwiZW5hYmxlZCI6dHJ1ZSwiaXNQdWJsaWMiOmZhbHNlLCJ0ZW5hbnRJZCI6ImVjODY0MzUwLTA4M2UtMTFlZC1iYzZlLWE1MDA2MmY2Y2RiYSIsImN1c3RvbWVySWQiOiIxMzgxNDAwMC0xZGQyLTExYjItODA4MC04MDgwODA4MDgwODAifQ.b4_l69ULFEcDTkpQlDzadPqzdfGw9CxVsLmsvm2r7U_mrIQaHFKiSW73MNGKzqRy_L4X7bxogRROQidv8SgqWg',
-    // };
-    // for(let i=10; i>1;i--){
-    //   this.http.post("http://localhost:9090/api/plugins/telemetry/DEVICE/47af66c0-0840-11ed-bc6e-a50062f6cdba/timeseries/any",{
-    //       "data_graph":Math.floor(Math.random()*900)+100,
-    //       "data_graph2":Math.floor(Math.random()*900)+100
-    //     },{headers:headersReq}).subscribe(val=>{
-    //     console.log("val>> ",val);
-    //   })
-    // }
 
   }
 
