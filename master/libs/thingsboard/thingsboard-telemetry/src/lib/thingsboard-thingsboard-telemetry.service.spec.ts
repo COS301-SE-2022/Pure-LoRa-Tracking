@@ -125,7 +125,7 @@ describe('ThingsboardThingsboardTelemetryService', () => {
 
     jest
       .spyOn(httpService, 'get')
-      .mockImplementationOnce(() => of(tests.axiosTelemetrySuccessExample));
+      .mockImplementationOnce(() => of(tests.TBkeysTimeseries));
     jest
       .spyOn(httpService, 'get')
       .mockImplementationOnce(() => of(tests.axiosTelemetrySuccessExample));
@@ -135,11 +135,13 @@ describe('ThingsboardThingsboardTelemetryService', () => {
     ).toMatchObject(tests.SuccessResponse);
   });
 
+  
+
   it('get sensor data -> return info, no time start', async () => {
     service.setToken('token');
     jest
       .spyOn(httpService, 'get')
-      .mockImplementationOnce(() => of(tests.axiosTelemetrySuccessExample));
+      .mockImplementationOnce(() => of(tests.TBkeysTimeseries));
     jest
       .spyOn(httpService, 'get')
       .mockImplementationOnce(() => of(tests.axiosTelemetrySuccessExample));
@@ -161,6 +163,7 @@ describe('ThingsboardThingsboardTelemetryService', () => {
 
   it('get sensor data -> ECONNREFUSED', async () => {
     service.setToken('token');
+    jest.spyOn(httpService,'get').mockImplementationOnce(()=>of(tests.TBkeysTimeseries))
     jest
       .spyOn(httpService, 'get')
       .mockImplementationOnce(() =>

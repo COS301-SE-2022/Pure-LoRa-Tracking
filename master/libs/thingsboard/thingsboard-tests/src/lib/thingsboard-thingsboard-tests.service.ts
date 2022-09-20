@@ -636,4 +636,12 @@ export class ThingsboardThingsboardTestsService {
     status : 'fail'
   }
 
+  TBkeysTimeseries= {
+    headers: {},
+    config: {},
+    status: 200,
+    statusText: 'OK',
+    data : ["longitude","latitude"]
+  }
+
 }

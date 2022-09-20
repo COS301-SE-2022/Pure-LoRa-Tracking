@@ -119,6 +119,16 @@ export class ThingsboardThingsboardTelemetryService {
       };
     }
 
+    console.log(keyResponse)
+    if(keyResponse.data==undefined||keyResponse.data==null){
+      return {
+        status:200,
+        data:"",
+        explanation:"No Keys Found"
+      }
+    }
+
+
     const sorter = ['fcnt', 'rssi', 'snr'];
     const newarr = keyResponse.data.filter(
       (curr) => curr.startsWith('data_') || sorter.includes(curr)
