@@ -34,7 +34,7 @@ export interface heatMapProcessingParameters {
   reading: {
     longitude: number;
     latitude: number;
-  };
+  }[];
 }
 
 export interface heatMapTestParameters {
