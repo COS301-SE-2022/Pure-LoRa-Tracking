@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormControl, Validators, FormBuilder, FormGroup } from '@angular/forms';
+import { FormControl, Validators, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SnackbarAlertComponent } from '@master/client/shared-ui/components-ui';
@@ -18,7 +18,7 @@ export class UserEditComponent implements OnInit {
 
 
 
-  userInfo: FormGroup = new FormGroup({});
+  userInfo: UntypedFormGroup = new UntypedFormGroup({});
 
   reservesList:ReserveDetails[] = [];
   id:string|null;
@@ -26,7 +26,7 @@ export class UserEditComponent implements OnInit {
   surname="";
   email="";
   selected:string[]=[];
-  constructor(private activeRoute:ActivatedRoute,private formBuilder: FormBuilder, private router:Router,private http:HttpClient,private snackbar:MatSnackBar) {
+  constructor(private activeRoute:ActivatedRoute,private formBuilder: UntypedFormBuilder, private router:Router,private http:HttpClient,private snackbar:MatSnackBar) {
     this.id="";
   }
 

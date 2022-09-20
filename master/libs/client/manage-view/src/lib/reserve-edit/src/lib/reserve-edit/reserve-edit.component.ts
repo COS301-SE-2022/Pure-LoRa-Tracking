@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Validators, FormBuilder, FormGroup } from '@angular/forms';
+import { Validators, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackbarAlertComponent } from '@master/client/shared-ui/components-ui';
@@ -13,10 +13,10 @@ export class ReserveEditComponent implements OnInit {
   id:string|null;
   email:string|null;
   name:string|null;
-  reserveInfo: FormGroup = new FormGroup({});
+  reserveInfo: UntypedFormGroup = new UntypedFormGroup({});
   mapgeojson="";
 
-  constructor(private activeRoute: ActivatedRoute, private formBuilder: FormBuilder, private router:Router,private http:HttpClient,private snackbar:MatSnackBar) { 
+  constructor(private activeRoute: ActivatedRoute, private formBuilder: UntypedFormBuilder, private router:Router,private http:HttpClient,private snackbar:MatSnackBar) { 
    this.id="";
    this.email="";
    this.name="";

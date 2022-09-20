@@ -50,6 +50,9 @@ The stored data will be processed using the location of each tower to calculate 
 ### Testing Policy
 - :page_facing_up: [Testing Policy Document](https://docs.google.com/document/d/1fNwmNPXSUINUTJFpM4AYDoQOlVFcwa7v5H2654s1r-s/edit?usp=sharing)
 
+### Additional Documents
+- :page_facing_up: [Particle Filter](https://drive.google.com/file/d/11dHkNii90tG5GDsM2Ddf-iLNLSQO3qi2/view?usp=sharing)
+
 ## Project Management
 
 - [Project Board](https://github.com/COS301-SE-2022/Pure-LoRa-Tracking/projects/1)

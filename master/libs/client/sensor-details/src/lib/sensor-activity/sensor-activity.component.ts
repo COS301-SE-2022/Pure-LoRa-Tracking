@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { DeviceNotifierService } from '@master/client/shared-services';
 
 interface graphdata{
@@ -61,8 +61,8 @@ export class SensorActivityComponent{
   }
 
   currentGraph="";
-  graphOption = new FormControl();
-  graphType = new FormControl();
+  graphOption = new UntypedFormControl();
+  graphType = new UntypedFormControl();
   graphdata=null;
   // view: [number,number]= [400, 200];
   
