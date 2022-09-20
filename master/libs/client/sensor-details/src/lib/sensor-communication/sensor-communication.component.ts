@@ -26,7 +26,7 @@ export class SensorCommunicationComponent {
   public set colnames(v : string[]) {
     this._colnames = v;
     console.log('this.colnames :>> ', this.colnames);
-    let myarr=['date','time',...this._colnames];
+    const myarr=['date','time',...this._colnames];
     myarr.length=Math.min(myarr.length,5);//limit the amount of columns shown
     this.columnsToDisplay=myarr;
   }

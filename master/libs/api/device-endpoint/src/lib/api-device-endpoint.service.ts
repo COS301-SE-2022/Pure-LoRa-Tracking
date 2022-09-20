@@ -20,7 +20,7 @@ import {
 } from './../api-device.interface';
 import { Injectable, Logger } from '@nestjs/common';
 import { DeviceProfile } from '@chirpstack/chirpstack-api/as/external/api/profiles_pb';
-import { UserSenserDataInput } from 'libs/api/user-endpoint/src/api-user.interface';
+import { UserSenserDataInput } from '../api-device.interface';
 
 @Injectable()
 export class ApiDeviceEndpointService {

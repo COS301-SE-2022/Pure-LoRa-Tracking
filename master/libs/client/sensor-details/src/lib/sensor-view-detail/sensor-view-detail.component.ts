@@ -52,14 +52,14 @@ export class SensorViewDetailComponent implements OnInit {
       }
     }
     this.http.post("api/device/admin/sensordata", body).subscribe((val: any) => {
-      let temp = [];
+      const temp = [];
       console.log("data received ", val);
       const rawdata = val.data;
       const tempnames = Object.keys(rawdata).map((curr: string) => curr.startsWith("data_") ? curr.substring(5) : curr);
       this.colnames = tempnames;
-      let joined: any = {};
+      const joined: any = {};
       if (val.status == 200 && val.explanation == "ok") {
-        for (let key in rawdata) {
+        for (const key in rawdata) {
           if (Object.prototype.hasOwnProperty.call(rawdata, key)) {
             if (key.startsWith("data_")) {
               temp.push(
@@ -87,7 +87,7 @@ export class SensorViewDetailComponent implements OnInit {
         }
       }
       //convert joined to comms format
-      let commsdata: Array<any> = [];
+      const commsdata: Array<any> = [];
       for (const key in joined) {
         if (Object.prototype.hasOwnProperty.call(joined, key)) {
           const currdate=new Date(parseInt(key));

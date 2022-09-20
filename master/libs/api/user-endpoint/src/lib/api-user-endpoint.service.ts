@@ -8,7 +8,6 @@ import {
   userInfoInput,
   userRemoveInput,
   userResponse,
-  UserSenserDataInput,
   usersInfoInput,
   userUpdateInput,
 } from '../api-user.interface';
