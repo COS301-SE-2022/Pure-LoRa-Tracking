@@ -8,7 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { GatewayActivityComponent } from './gateway-activity/gateway-activity.component';
-// import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 export const clientGatewayDetailRoutes: Route[] = [];
 
@@ -21,7 +21,7 @@ export const clientGatewayDetailRoutes: Route[] = [];
     MatButtonModule,
     MatIconModule,
     MatTabsModule,
-    //NgxChartsModule
+    NgxChartsModule
   ],
   declarations: [GatewayViewDetailComponent, GatewayActivityComponent],
   exports: [GatewayViewDetailComponent, GatewayActivityComponent],

@@ -72,8 +72,8 @@
     </mat-card-content>
 </mat-card>
 
-<master-sensor-detail-view *ngIf="openSensor === true" [openView]="openSensor" (viewChange)="openSensor=$event" [sensorInfo]="currentSensor" >
-</master-sensor-detail-view>
+<master-sensor-view-detail *ngIf="openSensor === true" [openView]="openSensor" (viewChange)="openSensor=$event" [sensorInfo]="currentSensor" >
+</master-sensor-view-detail>
 <master-gateway-view-detail *ngIf="openGateway === true" [openView]="openGateway" (viewChange)="openGateway=$event" [gatewayInfo]="currentGateway"></master-gateway-view-detail>
 
 <!-- <master-sensor-detail-view *ngIf="openSensor === true" [openView]="openSensor" (viewChange)="openSensor=$event" [sensorInfo]="currentSensor" >

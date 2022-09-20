@@ -27,7 +27,7 @@ export const clientReserveViewRoutes: Route[] = [];
     ClientLeafletLibraryModule,
     ReactiveFormsModule,
     MatExpansionModule,
-    ClientGatewayDetailModule
+    ClientGatewayDetailModule,
     ClientSensorDetailsModule
   ],
   declarations: [
