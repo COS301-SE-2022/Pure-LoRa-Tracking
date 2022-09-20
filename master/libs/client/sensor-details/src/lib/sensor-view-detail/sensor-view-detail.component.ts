@@ -24,6 +24,7 @@ export class SensorViewDetailComponent implements OnInit {
 
   public rawGraphdata: Array<{ graphname: string, data: Array<{ name: string, value: string }> }> = [];
   public colnames: Array<string> = [];
+  public tabledata: Array<any> = []
 
   //we need the contructor for injection, does not matter if its empty
   //eslint-disable-next-line no-empty
@@ -44,31 +45,44 @@ export class SensorViewDetailComponent implements OnInit {
       let joined: any = {};
       if (val.status == 200 && val.explanation == "ok") {
         for (let key in rawdata) {
-          if (key.startsWith("data_")) {
-            temp.push(
-              {
-                graphname: key.substring(5),
-                data: rawdata[key]?.map((curr: any) => {
-                  //use this opportunity to grab the comms data
-                  joined[curr.ts.toString()] = { ...joined[curr.ts.toString()], [key]: key.substring(5) };
-                  //return for the graph data
-                  return {
-                    name: new Date(curr.ts),
-                    value: curr.value
-                  }
-                })
-              }
-            )
-          }
-          else {
-            //add to array if not in data_
-            rawdata[key]?.forEach((curr: any) => {
-              joined[curr.ts.toString()] = { ...joined[curr.ts.toString()], [key]: key };
-            })
+          if (Object.prototype.hasOwnProperty.call(rawdata, key)) {
+            if (key.startsWith("data_")) {
+              temp.push(
+                {
+                  graphname: key.substring(5),
+                  data: rawdata[key]?.map((curr: any) => {
+                    //use this opportunity to grab the comms data
+                    joined[curr.ts.toString()] = { ...joined[curr.ts.toString()], [key.substring(5)]: curr.value };
+                    //return for the graph data
+                    return {
+                      name: new Date(curr.ts),
+                      value: curr.value
+                    }
+                  })
+                }
+              )
+            }
+            else {
+              //add to array if not in data_
+              rawdata[key]?.forEach((curr: any) => {
+                joined[curr.ts.toString()] = { ...joined[curr.ts.toString()], [key]: curr.value };
+              })
+            }
           }
         }
       }
+      //convert joined to comms format
+      let commsdata: Array<any> = [];
+      for (const key in joined) {
+        if (Object.prototype.hasOwnProperty.call(joined, key)) {
+          const currdate=new Date(parseInt(key));
+          commsdata.push({ "date": currdate.toISOString().substring(5,10).replace("-","/"),"timestamp":parseInt(key),"time":`${currdate.getHours()}:${currdate.getMinutes()}`,"Full_Date": currdate.toString(), ...joined[key] });
+        }
+      }
+      commsdata=commsdata.sort((a,b)=>{return b.timestamp-a.timestamp});
       this.rawGraphdata = temp;//setting with a temp to trigger change detection
+      this.tabledata = commsdata;//setting with a temp to trigger change detection
+      console.log('commsdata :>> ', commsdata);
     })
 
 
@@ -86,11 +100,6 @@ export class SensorViewDetailComponent implements OnInit {
     // }
 
   }
-
-  // sensorInformation:SensorProfile = {
-  //   profileID: "13456",
-  //   profileName: "S-123",
-  // }
 
   aditionalInfo = {
     lastPing: "",
