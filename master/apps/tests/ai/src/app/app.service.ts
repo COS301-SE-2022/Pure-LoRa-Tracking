@@ -7,7 +7,7 @@ import {
 import { LocationService } from '@lora/location';
 import { Injectable } from '@nestjs/common';
 import { ProcessingApiProcessingBusService } from '@processing/bus';
-import { testParamters } from './app.controller';
+import { testParamters, heatMapTestParameters } from './app.controller';
 
 @Injectable()
 export class AppService {
@@ -15,6 +15,25 @@ export class AppService {
     private locationService: LocationService,
     private serviceBus: ProcessingApiProcessingBusService
   ) {}
+
+  async processHeatmapAveragingTest(content: heatMapTestParameters) {
+    const avgHeatMapInstances = new Array<{
+      deviceId: string;
+      heatmap: AiHeatmapAverageService;
+      reading: {
+        longitude: number;
+        latitude: number;
+      };
+    }>();
+    const existingHeatmapsForDevID = [];
+    content.AvgPoints.forEach((reading) => {
+      if (!existingHeatmapsForDevID.includes(reading.devID)) {
+        const heatMapInstance = new AiHeatmapAverageService(this.serviceBus);
+        heatMapInstance.configureInitialParameters({ deviceID: reading.devID });
+        existingHeatmapsForDevID.push(reading.devID);
+      }
+    });
+  }
 
   async processParticleFilterTest(data: testParamters) {
     const pfInstances = new Array<{
