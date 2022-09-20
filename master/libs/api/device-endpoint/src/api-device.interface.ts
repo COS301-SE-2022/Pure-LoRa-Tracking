@@ -85,3 +85,11 @@ export interface GetGatewaysInput {
   token : string;
   customerID: string;
 }
+
+
+export interface UserSenserDataInput {
+  token: string;
+  deviceEUI: string;
+  timeStart?: number;
+  timeStop?: number;
+}

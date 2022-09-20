@@ -6,7 +6,6 @@
         <button id="backButton"  mat-icon-button (click)="closeSensor()"><mat-icon>arrow_back</mat-icon></button>
         <mat-card-title id="sensor-title-text" style="order: 3;">
             {{sensorInfo.name}}
-           
         </mat-card-title>
     </mat-card-header>
     <mat-divider></mat-divider>
@@ -43,10 +42,10 @@
                 </div>
             </mat-tab>
             <mat-tab label="Activity">
-                <master-sensor-activity></master-sensor-activity>
+                <master-sensor-activity [RawGraphData]="rawGraphdata"></master-sensor-activity>
             </mat-tab>
             <mat-tab  label="Communication">
-                <master-sensor-communication></master-sensor-communication>
+                <master-sensor-communication [colnames]="colnames" [tabledata]="tabledata"></master-sensor-communication>
             </mat-tab>
         </mat-tab-group>
         
