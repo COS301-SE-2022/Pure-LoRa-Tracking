@@ -4,6 +4,7 @@ import {
 } from '@lora/thingsboard-client';
 import { ChirpstackChirpstackGatewayService } from '@lora/chirpstack-gateway';
 import { ChirpstackChirpstackSensorService } from '@lora/chirpstack-sensor';
+import { Injectable, Logger } from '@nestjs/common';
 
 import {
   AddGatewayDevice,
@@ -58,6 +59,7 @@ export class ApiDeviceEndpointService {
   ///////////////////////////////////////////////////////////////////////////
 
   async processDeviceAddsensor(body: AddSensorDevice): Promise<deviceResponse> {
+    let error = null;
     if (body.token == undefined || body.token == '')
       return {
         status: 401,
@@ -107,27 +109,63 @@ export class ApiDeviceEndpointService {
       };
 
     if (resp.explanation == undefined) {
+      Logger.error("Thingsboard device creation error");
       /* delete the device as we do not want a half install */
-      this.thingsboardClient.RemoveDeviceFromReserve(resp.data);
+      this.thingsboardClient.RemoveDeviceFromReserve(resp.data.deviceCreate.data.id.id);
+      error = "access token failure";
+    }
+
+    if (error != null) {
       return {
         status: 400,
-        explanation: "access token failure"
+        explanation: error
       }
     }
 
-    const chirpPromise = await this.chirpstackSensor.addDevice(
+    await this.chirpstackSensor.addDevice(
       process.env.CHIRPSTACK_API,
-      resp.explanation,
-      body.labelName,
-      body.hardwareName,
+      resp.data.deviceToken,
+      body.labelName,            // Name
+      body.hardwareName,         // EUI
       body.deviceProfileId
-    ).catch((err) => {
-      this.thingsboardClient.RemoveDeviceFromReserve(resp.data);
+    ).catch(async (err) => {
+      Logger.error("Chirpstack device creation failed: \n" + err);
+      
+      this.thingsboardClient.RemoveDeviceFromReserve(resp.data.deviceCreate.data.id.id);
+      
+      error = "FAILED: Chirpstack Error";
+    });
+
+    if (error != null) {
       return {
         status: 400,
-        explanation: "access token failure"
+        explanation: error
       }
+    }
+
+    await this.chirpstackSensor.activateDevice(
+      process.env.CHIRPSTACK_API,
+      body.hardwareName,
+      body.activationKeys
+    ).catch((err) => {
+      Logger.error("Device activation failed: \n" + err);
+
+      this.thingsboardClient.RemoveDeviceFromReserve(resp.data.deviceCreate.data.id.id);
+      
+      this.chirpstackSensor.removeDevice(
+        process.env.CHIRPSTACK_API,
+        body.hardwareName
+      );
+
+      error = "FAILED: Chirpstack Activation Error";
     });
+
+    if (error != null) {
+      return {
+        status: 400,
+        explanation: error
+      }
+    }
 
     return {
       status: 200,
@@ -141,6 +179,8 @@ export class ApiDeviceEndpointService {
   async processDeviceAddGateway(
     body: AddGatewayDevice
   ): Promise<deviceResponse> {
+    let error = null;
+
     if (body.token == undefined || body.token == '')
       return {
         status: 401,
@@ -185,7 +225,7 @@ export class ApiDeviceEndpointService {
 
     if (resp.explanation == undefined) {
       /* delete the device as we do not want a half install */
-      this.thingsboardClient.RemoveDeviceFromReserve(resp.data);
+      this.thingsboardClient.RemoveDeviceFromReserve(resp.data.deviceCreate.data.id.id);
       return {
         status: 400,
         explanation: "access token failure"
@@ -197,13 +237,20 @@ export class ApiDeviceEndpointService {
       resp.explanation,
       body.labelName,
       body.hardwareName,
-    ).catch((_) => {
-      this.thingsboardClient.RemoveDeviceFromReserve(resp.data);
+    ).catch((err) => {
+      Logger.error("Chirpstack gateway creation failed: \n" + err);
+      
+      this.thingsboardClient.RemoveDeviceFromReserve(resp.data.deviceCreate.data.id.id);
+      
+      error = "FAILED: Chirpstack Activation Error";
+    });
+
+    if (error != null) {
       return {
         status: 400,
-        explanation: "access token failure"
+        explanation: error
       }
-    });
+    }
 
     return {
       status: 200,
@@ -245,15 +292,16 @@ export class ApiDeviceEndpointService {
     const isGateway = body.isGateway;
     const devID = body.devEUI;
     if (isGateway) {
-      await this.chirpstackGateway.removeGateway(
-        process.env.CHIRPSTACK_API,
-        devID
-      ).catch((_) => {
+      try {
+        this.chirpstackGateway.removeGateway(
+          process.env.CHIRPSTACK_API,
+          devID)
+      } catch(Exception) {
         return {
           status: 400,
           explanation: "Failed to remove device"
         }
-      });
+      };
     } else {
       await this.chirpstackSensor.removeDevice(
         process.env.CHIRPSTACK_API,
@@ -378,6 +426,13 @@ export class ApiDeviceEndpointService {
         status: 400,
         explanation: 'no location parameters',
       };
+    
+    this.chirpstackGateway.setGatewayLocation(
+      process.env.CHIRPSTACK_API,
+      body.devEUI,
+      body.locationParameters.latitude,
+      body.locationParameters.longitude
+    )
 
     this.thingsboardClient.setToken(body.token);
     const resp = await this.thingsboardClient.setGatewayLocation(body.deviceID, body.locationParameters);
@@ -433,12 +488,11 @@ export class ApiDeviceEndpointService {
   }
 
   ///////////////////////////////////////////////////////////////////////////
-  // TODO: Implement endpoint
   async processGetDeviceProfiles(): Promise<deviceResponse> {
 
     const result = await this.chirpstackSensor.getProfiles(process.env.CHIRPSTACK_API);
     const resultData = result.map((item) => ({
-      id: item.getId(), name: item.getName()
+      id: item.getId(), name: item.getName(), isOTAA: item.getSupportsJoin() , macVerion: item.getMacVersion()
     }));
     return {
       status: 200,
