@@ -54,14 +54,12 @@ export class CommunicationDataComponent implements OnInit{
   ngOnInit(): void {
     const treeData: DataNode[] = [];
     this.extractNested(this.sensorCommunication,treeData);
-    console.log(treeData);
     this.dataSource.data = treeData
   }
 
   hasChild = (_: number, node: ExampleFlatNode) => node.expandable;
 
   private extractNested(data: any, currentNode: DataNode[], key?: string){
-      console.log(data);
       if (typeof data !== 'object'){
         currentNode.push({
           name: key+": "+data,
