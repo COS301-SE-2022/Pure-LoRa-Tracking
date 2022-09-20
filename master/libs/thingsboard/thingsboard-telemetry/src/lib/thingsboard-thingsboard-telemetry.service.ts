@@ -6,7 +6,7 @@ import { lastValueFrom } from 'rxjs';
 @Injectable()
 export class ThingsboardThingsboardTelemetryService {
   private token: string;
-  private ThingsBoardURL = process.env.TB_URL || 'http://localhost:8080/api';
+  private ThingsBoardURL = process.env.TB_URL || 'http://localhost:9090/api';
   constructor(private httpService: HttpService) {}
   private headersReq = {};
 
@@ -70,6 +70,111 @@ export class ThingsboardThingsboardTelemetryService {
       data: {
         telemetryResults: this.buildTelemetryResults(resp.data),
       },
+    };
+  }
+
+  //////////////////////////////////////////////////////////////////
+
+  async getSensorData(
+    DeviceID: string,
+    DeviceProfile: string,
+    timeStart?: number,
+    timeStop?: number
+  ): Promise<SensorDataResponse> {
+    let url = '';
+
+    if (timeStop == undefined) {
+      timeStop = new Date().getTime();
+    }
+
+    if (timeStart == undefined) {
+      timeStart = new Date(timeStop - 24 * 60 * 60 * 1000).getTime();
+    }
+
+    //Get key attributes.
+    url =
+      this.ThingsBoardURL +
+      '/plugins/telemetry/' +
+      DeviceProfile +
+      '/' +
+      DeviceID +
+      '/keys/timeseries';
+
+    const keyResponse = await lastValueFrom(
+      this.httpService.get(url, { headers: this.headersReq })
+    ).catch((error) => {
+      if (error.response == undefined) return error.code;
+      return error;
+    });
+
+    if (keyResponse == 'ECONNREFUSED')
+      return {
+        status: 500,
+        explanation: keyResponse,
+      };
+    else if (keyResponse.status != 200) {
+      return {
+        status: keyResponse.response.status,
+        explanation: keyResponse.response.data.message,
+      };
+    }
+
+    console.log(keyResponse)
+    if(keyResponse.data==undefined||keyResponse.data==null){
+      return {
+        status:200,
+        data:"",
+        explanation:"No Keys Found"
+      }
+    }
+
+
+    const sorter = ['fcnt', 'rssi', 'snr'];
+    const newarr = keyResponse.data.filter(
+      (curr) => curr.startsWith('data_') || sorter.includes(curr)
+    );
+
+    let keys = '';
+
+    for (let i = 0; i < newarr.length - 1; i++) keys += newarr[i] + ',';
+
+    keys += newarr[newarr.length - 1];
+
+    url =
+      this.ThingsBoardURL +
+      '/plugins/telemetry/' +
+      DeviceProfile +
+      '/' +
+      DeviceID +
+      '/values/timeseries' +
+      '?startTs=' +
+      timeStart +
+      '&endTs=' +
+      timeStop +
+      '&keys=' +
+      keys;
+
+    const resp = await lastValueFrom(
+      this.httpService.get(url, { headers: this.headersReq })
+    ).catch((error) => {
+      if (error.response == undefined) return error.code;
+      return error;
+    });
+    if (resp == 'ECONNREFUSED')
+      return {
+        status: 500,
+        explanation: resp,
+      };
+    else if (resp.status != 200) {
+      return {
+        status: resp.response.status,
+        explanation: resp.response.data.message,
+      };
+    }
+    return {
+      status: resp.status,
+      explanation: 'ok',
+      data: resp.data,
     };
   }
 
@@ -187,9 +292,9 @@ export class ThingsboardThingsboardTelemetryService {
         this.ThingsBoardURL + '/v1/' + accessToken + '/telemetry',
         {
           timestamp: +new Date(),
-          ...TelemetryJSON
+          ...TelemetryJSON,
         },
-        { }
+        {}
       )
     ).catch((error) => {
       if (error.response == undefined) return { status: 500 };
@@ -244,4 +349,10 @@ export interface TelemetryResponse {
   data?: {
     telemetryResults?: TelemetryResult[];
   };
+}
+
+export interface SensorDataResponse {
+  status: number;
+  explanation: string;
+  data?: any;
 }
