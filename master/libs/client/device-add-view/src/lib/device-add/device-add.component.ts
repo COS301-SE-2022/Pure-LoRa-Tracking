@@ -6,6 +6,8 @@ import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {deviceOptionList} from "@master/shared-interfaces"
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackbarAlertComponent } from '@master/client/shared-ui/components-ui';
+import { Router } from '@angular/router';
+
 @Component({
   selector: 'master-add-device',
   templateUrl: './device-add.component.html',
@@ -26,7 +28,7 @@ export class DeviceAddComponent implements OnInit {
   lora1_0 = false;
   lora1_1 = false;
 
-  constructor(private cd: ChangeDetectorRef, private _formBuilder: UntypedFormBuilder,private http:HttpClient,private tokenmanager:TokenManagerService,private snackbar:MatSnackBar) {}
+  constructor(private cd: ChangeDetectorRef, private _formBuilder: UntypedFormBuilder,private http:HttpClient,private tokenmanager:TokenManagerService,private snackbar:MatSnackBar,private router:Router) {}
 
   ngOnInit(): void {
     this.typeGroup = this._formBuilder.group({
@@ -206,5 +208,9 @@ export class DeviceAddComponent implements OnInit {
     const target = data.target.getAttribute('formcontrolname');
     this.sensorGroup.get(target)?.setValue(data.target.value.replaceAll(' ','').toUpperCase());
     this.gatewayGroup.get(target)?.setValue(data.target.value.replaceAll(' ','').toUpperCase());
+  }
+
+  navigateBack():void{
+    this.router.navigate(['manage',{outlets:{managecontent:['manage-devices']}}]);   
   }
 }
