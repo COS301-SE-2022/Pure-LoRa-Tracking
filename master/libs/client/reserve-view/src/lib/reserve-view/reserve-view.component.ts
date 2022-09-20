@@ -3,7 +3,7 @@ import { ReserveMapComponent } from '@master/client/leaflet-library';
 import { MapCallerService } from '@master/client/map-apicaller';
 import { DeviceNotifierService } from '@master/client/shared-services';
 import { TokenManagerService } from '@master/client/user-storage-controller';
-import { Device, Gateway, MapApiReserveResponse, ViewMapType } from '@master/shared-interfaces';
+import { Device, Gateway, MapApiReserveResponse, StartEndTimestamps, ViewMapType } from '@master/shared-interfaces';
 import { HttpClient } from "@angular/common/http"
 import { CookieService } from 'ngx-cookie-service';
 
@@ -37,7 +37,7 @@ export class ReserveViewComponent {
 
   reservesList: ReserveInfo[];
   selectedReserveId = "";
-  
+
   constructor(public apicaller: MapCallerService, private tokenmanager: TokenManagerService, private notifier: DeviceNotifierService, private http: HttpClient, private cookiemanager: CookieService) {
     this.LastestHistorical = [];
     this.Gateways = [];
@@ -48,6 +48,13 @@ export class ReserveViewComponent {
       this.LastestHistorical = this.LastestHistorical.filter(curr => curr.deviceID != val);
     })
     this.reservesList = [];
+    this.notifier.getTimeStamps().subscribe((val: StartEndTimestamps) => {
+      this.apicaller.getHistoricalWithTime(this.token, this.selectedReserveId, [], val.startTime, val.endTime).then(val => {
+        // console.table(val['data'])
+        this.reservemap?.reload(val.data);
+        this.LastestHistorical = val.data;
+      });
+    })
   }
 
   ngOnInit(): void {
@@ -68,7 +75,7 @@ export class ReserveViewComponent {
               location: otherval.adminData[0].location
             }
           } as MapApiReserveResponse
-          this.selectedReserveId=otherval.adminData[0].reserveID;
+          this.selectedReserveId = otherval.adminData[0].reserveID;
           // console.log(otherval);
           this.reservesList = otherval.adminData.map((curr: any) => {
             return {
@@ -78,7 +85,7 @@ export class ReserveViewComponent {
           })
           this.Reserve = temp;
           console.log("reserve call in nginit", this.Reserve);
-          if (this.Reserve?.data?.reserveName != undefined){
+          if (this.Reserve?.data?.reserveName != undefined) {
             this.ReserveName = this.Reserve?.data?.reserveName;
           }
           this.loadreserve(this.selectedReserveId);
@@ -104,14 +111,6 @@ export class ReserveViewComponent {
   updateViewMapType(newval: string) {
     if (newval == "norm") this.ViewMapTypeInput = ViewMapType.NORMAL_OPEN_STREET_VIEW;
     else if (newval == "sat") this.ViewMapTypeInput = ViewMapType.SATELLITE_ESRI_1;
-  }
-
-  updateRange(event: { start: number, end: number }): void {
-    this.apicaller.getHistoricalWithTime(this.token, this.selectedReserveId, [], event.start, event.end).then(val => {
-      // console.table(val['data'])
-      this.reservemap?.reload(val.data);
-      this.LastestHistorical = val.data;
-    });
   }
 
   updateReserve(newReserveId: string) {
@@ -151,21 +150,31 @@ export class ReserveViewComponent {
           explanation: val.explanation,
           status: val.status,
           data: {
-            reserveName: val.adminData?.find((curr:any)=>curr.reserveID==newReserveId).reserveName,
-            location: val.adminData?.find((curr:any)=>curr.reserveID==newReserveId).location
+            reserveName: val.adminData?.find((curr: any) => curr.reserveID == newReserveId).reserveName,
+            location: val.adminData?.find((curr: any) => curr.reserveID == newReserveId).location
           }
         } as MapApiReserveResponse
-        val=temp;
+        val = temp;
       }
       this.Reserve = val;
       console.log("reserve call in loadreserve", this.Reserve);
       if (this.Reserve?.data?.reserveName != undefined)
         this.ReserveName = this.Reserve?.data?.reserveName;
     });
-    this.apicaller.getHistorical(this.token, this.selectedReserveId, []).then(val => {
-      this.LastestHistorical = val.data;
-      this.reservemap?.loadInnitial(this.LastestHistorical);
-    });
+    //if there is no current set timestamp
+    if (!this.notifier.isTimeSet()) {
+      this.apicaller.getHistorical(this.token, this.selectedReserveId, []).then(val => {
+        this.LastestHistorical = val.data;
+        this.reservemap?.loadInnitial(this.LastestHistorical);
+      });
+    }
+    else{
+      this.apicaller.getHistoricalWithTime(this.token, this.selectedReserveId, [], this.notifier.getTimeStampsValue().startTime, this.notifier.getTimeStampsValue().endTime).then(val => {
+        // console.table(val['data'])
+        this.LastestHistorical = val.data;
+        this.reservemap?.loadInnitial(this.LastestHistorical);
+      });
+    }
     this.apicaller.getGateways(this.selectedReserveId).then((val: any) => {
       console.log(val)
       this.Gateways = val.map((curr: any) => ({ id: curr.deviceID, name: curr.humanName, eui: curr.deviceName, location: curr.location } as Gateway));

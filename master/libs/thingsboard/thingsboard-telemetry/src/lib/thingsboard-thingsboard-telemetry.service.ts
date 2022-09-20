@@ -292,6 +292,39 @@ export class ThingsboardThingsboardTelemetryService {
     });
     return resp.status;
   }
+
+  ////////////////////////////////////////////////////////////////////
+
+  async clearTelemetry(deviceID:string) {
+    const headersReq = {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + this.token,
+    };
+
+    const url = this.ThingsBoardURL + '/plugins/telemetry/DEVICE/'+deviceID+'/timeseries/delete?deleteAllDataForKeys=true';
+
+    const resp = await lastValueFrom(
+      this.httpService.delete(url, { headers: headersReq })
+    ).catch((error) => {
+      if (error.response == undefined) return error.code;
+      return error;
+    });
+    if (resp == 'ECONNREFUSED')
+      return {
+        status: 500,
+        explanation: resp,
+      };
+    else if (resp.status != 200) {
+      return {
+        status: resp.response.status,
+        explanation: resp.response.data.message,
+      };
+    }
+    return {
+      status: resp.status,
+      explanation: 'ok',
+    };
+  }
 }
 
 export interface TelemetryResult {

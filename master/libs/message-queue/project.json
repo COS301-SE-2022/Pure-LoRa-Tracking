@@ -1,0 +1,33 @@
+{
+  "sourceRoot": "libs/message-queue/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/message-queue",
+        "tsConfig": "libs/message-queue/tsconfig.lib.json",
+        "packageJson": "libs/message-queue/package.json",
+        "main": "libs/message-queue/src/index.ts",
+        "assets": ["libs/message-queue/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/message-queue/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/message-queue"],
+      "options": {
+        "jestConfig": "libs/message-queue/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

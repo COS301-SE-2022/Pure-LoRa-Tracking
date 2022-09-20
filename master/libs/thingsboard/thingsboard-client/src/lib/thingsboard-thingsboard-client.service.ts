@@ -10,6 +10,7 @@ import { ThingsboardThingsboardAssetService } from '@lora/thingsboard-asset';
 import { MapApiReserveResponse } from '@master/shared-interfaces';
 import { ThingsboardThingsboardAdminService } from '@lora/thingsboard/admin';
 import { ThingsboardThingsboardReserveService } from '@lora/thingsboard/reserve';
+import { ServiceBusService } from '@lora/serviceBus';
 @Injectable()
 export class ThingsboardThingsboardClientService {
   private token: string;
@@ -22,8 +23,9 @@ export class ThingsboardThingsboardClientService {
     private deviceService: ThingsboardThingsboardDeviceService,
     private assetService: ThingsboardThingsboardAssetService,
     private adminService: ThingsboardThingsboardAdminService,
-    private reserveService: ThingsboardThingsboardReserveService
-  ) {}
+    private reserveService: ThingsboardThingsboardReserveService,
+    private serviceBus: ServiceBusService
+  ) { }
 
   //////////////////////////////////////////////////////////
 
@@ -558,10 +560,17 @@ export class ThingsboardThingsboardClientService {
       deviceCreate.data.id.id
     );
 
+    if (deviceDetails.isGateway == false) {
+      const mongoPair = { location: CustInfo.data.additionalInfo.location, device: AccessToken.data.credentialsId, name: CustInfo.data.title };
+      this.serviceBus.sendMongoDevicePerimeter(mongoPair);
+    }
+
+
     return {
       status: 'ok',
       data: deviceCreate,
       explanation: AccessToken.explanation,
+      furtherExplain: AccessToken.data.credentialsId
     };
   }
 
@@ -1115,6 +1124,9 @@ export class ThingsboardThingsboardClientService {
         explanation: response.explanation,
       };
 
+    const mongoPair = { name: info.data.title, location: location };
+    this.serviceBus.sendMongoDevicePerimeter(mongoPair);
+
     return {
       status: 'ok',
       explanation: 'call finished',
@@ -1328,7 +1340,6 @@ export class ThingsboardThingsboardClientService {
   }
 
   /////////////////////////////////////////////////////////////////
-  /* TODO */
   async getReserveList(): Promise<thingsboardResponse> {
     const userInfo = await this.getUserInfoFromToken();
     if (userInfo.status == 'fail')
@@ -1433,6 +1444,8 @@ export class ThingsboardThingsboardClientService {
         explanation: 'reserve update',
         furtherExplain: response.explanation,
       };
+
+    this.serviceBus.sendMongoDevicePerimeter({ name: info.data.title, newName: details.NameOfReserve })
 
     return {
       status: 'ok',
@@ -1612,6 +1625,14 @@ export class ThingsboardThingsboardClientService {
         status: 'fail',
         explanation: resp.explanation,
       };
+
+    this.telemetryService.clearTelemetry(resp.data.id.id);
+    this.reserveService.setToken(this.token);
+    const CustInfo = await this.reserveService.CustomerInfo(reserveID);
+    this.deviceService.setToken(this.token);
+    const AccessToken = await this.deviceService.GetAccessToken(deviceID);
+    const mongoPair = { device: AccessToken.data.credentialsId, name: CustInfo.data.title };
+    this.serviceBus.sendMongoDevicePerimeter(mongoPair);
 
     return {
       status: 'ok',
