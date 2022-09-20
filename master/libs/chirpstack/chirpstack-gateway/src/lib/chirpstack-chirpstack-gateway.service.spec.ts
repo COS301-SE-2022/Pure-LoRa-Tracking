@@ -2,6 +2,7 @@ import { Test } from '@nestjs/testing';
 import { ChirpstackChirpstackGatewayService } from './chirpstack-chirpstack-gateway.service';
 import * as gatewayMessages from '@chirpstack/chirpstack-api/as/external/api/gateway_pb';
 import { Empty } from 'google-protobuf/google/protobuf/empty_pb';
+import { Location } from '@chirpstack/chirpstack-api/common/common_pb';
 
 const describeLive = process.env.PURELORABUILD == 'DEV' ? describe : describe.skip;
 
@@ -42,15 +43,56 @@ describe('ChirpstackChirpstackGatewayService', () => {
           return null;
         });
 
-      const data = await service.addGateway(
+      await service.addGateway(
         authtoken,
         'test',
         gatewayName,
         gatewayId
       );
-      
-      expect(data).toBe(response);
+
+      expect(service.gatewayServiceClient.create).toHaveBeenCalled();
+      // expect(data).toBe(response);
     });
+
+    it('should update gateway location', async () => {
+      // Inputs
+      const gatewayId = '353036203a001011';
+      // Output
+      const response = new gatewayMessages.GetGatewayResponse;
+      const gateWay = new gatewayMessages.Gateway;
+      
+      gateWay.setLocation(new Location);
+      response.setGateway(gateWay);
+
+      // callback needs to be defined as any since it is an overloaded function
+      jest
+        .spyOn(service.gatewayServiceClient, 'get')
+        .mockImplementationOnce(
+          (getGatewayRequest, metadata, callback: any) => {
+            expect(getGatewayRequest.getId()).toBe(gatewayId);
+            expect(metadata).toBe(service.metadata);
+            
+            callback(null, response);
+            return null;
+          }
+        );
+
+      jest
+        .spyOn(service.gatewayServiceClient, 'update')
+        .mockImplementationOnce(
+          (updateGatewayRequest, metadata, callback: any) => {
+            expect(metadata).toBe(service.metadata);
+            callback(null, response);
+            return null;
+          }
+        );
+
+      service.setGatewayLocation(authtoken, gatewayId, 0, 0);
+      expect(service.gatewayServiceClient.get).toBeCalled();
+      expect(service.gatewayServiceClient.update).toBeCalled();
+    });
+
+  
 
     it('should list gateways', async () => {
       // Inputs
@@ -69,6 +111,18 @@ describe('ChirpstackChirpstackGatewayService', () => {
 
       const data = await service.listGateways(authtoken);
       expect(data).toBeInstanceOf(gatewayMessages.ListGatewayResponse);
+
+      jest
+        .spyOn(service.gatewayServiceClient, 'list')
+        .mockImplementationOnce(
+          (listGatewayRequest, metadata, callback: any) => {
+            callback("TEST_ERROR", null);
+            return null;
+          }
+        );
+      
+      await expect(service.listGateways(authtoken)).rejects.toEqual("TEST_ERROR");
+      
     });
 
     it('should delete a gateway', async () => {
@@ -83,13 +137,15 @@ describe('ChirpstackChirpstackGatewayService', () => {
         .mockImplementationOnce(
           (deleteGatewayRequest, metadata, callback: any) => {
             expect(deleteGatewayRequest.getId()).toBe(gatewayId);
+            expect(metadata).toBe(service.metadata);
             callback(null, response);
             return null;
           }
         );
 
       const data = await service.removeGateway(authtoken, gatewayId);
-      expect(data).toBe(response);
+      expect(service.gatewayServiceClient.delete).toBeCalled();
+      // expect(data).toBe(response);
     });
 
   })

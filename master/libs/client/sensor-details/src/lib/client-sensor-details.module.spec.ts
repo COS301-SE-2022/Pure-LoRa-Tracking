@@ -1,12 +1,12 @@
-import { async, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { ClientSensorDetailsModule } from './client-sensor-details.module';
 
 describe('ClientSensorDetailsModule', () => {
-  beforeEach(async(() => {
+  beforeEach(async () => {
     TestBed.configureTestingModule({
       imports: [ClientSensorDetailsModule],
     }).compileComponents();
-  }));
+  });
 
   // TODO: Add real tests here.
   //
