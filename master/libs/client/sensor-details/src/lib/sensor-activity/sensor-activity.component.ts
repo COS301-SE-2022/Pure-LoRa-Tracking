@@ -39,6 +39,18 @@ export class SensorActivityComponent{
     this.sensorEUI = v;
   }
 
+  private rawgraphdata:Array<{ graphname: string, data: Array<{ name: string, value: string }> }>=[];
+  @Input()
+  public get RawGraphData():Array<any>{
+    return this.rawgraphdata;
+  }
+  public set RawGraphData(v : Array<any>) {
+    this.rawgraphdata = v;
+    this.sensordata=v;
+    console.log("v>>>>>",v)
+  }
+  
+
   sensordata:sensorData[];
   // linechartData;
   currentbardata:graphdata[]=[];
@@ -47,16 +59,17 @@ export class SensorActivityComponent{
     series:[]
   };
   constructor(private notifier:DeviceNotifierService) {
+    this.sensordata=[];
     //make api call
-    this.sensordata=this.GETDATATEMP();
-    //set first
-    if(this.sensordata.length>0&&this.sensordata[0].data!=undefined){
-      // this.currentbardata=this.sensordata[0].data;
-      // this.currentlinedata={
-      //   name:this.sensordata[0].graphname,
-      //   series:this.sensordata[0].data
-      // }
-    }
+    // this.sensordata=this.GETDATATEMP();
+    // //set first
+    // if(this.sensordata.length>0&&this.sensordata[0].data!=undefined){
+    //   // this.currentbardata=this.sensordata[0].data;
+    //   // this.currentlinedata={
+    //   //   name:this.sensordata[0].graphname,
+    //   //   series:this.sensordata[0].data
+    //   // }
+    // }
 
   }
 

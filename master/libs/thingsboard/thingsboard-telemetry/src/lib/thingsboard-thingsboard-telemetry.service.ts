@@ -119,7 +119,6 @@ export class ThingsboardThingsboardTelemetryService {
       };
     }
 
-    console.log(keyResponse)
     if(keyResponse.data==undefined||keyResponse.data==null){
       return {
         status:200,
