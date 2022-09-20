@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { DeviceNotifierService } from '@master/client/shared-services';
 
@@ -53,7 +53,30 @@ export class SensorActivityComponent{
       })
       data.push(curr);
     })
-    this.sensordata=data;
+    this.sensordata=data.filter((curr:any)=>curr.data.length>1);//show only with data\
+    const currentvalue=this.graphOption.value;
+    if(currentvalue!=undefined){
+      //check if new value is present
+      let found=false;
+      this.sensordata.every((curr:any)=>{
+        if(curr.graphname==currentvalue){
+          found=true;
+          return true;
+        }
+        else return false
+      })
+      if(found)this.ChangeData({value:currentvalue});
+      else {
+        //data is no longer there, clear it
+        this.currentbardata=[];
+        this.currentlinedata={
+          name:"temp",
+          series:[]
+        };
+        this.graphOption.setValue("");
+        this.graphType.setValue("");
+      }
+    }
   }
   
 
@@ -64,18 +87,8 @@ export class SensorActivityComponent{
     name:"temp",
     series:[]
   };
-  constructor(private notifier:DeviceNotifierService) {
+  constructor(private notifier:DeviceNotifierService,private cd:ChangeDetectorRef) {
     this.sensordata=[];
-    //make api call
-    // this.sensordata=this.GETDATATEMP();
-    // //set first
-    // if(this.sensordata.length>0&&this.sensordata[0].data!=undefined){
-    //   // this.currentbardata=this.sensordata[0].data;
-    //   // this.currentlinedata={
-    //   //   name:this.sensordata[0].graphname,
-    //   //   series:this.sensordata[0].data
-    //   // }
-    // }
 
   }
 
@@ -117,70 +130,6 @@ export class SensorActivityComponent{
         series:curr.data
       }
     }
-  }
-
-
-  GETDATATEMP():sensorData[]{
-    return [
-      {
-        graphname:"Heart Rate",
-        data:[
-          {
-            "name": new Date("2020-05-12"),
-            "value":23.1
-          },
-          {
-            "name": new Date("2020-05-13"),
-            "value":23.2
-          },
-          {
-            "name": new Date("2020-05-14"),
-            "value":24
-          },
-          {
-            "name": new Date("2020-05-15"),
-            "value":23.4,
-          },
-          {
-            "name": new Date("2020-05-17"),
-            "value":22.9
-          },
-          {
-            "name": new Date("2020-05-20"),
-            "value":23.6,
-          },
-        ]
-      },
-      {
-        graphname:"Signal",
-        data:[
-          {
-            "value":15,
-            "name": new Date("2020-05-12"),
-          },
-          {
-            "value":6,
-            "name": new Date("2020-05-13"),
-          },
-          {
-            "value":5,
-            "name": new Date("2020-05-14"),
-          },
-          {
-            "value":10,
-            "name": new Date("2020-05-15"),
-          },
-          {
-            "value":9,
-            "name": new Date("2020-05-17"),
-          },
-          {
-            "value":12,
-            "name": new Date("2020-05-19"),
-          },
-        ]
-      }
-    ] 
   }
 
 
