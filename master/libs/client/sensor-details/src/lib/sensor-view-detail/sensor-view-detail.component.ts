@@ -23,6 +23,7 @@ export class SensorViewDetailComponent implements OnInit {
   @Output() viewChange = new EventEmitter<boolean>();
 
   public rawGraphdata: Array<{ graphname: string, data: Array<{ name: string, value: string }> }> = [];
+  public colnames: Array<string> = [];
 
   //we need the contructor for injection, does not matter if its empty
   //eslint-disable-next-line no-empty
@@ -31,7 +32,6 @@ export class SensorViewDetailComponent implements OnInit {
 
   }
 
-
   ngOnInit(): void {
     this.http.post("api/device/admin/sensordata", {
       "deviceEUI": this.sensorInfo.id
@@ -39,8 +39,9 @@ export class SensorViewDetailComponent implements OnInit {
       let temp = [];
       console.log("data received ", val);
       const rawdata = val.data;
-      let objnames=Object.keys(rawdata);
-      let joined:any={};
+      const tempnames = Object.keys(rawdata).map((curr: string) => curr.startsWith("data_") ? curr.substring(5) : curr);
+      this.colnames = tempnames;
+      let joined: any = {};
       if (val.status == 200 && val.explanation == "ok") {
         for (let key in rawdata) {
           if (key.startsWith("data_")) {
@@ -49,7 +50,7 @@ export class SensorViewDetailComponent implements OnInit {
                 graphname: key.substring(5),
                 data: rawdata[key]?.map((curr: any) => {
                   //use this opportunity to grab the comms data
-                  joined[curr.ts.toString()]={...joined[curr.ts.toString()], [key]:key.substring(5)};
+                  joined[curr.ts.toString()] = { ...joined[curr.ts.toString()], [key]: key.substring(5) };
                   //return for the graph data
                   return {
                     name: new Date(curr.ts),
@@ -59,10 +60,10 @@ export class SensorViewDetailComponent implements OnInit {
               }
             )
           }
-          else{
+          else {
             //add to array if not in data_
-            rawdata[key]?.forEach((curr: any) =>{
-              joined[curr.ts.toString()]={...joined[curr.ts.toString()], [key]:key};
+            rawdata[key]?.forEach((curr: any) => {
+              joined[curr.ts.toString()] = { ...joined[curr.ts.toString()], [key]: key };
             })
           }
         }

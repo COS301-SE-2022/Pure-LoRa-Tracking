@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 
 const TABLE_DATA = [
@@ -31,13 +31,6 @@ const TABLE_DATA = [
   }
 ];
 
-const prettyColumnNames = {
-      'date': "Date",
-      'time': "Time",
-      'gateway': "Gateway",
-      'temperature': "Temp (\xB0C)",
-      'heartrate': "Heart Rate (bpm)"
-}
 
 @Component({
   selector: 'master-sensor-communication',
@@ -55,14 +48,27 @@ const prettyColumnNames = {
 
 export class SensorCommunicationComponent {
  
+
+  private _colnames:Array<string>=[];
+  @Input()
+  public get colnames() : string[] {
+    return this._colnames;
+  }
+  public set colnames(v : string[]) {
+    this._colnames = v;
+    console.log('this.colnames :>> ', this.colnames);
+    this.columnsToDisplay=this._colnames
+  }
+  
+  
+
   dataSource = TABLE_DATA;
 
-  columnsToDisplay = ['date','time', 'gateway', 'temperature', 'heartrate'];
+  columnsToDisplay:Array<string> = [];
   expandedElm = null;
 
   getPrettyColumn(column: string): string {
-    const prettyName = prettyColumnNames[column as keyof typeof prettyColumnNames] as string;
-    return prettyName?.length > 0 ? prettyName : column;
+    return column.charAt(0).toUpperCase()+column.slice(1);
   }
 
 }
