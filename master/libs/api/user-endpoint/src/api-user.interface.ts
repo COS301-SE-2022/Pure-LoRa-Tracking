@@ -6,7 +6,7 @@ export interface userAddInput {
     firstName: string;
     lastName: string;
   };
-  reserves: { reserveName: string, reserveID: string }[];
+  reserves: { reserveName: string; reserveID: string }[];
 }
 
 export interface userUpdateInput {
@@ -16,9 +16,8 @@ export interface userUpdateInput {
     firstName: string;
     lastName: string;
   };
-  reserves?: { reserveName: string, reserveID: string }[];
+  reserves?: { reserveName: string; reserveID: string }[];
 }
-
 
 export interface userRemoveInput {
   token: string;
@@ -62,4 +61,9 @@ export interface UserChangeReserveInput {
   reserveID: string;
 }
 
-
+export interface UserSenserDataInput {
+  token: string;
+  DevicUEID: string;
+  timeStart?: number;
+  timeStop?: number;
+}
