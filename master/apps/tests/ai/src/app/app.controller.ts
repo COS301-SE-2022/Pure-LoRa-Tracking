@@ -29,10 +29,14 @@ export interface testParamters {
   NNs: null;
 }
 
-export interface heatMapTestParameters {
+export interface heatMapProcessingParameters {
   devID: string;
   reading: {
     longitude: number;
     latitude: number;
   };
+}
+
+export interface heatMapTestParameters {
+  AvgPoints: heatMapProcessingParameters[];
 }
