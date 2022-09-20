@@ -23,6 +23,7 @@
     "chirpstack-chirpstack-sensor": "libs/chirpstack/chirpstack-sensor",
     "client-defaultpage": "libs/client/defaultpage",
     "client-device-add-view": "libs/client/device-add-view",
+    "client-gateway-detail": "libs/client/gateway-detail",
     "client-leaflet-library": "libs/client/leaflet-library",
     "client-manage-view": "libs/client/manage-view",
     "client-manage-view-src-lib-create-reserve": "libs/client/manage-view/src/lib/create-reserve",

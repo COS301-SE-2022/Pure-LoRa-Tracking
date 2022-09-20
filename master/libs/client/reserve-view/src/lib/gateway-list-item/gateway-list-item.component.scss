@@ -1,16 +1,14 @@
 $radius-size: 1.5rem;
 
-.mat-expansion-panel-header-title,
-.mat-expansion-panel-header-description {
-  flex-basis: 0;
+.device-icon{
+    margin-right:0.5em;
 }
 
-.mat-expansion-panel-header-description {
-    justify-content: space-between;
-    align-items: center;
-  }
+.inner-icon{
+    margin-left: 0.2em;
+}
 
-  .mat-expansion-panel:not([class*='mat-elevation-z']) {
+.mat-expansion-panel:not([class*='mat-elevation-z']) {
     box-shadow: none;
 }
 
@@ -24,10 +22,6 @@ $radius-size: 1.5rem;
 
 .mat-expansion-panel-header.mat-expanded:hover{
     background: none;
-}
-
-.device-icon{
-    margin-right:0.5em;
 }
 
 .mat-expansion-panel-header{
@@ -44,14 +38,4 @@ $radius-size: 1.5rem;
 
 .action-buttons{
     margin-right: 0.4em;
-} 
-
-
-.button-text-icon{
-    display: inline-flex;
-    align-items: center;
-}
-
-.inner-icon{
-    margin-left: 0.2em;
 }

@@ -87,6 +87,9 @@
       "@master/client/device-add-view": [
         "libs/client/device-add-view/src/index.ts"
       ],
+      "@master/client/gateway-detail": [
+        "libs/client/gateway-detail/src/index.ts"
+      ],
       "@master/client/leaflet-library": [
         "libs/client/leaflet-library/src/index.ts"
       ],
