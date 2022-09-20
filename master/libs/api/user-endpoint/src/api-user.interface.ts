@@ -63,7 +63,7 @@ export interface UserChangeReserveInput {
 
 export interface UserSenserDataInput {
   token: string;
-  DevicUEID: string;
+  deviceEUI: string;
   timeStart?: number;
   timeStop?: number;
 }

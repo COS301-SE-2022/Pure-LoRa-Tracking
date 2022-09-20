@@ -2,6 +2,7 @@ import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ApiDeviceEndpointService } from './api-device-endpoint.service';
 
 import { AddGatewayDevice, AddSensorDevice, deviceAssign, deviceAvailable, deviceInfos, deviceResponse, GatewayLocationAdd, GatewayLocationInfo, GetGatewaysInput, RemoveDevice } from './../api-device.interface'
+import { UserSenserDataInput } from 'libs/api/user-endpoint/src/api-user.interface';
 
 @Controller('device')
 export class ApiDeviceEndpointController {
@@ -32,6 +33,9 @@ export class ApiDeviceEndpointController {
 
   @Post("admin/unassign")
   async PostDeviceRemoveFromReserve(@Body() content : RemoveDevice) : Promise<deviceResponse> {return this.apiDeviceEndpointService.processDeviceRemoveDeviceFromReserve(content);}
+  
+  @Post("admin/sensordata")
+  async GetSensorDataFromDevice(@Body() content : UserSenserDataInput) : Promise<deviceResponse> {return this.apiDeviceEndpointService.UserGetDeviceSensorData(content);}
 
   @Post("gateway/info")
   async GetGateways(@Body() content : GetGatewaysInput) : Promise<deviceResponse> {return this.apiDeviceEndpointService.getGatewaysProcess(content);}

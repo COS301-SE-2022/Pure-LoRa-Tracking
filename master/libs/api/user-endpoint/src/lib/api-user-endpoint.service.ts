@@ -363,38 +363,4 @@ export class ApiUserEndpointService {
       explain: resp.explanation,
     };
   }
-
-  async UserGetDeviceSensorData(content: UserSenserDataInput) {
-    if (content.token == undefined || content.token == '')
-      return {
-        status: 401,
-        explain: 'token missing',
-      };
-
-    if (content.DevicUEID == undefined || content.DevicUEID == '')
-      return {
-        status: 400,
-        explain: 'device EUID not defined',
-      };
-
-    this.thingsboardClient.setToken(content.token);
-
-    const response = await this.thingsboardClient.getDeviceSensorData(
-      content.DevicUEID,
-      content.timeStart,
-      content.timeStop
-    );
-    if (response.status != 'ok') {
-      return {
-        status: 500,
-        explain: response.explanation,
-      };
-    }
-    return {
-      status: 200,
-      explanation: response.status,
-      type: 'bar',
-      data: response.data.data,
-    };
-  }
 }
