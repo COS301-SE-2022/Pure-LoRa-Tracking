@@ -1,6 +1,6 @@
 module.exports = {
   displayName: 'client-gateway-detail',
-  preset: '../../../jest.preset.ts',
+  preset: '../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {
     'ts-jest': {
