@@ -121,7 +121,7 @@ export class AppService {
           name: pf.name,
           pf: pfInst,
           reading: this.latlongObj([reading])[0],
-          rssiReading: this.convertToRSSI(reading, pf.gateways),
+          rssiReading: this.convertToRSSI(reading, pf.gateways, pf.noiseFactor),
           samples: pf.numberOfParticles,
           noiseFactor: pf.noiseFactor,
         });
@@ -225,15 +225,19 @@ export class AppService {
     return 12742 * Math.sin(Math.sqrt(a)) * 1000;
   }
 
-  convertToRSSI(reading, gateways) {
+  convertToRSSI(reading, gateways, noiseFactor:number) {
     const rssi = new Array<number>();
     gateways.forEach((gateway) => {
       rssi.push(
         this.locationService.MetersToRSSI(
           this.distanceBetweenCoords(reading, gateway)
-        )
+        ) + this.randomNoise(noiseFactor)
       );
     });
     return rssi;
+  }
+
+  randomNoise(noiseFactor: number) {
+    return Math.floor(10 * (Math.random() * (noiseFactor - (-noiseFactor)) + (-noiseFactor)));
   }
 }
