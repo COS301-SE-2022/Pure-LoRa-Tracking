@@ -55,10 +55,10 @@ services:
   #     - "5672:5672"
   #     - "15673:15672"
 
-  mosquitto:
-    image: eclipse-mosquitto:1.6
-    ports:
-      - 1883:1883
+  # mosquitto:
+  #   image: eclipse-mosquitto:1.6
+  #   ports:
+  #     - 1883:1883
 
 
   chirpstack-gateway-bridge:
@@ -66,9 +66,9 @@ services:
     ports:
       - 1700:1700/udp
     environment:
-      - INTEGRATION__MQTT__AUTH__GENERIC__SERVERS=tcp://mosquitto:1883
-    depends_on: 
-      - mosquitto
+      - INTEGRATION__MQTT__AUTH__GENERIC__SERVERS=tcp://192.168.1.123:1884
+    # depends_on: 
+    #   - mosquitto
   
   
   chirpstack-network-server:
@@ -77,11 +77,11 @@ services:
       - POSTGRESQL__DSN=postgres://chirpstack_ns:chirpstack_ns@postgresql/chirpstack_ns?sslmode=disable
       - REDIS__URL=redis://redis:6379
       - NETWORK_SERVER__BAND__NAME=EU868
-      - NETWORK_SERVER__GATEWAY__BACKEND__MQTT__SERVER=tcp://mosquitto:1883
+      - NETWORK_SERVER__GATEWAY__BACKEND__MQTT__SERVER=tcp://192.168.1.123:1884
       - JOIN_SERVER__DEFAULT__SERVER=http://chirpstack-application-server:8003
     depends_on:
       - postgresql
-      - mosquitto
+      # - mosquitto
 
   chirpstack-application-server:
     image: chirpstack/chirpstack-application-server:3
@@ -90,49 +90,59 @@ services:
     environment:
       - POSTGRESQL__DSN=postgres://chirpstack_as:chirpstack_as@postgresql/chirpstack_as?sslmode=disable
       - REDIS__URL=redis://redis:6379
-      - APPLICATION_SERVER__INTEGRATION__MQTT__SERVER=tcp://mosquitto:1883
+      - APPLICATION_SERVER__INTEGRATION__MQTT__SERVER=tcp://192.168.1.123:1884
       - APPLICATION_SERVER__API__PUBLIC_HOST=chirpstack-application-server:8001
       - APPLICATION_SERVER__EXTERNAL_API__JWT_SECRET=verysecret
       - APPLICATION_SERVER__INTEGRATION__ENABLED=amqp
       - APPLICATION_SERVER__INTEGRATION__AMQP__URL=amqp://guest:guest@rabbitmq:5672
       - APPLICATION_SERVER__INTEGRATION__AMQP__EVENT_ROUTING_KEY_TEMPLATE=application.{{ .ApplicationID }}.device.{{ .DevEUI }}.event.{{ .EventType }}
-      - APPLICATION_SERVER__INTEGRATION__MARSHALER=protobuf
+      - APPLICATION_SERVER__INTEGRATION__MARSHALER=JSON
     depends_on:
       - chirpstack-network-server
       - rabbitmq
 
   
   # Thingsboard
-  mytb:
-    restart: always
-    image: "thingsboard/tb-postgres"
-    ports:
-      - "9090:9090" # local:docker
-      - "1884:1883"
-      - "7070:7070"
-      - "5683-5688:5683-5688/udp"
-    environment:
-      TB_QUEUE_TYPE: rabbitmq # while-testing
-      PURELORABUILD: ${PURELORABUILD-''}
-      JWT_TOKEN_SIGNING_KEY: 53ff38ebc9f89fdb047fa366909e5b610477f1a3
-      TB_QUEUE_RABBIT_MQ_PORT: 5672
-      TB_QUEUE_RABBIT_MQ_USERNAME: guest
-      TB_QUEUE_RABBIT_MQ_PASSWORD: guest
-      TB_QUEUE_RABBIT_MQ_HOST: rabbitmq 
-      #TB_QUEUE_RABBIT_MQ_AUTOMATIC_RECOVERY_ENABLED: true
-      # SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/thingsboard
-      # SPRING_DATASOURCE_PASSWORD: postgres
-      # SPRING_DATASOURCE_USERNAME: postgres
-    volumes:
-      - thingsboard_data:/data
-      - ~/.mytb-logs:/var/log/thingsboard
-      - ./configs/postgreSQL/thingsboard.sh:/thingsboard.sh
-      - ./configs/dev_db/thingsboard:/dev_db/thingsboard
-    command: /thingsboard.sh # hijack entrypoint
-    depends_on:
-      - rabbitmq
+  # mytb:
+  #   restart: always
+  #   image: "thingsboard/tb-postgres"
+  #   ports:
+  #     - "9090:9090" # local:docker
+  #     - "1884:1883"
+  #     - "7070:7070"
+  #     - "5683-5688:5683-5688/udp"
+  #   environment:
+  #     TB_QUEUE_TYPE: rabbitmq # while-testing
+  #     PURELORABUILD: ${PURELORABUILD-''}
+  #     JWT_TOKEN_SIGNING_KEY: 53ff38ebc9f89fdb047fa366909e5b610477f1a3
+  #     TB_QUEUE_RABBIT_MQ_PORT: 5672
+  #     TB_QUEUE_RABBIT_MQ_USERNAME: guest
+  #     TB_QUEUE_RABBIT_MQ_PASSWORD: guest
+  #     TB_QUEUE_RABBIT_MQ_HOST: rabbitmq 
+  #     #TB_QUEUE_RABBIT_MQ_AUTOMATIC_RECOVERY_ENABLED: true
+  #     # SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/thingsboard
+  #     # SPRING_DATASOURCE_PASSWORD: postgres
+  #     # SPRING_DATASOURCE_USERNAME: postgres
+  #   volumes:
+  #     - thingsboard_data:/data
+  #     - ~/.mytb-logs:/var/log/thingsboard
+  #     - ./configs/postgreSQL/thingsboard.sh:/thingsboard.sh
+  #     - ./configs/dev_db/thingsboard:/dev_db/thingsboard
+  #   command: /thingsboard.sh # hijack entrypoint
+  #   depends_on:
+  #     - rabbitmq
 #    networks:
 #      - thingsboards
+
+  prometheus:
+      build:
+        context: .
+        dockerfile: ./Dockerfile-prometheus
+      extra_hosts:
+        - lorhammer:192.168.1.123
+      ports:
+        - 9090:9090
+
 
   # GLOBAL
 
