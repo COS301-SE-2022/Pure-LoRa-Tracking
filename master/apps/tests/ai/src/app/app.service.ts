@@ -1,4 +1,7 @@
-import { particleFilterMultinomialService, particleFilterRSSIMultinomialService } from '@lora/ai/particle-filter';
+import {
+  particleFilterMultinomialService,
+  particleFilterRSSIMultinomialService,
+} from '@lora/ai/particle-filter';
 import { AiHeatmapAverageService } from '@lora/ai/average';
 import { LocationService } from '@lora/location';
 import { Injectable } from '@nestjs/common';
@@ -6,9 +9,8 @@ import { ProcessingApiProcessingBusService } from '@processing/bus';
 import { testParamters, heatMapTestParameters } from './app.controller';
 import { createObjectCsvWriter } from 'csv-writer';
 
-
 interface csvObj {
-  testName: string,
+  testName: string;
   numberOfSamples: number;
   processingTime: number;
   accuracy: number;
@@ -58,16 +60,17 @@ export class AppService {
       result: number[];
     }>();
 
-    avgHeatMapInstances.forEach((instance) => {
+    for (let i = 0; i < avgHeatMapInstances.length; i++) {
       let result, latestReading;
       const startTime = Date.now();
-      instance.reading.forEach(async (readingEntry) => {
-        latestReading = readingEntry;
-        result = await instance.heatmap.processData({
-          deviceID: instance.deviceId,
-          reading: readingEntry,
+      for (let j = 0; j < avgHeatMapInstances[i].reading.length; j++) {
+        latestReading = avgHeatMapInstances[i].reading[j];
+        result = await avgHeatMapInstances[i].heatmap.processData({
+          deviceID: avgHeatMapInstances[i].deviceId,
+          reading: latestReading,
         });
-      });
+        console.log(result);
+      }
       const endTime = Date.now();
       const procTime = (endTime - startTime) / 1000;
       const accuracy = this.distanceBetweenCoords(result, [
@@ -78,10 +81,10 @@ export class AppService {
       retObj.push({
         processingTime: procTime,
         accuracy: accuracy,
-        EUID: instance.deviceId,
+        EUID: avgHeatMapInstances[i].deviceId,
         result: result,
       });
-    });
+    }
 
     for (let i = 0; i < avgHeatMapInstances.length; i++)
       delete avgHeatMapInstances[i].heatmap;
@@ -100,12 +103,12 @@ export class AppService {
       name: string;
       pf: particleFilterRSSIMultinomialService;
       reading?: { latitude: number; longitude: number };
-      rssiReading? : number[];
+      rssiReading?: number[];
       samples: number;
       noiseFactor: number;
     }>();
     data.PFs.forEach((pf) => {
-      pf.readings.forEach(reading => {
+      pf.readings.forEach((reading) => {
         const pfInst = new particleFilterRSSIMultinomialService(
           this.locationService,
           this.serviceBus
@@ -121,9 +124,9 @@ export class AppService {
           reading: this.latlongObj([reading])[0],
           rssiReading: this.convertToRSSI(reading, pf.gateways),
           samples: pf.numberOfParticles,
-          noiseFactor: pf.noiseFactor
+          noiseFactor: pf.noiseFactor,
         });
-      })
+      });
     });
 
     /*const retObj = new Array<{
@@ -138,7 +141,10 @@ export class AppService {
     for (let i = 0; i < pfInstances.length; i++) {
       const pf = pfInstances[i];
       const startTime = Date.now();
-      const result = await pf.pf.particleFilter({...{rssi:pf.rssiReading}, ...pf.reading});
+      const result = await pf.pf.particleFilter({
+        ...{ rssi: pf.rssiReading },
+        ...pf.reading,
+      });
       const endTime = Date.now();
       const processingTime = (endTime - startTime) / 1000;
       const accuracy = this.distanceBetweenCoords(result, [
@@ -161,8 +167,8 @@ export class AppService {
         readingLat: pf.reading.latitude,
         estimateLong: result[0],
         estimateLat: result[1],
-        noiseFactor: pf.noiseFactor
-      })
+        noiseFactor: pf.noiseFactor,
+      });
     }
 
     for (let i = 0; i < pfInstances.length; i++) delete pfInstances[i].pf;
@@ -180,8 +186,8 @@ export class AppService {
         { id: 'readingLat', title: 'Reading Latitude' },
         { id: 'estimateLong', title: 'Estimate Longitude' },
         { id: 'estimateLat', title: 'Estimate Latitude' },
-        { id: 'noiseFactor', title: 'Noise Factor' }
-      ]
+        { id: 'noiseFactor', title: 'Noise Factor' },
+      ],
     });
 
     csvWriter
@@ -193,7 +199,7 @@ export class AppService {
       status: 200,
       linearTime: (Date.now() - linearTime) / 1000,
       //data: retObj,
-      data: null
+      data: null,
     };
   }
 
@@ -215,16 +221,20 @@ export class AppService {
       (Math.cos(pointOne[0] * p) *
         Math.cos(pointTwo[0] * p) *
         (1 - Math.cos((pointTwo[1] - pointOne[1]) * p))) /
-      2;
+        2;
 
     return 12742 * Math.sin(Math.sqrt(a)) * 1000;
   }
 
   convertToRSSI(reading, gateways) {
     const rssi = new Array<number>();
-    gateways.forEach(gateway => {
-        rssi.push(this.locationService.MetersToRSSI(this.distanceBetweenCoords(reading, gateway)))
-    })
+    gateways.forEach((gateway) => {
+      rssi.push(
+        this.locationService.MetersToRSSI(
+          this.distanceBetweenCoords(reading, gateway)
+        )
+      );
+    });
     return rssi;
   }
 }
