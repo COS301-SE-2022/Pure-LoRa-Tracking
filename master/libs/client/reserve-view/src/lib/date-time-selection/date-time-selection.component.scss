@@ -1,7 +1,11 @@
 #datetime-wrap {
     display: flex;  
     flex-direction: row;
-    padding: 0.5em;
+    padding: 0 0.5rem 0.5rem 0.5rem;
+    background-color: white;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+    justify-content: space-around;
 }
 
 .time-input{

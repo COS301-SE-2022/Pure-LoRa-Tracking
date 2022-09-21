@@ -4,7 +4,7 @@
     height: 100%;
     justify-content: space-between;
     margin-right: 2%;
-    margin-left: 2%;
+    margin-left: 1rem;
     
 }
 
@@ -43,4 +43,8 @@
 
 #mapComponent{
     z-index: 1;
+}
+
+master-date-time-selection {
+    margin-left: 2%;
 }
