@@ -53,12 +53,12 @@ export class AiHeatmapAverageService extends AiProcessingStrategyService {
   async processData(data: {
     deviceID: string;
     reading: { latitude: number; longitude: number };
-  }): Promise<boolean> {
+  }): Promise<number[]> {
     if (this.currentFive.length >= 5) this.currentFive.shift();
 
     this.currentFive.push(data.reading);
 
-    if (this.currentFive.length != 5) return false;
+    if (this.currentFive.length != 5) return [];
 
     const normalizedFive = this.normalizePoints(
       this.deconstructData(this.currentFive)
@@ -83,7 +83,7 @@ export class AiHeatmapAverageService extends AiProcessingStrategyService {
 
     this.saveModel(this.saveFilePath);
 
-    return true;
+    return result;
   }
 
   normalizePoints(dataSet: number[]): number[] {
