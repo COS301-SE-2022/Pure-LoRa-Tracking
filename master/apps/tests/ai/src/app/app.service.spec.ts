@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-loss-of-precision */
+import { LocationModule } from '@lora/location';
 import { Test } from '@nestjs/testing';
+import { ProcessingApiProcessingBusModule } from '@processing/bus';
 
 import { AppService } from './app.service';
 
@@ -8,11 +10,16 @@ describe('AppService', () => {
 
   beforeAll(async () => {
     const app = await Test.createTestingModule({
+      imports:[LocationModule, ProcessingApiProcessingBusModule],
       providers: [AppService],
     }).compile();
 
     service = app.get<AppService>(AppService);
   });
+
+  it('should be defined', ()=> {
+    expect(service).toBeTruthy
+  })
 });
 
 const groenkloofTestData = {
