@@ -7,7 +7,7 @@ import tf = require('@tensorflow/tfjs-node');
 export class AiHeatmapAverageService extends AiProcessingStrategyService {
   private EarthRadius = 6371;
   private model: tf.Sequential;
-  private targetEpochs = 15;
+  private targetEpochs = 5;
   private loadFilePath: string;
   private saveFilePath: string;
   private deviceToken: string;
@@ -50,15 +50,25 @@ export class AiHeatmapAverageService extends AiProcessingStrategyService {
     6) Denormalize
     7) Send result to TB via bus
   */
-  async processData(data: {
-    deviceID: string;
-    reading: { latitude: number; longitude: number };
-  }): Promise<number[]> {
+  async processData(
+    data: {
+      deviceID: string;
+      reading: { latitude: number; longitude: number };
+    },
+    procType?: string
+  ): Promise<number[]> {
     if (this.currentFive.length >= 5) this.currentFive.shift();
 
     this.currentFive.push(data.reading);
 
     if (this.currentFive.length != 5) return [];
+
+    if (procType == undefined || procType != 'ANN') {
+      const result = this.calculateAverageCoodirnateComputationally(
+        this.currentFive
+      );
+      return [result.longitude, result.latitude];
+    }
 
     const normalizedFive = this.normalizePoints(
       this.deconstructData(this.currentFive)
@@ -70,12 +80,6 @@ export class AiHeatmapAverageService extends AiProcessingStrategyService {
     this.fitModel(normalizedFive, normalizedReading);
     const result = await this.predictData(normalizedFive);
 
-    /* Show results
-    console.log(this.currentFive);
-    console.log(data.reading);
-    console.log(result);
-    */
-
     this.serviceBus.sendProcessedDatatoTB(this.deviceToken, {
       processingType: 'ANN',
       result: { longitude: result[0], latitude: result[1] },
@@ -84,6 +88,34 @@ export class AiHeatmapAverageService extends AiProcessingStrategyService {
     this.saveModel(this.saveFilePath);
 
     return result;
+  }
+
+  calculateAverageCoodirnateComputationally(
+    points: { latitude: number; longitude: number }[]
+  ): { latitude: number; longitude: number } {
+    let x = 0,
+      y = 0,
+      z = 0;
+
+    for (let i = 0; i < points.length; i++) {
+      const longitude = (points[i].longitude * Math.PI) / 180;
+      const latitude = (points[i].latitude * Math.PI) / 180;
+      x += Math.cos(latitude) * Math.cos(longitude);
+      y += Math.cos(latitude) * Math.sin(longitude);
+      z += Math.sin(latitude);
+    }
+
+    x /= points.length;
+    y /= points.length;
+    z /= points.length;
+    const centralLongitude = (Math.atan2(y, x) * 180) / Math.PI;
+    const centralSquareRoot = Math.sqrt(x * x + y * y);
+    const centralLatitude = (Math.atan2(z, centralSquareRoot) * 180) / Math.PI;
+
+    return {
+      longitude: centralLongitude,
+      latitude: centralLatitude,
+    };
   }
 
   normalizePoints(dataSet: number[]): number[] {
