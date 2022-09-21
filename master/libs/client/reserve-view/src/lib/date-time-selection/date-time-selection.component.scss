@@ -1,0 +1,15 @@
+#datetime-wrap {
+    display: flex;  
+    flex-direction: row;
+    padding: 0.5em;
+}
+
+.time-input{
+    width: 5em;
+}
+
+#date-action-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

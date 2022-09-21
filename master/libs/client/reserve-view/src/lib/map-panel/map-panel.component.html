@@ -1,23 +1,18 @@
-<mat-card>
-    <mat-card-content>
-      <div id="map-options-wrap">
-        <section>
-            <mat-checkbox color="primary" #border (change)="updateBorder(border.checked)" checked="true">
-                Show Border
-            </mat-checkbox>
-        </section>
-        <mat-button-toggle-group #group="matButtonToggleGroup">
-          <mat-button-toggle value="sat" (change)="updateViewType($event.source.value)">
-            Satellite
-          </mat-button-toggle>
-          <mat-button-toggle checked="true" value="norm" (change)="updateViewType($event.source.value)">
-            Normal
-          </mat-button-toggle>
-        </mat-button-toggle-group>
-      </div>
-      <div>
-        
-      
-    </div>
- </mat-card-content>       
-</mat-card>
+<div id="map-options-wrap">
+    <div class="margin" id="type-option">
+    <mat-button-toggle-group #group="matButtonToggleGroup" class="shadow" id="type-toggle" color="primary">
+      <mat-button-toggle value="sat" (change)="updateViewType($event.source.value)">
+        Satellite
+      </mat-button-toggle>
+      <mat-button-toggle checked="true" value="norm" (change)="updateViewType($event.source.value)">
+        Normal
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+  <div class="margin shadow" id="border-option">
+      <mat-checkbox class="padding" color="primary" #border (change)="updateBorder(border.checked)" checked="true">
+          Show Border
+      </mat-checkbox>
+  </div>
+
+</div>
