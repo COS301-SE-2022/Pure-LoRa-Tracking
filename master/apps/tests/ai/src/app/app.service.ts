@@ -268,7 +268,7 @@ export class AppService {
     return 12742 * Math.sin(Math.sqrt(a)) * 1000;
   }
 
-  convertToRSSI(reading, gateways, noiseFactor:number) {
+  convertToRSSI(reading, gateways, noiseFactor: number) {
     const rssi = new Array<number>();
     gateways.forEach((gateway) => {
       rssi.push(
@@ -281,6 +281,15 @@ export class AppService {
   }
 
   randomNoise(noiseFactor: number) {
-    return Math.floor(10 * (Math.random() * (noiseFactor - (-noiseFactor)) + (-noiseFactor)));
+    return Math.floor(
+      10 * (Math.random() * (noiseFactor - -noiseFactor) + -noiseFactor)
+    );
+  }
+
+  randomNoiseHeatMap(noiseFactor: number) {
+    return Math.floor(
+      (Math.random() * (noiseFactor - -noiseFactor) + -noiseFactor) /
+        1000000000000
+    );
   }
 }
