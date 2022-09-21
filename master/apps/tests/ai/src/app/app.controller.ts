@@ -24,15 +24,16 @@ export class AppController {
 export interface PFprocessingParameters {
   perimeter: number[];
   gateways: number[];
-  reading: number[];
+  readings: number[][];
   trainingIterations: number;
   numberOfParticles: number;
   name: string;
+  noiseFactor: number;
 }
 
 export interface testParamters {
   PFs: PFprocessingParameters[];
-  NNs: null;
+  numberOfTests: number;
 }
 
 export interface heatMapProcessingParameters {

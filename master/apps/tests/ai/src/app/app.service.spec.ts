@@ -23,6 +23,8 @@ describe('AppService', () => {
 });
 
 const groenkloofTestData = {
+  "numberOfParticles":100,
+  "noiseFactor":1,
   "trainingIterations": 50,
   "name": "test 1",
   "readings": [
@@ -214,8 +216,10 @@ const groenkloofTestData = {
 }
 
 const rietvleiTestData = {
+  "numberOfParticles":150,
+  "noiseFactor":1,
   "trainingIterations": 50,
-  "name": "test 1",
+  "name": "rietvlei",
   "readings": [
     [
       28.28927993774414,
@@ -390,8 +394,10 @@ const rietvleiTestData = {
 
 
 const lcFridayTestData = {
+  "numberOfParticles":150,
+  "noiseFactor":1,
   "trainingIterations": 50,
-  "name": "test 1",
+  "name":"friday",
   "readings": [
     [
       28.251077234745026,
@@ -473,8 +479,10 @@ const lcFridayTestData = {
 }
 
 const lcThursdayTestData = {
+  "numberOfParticles":150,
+  "noiseFactor":1,
   "trainingIterations": 50,
-  "name": "test 1",
+  "name":"thursday",
   "readings": [
     [
       28.24863910675049,
@@ -544,8 +552,10 @@ const lcThursdayTestData = {
 }
 
 const disneyLand = {
+  "numberOfParticles":150,
+  "noiseFactor":1,
   "trainingIterations": 50,
-  "name": "test 1",
+  "name":"disneyLand",
   "readings": [
     [
       -117.91896879673006,
