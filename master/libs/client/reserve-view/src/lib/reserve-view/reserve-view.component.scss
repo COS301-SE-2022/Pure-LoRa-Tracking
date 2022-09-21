@@ -19,9 +19,27 @@
 .mapContainer {
     margin-left: 2%;
     flex: 1;
+    // z-index: 1;
 }
 
 #reservePanel {
     margin-bottom: 5%;
-    height: 78%;
+    height: 100%;
+}
+
+#leftContainer{
+    flex-direction: column;
+    display: flex;
+    flex: 1
+}
+
+#mapOptions{
+    position: sticky;
+    z-index: 9999;
+    bottom: 0;
+    left: 0;
+}
+
+#mapComponent{
+    z-index: 1;
 }
