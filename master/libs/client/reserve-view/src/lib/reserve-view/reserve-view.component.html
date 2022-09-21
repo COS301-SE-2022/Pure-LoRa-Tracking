@@ -2,6 +2,7 @@
 <div id="layoutContainer">
     <div id="leftContainer">
         <div *ngIf="Reserve" class="mapContainer">
+            <master-date-time-selection></master-date-time-selection>
             <master-reserve-map id="mapComponent" #reservemap [Reserve]="Reserve" [ShowPolygon]="ShowPolygon" [LatestData]="LastestHistorical" [ViewMapTypeInput]="ViewMapTypeInput"></master-reserve-map>
             <div id="mapOptions">
                 <master-map-panel class="panel" (ShowPolygon)="ShowPolygon=$event" (ViewType)="updateViewMapType($event)"></master-map-panel>

@@ -12,6 +12,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { DeviceListItemComponent } from './device-list-item/device-list-item.component';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { ClientSensorDetailsModule } from '@master/client/sensor-details';
+import { DateTimeSelectionComponent } from './date-time-selection/date-time-selection.component';
 export const clientReserveViewRoutes: Route[] = [];
 
 @NgModule({
@@ -24,19 +25,21 @@ export const clientReserveViewRoutes: Route[] = [];
     ClientLeafletLibraryModule,
     ReactiveFormsModule,
     MatExpansionModule,
-    ClientSensorDetailsModule
+    ClientSensorDetailsModule,
   ],
   declarations: [
     ReserveViewComponent,
     ReservePanelComponent,
     MapPanelComponent,
     DeviceListItemComponent,
+    DateTimeSelectionComponent,
   ],
   exports: [
     ReserveViewComponent,
     ReservePanelComponent,
     MapPanelComponent,
     DeviceListItemComponent,
+    DateTimeSelectionComponent,
   ],
 })
 export class ClientReserveViewModule {}
