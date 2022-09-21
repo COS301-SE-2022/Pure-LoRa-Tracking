@@ -69,7 +69,6 @@ export class AppService {
           deviceID: avgHeatMapInstances[i].deviceId,
           reading: latestReading,
         });
-        console.log(result);
       }
       const endTime = Date.now();
       const procTime = (endTime - startTime) / 1000;
