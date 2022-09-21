@@ -34,6 +34,10 @@ export class AppService {
   private filepath = 'apps/tests/ai/results/';
 
   async processHeatmapAveragingTest(content: heatMapTestParameters) {
+    const csvFileName =
+      (content.processType == undefined || content.processType != 'ANN'
+        ? 'hmAvgCOMPTests'
+        : 'hmAvgANNTest') + '.csv';
     const avgHeatMapInstances = new Array<{
       deviceId: string;
       heatmap: AiHeatmapAverageService;
@@ -60,33 +64,72 @@ export class AppService {
       result: number[];
     }>();
 
+    const csvData = new Array<csvObj>();
     for (let i = 0; i < avgHeatMapInstances.length; i++) {
       let result, latestReading;
-      const startTime = Date.now();
       for (let j = 0; j < avgHeatMapInstances[i].reading.length; j++) {
-        latestReading = avgHeatMapInstances[i].reading[j];
-        result = await avgHeatMapInstances[i].heatmap.processData({
-          deviceID: avgHeatMapInstances[i].deviceId,
-          reading: latestReading,
-        });
-      }
-      const endTime = Date.now();
-      const procTime = (endTime - startTime) / 1000;
-      const accuracy = this.distanceBetweenCoords(result, [
-        latestReading.longitude,
-        latestReading.latitude,
-      ]);
+        const startTime = Date.now();
 
-      retObj.push({
-        processingTime: procTime,
-        accuracy: accuracy,
-        EUID: avgHeatMapInstances[i].deviceId,
-        result: result,
-      });
+        latestReading = avgHeatMapInstances[i].reading[j];
+        result = await avgHeatMapInstances[i].heatmap.processData(
+          {
+            deviceID: avgHeatMapInstances[i].deviceId,
+            reading: latestReading,
+          },
+          content.processType
+        );
+
+        const endTime = Date.now();
+        const procTime = (endTime - startTime) / 1000;
+
+        if (result.length != 0) {
+          const acc = this.distanceBetweenCoords(result, [
+            latestReading.longitude,
+            latestReading.latitude,
+          ]);
+
+          retObj.push({
+            processingTime: procTime,
+            accuracy: acc,
+            EUID: avgHeatMapInstances[i].deviceId,
+            result: result,
+          });
+
+          csvData.push({
+            testName: avgHeatMapInstances[i].deviceId,
+            accuracy: acc,
+            numberOfSamples: avgHeatMapInstances[i].reading.length,
+            processingTime: procTime,
+            readingLong: avgHeatMapInstances[i].reading[j].longitude,
+            readingLat: avgHeatMapInstances[i].reading[j].longitude,
+            estimateLong: result[0],
+            estimateLat: result[1],
+            noiseFactor: null,
+          });
+        }
+      }
     }
 
     for (let i = 0; i < avgHeatMapInstances.length; i++)
       delete avgHeatMapInstances[i].heatmap;
+    const csvWriter = this.csvWriterObj({
+      path: this.filepath + csvFileName,
+      header: [
+        { id: 'testName', title: 'Test Name' },
+        { id: 'numberOfSamples', title: 'Number Of Samples' },
+        { id: 'processingTime', title: 'Processing Time' },
+        { id: 'accuracy', title: 'Accuracy' },
+        { id: 'readingLong', title: 'Reading Longitude' },
+        { id: 'readingLat', title: 'Reading Latitude' },
+        { id: 'estimateLong', title: 'Estimate Longitude' },
+        { id: 'estimateLat', title: 'Estimate Latitude' },
+        { id: 'noiseFactor', title: 'Noise Factor' },
+      ],
+    });
+
+    csvWriter
+      .writeRecords(csvData)
+      .then(() => console.log('The CSV file was written successfully'));
 
     return {
       status: 200,
