@@ -46,4 +46,5 @@ export interface heatMapProcessingParameters {
 
 export interface heatMapTestParameters {
   AvgPoints: heatMapProcessingParameters[];
+  processType?: string;
 }
