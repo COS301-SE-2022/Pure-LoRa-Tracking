@@ -2,6 +2,7 @@ import { Test } from '@nestjs/testing';
 import { MiddlewareSessionManagementService } from './middleware-session-management.service';
 import { ThingsboardThingsboardClientModule } from "@lora/thingsboard-client";
 import { IncomingMessage, Server, ServerResponse } from 'http';
+import { Header } from '@nestjs/common';
 describe('MiddlewareSessionManagementService', () => {
   let service: MiddlewareSessionManagementService;
 
@@ -29,5 +30,51 @@ describe('MiddlewareSessionManagementService', () => {
       service.use(mockrequest, test.ServerResponse, next)
       expect(next).toBeCalled()
     });
+
   })
+
+  describe("Cookie Requests",()=>{
+    it("No Cookie provided -> Fail",()=>{
+      const mockrequest = {
+        headers:{},
+        url: "/any/any",
+      } as Request
+      const test: any = jest.createMockFromModule("http");
+      jest.spyOn(test, "ServerResponse").mock;
+      const next = jest.fn()
+      const failedrequest=jest.spyOn(service,"failedrequest").mockImplementation();
+      service.use(mockrequest,test.ServerResponse,next);
+      expect(failedrequest).toBeCalledWith(test.ServerResponse,"Token cookie or refresh token cookie not provided",400);
+
+    })
+    
+    it("No Pure Lora refresh token -> Fail",()=>{
+      const mockrequest = {
+        headers:{},
+        url: "/any/any",
+      } as unknown as Request
+      const test: any = jest.createMockFromModule("http");
+      jest.spyOn(test, "ServerResponse").mock;
+      const next = jest.fn()
+      const failedrequest=jest.spyOn(service,"failedrequest").mockImplementation();
+      service.use(mockrequest,test.ServerResponse,next);
+      expect(failedrequest).toBeCalledWith(test.ServerResponse,"Token cookie or refresh token cookie not provided",400);
+    })
+
+    
+    it("No headers -> Fail",()=>{
+      const mockrequest = {
+        url: "/any/any",
+      } as Request
+      const test: any = jest.createMockFromModule("http");
+      jest.spyOn(test, "ServerResponse").mock;
+      const next = jest.fn()
+      const failedrequest=jest.spyOn(service,"failedrequest").mockImplementation();
+      service.use(mockrequest,test.ServerResponse,next);
+      expect(failedrequest).toBeCalledWith(test.ServerResponse,"No headers provided",400);
+    })
+
+  })
+
+
 });

@@ -6,7 +6,6 @@ import * as jwt from "jsonwebtoken"
 export class MiddlewareSessionManagementService implements NestMiddleware {
     constructor(private TBClient: ThingsboardThingsboardClientService) { }
     async use(req: Request, res: ServerResponse, next: (error?: any) => void) {
-        
         //console.log(req.url)
         //login has a pass through this middleware, cause it has more checks later
         if (req.url.startsWith("/login")) {
@@ -16,11 +15,12 @@ export class MiddlewareSessionManagementService implements NestMiddleware {
         }
 
 
-
+        //check for no header
+        if(req.headers==undefined)
+        return this.failedrequest(res,"No headers provided",400);
         //check for no cookie at all
         if(req.headers["cookie"]==undefined)
         return this.failedrequest(res,"Token cookie or refresh token cookie not provided",400);
-        //console.log(req.headers["cookie"])
         //get the cookies
         const tokenCookieName="PURELORA_TOKEN";
         const refreshtokenCookieName="PURELORA_REFRESHTOKEN";
@@ -35,8 +35,8 @@ export class MiddlewareSessionManagementService implements NestMiddleware {
             return this.failedrequest(res,"Refresh Token cookie not found",400);
 
         //get the actual values of the tokens
-        cookietoken=cookietoken.substring(tokenCookieName.length+1);
-        cookierefreshtoken=cookierefreshtoken.substring(refreshtokenCookieName.length+1);
+        cookietoken=cookietoken.substring(tokenCookieName.length+1);//+1 is for the =
+        cookierefreshtoken=cookierefreshtoken.substring(refreshtokenCookieName.length+1);//+1 is for the =
 
         //second check for valid values
         if(cookietoken==undefined||cookietoken==null||cookietoken=="")
