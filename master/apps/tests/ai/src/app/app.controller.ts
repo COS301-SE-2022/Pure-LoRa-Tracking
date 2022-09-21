@@ -42,6 +42,7 @@ export interface heatMapProcessingParameters {
     longitude: number;
     latitude: number;
   }[];
+  noiseFactor: number;
 }
 
 export interface heatMapTestParameters {
