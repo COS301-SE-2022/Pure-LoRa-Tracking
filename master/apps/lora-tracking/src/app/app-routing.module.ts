@@ -76,6 +76,11 @@ const routes: Routes = [
       path: 'add-device',
       outlet: 'managecontent',
       loadChildren:()=>import('@master/client/device-add-view').then(m => m.ClientDeviceAddViewModule)
+    },
+    {
+      path: 'status',
+      outlet: 'managecontent',
+      loadChildren:()=>import('@master/client/manage-view/src/lib/status-view').then(m => m.ClientManageViewSrcLibStatusViewModule)
     }
   ]
 }

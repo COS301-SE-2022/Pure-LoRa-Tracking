@@ -3,10 +3,12 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Route } from '@angular/router';
 import { StatusPageComponent } from './status-page/status-page.component';
 
-export const clientManageViewSrcLibStatusViewRoutes: Route[] = [];
+export const clientManageViewSrcLibStatusViewRoutes: Route[] = [
+  {path:'', pathMatch: 'full', component:StatusPageComponent}
+];
 
 @NgModule({
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, RouterModule.forChild(clientManageViewSrcLibStatusViewRoutes)],
   declarations: [StatusPageComponent],
   exports: [StatusPageComponent],
 })
