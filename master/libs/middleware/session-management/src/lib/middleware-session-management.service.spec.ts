@@ -4,6 +4,7 @@ import { ThingsboardThingsboardClientModule } from "@lora/thingsboard-client";
 import { IncomingMessage, Server, ServerResponse } from 'http';
 import { Header } from '@nestjs/common';
 import * as jwt from "jsonwebtoken"
+import { of } from 'rxjs';
 describe('MiddlewareSessionManagementService', () => {
   let service: MiddlewareSessionManagementService;
 
@@ -145,7 +146,7 @@ describe('MiddlewareSessionManagementService', () => {
       expect(jwt.verify).toBeCalled();
     })
 
-    it("If malformed -> fail",()=>{
+    it("If malformed -> Fail",()=>{
       const mockrequest = {
         headers:{
           "cookie":"PURELORA_TOKEN=MYTOKEN;PURELORA_REFRESHTOKEN=any"
@@ -164,6 +165,110 @@ describe('MiddlewareSessionManagementService', () => {
       service.use(mockrequest,httpmock.ServerResponse,next);
       expect(failedrequest).toBeCalledWith(httpmock.ServerResponse,"Token cookie is malformed",400);
     })
+
+    it("If invalid signiture -> Fail",()=>{
+      const mockrequest = {
+        headers:{
+          "cookie":"PURELORA_TOKEN=MYTOKEN;PURELORA_REFRESHTOKEN=any"
+        },
+        url: "/any/any",
+      } as unknown as Request
+      const httpmock: any = jest.createMockFromModule("http");
+      jest.spyOn(httpmock, "ServerResponse").mock;
+      const failedrequest=jest.spyOn(service,"failedrequest").mockImplementation();
+      const next = jest.fn()
+      jest.spyOn(jwt,"verify").mockImplementationOnce((token,secret,callback:Function)=>{
+        callback({
+          message:"invalid signature"
+        },"")
+      });
+      service.use(mockrequest,httpmock.ServerResponse,next);
+      
+      expect(failedrequest).toBeCalledWith(httpmock.ServerResponse,"Token cookie is invalid",400);
+    })
+  
+    it("Expired -> Call thingsboard",()=>{
+      const mockrequest = {
+        headers:{
+          "cookie":"PURELORA_TOKEN=MYTOKEN;PURELORA_REFRESHTOKEN=TESTTOKEN"
+        },
+        url: "/any/any",
+      } as unknown as Request
+      const httpmock: any = jest.createMockFromModule("http");
+      jest.spyOn(httpmock, "ServerResponse").mock;
+      const failedrequest=jest.spyOn(service,"failedrequest").mockImplementation();
+      const next = jest.fn()
+      jest.spyOn(jwt,"verify").mockImplementationOnce((token,secret,callback:Function)=>{
+        callback({
+          message:"jwt expired"
+        },"")
+      });
+      jest.spyOn(service.TBClient,"refresh").mockResolvedValueOnce({
+        status: "fail",
+        explanation: "",
+        token: "string",
+        refreshToken: "1"
+      });
+      service.use(mockrequest,httpmock.ServerResponse,next);
+      expect(service.TBClient.refresh).toBeCalledWith("TESTTOKEN")
+    })
+
+    it("Expired -> Fail",()=>{
+      const mockrequest = {
+        headers:{
+          "cookie":"PURELORA_TOKEN=MYTOKEN;PURELORA_REFRESHTOKEN=any"
+        },
+        url: "/any/any",
+      } as unknown as Request
+      const httpmock: any = jest.createMockFromModule("http");
+      jest.spyOn(httpmock, "ServerResponse").mock;
+      const next = jest.fn()
+      jest.spyOn(jwt,"verify").mockImplementationOnce((token,secret,callback:Function)=>{
+        callback({
+          message:"jwt expired"
+        },"")
+      });
+      const tbrequest=jest.spyOn(service.TBClient,"refresh").mockResolvedValueOnce({
+        status: "fail",
+        explanation: "",
+        token: "string",
+        refreshToken: "1"
+      });
+      const failedrequest=jest.spyOn(service,"failedrequest").mockImplementation();
+      service.use(mockrequest,httpmock.ServerResponse,next);
+      expect(failedrequest).toBeCalledWith(httpmock.ServerResponse,"Could not refresh Token Or Token Invalid",401);
+    })
+
+    // it("Success refresh -> correct headers set -> call next",()=>{
+    //   const mockrequest = {
+    //     headers:{
+    //       "cookie":"PURELORA_TOKEN=MYTOKEN;PURELORA_REFRESHTOKEN=any"
+    //     },
+    //     body:{
+
+    //     },
+    //     url: "/any/any",
+    //   } as unknown as Request
+    //   const httpmock: any = jest.createMockFromModule("http");
+    //   const mockresponse=jest.spyOn(httpmock, "ServerResponse").mock;
+    //   jest.spyOn(httpmock.ServerResponse,"setHeader").mockImplementation()
+    //   const next = jest.fn()
+    //   jest.spyOn(jwt,"verify").mockImplementationOnce((token,secret,callback:Function)=>{
+    //     callback({
+    //       message:"jwt expired"
+    //     },"")
+    //   });
+    //   const tbrequest=jest.spyOn(service.TBClient,"refresh").mockResolvedValueOnce({
+    //     status: "ok",
+    //     explanation: "",
+    //     token: "NEWTOKEN",
+    //     refreshToken: "NEWREFESHTOKEN"
+    //   });
+      
+    //   service.use(mockrequest,httpmock.ServerResponse,next);
+      
+    // })
+
   });
 
 });

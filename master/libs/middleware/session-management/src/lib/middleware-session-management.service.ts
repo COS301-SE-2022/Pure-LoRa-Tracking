@@ -4,7 +4,7 @@ import { Server, ServerResponse } from 'http';
 import * as jwt from "jsonwebtoken"
 @Injectable()
 export class MiddlewareSessionManagementService implements NestMiddleware {
-    constructor(private TBClient: ThingsboardThingsboardClientService) { }
+    constructor(public TBClient: ThingsboardThingsboardClientService) { }
     async use(req: Request, res: ServerResponse, next: (error?: any) => void) {
         //console.log(req.url)
         //login has a pass through this middleware, cause it has more checks later
@@ -54,11 +54,9 @@ export class MiddlewareSessionManagementService implements NestMiddleware {
             if(err){
                 if(err.message=="jwt malformed"){
                     this.failedrequest(res,"Token cookie is malformed",400);
-                    // next();
                 }
                 else if(err.message=="invalid signature"){
                     this.failedrequest(res,"Token cookie is invalid",400);
-                    // next();
                 }
                 else if(err.message=="jwt expired"){
                     //try to refresh
@@ -70,7 +68,6 @@ export class MiddlewareSessionManagementService implements NestMiddleware {
                         
                     else if(refreshresp.status=="fail")
                         return this.failedrequest(res,"Could not refresh Token Or Token Invalid",401);
-
                     else if(refreshresp.status=="ok"){
                         //reset the tokens and set headers
                         // //console.log("asdf");
@@ -89,8 +86,6 @@ export class MiddlewareSessionManagementService implements NestMiddleware {
                 if(!decoded?.scopes?.includes("TENANT_ADMIN")&&req.url.includes("admin")){
                     return this.failedrequest(res,"You are not an admin",401);
                 }
-                console.log(decoded?.sd);
-
                 req.body["token"]=cookietoken;
                 req.body["refreshToken"]=cookierefreshtoken;
                 return next();
