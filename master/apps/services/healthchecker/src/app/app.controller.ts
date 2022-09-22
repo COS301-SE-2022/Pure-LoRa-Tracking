@@ -18,9 +18,6 @@ export class AppController {
   @Get('checkSystems')
   @HealthCheck()
   check() {
-    return this.healthcheck.check([
-      () => this.http.pingCheck("test", "https://google.com"),
-      // () => this.memory.checkHeap();
-    ]);
+   
   }
 }
