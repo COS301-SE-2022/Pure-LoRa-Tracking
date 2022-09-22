@@ -3,6 +3,7 @@ import { MiddlewareSessionManagementService } from './middleware-session-managem
 import { ThingsboardThingsboardClientModule } from "@lora/thingsboard-client";
 import { IncomingMessage, Server, ServerResponse } from 'http';
 import { Header } from '@nestjs/common';
+import * as jwt from "jsonwebtoken"
 describe('MiddlewareSessionManagementService', () => {
   let service: MiddlewareSessionManagementService;
 
@@ -24,10 +25,10 @@ describe('MiddlewareSessionManagementService', () => {
       const mockrequest = {
         url: "/login/any"
       } as Request
-      const test: any = jest.createMockFromModule("http");
-      jest.spyOn(test, "ServerResponse").mock;
+      const httpmock: any = jest.createMockFromModule("http");
+      jest.spyOn(httpmock, "ServerResponse").mock;
       const next = jest.fn()
-      service.use(mockrequest, test.ServerResponse, next)
+      service.use(mockrequest, httpmock.ServerResponse, next)
       expect(next).toBeCalled()
     });
 
@@ -40,12 +41,12 @@ describe('MiddlewareSessionManagementService', () => {
         headers:{},
         url: "/any/any",
       } as Request
-      const test: any = jest.createMockFromModule("http");
-      jest.spyOn(test, "ServerResponse").mock;
+      const httpmock: any = jest.createMockFromModule("http");
+      jest.spyOn(httpmock, "ServerResponse").mock;
       const next = jest.fn()
       const failedrequest=jest.spyOn(service,"failedrequest").mockImplementation();
-      service.use(mockrequest,test.ServerResponse,next);
-      expect(failedrequest).toBeCalledWith(test.ServerResponse,"Token cookie or refresh token cookie not provided",400);
+      service.use(mockrequest,httpmock.ServerResponse,next);
+      expect(failedrequest).toBeCalledWith(httpmock.ServerResponse,"Token cookie or refresh token cookie not provided",400);
 
     })
     
@@ -53,12 +54,12 @@ describe('MiddlewareSessionManagementService', () => {
       const mockrequest = {
         url: "/any/any",
       } as Request
-      const test: any = jest.createMockFromModule("http");
-      jest.spyOn(test, "ServerResponse").mock;
+      const httpmock: any = jest.createMockFromModule("http");
+      jest.spyOn(httpmock, "ServerResponse").mock;
       const next = jest.fn()
       const failedrequest=jest.spyOn(service,"failedrequest").mockImplementation();
-      service.use(mockrequest,test.ServerResponse,next);
-      expect(failedrequest).toBeCalledWith(test.ServerResponse,"No headers provided",400);
+      service.use(mockrequest,httpmock.ServerResponse,next);
+      expect(failedrequest).toBeCalledWith(httpmock.ServerResponse,"No headers provided",400);
     })
 
 
@@ -69,12 +70,12 @@ describe('MiddlewareSessionManagementService', () => {
         },
         url: "/any/any",
       } as unknown as Request
-      const test: any = jest.createMockFromModule("http");
-      jest.spyOn(test, "ServerResponse").mock;
+      const httpmock: any = jest.createMockFromModule("http");
+      jest.spyOn(httpmock, "ServerResponse").mock;
       const next = jest.fn()
       const failedrequest=jest.spyOn(service,"failedrequest").mockImplementation();
-      service.use(mockrequest,test.ServerResponse,next);
-      expect(failedrequest).toBeCalledWith(test.ServerResponse,"Token cookie not found",400);
+      service.use(mockrequest,httpmock.ServerResponse,next);
+      expect(failedrequest).toBeCalledWith(httpmock.ServerResponse,"Token cookie not found",400);
     })
 
 
@@ -85,12 +86,12 @@ describe('MiddlewareSessionManagementService', () => {
         },
         url: "/any/any",
       } as unknown as Request
-      const test: any = jest.createMockFromModule("http");
-      jest.spyOn(test, "ServerResponse").mock;
+      const httpmock: any = jest.createMockFromModule("http");
+      jest.spyOn(httpmock, "ServerResponse").mock;
       const next = jest.fn()
       const failedrequest=jest.spyOn(service,"failedrequest").mockImplementation();
-      service.use(mockrequest,test.ServerResponse,next);
-      expect(failedrequest).toBeCalledWith(test.ServerResponse,"Refresh Token cookie not found",400);
+      service.use(mockrequest,httpmock.ServerResponse,next);
+      expect(failedrequest).toBeCalledWith(httpmock.ServerResponse,"Refresh Token cookie not found",400);
     })
 
     it("Pure Lora token null -> Fail",()=>{
@@ -100,12 +101,12 @@ describe('MiddlewareSessionManagementService', () => {
         },
         url: "/any/any",
       } as unknown as Request
-      const test: any = jest.createMockFromModule("http");
-      jest.spyOn(test, "ServerResponse").mock;
+      const httpmock: any = jest.createMockFromModule("http");
+      jest.spyOn(httpmock, "ServerResponse").mock;
       const next = jest.fn()
       const failedrequest=jest.spyOn(service,"failedrequest").mockImplementation();
-      service.use(mockrequest,test.ServerResponse,next);
-      expect(failedrequest).toBeCalledWith(test.ServerResponse,"Token cookie not found",400);
+      service.use(mockrequest,httpmock.ServerResponse,next);
+      expect(failedrequest).toBeCalledWith(httpmock.ServerResponse,"Token cookie not found",400);
     })
 
     it("Pure Lora refresh token null -> Fail",()=>{
@@ -115,15 +116,54 @@ describe('MiddlewareSessionManagementService', () => {
         },
         url: "/any/any",
       } as unknown as Request
-      const test: any = jest.createMockFromModule("http");
-      jest.spyOn(test, "ServerResponse").mock;
+      const httpmock: any = jest.createMockFromModule("http");
+      jest.spyOn(httpmock, "ServerResponse").mock;
       const next = jest.fn()
       const failedrequest=jest.spyOn(service,"failedrequest").mockImplementation();
-      service.use(mockrequest,test.ServerResponse,next);
-      expect(failedrequest).toBeCalledWith(test.ServerResponse,"Refresh Token cookie not found",400);
+      service.use(mockrequest,httpmock.ServerResponse,next);
+      expect(failedrequest).toBeCalledWith(httpmock.ServerResponse,"Refresh Token cookie not found",400);
     })
     
   })
 
+  describe("JWT tests", () => {
+    
+    it("Verify should be called with the right cookie",()=>{
+      const mockrequest = {
+        headers:{
+          "cookie":"PURELORA_TOKEN=MYTOKEN;PURELORA_REFRESHTOKEN=any"
+        },
+        url: "/any/any",
+      } as unknown as Request
+      const httpmock: any = jest.createMockFromModule("http");
+      jest.spyOn(httpmock, "ServerResponse").mock;
+      const next = jest.fn()
+      jest.spyOn(jwt,"verify").mockImplementationOnce((token,secret,callback:Function)=>{
+        expect(token).toEqual("MYTOKEN");
+      });
+      service.use(mockrequest,httpmock.ServerResponse,next);
+      expect(jwt.verify).toBeCalled();
+    })
+
+    it("If malformed -> fail",()=>{
+      const mockrequest = {
+        headers:{
+          "cookie":"PURELORA_TOKEN=MYTOKEN;PURELORA_REFRESHTOKEN=any"
+        },
+        url: "/any/any",
+      } as unknown as Request
+      const httpmock: any = jest.createMockFromModule("http");
+      jest.spyOn(httpmock, "ServerResponse").mock;
+      const failedrequest=jest.spyOn(service,"failedrequest").mockImplementation();
+      const next = jest.fn()
+      jest.spyOn(jwt,"verify").mockImplementationOnce((token,secret,callback:Function)=>{
+        callback({
+          message:"jwt malformed"
+        },"")
+      });
+      service.use(mockrequest,httpmock.ServerResponse,next);
+      expect(failedrequest).toBeCalledWith(httpmock.ServerResponse,"Token cookie is malformed",400);
+    })
+  });
 
 });
