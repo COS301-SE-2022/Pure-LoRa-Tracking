@@ -13,6 +13,8 @@ import { DeviceListItemComponent } from './device-list-item/device-list-item.com
 import { MatExpansionModule } from '@angular/material/expansion';
 import { ClientSensorDetailsModule } from '@master/client/sensor-details';
 import { DateTimeSelectionComponent } from './date-time-selection/date-time-selection.component';
+import { MatChipsModule } from '@angular/material/chips';
+
 export const clientReserveViewRoutes: Route[] = [];
 
 @NgModule({
@@ -26,6 +28,7 @@ export const clientReserveViewRoutes: Route[] = [];
     ReactiveFormsModule,
     MatExpansionModule,
     ClientSensorDetailsModule,
+    MatChipsModule
   ],
   declarations: [
     ReserveViewComponent,

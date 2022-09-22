@@ -27,7 +27,14 @@
             </mat-select>
           </mat-form-field>
         </mat-action-list>
-        
+        <mat-chip-list [selectable]="true">
+            <mat-chip>
+                Sensors
+            </mat-chip>
+            <mat-chip >
+                Gateways
+            </mat-chip>
+        </mat-chip-list>
     <mat-card-content id="card-content">  
         <cdk-virtual-scroll-viewport itemSize="0">
         <mat-selection-list dense #devicesList [multiple]="true" >
