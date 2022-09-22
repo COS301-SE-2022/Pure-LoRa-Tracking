@@ -245,6 +245,113 @@ export class AppService {
     };
   }
 
+  async processParticleFilterTestV2(data: testParamters) {
+    const linearTime = Date.now();
+    const pfInstances = new Array<{
+      name: string;
+      pf: particleFilterRSSIMultinomialService;
+      reading?: number[][];
+      samples: number;
+      noiseFactor: number;
+      gateways: number[];
+    }>();
+    data.PFs.forEach((pf) => {
+      const pfInst = new particleFilterRSSIMultinomialService(
+        this.locationService,
+        this.serviceBus
+      );
+      pfInst.configureInitialParameters({
+        gateways: this.latlongObj(pf.gateways),
+        reservePolygon: this.latlongObj(pf.perimeter),
+        numberOfSamples: pf.numberOfParticles,
+      });
+      pfInst.setIterations(pf.trainingIterations);
+      pfInstances.push({
+        name: pf.name,
+        pf: pfInst,
+        reading: pf.readings,
+        samples: pf.numberOfParticles,
+        noiseFactor: pf.noiseFactor,
+        gateways: pf.gateways
+      });
+    });
+
+    /*const retObj = new Array<{
+      processingTime: number;
+      accuracy: number;
+      name: string;
+      samples: number;
+      result: number[];
+    }>();*/
+
+    const csvData = new Array<csvObj>();
+    console.log("[")
+    for (let i = 0; i < pfInstances.length; i++) {
+      const pf = pfInstances[i];
+      for (let j = 0; j < pf.reading.length; j++) {
+        const reading = pf.reading[j];
+        const startTime = Date.now();
+        const result = await pf.pf.particleFilter({
+          rssi:this.convertToRSSI(reading, pf.gateways, pf.noiseFactor),
+          latitude:null,
+          longitude:null
+        });
+        console.log("["+result+"],")
+        const endTime = Date.now();
+        const processingTime = (endTime - startTime) / 1000;
+        const accuracy = this.distanceBetweenCoords(result, [
+          reading[0],
+          reading[1],
+        ]);
+        
+        csvData.push({
+          testName: pf.name,
+          accuracy: accuracy,
+          numberOfSamples: pf.samples,
+          processingTime: processingTime,
+          readingLong: reading[0],
+          readingLat: reading[1],
+          estimateLong: result[0],
+          estimateLat: result[1],
+          noiseFactor: pf.noiseFactor,
+        });
+      }
+      console.log("]")
+    }
+
+    for (let i = 0; i < pfInstances.length; i++) delete pfInstances[i].pf;
+
+    /**/
+
+    const csvWriter = this.csvWriterObj({
+      path: this.filepath + 'pfTests.csv',
+      header: [
+        { id: 'testName', title: 'Test Name' },
+        { id: 'numberOfSamples', title: 'Number Of Samples' },
+        { id: 'processingTime', title: 'Processing Time' },
+        { id: 'accuracy', title: 'Accuracy' },
+        { id: 'readingLong', title: 'Reading Longitude' },
+        { id: 'readingLat', title: 'Reading Latitude' },
+        { id: 'estimateLong', title: 'Estimate Longitude' },
+        { id: 'estimateLat', title: 'Estimate Latitude' },
+        { id: 'noiseFactor', title: 'Noise Factor' },
+      ],
+    });
+
+    csvWriter
+      .writeRecords(csvData)
+      .then(() => console.log('The CSV file was written successfully'));
+    /**/
+
+    return {
+      status: 200,
+      linearTime: (Date.now() - linearTime) / 1000,
+      //data: retObj,
+      data: null,
+    };
+  }
+
+
   /********************************************/
 
   latlongObj(numArr) {
@@ -263,12 +370,12 @@ export class AppService {
       (Math.cos(pointOne[0] * p) *
         Math.cos(pointTwo[0] * p) *
         (1 - Math.cos((pointTwo[1] - pointOne[1]) * p))) /
-        2;
+      2;
 
     return 12742 * Math.sin(Math.sqrt(a)) * 1000;
   }
 
-  convertToRSSI(reading, gateways, noiseFactor:number) {
+  convertToRSSI(reading, gateways, noiseFactor: number) {
     const rssi = new Array<number>();
     gateways.forEach((gateway) => {
       rssi.push(

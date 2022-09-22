@@ -54,6 +54,10 @@ export class AiParticleFilterService extends AiProcessingStrategyService {
         this.resetWeights();
     }
 
+    setIterations(iterations: number) {
+        this.numberOfSamplingIterations = iterations;
+    }
+
     changeGateways(gateways: { latitude: number, longitude: number }[]) {
         if (gateways.length < 2)
             throw ("Not enough gateways given")
@@ -115,8 +119,8 @@ export class AiParticleFilterService extends AiProcessingStrategyService {
         const newPoints = new Array<number[]>();
         points.forEach(point => {
 
-            const randOne = Math.random() * (0.001 - 0.00001) + 0.00001;
-            const randTwo = Math.random() * (0.001 - 0.00001) + 0.00001;
+            const randOne = Math.random() * (0.02 - 0.0001) + 0.0001;
+            const randTwo = Math.random() * (0.02 - 0.0001) + 0.0001;
             const choice = Math.floor(Math.random() * (4 - 0) + 0);
 
             switch (choice) {
