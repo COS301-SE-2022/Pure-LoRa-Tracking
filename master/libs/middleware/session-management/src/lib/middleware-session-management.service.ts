@@ -4,9 +4,8 @@ import { Server, ServerResponse } from 'http';
 import * as jwt from "jsonwebtoken"
 @Injectable()
 export class MiddlewareSessionManagementService implements NestMiddleware {
-    constructor(private TBClient: ThingsboardThingsboardClientService) { }
+    constructor(public TBClient: ThingsboardThingsboardClientService) { }
     async use(req: Request, res: ServerResponse, next: (error?: any) => void) {
-        
         //console.log(req.url)
         //login has a pass through this middleware, cause it has more checks later
         if (req.url.startsWith("/login")) {
@@ -16,17 +15,18 @@ export class MiddlewareSessionManagementService implements NestMiddleware {
         }
 
 
-
+        //check for no header
+        if(req.headers==undefined)
+        return this.failedrequest(res,"No headers provided",400);
         //check for no cookie at all
         if(req.headers["cookie"]==undefined)
         return this.failedrequest(res,"Token cookie or refresh token cookie not provided",400);
-        //console.log(req.headers["cookie"])
         //get the cookies
         const tokenCookieName="PURELORA_TOKEN";
         const refreshtokenCookieName="PURELORA_REFRESHTOKEN";
         const cookies=req.headers["cookie"].split(";");
-        let cookietoken=cookies.find(val=>val.trimStart().trimEnd().startsWith(tokenCookieName)).trimStart().trimEnd()
-        let cookierefreshtoken=cookies.find(val=>val.trimStart().trimEnd().startsWith(refreshtokenCookieName)).trimStart().trimEnd()
+        let cookietoken=cookies.find(val=>val.trimStart().trimEnd().startsWith(tokenCookieName))
+        let cookierefreshtoken=cookies.find(val=>val.trimStart().trimEnd().startsWith(refreshtokenCookieName))
         
         //check for valid cookies
         if(cookietoken==undefined)
@@ -34,14 +34,18 @@ export class MiddlewareSessionManagementService implements NestMiddleware {
         if(cookierefreshtoken==undefined)
             return this.failedrequest(res,"Refresh Token cookie not found",400);
 
+            
+        cookietoken=cookietoken.trimStart().trimEnd()
+        cookierefreshtoken=cookierefreshtoken.trimStart().trimEnd();
+        
         //get the actual values of the tokens
-        cookietoken=cookietoken.substring(tokenCookieName.length+1);
-        cookierefreshtoken=cookierefreshtoken.substring(refreshtokenCookieName.length+1);
+        cookietoken=cookietoken.substring(tokenCookieName.length+1);//+1 is for the =
+        cookierefreshtoken=cookierefreshtoken.substring(refreshtokenCookieName.length+1);//+1 is for the =
 
         //second check for valid values
         if(cookietoken==undefined||cookietoken==null||cookietoken=="")
             return this.failedrequest(res,"Token cookie not found",400);
-        if(cookierefreshtoken==undefined||cookierefreshtoken==null||cookietoken=="")
+        if(cookierefreshtoken==undefined||cookierefreshtoken==null||cookierefreshtoken=="")
             return this.failedrequest(res,"Refresh Token cookie not found",400);
 
         
@@ -50,11 +54,9 @@ export class MiddlewareSessionManagementService implements NestMiddleware {
             if(err){
                 if(err.message=="jwt malformed"){
                     this.failedrequest(res,"Token cookie is malformed",400);
-                    // next();
                 }
                 else if(err.message=="invalid signature"){
                     this.failedrequest(res,"Token cookie is invalid",400);
-                    // next();
                 }
                 else if(err.message=="jwt expired"){
                     //try to refresh
@@ -66,7 +68,6 @@ export class MiddlewareSessionManagementService implements NestMiddleware {
                         
                     else if(refreshresp.status=="fail")
                         return this.failedrequest(res,"Could not refresh Token Or Token Invalid",401);
-
                     else if(refreshresp.status=="ok"){
                         //reset the tokens and set headers
                         // //console.log("asdf");
@@ -85,8 +86,6 @@ export class MiddlewareSessionManagementService implements NestMiddleware {
                 if(!decoded?.scopes?.includes("TENANT_ADMIN")&&req.url.includes("admin")){
                     return this.failedrequest(res,"You are not an admin",401);
                 }
-                console.log(decoded?.sd);
-
                 req.body["token"]=cookietoken;
                 req.body["refreshToken"]=cookierefreshtoken;
                 return next();
