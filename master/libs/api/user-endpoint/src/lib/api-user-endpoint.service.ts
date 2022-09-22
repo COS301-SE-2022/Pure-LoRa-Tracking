@@ -16,7 +16,7 @@ import { ThingsboardThingsboardClientService } from '@lora/thingsboard-client';
 
 @Injectable()
 export class ApiUserEndpointService {
-  constructor(private thingsboardClient: ThingsboardThingsboardClientService) { }
+  constructor(private thingsboardClient: ThingsboardThingsboardClientService) {}
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -61,10 +61,7 @@ export class ApiUserEndpointService {
           explain: 'no last name found',
         };
 
-      if (
-        content.reserves == undefined ||
-        content.reserves.length == 0
-      )
+      if (content.reserves == undefined || content.reserves.length == 0)
         return {
           status: 400,
           explain: 'no reserves found, there must at least be one',
@@ -222,21 +219,23 @@ export class ApiUserEndpointService {
     this.thingsboardClient.setToken(content.token);
     const response = await this.thingsboardClient.AdminGetCustomers();
 
-    if (response.status == "fail")
+    if (response.status == 'fail')
       return {
         status: 500,
         explain: response.explanation,
-      }
+      };
     return {
       status: 200,
-      explain: "call finished",
-      data: response.data
-    }
+      explain: 'call finished',
+      data: response.data,
+    };
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  async AdminAllReserveUsersProcess(content: usersInfoInput): Promise<userResponse> {
+  async AdminAllReserveUsersProcess(
+    content: usersInfoInput
+  ): Promise<userResponse> {
     if (content.token == undefined || content.token == '')
       return {
         status: 401,
@@ -250,20 +249,27 @@ export class ApiUserEndpointService {
 
     this.thingsboardClient.setToken(content.token);
 
-    const response = await this.thingsboardClient.AdminGetUsersFromReserve(content.customerID);
-    if (response.status == "fail")
-      return { status: 500, explain: "Server failed with: " + response.explanation }
+    const response = await this.thingsboardClient.AdminGetUsersFromReserve(
+      content.customerID
+    );
+    if (response.status == 'fail')
+      return {
+        status: 500,
+        explain: 'Server failed with: ' + response.explanation,
+      };
 
     return {
       status: 200,
-      explain: "ok",
-      data: response.data
-    }
+      explain: 'ok',
+      data: response.data,
+    };
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  async UserChangeReserveProcess(content: UserChangeReserveInput): Promise<userResponse> {
+  async UserChangeReserveProcess(
+    content: UserChangeReserveInput
+  ): Promise<userResponse> {
     if (content.token == undefined || content.token == '')
       return {
         status: 401,
@@ -282,20 +288,29 @@ export class ApiUserEndpointService {
 
     this.thingsboardClient.setToken(content.token);
 
-    const response = await this.thingsboardClient.changeReserveForUser(content.reserveID);
+    const response = await this.thingsboardClient.changeReserveForUser(
+      content.reserveID
+    );
 
     const tokens = await this.thingsboardClient.refresh(content.refreshToken);
     console.log('tokens :>> ', tokens);
 
-    if (response.status == "fail")
-      return { status: 500, explain: "Server failed with: " + response.explanation }
+    if (response.status == 'fail')
+      return {
+        status: 500,
+        explain: 'Server failed with: ' + response.explanation,
+      };
 
     return {
       status: 200,
-      explain: "ok",
-      furtherExplain: "refresh the page",
-      data: { ...response.data, ...{ token: tokens.token }, ...{ refreshToken: tokens.refreshToken } }
-    }
+      explain: 'ok',
+      furtherExplain: 'refresh the page',
+      data: {
+        ...response.data,
+        ...{ token: tokens.token },
+        ...{ refreshToken: tokens.refreshToken },
+      },
+    };
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -311,31 +326,40 @@ export class ApiUserEndpointService {
         status: 400,
         explain: 'userID not defined',
       };
-    if (content.userInfo == undefined || content.userInfo.firstName == undefined || content.userInfo.firstName == '')
+    if (
+      content.userInfo == undefined ||
+      content.userInfo.firstName == undefined ||
+      content.userInfo.firstName == ''
+    )
       return {
         status: 400,
         explain: 'firstname not defined',
       };
-    if (content.userInfo.lastName == undefined || content.userInfo.lastName == '')
+    if (
+      content.userInfo.lastName == undefined ||
+      content.userInfo.lastName == ''
+    )
       return {
         status: 400,
         explain: 'lastname not defined',
       };
 
     this.thingsboardClient.setToken(content.token);
-    const resp = await this.thingsboardClient.updateUser(content.userID, content.userInfo, content.reserves);
+    const resp = await this.thingsboardClient.updateUser(
+      content.userID,
+      content.userInfo,
+      content.reserves
+    );
 
-    if (resp.status == "fail")
+    if (resp.status == 'fail')
       return {
         status: 500,
-        explain: resp.explanation
-      }
+        explain: resp.explanation,
+      };
 
     return {
       status: 200,
-      explain: resp.explanation
-    }
-
-
+      explain: resp.explanation,
+    };
   }
 }

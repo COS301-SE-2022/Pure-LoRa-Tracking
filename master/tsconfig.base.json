@@ -25,6 +25,8 @@
         "libs/ai/mock-generator/triangulation/src/index.ts"
       ],
       "@lora/ai/particle-filter": ["libs/ai/particle-filter/src/index.ts"],
+      "@lora/ai/processing": ["libs/ai/ai-processing/src/index.ts"],
+      "@lora/ai/strategy": ["libs/ai/processing-strategy/src/index.ts"],
       "@lora/ai/triangulation": ["libs/ai/ai-triangulation/src/index.ts"],
       "@lora/api/login": ["libs/api/login-endpoint/src/index.ts"],
       "@lora/api/mapEndpoint": ["libs/api/map-endpoint/src/index.ts"],
@@ -85,6 +87,9 @@
       "@master/client/device-add-view": [
         "libs/client/device-add-view/src/index.ts"
       ],
+      "@master/client/gateway-detail": [
+        "libs/client/gateway-detail/src/index.ts"
+      ],
       "@master/client/leaflet-library": [
         "libs/client/leaflet-library/src/index.ts"
       ],
@@ -126,6 +131,9 @@
         "libs/client/map-apicaller/src/index.ts"
       ],
       "@master/client/reserve-view": ["libs/client/reserve-view/src/index.ts"],
+      "@master/client/sensor-details": [
+        "libs/client/sensor-details/src/index.ts"
+      ],
       "@master/client/shared-services": [
         "libs/client/shared-services/src/index.ts"
       ],
@@ -142,6 +150,7 @@
         "libs/client/users-management-view/src/index.ts"
       ],
       "@master/client/users-view": ["libs/client/users-view/src/index.ts"],
+      "@master/message-queue": ["libs/message-queue/src/index.ts"],
       "@master/middleware/cookie-management": [
         "libs/middleware/cookie-management/src/index.ts"
       ],

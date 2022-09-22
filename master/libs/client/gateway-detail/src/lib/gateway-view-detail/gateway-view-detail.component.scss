@@ -1,0 +1,54 @@
+.headerText {
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: flex-end;
+    padding-top: 0;
+}
+
+#spacer{
+    order: 2;
+    flex: 1 1 auto;
+}
+
+#backButton{
+    order: 4;
+}
+
+#locateButton{
+    background-color: transparent;
+    color: var(--color-bright-accent);
+    order: 1;
+}
+
+#locateIcon{
+    margin-left: 0.2em;
+}
+
+#sensor-title-text{
+    margin: 0;
+}
+
+.field-label {
+    color: grey;
+    font-size: x-small;
+}
+
+mat-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    margin-bottom: 1rem;
+    padding-top: 0.2em;
+}
+
+.mat-card .mat-divider-horizontal{
+    position: relative;
+}
+
+#field-list {
+    margin-top: 5%;
+}
+
+mat-card-content{
+    flex-grow: 1;
+}

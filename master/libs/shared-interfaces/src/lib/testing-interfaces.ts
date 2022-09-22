@@ -29,6 +29,7 @@ export const snackbarTesting={
 
 
 export const routerMock={
+    routerState:{ root: '' },
     navigate(path:any){
     }
 }

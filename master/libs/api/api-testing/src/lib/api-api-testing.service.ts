@@ -104,6 +104,11 @@ export class ApiApiTestingService {
     customerID: 'EA34',
     hardwareName: 'Sensor3',
     labelName: 'Animal Sensor 3',
+    activationKeys: {
+      isABP: false,
+      lora1_1: false,
+      appKey: 'AABBCCDDEEFFAABBCCDDEEFFAABBCCDD',
+    },
     deviceProfileId: '123456',
     profileType: {
       profileID: '1234567',
