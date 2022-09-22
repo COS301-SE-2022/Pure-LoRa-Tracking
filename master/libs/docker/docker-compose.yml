@@ -2,8 +2,6 @@
 # Todo:
 #  - Global port setting
 #  - Environmental secrets
-#  - Production profile with Queue
-#  - Look at kubernetes
 
 services:
   # MongoDB for our server
@@ -65,20 +63,28 @@ services:
     image: chirpstack/chirpstack-gateway-bridge:3
     ports:
       - 1700:1700/udp
+      - 8087:8087
     environment:
       - INTEGRATION__MQTT__AUTH__GENERIC__SERVERS=tcp://192.168.1.123:1884
+      - METRICS__PROMETHEUS__BIND=chirpstack-gateway-bridge:8097
+      - METRICS__PROMETHEUS__ENDPOINT_ENABLED=true
     # depends_on: 
     #   - mosquitto
   
   
   chirpstack-network-server:
     image: chirpstack/chirpstack-network-server:3
+    ports:
+      - 8086:8086
+      - 8096:8096
     environment: # parm can be set with files as well.
       - POSTGRESQL__DSN=postgres://chirpstack_ns:chirpstack_ns@postgresql/chirpstack_ns?sslmode=disable
       - REDIS__URL=redis://redis:6379
       - NETWORK_SERVER__BAND__NAME=EU868
       - NETWORK_SERVER__GATEWAY__BACKEND__MQTT__SERVER=tcp://192.168.1.123:1884
       - JOIN_SERVER__DEFAULT__SERVER=http://chirpstack-application-server:8003
+      - METRICS__PROMETHEUS__BIND=chirpstack-gateway-bridge:8096
+      - METRICS__PROMETHEUS__ENDPOINT_ENABLED=true
     depends_on:
       - postgresql
       # - mosquitto
@@ -87,6 +93,7 @@ services:
     image: chirpstack/chirpstack-application-server:3
     ports:
       - 8080:8080
+      - 8095:8095
     environment:
       - POSTGRESQL__DSN=postgres://chirpstack_as:chirpstack_as@postgresql/chirpstack_as?sslmode=disable
       - REDIS__URL=redis://redis:6379
@@ -97,6 +104,8 @@ services:
       - APPLICATION_SERVER__INTEGRATION__AMQP__URL=amqp://guest:guest@rabbitmq:5672
       - APPLICATION_SERVER__INTEGRATION__AMQP__EVENT_ROUTING_KEY_TEMPLATE=application.{{ .ApplicationID }}.device.{{ .DevEUI }}.event.{{ .EventType }}
       - APPLICATION_SERVER__INTEGRATION__MARSHALER=JSON
+      - METRICS__PROMETHEUS__BIND=chirpstack-gateway-bridge:8095
+      - METRICS__PROMETHEUS__ENDPOINT_ENABLED=true
     depends_on:
       - chirpstack-network-server
       - rabbitmq
