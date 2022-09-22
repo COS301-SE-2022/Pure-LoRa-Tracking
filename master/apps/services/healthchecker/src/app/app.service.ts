@@ -22,6 +22,13 @@ export class AppService {
 
   async checkServices() {
     const healthcheck=await this.healthcheck.check([
+      () => this.http.pingCheck("Pure Lora Client","http://localhost:4200"),
+      () => this.http.pingCheck("Pure Lora API","http://localhost:3333/api",{
+        validateStatus:(input)=>{
+          if(input==400||input==200) return true;
+          return false
+        }
+      }),
       () => this.http.pingCheck("Thingsboard API", "http://localhost:9090/api",{
         validateStatus:(input)=>{
           if(input==401||input==200) return true;
