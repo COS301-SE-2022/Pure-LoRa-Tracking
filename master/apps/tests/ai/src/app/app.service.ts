@@ -45,6 +45,7 @@ export class AppService {
         longitude: number;
         latitude: number;
       }[];
+      noiseFactor: number;
     }>();
 
     content.AvgPoints.forEach((reading) => {
@@ -54,6 +55,7 @@ export class AppService {
         deviceId: reading.devID,
         heatmap: heatMapInstance,
         reading: reading.reading,
+        noiseFactor: reading.noiseFactor,
       });
     });
 
@@ -71,6 +73,7 @@ export class AppService {
         const startTime = Date.now();
 
         latestReading = avgHeatMapInstances[i].reading[j];
+
         result = await avgHeatMapInstances[i].heatmap.processData(
           {
             deviceID: avgHeatMapInstances[i].deviceId,
@@ -83,6 +86,13 @@ export class AppService {
         const procTime = (endTime - startTime) / 1000;
 
         if (result.length != 0) {
+          const nFact = this.randomNoiseHeatMap(
+            avgHeatMapInstances[i].noiseFactor
+          );
+
+          result[0] += nFact;
+          result[1] += nFact;
+
           const acc = this.distanceBetweenCoords(result, [
             latestReading.longitude,
             latestReading.latitude,
@@ -104,7 +114,7 @@ export class AppService {
             readingLat: avgHeatMapInstances[i].reading[j].longitude,
             estimateLong: result[0],
             estimateLat: result[1],
-            noiseFactor: null,
+            noiseFactor: avgHeatMapInstances[i].noiseFactor,
           });
         }
       }
@@ -388,6 +398,14 @@ export class AppService {
   }
 
   randomNoise(noiseFactor: number) {
-    return Math.floor(10 * (Math.random() * (noiseFactor - (-noiseFactor)) + (-noiseFactor)));
+    return Math.floor(
+      10 * (Math.random() * (noiseFactor - -noiseFactor) + -noiseFactor)
+    );
+  }
+
+  randomNoiseHeatMap(noiseFactor: number) {
+    return (
+      (Math.random() * (noiseFactor - -noiseFactor) + -noiseFactor) / 1000000
+    );
   }
 }
