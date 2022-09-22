@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
 
 interface ExternalServices{
   name:string,
@@ -11,45 +12,40 @@ interface ExternalServices{
   templateUrl: './status-page.component.html',
   styleUrls: ['./status-page.component.scss'],
 })
-export class StatusPageComponent{
+export class StatusPageComponent implements OnInit {
+  constructor(private http:HttpClient){
+    console.log("placeholder");
+  }
+  timeLeft=10;
+  ngOnInit(): void {
+    this.reload();
+    setInterval(()=>{
+      this.timeLeft--;
+      if(this.timeLeft<=0){
+        this.timeLeft=10;
+        this.reload();
+      }
+    },1000)
+  }
 
-  externalServices: ExternalServices[] = [
-    {
-      name: "ThingsBoard",
-      status: true,
-      link: "https://www.thingsboard.io"
-    },
-    {
-      name:"Some Service",
-      status:false,
-    },
-    {
-      name:"Some Service",
-      status:true,
-      link:"https://www.google.com"
-    },
-    {
-      name:"Some Service",
-      status:true,
-    },
-    {
-      name:"Some Service",
-      status:true,
-      link:"https://www.google.com"
-    },
-    {
-      name:"Some Service",
-      status:true,
-    },
-    {
-      name:"Some Service",
-      status:true,
-    },
-    {
-      name:"Some Service",
-      status:false,
-      link:"https://www.google.com"
-    },
-  ];
+  reload(){
+    this.http.get("/health/checksystems").subscribe((data:any)=>{
+      const temp:ExternalServices[]=[];
+      for (const key in data.details) {
+        if (Object.prototype.hasOwnProperty.call(data.details, key)) {
+          const element = data.details[key];
+          temp.push({
+            name:key,
+            status:element.status=="up",
+          });
+        }
+      }
+      this.externalServices=temp;
+    })
+  }
+
+
+
+  externalServices: ExternalServices[] = [];
 
 }

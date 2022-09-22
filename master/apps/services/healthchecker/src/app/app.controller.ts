@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Logger } from '@nestjs/common';
 import { HealthCheck, HealthCheckService, HttpHealthIndicator, MemoryHealthIndicator } from '@nestjs/terminus';
 
 import { AppService } from './app.service';
@@ -16,8 +16,15 @@ export class AppController {
   }
 
   @Get('checkSystems')
-  @HealthCheck()
-  check() {
-   return this.appService.checkServices();
+  // @HealthCheck()
+  async check() {
+    const mypromise=new Promise((res,rej)=>{
+      this.appService.checkServices().then(stuff=>{
+        res(stuff)
+      }).catch(err=>{
+        res(err.response)
+      });
+    })
+    return await mypromise;
   }
 }

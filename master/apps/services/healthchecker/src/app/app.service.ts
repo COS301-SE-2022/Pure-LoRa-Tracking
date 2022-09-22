@@ -21,7 +21,7 @@ export class AppService {
   }
 
   async checkServices() {
-    const healthcheck=await this.healthcheck.check([
+    return this.healthcheck.check([
       () => this.http.pingCheck("Pure Lora Client","http://localhost:4200"),
       () => this.http.pingCheck("Pure Lora API","http://localhost:3333/api",{
         validateStatus:(input)=>{
@@ -42,7 +42,5 @@ export class AppService {
       () => this.http.pingCheck("Chirpstack Network server health check","http://localhost:8086/health"),
       () => this.mongo.pingCheck("MongoDB"),
     ]);
-
-    return healthcheck;
   }
 }

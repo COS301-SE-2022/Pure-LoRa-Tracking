@@ -2,5 +2,12 @@
   "/api": {
     "target": "http://localhost:3333",
     "secure": false
+  },
+  "/health": {
+    "target": "http://localhost:3354",
+    "secure": false
   }
+  
+
+  
 }
