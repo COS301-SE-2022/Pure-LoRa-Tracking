@@ -25,8 +25,8 @@ export class MiddlewareSessionManagementService implements NestMiddleware {
         const tokenCookieName="PURELORA_TOKEN";
         const refreshtokenCookieName="PURELORA_REFRESHTOKEN";
         const cookies=req.headers["cookie"].split(";");
-        let cookietoken=cookies.find(val=>val.trimStart().trimEnd().startsWith(tokenCookieName)).trimStart().trimEnd()
-        let cookierefreshtoken=cookies.find(val=>val.trimStart().trimEnd().startsWith(refreshtokenCookieName)).trimStart().trimEnd()
+        let cookietoken=cookies.find(val=>val.trimStart().trimEnd().startsWith(tokenCookieName))
+        let cookierefreshtoken=cookies.find(val=>val.trimStart().trimEnd().startsWith(refreshtokenCookieName))
         
         //check for valid cookies
         if(cookietoken==undefined)
@@ -34,6 +34,10 @@ export class MiddlewareSessionManagementService implements NestMiddleware {
         if(cookierefreshtoken==undefined)
             return this.failedrequest(res,"Refresh Token cookie not found",400);
 
+            
+        cookietoken=cookietoken.trimStart().trimEnd()
+        cookierefreshtoken=cookierefreshtoken.trimStart().trimEnd();
+        
         //get the actual values of the tokens
         cookietoken=cookietoken.substring(tokenCookieName.length+1);//+1 is for the =
         cookierefreshtoken=cookierefreshtoken.substring(refreshtokenCookieName.length+1);//+1 is for the =
@@ -41,7 +45,7 @@ export class MiddlewareSessionManagementService implements NestMiddleware {
         //second check for valid values
         if(cookietoken==undefined||cookietoken==null||cookietoken=="")
             return this.failedrequest(res,"Token cookie not found",400);
-        if(cookierefreshtoken==undefined||cookierefreshtoken==null||cookietoken=="")
+        if(cookierefreshtoken==undefined||cookierefreshtoken==null||cookierefreshtoken=="")
             return this.failedrequest(res,"Refresh Token cookie not found",400);
 
         
