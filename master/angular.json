@@ -59,6 +59,7 @@
     "service-bus": "libs/service-bus",
     "services-ai-processing": "apps/services/ai-processing",
     "services-cp-message-queue": "apps/services/cp-message-queue",
+    "services-healthchecker": "apps/services/healthchecker",
     "shared-interfaces": "libs/shared-interfaces",
     "thingsboard-thingsboard-admin": "libs/thingsboard/thingsboard-admin",
     "thingsboard-thingsboard-asset": "libs/thingsboard/thingsboard-asset",
