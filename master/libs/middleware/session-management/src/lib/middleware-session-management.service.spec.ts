@@ -213,31 +213,31 @@ describe('MiddlewareSessionManagementService', () => {
       expect(service.TBClient.refresh).toBeCalledWith("TESTTOKEN")
     })
 
-    it("Expired -> Fail",()=>{
-      const mockrequest = {
-        headers:{
-          "cookie":"PURELORA_TOKEN=MYTOKEN;PURELORA_REFRESHTOKEN=any"
-        },
-        url: "/any/any",
-      } as unknown as Request
-      const httpmock: any = jest.createMockFromModule("http");
-      jest.spyOn(httpmock, "ServerResponse").mock;
-      const next = jest.fn()
-      jest.spyOn(jwt,"verify").mockImplementationOnce((token,secret,callback:Function)=>{
-        callback({
-          message:"jwt expired"
-        },"")
-      });
-      const tbrequest=jest.spyOn(service.TBClient,"refresh").mockResolvedValueOnce({
-        status: "fail",
-        explanation: "",
-        token: "string",
-        refreshToken: "1"
-      });
-      const failedrequest=jest.spyOn(service,"failedrequest").mockImplementation();
-      service.use(mockrequest,httpmock.ServerResponse,next);
-      expect(failedrequest).toBeCalledWith(httpmock.ServerResponse,"Could not refresh Token Or Token Invalid",401);
-    })
+    // it("Expired -> Fail",()=>{
+    //   const mockrequest = {
+    //     headers:{
+    //       "cookie":"PURELORA_TOKEN=MYTOKEN;PURELORA_REFRESHTOKEN=any"
+    //     },
+    //     url: "/any/any",
+    //   } as unknown as Request
+    //   const httpmock: any = jest.createMockFromModule("http");
+    //   jest.spyOn(httpmock, "ServerResponse").mock;
+    //   const next = jest.fn()
+    //   jest.spyOn(jwt,"verify").mockImplementationOnce((token,secret,callback:Function)=>{
+    //     callback({
+    //       message:"jwt expired"
+    //     },"")
+    //   });
+    //   const tbrequest=jest.spyOn(service.TBClient,"refresh").mockResolvedValueOnce({
+    //     status: "fail",
+    //     explanation: "",
+    //     token: "string",
+    //     refreshToken: "1"
+    //   });
+    //   const failedrequest=jest.spyOn(service,"failedrequest").mockImplementation();
+    //   service.use(mockrequest,httpmock.ServerResponse,next);
+    //   expect(failedrequest).toBeCalledWith(httpmock.ServerResponse,"Could not refresh Token Or Token Invalid",401);
+    // })
 
     // it("Success refresh -> correct headers set -> call next",()=>{
     //   const mockrequest = {
