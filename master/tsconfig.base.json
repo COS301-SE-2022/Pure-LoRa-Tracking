@@ -121,6 +121,9 @@
       "@master/client/manage-view/src/lib/reserve-edit": [
         "libs/client/manage-view/src/lib/reserve-edit/src/index.ts"
       ],
+      "@master/client/manage-view/src/lib/status-view": [
+        "libs/client/manage-view/src/lib/status-view/src/index.ts"
+      ],
       "@master/client/manage-view/src/lib/users-edit": [
         "libs/client/manage-view/src/lib/users-edit/src/index.ts"
       ],
