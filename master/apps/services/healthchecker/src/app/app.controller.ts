@@ -18,6 +18,6 @@ export class AppController {
   @Get('checkSystems')
   @HealthCheck()
   check() {
-   
+   return this.appService.checkServices();
   }
 }
