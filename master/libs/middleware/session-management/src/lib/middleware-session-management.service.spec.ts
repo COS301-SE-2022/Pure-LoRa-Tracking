@@ -139,7 +139,7 @@ describe('MiddlewareSessionManagementService', () => {
       const httpmock: any = jest.createMockFromModule("http");
       jest.spyOn(httpmock, "ServerResponse").mock;
       const next = jest.fn()
-      jest.spyOn(jwt,"verify").mockImplementationOnce((token,secret,callback:Function)=>{
+      jest.spyOn(jwt,"verify").mockImplementationOnce((token,secret,callback:CallableFunction)=>{
         expect(token).toEqual("MYTOKEN");
       });
       service.use(mockrequest,httpmock.ServerResponse,next);
@@ -157,7 +157,7 @@ describe('MiddlewareSessionManagementService', () => {
       jest.spyOn(httpmock, "ServerResponse").mock;
       const failedrequest=jest.spyOn(service,"failedrequest").mockImplementation();
       const next = jest.fn()
-      jest.spyOn(jwt,"verify").mockImplementationOnce((token,secret,callback:Function)=>{
+      jest.spyOn(jwt,"verify").mockImplementationOnce((token,secret,callback:CallableFunction)=>{
         callback({
           message:"jwt malformed"
         },"")
@@ -177,7 +177,7 @@ describe('MiddlewareSessionManagementService', () => {
       jest.spyOn(httpmock, "ServerResponse").mock;
       const failedrequest=jest.spyOn(service,"failedrequest").mockImplementation();
       const next = jest.fn()
-      jest.spyOn(jwt,"verify").mockImplementationOnce((token,secret,callback:Function)=>{
+      jest.spyOn(jwt,"verify").mockImplementationOnce((token,secret,callback:CallableFunction)=>{
         callback({
           message:"invalid signature"
         },"")
@@ -198,7 +198,7 @@ describe('MiddlewareSessionManagementService', () => {
       jest.spyOn(httpmock, "ServerResponse").mock;
       const failedrequest=jest.spyOn(service,"failedrequest").mockImplementation();
       const next = jest.fn()
-      jest.spyOn(jwt,"verify").mockImplementationOnce((token,secret,callback:Function)=>{
+      jest.spyOn(jwt,"verify").mockImplementationOnce((token,secret,callback:CallableFunction)=>{
         callback({
           message:"jwt expired"
         },"")
