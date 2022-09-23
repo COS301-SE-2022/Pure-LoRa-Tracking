@@ -13,7 +13,7 @@ export class AuthenticationViewComponent implements OnInit {
   
   constructor(private fb:UntypedFormBuilder, private router:Router) {
     this.twofactorgroup=this.fb.group({
-      authcode:['',[Validators.required, Validators.pattern(/^(\d |\w){1}$/), Validators.maxLength(1)]]
+      authcode:['',[Validators.required]]
     })
   }
 
