@@ -1,10 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
 import { HttpService } from '@nestjs/axios';
+import { DatabaseProxyService } from '@lora/database';
 
 @Injectable()
 export class ServiceBusService {
-    constructor(private httpService: HttpService) { }
+    constructor(private httpService: HttpService,private proxy:DatabaseProxyService) { }
+
+    async getMoreInfo(deveui:string){
+        return this.proxy.getMoreInfo(deveui);
+    }
 
     async sendMongoDevicePerimeter(data: { device?: any, location?: any, name?: string, newName?:string}) {
         const resp = await firstValueFrom(
