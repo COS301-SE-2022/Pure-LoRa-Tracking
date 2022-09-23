@@ -21,24 +21,27 @@
                 </div>
                 
             </form>
-            <form [formGroup]="twofactorgroup" id="auth-content">
-                <mat-icon id="auth-icon">
-                    lock
-                </mat-icon>
-                <p id="intruction" [align]="'center'">
-                    A verification code has been sent to your e-mail.
-                    <br>
-                    This code is valid for n minutes.
-                </p>
-                <mat-form-field>
-                    <input matInput formControlName="authcode" type="text" id="auth-code">
-                </mat-form-field>
-                <div id="button-container">
-                    <div id="login-button">
-                        <button mat-flat-button color="primary" (click)="auth()">Submit</button>
+            <ng-template [hidden]="true">
+                <form [formGroup]="twofactorgroup" id="auth-content">
+                    <mat-icon id="auth-icon">
+                        lock
+                    </mat-icon>
+                    <p id="intruction" [align]="'center'">
+                        A verification code has been sent to your e-mail.
+                        <br>
+                        This code is valid for n minutes.
+                    </p>
+                    <mat-form-field>
+                        <input matInput formControlName="authcode" type="text" id="auth-code">
+                    </mat-form-field>
+                    <div id="button-container">
+                        <div id="login-button">
+                            <button mat-flat-button color="primary" (click)="auth()">Submit</button>
+                        </div>
                     </div>
-                </div>
-            </form>
+                </form>
+            </ng-template>
+
         </div>
     </div>
 </div>

@@ -4,32 +4,27 @@ import { RouterModule, Route } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { ClientSharedUiMaterialUiModule } from '@master/client/shared-ui/material-ui';
 import { ReactiveFormsModule } from '@angular/forms';
-import {FormsModule} from '@angular/forms';
-import {HttpClientModule} from "@angular/common/http"
-import {ClientSharedUiComponentsUiModule} from '@master/client/shared-ui/components-ui';
-import {CookieService} from "ngx-cookie-service"
+import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { ClientSharedUiComponentsUiModule } from '@master/client/shared-ui/components-ui';
+import { CookieService } from 'ngx-cookie-service';
 import { MatIconModule } from '@angular/material/icon';
+import { AuthenticationViewComponent } from './authentication-view/authentication-view.component';
 export const clientUsersViewRoutes: Route[] = [];
 
 @NgModule({
   imports: [
-    CommonModule, 
+    CommonModule,
     RouterModule,
     ClientSharedUiMaterialUiModule,
     ReactiveFormsModule,
     FormsModule,
     HttpClientModule,
     ClientSharedUiComponentsUiModule,
-    MatIconModule
+    MatIconModule,
   ],
-  declarations: [
-    LoginComponent
-  ],
-  exports: [
-    LoginComponent
-  ],
-  providers:[
-    CookieService
-  ]
+  declarations: [LoginComponent, AuthenticationViewComponent],
+  exports: [LoginComponent, AuthenticationViewComponent],
+  providers: [CookieService],
 })
 export class ClientUsersViewModule {}
