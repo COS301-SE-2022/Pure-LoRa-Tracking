@@ -71,13 +71,19 @@ export class AppService {
       let result, latestReading;
       for (let j = 0; j < avgHeatMapInstances[i].reading.length; j++) {
         const startTime = Date.now();
+        const nFact = this.randomNoiseHeatMap(
+          avgHeatMapInstances[i].noiseFactor
+        );
 
         latestReading = avgHeatMapInstances[i].reading[j];
 
         result = await avgHeatMapInstances[i].heatmap.processData(
           {
             deviceID: avgHeatMapInstances[i].deviceId,
-            reading: latestReading,
+            reading: {
+              longitude: latestReading.longitude + nFact,
+              latitude: latestReading.latitude + nFact,
+            },
           },
           content.processType
         );
@@ -86,13 +92,6 @@ export class AppService {
         const procTime = (endTime - startTime) / 1000;
 
         if (result.length != 0) {
-          const nFact = this.randomNoiseHeatMap(
-            avgHeatMapInstances[i].noiseFactor
-          );
-
-          result[0] += nFact;
-          result[1] += nFact;
-
           const acc = this.distanceBetweenCoords(result, [
             latestReading.longitude,
             latestReading.latitude,
@@ -282,7 +281,7 @@ export class AppService {
         reading: pf.readings,
         samples: pf.numberOfParticles,
         noiseFactor: pf.noiseFactor,
-        gateways: pf.gateways
+        gateways: pf.gateways,
       });
     });
 
@@ -302,9 +301,9 @@ export class AppService {
         const reading = pf.reading[j];
         const startTime = Date.now();
         const result = await pf.pf.particleFilter({
-          rssi:this.convertToRSSI(reading, pf.gateways, pf.noiseFactor),
-          latitude:null,
-          longitude:null
+          rssi: this.convertToRSSI(reading, pf.gateways, pf.noiseFactor),
+          latitude: null,
+          longitude: null,
         });
         //console.log("["+result+"],")
         const endTime = Date.now();
@@ -313,7 +312,7 @@ export class AppService {
           reading[0],
           reading[1],
         ]);
-        
+
         csvData.push({
           testName: pf.name,
           accuracy: accuracy,
@@ -361,7 +360,6 @@ export class AppService {
     };
   }
 
-
   /********************************************/
 
   latlongObj(numArr) {
@@ -380,7 +378,7 @@ export class AppService {
       (Math.cos(pointOne[0] * p) *
         Math.cos(pointTwo[0] * p) *
         (1 - Math.cos((pointTwo[1] - pointOne[1]) * p))) /
-      2;
+        2;
 
     return 12742 * Math.sin(Math.sqrt(a)) * 1000;
   }
