@@ -48,7 +48,7 @@ export class LoginComponent implements OnInit {
           //set cookies
           this.cookieservice.set("PURELORA_TOKEN",val.token,14);
           this.cookieservice.set("PURELORA_REFRESHTOKEN",val.refreshToken,14);
-          this.router.navigate(["reserve"]);
+          this.router.navigate(["auth"]);
         }
       });
     }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'master-authentication-view',
@@ -10,16 +11,18 @@ export class AuthenticationViewComponent implements OnInit {
 
   twofactorgroup:UntypedFormGroup;
   
-  constructor(private fb:UntypedFormBuilder) {
+  constructor(private fb:UntypedFormBuilder, private router:Router) {
     this.twofactorgroup=this.fb.group({
       authcode:['',[Validators.required, Validators.pattern(/^(\d |\w){1}$/), Validators.maxLength(1)]]
     })
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log("auth");
+  }
   
   auth():void{
-    console.log("Auth")
+    this.router.navigate(["reserve"]);
   }
 
 }
