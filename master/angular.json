@@ -33,6 +33,7 @@
     "client-manage-view-src-lib-profile-view": "libs/client/manage-view/src/lib/profile-view",
     "client-manage-view-src-lib-reserve-detail-view": "libs/client/manage-view/src/lib/reserve-detail-view",
     "client-manage-view-src-lib-reserve-edit": "libs/client/manage-view/src/lib/reserve-edit",
+    "client-manage-view-src-lib-sensor-edit": "libs/client/manage-view/src/lib/sensor-edit",
     "client-manage-view-src-lib-status-view": "libs/client/manage-view/src/lib/status-view",
     "client-manage-view-src-lib-users-edit": "libs/client/manage-view/src/lib/users-edit",
     "client-manage-view-src-lib-users-view": "libs/client/manage-view/src/lib/users-view",

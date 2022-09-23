@@ -1,0 +1,41 @@
+{
+  "projectType": "library",
+  "sourceRoot": "libs/client/manage-view/src/lib/sensor-edit/src",
+  "prefix": "master",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:ng-packagr-lite",
+      "outputs": ["dist/libs/client/manage-view/src/lib/sensor-edit"],
+      "options": {
+        "project": "libs/client/manage-view/src/lib/sensor-edit/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/client/manage-view/src/lib/sensor-edit/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/client/manage-view/src/lib/sensor-edit/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/client/manage-view/src/lib/sensor-edit"],
+      "options": {
+        "jestConfig": "libs/client/manage-view/src/lib/sensor-edit/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/client/manage-view/src/lib/sensor-edit/**/*.ts",
+          "libs/client/manage-view/src/lib/sensor-edit/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}
