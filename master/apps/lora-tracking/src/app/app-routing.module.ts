@@ -81,7 +81,12 @@ const routes: Routes = [
       path: 'status',
       outlet: 'managecontent',
       loadChildren:()=>import('@master/client/manage-view/src/lib/status-view').then(m => m.ClientManageViewSrcLibStatusViewModule)
-    }
+    },
+    {
+      path: 'edit-sensor/:id/:devEUI',
+      outlet: 'managecontent',
+      loadChildren: ()=>import('@master/client/manage-view/src/lib/sensor-edit').then(m => m.ClientManageViewSrcLibSensorEditModule),
+    },
   ]
 }
 ];

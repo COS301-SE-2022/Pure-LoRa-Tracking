@@ -23,7 +23,7 @@ export interface SensorGatewayInterface{
 
 export class DevicesListComponent implements OnInit {
 
-  sensorColumns:string[] = ["id", "name","reserve","status","delete"];
+  sensorColumns:string[] = ["id", "name","reserve","status","delete","edit"];
 
   gatewayColumns:string[] = ["id", "name","reserve","status","delete","edit"];
 
@@ -164,4 +164,11 @@ export class DevicesListComponent implements OnInit {
   addDeviceNavigate(): void {
     this.router.navigate(['manage',{outlets:{managecontent:['add-device']}}]);  
   }
+
+  editSensor(id:string,devEUI:string): void {
+    this.router.navigate(['manage',{outlets:{managecontent:['edit-sensor',id,devEUI]}}]);  
+  }
+
 }
+
+
