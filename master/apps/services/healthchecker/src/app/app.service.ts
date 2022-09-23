@@ -9,11 +9,11 @@ export class AppService {
     private healthcheck: HealthCheckService,
     private http: HttpHealthIndicator,
     private memory: MemoryHealthIndicator,
-    private grpc:GRPCHealthIndicator,
-    private mongo:MongooseHealthIndicator
-    ){
-      
-    }
+    private grpc: GRPCHealthIndicator,
+    private mongo: MongooseHealthIndicator
+  ) {
+
+  }
 
 
   getData(): { message: string } {
@@ -22,25 +22,27 @@ export class AppService {
 
   async checkServices() {
     return this.healthcheck.check([
-      () => this.http.pingCheck("Pure Lora Client","http://localhost:4200"),
-      () => this.http.pingCheck("Pure Lora API","http://localhost:3333/api",{
-        validateStatus:(input)=>{
-          if(input==400||input==200) return true;
+      () => this.http.pingCheck(JSON.stringify({name: "Pure Lora client",url:"https://loratracking.co.za"}), "http://localhost:4200"),
+      () => this.http.pingCheck(JSON.stringify({name: "Pure Lora API"}), "http://localhost:3333/api", {
+        validateStatus: (input) => {
+          if (input == 400 || input == 200) return true;
           return false
         }
       }),
-      () => this.http.pingCheck("Thingsboard API", "http://localhost:9090/api",{
-        validateStatus:(input)=>{
-          if(input==401||input==200) return true;
+      () => this.http.pingCheck(JSON.stringify({
+        name: "Thingsboard API",
+      }), "http://localhost:9090/api", {
+        validateStatus: (input) => {
+          if (input == 401 || input == 200) return true;
           return false
-        }
-      }),
-      () => this.http.pingCheck("Chirpstack API","http://localhost:8080/api"),
-      () => this.http.pingCheck("Chirpstack Client","http://localhost:8080"),
-      () => this.http.pingCheck("RabbitMQ Client","http://localhost:15672"),
-      () => this.http.pingCheck("Chirpstack Application health check (Postgres,Redis)","http://localhost:8085/health"),
-      () => this.http.pingCheck("Chirpstack Network server health check","http://localhost:8086/health"),
-      () => this.mongo.pingCheck("MongoDB"),
+        }}),
+      () => this.http.pingCheck(JSON.stringify({name: "Thingsboard Client",url:"http://thingsboard.loratracking.co.za"}), "http://localhost:9090"),
+      () => this.http.pingCheck(JSON.stringify({name: "Chirpstack API"}), "http://localhost:8080/api"),
+      () => this.http.pingCheck(JSON.stringify({name: "Chirpstack Client",url: "https://chirpstack.loratracking.co.za"}), "http://localhost:8080"),
+      () => this.http.pingCheck(JSON.stringify({ name: "RabbitMQ Client", url: "https://rabbitmq.loratracking.co.za" }), "http://localhost:15672"),
+      () => this.http.pingCheck(JSON.stringify({name: "Chirpstack Application health check (Postgres,Redis)"}), "http://localhost:8085/health"),
+      () => this.http.pingCheck(JSON.stringify({name: "Chirpstack Network server health check"}), "http://localhost:8086/health"),
+      () => this.mongo.pingCheck(JSON.stringify({name: "MongoDB"})),
     ]);
   }
 }
