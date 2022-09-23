@@ -11,10 +11,14 @@ import { Router } from '@angular/router';
 export class LoginComponent implements OnInit {
 
   logingroup:UntypedFormGroup;
+  twofactorgroup:UntypedFormGroup;
   constructor(private fb:UntypedFormBuilder,private http:HttpClient,private cookieservice:CookieService,private router:Router) {
     this.logingroup=this.fb.group({
       email:['',[Validators.required,Validators.email]],
       password:['',[Validators.required]]
+    })
+    this.twofactorgroup=this.fb.group({
+      authcode:['',[Validators.required, Validators.pattern(/^(\d |\w){1}$/), Validators.maxLength(1)]]
     })
   }
 
@@ -56,6 +60,10 @@ export class LoginComponent implements OnInit {
   
   reset():void{
       console.log("reset");
+  }
+
+  auth():void{
+    console.log("Auth")
   }
 
 }

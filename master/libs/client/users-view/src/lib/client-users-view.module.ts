@@ -8,7 +8,7 @@ import {FormsModule} from '@angular/forms';
 import {HttpClientModule} from "@angular/common/http"
 import {ClientSharedUiComponentsUiModule} from '@master/client/shared-ui/components-ui';
 import {CookieService} from "ngx-cookie-service"
-
+import { MatIconModule } from '@angular/material/icon';
 export const clientUsersViewRoutes: Route[] = [];
 
 @NgModule({
@@ -19,7 +19,8 @@ export const clientUsersViewRoutes: Route[] = [];
     ReactiveFormsModule,
     FormsModule,
     HttpClientModule,
-    ClientSharedUiComponentsUiModule
+    ClientSharedUiComponentsUiModule,
+    MatIconModule
   ],
   declarations: [
     LoginComponent
