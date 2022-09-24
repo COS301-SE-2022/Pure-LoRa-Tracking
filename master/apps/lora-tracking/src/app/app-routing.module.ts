@@ -3,13 +3,14 @@ import { CommonModule } from '@angular/common';
 import { Routes,RouterModule } from '@angular/router';
 import {HomescreenComponent} from '@master/client/defaultpage'
 import { ReserveMapComponent } from '@master/client/leaflet-library';
-import { AuthenticationViewComponent, LoginComponent } from '@master/client/users-view';
+import { AuthenticationViewComponent, LoginComponent,ConfirmTwofaComponent } from '@master/client/users-view';
 import { ManagePageComponent } from '@master/client/manage-view';
 
 const routes: Routes = [
   {path:"",component:LoginComponent},
   {path:"auth",component:AuthenticationViewComponent},
   {path:"home",component:HomescreenComponent},
+  {path:"twofa",component:ConfirmTwofaComponent},
   {path:"map",component:ReserveMapComponent},
   {path:"reserve",loadChildren:()=>import('@master/client/reserve-view').then(m => m.ClientReserveViewModule)},
   {path:"staff",loadChildren:()=>import('@master/client/users-management-view').then(m => m.ClientUsersManagementViewModule)},

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ThingsboardThingsboardClientService } from '@lora/thingsboard-client';
-import { refreshTokenLogin, userInitLoginResponse, userLoginData, userLoginResponse } from '../api-login.interface';
+import { Input2Fa, refreshTokenLogin, userInitLoginResponse, userLoginData, userLoginResponse } from '../api-login.interface';
 import { execFile } from 'child_process';
 
 @Injectable()
@@ -16,8 +16,8 @@ export class ApiLoginEndpointService {
         }
         const loginResponse = await this.thingsboardClient.loginUserReturnToken(body.username, body.password)
         //check if user has 2fa setup
-        console.log(loginResponse);
-        if(loginResponse.refreshToken==null){
+        console.log("teste",loginResponse);
+        if(loginResponse.refreshToken==null&&loginResponse.status=="ok"){
             return{
                 status:200,
                 explain:"Login successful. 2fa",
@@ -25,23 +25,43 @@ export class ApiLoginEndpointService {
                 has2fa:true
             }
         }
-        else{
+        else if(loginResponse.refreshToken!=null&&loginResponse.status=="ok"){
             //get 2fa secret
             const secret=await this.thingsboardClient.generate2FA(loginResponse.Token);
             return{
                 status:200,
                 explain:"Login failed. No 2fa",
+                token:loginResponse.Token,
                 authURL:secret.data.authUrl,
                 has2fa:false
             }
         }
 
-       
+       return {
+            status:401,
+            explain:loginResponse.explanation,
+       }
     }
 
-    // async do2faAuth(content : {token : string, code : string}) : Promise<userLoginResponse> {
+    async do2faAuth(content : Input2Fa) : Promise<userLoginResponse> {
+        console.log("I GOT",content);
+        const resp=await this.thingsboardClient.verify2FA(content.token,content.authcode,content.authurl);
+        if(resp.status=="fail"){
+            return {
+                status:500,
+                explain:resp.explanation
+            }
+        }
+        else if(resp.status=="ok"){
+            return {
+                status:500,
+                explain:resp.explanation
+            }
+        }
 
-    // }
+
+        
+    }
 
     async doRefreshTokenLogin(body:refreshTokenLogin):Promise<userLoginResponse>{
         if(body.refreshToken==undefined){

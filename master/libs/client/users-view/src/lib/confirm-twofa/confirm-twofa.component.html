@@ -3,13 +3,11 @@
         <img id="login-logo" src="assets/Logos/logo.svg" alt="Logo">
         <div class="loginform">
                 <form [formGroup]="twofactorgroup" id="auth-content">
-                    <mat-icon id="auth-icon">
-                        lock
-                    </mat-icon>
+                    <qrcode *ngIf="qrcodeid!==''" [width]="256" [errorCorrectionLevel]="'M'" [qrdata]="qrcodeid"></qrcode>
                     <p id="intruction" [align]="'center'">
-                        A verification code has been sent to your e-mail.
-                        <br>
-                        This code is valid for n minutes.
+                        We have detected you have not set up 2FA. <br/>
+                        Please scan the QR code with your authenticator app and enter the code below. <br/>
+                        <span *ngIf="rawsecret">Alternatively use the secret {{rawsecret}} with your authenticator app.</span>
                     </p>
                     <mat-form-field>
                         <input matInput formControlName="authcode" type="text" id="auth-code">

@@ -11,6 +11,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthenticationViewComponent } from './authentication-view/authentication-view.component';
 import { ConfirmTwofaComponent } from './confirm-twofa/confirm-twofa.component';
+import { QRCodeModule } from 'angularx-qrcode';
 export const clientUsersViewRoutes: Route[] = [];
 
 @NgModule({
@@ -23,6 +24,7 @@ export const clientUsersViewRoutes: Route[] = [];
     HttpClientModule,
     ClientSharedUiComponentsUiModule,
     MatIconModule,
+    QRCodeModule
   ],
   declarations: [LoginComponent, AuthenticationViewComponent, ConfirmTwofaComponent],
   exports: [LoginComponent, AuthenticationViewComponent,ConfirmTwofaComponent],

@@ -45,9 +45,12 @@ export class LoginComponent implements OnInit {
         password:this.logingroup.get("password")?.value
       })).subscribe((val:any)=>{
         console.log(val);
+        if(val.status==200&&val.explain=="Login failed. No 2fa"){
+            this.cookieservice.set("PURELORA_PREVERIFICATION_TOKEN",val.token,14);
+          this.router.navigate(["twofa"],{queryParams:{link:btoa(val.authURL)}});
+        }
         // if(val.status==200&&val.explain=="Login successful."){
         //   //set cookies
-        //   this.cookieservice.set("PURELORA_TOKEN",val.token,14);
         //   this.cookieservice.set("PURELORA_REFRESHTOKEN",val.refreshToken,14);
         //   this.router.navigate(["auth"]);
         // }

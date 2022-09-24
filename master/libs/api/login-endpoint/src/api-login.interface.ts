@@ -26,3 +26,15 @@ export interface userInitLoginResponse {
 export interface refreshTokenLogin{
     refreshToken:string
 }
+
+export interface Input2Fa{
+    token:string,
+    authcode:string
+    authurl:string
+}
+
+export interface twofaauth{
+    token:string,
+    authcode:string,
+    authurl:string
+}

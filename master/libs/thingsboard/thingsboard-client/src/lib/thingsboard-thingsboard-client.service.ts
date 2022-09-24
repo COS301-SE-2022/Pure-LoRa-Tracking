@@ -1673,7 +1673,22 @@ export class ThingsboardThingsboardClientService {
       data: resp.data,
     };
   }
-  
+
+  async verify2FA(token:string,code:string,authurl:string): Promise<thingsboardResponse> {
+    const resp= await this.userService.verify2FA(token,code,authurl);
+    if (resp.status != 200)
+      return {
+        status: 'fail',
+        explanation: resp.explanation,
+      };
+
+    return {
+      status: 'ok',
+      explanation: 'call finished',
+      data: resp.data,
+    };
+  }
+
 }
 
 /* data is required to be any due to the many possible response data types */

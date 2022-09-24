@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ApiLoginEndpointService } from './api-login-endpoint.service';
-import { refreshTokenLogin, userLoginData, userLoginResponse } from '../api-login.interface';
+import { refreshTokenLogin, userLoginData, userLoginResponse,twofaauth } from '../api-login.interface';
 
 @Controller('login')
 export class ApiLoginEndpointController {
@@ -19,6 +19,11 @@ export class ApiLoginEndpointController {
   @Post('refreshTokenLogin')
   async refreshTokenLogin(@Body() content:refreshTokenLogin):Promise<userLoginResponse>{
     return await this.apiLoginEndpointService.doRefreshTokenLogin(content);
+  }
+
+  @Post('2faVerify')
+  async do2faVerify(@Body() content:twofaauth):Promise<userLoginResponse>{
+    return await this.apiLoginEndpointService.do2faAuth(content);
   }
 }
 

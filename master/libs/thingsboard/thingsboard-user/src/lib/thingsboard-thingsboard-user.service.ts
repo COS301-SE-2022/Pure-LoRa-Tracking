@@ -616,6 +616,45 @@ export class ThingsboardThingsboardUserService {
 
   }
 
+  async verify2FA(token: string, code: string,authurl:string): Promise<twofaResponse> {
+    const headersReq = {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + token,
+    };
+    const resp = await firstValueFrom(this.httpService.post(this.ThingsBoardURL + "/2fa/account/config?verificationCode="+code, {
+      providerType: "TOTP",
+      useByDefault: true,
+      authUrl:authurl
+    }, {
+      headers: headersReq
+    })).catch((error) => {
+      if (error.response == undefined) return error.code;
+      return error;
+    });
+
+    console.log("IM ALSO HERE",resp);
+
+    if (resp == 'ECONNREFUSED')
+      return {
+        status: 500,
+        explanation: resp,
+      };
+
+    else if(resp.status != 200) {
+      return {
+        status: 500,
+        explanation: "Something went wrong"
+      }
+    }
+
+    return {
+      status: resp.status,
+      explanation: 'ok',
+      data: resp.data
+    }
+
+  }
+
 
 }
 
@@ -628,6 +667,7 @@ export interface twofaResponse {
   explanation: string;
   data?: any;
 }
+
 
 
 export interface UserResponse {
