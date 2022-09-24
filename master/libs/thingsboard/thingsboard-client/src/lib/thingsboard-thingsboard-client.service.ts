@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { ThingsboardThingsboardUserService } from '@lora/thingsboard-user';
 import { ThingsboardThingsboardTelemetryService } from '@lora/thingsboard-telemetry';
 import {
@@ -1657,6 +1657,12 @@ export class ThingsboardThingsboardClientService {
       explanation: 'call finished',
       data: resp.data,
     };
+  }
+
+  //////////////////////////////////////////////////////////////////
+  async resetLogin(email:string) {
+    const response = await this.userService.resetLogin(email);
+    Logger.log("Login Reset Attempted:\n"+response.explanation);
   }
 }
 

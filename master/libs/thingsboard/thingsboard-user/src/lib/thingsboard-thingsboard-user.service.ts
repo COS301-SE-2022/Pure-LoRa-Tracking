@@ -580,6 +580,36 @@ export class ThingsboardThingsboardUserService {
       data: resp.data,
     };
   }
+
+  async resetLogin(email:string) {
+    const resp = await firstValueFrom(
+      this.httpService.post(
+        this.ThingsBoardURL +
+          '/noauth/resetPasswordByEmail',
+        {"email":email},
+        {}
+      )
+    ).catch((error) => {
+      if (error.response == undefined) return error.code;
+      return error;
+    });
+
+    if (resp == 'ECONNREFUSED')
+      return {
+        status: 500,
+        explanation: resp,
+      };
+    else if (resp.status != 200) {
+      return {
+        status: resp.response.status,
+        explanation: resp.response.data.message,
+      };
+    }
+    return {
+      status: resp.status,
+      explanation: 'ok',
+    };
+  }
 }
 
 /////////////////////////////////////////////////////////////////
