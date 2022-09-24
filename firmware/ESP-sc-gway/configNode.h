@@ -169,6 +169,7 @@ struct wpas {
 // below. This is needed to get the gateway working
 //
 wpas wpa[] = {
+//	{ "delta", "test"},
 	{ "dvdw", "silentbanana598"}
 };
 

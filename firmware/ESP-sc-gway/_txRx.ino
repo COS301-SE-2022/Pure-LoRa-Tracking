@@ -537,7 +537,43 @@ int buildPacket(uint8_t *buff_up, struct LoraUp *LoraUp, bool internal)
 #	endif //_MONITOR
 
 	// Show received message status on Oled display
-#	if _OLED>=1
+#if _OLED==3
+    char timBuff[20];
+    sprintf(timBuff, "%02i:%02i:%02i", hour(), minute(), second());
+  
+    display.clearBuffer();
+    
+    display.setFont(u8g2_font_u8glib_4_tf);
+//    display.drawStr(0, 20, gw_addr.c_str());
+    display.drawUTF8(65, 55, version_harbinger);
+    
+    display.setFont(u8g2_font_questgiver_tr);
+    display.drawStr(0, 0, "Time: " );
+    display.drawStr(40, 0, timBuff);
+  
+    display.drawStr(0, 16, "RSSI: " );
+    display.drawStr(40, 16, String(prssi-rssicorr).c_str());
+  
+    display.drawStr(70, 16, "SNR: " );
+    display.drawStr(110, 16, String(SNR).c_str() );
+    
+    display.drawStr(0, 32, "Addr: " );
+    
+    if (message[4] < 0x10) display.drawStr( 40, 32, ("0"+String(message[4], HEX)).c_str()); else display.drawStr( 40, 32, String(message[4], HEX).c_str());
+    if (message[3] < 0x10) display.drawStr( 61, 32, ("0"+String(message[3], HEX)).c_str()); else display.drawStr( 61, 32, String(message[3], HEX).c_str());
+    if (message[2] < 0x10) display.drawStr( 82, 32, ("0"+String(message[2], HEX)).c_str()); else display.drawStr( 82, 32, String(message[2], HEX).c_str());
+    if (message[1] < 0x10) display.drawStr(103, 32, ("0"+String(message[1], HEX)).c_str()); else display.drawStr(103, 32, String(message[1], HEX).c_str());
+    
+    display.drawStr(0, 48, "LEN: " );
+    display.drawStr(40, 48, String((int)messageLength).c_str() );
+    
+    
+    // Print a rhino
+    display.setFont(u8g2_font_unifont_t_animals);
+    display.drawGlyph(115, 10, 0x006f);
+  
+    display.sendBuffer();
+#	elif _OLED>=1
     char timBuff[20];
     sprintf(timBuff, "%02i:%02i:%02i", hour(), minute(), second());
 	
@@ -554,12 +590,12 @@ int buildPacket(uint8_t *buff_up, struct LoraUp *LoraUp, bool internal)
     display.drawString(70, 16, ",SNR: " );
     display.drawString(110, 16, String(SNR) );
 	  
-	display.drawString(0, 32, "Addr: " );
+	  display.drawString(0, 32, "Addr: " );
 	  
     if (message[4] < 0x10) display.drawString( 40, 32, "0"+String(message[4], HEX)); else display.drawString( 40, 32, String(message[4], HEX));
-	if (message[3] < 0x10) display.drawString( 61, 32, "0"+String(message[3], HEX)); else display.drawString( 61, 32, String(message[3], HEX));
-	if (message[2] < 0x10) display.drawString( 82, 32, "0"+String(message[2], HEX)); else display.drawString( 82, 32, String(message[2], HEX));
-	if (message[1] < 0x10) display.drawString(103, 32, "0"+String(message[1], HEX)); else display.drawString(103, 32, String(message[1], HEX));
+  	if (message[3] < 0x10) display.drawString( 61, 32, "0"+String(message[3], HEX)); else display.drawString( 61, 32, String(message[3], HEX));
+  	if (message[2] < 0x10) display.drawString( 82, 32, "0"+String(message[2], HEX)); else display.drawString( 82, 32, String(message[2], HEX));
+  	if (message[1] < 0x10) display.drawString(103, 32, "0"+String(message[1], HEX)); else display.drawString(103, 32, String(message[1], HEX));
 	  
     display.drawString(0, 48, "LEN: " );
     display.drawString(40, 48, String((int)messageLength) );
@@ -798,7 +834,7 @@ int receivePacket()
 
 #			ifdef _THINGSERVER
 			// Use our own defined server or a second well known server
-			if (!sendUdp(thingServer, _THINGPORT, buff_up, build_index)) {
+			if (!sendUdp(thingServer, _THINGPORT, sendUdp, build_index)) {
 				return(-2); 							// received a message
 			}
 #			endif //_THINGSERVER

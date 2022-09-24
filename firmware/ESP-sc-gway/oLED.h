@@ -48,7 +48,7 @@
 #elif _PIN_OUT==5								// TTGO with external OLED
 #define OLED_SCL 22								// GPIO22 / SCL
 #define OLED_SDA 21								// GPIO21 / SDA
-#define OLED_RST 16								// Reset pin (Some OLED displays do not have it)
+//#define OLED_RST 16								// Reset pin (Some OLED displays do not have it)
 
 #endif
 
@@ -67,6 +67,12 @@ SSD1306  display(OLED_ADDR, OLED_SDA, OLED_SCL);// i2c ADDR & SDA, SCL on wemos
 #include "SH1106.h"
 #define OLED_ADDR 0x3C							// Default 0x3C for 1.3" SH1106
 SH1106  display(OLED_ADDR, OLED_SDA, OLED_SCL);	// i2c ADDR & SDA, SCL on wemos
+#endif
+
+// CUSTOM
+#if _OLED==3
+#include <U8g2lib.h>
+U8G2_SSD1306_128X64_NONAME_F_HW_I2C display(U8G2_R0, /* reset=*/ U8X8_PIN_NONE);
 #endif
 
 #endif //_OLED>=1
