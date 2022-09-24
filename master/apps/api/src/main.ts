@@ -7,7 +7,6 @@ import { NestFactory } from '@nestjs/core';
 
 import { AppModule } from './app/app.module';
 import { raw } from 'body-parser';
-// import { CookieManagementInterceptor } from '@master/middleware/cookie-management';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

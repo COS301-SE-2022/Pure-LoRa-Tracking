@@ -12,24 +12,23 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 export const clientSharedUiComponentsUiRoutes: Route[] = [];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    RouterModule,
-    ClientSharedUiMaterialUiModule,
-    MatDialogModule,
-    MatTabsModule,
-    NgxChartsModule
-  ],
-  declarations: [
-    HeaderUiComponent,
-    DialogConfirmationComponent,
-    SnackbarAlertComponent,
-  ],
-  exports: [
-    HeaderUiComponent,
-    DialogConfirmationComponent,
-    SnackbarAlertComponent,
-  ],
-  entryComponents: [DialogConfirmationComponent],
+    imports: [
+        CommonModule,
+        RouterModule,
+        ClientSharedUiMaterialUiModule,
+        MatDialogModule,
+        MatTabsModule,
+        NgxChartsModule
+    ],
+    declarations: [
+        HeaderUiComponent,
+        DialogConfirmationComponent,
+        SnackbarAlertComponent,
+    ],
+    exports: [
+        HeaderUiComponent,
+        DialogConfirmationComponent,
+        SnackbarAlertComponent,
+    ]
 })
 export class ClientSharedUiComponentsUiModule {}

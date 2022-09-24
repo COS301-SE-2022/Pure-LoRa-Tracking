@@ -46,6 +46,8 @@ export class ChirpstackChirpstackGatewayService {
     thingsBoardDeviceToken: string,
     gatewayName: string,
     gatewayId: string,
+    // latitude: number,
+    // longitude: number,
     gatewayDesc = 'General gateway',
     networkServer = 1,
     organisationId = 1
@@ -54,10 +56,10 @@ export class ChirpstackChirpstackGatewayService {
     const createGatewayRequest = new gatewayMessages.CreateGatewayRequest();
     const gateway = new gatewayMessages.Gateway();
     const location = new Location();
-    // location.setLatitude(0);
-    // location.setLongitude(0);
-    // location.setAccuracy(0)
+    // location.setLatitude(latitude);
+    // location.setLongitude(longitude);
     // location.setAltitude(0)
+    // location.setAccuracy(0)
     // location.setSource(0)
 
     gateway.setId(gatewayId);
@@ -84,21 +86,51 @@ export class ChirpstackChirpstackGatewayService {
     });
   }
 
-  async removeGateway(authtoken: string, gatewayId: string) {
+  setGatewayLocation(
+    authtoken: string, 
+    gatewayId: string,
+    latitude: number,
+    longitude: number
+  ) {
+    this.metadata.set('authorization', 'Bearer ' + authtoken);
+
+    const getGatewayRequest = new gatewayMessages.GetGatewayRequest();
+    getGatewayRequest.setId(gatewayId);
+    
+    this.gatewayServiceClient.get(
+      getGatewayRequest,
+      this.metadata,
+      (error, data) => {
+        if (data) {
+          const updateGatewayRequest = new gatewayMessages.UpdateGatewayRequest();  
+          const gateWay = data.getGateway();
+          const location = gateWay.getLocation();
+          location.setLatitude(latitude);
+          location.setLongitude(longitude);
+
+          updateGatewayRequest.setGateway(gateWay);
+          
+          this.gatewayServiceClient.update(
+            updateGatewayRequest,
+            this.metadata,
+            () => {}
+          );
+        }
+        else throw(error);
+      }
+    );
+  }
+
+  removeGateway(authtoken: string, gatewayId: string) {
     this.metadata.set('authorization', 'Bearer ' + authtoken);
 
     const deleteGatewayRequest = new gatewayMessages.DeleteGatewayRequest();
     deleteGatewayRequest.setId(gatewayId);
-
-    return new Promise((res, rej) => {
-      this.gatewayServiceClient.delete(
-        deleteGatewayRequest,
-        this.metadata,
-        (error, data) => {
-          if (data) res(data);
-          else rej(error);
-        }
-      );
-    });
+    
+    this.gatewayServiceClient.delete(
+      deleteGatewayRequest,
+      this.metadata,
+      () => {}      
+    );
   }
 }

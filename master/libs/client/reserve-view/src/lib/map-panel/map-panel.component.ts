@@ -1,7 +1,7 @@
 import { EventEmitter, OnInit, Output } from '@angular/core';
 import { Input } from '@angular/core';
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { DeviceNotifierService } from '@master/client/shared-services';
 
 @Component({
@@ -22,9 +22,10 @@ export class MapPanelComponent implements OnInit {
   constructor(public notifier: DeviceNotifierService) {
     this.ShowPolygon.emit(true);
   }
-  daterange = new FormGroup({
-    startdateform: new FormControl(new Date(), [Validators.required]),
-    enddateform: new FormControl(new Date(), [Validators.required]),
+
+  daterange = new UntypedFormGroup({
+    startdateform: new UntypedFormControl(new Date(),[Validators.required]),
+    enddateform: new UntypedFormControl(new Date(),[Validators.required]),
   });
 
   ngOnInit(): void {

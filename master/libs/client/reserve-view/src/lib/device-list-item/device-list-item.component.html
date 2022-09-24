@@ -2,7 +2,7 @@
     <mat-expansion-panel-header >
         <mat-panel-title>
             <mat-icon class="device-icon">
-                {{device.type === 'sensor' ? "memory" :"cell_tower" }}
+                memory
             </mat-icon>
             {{device.deviceName}}
         </mat-panel-title>
@@ -13,7 +13,7 @@
         <p>Animal:</p>
     </div>
     <mat-action-row>
-        <button mat-button class="action-buttons" color="accent" (click)="locateOnMap()">
+        <button mat-button color="accent" (click)="locateOnMap()">
             <span class="button-text-icon">Locate<mat-icon class="inner-icon">my_location</mat-icon></span>
         </button>
         <button mat-button class="action-buttons" color="accent" (click)="openDevice()">
