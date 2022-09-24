@@ -13,7 +13,6 @@ import {
   ThingsboardThingsboardTestsService,
 } from '@lora/thingsboard/tests';
 import { ServiceBusModule } from '@lora/serviceBus';
-import { isMapIterator } from 'util/types';
 
 describe('ThingsboardThingsboardClientService', () => {
   let service: ThingsboardThingsboardClientService;
@@ -351,7 +350,7 @@ it(' -> HTTP ERROR', async () => {
       .mockImplementationOnce(() =>
         throwError(() => tests.axiosECONNFailureExample)
       );
-    expect(await service.getDeviceHistoricalData('1', 2, 3)).toMatchObject({
+    expect(await service.getDeviceHistoricalData('1', "tri", 2, 3)).toMatchObject({
       ...tests.TBFailureResponse,
       ...{ explanation: 'token' },
     });
@@ -367,7 +366,7 @@ it(' -> HTTP ERROR', async () => {
       .mockImplementationOnce(() =>
         throwError(() => tests.axiosECONNFailureExample)
       );
-    expect(await service.getDeviceHistoricalData('1', 2, 3)).toMatchObject({
+    expect(await service.getDeviceHistoricalData('1', "tri", 2, 3)).toMatchObject({
       ...tests.TBFailureResponse,
       ...{ explanation: 'device with ID not found for user token combination' },
     });
@@ -380,7 +379,7 @@ it(' -> HTTP ERROR', async () => {
     jest
       .spyOn(httpService, 'get')
       .mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
-    expect(await service.getDeviceHistoricalData('1', 2, 3)).toMatchObject({
+    expect(await service.getDeviceHistoricalData('1', "tri", 2, 3)).toMatchObject({
       ...tests.TBFailureResponse,
       ...{ explanation: 'device with ID not found for user token combination' },
     });
@@ -399,7 +398,7 @@ it(' -> HTTP ERROR', async () => {
       .mockImplementationOnce(() =>
         throwError(() => tests.axiosECONNFailureExample)
       );
-    expect(await service.getDeviceHistoricalData('1', 2, 3)).toMatchObject({
+    expect(await service.getDeviceHistoricalData('1', "tri", 2, 3)).toMatchObject({
       ...tests.TBFailureResponse,
       ...{ explanation: 'ECONNREFUSED' },
     });
@@ -416,7 +415,7 @@ it(' -> HTTP ERROR', async () => {
     jest
       .spyOn(httpService, 'get')
       .mockImplementationOnce(() => of(tests.axiosTelemetrySuccessExample));
-    expect(await service.getDeviceHistoricalData('1', 2, 3)).toMatchObject({
+    expect(await service.getDeviceHistoricalData('1', "tri", 2, 3)).toMatchObject({
       status: 'ok',
       name: '1',
       explanation: 'Room 234 Sensor',

@@ -165,7 +165,7 @@ export class ApiMapEndpointService {
         if (content.deviceID != undefined && content.deviceID.length > 0) {
             content.deviceID.forEach((device) => {
                 /* await array -> telem results */
-                awaitArray.push(this.thingsboardClient.getDeviceHistoricalData(device, content.startTime, content.endTime))
+                awaitArray.push(this.thingsboardClient.getDeviceHistoricalData(device, content.pType, content.startTime, content.endTime))
             })
         } else {
             let devices;
@@ -176,7 +176,7 @@ export class ApiMapEndpointService {
             const other = devices.data.filter(val => val.isGateway == false);
             other.forEach((device) => {
                 /* await array -> telem results */
-                awaitArray.push(this.thingsboardClient.getDeviceHistoricalData(device.deviceID, content.startTime, content.endTime))
+                awaitArray.push(this.thingsboardClient.getDeviceHistoricalData(device.deviceID, content.pType, content.startTime, content.endTime))
             })
 
         }
@@ -206,6 +206,7 @@ export class ApiMapEndpointService {
                 explanationOfCall = "some devices are missing results";
                 furtherExplain = item.explanation;
                 data.push({
+                    pType:content.pType,
                     deviceID: item.name,
                     deviceName: item.furtherExplain,
                     type: "sensor",
@@ -213,6 +214,7 @@ export class ApiMapEndpointService {
                 })
             } else if (item['status'] == 'ok') {
                 data.push({
+                    pType:content.pType,
                     deviceID: item['name'],
                     deviceName: item.furtherExplain,
                     type: "sensor",
