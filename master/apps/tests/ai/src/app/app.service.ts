@@ -110,7 +110,7 @@ export class AppService {
             numberOfSamples: avgHeatMapInstances[i].reading.length,
             processingTime: procTime,
             readingLong: avgHeatMapInstances[i].reading[j].longitude,
-            readingLat: avgHeatMapInstances[i].reading[j].longitude,
+            readingLat: avgHeatMapInstances[i].reading[j].latitude,
             estimateLong: result[0],
             estimateLat: result[1],
             noiseFactor: avgHeatMapInstances[i].noiseFactor,
