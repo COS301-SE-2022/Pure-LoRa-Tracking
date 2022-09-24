@@ -10,6 +10,7 @@ import { ClientSharedUiComponentsUiModule } from '@master/client/shared-ui/compo
 import { CookieService } from 'ngx-cookie-service';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthenticationViewComponent } from './authentication-view/authentication-view.component';
+import { ConfirmTwofaComponent } from './confirm-twofa/confirm-twofa.component';
 export const clientUsersViewRoutes: Route[] = [];
 
 @NgModule({
@@ -23,8 +24,8 @@ export const clientUsersViewRoutes: Route[] = [];
     ClientSharedUiComponentsUiModule,
     MatIconModule,
   ],
-  declarations: [LoginComponent, AuthenticationViewComponent],
-  exports: [LoginComponent, AuthenticationViewComponent],
+  declarations: [LoginComponent, AuthenticationViewComponent, ConfirmTwofaComponent],
+  exports: [LoginComponent, AuthenticationViewComponent,ConfirmTwofaComponent],
   providers: [CookieService],
 })
 export class ClientUsersViewModule {}
