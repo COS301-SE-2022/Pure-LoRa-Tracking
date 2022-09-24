@@ -60,10 +60,3 @@ export interface UserChangeReserveInput {
   refreshToken: string;
   reserveID: string;
 }
-
-export interface UserSenserDataInput {
-  token: string;
-  DevicUEID: string;
-  timeStart?: number;
-  timeStop?: number;
-}

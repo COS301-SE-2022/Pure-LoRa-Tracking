@@ -1,10 +1,8 @@
 import { Injectable } from '@nestjs/common';
-
+import { ActivationKeys } from "@master/shared-interfaces"
 import * as grpc from '@grpc/grpc-js';
 
 import { InternalServiceClient } from '@chirpstack/chirpstack-api/as/external/api/internal_grpc_pb';
-// import * as internalMessages from '@chirpstack/chirpstack-api/as/external/api/internal_pb';
-
 import { DeviceServiceClient } from '@chirpstack/chirpstack-api/as/external/api/device_grpc_pb';
 import * as deviceMessages from '@chirpstack/chirpstack-api/as/external/api/device_pb';
 
@@ -130,11 +128,13 @@ export class ChirpstackChirpstackSensorService {
     device.setDeviceProfileId(deviceProfileId);
     device.setApplicationId(deviceAppl);
     // set thingsBoardDeviceId as a variable on the chirpstack "device" to identify it when data is received
+    const deviceVars = device.getVariablesMap();
     const deviceTags = device.getTagsMap();
-    deviceTags.set('thingsBoardDeviceToken', thingsBoardDeviceToken);
+    deviceVars.set('ThingsBoardAccessToken', thingsBoardDeviceToken); //ThingsBoardAccessToken | thingsBoardDeviceToken
+    deviceTags.set('deviceToken', thingsBoardDeviceToken);
 
     createDeviceRequest.setDevice(device);
-
+    
     return new Promise((res, rej) => {
       this.deviceServiceClient.create(
         createDeviceRequest,
@@ -145,6 +145,77 @@ export class ChirpstackChirpstackSensorService {
         }
       );
     });
+  }
+
+  async activateDevice(
+    authtoken: string,
+    devEUI: string,
+    activation: ActivationKeys
+  ) {
+    this.metadata.set('authorization', 'Bearer ' + authtoken);
+
+    
+    if (activation.isABP) {
+      const ActivateDeviceRequest = new deviceMessages.ActivateDeviceRequest();
+      const deviceActivation = new deviceMessages.DeviceActivation();
+      deviceActivation.setDevEui(devEUI)
+      deviceActivation.setDevAddr(activation.devAddr);
+      
+      deviceActivation.setAppSKey(activation.appSKey);
+
+      if (activation.lora1_1) {
+        deviceActivation.setFNwkSIntKey(activation.fNwkSIntKey);
+        deviceActivation.setSNwkSIntKey(activation.sNwkSIntKey)
+        deviceActivation.setNwkSEncKey(activation.nwkSEncKey);
+      } else {
+        deviceActivation.setFNwkSIntKey("00000000000000000000000000000000");
+        deviceActivation.setSNwkSIntKey("00000000000000000000000000000000")
+        deviceActivation.setNwkSEncKey(activation.nwkSKey);
+      }
+      ActivateDeviceRequest.setDeviceActivation(deviceActivation); 
+
+      return new Promise((res, rej) => {
+        this.deviceServiceClient.activate(
+          ActivateDeviceRequest,
+          this.metadata,
+          (error, data) => {
+            if (data) res(data);
+            else rej(error);
+          }
+        );
+      });
+
+
+    } else {
+      const updateDeviceKeysRequest = new deviceMessages.CreateDeviceKeysRequest();
+      const deviceKeys = new deviceMessages.DeviceKeys();
+      deviceKeys.setDevEui(devEUI);
+
+      if (activation.lora1_1) { 
+        deviceKeys.setAppKey(activation.appKey);
+        deviceKeys.setNwkKey(activation.nwkKey);
+      } else {
+        //This should be the appkey, refer to chirpstack(v3) grpc documention wrt Lorawan 1.0.x
+        deviceKeys.setNwkKey(activation.appKey); 
+      }
+      
+      updateDeviceKeysRequest.setDeviceKeys(deviceKeys);
+
+      return new Promise((res, rej) => {
+        this.deviceServiceClient.createKeys(
+          updateDeviceKeysRequest,
+          this.metadata,
+          (error, data) => {
+            if (data) res(data);
+            else {
+              console.log(deviceKeys);
+              rej(error);
+
+            }
+          }
+        );
+      }); 
+    } 
   }
 
   async removeDevice(authtoken: string, devEUI: string) {

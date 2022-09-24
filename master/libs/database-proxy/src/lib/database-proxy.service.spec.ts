@@ -1,4 +1,3 @@
-import { Logger } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Test } from '@nestjs/testing';
 import { AverageInput, AverageInputSchema, DataInput, DataInputSchema, DevicePerimeter, DevicePerimeterSchema, ReadyProcess, ReadyProcessSchema } from '../database-interfaces.interface';
@@ -9,7 +8,7 @@ describe('DatabaseProxyService', () => {
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      imports: [Logger, MongooseModule.forRoot('mongodb://lora:lora@localhost:27017'),
+      imports: [ MongooseModule.forRoot('mongodb://lora:lora@localhost:27017'),
         MongooseModule.forFeature([
           { name: AverageInput.name, schema: AverageInputSchema },
           { name: DataInput.name, schema: DataInputSchema },

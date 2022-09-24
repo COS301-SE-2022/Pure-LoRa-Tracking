@@ -1,43 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import {animate, state, style, transition, trigger} from '@angular/animations';
-
-const TABLE_DATA = [
-  {
-      id: "abc",
-      name: "ABC",
-      date: "11/04/2022",
-      time: "11:24",
-      gateway: "G2",
-      temperature: 2,
-      heartrate: 80,
-      location:{
-        long: 1,
-        lat: 1
-      }
-    
-  },
-  {
-      id: "abc",
-      name: "ABC",
-      date: "11/04/2022",
-      time: "11:24",
-      gateway: "G2",
-      temperature: 2,
-      heartrate: 80,
-      location:{
-        long: 1,
-        lat: 1
-      }
-  }
-];
-
-const prettyColumnNames = {
-      'date': "Date",
-      'time': "Time",
-      'gateway': "Gateway",
-      'temperature': "Temp (\xB0C)",
-      'heartrate': "Heart Rate (bpm)"
-}
 
 @Component({
   selector: 'master-sensor-communication',
@@ -55,14 +17,39 @@ const prettyColumnNames = {
 
 export class SensorCommunicationComponent {
  
-  dataSource = TABLE_DATA;
 
-  columnsToDisplay = ['date','time', 'gateway', 'temperature', 'heartrate'];
+  private _colnames:Array<string>=[];
+  @Input()
+  public get colnames() : string[] {
+    return this._colnames;
+  }
+  public set colnames(v : string[]) {
+    this._colnames = v;
+    console.log('this.colnames :>> ', this.colnames);
+    const myarr=['date','time',...this._colnames];
+    myarr.length=Math.min(myarr.length,5);//limit the amount of columns shown
+    this.columnsToDisplay=myarr;
+  }
+
+  private _tabledata:Array<any>=[];
+  @Input()
+  public get tabledata() : Array<any> {
+    return this._tabledata;
+  } 
+  public set tabledata(v : Array<any>) {
+    this._tabledata = v;
+    this.dataSource= v;
+  }
+
+
+  dataSource:Array<any> = [];
+
+  columnsToDisplay:Array<string> = [];
   expandedElm = null;
 
   getPrettyColumn(column: string): string {
-    const prettyName = prettyColumnNames[column as keyof typeof prettyColumnNames] as string;
-    return prettyName?.length > 0 ? prettyName : column;
+    
+    return column.charAt(0).toUpperCase()+column.slice(1);
   }
 
 }

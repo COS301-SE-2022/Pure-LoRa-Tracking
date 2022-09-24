@@ -87,6 +87,9 @@
       "@master/client/device-add-view": [
         "libs/client/device-add-view/src/index.ts"
       ],
+      "@master/client/gateway-detail": [
+        "libs/client/gateway-detail/src/index.ts"
+      ],
       "@master/client/leaflet-library": [
         "libs/client/leaflet-library/src/index.ts"
       ],
@@ -118,6 +121,9 @@
       "@master/client/manage-view/src/lib/reserve-edit": [
         "libs/client/manage-view/src/lib/reserve-edit/src/index.ts"
       ],
+      "@master/client/manage-view/src/lib/status-view": [
+        "libs/client/manage-view/src/lib/status-view/src/index.ts"
+      ],
       "@master/client/manage-view/src/lib/users-edit": [
         "libs/client/manage-view/src/lib/users-edit/src/index.ts"
       ],
@@ -148,9 +154,6 @@
       ],
       "@master/client/users-view": ["libs/client/users-view/src/index.ts"],
       "@master/message-queue": ["libs/message-queue/src/index.ts"],
-      "@master/middleware/cookie-management": [
-        "libs/middleware/cookie-management/src/index.ts"
-      ],
       "@master/shared-interfaces": ["libs/shared-interfaces/src/index.ts"],
       "@processing/bus": ["libs/processing-api/processing-bus/src/index.ts"]
     }

@@ -17,7 +17,7 @@ export class AppController {
   async processPerimeter(
     @Body() content: testParamters
   ): Promise<{ status: number; data: any }> {
-    return await this.appService.processParticleFilterTest(content);
+    return await this.appService.processParticleFilterTestV2(content);
   }
 }
 

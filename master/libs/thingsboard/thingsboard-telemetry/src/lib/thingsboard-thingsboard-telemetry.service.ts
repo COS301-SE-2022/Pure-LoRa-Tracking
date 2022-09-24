@@ -1,5 +1,6 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
+import { data } from '@tensorflow/tfjs-node';
 import { AxiosResponse } from 'axios';
 import { lastValueFrom } from 'rxjs';
 
@@ -20,6 +21,7 @@ export class ThingsboardThingsboardTelemetryService {
   async getTelemetry(
     DeviceID: string,
     DeviceProfile: string,
+    ptype = 'tri',
     timeStart?: number,
     timeStop?: number
   ): Promise<TelemetryResponse> {
@@ -36,7 +38,7 @@ export class ThingsboardThingsboardTelemetryService {
         timeStart +
         '&endTs=' +
         timeStop +
-        '&keys=ts,latitude,longitude';
+        '&keys=ts,latitude,longitude,pType';
     } else {
       url =
         this.ThingsBoardURL +
@@ -68,7 +70,7 @@ export class ThingsboardThingsboardTelemetryService {
       status: resp.status,
       explanation: 'ok',
       data: {
-        telemetryResults: this.buildTelemetryResults(resp.data),
+        telemetryResults: this.buildTelemetryResults(resp.data, ptype),
       },
     };
   }
@@ -119,7 +121,6 @@ export class ThingsboardThingsboardTelemetryService {
       };
     }
 
-    console.log(keyResponse)
     if(keyResponse.data==undefined||keyResponse.data==null){
       return {
         status:200,
@@ -180,10 +181,11 @@ export class ThingsboardThingsboardTelemetryService {
 
   //////////////////////////////////////////////////////////////////
 
-  buildTelemetryResults(items): TelemetryResult[] {
+  buildTelemetryResults(items, pType='tri'): TelemetryResult[] {
     if (items['longitude'] == undefined) return [];
     const TelList: TelemetryResult[] = new Array<TelemetryResult>();
     for (let i = 0; i < items['longitude'].length; i++) {
+      if(items['pType']==pType)
       TelList.push({
         longitude: items['longitude'][i]['value'],
         latitude: items['latitude'][i]['value'],

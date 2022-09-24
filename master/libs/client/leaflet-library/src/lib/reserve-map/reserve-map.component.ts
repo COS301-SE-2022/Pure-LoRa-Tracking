@@ -11,7 +11,7 @@ import { antPath } from "leaflet-ant-path"
 import { DeviceNotifierService } from '@master/client/shared-services';
 import { SnackbarAlertComponent } from '@master/client/shared-ui/components-ui';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css';
+// import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css';
 
 @Component({
   selector: 'master-reserve-map',

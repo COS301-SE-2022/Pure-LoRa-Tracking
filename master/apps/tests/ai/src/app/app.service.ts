@@ -294,7 +294,7 @@ export class AppService {
     }>();*/
 
     const csvData = new Array<csvObj>();
-    console.log('[');
+    //console.log("[")
     for (let i = 0; i < pfInstances.length; i++) {
       const pf = pfInstances[i];
       for (let j = 0; j < pf.reading.length; j++) {
@@ -305,7 +305,7 @@ export class AppService {
           latitude: null,
           longitude: null,
         });
-        console.log('[' + result + '],');
+        //console.log("["+result+"],")
         const endTime = Date.now();
         const processingTime = (endTime - startTime) / 1000;
         const accuracy = this.distanceBetweenCoords(result, [
@@ -325,7 +325,7 @@ export class AppService {
           noiseFactor: pf.noiseFactor,
         });
       }
-      console.log(']');
+      //console.log("]")
     }
 
     for (let i = 0; i < pfInstances.length; i++) delete pfInstances[i].pf;
