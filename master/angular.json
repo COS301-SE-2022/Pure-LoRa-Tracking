@@ -59,6 +59,7 @@
     "services-ai-processing": "apps/services/ai-processing",
     "services-cp-message-queue": "apps/services/cp-message-queue",
     "shared-interfaces": "libs/shared-interfaces",
+    "tests-ai": "apps/tests/ai",
     "thingsboard-thingsboard-admin": "libs/thingsboard/thingsboard-admin",
     "thingsboard-thingsboard-asset": "libs/thingsboard/thingsboard-asset",
     "thingsboard-thingsboard-client": "libs/thingsboard/thingsboard-client",

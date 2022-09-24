@@ -5,7 +5,7 @@ import { AverageInput, AverageInputSchema, DataInput, DataInputSchema, ReadyProc
 
 @Global()
 @Module({
-  imports : [MongooseModule.forRoot('mongodb://lora:lora@localhost:27017'),
+  imports : [MongooseModule.forRoot('mongodb://localhost'),
               MongooseModule.forFeature([
                 {name:AverageInput.name, schema:AverageInputSchema},
                 {name:DataInput.name, schema:DataInputSchema},
