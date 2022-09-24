@@ -9,7 +9,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-export const clientManageViewSrcLibReserveDetailViewRoutes: Route[] = [];
+export const clientManageViewSrcLibReserveDetailViewRoutes: Route[] = [
+  {path:'', pathMatch: 'full', component:ReserveDetailComponent}
+];
 
 @NgModule({
   imports: [
@@ -21,7 +23,8 @@ export const clientManageViewSrcLibReserveDetailViewRoutes: Route[] = [];
     MatInputModule,
     MatIconModule,
     MatDialogModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    RouterModule.forChild(clientManageViewSrcLibReserveDetailViewRoutes)
   ],
   declarations: [ReserveDetailComponent],
   exports: [ReserveDetailComponent],

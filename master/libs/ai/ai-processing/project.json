@@ -1,0 +1,45 @@
+{
+  "sourceRoot": "libs/ai/ai-processing/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/ai/ai-processing",
+        "tsConfig": "libs/ai/ai-processing/tsconfig.lib.json",
+        "packageJson": "libs/ai/ai-processing/package.json",
+        "main": "libs/ai/ai-processing/src/index.ts",
+        "assets": ["libs/ai/ai-processing/*.md"]
+      }
+    },
+    "publish": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "node tools/scripts/publish.mjs ai-ai-processing {args.ver} {args.tag}"
+      },
+      "dependsOn": [
+        {
+          "projects": "self",
+          "target": "build"
+        }
+      ]
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/ai/ai-processing/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/ai/ai-processing"],
+      "options": {
+        "jestConfig": "libs/ai/ai-processing/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

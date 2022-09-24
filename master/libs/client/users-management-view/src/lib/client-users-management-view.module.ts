@@ -11,21 +11,20 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { DialogConfirmationComponent } from '@master/client/shared-ui/components-ui';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 @NgModule({
-  imports: [
-    CommonModule,
-    ClientSharedUiComponentsUiModule,
-    ClientSharedUiMaterialUiModule,
-    MatSlideToggleModule,
-    MatTableModule,
-    ReactiveFormsModule,
-    MatDialogModule,
-    MatSnackBarModule,
-    RouterModule.forChild([
-       {path: '', pathMatch: 'full', component: ReserveUsersViewComponent} 
-    ]),
-  ],
-  declarations: [ReserveUsersViewComponent],
-  exports: [ReserveUsersViewComponent],
-  entryComponents:[DialogConfirmationComponent]
+    imports: [
+        CommonModule,
+        ClientSharedUiComponentsUiModule,
+        ClientSharedUiMaterialUiModule,
+        MatSlideToggleModule,
+        MatTableModule,
+        ReactiveFormsModule,
+        MatDialogModule,
+        MatSnackBarModule,
+        RouterModule.forChild([
+            { path: '', pathMatch: 'full', component: ReserveUsersViewComponent }
+        ]),
+    ],
+    declarations: [ReserveUsersViewComponent],
+    exports: [ReserveUsersViewComponent]
 })
 export class ClientUsersManagementViewModule {}

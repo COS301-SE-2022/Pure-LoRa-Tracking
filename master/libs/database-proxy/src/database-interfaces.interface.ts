@@ -3,6 +3,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
 export type AverageInputDocument = AverageInput & Document;
 export type DataDocument = DataInput & Document;
+export type ReadyProcessDocument = ReadyProcess & Document;
 export type DevicePerimeterDocument = DevicePerimeter & Document;
 
 class Coordinate {
@@ -33,8 +34,24 @@ export class DataInput {
     @Prop({ required: true })
     eventtype: string;
 
-    @Prop({ required: true })
-    data: string;
+    @Prop({required:true})
+    data : string;
+
+    @Prop({required:true})
+    processed : boolean;
+}
+
+@Schema()
+export class ReadyProcess{
+    @Prop({required:true})
+    timestamp : number;
+
+    @Prop({required:true})
+    deviceEUI : string;
+
+    @Prop({required:true})
+    data : string;
+
 }
 
 @Schema()
@@ -42,15 +59,14 @@ export class DevicePerimeter {
     @Prop({ required: true, unique: true })
     deviceID: string;
 
-    @Prop({required:true})
+    @Prop({ required: true })
     perimeter: number[]
 
     @Prop({ required: true })
     name: string;
-
 }
 
-
-export const AverageInputSchema = SchemaFactory.createForClass(AverageInput);
-export const DataInputSchema = SchemaFactory.createForClass(DataInput);
-export const DevicePerimeterSchema = SchemaFactory.createForClass(DevicePerimeter);
+export const AverageInputSchema = SchemaFactory.createForClass(AverageInput)
+export const DataInputSchema = SchemaFactory.createForClass(DataInput)
+export const ReadyProcessSchema = SchemaFactory.createForClass(ReadyProcess)
+export const DevicePerimeterSchema = SchemaFactory.createForClass(DevicePerimeter)

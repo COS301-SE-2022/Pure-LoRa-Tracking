@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormControl, Validators, FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormControl, Validators, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { SnackbarAlertComponent } from '@master/client/shared-ui/components-ui';
@@ -13,10 +13,10 @@ import { SnackbarAlertComponent } from '@master/client/shared-ui/components-ui';
 
 export class ProfilesEditComponent implements OnInit {
 
-  editProfile: FormGroup = new FormGroup({});
-  emailControl = new FormControl('',[Validators.required, Validators.email]);
+  editProfile: UntypedFormGroup = new UntypedFormGroup({});
+  emailControl = new UntypedFormControl('',[Validators.required, Validators.email]);
   id="";
-  constructor(private formBuilder: FormBuilder, private router:Router,private http:HttpClient,private snackbar:MatSnackBar) {}
+  constructor(private formBuilder: UntypedFormBuilder, private router:Router,private http:HttpClient,private snackbar:MatSnackBar) {}
 
   ngOnInit(): void {
     this.http.post("api/user/info",{}).subscribe((val:any)=>{

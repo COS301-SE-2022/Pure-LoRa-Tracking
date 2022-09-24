@@ -45,6 +45,15 @@ describe('ChirpstackChirpstackSensorService', () => {
       const data = await service.listDevices(authtoken);
       
       expect(data).toBe(response);
+
+      jest
+        .spyOn(service.deviceServiceClient, 'list')
+        .mockImplementationOnce((listDeviceRequest, metadata, callback: any) => {
+          callback("TEST_ERROR", null);
+          return null;
+        });
+
+      await expect(service.listDevices(authtoken)).rejects.toEqual("TEST_ERROR");
     });
 
     it('should get profile details', async () => {
@@ -70,6 +79,17 @@ describe('ChirpstackChirpstackSensorService', () => {
 
       const data = await service.getProfileDetail(authtoken, profileId);
       expect(data).toBe(mockDevProfile_1);
+
+      jest
+        .spyOn(service.deviceProfileServiceClient, 'get')
+        .mockImplementationOnce(
+          (getDeviceProfileRequest, metadata, callback: any) => {
+            callback("TEST_ERROR", null);
+            return null;
+          }
+        );
+
+      await expect(service.getProfileDetail(authtoken, profileId)).rejects.toEqual("TEST_ERROR");
     });
 
     
@@ -89,7 +109,7 @@ describe('ChirpstackChirpstackSensorService', () => {
       jest
         .spyOn(service, 'getProfileDetail')
         .mockImplementationOnce((authtoken, profileId) => {
-          const subResponse = new Promise<DeviceProfile>((res, req) => {
+          const subResponse = new Promise<DeviceProfile>((res, rej) => {
             res(mockDevProfile_1);
           });
           return subResponse;
@@ -107,6 +127,15 @@ describe('ChirpstackChirpstackSensorService', () => {
 
       const data = await service.getProfiles(authtoken);
       expect(data).toStrictEqual(response);
+
+      jest
+        .spyOn(service.deviceProfileServiceClient, 'list')
+        .mockImplementationOnce((listDeviceRequest, metadata, callback: any) => {
+          callback("TEST_ERROR", null);
+          return null;
+        });
+
+      await expect(service.getProfiles(authtoken)).rejects.toEqual("TEST_ERROR"); 
     });
 
 
@@ -138,6 +167,15 @@ describe('ChirpstackChirpstackSensorService', () => {
       );
       
       expect(data).toBe(response);
+
+      jest
+        .spyOn(service.deviceServiceClient, 'create')
+        .mockImplementationOnce((createDeviceRequest, metadata, callback: any) => {
+          callback("TEST_ERROR", null);
+          return null;
+        });
+
+      await expect(service.addDevice(null,null,null,null,null)).rejects.toEqual("TEST_ERROR"); 
     });
 
 
@@ -186,7 +224,23 @@ describe('ChirpstackChirpstackSensorService', () => {
         'test_token',
         'test',
         '70b3d5000000000b',
-        'cb71e932-cd57-44a0-b5ab-aebb6b377541'
+        'cb71e932-cd57-44a0-b5ab-aebb6b377541'        
+      );
+      console.log(data);
+      expect(data).toBeDefined();
+    });
+
+    it('should activate the device', async () => {
+      const data = await service.activateDevice(
+        authtoken,
+        "70b3d5000000000b", 
+        {
+          isABP: true,
+          lora1_1: false,
+          devAddr: "01c93656",
+          appSKey: "DFD761F3367B36F85762B9AEFD17DC72",
+          nwkSEncKey: "4A9851A0719D178F9655343206620713"
+        }
       );
       console.log(data);
       expect(data).toBeDefined();

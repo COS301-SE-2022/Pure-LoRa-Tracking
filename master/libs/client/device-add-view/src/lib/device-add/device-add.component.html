@@ -1,5 +1,5 @@
-<master-header-nav></master-header-nav>
   <div class="container">
+    <button mat-raised-button (click)="navigateBack()" class="action-buttons" color="primary" class="action-buttons">Cancel</button>
     <div class="wrapper">
       <mat-stepper labelPosition="bottom" #stepper>
         <mat-step [stepControl]="typeGroup">
@@ -28,16 +28,11 @@
             </mat-form-field>
             <br>
             <mat-form-field appearance="fill">
-              <mat-label>Device Description</mat-label>
-              <input matInput placeholder="Description" formControlName="desc" required>
+              <mat-label>Reserve</mat-label>
+              <mat-select formControlName="profilegroup">
+                  <mat-option *ngFor="let curr of profilelist" [value]="curr.deviceID">{{curr.name}}</mat-option>
+              </mat-select>
             </mat-form-field>
-            <br>
-                <mat-form-field appearance="fill">
-                  <mat-label>Profile</mat-label>
-                  <mat-select formControlName="profilegroup">
-                      <mat-option *ngFor="let curr of profilelist" [value]="curr.deviceID">{{curr.name}}</mat-option>
-                  </mat-select>
-                </mat-form-field>
             <div>
               <button mat-button matStepperPrevious>Back</button>
               <button mat-button matStepperNext [disabled]="descriptionGroup.invalid">Next</button>
@@ -47,57 +42,110 @@
 
         <mat-step [stepControl]="infoGroup" >
 
-            <ng-template matStepLabel>Device Info</ng-template>
-            
-            <div *ngIf="deviceType === 'sensor';">
-              <form [formGroup]="sensorGroup">
+          <ng-template matStepLabel>Device Info</ng-template>
+          
+          <div *ngIf="deviceType === 'sensor';">
+            <form [formGroup]="sensorGroup">
+              <mat-form-field appearance="fill">
+                <mat-label>EUI</mat-label>
+                <input matInput placeholder="EUI" formControlName="eui" required (change)="stripspaces($event)">
+              </mat-form-field>
+              <br>
+              <mat-form-field appearance="fill">
+                <mat-label>Device Profile</mat-label>
+                <mat-select formControlName="deviceProfile" (selectionChange)="changeProfile($event)" #selected>
+                  <mat-option *ngFor="let curr of deviceprofilelist" [value]="curr.id">{{curr.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <br>
+              
+              <div *ngIf="isABP">
                 <mat-form-field appearance="fill">
-                  <mat-label>EUI</mat-label>
-                  <input matInput placeholder="EUI" formControlName="eui" required>
+                  <mat-label>Device address</mat-label>
+                  <input matInput placeholder="Device address" formControlName="devAddr" required (change)="stripspaces($event)">
                 </mat-form-field>
                 <br>
-                <mat-form-field appearance="fill">
-                  <mat-label>Application Key</mat-label>
-                  <input matInput placeholder="Application Key" formControlName="applicationkey" required>
-                </mat-form-field>
-                <br>
-                <mat-form-field appearance="fill">
-                  <mat-label>Device Profile</mat-label>
-                  <mat-select formControlName="deviceProfile">
-                    <mat-option *ngFor="let curr of deviceprofilelist" [value]="curr.id">{{curr.name}}</mat-option>
-                  </mat-select>
-                </mat-form-field>
 
-              </form>
-            </div>
-            <div *ngIf="deviceType === 'gateway';">
-              <form [formGroup]="gatewayGroup">
+                <div *ngIf="lora1_0">
+                  <mat-form-field appearance="fill">
+                    <mat-label>Network Session Key</mat-label>
+                    <input matInput placeholder="Network Session Key" formControlName="nwkSkey" required (change)="stripspaces($event)">
+                  </mat-form-field>
+                  <br>
+                </div>
+
+                <div *ngIf="lora1_1">
+                  <mat-form-field appearance="fill">
+                    <mat-label>Network Session Encryption Key</mat-label>
+                    <input matInput placeholder="Network Session Encryption Key" formControlName="nwkSEncKey" required (change)="stripspaces($event)">
+                  </mat-form-field>
+                  <br>
+                  <mat-form-field appearance="fill">
+                    <mat-label>Serving Network Session Integrity Key</mat-label>
+                    <input matInput placeholder="Serving Network Session Integrity Key" formControlName="sNwkSIntKey" required (change)="stripspaces($event)">
+                  </mat-form-field>
+                  <br>
+                  <mat-form-field appearance="fill">
+                    <mat-label>Forwarding Network Session Integrity Key</mat-label>
+                    <input matInput placeholder="Forwarding Network Session Integrity Key" formControlName="fNwkSIntKey" required (change)="stripspaces($event)">
+                  </mat-form-field>
+                  <br>
+                </div>
+
                 <mat-form-field appearance="fill">
-                  <mat-label>Gateway ID</mat-label>
-                  <input matInput placeholder="ID" formControlName="gatewayid" required>
+                  <mat-label>Application Session Key</mat-label>
+                  <input matInput placeholder="Application Session Key" formControlName="appSkey" required (change)="stripspaces($event)">
                 </mat-form-field>
                 <br>
-                <!-- <mat-form-field appearance="fill">
-                  <mat-label>Network Server</mat-label>
-                  <input matInput placeholder="Server" formControlName="networkserver" required [defaultValue]="one">
-                </mat-form-field>
-                <br> -->
-                <mat-form-field appearance="fill">
-                  <mat-label>Gateway Latitude</mat-label>
-                  <input matInput placeholder="Location" formControlName="gatlang" optional>
-                </mat-form-field>
-                <mat-form-field appearance="fill">
-                  <mat-label>Gateway Longitude</mat-label>
-                  <input matInput placeholder="Location" formControlName="gatlong" optional>
-                </mat-form-field>
-                
-              </form>
-            </div>
-                
-            <div>
-              <button mat-button matStepperNext [disabled]="gatewayGroup.invalid&&sensorGroup.invalid">Next</button>
-              <button mat-button matStepperPrevious>Back</button>
-            </div>
+              </div>
+              
+              <div *ngIf="!isABP">
+                <div *ngIf="lora1_1">
+                  <mat-form-field appearance="fill">
+                    <mat-label>Network Key</mat-label>
+                    <input matInput placeholder="Network Key" formControlName="nwkKey" required (change)="stripspaces($event)">
+                  </mat-form-field>
+                  <br>
+                </div>
+                <div>
+                  <mat-form-field appearance="fill">
+                    <mat-label>Application Key</mat-label>
+                    <input matInput placeholder="Application Key" formControlName="appKey" required (change)="stripspaces($event)">
+                  </mat-form-field>
+                  <br>
+                </div>
+              </div>
+
+            </form>
+          </div>
+          <div *ngIf="deviceType === 'gateway';">
+            <form [formGroup]="gatewayGroup">
+              <mat-form-field appearance="fill">
+                <mat-label>Gateway ID</mat-label>
+                <input matInput placeholder="ID" formControlName="gatewayid" required (change)="stripspaces($event)">
+              </mat-form-field>
+              <br>
+              <!-- <mat-form-field appearance="fill">
+                <mat-label>Network Server</mat-label>
+                <input matInput placeholder="Server" formControlName="networkserver" required [defaultValue]="one">
+              </mat-form-field>
+              <br> -->
+              <mat-form-field appearance="fill">
+                <mat-label>Gateway Latitude</mat-label>
+                <input matInput placeholder="Location" formControlName="gatlang" optional>
+              </mat-form-field>
+              <mat-form-field appearance="fill">
+                <mat-label>Gateway Longitude</mat-label>
+                <input matInput placeholder="Location" formControlName="gatlong" optional>
+              </mat-form-field>
+              
+            </form>
+          </div>
+              
+          <div>
+            <button mat-button matStepperNext [disabled]="gatewayGroup.invalid&&sensorGroup.invalid">Next</button>
+            <button mat-button matStepperPrevious>Back</button>
+          </div>
           
         </mat-step>
         <mat-step>

@@ -10,10 +10,13 @@ import {MatSelectModule} from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule } from '@angular/material/dialog';
 
-export const clientManageViewSrcLibDevicesMangeViewRoutes: Route[] = [];
+export const clientManageViewSrcLibDevicesMangeViewRoutes: Route[] = [
+
+  {path:'', pathMatch: 'full', component:DevicesListComponent}
+];
 
 @NgModule({
-  imports: [CommonModule, RouterModule, MatTableModule, MatIconModule, MatButtonModule, MatTabsModule, MatSelectModule, MatSnackBarModule, MatDialogModule],
+  imports: [CommonModule, RouterModule, MatTableModule, MatIconModule, MatButtonModule, MatTabsModule, MatSelectModule, MatSnackBarModule, MatDialogModule, RouterModule.forChild(clientManageViewSrcLibDevicesMangeViewRoutes)],
   declarations: [DevicesListComponent],
   exports: [DevicesListComponent],
 })

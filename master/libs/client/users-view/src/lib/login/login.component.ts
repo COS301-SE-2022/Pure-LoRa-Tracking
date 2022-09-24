@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
 @Component({
@@ -10,8 +10,8 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
 
-  logingroup:FormGroup;
-  constructor(private fb:FormBuilder,private http:HttpClient,private cookieservice:CookieService,private router:Router) {
+  logingroup:UntypedFormGroup;
+  constructor(private fb:UntypedFormBuilder,private http:HttpClient,private cookieservice:CookieService,private router:Router) {
     this.logingroup=this.fb.group({
       email:['',[Validators.required,Validators.email]],
       password:['',[Validators.required]]
