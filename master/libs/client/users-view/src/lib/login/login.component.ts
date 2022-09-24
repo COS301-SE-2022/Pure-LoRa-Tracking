@@ -44,12 +44,13 @@ export class LoginComponent implements OnInit {
         username:this.logingroup.get("email")?.value,
         password:this.logingroup.get("password")?.value
       })).subscribe((val:any)=>{
-        if(val.status==200&&val.explain=="Login successful."){
-          //set cookies
-          this.cookieservice.set("PURELORA_TOKEN",val.token,14);
-          this.cookieservice.set("PURELORA_REFRESHTOKEN",val.refreshToken,14);
-          this.router.navigate(["auth"]);
-        }
+        console.log(val);
+        // if(val.status==200&&val.explain=="Login successful."){
+        //   //set cookies
+        //   this.cookieservice.set("PURELORA_TOKEN",val.token,14);
+        //   this.cookieservice.set("PURELORA_REFRESHTOKEN",val.refreshToken,14);
+        //   this.router.navigate(["auth"]);
+        // }
       });
     }
     

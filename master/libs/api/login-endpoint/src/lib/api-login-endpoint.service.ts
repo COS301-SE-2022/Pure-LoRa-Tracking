@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { ThingsboardThingsboardClientService } from '@lora/thingsboard-client';
-import { refreshTokenLogin, userLoginData, userLoginResponse } from '../api-login.interface';
+import { refreshTokenLogin, userInitLoginResponse, userLoginData, userLoginResponse } from '../api-login.interface';
 import { execFile } from 'child_process';
 
 @Injectable()
 export class ApiLoginEndpointService {
     constructor(private thingsboardClient: ThingsboardThingsboardClientService) { }
 
-    async doLogin(body: userLoginData): Promise<userLoginResponse> {
+    async doLogin(body: userLoginData): Promise<userInitLoginResponse> {
         if (body.username == undefined || body.password == undefined) {
             return {
                 status: 400,
@@ -15,25 +15,33 @@ export class ApiLoginEndpointService {
             }
         }
         const loginResponse = await this.thingsboardClient.loginUserReturnToken(body.username, body.password)
-
-        if (loginResponse.Token != "" && loginResponse.refreshToken != "") {
-            this.thingsboardClient.setToken(loginResponse.Token)
-            const userInfo = await this.thingsboardClient.getUserInfoFromToken();
-            return {
-                status: 200,
-                explain: 'Login successful.',
-                token: loginResponse.Token,
-                refreshToken: loginResponse.refreshToken,
-                //userID : userInfo.data.id.id,
-                reserveID : userInfo.data.customerId.id,
-                reserves : userInfo.data.additionalInfo.reserves
+        //check if user has 2fa setup
+        console.log(loginResponse);
+        if(loginResponse.refreshToken==null){
+            return{
+                status:200,
+                explain:"Login successful. 2fa",
+                token:loginResponse.Token,
+                has2fa:true
             }
         }
-        return {
-            status: 401,
-            explain: 'Login unsuccessful.'
+        else{
+            //get 2fa secret
+            const secret=await this.thingsboardClient.generate2FA(loginResponse.Token);
+            return{
+                status:200,
+                explain:"Login failed. No 2fa",
+                authURL:secret.data.authUrl,
+                has2fa:false
+            }
         }
+
+       
     }
+
+    // async do2faAuth(content : {token : string, code : string}) : Promise<userLoginResponse> {
+
+    // }
 
     async doRefreshTokenLogin(body:refreshTokenLogin):Promise<userLoginResponse>{
         if(body.refreshToken==undefined){

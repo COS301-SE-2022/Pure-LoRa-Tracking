@@ -10,8 +10,18 @@ export interface userLoginResponse {
     refreshToken?: string,
     userID?: string,
     reserveID?: string,
+    has2fa?: boolean,
     reserves? : {reserveName:string, reserveID:string}[]
 }
+
+export interface userInitLoginResponse {
+    status: number,
+    explain: string,
+    authURL?: string,
+    token?: string,
+    has2fa?: boolean,
+}
+
 
 export interface refreshTokenLogin{
     refreshToken:string
