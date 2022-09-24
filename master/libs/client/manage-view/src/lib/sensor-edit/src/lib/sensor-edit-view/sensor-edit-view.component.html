@@ -1,11 +1,11 @@
 <div id="formContainer">
-    <form [formGroup]="editProfile" (ngSubmit)="saveProfile(editProfile)" id="form">
+    <form [formGroup]="editSensor" (ngSubmit)="saveSensor()" id="form">
         <mat-form-field appearance="outline" required class="input-form" id="firstForm" >
             <mat-label>Name</mat-label>
             <input matInput placeholder="Name" formControlName="name" class="placeholder" >
         </mat-form-field>
         <div id="button-wrapper">
-            <button mat-raised-button (click)="navigateBack()" class="action-buttons" color="primary">Cancel</button>
+            <button mat-raised-button (click)="cancelEdit()" class="action-buttons" color="primary">Cancel</button>
             <button mat-flat-button type="submit" class="action-buttons" color="primary" >Save</button>
         </div>
     </form>
