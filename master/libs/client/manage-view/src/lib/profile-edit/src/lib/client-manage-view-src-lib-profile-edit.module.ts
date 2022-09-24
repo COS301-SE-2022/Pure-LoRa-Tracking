@@ -7,10 +7,12 @@ import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-export const clientManageViewSrcLibProfileEditRoutes: Route[] = [];
+export const clientManageViewSrcLibProfileEditRoutes: Route[] = [
+  {path:'', pathMatch: 'full', component:ProfilesEditComponent}
+];
 
 @NgModule({
-  imports: [CommonModule, RouterModule, MatFormFieldModule, ReactiveFormsModule, FormsModule, MatButtonModule, MatInputModule, MatSnackBarModule],
+  imports: [CommonModule, RouterModule, MatFormFieldModule, ReactiveFormsModule, FormsModule, MatButtonModule, MatInputModule, MatSnackBarModule, RouterModule.forChild(clientManageViewSrcLibProfileEditRoutes)],
   declarations: [ProfilesEditComponent],
   exports: [ProfilesEditComponent],
 })

@@ -13,7 +13,6 @@ import {
   ThingsboardThingsboardTestsService,
 } from '@lora/thingsboard/tests';
 import { ServiceBusModule } from '@lora/serviceBus';
-import { isMapIterator } from 'util/types';
 
 describe('ThingsboardThingsboardClientService', () => {
   let service: ThingsboardThingsboardClientService;
@@ -351,7 +350,7 @@ it(' -> HTTP ERROR', async () => {
       .mockImplementationOnce(() =>
         throwError(() => tests.axiosECONNFailureExample)
       );
-    expect(await service.getDeviceHistoricalData('1', 2, 3)).toMatchObject({
+    expect(await service.getDeviceHistoricalData('1', "tri", 2, 3)).toMatchObject({
       ...tests.TBFailureResponse,
       ...{ explanation: 'token' },
     });
@@ -367,7 +366,7 @@ it(' -> HTTP ERROR', async () => {
       .mockImplementationOnce(() =>
         throwError(() => tests.axiosECONNFailureExample)
       );
-    expect(await service.getDeviceHistoricalData('1', 2, 3)).toMatchObject({
+    expect(await service.getDeviceHistoricalData('1', "tri", 2, 3)).toMatchObject({
       ...tests.TBFailureResponse,
       ...{ explanation: 'device with ID not found for user token combination' },
     });
@@ -380,7 +379,7 @@ it(' -> HTTP ERROR', async () => {
     jest
       .spyOn(httpService, 'get')
       .mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
-    expect(await service.getDeviceHistoricalData('1', 2, 3)).toMatchObject({
+    expect(await service.getDeviceHistoricalData('1', "tri", 2, 3)).toMatchObject({
       ...tests.TBFailureResponse,
       ...{ explanation: 'device with ID not found for user token combination' },
     });
@@ -399,7 +398,7 @@ it(' -> HTTP ERROR', async () => {
       .mockImplementationOnce(() =>
         throwError(() => tests.axiosECONNFailureExample)
       );
-    expect(await service.getDeviceHistoricalData('1', 2, 3)).toMatchObject({
+    expect(await service.getDeviceHistoricalData('1', "tri", 2, 3)).toMatchObject({
       ...tests.TBFailureResponse,
       ...{ explanation: 'ECONNREFUSED' },
     });
@@ -416,7 +415,7 @@ it(' -> HTTP ERROR', async () => {
     jest
       .spyOn(httpService, 'get')
       .mockImplementationOnce(() => of(tests.axiosTelemetrySuccessExample));
-    expect(await service.getDeviceHistoricalData('1', 2, 3)).toMatchObject({
+    expect(await service.getDeviceHistoricalData('1', "tri", 2, 3)).toMatchObject({
       status: 'ok',
       name: '1',
       explanation: 'Room 234 Sensor',
@@ -898,6 +897,21 @@ it(' -> HTTP ERROR', async () => {
 
   //////////////////////////////////////////////////////////////////////////////////////////
 
+  /*it('add user to reserve -> live', async () => {
+    await service.loginUser('reserveadmin@reserve.com', 'reserve')
+    console.table(await service.addUserToReserve('a0436390-0845-11ed-bc6e-a50062f6cdba', 'reserveuserthree@reserve.com', 'reserveuserthree', 'reserve',
+      [
+        {
+          reserveID: "a0436390-0845-11ed-bc6e-a50062f6cdba",
+          reserveName: "Rietvlei"
+        },
+        {
+          reserveID: "92291e40-0844-11ed-bc6e-a50062f6cdba",
+          reserveName: "Groenkloof"
+        },
+      ]))
+  });*/
+
   it('add user to reserve -> login fail', async () => {
     expect(await service.addUserToReserve('1', '', '', '', [])).toMatchObject({
       status: 'fail',
@@ -942,6 +956,8 @@ it(' -> HTTP ERROR', async () => {
       explanation: 'ok',
     });
   });
+
+
   //////////////////////////////////////////////////////////////////////////////////////////
 
   it('change reserve for user -> login fail', async () => {
@@ -1682,6 +1698,10 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
   });
 
   //////////////////////////////////////////////////////////////////////
+  it('gen admin reserve list -> live', async () => {
+    /*await service.loginUser('reserveadmintwo@reserve.com', 'reserve');
+    console.table(await service.generateReserveList_ReserveAdmin());*/
+  })
 
   it('generate reserve list -> login fail', async () => {
     /*await service.loginUser('server@thingsboard.org', 'thingsboardserveraccountissecure')
@@ -1827,7 +1847,7 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
   it('generate reserve list sys admin -> not admin', async () => {
     jest
       .spyOn(httpService, 'get')
-      .mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
+      .mockImplementationOnce(() => of(tests.axiosUserSuccessExample));
     expect(await service.generateReserveList_SystemAdmin()).toMatchObject({
       status: 'fail',
       explanation: 'user not system admin',
@@ -1862,6 +1882,11 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
       .mockImplementationOnce(() =>
         throwError(() => tests.axiosECONNFailureExample)
       );
+    jest
+      .spyOn(httpService, 'post')
+      .mockImplementationOnce(() =>
+        throwError(() => tests.axiosECONNFailureExample)
+      );
     expect(await service.generateReserveList_SystemAdmin()).toMatchObject({
       status: 'fail',
       explanation: 'ECONNREFUSED',
@@ -1875,6 +1900,11 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
     jest
       .spyOn(httpService, 'get')
       .mockImplementationOnce(() => of(tests.axiosTenantsSuccessExample));
+    jest
+      .spyOn(httpService, 'post')
+      .mockImplementationOnce(() =>
+        throwError(() => tests.axiosECONNFailureExample)
+      );
     jest
       .spyOn(httpService, 'post')
       .mockImplementationOnce(() => of(tests.axiosUserSuccessExample));

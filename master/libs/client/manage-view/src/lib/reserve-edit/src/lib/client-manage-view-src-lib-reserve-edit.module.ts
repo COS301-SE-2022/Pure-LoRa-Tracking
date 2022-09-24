@@ -7,10 +7,12 @@ import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-export const clientManageViewSrcLibReserveEditRoutes: Route[] = [];
+export const clientManageViewSrcLibReserveEditRoutes: Route[] = [
+  {path:'', pathMatch: 'full', component:ReserveEditComponent}
+];
 
 @NgModule({
-  imports: [CommonModule, RouterModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule, FormsModule, MatButtonModule, MatSnackBarModule],
+  imports: [CommonModule, RouterModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule, FormsModule, MatButtonModule, MatSnackBarModule, RouterModule.forChild(clientManageViewSrcLibReserveEditRoutes)],
   declarations: [ReserveEditComponent],
   exports: [ReserveEditComponent],
 })

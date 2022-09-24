@@ -286,7 +286,7 @@ describe('DevicesListComponent', () => {
   describe("EditGateway",()=>{
     it("Call the router",()=>{
       jest.spyOn(routerMock,"navigate").mockImplementation();
-      component.editGateway("test");
+      component.editGateway("test","70b3d50000000000");
       expect(routerMock.navigate).toBeCalled();
     })
   })

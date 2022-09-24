@@ -7,7 +7,10 @@ import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
-export const clientManageViewSrcLibCreateReserveRoutes: Route[] = [];
+export const clientManageViewSrcLibCreateReserveRoutes: Route[] = [
+
+  {path:'', pathMatch: 'full', component:ReserveCreateComponent}
+];
 
 @NgModule({
   imports: [
@@ -18,7 +21,8 @@ export const clientManageViewSrcLibCreateReserveRoutes: Route[] = [];
     ReactiveFormsModule,
     FormsModule,
     MatButtonModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    RouterModule.forChild(clientManageViewSrcLibCreateReserveRoutes)
   ],
   declarations: [ReserveCreateComponent],
   exports: [ReserveCreateComponent],
