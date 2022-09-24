@@ -634,7 +634,7 @@ export class ThingsboardThingsboardClientService {
     email: string,
     firstName: string,
     lastName: string,
-    reserves: { reserveName: string; reserveID: string }[]
+    reserves: {reserveName: string; reserveID: string }[]
   ): Promise<thingsboardResponse> {
     const login = await this.userService.userInfo(this.token);
 
@@ -649,6 +649,13 @@ export class ThingsboardThingsboardClientService {
         status: 'fail',
         explanation: 'user not admin',
       };
+
+    const reserveList = (await this.getReserveList()).data;
+    reserves.forEach(reserve => {
+      let i = 0;
+      while (reserve.reserveID != reserveList[i].reserveID) i++;
+      reserve['tenantID'] = reserveList[i].tenantID;
+    });
 
     const resp = await this.userService.createReserveUser(
       this.token,
@@ -690,13 +697,14 @@ export class ThingsboardThingsboardClientService {
       };
 
     let exists = false;
+    let tenantID = "";
     for (
       let i = 0;
       i < UserInfo.data.additionalInfo.reserves.length && exists == false;
       i++
     ) {
       const element = UserInfo.data.additionalInfo.reserves[i];
-      if (element.reserveID == custID) exists = true;
+      if (element.reserveID == custID) {tenantID = element.tenantID; exists = true};
     }
 
     if (UserInfo.data.additionalInfo.reserves == undefined || exists == false)
@@ -707,7 +715,7 @@ export class ThingsboardThingsboardClientService {
 
     const resp = await this.userService.changeReserveForUser(
       this.token,
-      UserInfo.data.tenantId.id,
+      tenantID,
       UserInfo.data.id.id,
       custID,
       UserInfo.data.email,
@@ -1153,11 +1161,17 @@ export class ThingsboardThingsboardClientService {
         explanation: 'token invalid',
       };
 
-    if (login.data.authority != 'SYS_ADMIN')
+    if (login.data.authority == 'CUSTOMER_USER')
       return {
         status: 'fail',
         explanation: 'user not system admin',
-      };
+      }
+    else {
+      const serverLogin = await this.loginUser(
+        'server@thingsboard.org',
+        process.env.DEFAULT_SERVER_PASSWORD
+      );
+    }
 
     this.adminService.setToken(this.token);
     const tenants = await this.adminService.getTenantInfos(1000, 0);
@@ -1178,6 +1192,8 @@ export class ThingsboardThingsboardClientService {
 
     console.log(tenants);
     tenants.data.forEach((tenant) => {
+      if (tenant.additionalInfo.reserves == undefined)
+      return
       tenant.additionalInfo.reserves.forEach((reserve) => {
         reserveList.push({
           tenantID: tenant.id.id,
@@ -1245,10 +1261,11 @@ export class ThingsboardThingsboardClientService {
       };
     }
 
-    const reserveList = new Array<{ reserveID: string; reserveName: string }>();
+    const reserveList = new Array<{ tenantID: string, reserveID: string; reserveName: string }>();
 
     reserves.data.forEach((item) => {
       reserveList.push({
+        tenantID : item.tenantId.id,
         reserveID: item.id.id,
         reserveName: item.name,
       });
@@ -1359,6 +1376,9 @@ export class ThingsboardThingsboardClientService {
         explanation: 'request not made by an admin',
       };
 
+    const token = this.token;
+    const refreshToken = this.refreshToken;
+
     const serverLogin = await this.loginUser(
       'server@thingsboard.org',
       process.env.DEFAULT_SERVER_PASSWORD
@@ -1372,6 +1392,10 @@ export class ThingsboardThingsboardClientService {
 
     await this.generateReserveList_SystemAdmin();
     const serverUser = await this.userService.userInfo(this.token);
+
+    this.token = token;
+    this.refreshToken = refreshToken;
+
 
     if (serverUser.status != 200)
       return {
@@ -1459,15 +1483,10 @@ export class ThingsboardThingsboardClientService {
   }
 
   ////////////////////////////////////////////////////////////////
-
-  async updateUser(
-    userID: string,
-    details: {
-      firstName: string;
-      lastName: string;
-    },
-    reserves?: { reserveName: string; reserveID: string }[]
-  ): Promise<thingsboardResponse> {
+  async updateUser(userID: string, details: {
+    firstName: string,
+    lastName: string,
+  }, reserves?: { tenantID?: string, reserveName: string, reserveID: string }[]): Promise<thingsboardResponse> {
     const user = await this.userService.userInfo(this.token);
 
     if (user.status != 200)
@@ -1488,10 +1507,18 @@ export class ThingsboardThingsboardClientService {
         furtherExplain: userinfo.explanation,
       };
 
-    const additionalinfo = userinfo.data.additionalInfo;
+    let additionalinfo; 
     if (reserves != undefined) {
-      delete additionalinfo.reserves;
-      additionalinfo.reserves = reserves;
+      const reserveList = (await this.getReserveList()).data;
+      reserves.forEach(reserve => {
+        let i = 0;
+        while (reserve.reserveID != reserveList[i].reserveID) i++;
+        reserve['tenantID'] = reserveList[i].tenantID;
+      });
+      delete additionalinfo.reserves
+      additionalinfo.reserves = reserves
+    } else {
+      additionalinfo = userinfo.data.additionalInfo;
     }
 
     const resp = await this.userService.UpdateUserInfo(

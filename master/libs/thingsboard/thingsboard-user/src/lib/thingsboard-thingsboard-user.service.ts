@@ -639,7 +639,7 @@ export interface UserResponse {
     firstName?: string;
     lastName?: string;
     additionalInfo?: {
-      reserves?: {reserveName:string, reserveID:string}[];
+      reserves?: {tenantID: string, reserveName:string, reserveID:string}[];
     };
   };
   type?: string;

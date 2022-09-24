@@ -293,7 +293,7 @@ export class ApiUserEndpointService {
     );
 
     const tokens = await this.thingsboardClient.refresh(content.refreshToken);
-    console.log('tokens :>> ', tokens);
+    //console.log('tokens :>> ', tokens);
 
     if (response.status == 'fail')
       return {
