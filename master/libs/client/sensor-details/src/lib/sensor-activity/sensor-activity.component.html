@@ -1,0 +1,55 @@
+<div>
+  <mat-form-field>
+    <label>Value</label>
+    <mat-select
+      [formControl]="graphOption"
+      [(value)]="currentGraph"
+      (selectionChange)="ChangeData($event)"
+    >
+      <mat-option *ngFor="let curr of sensordata" value="{{curr.graphname}}">{{curr.graphname}}</mat-option>
+    </mat-select>
+</mat-form-field>
+<mat-form-field>
+      <label>GraphType</label>
+    <mat-select [formControl]="graphType">
+      <mat-option value="Linechart">Line Chart</mat-option>
+      <mat-option value="Bargraph">Bar Graph</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <br>
+  <br>
+
+  <div id="chart-container" [ngSwitch]="graphType.value">
+    <ngx-charts-line-chart
+      *ngSwitchCase="'Linechart'"
+      [legend]="legend"
+      [showXAxisLabel]="showXAxisLabel"
+      [showYAxisLabel]="showYAxisLabel"
+      [xAxis]="xAxis"
+      [yAxis]="yAxis"
+      [xAxisLabel]="xAxisLabel"
+      [yAxisLabel]="yAxisLabel"
+      [timeline]="true"
+      [results]="[currentlinedata]"
+      [autoScale]="true"
+    >
+    </ngx-charts-line-chart>
+    <ngx-charts-bar-vertical
+      *ngSwitchCase="'Bargraph'"
+      [legend]="legend"
+      [showXAxisLabel]="showXAxisLabel"
+      [showYAxisLabel]="showYAxisLabel"
+      [xAxis]="xAxis"
+      [yAxis]="yAxis"
+      [xAxisLabel]="xAxisLabel"
+      [yAxisLabel]="yAxisLabel"
+      [results]="currentbardata"
+    >
+    </ngx-charts-bar-vertical>
+  </div>
+
+  <div *ngIf="this.sensordata.length===0">
+    <h1>No Graph data has been found in the current date range</h1>
+  </div>
+
+</div>

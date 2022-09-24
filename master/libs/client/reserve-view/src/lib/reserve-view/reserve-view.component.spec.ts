@@ -118,17 +118,6 @@ describe('ReserveViewComponent', () => {
 
   // })
 
-  describe("Update Range", () => {
-    it("Should update the range", async() => {
-      jest.spyOn(component.apicaller, "getHistoricalWithTime").mockResolvedValue({ data: "test" });
-      if (component.reservemap != null) jest.spyOn(component.reservemap, "reload").mockImplementation();
-      component.updateRange({start:0,end:0});
-      await new Promise(process.nextTick)
-      expect(component.apicaller.getHistoricalWithTime).toBeCalled();
-      if (component.reservemap != null) expect(component.reservemap.reload).toBeCalled();
-    })
-  });
-
 
   // describe("Update Reserve", () => {
   //   const val="Testval";

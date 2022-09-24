@@ -28,6 +28,7 @@ export class ReservePanelComponent implements OnInit {
     this.filteredSensors = this.Devices;
   }
   openSensor = false;
+  openGateway = false;
 
   @Output() selectedReserveChange = new EventEmitter<string>();
 
@@ -35,6 +36,13 @@ export class ReservePanelComponent implements OnInit {
     name: "",
     id: "",
   }
+
+  currentGateway = {
+    name: "",
+    id: "",
+    eui: ""
+  }
+
   @Input()
   public get GateWays() {
     return this._GateWays;
@@ -148,6 +156,14 @@ export class ReservePanelComponent implements OnInit {
     this.openSensor = true;
   }
 
+  viewGateway(event:{id:string,name: string, eui: string}):void{
+    this.currentGateway = {
+      name: event.name,
+      id: event.id,
+      eui: event.eui
+    }
+    this.openGateway = true;
+  }
 
   reserveChanged(): void {
     this.selectedReserveChange.emit(this.selectedReserve);

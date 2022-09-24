@@ -19,6 +19,10 @@
                     <mat-icon class="btn-icon">hub</mat-icon> 
                     <span>Devices</span>
                 </button>
+                <button  mat-button class="nav-buttons" color="primary" [routerLink]="[{outlets:{managecontent:['status']}}]">
+                    <mat-icon class="btn-icon">tips_and_updates</mat-icon> 
+                    <span>Services</span>
+                </button>
             </div>
         </mat-drawer>
         <mat-drawer-content>

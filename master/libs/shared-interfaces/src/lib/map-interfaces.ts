@@ -58,7 +58,7 @@ export interface Gateway {
         latitude:number,
         longitude:number
     }
-  }
+}
 
 
   export interface MapApiReserveResponse {
