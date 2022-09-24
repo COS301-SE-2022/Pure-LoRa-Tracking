@@ -138,4 +138,3 @@ struct moniLine {
 	String txt;
 };
 struct moniLine monitor[_MAXMONITOR];
-

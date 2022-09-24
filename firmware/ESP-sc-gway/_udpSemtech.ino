@@ -585,6 +585,9 @@ int readUdp(int packetSize)
 // ----------------------------------------------------------------------------
 int sendUdp(IPAddress server, int port, uint8_t *msg, uint16_t length) 
 {
+  mPrint("sendUdp:: ==== DELTA =====");
+  mPrint(String(length));
+  mPrint("=========");
   // Check whether we are conected to Wifi and the internet
   if (WlanConnect(3) < 0) {
 #   if _MONITOR>=1

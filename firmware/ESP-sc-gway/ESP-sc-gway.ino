@@ -24,6 +24,9 @@
 //
 // ----------------------------------------------------------------------------------------
 
+char* version_harbinger = "sc-gway v1.0.9"; // Tracking if updates are applied
+String gw_addr="";
+
 #if defined (ARDUINO_ARCH_ESP32) || defined(ESP32)
 #	define ESP32_ARCH 1
 #	ifndef _PIN_OUT
@@ -58,6 +61,8 @@
 #include <WiFiUdp.h>
 #include <pins_arduino.h>
 #include <gBase64.h>										// https://github.com/adamvr/arduino-base64 (changed the name)
+
+
 
 // Local include files
 #include "loraModem.h"
@@ -292,18 +297,21 @@ void pullData();														// _udpSemtech.ino
 // _state is S_INIT
 // ----------------------------------------------------------------------------
 void setup() {
+  
+  char MAC_char[19];										// XXX Unbelievable
+  MAC_char[18] = 0;
+  char hostname[12];										// hostname space
 
-	char MAC_char[19];										// XXX Unbelievable
-	MAC_char[18] = 0;
-	char hostname[12];										// hostname space
-
-	initDown(&LoraDown);
-	initConfig(&gwayConfig);
+  initDown(&LoraDown);
+  initConfig(&gwayConfig);
 		
 #	if _DUSB>=1
 		Serial.begin(_BAUDRATE);							// As fast as possible for bus
-		delay(500);
+    delay(500);
 		Serial.flush();
+   
+    Serial.println("Starting");  
+    Serial.println(version_harbinger);
 #	endif //_DUSB
 
 #	if _OLED>=1
@@ -382,6 +390,7 @@ void setup() {
 	};							
 	delay(500);
 
+
 #	if _WIFIMANAGER==1
 		msg_oLED("WIFIMGR");
 #		if _MONITOR>=1
@@ -403,6 +412,13 @@ void setup() {
 		mPrint("MAC: " + String(MAC_char) + ", len=" + String(strlen(MAC_char)) );
 #	endif //_MONITOR
 
+  if (MAC_array[0]< 0x10) gw_addr +='0'; gw_addr +=String(MAC_array[0],HEX);  // The MAC array is always returned in lowercase
+  if (MAC_array[1]< 0x10) gw_addr +='0'; gw_addr +=String(MAC_array[1],HEX);
+  if (MAC_array[2]< 0x10) gw_addr +='0'; gw_addr +=String(MAC_array[2],HEX);
+  gw_addr +="ffff"; 
+  if (MAC_array[3]< 0x10) gw_addr +='0'; gw_addr +=String(MAC_array[3],HEX);
+  if (MAC_array[4]< 0x10) gw_addr +='0'; gw_addr +=String(MAC_array[4],HEX);
+  if (MAC_array[5]< 0x10) gw_addr +='0'; gw_addr +=String(MAC_array[5],HEX);
 
 	// Setup WiFi UDP connection. Give it some time and retry x times. '0' means try forever
 	while (WlanConnect(0) <= 0) {
@@ -685,7 +701,10 @@ void loop ()
   #  if _GPS==1
 //    Serial.println("checking location");
       
-    if (i % 500 == 1) {
+    if (i % 50000 == 1) {
+      
+
+      
       smartDelay(0);
       printDateTime(gps.date, gps.time);
         

@@ -548,7 +548,7 @@ static void openWebPage()
 	response +="<h1>ESP Gateway Config</h1>";
 
 	response +="<p style='font-size:10px;'>";
-	response +="Version: "; response+=VERSION;
+	response +="Version: "; response+=VERSION; response+=version_harbinger;
 	response +="<br>ESP alive since "; 					// STARTED ON
 	stringTime(startTime, response);
 
@@ -2075,4 +2075,3 @@ static void websiteFooter()
 
 
 #endif //_SERVER==1
-

@@ -1,7 +1,8 @@
 // 1-channel LoRa Gateway for ESP32 and ESP8266
 // Copyright (c) Maarten Westenberg 2016-2021 
 
-#define VERSION "V.6.2.8.EU868; PlatformIO 210712 a; GIT"
+//#define VERSION "V.6.2.8.EU868; PlatformIO 210712 a; GIT"
+#define VERSION "based on [V.6.2.8.EU868]; Harbinger Rev: "
 
 //
 // Based on work done by Thomas Telkamp for Raspberry PI 1ch gateway and many others.
@@ -167,7 +168,7 @@
 //	4: ESP32, Heltec and TTGO pin out (should work for Heltec, 433 and Oled too).
 //	5: Other, define your own in loraModem.h (does not include GPS Code)
 #if !defined _PIN_OUT
-#	define _PIN_OUT 4
+#	define _PIN_OUT 5
 #endif
 
 
@@ -218,7 +219,7 @@
 // _OLED==1;	0.9" Oled Screen based on SSD1306
 // _OLED==2;	1.3" Oled screens for Wemos, 128x64 SH1106
 #if !defined _OLED
-#	define _OLED 1
+#	define _OLED 3
 #endif
 
 
@@ -348,7 +349,7 @@
 
 
 // Serial Port speed
-#define _BAUDRATE 9600						// Works for debug messages to serial momitor
+#define _BAUDRATE 115200						// Works for debug messages to serial momitor
 
 
 // Will we use Mutex or not?

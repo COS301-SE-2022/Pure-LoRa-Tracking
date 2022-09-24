@@ -268,21 +268,24 @@ struct pins {
 #define GPS_RX 34 //[CHANGED] TTGO uses 34, not 15 
 #define GPS_TX 12
 
-#define I2C_SDA                     21
-#define I2C_SCL                     22
-
-Wire.begin(I2C_SDA, I2C_SCL);
+Wire.begin(21, 22);
 if (PMU.begin(Wire, AXP192_SLAVE_ADDRESS) == AXP_FAIL) {
   Serial.print("Failed to connect to axp192 module");
 }
 
-PMU.setPowerOutPut(AXP192_LDO3, AXP202_ON); // GPS main power
-PMU.setPowerOutPut(AXP192_LDO2, AXP202_ON); // provides power to GPS backup battery
-PMU.setPowerOutPut(AXP192_LDO3, AXP202_ON);
-PMU.setPowerOutPut(AXP192_DCDC2, AXP202_ON);
-PMU.setPowerOutPut(AXP192_EXTEN, AXP202_ON);
-PMU.setPowerOutPut(AXP192_DCDC1, AXP202_ON); // enables power to ESP32 on T-beam
-PMU.setPowerOutPut(AXP192_DCDC3, AXP202_ON); 
+axp.adc1Enable(AXP202_VBUS_VOL_ADC1 |
+                 AXP202_VBUS_CUR_ADC1 |
+                 AXP202_BATT_CUR_ADC1 |
+                 AXP202_BATT_VOL_ADC1,
+                 true);
+                   
+//PMU.setPowerOutPut(AXP192_LDO3, AXP202_ON); // GPS main power
+//PMU.setPowerOutPut(AXP192_LDO2, AXP202_ON); // provides power to GPS backup battery
+//PMU.setPowerOutPut(AXP192_LDO3, AXP202_ON);
+//PMU.setPowerOutPut(AXP192_DCDC2, AXP202_ON);
+//PMU.setPowerOutPut(AXP192_EXTEN, AXP202_ON);
+//PMU.setPowerOutPut(AXP192_DCDC1, AXP202_ON); // enables power to ESP32 on T-beam
+//PMU.setPowerOutPut(AXP192_DCDC3, AXP202_ON); 
 
 #endif //_GPS
 
@@ -308,6 +311,10 @@ struct pins {
 #define RST 14				// Check
 #define SS 18
 
+#if _GPS==1
+#define GPS_RX 34 //[CHANGED] TTGO uses 34, not 15 
+#define GPS_TX 12
+#endif //_GPS
 
 #else
 // ----------------------------------------------------------------------------
