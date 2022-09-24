@@ -1,0 +1,28 @@
+table{
+    width: 100%;
+}
+tr.detailRow {
+    height: 0;
+}
+  
+tr.elmRow:not(.example-expanded-row):hover {
+background: whitesmoke;
+}
+
+tr.elmRow:not(.example-expanded-row):active {
+background: #efefef;
+}
+
+.elmRow td {
+border-bottom-width: 0;
+}
+
+.elm-detail {
+    overflow: hidden;
+    display: flex;
+  }
+  
+.scrollcontainer{
+   
+   height: 100%;
+}

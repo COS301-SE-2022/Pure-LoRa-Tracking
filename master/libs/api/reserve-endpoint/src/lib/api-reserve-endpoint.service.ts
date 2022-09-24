@@ -131,7 +131,7 @@ export class ApiReserveEndpointService {
             }*/
 
         this.thingsboardClient.setToken(body.token);
-        console.log(body.reserveID);
+        //console.log(body.reserveID);
         const response = await this.thingsboardClient.updateReservePerimeter(body.reserveID, body.location);
         //console.log(response);
         if(response.status == 'fail')
@@ -188,14 +188,15 @@ export class ApiReserveEndpointService {
         };
 
         this.thingsboardClient.setToken(body.token);
-        /*const generate = await this.thingsboardClient.generateReserveList_SystemAdmin();
+        const generate = await this.thingsboardClient.generateReserveList_SystemAdmin();
         if(generate.status != 'ok')
         return {
             status : 500,
             explanation : generate.explanation
-        }*/
-
-        const response =    await this.thingsboardClient.getReserveList();
+        }
+        
+        this.thingsboardClient.setToken(body.token);
+        const response = await this.thingsboardClient.getReserveList();
         if(response.status == 'fail')
         return {
             status : 500,

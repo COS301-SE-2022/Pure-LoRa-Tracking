@@ -78,4 +78,19 @@ export class ApiLoginEndpointService {
             explain : "logout successful"
         }
     }
+
+    async resetLogin(content:{email:string}) : Promise<userLoginResponse> {
+        if(content.email == "" || content.email == undefined)
+        return {
+            status : 403,
+            explain : "no email provided"
+        }
+
+        this.thingsboardClient.resetLogin(content.email);
+
+        return {
+            status : 200,
+            explain : 'reset attempt'
+        }
+    }
 }

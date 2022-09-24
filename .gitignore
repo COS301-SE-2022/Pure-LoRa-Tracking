@@ -1,6 +1,10 @@
 # dependencies
 /node_modules
 
+# yarn lock and package lock
+yarn.lock
+package-lock.json
+
 # IDEs and editors
 /.idea
 /.awcache
