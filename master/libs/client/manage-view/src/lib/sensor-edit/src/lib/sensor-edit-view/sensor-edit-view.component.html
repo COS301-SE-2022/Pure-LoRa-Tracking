@@ -4,6 +4,22 @@
             <mat-label>Name</mat-label>
             <input matInput placeholder="Name" formControlName="name" class="placeholder" >
         </mat-form-field>
+
+        <ng-container>
+            <mat-form-field>
+                <mat-label>Reserve</mat-label>
+                <mat-select [(value)]="sensorDetails.reserve" [disabled]="sensorDetails.reserve!==''">
+                    <mat-option *ngFor="let reserve of reserveList" [value]="reserve.id">
+                        {{reserve.name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <div>
+                <button *ngIf="sensorDetails.status" mat-button (click)="unassign(sensorDetails.id)">Unassign</button>
+                <button *ngIf="!sensorDetails.status" [disabled]="sensorDetails.reserve===''" mat-button (click)="assign(sensorDetails.id,sensorDetails.reserve)">Assign</button>
+            </div>
+        </ng-container>
+
         <div id="button-wrapper">
             <button mat-raised-button (click)="cancelEdit()" class="action-buttons" color="primary">Cancel</button>
             <button mat-flat-button type="submit" class="action-buttons" color="primary" >Save</button>
