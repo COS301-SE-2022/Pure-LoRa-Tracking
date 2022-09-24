@@ -90,8 +90,8 @@ export class LocationService {
         //     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
         //     return EARTH_RAD * c;
         // }
-        private BASE_FACTOR = -61.1;
-        private ENV_FACTOR = 2;
+        private BASE_FACTOR = -41;
+        private ENV_FACTOR = 1.8;
 
         rssiToMeters(rssi: number) {
             if (rssi < this.BASE_FACTOR)
