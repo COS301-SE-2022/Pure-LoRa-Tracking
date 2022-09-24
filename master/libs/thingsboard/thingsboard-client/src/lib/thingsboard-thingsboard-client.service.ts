@@ -282,8 +282,9 @@ export class ThingsboardThingsboardClientService {
     */
   async getDeviceHistoricalData(
     DeviceID: string,
+    pType = 'tri',
     startTime?: number,
-    endTime?: number
+    endTime?: number,
   ): Promise<thingsboardResponse> {
     const verifyToken = await this.validateToken();
     if (verifyToken == false) {
@@ -307,6 +308,7 @@ export class ThingsboardThingsboardClientService {
     const resp = await this.telemetryService.getTelemetry(
       DeviceID,
       'DEVICE',
+      pType,
       startTime,
       endTime
     );
