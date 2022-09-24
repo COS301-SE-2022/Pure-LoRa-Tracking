@@ -30,3 +30,12 @@ export class ApiLogoutEndpointController {
     return await this.apiLoginEndpointService.processLogout(content);
   }
 }
+
+@Controller('reset')
+export class ApiPasswordResetEndpointController {
+  constructor(private apiLoginEndpointService: ApiLoginEndpointService) { }
+  @Post('')
+  async logout(@Body() content:{email:string}) : Promise<userLoginResponse> {
+    return await this.apiLoginEndpointService.resetLogin(content);
+  }
+}

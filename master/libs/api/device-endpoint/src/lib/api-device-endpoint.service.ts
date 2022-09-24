@@ -473,7 +473,7 @@ export class ApiDeviceEndpointService {
 
     this.thingsboardClient.setToken(body.token);
     const response = await this.thingsboardClient.getCustomerDevices(body.customerID);
-    console.log(response)
+    //console.log(response)
     if (response.status != "ok") {
       return {
         status: 500,

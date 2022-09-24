@@ -1,6 +1,5 @@
-/* eslint-disable */
-export default {
-  displayName: 'middleware-cookie-management',
+module.exports = {
+  displayName: 'tests-ai',
   preset: '../../../jest.preset.js',
   globals: {
     'ts-jest': {
@@ -12,5 +11,5 @@ export default {
     '^.+\\.[tj]s$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageDirectory: '../../../coverage/libs/middleware/cookie-management',
+  coverageDirectory: '../../../coverage/apps/tests/ai',
 };
