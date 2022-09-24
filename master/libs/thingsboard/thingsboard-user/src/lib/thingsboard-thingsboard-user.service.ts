@@ -236,7 +236,7 @@ export class ThingsboardThingsboardUserService {
 
     const resp = await firstValueFrom(
       this.httpService.post(
-        this.ThingsBoardURL + '/user?sendActivationMail=false',
+        this.ThingsBoardURL + '/user?sendActivationMail=true',
         {
           email: email,
           customerId: {
@@ -298,7 +298,7 @@ export class ThingsboardThingsboardUserService {
 
     const resp = await firstValueFrom(
       this.httpService.post(
-        this.ThingsBoardURL + '/user?sendActivationMail=false',
+        this.ThingsBoardURL + '/user?sendActivationMail=true',
         {
           id: {
             id: entityID,
@@ -534,7 +534,7 @@ export class ThingsboardThingsboardUserService {
 
     const resp = await firstValueFrom(
       this.httpService.post(
-        this.ThingsBoardURL + "/user?sendActivationEmail=false",
+        this.ThingsBoardURL + "/user?sendActivationMail=true",
         {
           id: {
             id: userID,
