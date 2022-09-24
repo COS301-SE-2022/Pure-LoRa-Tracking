@@ -1,3 +1,5 @@
+#include <Time.h>
+
 //
 #include <lmic.h>
 #include <hal/hal.h>
@@ -9,7 +11,7 @@
 AXP20X_Class axp;
 U8G2_SSD1306_128X64_NONAME_1_HW_I2C u8g2(U8G2_R0, /* reset=*/ U8X8_PIN_NONE);
 
-char* version = "ttn-abp v1.0.36";
+char* version = "ttn-abp v1.0.37";
 
 //
 // LoRaWAN NwkSKey, network session key
@@ -40,7 +42,7 @@ static osjob_t sendjob;
 
 // Schedule TX every this many seconds (might become longer due to duty
 // cycle limitations).
-const unsigned TX_INTERVAL = 60;
+const unsigned TX_INTERVAL = 10;
 
 
 const lmic_pinmap lmic_pins = {
@@ -133,7 +135,11 @@ void setup() {
   if(axp.begin(Wire, AXP192_SLAVE_ADDRESS) == AXP_FAIL) {
     Serial.println(F("error communicating with AXP192 power chip"));
   }
-
+  axp.adc1Enable(AXP202_VBUS_VOL_ADC1 |
+                   AXP202_VBUS_CUR_ADC1 |
+                   AXP202_BATT_CUR_ADC1 |
+                   AXP202_BATT_VOL_ADC1,
+                   true);
   
   Serial.begin(115200);
   Serial.println(F("Starting"));
@@ -238,12 +244,12 @@ void setup() {
 void loop() {
   static int state = 0;
   static char batt_v[50];
-  static int i = 0;
+  static long i = 0;
   i++;
 
-  if (i % 100000 == 1) {
+  if (i % 1000000 == 1) {
     if (!digitalRead(38)) {
-      state = (state < 2? state+1:0);
+      state = (state < 3? state+1:0);
     }
     Serial.print("battery: ");
     Serial.print(axp.getBattVoltage()/1000);
@@ -290,7 +296,10 @@ void loop() {
       u8g2.setFontDirection(0);  
 
       u8g2.setFont(u8g2_font_ncenR12_tr);
-      
+      Serial.print("Charging: ");
+      Serial.println(axp.getBattChargeCurrent());
+      Serial.print("Usage: ");
+      Serial.println(axp.getBattDischargeCurrent());
       switch (state) {
         case 0:    
           sprintf(batt_v, "Battery %g V", axp.getBattVoltage()/1000); //,%d %% axp.getBattPercentage()
@@ -300,6 +309,9 @@ void loop() {
           break;
         case 2:
           sprintf(batt_v, "Usage %g mA", axp.getBattDischargeCurrent()); //,%d %% axp.getBattPercentage()
+          break;
+        case 3:
+          sprintf(batt_v, "USB %g mA", axp.getVbusCurrent()); //,%d %% axp.getBattPercentage()
           break;
       }
       
