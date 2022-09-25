@@ -22,7 +22,7 @@ export class ProcessingApiProcessingBusService {
 
     /* forward new device and perimeter to relevant mongo table */
     async saveDevicePerimeterToDB(body: { perimeter: number[], name: string, deviceID: string }) {
-        this.database.insertDevicePerimeter(body)
+        Logger.log(await this.database.insertDevicePerimeter(body));
     }
 
     /* forward new perimeter to all device in table */
