@@ -293,7 +293,7 @@ export class ThingsboardThingsboardTelemetryService {
       this.httpService.post(
         this.ThingsBoardURL + '/v1/' + accessToken + '/telemetry',
         {
-          timestamp: +new Date(),
+          ts: +new Date(),
           ...TelemetryJSON,
         },
         {}

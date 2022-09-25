@@ -1275,35 +1275,39 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
 
   //////////////////////////////////////////////////////////////////////////////////////////
 
-  it('v1 send telemetry -> pass', async () => {
-    /*expect(await service.loginUser('reserveadmin@reserve.com', 'reserve')).toBe(
-      true
-    );
-    console.log(await service.removeReserveUser("cf0afc80-e63d-11ec-9a49-9105980e5c8a"));*/
+  // it('v1 send telemetry -> pass', async () => {
+  //   /*expect(await service.loginUser('reserveadmin@reserve.com', 'reserve')).toBe(
+  //     true
+  //   );
+  //   console.log(await service.removeReserveUser("cf0afc80-e63d-11ec-9a49-9105980e5c8a"));*/
 
-    jest
-      .spyOn(httpService, 'post')
-      .mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
+  //   jest
+  //     .spyOn(httpService, 'post')
+  //     .mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
 
-    expect(
-      await service.v1SendTelemetry('sadfj-assen-12xed-esawf', { rssi: 2000 })
-    ).toEqual({ status: 200, explanation: 'call finished' });
-  });
+  //   expect(
+  //     await service.v1SendTelemetry('sadfj-assen-12xed-esawf', { rssi: 2000 })
+  //   ).toEqual({ status: 200, explanation: 'call finished' });
+  // });
 
-  it('v1 send telemetry -> fail', async () => {
-    /*expect(await service.loginUser('reserveadmin@reserve.com', 'reserve')).toBe(
-      true
-    );
-    console.log(await service.removeReserveUser("cf0afc80-e63d-11ec-9a49-9105980e5c8a"));*/
+  // it('v1 send telemetry -> fail', async () => {
+  //   /*expect(await service.loginUser('reserveadmin@reserve.com', 'reserve')).toBe(
+  //     true
+  //   );
+  //   console.log(await service.removeReserveUser("cf0afc80-e63d-11ec-9a49-9105980e5c8a"));*/
 
-    jest
-      .spyOn(httpService, 'post')
-      .mockImplementationOnce(() =>
-        throwError(() => tests.axiosECONNFailureExample)
-      );
-    expect(
-      await service.v1SendTelemetry('sadfj-assen-12xed-esawf', { rssi: 2000 })
-    ).toEqual({ status: 500, explanation: 'send telemetry failed' });
+  //   jest
+  //     .spyOn(httpService, 'post')
+  //     .mockImplementationOnce(() =>
+  //       throwError(() => tests.axiosECONNFailureExample)
+  //     );
+  //   expect(
+  //     await service.v1SendTelemetry('sadfj-assen-12xed-esawf', { rssi: 2000 })
+  //   ).toEqual({ status: 500, explanation: 'send telemetry failed' });
+  // });
+
+  it('v1 send telemetry -> live test', async () => {
+    service.v1SendTelemetry("wzBhcYgAjRUs8conbhCG",{location:{longitude:1, latitude:2},pType:'TRI'})
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////
