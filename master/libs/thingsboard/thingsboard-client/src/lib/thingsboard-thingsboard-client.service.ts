@@ -282,7 +282,7 @@ export class ThingsboardThingsboardClientService {
     */
   async getDeviceHistoricalData(
     DeviceID: string,
-    pType = 'tri',
+    pType = 'TRI',
     startTime?: number,
     endTime?: number,
   ): Promise<thingsboardResponse> {
