@@ -1,6 +1,8 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'master-authentication-view',
@@ -10,8 +12,13 @@ import { Router } from '@angular/router';
 export class AuthenticationViewComponent implements OnInit {
 
   twofactorgroup:UntypedFormGroup;
-  
-  constructor(private fb:UntypedFormBuilder, private router:Router) {
+  querytoken:string;
+
+  constructor(private fb:UntypedFormBuilder, private router:Router,private activatedRoute:ActivatedRoute,private http:HttpClient,private cookieservice:CookieService) {
+    this.querytoken="";
+    this.activatedRoute.queryParamMap.subscribe((params)=>{
+      this.querytoken=atob(params.get("token") || "");
+    })
     this.twofactorgroup=this.fb.group({
       authcode:['',[Validators.required]]
     })
@@ -22,7 +29,21 @@ export class AuthenticationViewComponent implements OnInit {
   }
   
   auth():void{
-    this.router.navigate(["reserve"]);
+    console.log("");
+    this.http.post("api/login/2faCheck",{
+      token:this.querytoken,
+      authcode:this.twofactorgroup.get("authcode")?.value
+    }).subscribe((val:any)=>{
+      console.log(val);
+      if(val.status==200&&val.explain=="call finished"){
+        this.cookieservice.set("PURELORA_TOKEN",val.token,14);
+        this.cookieservice.set("PURELORA_REFRESHTOKEN",val.refreshToken,14);
+        this.router.navigate(["reserve"]);
+      }
+      // else if(val){
+
+      // }
+    })
   }
 
 }

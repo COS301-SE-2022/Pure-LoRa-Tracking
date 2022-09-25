@@ -56,9 +56,9 @@ export class LoginComponent implements OnInit {
           this.router.navigate(["twofa"],{queryParams:{link:btoa(val.authURL)}});
         }
         else if(val.status==200&&val.explain=="Login successful. 2fa"){
-          this.router.navigate(["auth"],{queryParams:{token:val.token}});
+          this.router.navigate(["auth"],{queryParams:{token:btoa(val.token)}});
         }
-        
+
         // if(val.status==200&&val.explain=="Login successful."){
         //   //set cookies
         //   this.cookieservice.set("PURELORA_REFRESHTOKEN",val.refreshToken,14);

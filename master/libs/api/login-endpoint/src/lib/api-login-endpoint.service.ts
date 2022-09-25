@@ -44,9 +44,11 @@ export class ApiLoginEndpointService {
     }
 
     async do2faAuth(content : Input2Fa) : Promise<userLoginResponse> {
-        console.log("I GOT",content);
+        // console.log("I GOT",content);
         const resp=await this.thingsboardClient.verify2FA(content.token,content.authcode,content.authurl);
         if(resp.status=="fail"){
+            if(resp.explanation=="Verification code is incorrect")
+
             return {
                 status:500,
                 explain:resp.explanation
@@ -63,7 +65,6 @@ export class ApiLoginEndpointService {
 
     async do2faCheck(content:check2FAInput):Promise<userLoginResponse>{
         const resp=await this.thingsboardClient.check2FA(content.token,content.authcode);
-        
         if(resp.status=="fail"){
             return {
                 status:500,
@@ -73,7 +74,9 @@ export class ApiLoginEndpointService {
         else if(resp.status=="ok"){
             return {
                 status:200,
-                explain:resp.explanation
+                explain:resp.explanation,
+                token:resp.data.token,
+                refreshToken:resp.data.refreshToken
             }
         }
     }

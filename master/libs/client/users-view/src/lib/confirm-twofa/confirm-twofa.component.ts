@@ -48,10 +48,14 @@ export class ConfirmTwofaComponent implements OnInit {
       authcode: this.twofactorgroup.get("authcode")?.value,
       authurl: this.qrcodeid
     }).subscribe((val: any) => {
-      if(val.status==200&&val.explain=="call finished"){
+      console.log(val);
+      if(val.status==500&&val.explain=="Verification code is incorrect"){
+        this.snackbar.openFromComponent(SnackbarAlertComponent,{duration: 5000, panelClass: ['red-snackbar'], data: {message:"Incorrect Code", icon:"error_outline"}});
+      }
+      else if(val.status==200&&val.explain=="call finished"){
         this.cookieservice.delete("PURELORA_PREVERIFICATION_TOKEN");
         this.snackbar.openFromComponent(SnackbarAlertComponent,{duration: 5000, panelClass: ['green-snackbar'], data: {message:"2FA Added, Please log in", icon:"check_circle"}});
-        this.router.navigate(["/login"]);
+        this.router.navigate(["/"]);
       }
     });
 

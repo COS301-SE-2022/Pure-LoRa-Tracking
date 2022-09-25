@@ -631,16 +631,31 @@ export class ThingsboardThingsboardUserService {
       if (error.response == undefined) return error.code;
       return error;
     });
-
-    // console.log("IM ALSO HERE",resp.data?.configs?.TOTP!=undefined);
-
     
+    if(resp.data!=undefined){
+      return {
+        status: resp.status,
+        explanation: 'ok',
+      }
+    }
+
     if (resp == 'ECONNREFUSED')
     return {
       status: 500,
-      explanation: resp,
+      explanation: resp.response.data,
     };
-    
+    else if(resp.response?.data.message=="Verification code is incorrect"){
+      return {
+        status:400,
+        explanation: "Verification code is incorrect",
+      }
+    }
+    else if(resp.response?.data.message=="2FA provider is already configured"){
+      return {
+        status:400,
+        explanation: "2FA provider is already configured",
+      }
+    }
     else if(resp.status != 200) {
       return {
         status: 500,
@@ -648,17 +663,15 @@ export class ThingsboardThingsboardUserService {
       }
     }
 
-    if(resp.data?.configs?.TOTP==undefined){
+    if(resp.response?.data?.configs?.TOTP==undefined){
       return {
         status: 500,
         explanation: "Something went wrong"
       }
     }
-    
     return {
-      status: resp.status,
-      explanation: 'ok',
-      data: resp.data
+      status: 500,
+      explanation: 'fail'
     }
 
   }
@@ -668,8 +681,8 @@ export class ThingsboardThingsboardUserService {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + token,
     };
-    const resp = await firstValueFrom(this.httpService.post(this.ThingsBoardURL + "/2fa/account/config?verificationCode="+authcode, {
-      providerType: "TOTP",
+    const resp = await firstValueFrom(this.httpService.post(this.ThingsBoardURL + "/auth/2fa/verification/check?providerType=TOTP&verificationCode="+authcode, {
+      
     }, {
       headers: headersReq
     })).catch((error) => {
@@ -678,13 +691,26 @@ export class ThingsboardThingsboardUserService {
     });
 
 
-    console.log('resp.data :>> ', resp.data);
+    if(resp.data!=undefined){
+      return {
+        status: resp.status,
+        explanation: 'ok',
+        data:resp.data
+      }
+    }
 
     if (resp == 'ECONNREFUSED')
     return {
       status: 500,
       explanation: resp,
     };
+
+    else if(resp.response.data.status==400&&resp.response.data.message=="Verification code is incorrect"){
+      return {
+        status: 400,
+        explanation: "Verification code is incorrect"
+      }
+    }
     
     else if(resp.status != 200) {
       return {
@@ -701,9 +727,8 @@ export class ThingsboardThingsboardUserService {
     }
     
     return {
-      status: resp.status,
-      explanation: 'ok',
-      data: resp.data
+      status: 500,
+      explanation: "Something went wrong"
     }
   }
 

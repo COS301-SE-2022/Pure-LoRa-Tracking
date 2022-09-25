@@ -1676,6 +1676,12 @@ export class ThingsboardThingsboardClientService {
 
   async verify2FA(token:string,code:string,authurl:string): Promise<thingsboardResponse> {
     const resp= await this.userService.verify2FA(token,code,authurl);
+    if(resp.status==400&&resp.explanation=="Verification code is incorrect"){
+      return {
+        status: 'fail',
+        explanation: resp.explanation,
+      };
+    }
     if (resp.status != 200)
       return {
         status: 'fail',
@@ -1691,6 +1697,13 @@ export class ThingsboardThingsboardClientService {
 
   async check2FA(token:string,authcode:string): Promise<thingsboardResponse> {
     const resp= await this.userService.check2fa(token,authcode);
+    if(resp.status==400&&resp.explanation=="Verification code is incorrect"){
+      return {
+        status: 'fail',
+        explanation: resp.explanation,
+      };
+    }
+
     if (resp.status != 200)
       return {
         status: 'fail',
