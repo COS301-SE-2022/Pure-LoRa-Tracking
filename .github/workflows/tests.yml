@@ -1,4 +1,4 @@
-name: StaticTests
+name: MainTests
 
 # Controls when the workflow will run
 on:
@@ -63,6 +63,7 @@ jobs:
         working-directory: ./master/
         run: |
           yarn nx run-many --target=test --all --skip-nx-cache --parallel --coverage
+          yarn nx run-many --target=build --all --skip-nx-cacahe --parallel
           yarn nx run-many --target=lint --all --skip-nx-cache --parallel
           yarn nx run-many --target=e2e --all --skip-nx-cache --parallel --coverage
           
