@@ -25,6 +25,12 @@ export class ApiLoginEndpointController {
   async do2faVerify(@Body() content:twofaauth):Promise<userLoginResponse>{
     return await this.apiLoginEndpointService.do2faAuth(content);
   }
+
+  @Post('2faCheck')
+  async do2faCheck(@Body() content:twofaauth):Promise<userLoginResponse>{
+    return await this.apiLoginEndpointService.do2faCheck(content);
+  }
+
 }
 
 @Controller('logout')

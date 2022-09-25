@@ -632,14 +632,15 @@ export class ThingsboardThingsboardUserService {
       return error;
     });
 
-    console.log("IM ALSO HERE",resp);
+    // console.log("IM ALSO HERE",resp.data?.configs?.TOTP!=undefined);
 
+    
     if (resp == 'ECONNREFUSED')
-      return {
-        status: 500,
-        explanation: resp,
-      };
-
+    return {
+      status: 500,
+      explanation: resp,
+    };
+    
     else if(resp.status != 200) {
       return {
         status: 500,
@@ -647,6 +648,13 @@ export class ThingsboardThingsboardUserService {
       }
     }
 
+    if(resp.data?.configs?.TOTP==undefined){
+      return {
+        status: 500,
+        explanation: "Something went wrong"
+      }
+    }
+    
     return {
       status: resp.status,
       explanation: 'ok',
@@ -655,6 +663,49 @@ export class ThingsboardThingsboardUserService {
 
   }
 
+  async check2fa(token: string,authcode:string): Promise<twofaResponse> {
+    const headersReq = {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + token,
+    };
+    const resp = await firstValueFrom(this.httpService.post(this.ThingsBoardURL + "/2fa/account/config?verificationCode="+authcode, {
+      providerType: "TOTP",
+    }, {
+      headers: headersReq
+    })).catch((error) => {
+      if (error.response == undefined) return error.code;
+      return error;
+    });
+
+
+    console.log('resp.data :>> ', resp.data);
+
+    if (resp == 'ECONNREFUSED')
+    return {
+      status: 500,
+      explanation: resp,
+    };
+    
+    else if(resp.status != 200) {
+      return {
+        status: 500,
+        explanation: "Something went wrong"
+      }
+    }
+
+    if(resp.data?.configs?.TOTP==undefined){
+      return {
+        status: 500,
+        explanation: "Something went wrong"
+      }
+    }
+    
+    return {
+      status: resp.status,
+      explanation: 'ok',
+      data: resp.data
+    }
+  }
 
 }
 

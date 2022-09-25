@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ThingsboardThingsboardClientService } from '@lora/thingsboard-client';
-import { Input2Fa, refreshTokenLogin, userInitLoginResponse, userLoginData, userLoginResponse } from '../api-login.interface';
+import { Input2Fa, refreshTokenLogin, userInitLoginResponse, userLoginData, userLoginResponse,check2FAInput } from '../api-login.interface';
 import { execFile } from 'child_process';
 
 @Injectable()
@@ -54,13 +54,28 @@ export class ApiLoginEndpointService {
         }
         else if(resp.status=="ok"){
             return {
-                status:500,
+                status:200,
                 explain:resp.explanation
             }
         }
 
+    }
 
+    async do2faCheck(content:check2FAInput):Promise<userLoginResponse>{
+        const resp=await this.thingsboardClient.check2FA(content.token,content.authcode);
         
+        if(resp.status=="fail"){
+            return {
+                status:500,
+                explain:resp.explanation
+            }
+        }
+        else if(resp.status=="ok"){
+            return {
+                status:200,
+                explain:resp.explanation
+            }
+        }
     }
 
     async doRefreshTokenLogin(body:refreshTokenLogin):Promise<userLoginResponse>{

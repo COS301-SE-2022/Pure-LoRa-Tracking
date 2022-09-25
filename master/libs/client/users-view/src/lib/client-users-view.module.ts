@@ -11,6 +11,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthenticationViewComponent } from './authentication-view/authentication-view.component';
 import { ConfirmTwofaComponent } from './confirm-twofa/confirm-twofa.component';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { QRCodeModule } from 'angularx-qrcode';
 export const clientUsersViewRoutes: Route[] = [];
 
@@ -22,12 +23,13 @@ export const clientUsersViewRoutes: Route[] = [];
     ReactiveFormsModule,
     FormsModule,
     HttpClientModule,
+    MatSnackBarModule,
     ClientSharedUiComponentsUiModule,
     MatIconModule,
-    QRCodeModule
+    QRCodeModule,
   ],
   declarations: [LoginComponent, AuthenticationViewComponent, ConfirmTwofaComponent],
   exports: [LoginComponent, AuthenticationViewComponent,ConfirmTwofaComponent],
-  providers: [CookieService],
+  providers: [CookieService,MatSnackBar],
 })
 export class ClientUsersViewModule {}

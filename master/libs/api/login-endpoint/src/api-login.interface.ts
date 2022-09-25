@@ -38,3 +38,8 @@ export interface twofaauth{
     authcode:string,
     authurl:string
 }
+
+export interface check2FAInput{
+    token:string,
+    authcode:string
+}

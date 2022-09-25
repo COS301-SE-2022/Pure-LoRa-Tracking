@@ -5,9 +5,9 @@
                 <form [formGroup]="twofactorgroup" id="auth-content">
                     <qrcode *ngIf="qrcodeid!==''" [width]="256" [errorCorrectionLevel]="'M'" [qrdata]="qrcodeid"></qrcode>
                     <p id="intruction" [align]="'center'">
-                        We have detected you have not set up 2FA. <br/>
+                        Please set up 2FA before using your account <br/>
                         Please scan the QR code with your authenticator app and enter the code below. <br/>
-                        <span *ngIf="rawsecret">Alternatively use the secret {{rawsecret}} with your authenticator app.</span>
+                        <span *ngIf="rawsecret">Alternatively use the secret {{rawsecret}}<br> with your authenticator app.</span>
                     </p>
                     <mat-form-field>
                         <input matInput formControlName="authcode" type="text" id="auth-code">

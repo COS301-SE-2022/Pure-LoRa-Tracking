@@ -1689,6 +1689,21 @@ export class ThingsboardThingsboardClientService {
     };
   }
 
+  async check2FA(token:string,authcode:string): Promise<thingsboardResponse> {
+    const resp= await this.userService.check2fa(token,authcode);
+    if (resp.status != 200)
+      return {
+        status: 'fail',
+        explanation: resp.explanation,
+      };
+
+    return {
+      status: 'ok',
+      explanation: 'call finished',
+      data: resp.data,
+    };
+  }
+
 }
 
 /* data is required to be any due to the many possible response data types */
