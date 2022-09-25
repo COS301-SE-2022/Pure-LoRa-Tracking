@@ -86,6 +86,10 @@ export interface GetGatewaysInput {
   customerID: string;
 }
 
+export interface GetMoreInfoInput {
+  token : string;
+  deviceEUI: string;
+}
 
 export interface UserSenserDataInput {
   token: string;

@@ -1,38 +1,42 @@
 <div>
-    <mat-list>
-        <div mat-subheader>
-            External services
+  <mat-list>
+    <div mat-subheader>
+      External services (Updating in {{ timeLeft }} seconds)
+    </div>
+    <mat-divider></mat-divider>
+    <ng-container *ngFor="let service of externalServices">
+      <mat-list-item>
+        <div mat-line class="service-item">
+          {{ service.name }}
+          <a
+            *ngIf="service.link"
+            mat-icon-button
+            class="small-icon-btn"
+            href="{{ service.link }}"
+            target="_blank"
+          >
+            <mat-icon class="link-icon">open_in_new</mat-icon>
+          </a>
+          <span class="spacer"></span>
+          <mat-chip-list [selectable]="false">
+            <mat-chip
+              *ngIf="service.status === true; else out"
+              color="primary"
+              selected
+            >
+              Operational
+              <mat-icon class="chip-icon"> check_circle_outline </mat-icon>
+            </mat-chip>
+            <ng-template #out>
+              <mat-chip color="warn" selected>
+                Unreachable
+                <mat-icon class="chip-icon"> error_outline </mat-icon>
+              </mat-chip>
+            </ng-template>
+          </mat-chip-list>
         </div>
-        <mat-divider></mat-divider>
-        <ng-container *ngFor="let service of externalServices">
-            <mat-list-item>
-                <div mat-line class="service-item">
-                    {{service.name}}
-                    <a *ngIf="service.link" mat-icon-button class="small-icon-btn" href={{service.link}} target="_blank">
-                        <mat-icon class="link-icon">open_in_new</mat-icon>
-                    </a>
-                    <span class="spacer"></span>
-                    <mat-chip-list [selectable]="false">
-                        <mat-chip *ngIf="service.status===true; else out" color="primary" selected>
-                            Operational
-                            <mat-icon class="chip-icon">
-                                check_circle_outline
-                            </mat-icon>
-                        </mat-chip>
-                        <ng-template #out>
-                            <mat-chip color="warn" selected>
-                                Outage
-                                <mat-icon class="chip-icon">
-                                    error_outline
-                                </mat-icon>
-                            </mat-chip>
-                        </ng-template>
-                        
-                    </mat-chip-list>
-                </div>
-            </mat-list-item>
-            <mat-divider></mat-divider>
-        </ng-container>
-
-    </mat-list>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+    </ng-container>
+  </mat-list>
 </div>

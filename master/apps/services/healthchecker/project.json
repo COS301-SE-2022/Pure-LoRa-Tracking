@@ -1,0 +1,51 @@
+{
+  "sourceRoot": "apps/services/healthchecker/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/node:webpack",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/services/healthchecker",
+        "main": "apps/services/healthchecker/src/main.ts",
+        "tsConfig": "apps/services/healthchecker/tsconfig.app.json",
+        "assets": ["apps/services/healthchecker/src/assets"]
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false,
+          "fileReplacements": [
+            {
+              "replace": "apps/services/healthchecker/src/environments/environment.ts",
+              "with": "apps/services/healthchecker/src/environments/environment.prod.ts"
+            }
+          ]
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/node:node",
+      "options": {
+        "buildTarget": "services-healthchecker:build"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/services/healthchecker/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/services/healthchecker"],
+      "options": {
+        "jestConfig": "apps/services/healthchecker/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

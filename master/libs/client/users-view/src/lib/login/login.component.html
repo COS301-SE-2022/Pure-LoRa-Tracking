@@ -1,5 +1,6 @@
 <div class="container">
     <div class="wrapper">
+        <img id="login-logo" src="assets/Logos/logo.svg" alt="Logo">
         <div class="loginform">
             <form [formGroup]="logingroup" id="login-content">
                 <mat-form-field>
@@ -10,12 +11,15 @@
                     <mat-label>Password</mat-label>
                     <input matInput type="password" formControlName="password" placeholder="Password">
                 </mat-form-field>
-                <div id="login-button">
-                    <button mat-flat-button color="primary" (click)="login()">Login</button>
+                <div id="button-container">
+                    <div id="login-button">
+                        <button mat-flat-button color="primary" (click)="login()">Login</button>
+                    </div>
+                    <div>
+                        <button mat-button color="primary" (click)="reset()">Reset password</button>
+                    </div>
                 </div>
-                <div>
-                    <button mat-button (click)="reset()">Reset password</button>
-                </div>
+                
             </form>
         </div>
     </div>

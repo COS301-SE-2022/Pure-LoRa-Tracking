@@ -1687,6 +1687,64 @@ export class ThingsboardThingsboardClientService {
       data: resp.data,
     };
   }
+  
+  async generate2FA(token:string): Promise<thingsboardResponse> {
+    const resp= await this.userService.generate2FA(token);
+    if (resp.status != 200)
+      return {
+        status: 'fail',
+        explanation: resp.explanation,
+      };
+
+    return {
+      status: 'ok',
+      explanation: 'call finished',
+      data: resp.data,
+    };
+  }
+
+  async verify2FA(token:string,code:string,authurl:string): Promise<thingsboardResponse> {
+    const resp= await this.userService.verify2FA(token,code,authurl);
+    if(resp.status==400&&resp.explanation=="Verification code is incorrect"){
+      return {
+        status: 'fail',
+        explanation: resp.explanation,
+      };
+    }
+    if (resp.status != 200)
+      return {
+        status: 'fail',
+        explanation: resp.explanation,
+      };
+
+    return {
+      status: 'ok',
+      explanation: 'call finished',
+      data: resp.data,
+    };
+  }
+
+  async check2FA(token:string,authcode:string): Promise<thingsboardResponse> {
+    const resp= await this.userService.check2fa(token,authcode);
+    if(resp.status==400&&resp.explanation=="Verification code is incorrect"){
+      return {
+        status: 'fail',
+        explanation: resp.explanation,
+      };
+    }
+
+    if (resp.status != 200)
+      return {
+        status: 'fail',
+        explanation: resp.explanation,
+      };
+
+    return {
+      status: 'ok',
+      explanation: 'call finished',
+      data: resp.data,
+    };
+  }
 
   //////////////////////////////////////////////////////////////////
   async resetLogin(email:string) {
@@ -1694,8 +1752,7 @@ export class ThingsboardThingsboardClientService {
     Logger.log("Login Reset Attempted:\n"+response.explanation);
   }
 }
-
-/* data is required to be any due to the many possible response data types */
+  /* data is required to be any due to the many possible response data types */
 
 export interface thingsboardResponse {
   status: 'ok' | 'fail';
