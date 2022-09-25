@@ -21,7 +21,7 @@ export class ThingsboardThingsboardTelemetryService {
   async getTelemetry(
     DeviceID: string,
     DeviceProfile: string,
-    ptype = 'tri',
+    ptype = 'TRI',
     timeStart?: number,
     timeStop?: number
   ): Promise<TelemetryResponse> {
@@ -181,7 +181,7 @@ export class ThingsboardThingsboardTelemetryService {
 
   //////////////////////////////////////////////////////////////////
 
-  buildTelemetryResults(items, pType='tri'): TelemetryResult[] {
+  buildTelemetryResults(items, pType='TRI'): TelemetryResult[] {
     if (items['longitude'] == undefined) return [];
     const TelList: TelemetryResult[] = new Array<TelemetryResult>();
     for (let i = 0; i < items['longitude'].length; i++) {
