@@ -3,7 +3,8 @@
 # currently it only contains the base setup commands
 
 # goes to base directory of the repo
-cd $(git rev-parse --show-toplevel)/master
+export INSTALL_DIR=$(git rev-parse --show-toplevel)
+cd $INSTALL_DIR/master
 # load environment variables from .env file
 export $(grep -v '^#' .env | xargs)
 # installs nginx
