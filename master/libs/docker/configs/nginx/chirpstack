@@ -1,0 +1,6 @@
+server {
+        server_name rabbitmq.loratracking.co.za;
+        location / {
+                proxy_pass http: //localhost:15672;
+        }
+}

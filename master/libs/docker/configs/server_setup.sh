@@ -10,6 +10,7 @@ export $(grep -v '^#' .env | xargs)
 apt update && apt install nginx
 # copies over nginx configs
 cp libs/docker/configs/nginx/* /etc/nginx/sites-enabled
+sed -i 's/<<DOMAIN>>/'$DOMAIN'/g' /etc/nginx/sites-enabled/*
 # install pm2 globally (runs backend)
 yarn global add pm2
 # build the project 
