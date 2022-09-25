@@ -2,7 +2,6 @@
     background-color: white;
    padding: 1rem;
    border-radius: 0.5rem;
-   
 }
 
 .container {
@@ -26,3 +25,15 @@
 #login-button {
     margin-bottom: 0.5em;
 }
+
+#response{
+    color: red;
+    margin:0;
+    text-align: center;
+}
+
+#response-container{
+    min-width: 100%;
+    width: 0;
+}
+

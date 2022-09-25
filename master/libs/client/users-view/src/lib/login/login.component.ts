@@ -11,6 +11,8 @@ import { Router } from '@angular/router';
 export class LoginComponent implements OnInit {
 
   logingroup:UntypedFormGroup;
+  responseMessage = "\n";
+
   constructor(private fb:UntypedFormBuilder,private http:HttpClient,private cookieservice:CookieService,private router:Router) {
     this.logingroup=this.fb.group({
       email:['',[Validators.required,Validators.email]],
@@ -38,6 +40,7 @@ export class LoginComponent implements OnInit {
 
   //handle login logic
   login():void{
+    console.log("Triggered");
     if(this.logingroup.valid){
       this.http.post("api/login/user",({
         username:this.logingroup.get("email")?.value,
@@ -48,10 +51,13 @@ export class LoginComponent implements OnInit {
           this.cookieservice.set("PURELORA_TOKEN",val.token,14);
           this.cookieservice.set("PURELORA_REFRESHTOKEN",val.refreshToken,14);
           this.router.navigate(["reserve"]);
+        } else {
+          this.responseMessage = "Invalid login information.";
         }
       });
+    } else {
+      this.responseMessage = this.logingroup.controls['email'].invalid ? 'Please enter a valid e-mail address.' : (this.logingroup.controls['password'].invalid) ? 'Please enter a password.' : '\n';
     }
-    
   } 
   
   reset():void{

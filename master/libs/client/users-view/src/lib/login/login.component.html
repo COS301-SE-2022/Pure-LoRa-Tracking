@@ -1,20 +1,25 @@
-<div class="container">
+<div class="container" tabindex="5" (keyup.enter)="login()">
     <div class="wrapper">
         <div class="loginform">
-            <form [formGroup]="logingroup" id="login-content">
+            <form [formGroup]="logingroup" id="login-content" (ngSubmit)="login()">
                 <mat-form-field>
                     <mat-label>Email</mat-label>
-                    <input matInput type="email" formControlName="email" placeholder="Email">
+                    <input matInput type="email" formControlName="email" placeholder="Email" tabindex="1" autofocus>
                 </mat-form-field>
                 <mat-form-field>
                     <mat-label>Password</mat-label>
-                    <input matInput type="password" formControlName="password" placeholder="Password">
+                    <input matInput type="password" formControlName="password" placeholder="Password" tabindex="2">
                 </mat-form-field>
                 <div id="login-button">
-                    <button mat-flat-button color="primary" (click)="login()">Login</button>
+                    <button mat-flat-button color="primary" type="submit" tabindex="3" [disabled]="logingroup.invalid">Login</button>
                 </div>
                 <div>
-                    <button mat-button (click)="reset()">Reset password</button>
+                    <button mat-button (click)="reset()" tabindex="4"><u>Reset password</u></button>
+                </div>
+                <div id="response-container">
+                    <p id="response">
+                        {{responseMessage}}
+                    </p>
                 </div>
             </form>
         </div>
