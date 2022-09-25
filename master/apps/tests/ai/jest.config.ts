@@ -1,4 +1,5 @@
-module.exports = {
+/* eslint-disable */
+export default {
   displayName: 'tests-ai',
   preset: '../../../jest.preset.js',
   globals: {
