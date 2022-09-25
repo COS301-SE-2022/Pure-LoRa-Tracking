@@ -13,6 +13,7 @@ interface ExternalServices {
   styleUrls: ['./status-page.component.scss'],
 })
 export class StatusPageComponent implements OnInit {
+  externalServices: ExternalServices[] = [];
   constructor(private http: HttpClient) {
     console.log("placeholder");
   }
@@ -55,6 +56,6 @@ export class StatusPageComponent implements OnInit {
 
 
 
-  externalServices: ExternalServices[] = [];
+ 
 
 }
