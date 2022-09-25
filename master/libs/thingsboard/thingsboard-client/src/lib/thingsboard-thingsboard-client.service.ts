@@ -918,7 +918,7 @@ export class ThingsboardThingsboardClientService {
 
   async v1SendTelemetry(
     accessToken: string,
-    data: any
+    data: {location:{latitude:number, longitude:number}, pType:string}
   ): Promise<{ status: number; explanation: string }> {
     const resp = await this.telemetryService.V1sendJsonTelemetry(
       accessToken,
