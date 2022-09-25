@@ -4,7 +4,7 @@ import { firstValueFrom } from 'rxjs';
 @Injectable()
 export class ThingsboardThingsboardUserService {
   private ThingsBoardURL = process.env.TB_URL || 'http://localhost:8080/api';
-  constructor(private httpService: HttpService) {}
+  constructor(private httpService: HttpService) { }
 
   /////////////////////////////////////////////////////////
 
@@ -227,7 +227,7 @@ export class ThingsboardThingsboardUserService {
     authority: 'TENANT_ADMIN' | 'CUSTOMER_USER',
     firstName: string,
     lastName: string,
-    reserves: {reserveName:string, reserveID:string}[]
+    reserves: { reserveName: string, reserveID: string }[]
   ): Promise<UserResponse> {
     const headersReq = {
       'Content-Type': 'application/json',
@@ -236,7 +236,7 @@ export class ThingsboardThingsboardUserService {
 
     const resp = await firstValueFrom(
       this.httpService.post(
-        this.ThingsBoardURL + '/user?sendActivationMail=false',
+        this.ThingsBoardURL + '/user?sendActivationMail=true',
         {
           email: email,
           customerId: {
@@ -287,7 +287,7 @@ export class ThingsboardThingsboardUserService {
     email: string,
     firstName: string,
     lastName: string,
-    reserves: {reserveName:string, reserveID:string}[]
+    reserves: { reserveName: string, reserveID: string }[]
   ): Promise<UserResponse> {
     const headersReq = {
       'Content-Type': 'application/json',
@@ -298,7 +298,7 @@ export class ThingsboardThingsboardUserService {
 
     const resp = await firstValueFrom(
       this.httpService.post(
-        this.ThingsBoardURL + '/user?sendActivationMail=false',
+        this.ThingsBoardURL + '/user?sendActivationMail=true',
         {
           id: {
             id: entityID,
@@ -364,9 +364,9 @@ export class ThingsboardThingsboardUserService {
     const resp = await firstValueFrom(
       this.httpService.get(
         this.ThingsBoardURL +
-          '/customer/' +
-          custID +
-          '/users?page=0&pageSize=100',
+        '/customer/' +
+        custID +
+        '/users?page=0&pageSize=100',
         {
           headers: headersReq,
         }
@@ -405,9 +405,9 @@ export class ThingsboardThingsboardUserService {
     const resp = await firstValueFrom(
       this.httpService.post(
         this.ThingsBoardURL +
-          '/user/' +
-          userID +
-          '/userCredentialsEnabled?userCredentialsEnabled=false',
+        '/user/' +
+        userID +
+        '/userCredentialsEnabled?userCredentialsEnabled=false',
         {},
         {
           headers: headersReq,
@@ -446,9 +446,9 @@ export class ThingsboardThingsboardUserService {
     const resp = await firstValueFrom(
       this.httpService.post(
         this.ThingsBoardURL +
-          '/user/' +
-          userID +
-          '/userCredentialsEnabled?userCredentialsEnabled=true',
+        '/user/' +
+        userID +
+        '/userCredentialsEnabled?userCredentialsEnabled=true',
         {},
         {
           headers: headersReq,
@@ -534,7 +534,7 @@ export class ThingsboardThingsboardUserService {
 
     const resp = await firstValueFrom(
       this.httpService.post(
-        this.ThingsBoardURL + "/user?sendActivationEmail=false",
+        this.ThingsBoardURL + "/user?sendActivationMail=true",
         {
           id: {
             id: userID,
@@ -581,6 +581,158 @@ export class ThingsboardThingsboardUserService {
     };
   }
 
+  async generate2FA(token: string): Promise<twofaResponse> {
+    const headersReq = {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + token,
+    };
+    const resp = await firstValueFrom(this.httpService.post(this.ThingsBoardURL + "/2fa/account/config/generate?providerType=TOTP", {}, {
+      headers: headersReq
+    })).catch((error) => {
+      if (error.response == undefined) return error.code;
+      return error;
+    });
+
+    if (resp == 'ECONNREFUSED')
+      return {
+        status: 500,
+        explanation: resp,
+      };
+
+    else if(resp.status != 200) {
+      return {
+        status: 500,
+        explanation: "Something went wrong"
+      }
+    }
+
+    return {
+      status: resp.status,
+      explanation: 'ok',
+      data: resp.data
+    }
+
+
+
+  }
+
+  async verify2FA(token: string, code: string,authurl:string): Promise<twofaResponse> {
+    const headersReq = {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + token,
+    };
+    const resp = await firstValueFrom(this.httpService.post(this.ThingsBoardURL + "/2fa/account/config?verificationCode="+code, {
+      providerType: "TOTP",
+      useByDefault: true,
+      authUrl:authurl
+    }, {
+      headers: headersReq
+    })).catch((error) => {
+      if (error.response == undefined) return error.code;
+      return error;
+    });
+    
+    if(resp.data!=undefined){
+      return {
+        status: resp.status,
+        explanation: 'ok',
+      }
+    }
+
+    if (resp == 'ECONNREFUSED')
+    return {
+      status: 500,
+      explanation: resp.response.data,
+    };
+    else if(resp.response?.data.message=="Verification code is incorrect"){
+      return {
+        status:400,
+        explanation: "Verification code is incorrect",
+      }
+    }
+    else if(resp.response?.data.message=="2FA provider is already configured"){
+      return {
+        status:400,
+        explanation: "2FA provider is already configured",
+      }
+    }
+    else if(resp.status != 200) {
+      return {
+        status: 500,
+        explanation: "Something went wrong"
+      }
+    }
+
+    if(resp.response?.data?.configs?.TOTP==undefined){
+      return {
+        status: 500,
+        explanation: "Something went wrong"
+      }
+    }
+    return {
+      status: 500,
+      explanation: 'fail'
+    }
+
+  }
+
+  async check2fa(token: string,authcode:string): Promise<twofaResponse> {
+    const headersReq = {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + token,
+    };
+    const resp = await firstValueFrom(this.httpService.post(this.ThingsBoardURL + "/auth/2fa/verification/check?providerType=TOTP&verificationCode="+authcode, {
+      
+    }, {
+      headers: headersReq
+    })).catch((error) => {
+      if (error.response == undefined) return error.code;
+      return error;
+    });
+
+
+    if(resp.data!=undefined){
+      return {
+        status: resp.status,
+        explanation: 'ok',
+        data:resp.data
+      }
+    }
+
+    if (resp == 'ECONNREFUSED')
+    return {
+      status: 500,
+      explanation: resp,
+    };
+
+    else if(resp.response.data.status==400&&resp.response.data.message=="Verification code is incorrect"){
+      return {
+        status: 400,
+        explanation: "Verification code is incorrect"
+      }
+    }
+    
+    else if(resp.status != 200) {
+      return {
+        status: 500,
+        explanation: "Something went wrong"
+      }
+    }
+
+    if(resp.data?.configs?.TOTP==undefined){
+      return {
+        status: 500,
+        explanation: "Something went wrong"
+      }
+    }
+    
+    return {
+      status: 500,
+      explanation: "Something went wrong"
+    }
+  }
+
+  
   async resetLogin(email:string) {
     const resp = await firstValueFrom(
       this.httpService.post(
@@ -610,9 +762,23 @@ export class ThingsboardThingsboardUserService {
       explanation: 'ok',
     };
   }
+
 }
 
+
+
+
+
+
 /////////////////////////////////////////////////////////////////
+
+export interface twofaResponse {
+  status: number;
+  explanation: string;
+  data?: any;
+}
+
+
 
 export interface UserResponse {
   status: number;

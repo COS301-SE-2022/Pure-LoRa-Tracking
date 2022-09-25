@@ -4,7 +4,7 @@
         <master-reserve-map #reservemap [Reserve]="Reserve" [ShowPolygon]="ShowPolygon" [LatestData]="LastestHistorical" [ViewMapTypeInput]="ViewMapTypeInput"></master-reserve-map>
     </div>
     <div id="container">
-        <master-reserve-panel id="reservePanel" class="panel" [Devices]="LastestHistorical" [GateWays]="Gateways" [selectedReserve]="selectedReserveId" (selectedReserveChange)="updateReserve($event)" [reserveList]="reservesList"></master-reserve-panel>
+        <master-reserve-panel id="reservePanel" class="panel" [Devices]="LastestHistorical" [GateWays]="Gateways" [selectedReserve]="selectedReserveId" (selectedReserveChange)="updateReserve($event)" (proccessingTypeChange)="typeChange($event)" [reserveList]="reservesList"></master-reserve-panel>
         <master-map-panel class="panel" (ShowPolygon)="ShowPolygon=$event" (ViewType)="updateViewMapType($event)"></master-map-panel>
     </div>
 </div>
