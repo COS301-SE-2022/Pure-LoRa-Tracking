@@ -16,23 +16,27 @@ export class AiAiProcessingService {
         // msgq.runRabbit();
     };
 
-    async processPerimeterRequest(body: {data: { location?: any, name?: string, device?: string, newName?: string, action:string }}): Promise<any> {
+    async processPerimeterRequest(body: { data: { location?: any, name?: string, device?: string, newName?: string, action: string } }): Promise<any> {
         //Logger.log("LOG PERIMETER")
         //Logger.log(body.data);
         if (body.data.name == undefined) {
             return "NO NAME FAIL"
         }
         if (body.data.action == 'create') {
-            Logger.log('create perimeter')
+            this.serviceBus.RemoveDeviceFromPerimeter({ deviceID: body.data.device });
             this.serviceBus.saveDevicePerimeterToDB({ perimeter: body.data.location.features[0].geometry.coordinates[0], name: body.data.name, deviceID: body.data.device })
         } else if (body.data.action == 'updatePerimeter') {
-            this.serviceBus.updateDevicePerimeter({ perimeter: body.data.location.features[0].geometry.coordinates[0], name: body.data.name })
+            if (body.data.location == undefined)
+                return { status: 400, explanation: "noop" }
+            this.serviceBus.updateDevicePerimeter({ deviceID: body.data.device, perimeter: body.data.location.features[0].geometry.coordinates[0], name: body.data.name })
         } else if (body.data.action == 'updateName') {
+            if (body.data.location == undefined)
+                return { status: 400, explanation: "noop" }
             this.serviceBus.updateDeviceReserveName({ name: body.data.name, newName: body.data.newName })
         } else {
-            return{status:400, explanation:"noop"}
+            return { status: 400, explanation: "noop" }
         }
-        return{status:200, explanation:"call finished"}
+        return { status: 200, explanation: "call finished" }
     }
 
     async forwardData(uplinkData: UplinkEvent, next: Subject<string>) {

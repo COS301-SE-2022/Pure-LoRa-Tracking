@@ -1663,7 +1663,8 @@ export class ThingsboardThingsboardClientService {
     const CustInfo = await this.reserveService.CustomerInfo(reserveID);
     this.deviceService.setToken(this.token);
     const AccessToken = await this.deviceService.GetAccessToken(deviceID);
-    const mongoPair = { device: AccessToken.data.credentialsId, name: CustInfo.data.title, action : "updateName" };
+    //console.log(CustInfo.data.additionalInfo)
+    const mongoPair = { device: AccessToken.data.credentialsId, location:CustInfo.data.additionalInfo.location, name: CustInfo.data.title, action : "create" };
     this.serviceBus.sendMongoDevicePerimeter(mongoPair);
 
     return {

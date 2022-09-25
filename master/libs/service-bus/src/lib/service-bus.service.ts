@@ -17,7 +17,7 @@ export class ServiceBusService {
             return error;
         });
 
-        console.log(resp)
+       // console.log(resp)
 
         if (resp == 'ECONNREFUSED')
             return {
