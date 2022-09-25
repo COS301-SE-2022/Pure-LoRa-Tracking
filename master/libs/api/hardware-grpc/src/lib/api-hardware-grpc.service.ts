@@ -52,15 +52,15 @@ export class ApiHardwareGrpcService {
     const gateways = eventData.getRxInfoList();
     this.locationService.calculateLocation(gateways, thingsBoardDeviceToken);
 
-    console.log(
-      new Date().toISOString(),
-      '[hardware-endpoint] Uplink from:',
-      eventData.getDeviceName(),
-      '|',
-      thingsBoardDeviceToken
-    );
+    // console.log(
+    //   new Date().toISOString(),
+    //   '[hardware-endpoint] Uplink from:',
+    //   eventData.getDeviceName(),
+    //   '|',
+    //   thingsBoardDeviceToken
+    // );
 
-    this.tbClientService.v1SendTelemetry(thingsBoardDeviceToken, dataJSON);
+    // this.tbClientService.v1SendTelemetry(thingsBoardDeviceToken, dataJSON);
   }
 
   deviceJoinProcess(content: Uint8Array): acknowledge {
