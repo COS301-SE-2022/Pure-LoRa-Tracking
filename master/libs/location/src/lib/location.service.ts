@@ -192,7 +192,7 @@ export class LocationService {
         const location_Geodetic = this.ECEFToGeodetic(output[0], output[1], avgHeight);
         // console.log(location_Geodetic);
         const location = { latitude: location_Geodetic[0], longitude: location_Geodetic[1] };
-        this.tbClient.v1SendTelemetry(thingsBoardDeviceToken, {...location, ...{pType:"TRI"}});
+        this.tbClient.v1SendTelemetry(thingsBoardDeviceToken, {...location, ...{ts:Date.now(), pType:"TRI"}});
         return location;
     }
 
