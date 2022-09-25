@@ -49,6 +49,8 @@ export class ThingsboardThingsboardTelemetryService {
         '/values/timeseries';
     }
 
+    //console.log(url)
+
     const resp = await lastValueFrom(
       this.httpService.get(url, { headers: this.headersReq })
     ).catch((error) => {
@@ -182,10 +184,11 @@ export class ThingsboardThingsboardTelemetryService {
   //////////////////////////////////////////////////////////////////
 
   buildTelemetryResults(items, pType='TRI'): TelemetryResult[] {
+    console.log(items)
     if (items['longitude'] == undefined) return [];
     const TelList: TelemetryResult[] = new Array<TelemetryResult>();
     for (let i = 0; i < items['longitude'].length; i++) {
-      if(items['pType']==pType)
+      if(items['pType'][i]['value']==pType)
       TelList.push({
         longitude: items['longitude'][i]['value'],
         latitude: items['latitude'][i]['value'],
@@ -293,7 +296,6 @@ export class ThingsboardThingsboardTelemetryService {
       this.httpService.post(
         this.ThingsBoardURL + '/v1/' + accessToken + '/telemetry',
         {
-          ts: +new Date(),
           ...TelemetryJSON,
         },
         {}
