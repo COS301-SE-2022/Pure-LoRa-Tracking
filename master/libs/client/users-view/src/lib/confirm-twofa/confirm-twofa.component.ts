@@ -57,9 +57,11 @@ export class ConfirmTwofaComponent implements OnInit {
         this.snackbar.openFromComponent(SnackbarAlertComponent,{duration: 5000, panelClass: ['green-snackbar'], data: {message:"2FA Added, Please log in", icon:"check_circle"}});
         this.router.navigate(["/"]);
       }
+      else{
+        this.snackbar.openFromComponent(SnackbarAlertComponent,{duration: 5000, panelClass: ['red-snackbar'], data: {message:"Something went wrong", icon:"error_outline"}});
+      }
     });
 
-    // this.router.navigate(["reserve"]);
   }
 
 
