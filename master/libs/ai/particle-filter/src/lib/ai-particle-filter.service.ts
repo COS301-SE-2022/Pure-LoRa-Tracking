@@ -9,7 +9,7 @@ export class AiParticleFilterService extends AiProcessingStrategyService {
     async processData(reading: any): Promise<boolean> {
         console.log("Particle filter strategy")
         const result = await this.particleFilter(reading);
-        const obj = {location:{latitude: result[1], longitude: result[0]}, pType: this.pType}
+        const obj = {latitude: result[1], longitude: result[0], pType: this.pType}
         this.serviceBus.sendProcessedDatatoTB(reading.deviceToken,  obj);
         return false;
     }
