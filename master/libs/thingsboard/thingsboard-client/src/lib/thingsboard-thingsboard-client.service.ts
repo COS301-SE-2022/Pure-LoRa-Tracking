@@ -1746,14 +1746,12 @@ export class ThingsboardThingsboardClientService {
     };
   }
 
-
-
   //////////////////////////////////////////////////////////////////
   async resetLogin(email:string) {
     const response = await this.userService.resetLogin(email);
     Logger.log("Login Reset Attempted:\n"+response.explanation);
   }
-  
+}
   /* data is required to be any due to the many possible response data types */
 
 export interface thingsboardResponse {
