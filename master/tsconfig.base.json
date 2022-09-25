@@ -154,9 +154,6 @@
       ],
       "@master/client/users-view": ["libs/client/users-view/src/index.ts"],
       "@master/message-queue": ["libs/message-queue/src/index.ts"],
-      "@master/middleware/cookie-management": [
-        "libs/middleware/cookie-management/src/index.ts"
-      ],
       "@master/shared-interfaces": ["libs/shared-interfaces/src/index.ts"],
       "@processing/bus": ["libs/processing-api/processing-bus/src/index.ts"]
     }
