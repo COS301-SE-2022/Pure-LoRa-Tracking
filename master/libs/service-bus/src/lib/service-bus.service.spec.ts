@@ -1,3 +1,4 @@
+import { DatabaseProxyModule } from '@lora/database';
 import { HttpModule } from '@nestjs/axios';
 import { Test } from '@nestjs/testing';
 import { ServiceBusService } from './service-bus.service';
@@ -7,7 +8,7 @@ describe('ServiceBusService', () => {
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      imports:[HttpModule],
+      imports:[HttpModule,DatabaseProxyModule],
       providers: [ServiceBusService],
     }).compile();
 
