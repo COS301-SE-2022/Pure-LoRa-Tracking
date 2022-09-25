@@ -20,8 +20,9 @@ Using windows with a CP210x bridge as example:
 ## Installing boards for arduino
 Within the arduino IDE do the following:
 1. Open preferences (File -> Preferences)
-2. Locate the `Additional Board Manager URLs` field and add the url:  
- `https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json` 
+2. Locate the `Additional Board Manager URLs` field and add the urls:  
+ `https://github.com/stm32duino/BoardManagerFiles/raw/main/package_stmicroelectronics_index.json
+https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json` 
 4. Open the board manager (Tools -> Board: -> Boards Manager)
 5. Search for "esp32" and install version **1.0.5**, then close boards manager
 6. Under the tools tab set following parameters: 
