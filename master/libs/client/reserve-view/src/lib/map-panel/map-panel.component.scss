@@ -21,14 +21,16 @@
   background-color: white;
   border-radius: 0.5rem;
   flex:1;
+  border: 1px solid grey;
 }
 
 #type-option{
-  flex:1
+  flex:1;
 }
 
 #type-toggle{
   height: 2.5rem;
   align-items: center;
   border-radius: 0.5rem;
+  border: 1px solid grey;
 }

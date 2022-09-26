@@ -196,3 +196,7 @@ mat-card-header.mat-card-header.headerText div.mat-card-header-text {
   display: flex;
   align-items: center;
 }
+
+.horizontal-chips div.mat-chip-list-wrapper{
+  flex-wrap: nowrap !important;
+}

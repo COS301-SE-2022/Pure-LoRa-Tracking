@@ -91,3 +91,7 @@ cdk-virtual-scroll-viewport {
 master-sensor-view-detail{
     height: 100%
 }
+
+.mat-chip.mat-standard-chip.mat-chip-selected.mat-primary{
+    box-shadow: 2px 2px 2px grey;
+}
