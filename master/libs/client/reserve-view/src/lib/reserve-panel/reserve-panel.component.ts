@@ -17,6 +17,7 @@ export class ReservePanelComponent implements OnInit {
   private _Devices: Device[];
   private _GateWays: Gateway[];
   private _ViewType: string;
+  public processingType:string;
   @Input() selectedReserve = "";
   @Input() reserveList: ReserveInfo[];
   @Input()
@@ -30,8 +31,9 @@ export class ReservePanelComponent implements OnInit {
   openSensor = false;
   openGateway = false;
 
-  @Output() selectedReserveChange = new EventEmitter<string>();
 
+  @Output() selectedReserveChange = new EventEmitter<string>();
+  @Output() proccessingTypeChange = new EventEmitter<string>();
   currentSensor = {
     name: "",
     id: "",
@@ -64,6 +66,7 @@ export class ReservePanelComponent implements OnInit {
     this._Devices = [];
     this._GateWays = [];
     this._ViewType = "norm"
+    this.processingType="TRI";
     this.notifier.getSensorDeleted().subscribe(val => {
       this.filteredSensors = this.filteredSensors.filter(curr => curr.deviceID != val);
       this.Devices = this.Devices.filter(curr => curr.deviceID != val);
@@ -168,6 +171,10 @@ export class ReservePanelComponent implements OnInit {
   reserveChanged(): void {
     this.selectedReserveChange.emit(this.selectedReserve);
     console.log("changed");
+  }
+
+  typechange(event:any){
+    this.proccessingTypeChange.emit(event);
   }
 
 }

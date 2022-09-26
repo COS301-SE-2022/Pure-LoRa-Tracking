@@ -1,6 +1,6 @@
 import { particleFilterMultinomialService, particleFilterRSSIMultinomialService } from '@lora/ai/particle-filter';
 import { AiProcessingStrategyService } from '@lora/ai/strategy';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { ProcessingApiProcessingBusService } from '@processing/bus';
 import { UplinkEvent } from '@chirpstack/chirpstack-api/as/integration/integration_pb';
 import { UplinkRXInfo } from '@chirpstack/chirpstack-api/gw/gw_pb';
@@ -16,20 +16,27 @@ export class AiAiProcessingService {
         // msgq.runRabbit();
     };
 
-    async processPerimeterRequest(body: { location?: any, name?: string, device?: string, newName?: string }): Promise<string> {
-        console.log(body);
-        if (body.name == undefined) {
+    async processPerimeterRequest(body: { data: { location?: any, name?: string, device?: string, newName?: string, action: string } }): Promise<any> {
+        //Logger.log("LOG PERIMETER")
+        //Logger.log(body.data);
+        if (body.data.name == undefined) {
             return "NO NAME FAIL"
         }
-        if (body.device != undefined) {
-            this.serviceBus.saveDevicePerimeterToDB({ perimeter: body.location.features[0].geometry.coordinates[0], name: body.name, deviceID: body.device })
-        } else if (body.location != undefined) {
-            this.serviceBus.updateDevicePerimeter({ perimeter: body.location.features[0].geometry.coordinates[0], name: body.name })
-        } else if (body.newName != undefined) {
-            this.serviceBus.updateDeviceReserveName({ name: body.name, newName: body.newName })
+        if (body.data.action == 'create') {
+            this.serviceBus.RemoveDeviceFromPerimeter({ deviceID: body.data.device });
+            this.serviceBus.saveDevicePerimeterToDB({ perimeter: body.data.location.features[0].geometry.coordinates[0], name: body.data.name, deviceID: body.data.device })
+        } else if (body.data.action == 'updatePerimeter') {
+            if (body.data.location == undefined)
+                return { status: 400, explanation: "noop" }
+            this.serviceBus.updateDevicePerimeter({ deviceID: body.data.device, perimeter: body.data.location.features[0].geometry.coordinates[0], name: body.data.name })
+        } else if (body.data.action == 'updateName') {
+            if (body.data.location == undefined)
+                return { status: 400, explanation: "noop" }
+            this.serviceBus.updateDeviceReserveName({ name: body.data.name, newName: body.data.newName })
         } else {
-            return "NOOP"
+            return { status: 400, explanation: "noop" }
         }
+        return { status: 200, explanation: "call finished" }
     }
 
     async forwardData(uplinkData: UplinkEvent, next: Subject<string>) {

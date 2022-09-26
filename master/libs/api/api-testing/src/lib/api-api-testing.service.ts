@@ -42,7 +42,7 @@ export class ApiApiTestingService {
     ]
 
     mapEndpointExample = {
-      pType:'tri',
+      pType:"TRI",
       token : "`1rthtgys-wr321fsd-qw3423sdfcvs",
       reserveID : "3234jklnosdf",
       startTime : 1,

@@ -17,7 +17,7 @@ export interface MapApiHistorical {
     deviceID: string[],
     startTime?: number,
     endTime?: number,
-    pType : string
+    pType : "TRI" | "PF" | "HM",
 }
 
 // enum sortHistorical {
@@ -37,7 +37,7 @@ export interface Device {
     deviceID: string,
     deviceName: string,
     type: string,
-    pType : string,
+    pType : "TRI" | "PF" | "HM",
     locationData: {
         timeStamp: number,
         location: {

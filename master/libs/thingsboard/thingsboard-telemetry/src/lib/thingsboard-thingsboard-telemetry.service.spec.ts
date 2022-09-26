@@ -45,7 +45,7 @@ describe('ThingsboardThingsboardTelemetryService', () => {
       .spyOn(httpService, 'get')
       .mockImplementationOnce(() => of(tests.axiosTelemetrySuccessExample));
     expect(
-      await service.getTelemetry('deviceID', 'deviceType', 'tri', 0, 1654072587463)
+      await service.getTelemetry('deviceID', 'deviceType', 'TRI', 0, 1654072587463)
     ).toMatchObject(tests.SuccessResponse);
 
     expect(

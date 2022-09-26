@@ -1,5 +1,6 @@
 <div class="container" tabindex="5" (keyup.enter)="login()">
     <div class="wrapper">
+        <img id="login-logo" src="assets/Logos/logo.svg" alt="Logo">
         <div class="loginform">
             <form [formGroup]="logingroup" id="login-content" (ngSubmit)="login()">
                 <mat-form-field>
@@ -21,6 +22,7 @@
                         {{responseMessage}}
                     </p>
                 </div>
+                
             </form>
         </div>
     </div>

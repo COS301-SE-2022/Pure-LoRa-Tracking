@@ -282,7 +282,7 @@ export class ThingsboardThingsboardClientService {
     */
   async getDeviceHistoricalData(
     DeviceID: string,
-    pType = 'tri',
+    pType = 'TRI',
     startTime?: number,
     endTime?: number,
   ): Promise<thingsboardResponse> {
@@ -563,7 +563,7 @@ export class ThingsboardThingsboardClientService {
     );
 
     if (deviceDetails.isGateway == false) {
-      const mongoPair = { location: CustInfo.data.additionalInfo.location, device: AccessToken.data.credentialsId, name: CustInfo.data.title };
+      const mongoPair = { location: CustInfo.data.additionalInfo.location, device: AccessToken.data.credentialsId, name: CustInfo.data.title, action:'create' };
       this.serviceBus.sendMongoDevicePerimeter(mongoPair);
     }
 
@@ -918,7 +918,7 @@ export class ThingsboardThingsboardClientService {
 
   async v1SendTelemetry(
     accessToken: string,
-    data: any
+    data: {latitude:number, longitude:number, pType:string}
   ): Promise<{ status: number; explanation: string }> {
     const resp = await this.telemetryService.V1sendJsonTelemetry(
       accessToken,
@@ -1137,7 +1137,7 @@ export class ThingsboardThingsboardClientService {
         explanation: response.explanation,
       };
 
-    const mongoPair = { name: info.data.title, location: location };
+    const mongoPair = { name: info.data.title, location: location, action : 'updatePerimeter' };
     this.serviceBus.sendMongoDevicePerimeter(mongoPair);
 
     return {
@@ -1474,7 +1474,7 @@ export class ThingsboardThingsboardClientService {
         furtherExplain: response.explanation,
       };
 
-    this.serviceBus.sendMongoDevicePerimeter({ name: info.data.title, newName: details.NameOfReserve })
+    this.serviceBus.sendMongoDevicePerimeter({ name: info.data.title, newName: details.NameOfReserve, action:"updateName" })
 
     return {
       status: 'ok',
@@ -1663,7 +1663,8 @@ export class ThingsboardThingsboardClientService {
     const CustInfo = await this.reserveService.CustomerInfo(reserveID);
     this.deviceService.setToken(this.token);
     const AccessToken = await this.deviceService.GetAccessToken(deviceID);
-    const mongoPair = { device: AccessToken.data.credentialsId, name: CustInfo.data.title };
+    //console.log(CustInfo.data.additionalInfo)
+    const mongoPair = { device: AccessToken.data.credentialsId, location:CustInfo.data.additionalInfo.location, name: CustInfo.data.title, action : "create" };
     this.serviceBus.sendMongoDevicePerimeter(mongoPair);
 
     return {
@@ -1687,6 +1688,64 @@ export class ThingsboardThingsboardClientService {
       data: resp.data,
     };
   }
+  
+  async generate2FA(token:string): Promise<thingsboardResponse> {
+    const resp= await this.userService.generate2FA(token);
+    if (resp.status != 200)
+      return {
+        status: 'fail',
+        explanation: resp.explanation,
+      };
+
+    return {
+      status: 'ok',
+      explanation: 'call finished',
+      data: resp.data,
+    };
+  }
+
+  async verify2FA(token:string,code:string,authurl:string): Promise<thingsboardResponse> {
+    const resp= await this.userService.verify2FA(token,code,authurl);
+    if(resp.status==400&&resp.explanation=="Verification code is incorrect"){
+      return {
+        status: 'fail',
+        explanation: resp.explanation,
+      };
+    }
+    if (resp.status != 200)
+      return {
+        status: 'fail',
+        explanation: resp.explanation,
+      };
+
+    return {
+      status: 'ok',
+      explanation: 'call finished',
+      data: resp.data,
+    };
+  }
+
+  async check2FA(token:string,authcode:string): Promise<thingsboardResponse> {
+    const resp= await this.userService.check2fa(token,authcode);
+    if(resp.status==400&&resp.explanation=="Verification code is incorrect"){
+      return {
+        status: 'fail',
+        explanation: resp.explanation,
+      };
+    }
+
+    if (resp.status != 200)
+      return {
+        status: 'fail',
+        explanation: resp.explanation,
+      };
+
+    return {
+      status: 'ok',
+      explanation: 'call finished',
+      data: resp.data,
+    };
+  }
 
   //////////////////////////////////////////////////////////////////
   async resetLogin(email:string) {
@@ -1694,8 +1753,7 @@ export class ThingsboardThingsboardClientService {
     Logger.log("Login Reset Attempted:\n"+response.explanation);
   }
 }
-
-/* data is required to be any due to the many possible response data types */
+  /* data is required to be any due to the many possible response data types */
 
 export interface thingsboardResponse {
   status: 'ok' | 'fail';

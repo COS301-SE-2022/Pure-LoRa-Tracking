@@ -81,8 +81,8 @@ export class AiHeatmapAverageService extends AiProcessingStrategyService {
     const result = await this.predictData(normalizedFive);
 
     this.serviceBus.sendProcessedDatatoTB(this.deviceToken, {
-      processingType: 'ANN',
-      result: { longitude: result[0], latitude: result[1] },
+      pType: 'HM',
+      longitude: result[0], latitude: result[1] ,
     });
 
     this.saveModel(this.saveFilePath);
