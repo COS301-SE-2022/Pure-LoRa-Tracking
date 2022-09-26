@@ -22,12 +22,22 @@ export class ProcessingApiProcessingBusService {
 
     /* forward new device and perimeter to relevant mongo table */
     async saveDevicePerimeterToDB(body: { perimeter: number[], name: string, deviceID: string }) {
-        this.database.insertDevicePerimeter(body);
+        try {
+            this.database.insertDevicePerimeter(body);
+        } catch (error) {
+            Logger.log("Save Device perimeter error");
+            Logger.log(error)
+        }
     }
 
     /* forward new perimeter to all device in table */
-    async updateDevicePerimeter(body: { deviceID : string, perimeter: number[], name: string }) {
-        this.database.updateDevicePerimeter(body);
+    async updateDevicePerimeter(body: { deviceID: string, perimeter: number[], name: string }) {
+        try {
+            this.database.updateDevicePerimeter(body);
+        } catch (error) {
+            Logger.log("Save Device perimeter error");
+            Logger.log(error)
+        }
     }
 
     /* forward new name of reserve to all devices associated */
@@ -39,7 +49,7 @@ export class ProcessingApiProcessingBusService {
         }
     }
 
-    async RemoveDeviceFromPerimeter(body: { deviceID:string }) {
+    async RemoveDeviceFromPerimeter(body: { deviceID: string }) {
         try {
             this.database.removeDeviceFromPerimeter(body);
         } catch (error) {
@@ -48,7 +58,12 @@ export class ProcessingApiProcessingBusService {
     }
 
     async getDevicePerimeter(deviceID: string) {
-        return this.database.getDevicePerimeter(deviceID);
+        try {
+            return this.database.getDevicePerimeter(deviceID);
+        } catch (error) {
+            Logger.log("Save Device perimeter error");
+            Logger.log(error)
+        }
     }
 
     /* get the last data points */
