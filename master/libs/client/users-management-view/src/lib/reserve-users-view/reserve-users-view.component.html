@@ -11,7 +11,13 @@
         <mat-option *ngFor="let curr of groups" [value]="curr.customerid">{{curr.name}}</mat-option>
       </mat-select>
     </mat-form-field> -->
-    <button class="addbtn" mat-raised-button color="primary" (click)="openUserForm()">Add User</button>
+    <div id="banner-container">
+      <h1>Users</h1>
+      <span id="spacer"></span>
+      <div>
+        <button class="addbtn" mat-raised-button color="primary" (click)="openUserForm()">Add User</button>
+      </div>
+    </div>
     <table mat-table [dataSource]="sourceData" >
         <ng-container matColumnDef="id">
             <th mat-header-cell *matHeaderCellDef>

@@ -3,23 +3,38 @@ table {
 }
 
 #userContainer {
-    margin: 5%;
 }
 
 .addbtn {
-    margin: 2%;
 }
 
 #addUserForm {
-    margin: 5%;
     background-color: white;
 }
 
 #main-container {
-    height: 100%;
     display: block;
+    margin: 1rem;
 }
 
 #cancelBtn {
    margin: 1%;
+}
+
+#banner-container{
+    margin: 1rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+#spacer{
+    flex: 1 1 auto;
+}
+
+h1{
+    font-family: 'Bai Jamjuree', sans-serif;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin: 0;
 }
