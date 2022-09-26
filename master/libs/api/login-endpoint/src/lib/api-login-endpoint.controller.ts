@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ApiLoginEndpointService } from './api-login-endpoint.service';
-import { refreshTokenLogin, userLoginData, userLoginResponse } from '../api-login.interface';
+import { refreshTokenLogin, userLoginData, userLoginResponse,twofaauth } from '../api-login.interface';
 
 @Controller('login')
 export class ApiLoginEndpointController {
@@ -20,6 +20,17 @@ export class ApiLoginEndpointController {
   async refreshTokenLogin(@Body() content:refreshTokenLogin):Promise<userLoginResponse>{
     return await this.apiLoginEndpointService.doRefreshTokenLogin(content);
   }
+
+  @Post('2faVerify')
+  async do2faVerify(@Body() content:twofaauth):Promise<userLoginResponse>{
+    return await this.apiLoginEndpointService.do2faAuth(content);
+  }
+
+  @Post('2faCheck')
+  async do2faCheck(@Body() content:twofaauth):Promise<userLoginResponse>{
+    return await this.apiLoginEndpointService.do2faCheck(content);
+  }
+
 }
 
 @Controller('logout')
@@ -28,5 +39,14 @@ export class ApiLogoutEndpointController {
   @Post('')
   async logout(@Body() content:{token:string}) : Promise<userLoginResponse> {
     return await this.apiLoginEndpointService.processLogout(content);
+  }
+}
+
+@Controller('reset')
+export class ApiPasswordResetEndpointController {
+  constructor(private apiLoginEndpointService: ApiLoginEndpointService) { }
+  @Post('')
+  async logout(@Body() content:{email:string}) : Promise<userLoginResponse> {
+    return await this.apiLoginEndpointService.resetLogin(content);
   }
 }

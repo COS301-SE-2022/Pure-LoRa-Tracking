@@ -38,6 +38,7 @@ export class ReserveUsersViewComponent implements OnInit {
   canadd=false;
   // token="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZlYWRtaW5AcmVzZXJ2ZS5jb20iLCJzY29wZXMiOlsiVEVOQU5UX0FETUlOIl0sInVzZXJJZCI6ImQ2MzcyZTMwLWRmZTgtMTFlYy1iZGIzLTc1MGNlN2VkMjQ1MSIsImVuYWJsZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiJjZDJkZjJiMC1kZmU4LTExZWMtYmRiMy03NTBjZTdlZDI0NTEiLCJjdXN0b21lcklkIjoiMTM4MTQwMDAtMWRkMi0xMWIyLTgwODAtODA4MDgwODA4MDgwIiwiaXNzIjoidGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE2NTQ4MDU3NzUsImV4cCI6MTY1NDgxNDc3NX0.76eRuu1QDS4QLxUVuJNcawQkpyMoXezGuRfPiVMhLnDHxtxwUQqtIrnbEeLBMkVITbwjYhozU6zOyQaRiW2ajA"
   assignedReserves= new UntypedFormControl();
+  reserveID="";
   
   constructor(private _formBuilder: UntypedFormBuilder,public http:HttpClient,public confirmDialog: MatDialog, private router:Router,private snackbar:MatSnackBar) {
    
@@ -59,16 +60,25 @@ export class ReserveUsersViewComponent implements OnInit {
 
     this.sourceData=[];
 
-    this.http.post("api/user/admin/groups",{
+    this.http.post("api/reserve/admin/list",{
     }).subscribe((val:any)=>{
-      if(val.data.data.length>0){
+      console.log(val);
+      if(val.data.length>0){
         console.log("Test"+val);
-        this.groups=val.data.data.map((curr:any)=>({
-          name:curr.title,
-          customerid:curr.id.id
+        this.groups=val.data.map((curr:any)=>({
+          name:curr.reserveName,
+          customerid:curr.reserveID
         } as SingleGroup)) as Array<SingleGroup>
 
-        this.groups.forEach(curr=>{
+        this.http.post("api/user/admin/groups", {
+
+        }).subscribe((val: any) => {
+         console.log(val);
+         this.reserveID = val.data.data[0].id.id;
+        })
+
+        // this call does nothing? Source data is empty
+        /*this.groups.forEach(curr=>{
           // console.log("test");
           this.http.post("api/user/admin/reserve/all",{
             "customerID":curr.customerid
@@ -84,7 +94,7 @@ export class ReserveUsersViewComponent implements OnInit {
             this.sourceData=[...this.sourceData,...temp]
             console.log(this.sourceData)
           })
-        })
+        })*/
       }
     })
 
@@ -107,9 +117,10 @@ export class ReserveUsersViewComponent implements OnInit {
   // }
   addUserToDB(){
     if(this.nameGroup.valid&&this.emailGroup.valid&&this.surnameGroup.valid&&this.reserveGroup.valid){
-      console.log(this.emailGroup.get("emailControl")?.value)
+      // console.log(this.emailGroup.get("emailControl")?.value)
       this.http.post("api/user/admin/add",{
-        customerID:this.reserveGroup.get("reserveControl")?.value[0],
+        //customerID:this.reserveGroup.get("reserveControl")?.value[0],
+        customerID:this.reserveID,
         userInfo:{
           email:this.emailGroup.get("emailControl")?.value,
           firstName:this.nameGroup.get("nameControl")?.value,

@@ -87,15 +87,26 @@ export class DatabaseProxyService {
         return await Insert.save();
     }
 
+    public async removeDeviceFromPerimeter(data:{deviceID:string}) {
+        await this.DevicePerimeterModel.deleteOne({deviceID:data.deviceID});
+    }
+
     public async updateDevicePerimeterName(data:{name:string, newName:string}) {
-        return await this.DevicePerimeterModel.updateMany({name:data.name}, { $set: { name:data.newName } }).exec()   
+        this.DevicePerimeterModel.updateMany({name:data.name}, { $set: { name:data.newName } }).exec()   
     }
 
     public async updateDevicePerimeter(data:{perimeter:number[], name:string}) {
-        return await this.DevicePerimeterModel.updateMany({name:data.name}, { $set: { perimeter:data.perimeter } }).exec 
+        this.DevicePerimeterModel.updateMany({name:data.name}, { $set: { perimeter:data.perimeter} }).exec 
     } 
 
     public async getDevicePerimeter(deviceID:string) : Promise<DevicePerimeter> {
         return await this.DevicePerimeterModel.findOne({deviceID:deviceID})
+    }
+
+    public async getMoreInfo(deviceEUI:string): Promise<any>{
+        const lastest= await this.DataModel.find({deviceEUI:deviceEUI}).sort({timestamp:-1}).limit(1).exec();
+        const latestcount= await this.DataModel.find({deviceEUI:deviceEUI}).count();
+        
+        console.log(latestcount);   
     }
 }

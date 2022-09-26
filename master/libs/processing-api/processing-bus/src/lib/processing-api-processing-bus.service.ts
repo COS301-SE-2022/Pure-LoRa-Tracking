@@ -9,7 +9,7 @@ export class ProcessingApiProcessingBusService {
     constructor(private database: DatabaseProxyService, private thingsboardClient: ThingsboardThingsboardClientService, public locationService: LocationService) { }
 
     /* forward to message queue for processing/splitting */
-    async forwardChirpstackData(data: { timestamp: number, deviceEUI: string, data: string, eventtype: string ,processed:false}): Promise<boolean> {
+    async forwardChirpstackData(data: { timestamp: number, deviceEUI: string, data: string, eventtype: string, processed: false }): Promise<boolean> {
         try {
             this.database.saveRSSIinfos(data);
         } catch (Error) {
@@ -22,17 +22,29 @@ export class ProcessingApiProcessingBusService {
 
     /* forward new device and perimeter to relevant mongo table */
     async saveDevicePerimeterToDB(body: { perimeter: number[], name: string, deviceID: string }) {
-        this.database.insertDevicePerimeter(body)
+        this.database.insertDevicePerimeter(body);
     }
 
     /* forward new perimeter to all device in table */
-    async updateDevicePerimeter(body: { perimeter: number[], name: string }) {
-        this.database.updateDevicePerimeter(body)
+    async updateDevicePerimeter(body: { deviceID : string, perimeter: number[], name: string }) {
+        this.database.updateDevicePerimeter(body);
     }
 
     /* forward new name of reserve to all devices associated */
     async updateDeviceReserveName(body: { name: string, newName: string }) {
-        this.database.updateDevicePerimeterName(body);
+        try {
+            this.database.updateDevicePerimeterName(body);
+        } catch (error) {
+            Logger.log(error)
+        }
+    }
+
+    async RemoveDeviceFromPerimeter(body: { deviceID:string }) {
+        try {
+            this.database.removeDeviceFromPerimeter(body);
+        } catch (error) {
+            Logger.log(error)
+        }
     }
 
     async getDevicePerimeter(deviceID: string) {
@@ -41,10 +53,10 @@ export class ProcessingApiProcessingBusService {
 
     /* get the last data points */
     //TODO change this to the devicedata input
-    async getRssiInfo(deviceEUI: string, numberOfRecords: number):Promise<any>{
+    async getRssiInfo(deviceEUI: string, numberOfRecords: number): Promise<any> {
         try {
-            return await this.database.fetchRSSIinfos(deviceEUI,numberOfRecords);
-        } catch(error) {
+            return await this.database.fetchRSSIinfos(deviceEUI, numberOfRecords);
+        } catch (error) {
             Logger.log('Delete Error');
             Logger.log(error);
         }
@@ -52,12 +64,12 @@ export class ProcessingApiProcessingBusService {
     }
 
     /* mark points as proccessed */
-    async markProcessed(data:{deviceEUI:string,timestamp:string}[]):Promise<void>{
-        console.log("Process mark ",data);
+    async markProcessed(data: { deviceEUI: string, timestamp: string }[]): Promise<void> {
+        console.log("Process mark ", data);
         try {
             await this.database.markAsProcessed(data);
             return;
-        } catch(error) {
+        } catch (error) {
             Logger.log('Delete Error');
             Logger.log(error);
         }
@@ -74,48 +86,48 @@ export class ProcessingApiProcessingBusService {
         }
     }
 
-    async addToReady(data:{deviceEUI:string,timestamp:number,data:string}){
+    async addToReady(data: { deviceEUI: string, timestamp: number, data: string }) {
         try {
             return await this.database.addToReady(data);
-        } catch(error) {
+        } catch (error) {
             Logger.log('Error');
             Logger.log(error);
         }
     }
 
-    async checkCountReady(deviceEUI:string){
+    async checkCountReady(deviceEUI: string) {
         try {
             return await this.database.checkNumReady(deviceEUI);
-        } catch(error) {
+        } catch (error) {
             Logger.log('Error');
             Logger.log(error);
         }
     }
 
-    async getLastReady(deviceEUI:string){
+    async getLastReady(deviceEUI: string) {
         try {
             const data = await this.database.getLatestReady(deviceEUI);
             await this.database.deleteReadyAt(data._id?.toString());
             return data;
-        } catch(error) {
+        } catch (error) {
             Logger.log('Error');
             Logger.log(error);
         }
     }
 
-    async deleteReadyAt(deviceID:string){
+    async deleteReadyAt(deviceID: string) {
         try {
             return await this.database.deleteReadyAt(deviceID);
-        } catch(error) {
+        } catch (error) {
             Logger.log('Error');
             Logger.log(error);
         }
     }
 
 
-    async sendProcessedDatatoTB(accessToken: string, data: { result: { latitude: number, longitude: number }, processingType: string }) {
+    async sendProcessedDatatoTB(accessToken: string, data: { latitude: number, longitude: number, pType: string }) {
         try {
-            this.thingsboardClient.v1SendTelemetry(accessToken, { ...data, timestamp: + new Date() });
+            this.thingsboardClient.v1SendTelemetry(accessToken, data);
         } catch (error) {
             Logger.log('TB Send Error');
             Logger.log(error);

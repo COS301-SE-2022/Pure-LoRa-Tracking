@@ -55,8 +55,6 @@ describe('LocationService', () => {
     if (process.env.PURELORABUILD != 'DEV')
     jest.spyOn(tbClient,'v1SendTelemetry').mockImplementation();
     service.calculateLocation(gatewayData, 'sAcQ4Qj54v9wLWi40thD');
-    // expect(service).toBeTruthy();
-    // TODO: check thingsboard function call
   });
 
   it('should give the distance between two point in meters', () => {
@@ -64,7 +62,7 @@ describe('LocationService', () => {
   });
 
   it('should compute the RSSI from distance', ()=> {
-    expect(service.MetersToRSSI(1)).toEqual(-61.1);
-    expect(service.MetersToRSSI(2)).toEqual(-67.12059991327962);
+    expect(service.MetersToRSSI(1)).toEqual(-41);
+    expect(service.MetersToRSSI(15)).toEqual(-62.169642663002264);
   })
 });

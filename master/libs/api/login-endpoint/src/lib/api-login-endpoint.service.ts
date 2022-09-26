@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { ThingsboardThingsboardClientService } from '@lora/thingsboard-client';
-import { refreshTokenLogin, userLoginData, userLoginResponse } from '../api-login.interface';
+import { Input2Fa, refreshTokenLogin, userInitLoginResponse, userLoginData, userLoginResponse,check2FAInput } from '../api-login.interface';
 import { execFile } from 'child_process';
 
 @Injectable()
 export class ApiLoginEndpointService {
     constructor(private thingsboardClient: ThingsboardThingsboardClientService) { }
 
-    async doLogin(body: userLoginData): Promise<userLoginResponse> {
+    async doLogin(body: userLoginData): Promise<userInitLoginResponse> {
         if (body.username == undefined || body.password == undefined) {
             return {
                 status: 400,
@@ -15,23 +15,69 @@ export class ApiLoginEndpointService {
             }
         }
         const loginResponse = await this.thingsboardClient.loginUserReturnToken(body.username, body.password)
-
-        if (loginResponse.Token != "" && loginResponse.refreshToken != "") {
-            this.thingsboardClient.setToken(loginResponse.Token)
-            const userInfo = await this.thingsboardClient.getUserInfoFromToken();
-            return {
-                status: 200,
-                explain: 'Login successful.',
-                token: loginResponse.Token,
-                refreshToken: loginResponse.refreshToken,
-                //userID : userInfo.data.id.id,
-                reserveID : userInfo.data.customerId.id,
-                reserves : userInfo.data.additionalInfo.reserves
+        //check if user has 2fa setup
+        console.log("teste",loginResponse);
+        if(loginResponse.refreshToken==null&&loginResponse.status=="ok"){
+            return{
+                status:200,
+                explain:"Login successful. 2fa",
+                token:loginResponse.Token,
+                has2fa:true
             }
         }
-        return {
-            status: 401,
-            explain: 'Login unsuccessful.'
+        else if(loginResponse.refreshToken!=null&&loginResponse.status=="ok"){
+            //get 2fa secret
+            const secret=await this.thingsboardClient.generate2FA(loginResponse.Token);
+            return{
+                status:200,
+                explain:"Login failed. No 2fa",
+                token:loginResponse.Token,
+                authURL:secret.data.authUrl,
+                has2fa:false
+            }
+        }
+
+       return {
+            status:401,
+            explain:loginResponse.explanation,
+       }
+    }
+
+    async do2faAuth(content : Input2Fa) : Promise<userLoginResponse> {
+        // console.log("I GOT",content);
+        const resp=await this.thingsboardClient.verify2FA(content.token,content.authcode,content.authurl);
+        if(resp.status=="fail"){
+            if(resp.explanation=="Verification code is incorrect")
+
+            return {
+                status:500,
+                explain:resp.explanation
+            }
+        }
+        else if(resp.status=="ok"){
+            return {
+                status:200,
+                explain:resp.explanation
+            }
+        }
+
+    }
+
+    async do2faCheck(content:check2FAInput):Promise<userLoginResponse>{
+        const resp=await this.thingsboardClient.check2FA(content.token,content.authcode);
+        if(resp.status=="fail"){
+            return {
+                status:500,
+                explain:resp.explanation
+            }
+        }
+        else if(resp.status=="ok"){
+            return {
+                status:200,
+                explain:resp.explanation,
+                token:resp.data.token,
+                refreshToken:resp.data.refreshToken
+            }
         }
     }
 
@@ -76,6 +122,21 @@ export class ApiLoginEndpointService {
         return {
             status : 200,
             explain : "logout successful"
+        }
+    }
+
+    async resetLogin(content:{email:string}) : Promise<userLoginResponse> {
+        if(content.email == "" || content.email == undefined)
+        return {
+            status : 403,
+            explain : "no email provided"
+        }
+
+        this.thingsboardClient.resetLogin(content.email);
+
+        return {
+            status : 200,
+            explain : 'reset attempt'
         }
     }
 }

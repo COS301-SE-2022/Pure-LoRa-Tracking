@@ -11,7 +11,6 @@
         
     </div>
     <div id="container">
-        <master-reserve-panel id="reservePanel" class="panel" [Devices]="LastestHistorical" [GateWays]="Gateways" [selectedReserve]="selectedReserveId" (selectedReserveChange)="updateReserve($event)" [reserveList]="reservesList"></master-reserve-panel>
-        
+        <master-reserve-panel id="reservePanel" class="panel" [Devices]="LastestHistorical" [GateWays]="Gateways" [selectedReserve]="selectedReserveId" (selectedReserveChange)="updateReserve($event)" (proccessingTypeChange)="typeChange($event)" [reserveList]="reservesList"></master-reserve-panel>
     </div>
 </div>

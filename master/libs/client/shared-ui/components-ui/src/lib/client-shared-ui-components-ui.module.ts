@@ -7,6 +7,7 @@ import { DialogConfirmationComponent } from './dialog-confirmation/dialog-confir
 import { MatDialogModule } from '@angular/material/dialog';
 import { SnackbarAlertComponent } from './snackbar-alert/snackbar-alert.component';
 import { MatTabsModule } from '@angular/material/tabs';
+import * as jwt from 'jsonwebtoken';
 
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 export const clientSharedUiComponentsUiRoutes: Route[] = [];

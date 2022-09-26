@@ -11,6 +11,8 @@ import { ClientLeafletLibraryModule } from '@master/client/leaflet-library';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DeviceListItemComponent } from './device-list-item/device-list-item.component';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { GatewayListItemComponent } from './gateway-list-item/gateway-list-item.component';
+import { ClientGatewayDetailModule } from '@master/client/gateway-detail';
 import { ClientSensorDetailsModule } from '@master/client/sensor-details';
 import { DateTimeSelectionComponent } from './date-time-selection/date-time-selection.component';
 import { MatChipsModule } from '@angular/material/chips';
@@ -28,7 +30,8 @@ export const clientReserveViewRoutes: Route[] = [];
     ReactiveFormsModule,
     MatExpansionModule,
     ClientSensorDetailsModule,
-    MatChipsModule
+    MatChipsModule,
+    ClientGatewayDetailModule,
   ],
   declarations: [
     ReserveViewComponent,
@@ -36,6 +39,7 @@ export const clientReserveViewRoutes: Route[] = [];
     MapPanelComponent,
     DeviceListItemComponent,
     DateTimeSelectionComponent,
+    GatewayListItemComponent,
   ],
   exports: [
     ReserveViewComponent,

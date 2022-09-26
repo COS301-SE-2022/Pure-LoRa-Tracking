@@ -57,7 +57,7 @@ export class ReserveEditComponent implements OnInit {
         this.snackbar.openFromComponent(SnackbarAlertComponent,{duration: 5000, panelClass: ['red-snackbar'], data: {message:val.explanation, icon:"check_circle"}});
       }
       if(this.mapgeojson!=""){
-        this.http.post("api/reserve/location/set",{
+        this.http.post("api/reserve/admin/location/set",{
           reserveID:this.id,
           location:JSON.parse(this.mapgeojson)
         }).subscribe((otherval:any)=>{

@@ -4,7 +4,6 @@ import {
 } from '@lora/thingsboard-client';
 import { ChirpstackChirpstackGatewayService } from '@lora/chirpstack-gateway';
 import { ChirpstackChirpstackSensorService } from '@lora/chirpstack-sensor';
-import { Injectable, Logger } from '@nestjs/common';
 
 import {
   AddGatewayDevice,
@@ -18,8 +17,12 @@ import {
   GetGatewaysInput,
   RemoveDevice,
   UnassignDevice,
+  GetMoreInfoInput
 } from './../api-device.interface';
-
+import { Injectable, Logger } from '@nestjs/common';
+import { DeviceProfile } from '@chirpstack/chirpstack-api/as/external/api/profiles_pb';
+import { UserSenserDataInput } from '../api-device.interface';
+import { ServiceBusService } from '@lora/serviceBus';
 
 @Injectable()
 export class ApiDeviceEndpointService {
@@ -27,6 +30,7 @@ export class ApiDeviceEndpointService {
     private thingsboardClient: ThingsboardThingsboardClientService,
     private chirpstackGateway: ChirpstackChirpstackGatewayService,
     private chirpstackSensor: ChirpstackChirpstackSensorService,
+    private serivebus: ServiceBusService,
   ) { }
 
   ///////////////////////////////////////////////////////////////////////////
@@ -469,7 +473,7 @@ export class ApiDeviceEndpointService {
 
     this.thingsboardClient.setToken(body.token);
     const response = await this.thingsboardClient.getCustomerDevices(body.customerID);
-    console.log(response)
+    //console.log(response)
     if (response.status != "ok") {
       return {
         status: 500,
@@ -586,4 +590,59 @@ export class ApiDeviceEndpointService {
         explanation: "call finished",
       }
   }
+
+
+  
+  async UserGetDeviceSensorData(content: UserSenserDataInput) :Promise<deviceResponse> {
+    if (content.token == undefined || content.token == '')
+      return {
+        status: 401,
+        explanation: 'token missing',
+      };
+
+    if (content.deviceEUI == undefined || content.deviceEUI == '')
+      return {
+        status: 400,
+        explanation: 'device EUID not defined',
+      };
+
+    this.thingsboardClient.setToken(content.token);
+
+    const response = await this.thingsboardClient.getDeviceSensorData(
+      content.deviceEUI,
+      content.timeStart,
+      content.timeStop
+    );
+    if (response.status != 'ok') {
+      return {
+        status: 500,
+        explanation: response.explanation,
+      };
+    }
+    return {
+      status: 200,
+      explanation: response.status,
+      data: response.data.data,
+    };
+  }
+
+  async processGetMoreInfo(content: GetMoreInfoInput): Promise<deviceResponse> {
+    if (content.token == undefined || content.token == '')
+    return {
+      status: 401,
+      explanation: 'token missing',
+    };
+
+    if (content.deviceEUI == undefined || content.deviceEUI == '')
+      return {
+        status: 400,
+        explanation: 'device EUI not defined',
+      };
+
+    const other=this.serivebus.getMoreInfo(content.deviceEUI);
+
+  }
+
+
+
 }

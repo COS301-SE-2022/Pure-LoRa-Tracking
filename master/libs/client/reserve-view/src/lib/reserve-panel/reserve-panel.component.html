@@ -1,4 +1,4 @@
-<mat-card color='$primary' *ngIf="openSensor === false">
+<mat-card color='$primary' *ngIf="openSensor === false && openGateway === false">
     <mat-card-header class="headerText">
         <mat-card-title >
             <mat-form-field class="reserve-select-field">
@@ -34,15 +34,29 @@
                     Gateways
                 </mat-chip>
             </mat-chip-list>
+            <mat-form-field appearance="legacy">
+              <mat-label>Proccessing Type</mat-label>
+              <mat-select [(value)]="processingType" (valueChange)="typechange($event)">
+                <mat-option value="TRI">Trilateration</mat-option>
+                <mat-option value="PF">Particle Filter</mat-option>
+                <mat-option value="HM">Heat Map</mat-option>
+              </mat-select>
+            </mat-form-field>
         </mat-action-list> 
-    <mat-card-content id="card-content">  
-        <cdk-virtual-scroll-viewport itemSize="0">
-        <mat-selection-list dense #devicesList [multiple]="true" >
-            <div *ngIf="showSensors && Devices.length>0">
-                <mat-accordion class="device-list">
-                    <master-device-list-item *ngFor="let deviceItem of Devices" [device]="deviceItem" (openDeviceView)="viewSensor($event)" (locateDevice)="selectedSensor($event)" (itemExpanded)="selectedSensor(deviceItem.deviceID)"></master-device-list-item>
-                </mat-accordion> 
-                <!-- <mat-list-option *ngFor="let sensorItem of filteredSensors" [value]="sensorItem.deviceID" [style.background-color]="getSelectedStyle(sensorItem.deviceID)" (click)="selectedSensor(sensorItem.deviceID)" >
+  <mat-card-content id="card-content">
+    <cdk-virtual-scroll-viewport itemSize="0">
+      <mat-selection-list dense #devicesList [multiple]="true">
+        <div *ngIf="showSensors && Devices.length>0">
+          <mat-accordion class="device-list">
+            <master-device-list-item
+              *ngFor="let deviceItem of Devices"
+              [device]="deviceItem"
+              (openDeviceView)="viewSensor($event)"
+              (locateDevice)="selectedSensor($event)"
+              (itemExpanded)="selectedSensor(deviceItem.deviceID)"
+            ></master-device-list-item>
+          </mat-accordion>
+          <!-- <mat-list-option *ngFor="let sensorItem of filteredSensors" [value]="sensorItem.deviceID" [style.background-color]="getSelectedStyle(sensorItem.deviceID)" (click)="selectedSensor(sensorItem.deviceID)" >
                     <mat-icon mat-list-icon>memory</mat-icon>
                     <div class="listItemWrap">
                         <div class="itemText">    
@@ -55,9 +69,19 @@
                         </button>
                     </div>
                 </mat-list-option> -->
+
             </div>
             <div *ngIf="showGateways && GateWays.length>0" >
-                <mat-list-option *ngFor="let gatewayItem of filteredGateways" [value]="gatewayItem.id" [style.background-color]="getSelectedStyle(gatewayItem.id)" (click)="selectedGateway(gatewayItem.id)">
+          <mat-accordion>
+            <master-gateway-list-item
+              *ngFor="let gatewayItem of GateWays"
+              [gateway]="gatewayItem"
+              (openGatewayView)="viewGateway($event)"
+              (locateGateway)="selectedGateway($event)"
+              (gatewayExpanded)="selectedGateway(gatewayItem.id)"
+            ></master-gateway-list-item>
+          </mat-accordion>
+          <!-- <mat-list-option *ngFor="let gatewayItem of filteredGateways" [value]="gatewayItem.id" [style.background-color]="getSelectedStyle(gatewayItem.id)" (click)="selectedGateway(gatewayItem.id)">
                     <mat-icon mat-list-icon>cell_tower</mat-icon>
                     <div class="listItemWrap">
                         <div class="itemText">    
@@ -69,12 +93,26 @@
                             <mat-icon>chevron_right</mat-icon>
                         </button>
                     </div>
-                </mat-list-option>
-            </div>
-        </mat-selection-list>
-        </cdk-virtual-scroll-viewport>
-    </mat-card-content>
+                </mat-list-option> -->
+        </div>
+      </mat-selection-list>
+    </cdk-virtual-scroll-viewport>
+  </mat-card-content>
 </mat-card>
+
+<master-sensor-view-detail
+  *ngIf="openSensor === true"
+  [openView]="openSensor"
+  (viewChange)="openSensor = $event"
+  [sensorInfo]="currentSensor"
+>
+</master-sensor-view-detail>
+<master-gateway-view-detail
+  *ngIf="openGateway === true"
+  [openView]="openGateway"
+  (viewChange)="openGateway = $event"
+  [gatewayInfo]="currentGateway"
+></master-gateway-view-detail>
+
 <!-- <master-sensor-detail-view *ngIf="openSensor === true" [openView]="openSensor" (viewChange)="openSensor=$event" [sensorInfo]="currentSensor" >
 </master-sensor-detail-view> -->
-<master-sensor-view-detail *ngIf="openSensor === true" [openView]="openSensor" (viewChange)="openSensor=$event" [sensorInfo]="currentSensor"></master-sensor-view-detail>
