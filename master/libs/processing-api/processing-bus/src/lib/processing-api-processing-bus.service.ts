@@ -142,10 +142,11 @@ export class ProcessingApiProcessingBusService {
 
     async sendProcessedDatatoTB(accessToken: string, data: { latitude: number, longitude: number, pType: string }) {
         try {
-            this.thingsboardClient.v1SendTelemetry(accessToken, data);
+            return this.thingsboardClient.v1SendTelemetry(accessToken, data);
         } catch (error) {
             Logger.log('TB Send Error');
             Logger.log(error);
+            return false;
         }
     }
 
@@ -155,6 +156,7 @@ export class ProcessingApiProcessingBusService {
         } catch (error) {
             Logger.log('Location Service Error');
             Logger.log(error);
+            return false;
         }
     }
 }

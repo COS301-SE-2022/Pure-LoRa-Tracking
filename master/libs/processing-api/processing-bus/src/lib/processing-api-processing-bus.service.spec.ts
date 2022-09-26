@@ -1,28 +1,67 @@
 import { DatabaseProxyModule } from '@lora/database';
-import { LocationModule } from '@lora/location';
-import { ThingsboardThingsboardClientModule } from '@lora/thingsboard-client';
+import { LocationModule, LocationService } from '@lora/location';
+import { ThingsboardThingsboardClientModule, ThingsboardThingsboardClientService } from '@lora/thingsboard-client';
+import { ThingsboardThingsboardTestsModule, ThingsboardThingsboardTestsService } from '@lora/thingsboard/tests';
 import { Test } from '@nestjs/testing';
+import { of, throwError } from 'rxjs';
 import { ProcessingApiProcessingBusService } from './processing-api-processing-bus.service';
 
 describe('ProcessingApiProcessingBusService', () => {
   let service: ProcessingApiProcessingBusService;
+  let locationService: LocationService;
+  let tests: ThingsboardThingsboardTestsService;
+  let tbClient: ThingsboardThingsboardClientService;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      imports :[DatabaseProxyModule, ThingsboardThingsboardClientModule, LocationModule],
+      imports: [DatabaseProxyModule, ThingsboardThingsboardClientModule, LocationModule, ThingsboardThingsboardTestsModule],
       providers: [ProcessingApiProcessingBusService],
     }).compile();
 
     service = module.get(ProcessingApiProcessingBusService);
+    locationService = module.get(LocationService);
+    tests = module.get(ThingsboardThingsboardTestsService);
+    tbClient = module.get(ThingsboardThingsboardClientService);
   });
 
   it('should be defined', () => {
     expect(service).toBeTruthy();
   });
 
- /* it('should insert the record', () => {
-    service.saveDevicePerimeterToDB(exampleInput)
-  })*/
+  ///////////////////////////////////////////////
+
+  it('Location service process -> fail', async () => {
+    jest.spyOn(locationService, 'calculateLocation').mockImplementationOnce(() => { throw new Error("Location failed") });
+    expect(await service.LocationServiceProcess("", "")).toEqual(false);
+  });
+
+  it('Location service process -> pass', async () => {
+    jest.spyOn(locationService, 'calculateLocation').mockImplementationOnce(() => { return { latitude: 1, longitude: 1 } });
+    expect(await service.LocationServiceProcess("", "")).toEqual({ latitude: 1, longitude: 1 });
+  });
+
+  ///////////////////////////////////////////
+
+  it('send data to tb -> fail', async () => {
+    jest.spyOn(tbClient, 'v1SendTelemetry').mockImplementationOnce(() => { throw new Error("Telemetry failed") });
+    expect(await service.sendProcessedDatatoTB("", { latitude: 1, longitude: 2, pType: "" })).toEqual(false);
+  });
+
+  it('v1 send telemetry -> pass', async () => {
+    jest.spyOn(tbClient, 'v1SendTelemetry').mockImplementationOnce(() => Promise.resolve({
+      status: 200,
+      explanation: 'call finished',
+    }));
+    expect(await service.sendProcessedDatatoTB("", { latitude: 1, longitude: 2, pType: "" })).toMatchObject({ status: 200, explanation: "call finished" });
+  });
+
+  /////////////////////////////////////////////
+
+
+
+  /* it('should insert the record', () => {
+     service.saveDevicePerimeterToDB(exampleInput)
+   })*/
 });
 
 const exampleInput = {
