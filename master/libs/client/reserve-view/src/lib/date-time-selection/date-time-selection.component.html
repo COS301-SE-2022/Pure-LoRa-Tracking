@@ -1,6 +1,7 @@
-<div id="datetime-wrap">
+<div id="container">
+  <div id="datetime-wrap">
     <!-- TODO fix formatting -->
-     <mat-form-field appearance="standard" style="margin-right: 0.5em; width: 14em;" >
+     <mat-form-field appearance="standard" style="margin-right: 1.5em;">
        <mat-label>Please enter in the dates</mat-label>
        <mat-date-range-input [rangePicker]="picker" [formGroup]="daterange">
          <input matInput matStartDate placeholder="Start date"  formControlName="startdateform">
@@ -11,7 +12,7 @@
        <mat-date-range-picker #picker></mat-date-range-picker>
      </mat-form-field>
      <div>
-       <mat-form-field appearance="standard" style="margin-right: 0.5em;" class="time-input">
+       <mat-form-field appearance="standard" style="margin-right: 1.5em;" class="time-input">
          <mat-label>Start Time</mat-label>
          <mat-select [(value)]="starttime" >
            <mat-option value="0">00:00</mat-option>
@@ -42,7 +43,7 @@
            <!-- gives one minute of next day -->
          </mat-select>
        </mat-form-field>
-       <mat-form-field appearance="standard" class="time-input">
+       <mat-form-field appearance="standard" class="time-input" style="margin-right: 1.5em;">
          <mat-label>End Time</mat-label>
          <mat-select [(value)]="endtime">
            <mat-option value="0">00:00</mat-option>
@@ -77,10 +78,11 @@
     
      <div id="date-action-wrapper">
        <div>
-         <button mat-button (click)="apply()">Apply</button>
+         <button mat-button color="primary" (click)="apply()">Apply</button>
        </div>
        <div>
-         <button mat-button (click)="reset()">Reset</button> 
+         <button mat-button color="primary" (click)="reset()">Reset</button> 
        </div>
      </div>
    </div>
+</div>

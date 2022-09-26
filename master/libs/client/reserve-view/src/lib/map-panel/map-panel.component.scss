@@ -14,14 +14,13 @@
 }
 
 .shadow{
- box-shadow: 0 1px 2px rgb(60 64 67 / 30%), 0 1px 3px 1px rgb(60 64 67 / 15%)
+// box-shadow: 0 1px 2px rgb(60 64 67 / 30%), 0 1px 3px 1px rgb(60 64 67 / 15%)
 }
 
 #border-option{
-  background-color: white;
   border-radius: 0.5rem;
   flex:1;
-  border: 1px solid grey;
+  border: 2px solid rgba(0,0,0,0.2);
 }
 
 #type-option{
@@ -32,5 +31,10 @@
   height: 2.5rem;
   align-items: center;
   border-radius: 0.5rem;
-  border: 1px solid grey;
+  border: 2px solid rgba(0,0,0,0.2);
+}
+
+mat-checkbox{
+  border-radius: 0.5rem;
+  background-color: white;
 }
