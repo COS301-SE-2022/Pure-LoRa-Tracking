@@ -1,5 +1,3 @@
-@import "apps/lora-tracking/src/styles.scss";
-
 mat-card {
     height: 100%;
     padding-top: 0.3em;
@@ -74,8 +72,9 @@ cdk-virtual-scroll-viewport {
     border: none;
 }
 
-#switchIcon {
-    // vertical-align: sub;
+.reserve-select {
+    font-weight: 500;
+    font-family:  'Bai Jamjuree', sans-serif;
 }
 
 ::ng-deep .reserve-select-field .mat-form-field-wrapper {
