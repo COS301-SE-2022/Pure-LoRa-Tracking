@@ -124,6 +124,7 @@ export class ReserveUsersViewComponent implements OnInit {
         if(curr.status==200&&curr.explain=="ok"){
           this.snackbar.openFromComponent(SnackbarAlertComponent,{duration: 5000, panelClass: ['green-snackbar'], data: {message:"User Added", icon:"check_circle"}});
           this.ngOnInit();
+          this.addUser = false;
         }
       })
 

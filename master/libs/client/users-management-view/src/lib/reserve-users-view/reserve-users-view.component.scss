@@ -18,7 +18,7 @@ table {
 }
 
 #cancelBtn {
-   margin: 1%;
+   margin: 1rem;
 }
 
 #banner-container{
@@ -37,4 +37,8 @@ h1{
     font-weight: 700;
     color: var(--color-primary);
     margin: 0;
+}
+
+.stepperForm{
+    margin: 0.5rem;
 }

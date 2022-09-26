@@ -84,10 +84,10 @@
 </div>
 
 <div id="addUserForm" *ngIf="addUser === true">
-    <mat-stepper orientation="vertical" linear="true" #stepper>
+    <mat-stepper orientation="horizontal" linear="true" #stepper>
         <mat-step [stepControl]="nameGroup">
-    <form [formGroup]="nameGroup">
-      <ng-template matStepLabel>Provide name</ng-template>
+    <form [formGroup]="nameGroup" class="stepperForm">
+      <ng-template matStepLabel>Name</ng-template>
       <mat-form-field appearance="fill">
         <mat-label>Name</mat-label>
         <input matInput placeholder="First name" formControlName="nameControl" required>
@@ -98,8 +98,8 @@
     </form>
   </mat-step>
   <mat-step [stepControl]="surnameGroup">
-    <form [formGroup]="surnameGroup">
-      <ng-template matStepLabel>Provide surname</ng-template>
+    <form [formGroup]="surnameGroup" class="stepperForm">
+      <ng-template matStepLabel>Surname</ng-template>
       <mat-form-field appearance="fill">
         <mat-label>Surname</mat-label>
         <input matInput formControlName="surnameControl" placeholder="Surname"
@@ -112,7 +112,7 @@
     </form>
   </mat-step>
   <mat-step [stepControl]="emailGroup">
-    <form [formGroup]="emailGroup">
+    <form [formGroup]="emailGroup" class="stepperForm">
       <ng-template matStepLabel>Fill in user e-mail</ng-template>
       <mat-form-field appearance="fill">
         <mat-label>E-mail</mat-label>
@@ -126,7 +126,7 @@
     </form>
   </mat-step>
   <mat-step [stepControl]="reserveGroup">
-    <form [formGroup]="reserveGroup">
+    <form [formGroup]="reserveGroup" class="stepperForm">
       <ng-template matStepLabel>Select reserve(s)</ng-template>
       <mat-form-field appearance="fill">
         <mat-label>Reserves</mat-label>
@@ -144,8 +144,7 @@
     <ng-template matStepLabel>Confirm</ng-template>
     <p>Please confirm to add the user:</p>
     <div>
-        <button mat-button matStepperPrevious>Back</button>
-      
+      <button mat-button matStepperPrevious>Back</button>
       <button mat-button (click)="addUserToDB()"  >Confirm</button>
     </div>
   </mat-step>
