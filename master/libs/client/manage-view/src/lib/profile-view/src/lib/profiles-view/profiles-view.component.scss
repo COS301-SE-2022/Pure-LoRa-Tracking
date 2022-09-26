@@ -20,32 +20,46 @@
 
 #banner-content {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    margin: 0.5rem 1rem 0.5rem 1rem;
-    color: white;;
-    
+    margin: 1rem;
+    color: white;    
 }
 
 #profile-icon {
     color: white;
-    font-size: 3rem;
-    height: 3rem;
-    width: 3rem;
-    margin-bottom: 0.1em;
+    font-size: 4rem;
+    height: 4rem;
+    width: 4rem;
+    margin-right: 1rem;
 }
 
 #wrapper {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    
+    margin: 1rem;
 }
 
 #content {
-    // flex-grow: 2;
+    flex-grow: 1;
     margin: 0rem 0rem 0rem 1rem;
 }
 
 #button-wrapper {
     margin-right: 1.0rem;
+}
+
+.btn-icon{
+    margin-right: 0.5rem;
+}
+
+.values{
+    font-weight: 500;
+}
+
+.content-padding{
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    display: inline-block;
 }
