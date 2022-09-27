@@ -2538,14 +2538,20 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
     console.log(await service.getDeviceSensorData('DEVID', 0, 1));
   });
 
-  it('Historical Data -> live', async () => {
-    console.log(await service.loginUser('reserveadmin@reserve.com', 'reserveaccountissecure.'))
-    console.log((await service.getDeviceHistoricalData('8ee47c40-3cd6-11ed-879e-15327a14b2fd','TRI', 0, 1754072587463)).data)
-  });
+  // it('Historical Data -> live', async () => {
+  //   console.log(await service.loginUser('reserveadmin@reserve.com', 'reserveaccountissecure.'))
+  //   console.log((await service.getDeviceHistoricalData('8ee47c40-3cd6-11ed-879e-15327a14b2fd','TRI', 0, 1754072587463)).data)
+  // });
 
   /*it('v1 send telemetry -> live test', async () => {
     service.v1SendTelemetry("wzBhcYgAjRUs8conbhCG",{longitude:3, latitude:4,pType:'TRI'})
   });*/
+
+  // it('Historical Data -> live', async () => {
+  //   console.log(await service.loginUser('isak@lora.co.za', 'reserve'))
+  //   console.log((await service.getDeviceHistoricalData('b30f3f90-3d37-11ed-9f1a-879a3b706658','PF', 0, 1754072587463)).data.data)
+  // });
+
 });
 
 //////////////////////////////////////////////////////////////////////

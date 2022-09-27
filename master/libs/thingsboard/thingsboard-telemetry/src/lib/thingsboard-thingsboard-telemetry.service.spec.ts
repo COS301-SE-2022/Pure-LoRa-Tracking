@@ -351,10 +351,11 @@ describe('ThingsboardThingsboardTelemetryService', () => {
   });
   ////////////////////////////////////////////////////////////////////////////////
 
-  /*it('send telemetry V1 -> Mock Data', async () => {
-    expect(await service.V1sendJsonTelemetry("hZQ9lFxS0Bk6Ic8nSBlV", {
-      latitude: -25.802363957922285,
-      longitude: 28.206281661987305
-    })).toEqual(200);
-  });*/
+  // it('send telemetry V1 -> Mock Data', async () => {
+  //   expect(await service.V1sendJsonTelemetry("cF8C9RHmkhhcQR2wbDjy", {
+  //     latitude: -25.754580029178225,
+  //     longitude: 28.232567310333252,
+  //     pType : "PF"
+  //   })).toEqual(200);
+  // });
 });
