@@ -60,7 +60,7 @@ describe('ProcessingApiProcessingBusService', () => {
   /////////////////////////////////////////////
   it('get device perimeter -> fail', async () => {
     jest.spyOn(dbProxy, 'getDevicePerimeter').mockImplementationOnce(() => { throw new Error("find perimeter failed") });
-    expect(await service.getDevicePerimeter("")).toEqual({});
+    expect(await service.getDevicePerimeter("")).toEqual(null);
   });
 
   it('get device perimeter -> pass', async () => {
