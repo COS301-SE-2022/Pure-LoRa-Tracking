@@ -37,7 +37,7 @@ export class ReserveViewComponent {
   processingType="TRI";
   reservesList: ReserveInfo[];
   selectedReserveId = "";
-
+  noReservesMessage = "You do not belong to any reserves.\nPlease contact your reserve administrator.";
   constructor(public apicaller: MapCallerService, private tokenmanager: TokenManagerService, private notifier: DeviceNotifierService, private http: HttpClient, private cookiemanager: CookieService) {
     this.LastestHistorical = [];
     this.Gateways = [];
