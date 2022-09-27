@@ -140,9 +140,11 @@ export class ReserveViewComponent {
   }
 
   typeChange(event:string){
+    console.log("type change",event);
     this.processingType=event;
     this.apicaller.getHistoricalWithTime(this.token, this.selectedReserveId, [], this.notifier.getTimeStampsValue().startTime, this.notifier.getTimeStampsValue().endTime,this.processingType).then(val => {
       // console.table(val['data'])
+      console.log("returned ",val);
       this.reservemap?.reload(val.data);
       this.LastestHistorical = val.data;
     });

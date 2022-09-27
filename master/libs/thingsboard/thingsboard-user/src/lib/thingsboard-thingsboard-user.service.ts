@@ -1,5 +1,5 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
 @Injectable()
 export class ThingsboardThingsboardUserService {
@@ -761,6 +761,20 @@ export class ThingsboardThingsboardUserService {
       status: resp.status,
       explanation: 'ok',
     };
+  }
+
+  async check2FAEnabled(token:string):Promise<boolean>{
+    const headersReq = {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + token,
+    };
+    
+    const resp = await firstValueFrom(this.httpService.get(this.ThingsBoardURL + "/2fa/providers",{
+      headers: headersReq
+    }));
+    const array=resp.data;
+    if(array.includes('TOTP'))return true;
+    return false;
   }
 
 }

@@ -1752,6 +1752,13 @@ export class ThingsboardThingsboardClientService {
     const response = await this.userService.resetLogin(email);
     Logger.log("Login Reset Attempted:\n"+response.explanation);
   }
+
+  //////////////////////////////////////////////////////////////////
+
+  async check2FAEnabled(token:string): Promise<boolean> {
+    const resp= await this.userService.check2FAEnabled(token);
+    return resp;
+  }
 }
   /* data is required to be any due to the many possible response data types */
 

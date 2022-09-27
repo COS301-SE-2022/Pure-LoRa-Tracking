@@ -51,13 +51,23 @@ export class LoginComponent implements OnInit {
         password:this.logingroup.get("password")?.value
       })).subscribe((val:any)=>{
         console.log(val);
-        if(val.status==200&&val.explain=="Login failed. No 2fa"){
-            this.cookieservice.set("PURELORA_PREVERIFICATION_TOKEN",val.token,14);
-          this.router.navigate(["twofa"],{queryParams:{link:btoa(val.authURL)}});
+        if(val.enabled2fa==true){
+          if(val.status==200&&val.explain=="Login failed. No 2fa"){
+              this.cookieservice.set("PURELORA_PREVERIFICATION_TOKEN",val.token,14);
+            this.router.navigate(["twofa"],{queryParams:{link:btoa(val.authURL)}});
+          }
+          else if(val.status==200&&val.explain=="Login successful. 2fa"){
+            this.router.navigate(["auth"],{queryParams:{token:btoa(val.token)}});
+          }
         }
-        else if(val.status==200&&val.explain=="Login successful. 2fa"){
-          this.router.navigate(["auth"],{queryParams:{token:btoa(val.token)}});
+        else {
+          if(val.status==200&&val.explain=="Login successful. 2fa not enabled"){
+            this.cookieservice.set("PURELORA_TOKEN",val.token,14);
+            this.cookieservice.set("PURELORA_REFRESHTOKEN",val.refreshToken,14);
+            this.router.navigate(["reserve"]);
+          }
         }
+        
 
         // if(val.status==200&&val.explain=="Login successful."){
         //   //set cookies
