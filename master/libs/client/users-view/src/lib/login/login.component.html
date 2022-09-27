@@ -11,10 +11,10 @@
                     <mat-label>Password</mat-label>
                     <input matInput type="password" formControlName="password" placeholder="Password" tabindex="2">
                 </mat-form-field>
-                <div id="login-button">
-                    <button mat-flat-button color="primary" type="submit" tabindex="3" [disabled]="logingroup.invalid">Login</button>
+                <div class="buttons">
+                    <button mat-raised-button color="primary" type="submit" tabindex="3" [disabled]="logingroup.invalid">Login</button>
                 </div>
-                <div>
+                <div class="buttons">
                     <button mat-button (click)="reset()" tabindex="4"><u>Reset password</u></button>
                 </div>
                 <div id="response-container">

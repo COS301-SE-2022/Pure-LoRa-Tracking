@@ -1,6 +1,6 @@
 .loginform{
     background-color: white;
-   padding: 1rem;
+   padding: 1.5rem;
    border-radius: 0.5rem;
 }
 
@@ -28,7 +28,7 @@
     width: 100%;
 }
 
-#login-button {
+.buttons {
     margin-bottom: 0.5em;
 }
 
@@ -46,6 +46,7 @@
 #login-logo{
     width: 50%;
     margin-bottom: 1rem;
+    filter: drop-shadow(3px 5px 2px rgb(0 0 0 / 0.4));
 }
 
 #button-container{
