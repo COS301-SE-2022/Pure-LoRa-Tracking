@@ -1,17 +1,33 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, Input, OnChanges, SimpleChanges, } from '@angular/core';
 import { MapApiHistoricalData, MapApiHistoricalResponse, MapApiLatestResponse, MapApiReserveResponse, MapHistoricalPoints, MapRender, MarkerView, ViewMapType, Device, Gateway} from '@master/shared-interfaces';
-import * as L from 'leaflet';
 import * as geojson from 'geojson';
 // This library does not declare a module type, we we need to ignore this
 // error for a successful import
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { antPath } from "leaflet-ant-path"
+import * as L from 'leaflet';
 import { DeviceNotifierService } from '@master/client/shared-services';
 import { SnackbarAlertComponent } from '@master/client/shared-ui/components-ui';
 import { MatSnackBar } from '@angular/material/snack-bar';
+// import 'leaflet/dist/leaflet.css';
 // import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css';
+// import 'leaflet-defaulticon-compatibility';
+import { icon, Marker } from 'leaflet';
+//this fixes the marker shadow issue
+const iconDefault = icon({
+  iconRetinaUrl:'assets/marker-icon-2x.png',
+  iconUrl:'assets/marker-icon.png',
+  shadowUrl:'assets/marker-shadow.png',
+  iconSize: [25, 41],
+  tooltipAnchor: [16, -26],
+  popupAnchor: [1, -50],
+  iconAnchor: [10, 40],
+  shadowSize: [31, 31]
+});
+Marker.prototype.options.icon = iconDefault;
+
 
 @Component({
   selector: 'master-reserve-map',
