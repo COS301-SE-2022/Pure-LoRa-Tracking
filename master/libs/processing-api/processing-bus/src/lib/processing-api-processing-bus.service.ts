@@ -45,6 +45,7 @@ export class ProcessingApiProcessingBusService {
         try {
             this.database.updateDevicePerimeterName(body);
         } catch (error) {
+            Logger.log('Update perimeter name');
             Logger.log(error)
         }
     }
@@ -53,7 +54,8 @@ export class ProcessingApiProcessingBusService {
         try {
             this.database.removeDeviceFromPerimeter(body);
         } catch (error) {
-            Logger.log(error)
+            Logger.log("Remove device fail");
+            Logger.log(error);
         }
     }
 
@@ -61,8 +63,9 @@ export class ProcessingApiProcessingBusService {
         try {
             return this.database.getDevicePerimeter(deviceID);
         } catch (error) {
-            Logger.log("Save Device perimeter error");
-            Logger.log(error)
+            Logger.log("Get Device perimeter error");
+            Logger.log(error);
+            return {};
         }
     }
 

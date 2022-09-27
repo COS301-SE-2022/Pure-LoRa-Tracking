@@ -1,4 +1,4 @@
-import { DatabaseProxyModule } from '@lora/database';
+import { DatabaseProxyModule, DatabaseProxyService } from '@lora/database';
 import { LocationModule, LocationService } from '@lora/location';
 import { ThingsboardThingsboardClientModule, ThingsboardThingsboardClientService } from '@lora/thingsboard-client';
 import { ThingsboardThingsboardTestsModule, ThingsboardThingsboardTestsService } from '@lora/thingsboard/tests';
@@ -11,6 +11,7 @@ describe('ProcessingApiProcessingBusService', () => {
   let locationService: LocationService;
   let tests: ThingsboardThingsboardTestsService;
   let tbClient: ThingsboardThingsboardClientService;
+  let dbProxy: DatabaseProxyService;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
@@ -22,6 +23,7 @@ describe('ProcessingApiProcessingBusService', () => {
     locationService = module.get(LocationService);
     tests = module.get(ThingsboardThingsboardTestsService);
     tbClient = module.get(ThingsboardThingsboardClientService);
+    dbProxy = module.get(DatabaseProxyService);
   });
 
   it('should be defined', () => {
@@ -47,7 +49,7 @@ describe('ProcessingApiProcessingBusService', () => {
     expect(await service.sendProcessedDatatoTB("", { latitude: 1, longitude: 2, pType: "" })).toEqual(false);
   });
 
-  it('v1 send telemetry -> pass', async () => {
+  it('send data to tb -> pass', async () => {
     jest.spyOn(tbClient, 'v1SendTelemetry').mockImplementationOnce(() => Promise.resolve({
       status: 200,
       explanation: 'call finished',
@@ -56,6 +58,67 @@ describe('ProcessingApiProcessingBusService', () => {
   });
 
   /////////////////////////////////////////////
+  it('get device perimeter -> fail', async () => {
+    jest.spyOn(dbProxy, 'getDevicePerimeter').mockImplementationOnce(() => { throw new Error("find perimeter failed") });
+    expect(await service.getDevicePerimeter("")).toEqual({});
+  });
+
+  it('get device perimeter -> pass', async () => {
+    jest.spyOn(dbProxy, 'getDevicePerimeter').mockImplementationOnce(() => Promise.resolve({
+      deviceID: "122",
+      perimeter: [],
+      name: "device"
+    }));
+    expect(await service.getDevicePerimeter("")).toMatchObject({
+      deviceID: "122",
+      perimeter: [],
+      name: "device"
+    });
+  });
+
+  /////////////////////////////////////////////
+  it('delete device perimeter -> fail', async () => {
+    jest.spyOn(dbProxy, 'removeDeviceFromPerimeter').mockImplementationOnce(() => { throw new Error("delete perimeter failed") });
+    expect(await service.RemoveDeviceFromPerimeter({ deviceID: '' })).toEqual(undefined);
+  });
+
+  it('delete device perimeter -> pass', async () => {
+    jest.spyOn(dbProxy, 'removeDeviceFromPerimeter').mockImplementationOnce(() => Promise.resolve());
+    expect(await service.RemoveDeviceFromPerimeter({ deviceID: "" })).toEqual(undefined);
+  });
+
+  /////////////////////////////////////////////
+  it('update device perimeter name -> fail', async () => {
+    jest.spyOn(dbProxy, 'updateDevicePerimeterName').mockImplementationOnce(() => { throw new Error("delete perimeter failed") });
+    expect(await service.updateDeviceReserveName({ name : "", newName : "" })).toEqual(undefined);
+  });
+
+  it('update device perimeter name -> pass', async () => {
+    jest.spyOn(dbProxy, 'updateDevicePerimeterName').mockImplementationOnce(() => Promise.resolve());
+    expect(await service.updateDeviceReserveName({ name : "", newName : "" })).toEqual(undefined);
+  });
+
+  /////////////////////////////////////////////
+  it('update device perimeter -> fail', async () => {
+    jest.spyOn(dbProxy, 'updateDevicePerimeter').mockImplementationOnce(() => { throw new Error("delete perimeter failed") });
+    expect(await service.updateDevicePerimeter({ name : "", deviceID : "", perimeter : [] })).toEqual(undefined);
+  });
+
+  it('update device perimeter -> pass', async () => {
+    jest.spyOn(dbProxy, 'updateDevicePerimeter').mockImplementationOnce(() => Promise.resolve());
+    expect(await service.updateDevicePerimeter({ name : "", deviceID : "", perimeter : [] })).toEqual(undefined);
+  });
+  
+  /////////////////////////////////////////////
+  it('save device perimeter -> fail', async () => {
+    jest.spyOn(dbProxy, 'insertDevicePerimeter').mockImplementationOnce(() => { throw new Error("delete perimeter failed") });
+    expect(await service.saveDevicePerimeterToDB({ name : "", deviceID : "", perimeter : [] })).toEqual(undefined);
+  });
+
+  it('save device perimeter -> pass', async () => {
+    jest.spyOn(dbProxy, 'insertDevicePerimeter').mockImplementationOnce(() => Promise.resolve());
+    expect(await service.saveDevicePerimeterToDB({ name : "", deviceID : "", perimeter : [] })).toEqual(undefined);
+  });
 
 
 
