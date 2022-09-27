@@ -2,7 +2,8 @@ import { DatabaseProxyService } from '@lora/database';
 import { LocationService } from '@lora/location';
 import { ThingsboardThingsboardClientService } from '@lora/thingsboard-client';
 import { Injectable, Logger } from '@nestjs/common';
-import { DevicePerimeter } from 'libs/database-proxy/src/database-interfaces.interface';
+import { Prop, Schema } from '@nestjs/mongoose';
+//import { DevicePerimeter } from 'libs/database-proxy/src/database-interfaces.interface';
 
 @Injectable()
 export class ProcessingApiProcessingBusService {
@@ -60,7 +61,7 @@ export class ProcessingApiProcessingBusService {
         }
     }
 
-    async getDevicePerimeter(deviceID: string) : Promise<null | DevicePerimeter> {
+    async getDevicePerimeter(deviceID: string) : Promise<any> {
         try {
             return this.database.getDevicePerimeter(deviceID);
         } catch (error) {
