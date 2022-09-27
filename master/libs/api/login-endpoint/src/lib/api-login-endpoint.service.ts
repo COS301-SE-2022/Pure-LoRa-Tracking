@@ -144,6 +144,7 @@ export class ApiLoginEndpointService {
             status : 403,
             explain : "no email provided"
         }
+        
 
         this.thingsboardClient.resetLogin(content.email);
 

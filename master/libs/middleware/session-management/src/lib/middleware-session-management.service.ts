@@ -8,7 +8,7 @@ export class MiddlewareSessionManagementService implements NestMiddleware {
     async use(req: Request, res: ServerResponse, next: (error?: any) => void) {
         //console.log(req.url)
         //login has a pass through this middleware, cause it has more checks later
-        if (req.url.startsWith("/login")) {
+        if (req.url.startsWith("/login")||req.url.startsWith("/logout")||req.url.startsWith("/reset")) {
             //check if this has a issue with security
             //this MUST be a return
             return next();
