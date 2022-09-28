@@ -61,6 +61,8 @@ export class ReservePanelComponent implements OnInit {
   filteredGateways: Gateway[] | undefined = [];
 
   filteredSensors: Device[] = [];
+  showSensors: boolean;
+  showGateways: boolean;
 
   constructor(public notifier: DeviceNotifierService) {
     this._Devices = [];
@@ -80,6 +82,8 @@ export class ReservePanelComponent implements OnInit {
       this.selectedDeviceID = "";
     });
     this.reserveList = [];
+    this.showSensors = true;
+    this.showGateways = false;
   }
 
   getSelectedStyle(deviceId: string): string {
