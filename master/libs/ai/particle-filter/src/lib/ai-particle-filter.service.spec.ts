@@ -133,6 +133,10 @@ describe('Live Particle filter test', () => {
     const result = await service.processData(sensorSet[0]);
     expect(result).toEqual(false);
   });
+
+  it('should set the number of iterations', () => {
+    expect(service.setIterations(5)).toBeUndefined();
+  });
 });
 
 const initialParameters = {
