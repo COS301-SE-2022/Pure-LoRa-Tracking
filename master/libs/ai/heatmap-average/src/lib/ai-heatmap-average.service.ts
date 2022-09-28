@@ -5,7 +5,6 @@ import tf = require('@tensorflow/tfjs-node');
 
 @Injectable()
 export class AiHeatmapAverageService extends AiProcessingStrategyService {
-  private EarthRadius = 6371;
   private model: tf.Sequential;
   private targetEpochs = 5;
   private loadFilePath: string;
@@ -82,7 +81,8 @@ export class AiHeatmapAverageService extends AiProcessingStrategyService {
 
     this.serviceBus.sendProcessedDatatoTB(this.deviceToken, {
       pType: 'HM',
-      longitude: result[0], latitude: result[1] ,
+      longitude: result[0],
+      latitude: result[1],
     });
 
     this.saveModel(this.saveFilePath);
