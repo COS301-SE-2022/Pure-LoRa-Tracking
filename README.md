@@ -27,6 +27,7 @@ The stored data will be processed using the location of each tower to calculate 
 
 - :camera_flash: [Harbinger - Demo 1](https://drive.google.com/file/d/1zug-8h2NstFJNKIpBGP23iTfKXIWgtUo/view?usp=sharing)
 - :camera_flash: [Harbinger - Demo 2](https://drive.google.com/file/d/1Pe_EokRQlYhefhzOU6qfEsrA-hvo5QeV/view?usp=sharing)
+- :camera_flash: [Harbinger - Demo 3](https://drive.google.com/file/d/1Lxx42RLoIJ9rDvSbeuKfnR4WLwDHWXwt/view?usp=sharing)
 
 ## Documentation
 ### Software Requirements Specification
