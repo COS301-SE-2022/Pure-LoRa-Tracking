@@ -158,6 +158,15 @@ describe('Live Particle filter test', () => {
       service.weightDistanceEuclidean([0.000000004], [0.00000005])
     ).toEqual(100000);
   });
+
+  it('generateSampleFromWeights -> exception', async () => {
+    const result = await service
+      .generateNewSampleFromWeights([[0.4]], [0.5, 0.6])
+      .catch((error) => {
+        return error.message;
+      });
+    expect(result).toEqual('Point and Weight dimension incorrect: P-1 W-2');
+  });
 });
 
 const initialParameters = {
