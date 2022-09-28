@@ -97,6 +97,14 @@ export class ReserveMapComponent implements OnInit, OnChanges {
       console.log();
       if (this.mainmap != null && this.mappolygons != null) this.mainmap.fitBounds(this.mappolygons.getBounds())
     })
+    this.notifier.getVisibilityChange().subscribe(params=>{
+      if(params.hide){
+        this.hideSensor(params.deviceid);
+      }
+      else{
+        this.unhideSensor(params.deviceid);
+      }
+    })
 
     
   }
@@ -306,6 +314,23 @@ export class ReserveMapComponent implements OnInit, OnChanges {
     })
     this.historicalpath = [];
     this.loadInnitial(deviceIDs);
+  }
+
+  public hideSensor(deviceid:string){
+    console.log("called");
+    const current=this.historicalpath.find(curr=>curr.deviceID==deviceid);
+    if(current!=null){
+      current.markers.forEach(other=>other.remove());
+      current.polyline.remove();
+    }
+  }
+
+  public unhideSensor(deviceid:string){
+    const current=this.historicalpath.find(curr=>curr.deviceID==deviceid);
+    if(current!=null){
+      current.markers.forEach(other=>other.addTo(this.mainmap));
+      current.polyline.addTo(this.mainmap);
+    }
   }
 
   //loop through and add all things back to map
