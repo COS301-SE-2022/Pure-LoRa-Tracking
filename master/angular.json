@@ -3,7 +3,6 @@
   "projects": {
     "ai-ai-processing": "libs/ai/ai-processing",
     "ai-heatmap-average": "libs/ai/heatmap-average",
-    "ai-mock-generator-triangulation": "libs/ai/mock-generator/triangulation",
     "ai-particle-filter": "libs/ai/particle-filter",
     "ai-processing-strategy": "libs/ai/processing-strategy",
     "api": "apps/api",
