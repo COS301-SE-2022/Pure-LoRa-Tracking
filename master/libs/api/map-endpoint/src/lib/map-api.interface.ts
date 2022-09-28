@@ -38,6 +38,7 @@ export interface Device {
     deviceName: string,
     type: string,
     pType : "TRI" | "PF" | "HM",
+    hardwareid: string,
     locationData: {
         timeStamp: number,
         location: {

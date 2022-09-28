@@ -208,7 +208,8 @@ export class ApiMapEndpointService {
                 data.push({
                     pType:content.pType,
                     deviceID: item.name,
-                    deviceName: item.furtherExplain,
+                    deviceName: item.explanation,
+                    hardwareid:item.furtherExplain,
                     type: "sensor",
                     locationData: item.data
                 })
@@ -216,7 +217,8 @@ export class ApiMapEndpointService {
                 data.push({
                     pType:content.pType,
                     deviceID: item['name'],
-                    deviceName: item.furtherExplain,
+                    deviceName: item.explanation,
+                    hardwareid:item.furtherExplain,
                     type: "sensor",
                     locationData: item.data.data.telemetryResults
                 })

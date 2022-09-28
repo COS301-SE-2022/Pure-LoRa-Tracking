@@ -17,6 +17,7 @@ export class DeviceListItemComponent {
       deviceID: "",
       deviceName: "",
       type: "",
+      hardwareid:"",
       locationData: [{
         timeStamp: 0,
         latitude: "",

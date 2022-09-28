@@ -43,6 +43,7 @@ export interface Device {
     deviceID: string,
     deviceName: string,
     type: string,
+    hardwareid: string,
     locationData: {
         timeStamp: number,
         latitude: string,
