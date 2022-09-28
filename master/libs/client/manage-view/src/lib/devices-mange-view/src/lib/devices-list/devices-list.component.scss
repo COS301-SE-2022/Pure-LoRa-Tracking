@@ -2,3 +2,29 @@ table {
     width: 100%;
     padding: 1rem;
 }
+
+#banner-container{
+    margin: 1rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+#spacer{
+    flex: 1 1 auto;
+}
+
+h1{
+    font-family: 'Bai Jamjuree', sans-serif;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin: 0;
+}
+
+#content-container{
+    margin:1rem;
+}
+
+#add-icon{
+    margin-left: 0.2em;
+}
