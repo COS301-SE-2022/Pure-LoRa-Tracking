@@ -4,9 +4,11 @@ import { ThingsboardThingsboardClientModule } from '@lora/thingsboard-client';
 import { ConsoleLogger } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { ProcessingApiProcessingBusModule } from '@processing/bus';
+import { mod } from '@tensorflow/tfjs-node';
 import {
   AiParticleFilterService,
   particleFilterMultinomialService,
+  particleFilterRSSIMultinomialService,
   particleFilterStratifiedService,
 } from './ai-particle-filter.service';
 
@@ -98,6 +100,7 @@ describe('Live Particle filter test', () => {
   let service: AiParticleFilterService;
   let stratifiedService: particleFilterStratifiedService;
   let multinomialService: particleFilterMultinomialService;
+  let rssiService: particleFilterRSSIMultinomialService;
 
   beforeAll(async () => {
     const module = await Test.createTestingModule({
@@ -110,16 +113,19 @@ describe('Live Particle filter test', () => {
         AiParticleFilterService,
         particleFilterStratifiedService,
         particleFilterMultinomialService,
+        particleFilterRSSIMultinomialService,
       ],
     }).compile();
 
     service = module.get(AiParticleFilterService);
     stratifiedService = module.get(particleFilterStratifiedService);
     multinomialService = module.get(particleFilterMultinomialService);
+    rssiService = module.get(particleFilterRSSIMultinomialService);
 
     service.configureInitialParameters(initialParameters);
     stratifiedService.configureInitialParameters(initialParameters);
     multinomialService.configureInitialParameters(initialParameters);
+    rssiService.configureInitialParameters(initialParameters);
   });
 
   it('particle filtration', async () => {
@@ -188,6 +194,10 @@ describe('Live Particle filter test', () => {
 
   it('miltiService resample -> success', () => {
     expect(multinomialService.resampleParticles()).toBeUndefined();
+  });
+
+  it('rssiService weightsMeasuredRelativeToOriginal -> success', () => {
+    expect(rssiService.resampleParticles(4)).toBeUndefined();
   });
 });
 
