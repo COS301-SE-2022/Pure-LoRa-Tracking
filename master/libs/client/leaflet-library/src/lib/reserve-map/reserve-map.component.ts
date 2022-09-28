@@ -333,6 +333,7 @@ export class ReserveMapComponent implements OnInit, OnChanges {
 
   //loop through and add all things back to map
   public resetData(): void {
+    if(this.currentantpath!=null) this.currentantpath.remove();
     this.HistoricalMode = false;
     this.historicalpath.forEach(val => this.addToMap(val))
     if (this.currentantpath != null) {
