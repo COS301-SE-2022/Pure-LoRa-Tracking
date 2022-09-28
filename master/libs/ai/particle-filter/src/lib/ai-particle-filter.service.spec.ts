@@ -1,6 +1,7 @@
 import { AiProcessingStrategyService } from '@lora/ai/strategy';
 import { LocationModule } from '@lora/location';
 import { ThingsboardThingsboardClientModule } from '@lora/thingsboard-client';
+import { ConsoleLogger } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { ProcessingApiProcessingBusModule } from '@processing/bus';
 import {
@@ -146,6 +147,10 @@ describe('Live Particle filter test', () => {
 
   it('should set gateways correctly', () => {
     expect(service.changeGateways(initialParameters.gateways)).toBeUndefined();
+  });
+
+  it('should convert rssi to meters', () => {
+    expect(service.RssiToMeters([70, 75, 20])).toEqual([1, 1, 1]);
   });
 });
 
