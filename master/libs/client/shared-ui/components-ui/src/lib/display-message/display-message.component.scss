@@ -1,0 +1,21 @@
+#container{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: large;
+}
+
+p{
+    white-space: pre-line;
+    text-align: center;
+    padding: 1rem;
+}
+
+mat-icon{
+    font-size: 5rem;
+    height: 5rem;
+    width: 5rem;
+}
