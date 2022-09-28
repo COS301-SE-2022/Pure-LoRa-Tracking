@@ -181,6 +181,10 @@ describe('Live Particle filter test', () => {
       })
     ).toBeDefined();
   });
+
+  it('stratService resample -> success', () => {
+    expect(stratifiedService.resampleParticles()).toBeUndefined();
+  });
 });
 
 const initialParameters = {
