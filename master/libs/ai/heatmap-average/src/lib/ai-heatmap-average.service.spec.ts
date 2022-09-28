@@ -121,6 +121,34 @@ describe('AiHeatmapAverageService', () => {
     ).toBeDefined();
   });
 
+  it('process data with >= 5 coordinates (ANN)', async () => {
+    const EUID = 'TEST';
+    for (let i = 0; i < 3; i++)
+      await service.processData(
+        {
+          deviceID: EUID,
+          reading: {
+            longitude: learning.coordinates[i].longitude,
+            latitude: learning.coordinates[i].latitude,
+          },
+        },
+        'ANN'
+      );
+
+    expect(
+      await service.processData(
+        {
+          deviceID: EUID,
+          reading: {
+            longitude: learning.coordinates[3].longitude,
+            latitude: learning.coordinates[3].latitude,
+          },
+        },
+        'ANN'
+      )
+    ).toBeDefined();
+  });
+
   it('tf -> create, fit, save', async () => {
     const learn = service.normalizePoints(
       service.deconstructData(learning.coordinates)
