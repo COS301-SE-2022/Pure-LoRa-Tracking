@@ -137,6 +137,16 @@ describe('Live Particle filter test', () => {
   it('should set the number of iterations', () => {
     expect(service.setIterations(5)).toBeUndefined();
   });
+
+  it('setGateways -> gatways < 2', () => {
+    expect(() =>
+      service.changeGateways([initialParameters.gateways[0]])
+    ).toThrow('Not enough gateways given');
+  });
+
+  it('should set gateways correctly', () => {
+    expect(service.changeGateways(initialParameters.gateways)).toBeUndefined();
+  });
 });
 
 const initialParameters = {
