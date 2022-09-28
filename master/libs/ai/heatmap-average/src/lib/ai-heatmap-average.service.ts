@@ -5,7 +5,6 @@ import tf = require('@tensorflow/tfjs-node');
 
 @Injectable()
 export class AiHeatmapAverageService extends AiProcessingStrategyService {
-  private EarthRadius = 6371;
   private model: tf.Sequential;
   private targetEpochs = 5;
   private loadFilePath: string;
@@ -82,7 +81,8 @@ export class AiHeatmapAverageService extends AiProcessingStrategyService {
 
     this.serviceBus.sendProcessedDatatoTB(this.deviceToken, {
       pType: 'HM',
-      longitude: result[0], latitude: result[1] ,
+      longitude: result[0],
+      latitude: result[1],
     });
 
     this.saveModel(this.saveFilePath);
@@ -179,15 +179,6 @@ export class AiHeatmapAverageService extends AiProcessingStrategyService {
       {
         epochs: this.targetEpochs,
         verbose: 0,
-        /*callbacks: {
-          onEpochEnd: async (epoch, logs) => {
-            console.log('Epoch ' + epoch);
-            console.log('Loss: ' + logs.loss + ' accuracy: ' + logs.acc);
-          },
-          onTrainEnd: async (logs: tf.Logs) => {
-            console.log(logs);
-          },
-        },*/
       }
     );
   }
@@ -200,49 +191,5 @@ export class AiHeatmapAverageService extends AiProcessingStrategyService {
         ).array()) as number[][]
       )[0]
     );
-  }
-
-  LatLongToGeometric(
-    latitude: number,
-    longitude: number
-  ): { x: number; y: number; z: number } {
-    return {
-      x: Math.cos(latitude) * Math.cos(longitude),
-      y: Math.cos(latitude) * Math.sin(longitude),
-      z: Math.sin(latitude),
-    };
-  }
-
-  GeometricAverage(GeomSet: { x: number; y: number; z: number }[]): {
-    x: number;
-    y: number;
-    z: number;
-  } {
-    let Xtot: number, Ytot: number, Ztot: number;
-    Xtot = 0;
-    Ytot = 0;
-    Ztot = 0;
-    GeomSet.forEach((item) => {
-      Xtot += item.x;
-      Ytot += item.y;
-      Ztot += item.z;
-    });
-
-    return {
-      x: Xtot / GeomSet.length,
-      y: Ytot / GeomSet.length,
-      z: Ztot / GeomSet.length,
-    };
-  }
-
-  GeometricToLatLong(GeomSet: { x: number; y: number; z: number }): {
-    latitude: number;
-    longitude: number;
-  } {
-    const hyp = Math.sqrt(GeomSet.x * GeomSet.x + GeomSet.y * GeomSet.y);
-    return {
-      longitude: Math.atan2(GeomSet.y, GeomSet.x),
-      latitude: Math.atan2(GeomSet.z, hyp),
-    };
   }
 }
