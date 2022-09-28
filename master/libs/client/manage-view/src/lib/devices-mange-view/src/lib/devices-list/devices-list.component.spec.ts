@@ -57,6 +57,7 @@ describe('DevicesListComponent', () => {
       {
         deviceID: 1,
         deviceName: "MyGateway1",
+        humanName: "MyGateway1",
         id: 1,
       }
     ]
@@ -67,6 +68,7 @@ describe('DevicesListComponent', () => {
       {
         deviceID: 2,
         deviceName: "MyGateway2",
+        humanName: "MyGateway2",
         id: 2,
       },
     ]
@@ -77,25 +79,29 @@ describe('DevicesListComponent', () => {
     data: [
       {
         deviceID: 1,
-        deviceName: "MyAvailable1",
+        deviceName: "MyAvailable1ID",
+        humanName: "MyAvailable1",
         id: 1,
         isGateway: true
       },
       {
         deviceID: 2,
-        deviceName: "MyAvailable2",
+        deviceName: "MyAvailable2ID",
+        humanName: "MyAvailable2",
         id: 2,
         isGateway: true
       },
       {
         deviceID: 3,
-        deviceName: "MyAvailable3",
+        deviceName: "MyAvailable3ID",
+        humanName: "MyAvailable3",
         id: 3,
         isGateway: false
       },
       {
         deviceID: 4,
-        deviceName: "MyAvailable4",
+        deviceName: "MyAvailable4ID",
+        humanName: "MyAvailable4",
         id: 4,
         isGateway: false
       },
@@ -175,24 +181,28 @@ describe('DevicesListComponent', () => {
         {
           id: 1,
           name: "MyGateway1",
+          hardwareid: "MyGateway1",
           reserve: 1,
           status: true
         },
         {
           id: 2,
           name: "MyGateway2",
+          hardwareid: "MyGateway2",
           reserve: 2,
           status: true
         },
         {
           id: 1,
           name: "MyAvailable1",
+          hardwareid: "MyAvailable1ID",
           reserve: "",
           status: false
         },
         {
           id: 2,
           name: "MyAvailable2",
+          hardwareid: "MyAvailable2ID",
           reserve: "",
           status: false
         },
@@ -205,24 +215,28 @@ describe('DevicesListComponent', () => {
           id: 1,
           name: "MySensor1",
           reserve: 1,
+          hardwareid:undefined,
           status: true
         },
         {
           id: 2,
           name: "MySensor2",
           reserve: 2,
+          hardwareid:undefined,
           status: true
         },
         {
           id: 3,
-          name: "MyAvailable3",
+          name: "MyAvailable3ID",
           reserve: "",
+          hardwareid:undefined,
           status: false
         },
         {
           id: 4,
-          name: "MyAvailable4",
+          name: "MyAvailable4ID",
           reserve: "",
+          hardwareid:undefined,
           status: false
         },
       ]);

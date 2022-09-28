@@ -10,6 +10,7 @@ describe('ReservePanelComponent', () => {
     deviceID: "sens-11",
     deviceName: "sens-11-test",
     type: "sensor",
+    hardwareid: "hardwareid2",
     locationData: [
       {
         timeStamp: Date.now() - 6000,
@@ -33,6 +34,7 @@ describe('ReservePanelComponent', () => {
     deviceID: "sens-2",
     deviceName: "sens-2-test",
     type: "sensor",
+    hardwareid: "hardwareid21",
     locationData: [
       {
         timeStamp: Date.now() - 6000,
@@ -56,19 +58,22 @@ describe('ReservePanelComponent', () => {
     deviceID: "sens-23",
     deviceName: "sens-23-test",
     type: "sensor",
+    hardwareid: "hardwareid3",
     locationData: []
   }
 
   const demogateway1={
     eui:"lkdsaf1",
     id:"gatesdfd2",
-    name:"gateway1"
+    name:"gateway1",
+    hardwareid:"hardwareid1",
   }
 
   const demogateway2={
     eui:"dsfserd",
     id:"saddffd",
-    name:"gateway2"
+    name:"gateway2",
+    hardwareid:"hardwareid2",
   }
 
   const demoval1="Test1";

@@ -1532,7 +1532,7 @@ export class ThingsboardThingsboardClientService {
       details.lastName,
       additionalinfo,
     );
-      console.log("details is ",details.email," and user is ",userinfo.data.email);
+      // console.log("details is ",details.email," and user is ",userinfo.data.email);
 
     if (resp.status != 200)
       return {
