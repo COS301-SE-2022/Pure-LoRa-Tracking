@@ -48,8 +48,11 @@ export class ProfilesEditComponent implements OnInit {
     }).subscribe((val:any)=>{
       console.log(val);
       if(val.status==200&&val.explain=="call finished"){
-        this.snackbar.openFromComponent(SnackbarAlertComponent,{duration: 5000, panelClass: ['green-snackbar'], data: {message:"User Updated", icon:"check_circle"}});
+        this.snackbar.openFromComponent(SnackbarAlertComponent,{duration: 3000, panelClass: ['green-snackbar'], data: {message:"Profle Updated", icon:"check_circle"}});
         this.navigateBack();
+      }
+      else {
+        this.snackbar.openFromComponent(SnackbarAlertComponent,{duration: 3000, panelClass: ['red-snackbar'], data: {message:"Something went wrong", icon:"error_outline"}});
       }
     });
   }

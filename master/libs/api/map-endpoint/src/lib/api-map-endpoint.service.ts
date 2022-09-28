@@ -199,7 +199,7 @@ export class ApiMapEndpointService {
                 explanation: "Invalid username or password",
                 data: [],
             }
-            if(item.data=undefined)
+            if(item.data==undefined)
                 item.data.telemetryResults = [];
             else if (item.data.telemetryResults == undefined)
                 item.data.telemetryResults = [];

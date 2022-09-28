@@ -105,6 +105,9 @@ export class ReserveMapComponent implements OnInit, OnChanges {
         this.unhideSensor(params.deviceid);
       }
     })
+    // this.notifier.getTimeStamps().subscribe(params=>{
+    //   this.resetData();
+    // })
 
     
   }
