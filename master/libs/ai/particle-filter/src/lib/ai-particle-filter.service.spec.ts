@@ -152,6 +152,12 @@ describe('Live Particle filter test', () => {
   it('should convert rssi to meters', () => {
     expect(service.RssiToMeters([70, 75, 20])).toEqual([1, 1, 1]);
   });
+
+  it('weightDistanceEuclidian -> 100000', () => {
+    expect(
+      service.weightDistanceEuclidean([0.000000004], [0.00000005])
+    ).toEqual(100000);
+  });
 });
 
 const initialParameters = {
