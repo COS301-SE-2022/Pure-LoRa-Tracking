@@ -5,20 +5,17 @@
 
     <span id="navspacer"></span>
 
-    <a mat-button class="nav-btn" routerLink='/reserve' routerLinkActive="active" >
-        <mat-icon >map</mat-icon>
-        <div class="navText">Reserve</div>
-    </a>
-        
-    <!-- <a mat-button class="nav-btn" routerLink='/staff' routerLinkActive="inactive">
-        <mat-icon>groups</mat-icon>
-        <div class="navText">Staff</div>
-    </a> -->
+    <div *ngIf="admin">
+        <a mat-button class="nav-btn" routerLink='/reserve' routerLinkActive="active" >
+            <mat-icon >map</mat-icon>
+            <div class="navText">Reserve</div>
+        </a>
 
-    <a mat-button class="nav-btn" routerLink='/manage' routerLinkActive="inactive">
-        <mat-icon >face</mat-icon>
-        <div class="navText">Manage</div>
-    </a>
+        <a mat-button class="nav-btn" routerLink='/manage' routerLinkActive="inactive">
+            <mat-icon >face</mat-icon>
+            <div class="navText">Manage</div>
+        </a>
+    </div>
 
     <a mat-mini-fab id="logoutBtn" color="white" (click)="logout()">
         <mat-icon>logout</mat-icon>

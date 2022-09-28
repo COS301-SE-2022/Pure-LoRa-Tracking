@@ -7,8 +7,10 @@ import { DialogConfirmationComponent } from './dialog-confirmation/dialog-confir
 import { MatDialogModule } from '@angular/material/dialog';
 import { SnackbarAlertComponent } from './snackbar-alert/snackbar-alert.component';
 import { MatTabsModule } from '@angular/material/tabs';
+import * as jwt from 'jsonwebtoken';
 
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { DisplayMessageComponent } from './display-message/display-message.component';
 export const clientSharedUiComponentsUiRoutes: Route[] = [];
 
 @NgModule({
@@ -18,18 +20,19 @@ export const clientSharedUiComponentsUiRoutes: Route[] = [];
     ClientSharedUiMaterialUiModule,
     MatDialogModule,
     MatTabsModule,
-    NgxChartsModule
+    NgxChartsModule,
   ],
   declarations: [
     HeaderUiComponent,
     DialogConfirmationComponent,
     SnackbarAlertComponent,
+    DisplayMessageComponent,
   ],
   exports: [
     HeaderUiComponent,
     DialogConfirmationComponent,
     SnackbarAlertComponent,
+    DisplayMessageComponent,
   ],
-  entryComponents: [DialogConfirmationComponent],
 })
 export class ClientSharedUiComponentsUiModule {}

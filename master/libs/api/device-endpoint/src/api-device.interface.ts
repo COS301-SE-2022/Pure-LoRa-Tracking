@@ -1,3 +1,4 @@
+
 export interface deviceResponse {
   status: number;
   explanation: string;
@@ -21,11 +22,28 @@ export interface deviceAvailable {
   token: string;
 }
 
+export interface ActivationKeys {
+  isABP: boolean,
+  lora1_1: boolean,
+
+  devAddr?: string;
+  appSKey?: string;
+  nwkSKey?: string;
+  nwkSEncKey?: string; // Network session key at backend
+
+  fNwkSIntKey?: string;
+  sNwkSIntKey?: string;
+
+  appKey?: string;
+  nwkKey?: string;
+};
+
 export interface AddSensorDevice {
   token: string;
   customerID: string;
-  hardwareName: string;
-  labelName: string;
+  hardwareName: string; // EUI
+  labelName: string;    // Name
+  activationKeys: ActivationKeys;
   deviceProfileId: string;
   profileType?: SensorProfile;
   extraParams?: any;
@@ -69,6 +87,7 @@ export interface GatewayLocationInfo {
 export interface GatewayLocationAdd {
   token: string;
   deviceID: string;
+  devEUI: string;
   locationParameters: {
     latitude: number;
     longitude: number;
@@ -78,4 +97,16 @@ export interface GatewayLocationAdd {
 export interface GetGatewaysInput {
   token : string;
   customerID: string;
+}
+
+export interface GetMoreInfoInput {
+  token : string;
+  deviceEUI: string;
+}
+
+export interface UserSenserDataInput {
+  token: string;
+  deviceEUI: string;
+  timeStart?: number;
+  timeStop?: number;
 }

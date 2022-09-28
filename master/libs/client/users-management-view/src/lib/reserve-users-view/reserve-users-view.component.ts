@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {HttpClient} from "@angular/common/http"
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
-import { FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
 import { DialogConfirmationComponent, SnackbarAlertComponent } from '@master/client/shared-ui/components-ui';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -28,18 +28,19 @@ export class ReserveUsersViewComponent implements OnInit {
   tableColumns:string[] = ['id', 'surname', 'name','email',"status","delete","edit"];
   addUser= false;
   
-  nameGroup!: FormGroup;
-  surnameGroup!: FormGroup;
-  emailGroup!: FormGroup;
-  reserveGroup!: FormGroup;
+  nameGroup!: UntypedFormGroup;
+  surnameGroup!: UntypedFormGroup;
+  emailGroup!: UntypedFormGroup;
+  reserveGroup!: UntypedFormGroup;
   groups:Array<SingleGroup>=[];
   sourceData:Array<userInfo>=[];
   currentid="";
   canadd=false;
   // token="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZlYWRtaW5AcmVzZXJ2ZS5jb20iLCJzY29wZXMiOlsiVEVOQU5UX0FETUlOIl0sInVzZXJJZCI6ImQ2MzcyZTMwLWRmZTgtMTFlYy1iZGIzLTc1MGNlN2VkMjQ1MSIsImVuYWJsZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiJjZDJkZjJiMC1kZmU4LTExZWMtYmRiMy03NTBjZTdlZDI0NTEiLCJjdXN0b21lcklkIjoiMTM4MTQwMDAtMWRkMi0xMWIyLTgwODAtODA4MDgwODA4MDgwIiwiaXNzIjoidGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE2NTQ4MDU3NzUsImV4cCI6MTY1NDgxNDc3NX0.76eRuu1QDS4QLxUVuJNcawQkpyMoXezGuRfPiVMhLnDHxtxwUQqtIrnbEeLBMkVITbwjYhozU6zOyQaRiW2ajA"
-  assignedReserves= new FormControl();
+  assignedReserves= new UntypedFormControl();
+  reserveID="";
   
-  constructor(private _formBuilder: FormBuilder,public http:HttpClient,public confirmDialog: MatDialog, private router:Router,private snackbar:MatSnackBar) {
+  constructor(private _formBuilder: UntypedFormBuilder,public http:HttpClient,public confirmDialog: MatDialog, private router:Router,private snackbar:MatSnackBar) {
    
   }
 
@@ -59,16 +60,25 @@ export class ReserveUsersViewComponent implements OnInit {
 
     this.sourceData=[];
 
-    this.http.post("api/user/admin/groups",{
+    this.http.post("api/reserve/admin/list",{
     }).subscribe((val:any)=>{
-      if(val.data.data.length>0){
+      console.log(val);
+      if(val.data.length>0){
         console.log("Test"+val);
-        this.groups=val.data.data.map((curr:any)=>({
-          name:curr.title,
-          customerid:curr.id.id
+        this.groups=val.data.map((curr:any)=>({
+          name:curr.reserveName,
+          customerid:curr.reserveID
         } as SingleGroup)) as Array<SingleGroup>
 
-        this.groups.forEach(curr=>{
+        this.http.post("api/user/admin/groups", {
+
+        }).subscribe((val: any) => {
+         console.log(val);
+         this.reserveID = val.data.data[0].id.id;
+        })
+
+        // this call does nothing? Source data is empty
+        /*this.groups.forEach(curr=>{
           // console.log("test");
           this.http.post("api/user/admin/reserve/all",{
             "customerID":curr.customerid
@@ -84,7 +94,7 @@ export class ReserveUsersViewComponent implements OnInit {
             this.sourceData=[...this.sourceData,...temp]
             console.log(this.sourceData)
           })
-        })
+        })*/
       }
     })
 
@@ -107,9 +117,10 @@ export class ReserveUsersViewComponent implements OnInit {
   // }
   addUserToDB(){
     if(this.nameGroup.valid&&this.emailGroup.valid&&this.surnameGroup.valid&&this.reserveGroup.valid){
-      console.log(this.emailGroup.get("emailControl")?.value)
+      // console.log(this.emailGroup.get("emailControl")?.value)
       this.http.post("api/user/admin/add",{
-        customerID:this.reserveGroup.get("reserveControl")?.value[0],
+        //customerID:this.reserveGroup.get("reserveControl")?.value[0],
+        customerID:this.reserveID,
         userInfo:{
           email:this.emailGroup.get("emailControl")?.value,
           firstName:this.nameGroup.get("nameControl")?.value,
@@ -124,6 +135,7 @@ export class ReserveUsersViewComponent implements OnInit {
         if(curr.status==200&&curr.explain=="ok"){
           this.snackbar.openFromComponent(SnackbarAlertComponent,{duration: 5000, panelClass: ['green-snackbar'], data: {message:"User Added", icon:"check_circle"}});
           this.ngOnInit();
+          this.addUser = false;
         }
       })
 

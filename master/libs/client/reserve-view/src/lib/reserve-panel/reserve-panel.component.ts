@@ -17,6 +17,7 @@ export class ReservePanelComponent implements OnInit {
   private _Devices: Device[];
   private _GateWays: Gateway[];
   private _ViewType: string;
+  public processingType:string;
   @Input() selectedReserve = "";
   @Input() reserveList: ReserveInfo[];
   @Input()
@@ -28,13 +29,22 @@ export class ReservePanelComponent implements OnInit {
     this.filteredSensors = this.Devices;
   }
   openSensor = false;
+  openGateway = false;
+
 
   @Output() selectedReserveChange = new EventEmitter<string>();
-
+  @Output() proccessingTypeChange = new EventEmitter<string>();
   currentSensor = {
     name: "",
     id: "",
   }
+
+  currentGateway = {
+    name: "",
+    id: "",
+    eui: ""
+  }
+
   @Input()
   public get GateWays() {
     return this._GateWays;
@@ -51,11 +61,14 @@ export class ReservePanelComponent implements OnInit {
   filteredGateways: Gateway[] | undefined = [];
 
   filteredSensors: Device[] = [];
+  showSensors: boolean;
+  showGateways: boolean;
 
   constructor(public notifier: DeviceNotifierService) {
     this._Devices = [];
     this._GateWays = [];
     this._ViewType = "norm"
+    this.processingType="TRI";
     this.notifier.getSensorDeleted().subscribe(val => {
       this.filteredSensors = this.filteredSensors.filter(curr => curr.deviceID != val);
       this.Devices = this.Devices.filter(curr => curr.deviceID != val);
@@ -69,6 +82,8 @@ export class ReservePanelComponent implements OnInit {
       this.selectedDeviceID = "";
     });
     this.reserveList = [];
+    this.showSensors = true;
+    this.showGateways = false;
   }
 
   getSelectedStyle(deviceId: string): string {
@@ -148,10 +163,22 @@ export class ReservePanelComponent implements OnInit {
     this.openSensor = true;
   }
 
+  viewGateway(event:{id:string,name: string, eui: string}):void{
+    this.currentGateway = {
+      name: event.name,
+      id: event.id,
+      eui: event.eui
+    }
+    this.openGateway = true;
+  }
 
   reserveChanged(): void {
     this.selectedReserveChange.emit(this.selectedReserve);
     console.log("changed");
+  }
+
+  typechange(event:any){
+    this.proccessingTypeChange.emit(event);
   }
 
 }

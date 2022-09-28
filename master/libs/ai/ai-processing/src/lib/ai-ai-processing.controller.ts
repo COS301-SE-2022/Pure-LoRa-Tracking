@@ -1,13 +1,13 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { AiAiProcessingService } from './ai-ai-processing.service';
 
-@Controller('ai-ai-processing')
+@Controller('ai')
 export class AiAiProcessingController {
   constructor(private aiAiProcessingService: AiAiProcessingService) {}
 
   @Get()
   online() { return "reachable" }
 
-  @Post('ai/perimeter')
-  processPerimeter(@Body() content: { location?: any, name?: string, device?: string, newName?: string }) { this.aiAiProcessingService.processPerimeterRequest(content) };
+  @Post('perimeter')
+  processPerimeter(@Body() content: {data:{ location?: any, name?: string, device?: string, newName?: string, action : string }}) { return this.aiAiProcessingService.processPerimeterRequest(content) };
 }

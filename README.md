@@ -1,12 +1,14 @@
 <h1 align="center"> Pure LoRa tracking </h1>
 
+![Libraries.io dependency status for GitHub repo](https://img.shields.io/librariesio/github/COS301-SE-2022/Pure-LoRa-Tracking)
+![Monitoring](https://img.shields.io/website?url=https%3A%2F%2Floratracking.co.za%2F)
+[![codecov](https://codecov.io/gh/COS301-SE-2022/Pure-LoRa-Tracking/branch/dev/graph/badge.svg?token=2BANYONTYU)](https://codecov.io/gh/COS301-SE-2022/Pure-LoRa-Tracking)
 ![GitHub issues](https://img.shields.io/github/issues/COS301-SE-2022/Pure-LoRa-Tracking)
 ![GitHub pull requests](https://img.shields.io/github/issues-pr/COS301-SE-2022/Pure-LoRa-Tracking)
-[![codecov](https://codecov.io/gh/COS301-SE-2022/Pure-LoRa-Tracking/branch/dev/graph/badge.svg?token=2BANYONTYU)](https://codecov.io/gh/COS301-SE-2022/Pure-LoRa-Tracking)
 [![Requirements Status](https://requires.io/github/COS301-SE-2022/Pure-LoRa-Tracking/requirements.svg?branch=master)](https://requires.io/github/COS301-SE-2022/Pure-LoRa-Tracking/requirements/?branch=master)
 [![CodeQL](https://github.com/COS301-SE-2022/Pure-LoRa-Tracking/actions/workflows/codeql-analysis.yml/badge.svg?branch=main)](https://github.com/COS301-SE-2022/Pure-LoRa-Tracking/actions/workflows/codeql-analysis.yml)
 [![StaticTests](https://github.com/COS301-SE-2022/Pure-LoRa-Tracking/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/COS301-SE-2022/Pure-LoRa-Tracking/actions/workflows/tests.yml)
-![Monitoring](https://img.shields.io/website?url=https%3A%2F%2Floratracking.co.za%2F)
+
 
 ## Table of Contents
 

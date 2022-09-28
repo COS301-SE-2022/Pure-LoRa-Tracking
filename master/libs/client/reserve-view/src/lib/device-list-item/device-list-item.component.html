@@ -2,18 +2,23 @@
     <mat-expansion-panel-header >
         <mat-panel-title>
             <mat-icon class="device-icon">
-                {{device.type === 'sensor' ? "memory" :"cell_tower" }}
+                memory
             </mat-icon>
             {{device.deviceName}}
+            <span id="spacer"></span>
+            <button mat-icon-button 
+                (click)="toggleHistory($event)"
+                matTooltip="Show History">
+                <mat-icon>{{visibilityIcon}}</mat-icon>
+            </button>
         </mat-panel-title>
     </mat-expansion-panel-header>
     <div>
         <p>UEI: {{device.deviceID}}</p>
-        <p>Last Signal:</p>
-        <p>Animal:</p>
+        <p>Last Signal: --</p>
     </div>
     <mat-action-row>
-        <button mat-button class="action-buttons" color="accent" (click)="locateOnMap()">
+        <button mat-button color="accent" (click)="locateOnMap()">
             <span class="button-text-icon">Locate<mat-icon class="inner-icon">my_location</mat-icon></span>
         </button>
         <button mat-button class="action-buttons" color="accent" (click)="openDevice()">

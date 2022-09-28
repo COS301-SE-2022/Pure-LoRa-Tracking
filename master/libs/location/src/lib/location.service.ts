@@ -90,8 +90,8 @@ export class LocationService {
         //     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
         //     return EARTH_RAD * c;
         // }
-        private BASE_FACTOR = -61.1;
-        private ENV_FACTOR = 2;
+        private BASE_FACTOR = -41;
+        private ENV_FACTOR = 1.8;
 
         rssiToMeters(rssi: number) {
             if (rssi < this.BASE_FACTOR)
@@ -192,7 +192,7 @@ export class LocationService {
         const location_Geodetic = this.ECEFToGeodetic(output[0], output[1], avgHeight);
         // console.log(location_Geodetic);
         const location = { latitude: location_Geodetic[0], longitude: location_Geodetic[1] };
-        this.tbClient.v1SendTelemetry(thingsBoardDeviceToken, location);
+        this.tbClient.v1SendTelemetry(thingsBoardDeviceToken, {...location, pType:"TRI"});
         return location;
     }
 

@@ -10,10 +10,14 @@
             <mat-error *ngIf="reserveInfo.controls['email'].errors?.['required']">Valid e-mail is required.</mat-error>
         </mat-form-field>
 
-        <input formControlName="geojson" type="file" (change)="fileSelected($event)">
-        
+        <mat-label>
+            <span>Perimeter (Please upload a geojson file.)</span>
+            <br>
+            <button mat-flat-button color="primary" (click)="fileUpload.click()" type="button"><div class="button-icon-text"><mat-icon id="uploadIcon">upload</mat-icon>Upload</div></button>
+            <input #fileUpload formControlName="geojson" type="file" (change)="fileSelected($event)" id="upload-input">
+        </mat-label>
         <div id="button-wrapper">
-            <button mat-raised-button (click)="navigateBack()" class="action-buttons" color="primary" class="action-buttons">Cancel</button>
+            <button mat-raised-button (click)="navigateBack()" class="action-buttons" color="primary">Cancel</button>
             <button mat-flat-button type="submit" class="action-buttons" color="primary" class="action-buttons" >Save</button>
         </div>
     </form>

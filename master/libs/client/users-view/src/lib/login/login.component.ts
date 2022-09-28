@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { CookieService } from 'ngx-cookie-service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 @Component({
   selector: 'master-login',
@@ -10,8 +11,16 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
 
-  logingroup:FormGroup;
-  constructor(private fb:FormBuilder,private http:HttpClient,private cookieservice:CookieService,private router:Router) {
+  logingroup:UntypedFormGroup;
+
+  responseMessage = "\n";
+
+  constructor(
+    private fb:UntypedFormBuilder,
+    private http:HttpClient,
+    private cookieservice:CookieService,
+    private router:Router,
+    private snackbar:MatSnackBar) {
     this.logingroup=this.fb.group({
       email:['',[Validators.required,Validators.email]],
       password:['',[Validators.required]]
@@ -38,24 +47,39 @@ export class LoginComponent implements OnInit {
 
   //handle login logic
   login():void{
+    console.log("Triggered");
     if(this.logingroup.valid){
       this.http.post("api/login/user",({
         username:this.logingroup.get("email")?.value,
         password:this.logingroup.get("password")?.value
       })).subscribe((val:any)=>{
-        if(val.status==200&&val.explain=="Login successful."){
-          //set cookies
-          this.cookieservice.set("PURELORA_TOKEN",val.token,14);
-          this.cookieservice.set("PURELORA_REFRESHTOKEN",val.refreshToken,14);
-          this.router.navigate(["reserve"]);
+
+        console.log(val);
+        if(val.status==200&&val.explain=="Login failed. No 2fa"){
+            this.cookieservice.set("PURELORA_PREVERIFICATION_TOKEN",val.token,14);
+          this.router.navigate(["twofa"],{queryParams:{link:btoa(val.authURL)}});
         }
+        else if(val.status==200&&val.explain=="Login successful. 2fa"){
+          this.router.navigate(["auth"],{queryParams:{token:btoa(val.token)}});
+
+        } else {
+          this.responseMessage = "Invalid login information.";
+          }
+
+        // if(val.status==200&&val.explain=="Login successful."){
+        //   //set cookies
+        //   this.cookieservice.set("PURELORA_REFRESHTOKEN",val.refreshToken,14);
+        //   this.router.navigate(["auth"]);
+        // }
       });
+    } else {
+      this.responseMessage = this.logingroup.controls['email'].invalid ? 'Please enter a valid e-mail address.' : (this.logingroup.controls['password'].invalid) ? 'Please enter a password.' : '\n';
     }
-    
   } 
   
   reset():void{
       console.log("reset");
   }
+
 
 }

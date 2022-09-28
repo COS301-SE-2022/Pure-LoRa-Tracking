@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormControl, Validators, FormBuilder, FormGroup } from '@angular/forms';
+import { FormControl, Validators, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackbarAlertComponent } from '@master/client/shared-ui/components-ui';
@@ -11,8 +11,8 @@ import { SnackbarAlertComponent } from '@master/client/shared-ui/components-ui';
 })
 export class ReserveCreateComponent implements OnInit {
  
-  reserveInfo: FormGroup = new FormGroup({});
-  constructor(private formBuilder: FormBuilder, private router:Router, private http: HttpClient,private snackbar:MatSnackBar) {}
+  reserveInfo: UntypedFormGroup = new UntypedFormGroup({});
+  constructor(private formBuilder: UntypedFormBuilder, private router:Router, private http: HttpClient,private snackbar:MatSnackBar) {}
   mapgeojson="";
 
   ngOnInit(): void {
@@ -24,6 +24,7 @@ export class ReserveCreateComponent implements OnInit {
   }
 
   createReserve():void {
+    console.log("Triggered");
       if(this.mapgeojson!=""){
       //api call
       this.http.post("/api/reserve/admin/create",{

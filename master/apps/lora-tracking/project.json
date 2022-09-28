@@ -28,12 +28,12 @@
           "budgets": [
             {
               "type": "initial",
-              "maximumWarning": "500kb",
+              "maximumWarning": "1500kb",
               "maximumError": "5mb"
             },
             {
               "type": "anyComponentStyle",
-              "maximumWarning": "2kb",
+              "maximumWarning": "100kb",
               "maximumError": "200kb"
             }
           ],
@@ -43,6 +43,14 @@
               "with": "apps/lora-tracking/src/environments/environment.prod.ts"
             }
           ],
+          "optimization": {
+            "scripts": true,
+            "styles": {
+              "minify": true,
+              "inlineCritical": false
+            },
+            "fonts": true
+          },
           "outputHashing": "all"
         },
         "development": {

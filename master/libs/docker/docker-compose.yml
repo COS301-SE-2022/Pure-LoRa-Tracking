@@ -73,20 +73,25 @@ services:
   
   chirpstack-network-server:
     image: chirpstack/chirpstack-network-server:3
+    ports:
+      - 8086:8086
     environment: # parm can be set with files as well.
       - POSTGRESQL__DSN=postgres://chirpstack_ns:chirpstack_ns@postgresql/chirpstack_ns?sslmode=disable
       - REDIS__URL=redis://redis:6379
       - NETWORK_SERVER__BAND__NAME=EU868
       - NETWORK_SERVER__GATEWAY__BACKEND__MQTT__SERVER=tcp://mosquitto:1883
       - JOIN_SERVER__DEFAULT__SERVER=http://chirpstack-application-server:8003
+      - MONITORING__BIND=chirpstack-network-server:8086
+      - MONITORING__HEALTHCHECK_ENDPOINT=true
     depends_on:
       - postgresql
       - mosquitto
 
   chirpstack-application-server:
-    image: chirpstack/chirpstack-application-server:3
+    image: chirpstack/chirpstack-application-server:3.17
     ports:
       - 8080:8080
+      - 8085:8085
     environment:
       - POSTGRESQL__DSN=postgres://chirpstack_as:chirpstack_as@postgresql/chirpstack_as?sslmode=disable
       - REDIS__URL=redis://redis:6379
@@ -97,6 +102,8 @@ services:
       - APPLICATION_SERVER__INTEGRATION__AMQP__URL=amqp://guest:guest@rabbitmq:5672
       - APPLICATION_SERVER__INTEGRATION__AMQP__EVENT_ROUTING_KEY_TEMPLATE=application.{{ .ApplicationID }}.device.{{ .DevEUI }}.event.{{ .EventType }}
       - APPLICATION_SERVER__INTEGRATION__MARSHALER=protobuf
+      - MONITORING__BIND=chirpstack-application-server:8085
+      - MONITORING__HEALTHCHECK_ENDPOINT=true
     depends_on:
       - chirpstack-network-server
       - rabbitmq
@@ -105,7 +112,7 @@ services:
   # Thingsboard
   mytb:
     restart: always
-    image: "thingsboard/tb-postgres"
+    image: "thingsboard/tb-postgres:3.4.0"
     ports:
       - "9090:9090" # local:docker
       - "1884:1883"
