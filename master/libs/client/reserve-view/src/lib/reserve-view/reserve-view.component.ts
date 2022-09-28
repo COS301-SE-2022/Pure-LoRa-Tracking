@@ -30,6 +30,7 @@ export class ReserveViewComponent {
   Reserve: MapApiReserveResponse | null = null;
   LastestHistorical: Device[];
   ShowPolygon: boolean;
+  ShowGateway:boolean;
   Gateways: Gateway[];
   ReserveName = "";
   token = "";
@@ -42,6 +43,7 @@ export class ReserveViewComponent {
     this.LastestHistorical = [];
     this.Gateways = [];
     this.ShowPolygon = true;
+    this.ShowGateway = true;
     this.ViewMapTypeInput = ViewMapType.NORMAL_OPEN_STREET_VIEW;
     this.token = this.tokenmanager.getToken();
     this.notifier.getSensorDeleted().subscribe(val => {

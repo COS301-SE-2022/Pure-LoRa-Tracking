@@ -45,6 +45,7 @@ export class ReserveMapComponent implements OnInit, OnChanges {
   @Input() ShowMarkers: boolean;
   @Input() ShowPolygon: boolean;
   @Input() HistoricalMode: boolean;
+  @Input() ShowGateway:boolean;
   // @Input() HistoricalDataID:number;
   public mainmap: any = null;
   public maptiles: any = null;
@@ -68,6 +69,7 @@ export class ReserveMapComponent implements OnInit, OnChanges {
     this.ShowMarkers = true;
     this.ShowPolygon = true;
     this.HistoricalMode = false;
+    this.ShowGateway = true;
     // this.HistoricalDataID=-1;
     this.mappolygons = new L.GeoJSON();
     this.currentHistoricalId = -1;
@@ -124,12 +126,21 @@ export class ReserveMapComponent implements OnInit, OnChanges {
           this.hidepolygon();
         }
       }
+      else if (Object.prototype.hasOwnProperty.call(changes, "ShowGateway")) {
+        if (this.ShowGateway) {
+          this.showAllGateways();
+        } else {
+          this.hideAllGateways();
+        }
+      }
+      
       else if (Object.prototype.hasOwnProperty.call(changes, "HistoricalDataID")) {
         console.log("change historical when moved to live");
       }
     }
 
   }
+  
 
   //MAP
 
@@ -333,13 +344,21 @@ export class ReserveMapComponent implements OnInit, OnChanges {
 
   public showGateway(deviceID:string){
     const device=this.gatewayMarkers.find(curr=>curr.gatewayID==deviceID);
-
+    
     if(device!=undefined){
       if(this.mainmap!=null) this.mainmap.panTo(device.marker.getLatLng());
     }
     else{
       alert("No location data found");
     }
+  }
+
+  hideAllGateways() {
+    this.gatewayMarkers.forEach(curr=>curr.marker.remove());
+  }
+
+  showAllGateways() {
+    this.gatewayMarkers.forEach(curr=>curr.marker.addTo(this.mainmap));
   }
 
   //reset all data
