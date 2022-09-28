@@ -55,6 +55,72 @@ describe('AiHeatmapAverageService', () => {
     ).toEqual([]);
   });
 
+  it('process data with < 5 coordinates', async () => {
+    const EUID = 'TEST';
+    for (let i = 0; i < 3; i++)
+      await service.processData({
+        deviceID: EUID,
+        reading: {
+          longitude: learning.coordinates[i].longitude,
+          latitude: learning.coordinates[i].latitude,
+        },
+      });
+
+    expect(
+      await service.processData({
+        deviceID: EUID,
+        reading: {
+          longitude: learning.coordinates[3].longitude,
+          latitude: learning.coordinates[3].latitude,
+        },
+      })
+    ).toEqual([]);
+  });
+
+  it('process data with < 5 coordinates', async () => {
+    const EUID = 'TEST';
+    for (let i = 0; i < 3; i++)
+      await service.processData({
+        deviceID: EUID,
+        reading: {
+          longitude: learning.coordinates[i].longitude,
+          latitude: learning.coordinates[i].latitude,
+        },
+      });
+
+    expect(
+      await service.processData({
+        deviceID: EUID,
+        reading: {
+          longitude: learning.coordinates[3].longitude,
+          latitude: learning.coordinates[3].latitude,
+        },
+      })
+    ).toEqual([]);
+  });
+
+  it('process data with >= 5 coordinates', async () => {
+    const EUID = 'TEST';
+    for (let i = 0; i < 5; i++)
+      await service.processData({
+        deviceID: EUID,
+        reading: {
+          longitude: learning.coordinates[i].longitude,
+          latitude: learning.coordinates[i].latitude,
+        },
+      });
+
+    expect(
+      await service.processData({
+        deviceID: EUID,
+        reading: {
+          longitude: learning.coordinates[5].longitude,
+          latitude: learning.coordinates[5].latitude,
+        },
+      })
+    ).toBeDefined();
+  });
+
   it('tf -> create, fit, save', async () => {
     const learn = service.normalizePoints(
       service.deconstructData(learning.coordinates)
