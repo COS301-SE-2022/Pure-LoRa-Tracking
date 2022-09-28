@@ -171,6 +171,16 @@ describe('Live Particle filter test', () => {
   it('resample particles to 4', async () => {
     expect(service.resampleParticles(4)).toBeUndefined();
   });
+
+  it('particleFileter -> with gatewayParams', async () => {
+    expect(
+      await service.particleFilter({
+        longitude: sensorSet[0].longitude,
+        latitude: sensorSet[0].latitude,
+        gateways: initialParameters.gateways,
+      })
+    ).toBeDefined();
+  });
 });
 
 const initialParameters = {
