@@ -1,10 +1,5 @@
-import { DatabaseProxyModule } from '@lora/database';
 import { Test } from '@nestjs/testing';
-import tf = require('@tensorflow/tfjs-node');
-import {
-  ProcessingApiProcessingBusModule,
-  ProcessingApiProcessingBusService,
-} from '@processing/bus';
+import { ProcessingApiProcessingBusModule } from '@processing/bus';
 import exp = require('constants');
 import { AiHeatmapAverageService } from './ai-heatmap-average.service';
 
@@ -20,80 +15,67 @@ describe('AiHeatmapAverageService', () => {
     }).compile();
 
     service = module.get(AiHeatmapAverageService);
-    tf.setBackend('cpu');
   });
 
   it('should be defined', () => {
     expect(service).toBeTruthy();
   });
 
-  /* it('tf -> create, fit, save', async() => {
-    const learn = service.normalizePoints(service.deconstructData(learning.coordinates));
-    const train = service.normalizePoints(service.deconstructData([learning.truePoint]));
-    await service.fitModel(learn, train)
+  it('configure initial parameters with filename that does exist', async () => {
+    expect(
+      await service.configureInitialParameters({ deviceID: 'TEST4422' })
+    ).toBeUndefined();
+  });
 
-    const ToPredictData = service.normalizePoints(service.deconstructData(mock2.coordinates));
-    console.log(await service.predictData(ToPredictData))
-  });*/
+  it('configure initial parameters with filename that does not exist', async () => {
+    expect(
+      await service.configureInitialParameters({ deviceID: 'TEST5533' })
+    ).toBeUndefined();
+  });
 
-  /*
+  it('process data with < 5 coordinates', async () => {
+    const EUID = 'TEST';
+    for (let i = 0; i < 3; i++)
+      await service.processData({
+        deviceID: EUID,
+        reading: {
+          longitude: learning.coordinates[i].longitude,
+          latitude: learning.coordinates[i].latitude,
+        },
+      });
+
+    expect(
+      await service.processData({
+        deviceID: EUID,
+        reading: {
+          longitude: learning.coordinates[3].longitude,
+          latitude: learning.coordinates[3].latitude,
+        },
+      })
+    ).toEqual([]);
+  });
+
+  it('tf -> create, fit, save', async () => {
+    const learn = service.normalizePoints(
+      service.deconstructData(learning.coordinates)
+    );
+    const train = service.normalizePoints(
+      service.deconstructData([learning.truePoint])
+    );
+    await service.fitModel(learn, train);
+
+    const ToPredictData = service.normalizePoints(
+      service.deconstructData(mock2.coordinates)
+    );
+    console.log(await service.predictData(ToPredictData));
+  });
+
   it('tf -> save, load', async () => {
     const saveModelResult = await service.saveModel(saveFilePath);
     const loadModelResult = await service.loadModel(loadFilePath);
     expect(saveModelResult).toEqual(loadModelResult);
     expect(loadModelResult).toEqual(true);
   });
-
-  it('tf -> coordinate predict', async () => {
-    const loopBound = 4;
-    await service.configureInitialParameters({ deviceID: 'TEST4422' });
-    for (let i = 0; i < loopBound; i++) {
-      await service.processData({
-        deviceID: 'TEST4422',
-        reading: {
-          latitude: learning.coordinates[i].latitude,
-          longitude: learning.coordinates[i].longitude,
-        },
-      });
-    }
-
-    const result = await service.processData({
-      deviceID: 'TEST4422',
-      reading: {
-        latitude: learning.truePoint.latitude,
-        longitude: learning.truePoint.longitude,
-      },
-    });
-
-    expect(result).toEqual(true);
-  });
-
-  it('tf -> train default model', async () => {
-    const loopBound = 4;
-    service.configureInitialParameters({ deviceID: 'TEST4422' });
-
-    for (let i = 0; i < loopBound; i++) {
-      await service.processData({
-        deviceID: 'TEST4422',
-        reading: {
-          latitude: learning.coordinates[4 + i].latitude,
-          longitude: learning.coordinates[4 + i].longitude,
-        },
-      });
-    }
-
-    const result = await service.processData({
-      deviceID: 'TEST4422',
-      reading: {
-        latitude: learning.truePoint.latitude,
-        longitude: learning.truePoint.longitude,
-      },
-    });
-
-    service.saveModel('file://libs/ai/Models/averaging/');
-
-    expect(result).toEqual(true);
-  });*/
 });
 
 const learning = {
