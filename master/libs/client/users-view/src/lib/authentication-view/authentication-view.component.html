@@ -2,7 +2,7 @@
     <div class="wrapper">
         <img id="login-logo" src="assets/Logos/logo.svg" alt="Logo">
         <div class="loginform">
-                <form [formGroup]="twofactorgroup" id="auth-content">
+                <form [formGroup]="twofactorgroup" id="auth-content" (ngSubmit)="auth()">
                     <mat-icon id="auth-icon">
                         lock
                     </mat-icon>
@@ -12,8 +12,8 @@
                     <mat-form-field>
                         <input matInput formControlName="authcode" type="text" id="auth-code">
                     </mat-form-field>
-                    <div id="login-button">
-                        <button mat-flat-button color="primary" (click)="auth()">Submit</button>
+                    <div>
+                        <button mat-raised-button color="primary" type="submit" id="login-button" [disabled]="twofactorgroup.invalid">Submit</button>
                     </div>
                 </form>
         </div>
