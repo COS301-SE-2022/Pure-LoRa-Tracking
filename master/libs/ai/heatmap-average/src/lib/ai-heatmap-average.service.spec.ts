@@ -150,16 +150,20 @@ describe('AiHeatmapAverageService', () => {
   });
 
   it('tf -> create, fit, save', async () => {
-    const learn = service.normalizePoints(
-      service.deconstructData(learning.coordinates)
-    );
+    let coordinates = [];
+    for (let i = 0; i < 5; i++) coordinates.push(learning.coordinates[i]);
+
+    const learn = service.normalizePoints(service.deconstructData(coordinates));
     const train = service.normalizePoints(
       service.deconstructData([learning.truePoint])
     );
     await service.fitModel(learn, train);
 
+    coordinates = [];
+    for (let i = 0; i < 5; i++) coordinates.push(mock2.coordinates[i]);
+
     const ToPredictData = service.normalizePoints(
-      service.deconstructData(mock2.coordinates)
+      service.deconstructData(coordinates)
     );
     console.log(await service.predictData(ToPredictData));
   });
