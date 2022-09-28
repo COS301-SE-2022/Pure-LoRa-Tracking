@@ -2,6 +2,8 @@ import { DatabaseProxyService } from '@lora/database';
 import { LocationService } from '@lora/location';
 import { ThingsboardThingsboardClientService } from '@lora/thingsboard-client';
 import { Injectable, Logger } from '@nestjs/common';
+import { Prop, Schema } from '@nestjs/mongoose';
+//import { DevicePerimeter } from 'libs/database-proxy/src/database-interfaces.interface';
 
 @Injectable()
 export class ProcessingApiProcessingBusService {
@@ -22,12 +24,22 @@ export class ProcessingApiProcessingBusService {
 
     /* forward new device and perimeter to relevant mongo table */
     async saveDevicePerimeterToDB(body: { perimeter: number[], name: string, deviceID: string }) {
-        this.database.insertDevicePerimeter(body);
+        try {
+            this.database.insertDevicePerimeter(body);
+        } catch (error) {
+            Logger.log("Save Device perimeter error");
+            Logger.log(error)
+        }
     }
 
     /* forward new perimeter to all device in table */
-    async updateDevicePerimeter(body: { deviceID : string, perimeter: number[], name: string }) {
-        this.database.updateDevicePerimeter(body);
+    async updateDevicePerimeter(body: { deviceID: string, perimeter: number[], name: string }) {
+        try {
+            this.database.updateDevicePerimeter(body);
+        } catch (error) {
+            Logger.log("Save Device perimeter error");
+            Logger.log(error)
+        }
     }
 
     /* forward new name of reserve to all devices associated */
@@ -35,20 +47,28 @@ export class ProcessingApiProcessingBusService {
         try {
             this.database.updateDevicePerimeterName(body);
         } catch (error) {
+            Logger.log('Update perimeter name');
             Logger.log(error)
         }
     }
 
-    async RemoveDeviceFromPerimeter(body: { deviceID:string }) {
+    async RemoveDeviceFromPerimeter(body: { deviceID: string }) {
         try {
             this.database.removeDeviceFromPerimeter(body);
         } catch (error) {
-            Logger.log(error)
+            Logger.log("Remove device fail");
+            Logger.log(error);
         }
     }
 
-    async getDevicePerimeter(deviceID: string) {
-        return this.database.getDevicePerimeter(deviceID);
+    async getDevicePerimeter(deviceID: string) : Promise<any> {
+        try {
+            return this.database.getDevicePerimeter(deviceID);
+        } catch (error) {
+            Logger.log("Get Device perimeter error");
+            Logger.log(error);
+            return null;
+        }
     }
 
     /* get the last data points */
@@ -127,10 +147,11 @@ export class ProcessingApiProcessingBusService {
 
     async sendProcessedDatatoTB(accessToken: string, data: { latitude: number, longitude: number, pType: string }) {
         try {
-            this.thingsboardClient.v1SendTelemetry(accessToken, data);
+            return this.thingsboardClient.v1SendTelemetry(accessToken, data);
         } catch (error) {
             Logger.log('TB Send Error');
             Logger.log(error);
+            return false;
         }
     }
 
@@ -140,6 +161,7 @@ export class ProcessingApiProcessingBusService {
         } catch (error) {
             Logger.log('Location Service Error');
             Logger.log(error);
+            return false;
         }
     }
 }

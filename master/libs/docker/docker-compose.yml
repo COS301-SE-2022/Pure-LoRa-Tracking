@@ -112,7 +112,7 @@ services:
   # Thingsboard
   mytb:
     restart: always
-    image: "thingsboard/tb-postgres"
+    image: "thingsboard/tb-postgres:3.4.0"
     ports:
       - "9090:9090" # local:docker
       - "1884:1883"
