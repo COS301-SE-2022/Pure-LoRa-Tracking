@@ -199,6 +199,17 @@ describe('Live Particle filter test', () => {
   it('rssiService weightsMeasuredRelativeToOriginal -> success', () => {
     expect(rssiService.resampleParticles(4)).toBeUndefined();
   });
+
+  it('rssiService PF with gatewayParams', async () => {
+    expect(
+      await rssiService.particleFilter({
+        longitude: sensorSet[0].longitude,
+        latitude: sensorSet[0].latitude,
+        gateways: initialParameters.gateways,
+        rssi: [70],
+      })
+    ).toBeDefined();
+  });
 });
 
 const initialParameters = {
