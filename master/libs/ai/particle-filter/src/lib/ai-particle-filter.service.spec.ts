@@ -167,6 +167,10 @@ describe('Live Particle filter test', () => {
       });
     expect(result).toEqual('Point and Weight dimension incorrect: P-1 W-2');
   });
+
+  it('resample particles to 4', async () => {
+    expect(service.resampleParticles(4)).toBeUndefined();
+  });
 });
 
 const initialParameters = {
