@@ -1609,7 +1609,6 @@ export class ThingsboardThingsboardClientService {
         explanation: 'get',
         furtherExplain: response.explanation,
       };
-
     const retArray = new Array<any>();
     for (let i = 0; i < response.data.data.length; i++) {
       if (
@@ -1618,7 +1617,8 @@ export class ThingsboardThingsboardClientService {
       )
         retArray.push({
           deviceID: response.data.data[i].id.id,
-          deviceName: response.data.data[i].name,
+          hardwareid: response.data.data[i].name,
+          deviceName: response.data.data[i].label,
           isGateway: response.data.data[i].additionalInfo.gateway,
         });
     }

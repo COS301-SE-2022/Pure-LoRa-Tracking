@@ -387,7 +387,7 @@ export class ReserveMapComponent implements OnInit, OnChanges {
   //reset all data
   public changeReserve(){
     this.mappolygons.remove();
-    // this.mappolygons=L.polygon([]);
+    if(this.currentantpath!=null) this.currentantpath.remove();
     this.historicalpath.forEach(val => {
       val.markers.forEach(curr => curr.remove())
       val.polyline.remove();

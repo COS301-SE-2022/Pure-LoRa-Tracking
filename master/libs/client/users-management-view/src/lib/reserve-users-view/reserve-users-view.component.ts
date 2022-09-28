@@ -1,22 +1,22 @@
 import { Component, OnInit } from '@angular/core';
-import {HttpClient} from "@angular/common/http"
-import {MatDialog, MatDialogRef} from '@angular/material/dialog';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
+import { HttpClient } from "@angular/common/http"
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { DialogConfirmationComponent, SnackbarAlertComponent } from '@master/client/shared-ui/components-ui';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-export interface userInfo{
+export interface userInfo {
   name: string,
   surname: string,
   id: string,
   email: string,
   status: boolean,
-  accountEnabled:boolean
+  accountEnabled: boolean
 }
 
-export interface SingleGroup{
-  name:string,
-  customerid:string
+export interface SingleGroup {
+  name: string,
+  customerid: string
 }
 @Component({
   selector: 'master-reserve-users-view',
@@ -24,24 +24,23 @@ export interface SingleGroup{
   styleUrls: ['./reserve-users-view.component.scss'],
 })
 export class ReserveUsersViewComponent implements OnInit {
-    
-  tableColumns:string[] = ['id', 'surname', 'name','email',"status","delete","edit"];
-  addUser= false;
-  
+
+  tableColumns: string[] = ['id', 'surname', 'name', 'email', "status", "delete", "edit"];
+  addUser = false;
+
   nameGroup!: UntypedFormGroup;
   surnameGroup!: UntypedFormGroup;
   emailGroup!: UntypedFormGroup;
   reserveGroup!: UntypedFormGroup;
-  groups:Array<SingleGroup>=[];
-  sourceData:Array<userInfo>=[];
-  currentid="";
-  canadd=false;
-  // token="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZXNlcnZlYWRtaW5AcmVzZXJ2ZS5jb20iLCJzY29wZXMiOlsiVEVOQU5UX0FETUlOIl0sInVzZXJJZCI6ImQ2MzcyZTMwLWRmZTgtMTFlYy1iZGIzLTc1MGNlN2VkMjQ1MSIsImVuYWJsZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiJjZDJkZjJiMC1kZmU4LTExZWMtYmRiMy03NTBjZTdlZDI0NTEiLCJjdXN0b21lcklkIjoiMTM4MTQwMDAtMWRkMi0xMWIyLTgwODAtODA4MDgwODA4MDgwIiwiaXNzIjoidGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE2NTQ4MDU3NzUsImV4cCI6MTY1NDgxNDc3NX0.76eRuu1QDS4QLxUVuJNcawQkpyMoXezGuRfPiVMhLnDHxtxwUQqtIrnbEeLBMkVITbwjYhozU6zOyQaRiW2ajA"
-  assignedReserves= new UntypedFormControl();
-  reserveID="";
-  
-  constructor(private _formBuilder: UntypedFormBuilder,public http:HttpClient,public confirmDialog: MatDialog, private router:Router,private snackbar:MatSnackBar) {
-   
+  groups: Array<SingleGroup> = [];
+  sourceData: Array<userInfo> = [];
+  currentid = "";
+  canadd = false;
+  assignedReserves = new UntypedFormControl();
+  reserveID = "";
+
+  constructor(private _formBuilder: UntypedFormBuilder, public http: HttpClient, public confirmDialog: MatDialog, private router: Router, private snackbar: MatSnackBar) {
+
   }
 
   ngOnInit(): void {
@@ -52,56 +51,61 @@ export class ReserveUsersViewComponent implements OnInit {
       surnameControl: ['', Validators.required],
     });
     this.emailGroup = this._formBuilder.group({
-      emailControl: ['', [Validators.required,Validators.email]],
+      emailControl: ['', [Validators.required, Validators.email]],
     });
     this.reserveGroup = this._formBuilder.group({
-      reserveControl: ['',Validators.required],
+      reserveControl: ['', Validators.required],
     })
 
-    this.sourceData=[];
+    this.sourceData = [];
 
-    this.http.post("api/reserve/admin/list",{
-    }).subscribe((val:any)=>{
+    this.http.post("api/reserve/admin/list", {
+    }).subscribe((val: any) => {
       console.log(val);
-      if(val.data.length>0){
-        console.log("Test"+val);
-        this.groups=val.data.map((curr:any)=>({
-          name:curr.reserveName,
-          customerid:curr.reserveID
+      if (val.data.length > 0) {
+        console.log("Test" + val);
+        this.groups = val.data.map((curr: any) => ({
+          name: curr.reserveName,
+          customerid: curr.reserveID
         } as SingleGroup)) as Array<SingleGroup>
 
         this.http.post("api/user/admin/groups", {
 
         }).subscribe((val: any) => {
-         console.log(val);
-         this.reserveID = val.data.data[0].id.id;
+          console.log(val);
+          this.reserveID = val.data.data[0].id.id;
         })
 
         // this call does nothing? Source data is empty
-        /*this.groups.forEach(curr=>{
+        this.groups.forEach(curr => {
           // console.log("test");
-          this.http.post("api/user/admin/reserve/all",{
-            "customerID":curr.customerid
-          }).subscribe((val:any)=>{
-            const temp=val.data.data.map((curr:any)=>({
-              email:curr.email,
-              id:curr.id.id,
-              name:curr.firstName,
-              surname:curr.lastName,
-              status:curr.additionalInfo!=undefined?curr.additionalInfo.userCredentialsEnabled:false,
-              accountEnabled:curr.additionalInfo!=undefined
-            } as userInfo)) as Array<userInfo>
-            this.sourceData=[...this.sourceData,...temp]
+          this.http.post("api/user/admin/reserve/all", {
+            "customerID": curr.customerid
+          }).subscribe((val: any) => {
+            console.log("temp is ", val);
+            if (val.status == 200) {
+              if (val.data.data.length > 0) {
+                const temp = val.data.data.map((curr: any) => ({
+                  email: curr.email,
+                  id: curr.id.id,
+                  name: curr.firstName,
+                  surname: curr.lastName,
+                  status: curr.additionalInfo != undefined ? curr.additionalInfo.userCredentialsEnabled : false,
+                  accountEnabled: curr.additionalInfo != undefined
+                } as userInfo)) as Array<userInfo>
+                this.sourceData = [...this.sourceData, ...temp]
+              }
+            }
             console.log(this.sourceData)
           })
-        })*/
+        })
       }
     })
 
   }
 
 
-  
+
   openUserForm(): void {
     this.addUser = !this.addUser;
   }
@@ -115,49 +119,49 @@ export class ReserveUsersViewComponent implements OnInit {
   //     lastName: string;
   //   };
   // }
-  addUserToDB(){
-    if(this.nameGroup.valid&&this.emailGroup.valid&&this.surnameGroup.valid&&this.reserveGroup.valid){
+  addUserToDB() {
+    if (this.nameGroup.valid && this.emailGroup.valid && this.surnameGroup.valid && this.reserveGroup.valid) {
       // console.log(this.emailGroup.get("emailControl")?.value)
-      this.http.post("api/user/admin/add",{
+      this.http.post("api/user/admin/add", {
         //customerID:this.reserveGroup.get("reserveControl")?.value[0],
-        customerID:this.reserveID,
-        userInfo:{
-          email:this.emailGroup.get("emailControl")?.value,
-          firstName:this.nameGroup.get("nameControl")?.value,
-          lastName:this.surnameGroup.get("surnameControl")?.value
+        customerID: this.reserveID,
+        userInfo: {
+          email: this.emailGroup.get("emailControl")?.value,
+          firstName: this.nameGroup.get("nameControl")?.value,
+          lastName: this.surnameGroup.get("surnameControl")?.value
         },
-        reserves: this.reserveGroup.get("reserveControl")?.value.map((curr:any)=>{
+        reserves: this.reserveGroup.get("reserveControl")?.value.map((curr: any) => {
           return {
-            reserveID: curr, reserveName: this.groups.find(other=>other.customerid==curr)?.name
+            reserveID: curr, reserveName: this.groups.find(other => other.customerid == curr)?.name
           }
         }),
-      }).subscribe((curr:any)=>{
-        if(curr.status==200&&curr.explain=="ok"){
-          this.snackbar.openFromComponent(SnackbarAlertComponent,{duration: 5000, panelClass: ['green-snackbar'], data: {message:"User Added", icon:"check_circle"}});
+      }).subscribe((curr: any) => {
+        if (curr.status == 200 && curr.explain == "ok") {
+          this.snackbar.openFromComponent(SnackbarAlertComponent, { duration: 5000, panelClass: ['green-snackbar'], data: { message: "User Added", icon: "check_circle" } });
           this.ngOnInit();
           this.addUser = false;
         }
       })
 
     }
-    
+
   }
-  confirmDelete(userId:string):void{
-    const mydialog=this.confirmDialog.open(DialogConfirmationComponent,{
+  confirmDelete(userId: string): void {
+    const mydialog = this.confirmDialog.open(DialogConfirmationComponent, {
       data: {
         title: 'Confirm Delete',
-        dialogMessage: 'Are you sure you want to delete user: '+userId+'?',
+        dialogMessage: 'Are you sure you want to delete user: ' + userId + '?',
       },
     });
-  
-    mydialog.afterClosed().subscribe(val=>{
-      if(val){
-        this.http.post("api/user/admin/remove",{
-          userID:userId
-        }).subscribe((val:any)=>{
+
+    mydialog.afterClosed().subscribe(val => {
+      if (val) {
+        this.http.post("api/user/admin/remove", {
+          userID: userId
+        }).subscribe((val: any) => {
           console.log(val);
-          if(val.explain=="ok") {
-            this.snackbar.openFromComponent(SnackbarAlertComponent,{duration: 5000, panelClass: ['red-snackbar'], data: {message:"User Deleted", icon:"check_circle"}});
+          if (val.explain == "ok") {
+            this.snackbar.openFromComponent(SnackbarAlertComponent, { duration: 5000, panelClass: ['red-snackbar'], data: { message: "User Deleted", icon: "check_circle" } });
             this.ngOnInit();
           }
         })
@@ -166,36 +170,38 @@ export class ReserveUsersViewComponent implements OnInit {
 
   }
 
-  confirmSwitch(userId:string,currval:boolean):void{
-    const mydialog=this.confirmDialog.open(DialogConfirmationComponent,{ data: {
-      title: 'Confirm changing status.',
-      dialogMessage: 'Are you sure you want to change the status of the user: '+userId+'?',
-    }});
-    mydialog.afterClosed().subscribe(val=>{
-      if(val){
-        if(!currval){
-          this.http.post('api/user/admin/disable',{
-            userID:userId
-          }).subscribe((val:any)=>{
+  confirmSwitch(userId: string, currval: boolean): void {
+    const mydialog = this.confirmDialog.open(DialogConfirmationComponent, {
+      data: {
+        title: 'Confirm changing status.',
+        dialogMessage: 'Are you sure you want to change the status of the user: ' + userId + '?',
+      }
+    });
+    mydialog.afterClosed().subscribe(val => {
+      if (val) {
+        if (!currval) {
+          this.http.post('api/user/admin/disable', {
+            userID: userId
+          }).subscribe((val: any) => {
             console.log(val);
-            if(val.explain=="ok")this.snackbar.openFromComponent(SnackbarAlertComponent,{duration: 5000, panelClass: ['green-snackbar'], data: {message:"User Disabled", icon:"check_circle"}});
+            if (val.explain == "ok") this.snackbar.openFromComponent(SnackbarAlertComponent, { duration: 5000, panelClass: ['green-snackbar'], data: { message: "User Disabled", icon: "check_circle" } });
           });
-        }else {
-          this.http.post('api/user/admin/enable',{
-            userID:userId
-          }).subscribe((val:any)=>{
+        } else {
+          this.http.post('api/user/admin/enable', {
+            userID: userId
+          }).subscribe((val: any) => {
             console.log(val);
-            if(val.explain=="ok")this.snackbar.openFromComponent(SnackbarAlertComponent,{duration: 5000, panelClass: ['green-snackbar'], data: {message:"User Enabled", icon:"check_circle"}});
+            if (val.explain == "ok") this.snackbar.openFromComponent(SnackbarAlertComponent, { duration: 5000, panelClass: ['green-snackbar'], data: { message: "User Enabled", icon: "check_circle" } });
           });
         }
-      }  
+      }
     })
 
 
   }
 
-  editUser(id:string):void{
-    this.router.navigate(['manage',{outlets:{managecontent:['edit-user',id]}}]);   
+  editUser(id: string): void {
+    this.router.navigate(['manage', { outlets: { managecontent: ['edit-user', id] } }]);
   }
 
 }
