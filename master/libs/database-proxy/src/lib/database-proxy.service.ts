@@ -84,7 +84,7 @@ export class DatabaseProxyService {
 
     public async insertDevicePerimeter(data:{deviceID:string, perimeter:number[], name:string}) {
         const Insert = new this.DevicePerimeterModel(data);
-        return await Insert.save();
+        await Insert.save();
     }
 
     public async removeDeviceFromPerimeter(data:{deviceID:string}) {
