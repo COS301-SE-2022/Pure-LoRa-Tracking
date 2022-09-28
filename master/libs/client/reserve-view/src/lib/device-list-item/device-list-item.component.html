@@ -5,12 +5,17 @@
                 memory
             </mat-icon>
             {{device.deviceName}}
+            <span id="spacer"></span>
+            <button mat-icon-button 
+                (click)="toggleHistory($event)"
+                matTooltip="Show History">
+                <mat-icon>{{visibilityIcon}}</mat-icon>
+            </button>
         </mat-panel-title>
     </mat-expansion-panel-header>
     <div>
         <p>UEI: {{device.deviceID}}</p>
-        <p>Last Signal:</p>
-        <p>Animal:</p>
+        <p>Last Signal: --</p>
     </div>
     <mat-action-row>
         <button mat-button color="accent" (click)="locateOnMap()">

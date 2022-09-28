@@ -15,6 +15,7 @@
 #login-logo{
     width: 50%;
     margin-bottom: 1rem;
+    filter: drop-shadow(3px 5px 2px rgb(0 0 0 / 0.4));
 }
 
 .loginform{
@@ -39,6 +40,7 @@
     border-radius: 50%;
     padding: 1rem;
     margin: 0.5rem;
+    box-shadow: 1px 2px 2px gray;
 }
 
 #intruction{

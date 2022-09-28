@@ -1,0 +1,19 @@
+#datetime-wrap {
+    display: flex;  
+    flex-direction: row;
+    padding: 0 0.5rem 0.5rem 0.5rem;
+    background-color: white;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+    justify-content: center;
+}
+
+.time-input{
+    width: 5em;
+}
+
+#date-action-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

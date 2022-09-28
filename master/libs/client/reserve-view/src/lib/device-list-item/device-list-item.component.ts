@@ -1,5 +1,6 @@
 import { Component, Input, Output,EventEmitter } from '@angular/core';
 import { Device } from '@master/shared-interfaces';
+
 @Component({
   selector: 'master-device-list-item',
   templateUrl: './device-list-item.component.html',
@@ -23,6 +24,8 @@ export class DeviceListItemComponent {
     }
   }
 
+  showHistory = true;
+  visibilityIcon = 'visibility';
   //ngOnInit(): void {}
 
   openDevice(): void {
@@ -38,5 +41,12 @@ export class DeviceListItemComponent {
 
   itemExpand(): void{
     this.itemExpanded.emit();
+  }
+
+  toggleHistory(event:any):void{
+    //prevents expansion panel expand
+    event.stopPropagation();
+    this.visibilityIcon = this.showHistory ? 'visibility_off' : 'visibility';
+    this.showHistory = !this.showHistory;
   }
 }
