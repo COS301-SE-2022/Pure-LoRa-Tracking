@@ -16,6 +16,7 @@ import { ClientGatewayDetailModule } from '@master/client/gateway-detail';
 import { ClientSensorDetailsModule } from '@master/client/sensor-details';
 import { DateTimeSelectionComponent } from './date-time-selection/date-time-selection.component';
 import { MatChipsModule } from '@angular/material/chips';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 export const clientReserveViewRoutes: Route[] = [];
 
@@ -32,6 +33,7 @@ export const clientReserveViewRoutes: Route[] = [];
     ClientSensorDetailsModule,
     MatChipsModule,
     ClientGatewayDetailModule,
+    MatTooltipModule
   ],
   declarations: [
     ReserveViewComponent,

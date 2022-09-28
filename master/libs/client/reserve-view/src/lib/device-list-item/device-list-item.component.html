@@ -5,6 +5,12 @@
                 memory
             </mat-icon>
             {{device.deviceName}}
+            <span id="spacer"></span>
+            <button mat-icon-button 
+                (click)="toggleHistory($event)"
+                matTooltip="Show History">
+                <mat-icon>{{visibilityIcon}}</mat-icon>
+            </button>
         </mat-panel-title>
     </mat-expansion-panel-header>
     <div>
