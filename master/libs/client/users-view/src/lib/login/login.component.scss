@@ -1,9 +1,7 @@
 .loginform{
     background-color: white;
-   padding: 1rem;
+   padding: 1.5rem;
    border-radius: 0.5rem;
-   margin: 1rem;
-   
 }
 
 .container {
@@ -30,13 +28,25 @@
     width: 100%;
 }
 
-#login-button {
-    // margin-bottom: 0.5em;
+.buttons {
+    margin-bottom: 0.5em;
+}
+
+#response{
+    color: red;
+    margin:0;
+    text-align: center;
+}
+
+#response-container{
+    min-width: 100%;
+    width: 0;
 }
 
 #login-logo{
     width: 50%;
     margin-bottom: 1rem;
+    filter: drop-shadow(3px 5px 2px rgb(0 0 0 / 0.4));
 }
 
 #button-container{

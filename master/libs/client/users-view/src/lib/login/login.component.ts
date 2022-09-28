@@ -14,6 +14,8 @@ export class LoginComponent implements OnInit {
 
   logingroup: UntypedFormGroup;
 
+  responseMessage = "\n";
+
   constructor(
     private fb: UntypedFormBuilder,
     private http: HttpClient,
@@ -45,12 +47,14 @@ export class LoginComponent implements OnInit {
   }
 
   //handle login logic
-  login(): void {
-    if (this.logingroup.valid) {
-      this.http.post("api/login/user", ({
-        username: this.logingroup.get("email")?.value,
-        password: this.logingroup.get("password")?.value
-      })).subscribe((val: any) => {
+  login():void{
+    console.log("Triggered");
+    if(this.logingroup.valid){
+      this.http.post("api/login/user",({
+        username:this.logingroup.get("email")?.value,
+        password:this.logingroup.get("password")?.value
+      })).subscribe((val:any)=>{
+
         console.log(val);
         if (val.status == 401 && val.explain == "Invalid username or password") {
           this.snackbar.openFromComponent(SnackbarAlertComponent,{duration: 3000, panelClass: ['orange-snackbar'], data: {message:"Username or password incorrect", icon:"error_outline"}})
@@ -74,6 +78,8 @@ export class LoginComponent implements OnInit {
           }
         }
       });
+    } else {
+      this.responseMessage = this.logingroup.controls['email'].invalid ? 'Please enter a valid e-mail address.' : (this.logingroup.controls['password'].invalid) ? 'Please enter a password.' : '\n';
     }
 
   }
