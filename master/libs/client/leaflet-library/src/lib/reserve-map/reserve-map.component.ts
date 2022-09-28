@@ -151,7 +151,6 @@ export class ReserveMapComponent implements OnInit, OnChanges {
   
 
   //MAP
-
   public loadmap(): void {
     if (this.Reserve?.data != null) {
       if (this.mainmap != null) this.mainmap.remove();//if change to main map reload
@@ -164,7 +163,6 @@ export class ReserveMapComponent implements OnInit, OnChanges {
   }
 
   //MAPTILES
-
   public loadmaptiles(): void {
     if (this.mainmap != null) {
       if (this.maptiles != null) {

@@ -17,7 +17,7 @@ export class HeaderUiComponent implements OnInit{
   logout() {
     console.log("logout called");
     this.cookieservice.deleteAll();
-    this.cookieservice.deleteAll("/manage");//delete cookies for manage
+    this.cookieservice.deleteAll("manage");//delete cookies for manage
     this.router.navigate(['']);
   }
 }

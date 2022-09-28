@@ -1215,7 +1215,7 @@ export class ThingsboardThingsboardClientService {
       login.data.authority,
       login.data.firstName,
       login.data.lastName,
-      Object.assign(login.data.additionalInfo, { reserves: reserveList })
+      Object.assign(login.data.additionalInfo, { reserves: reserveList }),
     );
 
     if (resp.status != 200)
@@ -1486,6 +1486,7 @@ export class ThingsboardThingsboardClientService {
   async updateUser(userID: string, details: {
     firstName: string,
     lastName: string,
+    email: string,
   }, reserves?: { tenantID?: string, reserveName: string, reserveID: string }[]): Promise<thingsboardResponse> {
     const user = await this.userService.userInfo(this.token);
 
@@ -1520,18 +1521,18 @@ export class ThingsboardThingsboardClientService {
     } else {
       additionalinfo = userinfo.data.additionalInfo;
     }
-
     const resp = await this.userService.UpdateUserInfo(
       this.token,
       userID,
       userinfo.data.tenantId.id,
       userinfo.data.customerId.id,
-      userinfo.data.email,
+      details.email,
       userinfo.data.authority,
       details.firstName,
       details.lastName,
-      additionalinfo
+      additionalinfo,
     );
+      console.log("details is ",details.email," and user is ",userinfo.data.email);
 
     if (resp.status != 200)
       return {

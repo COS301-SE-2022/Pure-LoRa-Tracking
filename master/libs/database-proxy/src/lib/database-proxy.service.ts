@@ -106,7 +106,6 @@ export class DatabaseProxyService {
     public async getMoreInfo(deviceEUI:string): Promise<any>{
         const lastest= await this.DataModel.find({deviceEUI:deviceEUI}).sort({timestamp:-1}).limit(1).exec();
         const latestcount= await this.DataModel.find({deviceEUI:deviceEUI}).count();
-        
         console.log(latestcount);   
     }
 }

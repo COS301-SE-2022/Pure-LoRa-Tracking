@@ -525,16 +525,21 @@ export class ThingsboardThingsboardUserService {
     authority: string,
     firstname: string,
     lastname: string,
-    additionalInfo: any
+    additionalInfo: any,
   ): Promise<UserResponse> {
     const headersReq = {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + token,
     };
-
+    
+    //apparently we dont need the email change
+    // console.log("emailchange: " + emailchange);
+    // const details=emailchange?"/user?sendActivationMail=true":"/user?sendActivationMail=false";
+    // console.log("details: " + details);
+    
     const resp = await firstValueFrom(
       this.httpService.post(
-        this.ThingsBoardURL + "/user?sendActivationMail=true",
+        this.ThingsBoardURL + "/user?sendActivationMail=false",
         {
           id: {
             id: userID,
@@ -559,9 +564,12 @@ export class ThingsboardThingsboardUserService {
         }
       )
     ).catch((error) => {
+      console.log(error);
       if (error.response == undefined) return error.code;
       return error;
     });
+
+    console.log("logged ",resp);
 
     if (resp == 'ECONNREFUSED')
       return {

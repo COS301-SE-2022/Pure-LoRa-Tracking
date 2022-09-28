@@ -15,6 +15,7 @@ export interface userUpdateInput {
   userInfo: {
     firstName: string;
     lastName: string;
+    email:string;
   };
   reserves?: { reserveName: string; reserveID: string }[];
 }

@@ -42,7 +42,8 @@ export class ProfilesEditComponent implements OnInit {
       userID:this.id,
       userInfo: {
         firstName:this.editProfile.get("name")?.value,
-        lastName:this.editProfile.get("surname")?.value
+        lastName:this.editProfile.get("surname")?.value,
+        email:this.editProfile.get("email")?.value
       }
     }).subscribe((val:any)=>{
       console.log(val);

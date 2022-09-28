@@ -14,8 +14,8 @@
         </mat-panel-title>
     </mat-expansion-panel-header>
     <div>
-        <p>UEI: {{device.deviceID}}</p>
-        <p>Last Signal: --</p>
+        <p>Thingsboard EUI: {{device.deviceID}}</p>
+        <p>Chirpstack ID: {{device.hardwareid}}</p>
     </div>
     <mat-action-row>
         <button mat-button color="accent" (click)="locateOnMap()">

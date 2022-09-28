@@ -53,7 +53,7 @@
               [device]="deviceItem"
               (openDeviceView)="viewSensor($event)"
               (locateDevice)="selectedSensor($event)"
-              (itemExpanded)="selectedSensor(deviceItem.deviceID)"
+              (itemExpanded)="viewsensor(deviceItem.deviceID)"
             ></master-device-list-item>
           </mat-accordion>
           <!-- <mat-list-option *ngFor="let sensorItem of filteredSensors" [value]="sensorItem.deviceID" [style.background-color]="getSelectedStyle(sensorItem.deviceID)" (click)="selectedSensor(sensorItem.deviceID)" >
