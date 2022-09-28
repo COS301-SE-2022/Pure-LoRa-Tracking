@@ -13,6 +13,8 @@ export class LoginComponent implements OnInit {
 
   logingroup:UntypedFormGroup;
 
+  responseMessage = "\n";
+
   constructor(
     private fb:UntypedFormBuilder,
     private http:HttpClient,
@@ -45,11 +47,13 @@ export class LoginComponent implements OnInit {
 
   //handle login logic
   login():void{
+    console.log("Triggered");
     if(this.logingroup.valid){
       this.http.post("api/login/user",({
         username:this.logingroup.get("email")?.value,
         password:this.logingroup.get("password")?.value
       })).subscribe((val:any)=>{
+
         console.log(val);
         if(val.status==200&&val.explain=="Login failed. No 2fa"){
             this.cookieservice.set("PURELORA_PREVERIFICATION_TOKEN",val.token,14);
@@ -57,7 +61,10 @@ export class LoginComponent implements OnInit {
         }
         else if(val.status==200&&val.explain=="Login successful. 2fa"){
           this.router.navigate(["auth"],{queryParams:{token:btoa(val.token)}});
-        }
+
+        } else {
+          this.responseMessage = "Invalid login information.";
+          }
 
         // if(val.status==200&&val.explain=="Login successful."){
         //   //set cookies
@@ -65,8 +72,9 @@ export class LoginComponent implements OnInit {
         //   this.router.navigate(["auth"]);
         // }
       });
+    } else {
+      this.responseMessage = this.logingroup.controls['email'].invalid ? 'Please enter a valid e-mail address.' : (this.logingroup.controls['password'].invalid) ? 'Please enter a password.' : '\n';
     }
-    
   } 
   
   reset():void{

@@ -1,23 +1,26 @@
-<div class="container">
+<div class="container" tabindex="5" (keyup.enter)="login()">
     <div class="wrapper">
         <img id="login-logo" src="assets/Logos/logo.svg" alt="Logo">
         <div class="loginform">
-            <form [formGroup]="logingroup" id="login-content">
+            <form [formGroup]="logingroup" id="login-content" (ngSubmit)="login()">
                 <mat-form-field>
                     <mat-label>Email</mat-label>
-                    <input matInput type="email" formControlName="email" placeholder="Email">
+                    <input matInput type="email" formControlName="email" placeholder="Email" tabindex="1" autofocus>
                 </mat-form-field>
                 <mat-form-field>
                     <mat-label>Password</mat-label>
-                    <input matInput type="password" formControlName="password" placeholder="Password">
+                    <input matInput type="password" formControlName="password" placeholder="Password" tabindex="2">
                 </mat-form-field>
-                <div id="button-container">
-                    <div id="login-button">
-                        <button mat-flat-button color="primary" (click)="login()">Login</button>
-                    </div>
-                    <div>
-                        <button mat-button color="primary" (click)="reset()">Reset password</button>
-                    </div>
+                <div class="buttons">
+                    <button mat-raised-button color="primary" type="submit" tabindex="3" [disabled]="logingroup.invalid">Login</button>
+                </div>
+                <div class="buttons">
+                    <button mat-button (click)="reset()" tabindex="4"><u>Reset password</u></button>
+                </div>
+                <div id="response-container">
+                    <p id="response">
+                        {{responseMessage}}
+                    </p>
                 </div>
                 
             </form>
