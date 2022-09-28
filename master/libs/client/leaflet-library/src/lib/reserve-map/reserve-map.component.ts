@@ -17,11 +17,11 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { icon, Marker } from 'leaflet';
 //this fixes the marker shadow issue
 const iconDefault = icon({
-  iconRetinaUrl:'assets/marker-icon-2x.png',
-  iconUrl:'assets/marker-icon.png',
+  iconRetinaUrl:'assets/cell_tower.png',
+  iconUrl:'assets/cell_tower.png',
   shadowUrl:'assets/marker-shadow.png',
-  iconSize: [25, 41],
-  tooltipAnchor: [16, -26],
+  iconSize: [20, 35],
+  tooltipAnchor: [10, -26],
   popupAnchor: [1, -50],
   iconAnchor: [10, 40],
   shadowSize: [31, 31]
