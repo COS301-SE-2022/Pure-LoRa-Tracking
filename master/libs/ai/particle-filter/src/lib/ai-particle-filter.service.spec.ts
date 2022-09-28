@@ -185,6 +185,10 @@ describe('Live Particle filter test', () => {
   it('stratService resample -> success', () => {
     expect(stratifiedService.resampleParticles()).toBeUndefined();
   });
+
+  it('miltiService resample -> success', () => {
+    expect(multinomialService.resampleParticles()).toBeUndefined();
+  });
 });
 
 const initialParameters = {
