@@ -161,7 +161,7 @@ export class ProcessingApiProcessingBusService {
         } catch (error) {
             Logger.log('Location Service Error');
             Logger.log(error);
-            return false;
+            // return false;
         }
     }
 }
