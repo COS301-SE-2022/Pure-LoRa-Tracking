@@ -17,7 +17,8 @@ export class ReservePanelComponent implements OnInit {
   private _Devices: Device[];
   private _GateWays: Gateway[];
   private _ViewType: string;
-  public processingType:string;
+  public processingType: string;
+  public currentdevice = "";
   @Input() selectedReserve = "";
   @Input() reserveList: ReserveInfo[];
   @Input()
@@ -68,7 +69,7 @@ export class ReservePanelComponent implements OnInit {
     this._Devices = [];
     this._GateWays = [];
     this._ViewType = "norm"
-    this.processingType="TRI";
+    this.processingType = "TRI";
     this.notifier.getSensorDeleted().subscribe(val => {
       this.filteredSensors = this.filteredSensors.filter(curr => curr.deviceID != val);
       this.Devices = this.Devices.filter(curr => curr.deviceID != val);
@@ -80,6 +81,10 @@ export class ReservePanelComponent implements OnInit {
     this.notifier.getPanToMap().subscribe(() => {
       //this might need to change if we pantomap in other places
       this.selectedDeviceID = "";
+    });
+    this.notifier.StartEndTimestamps.asObservable().subscribe(val => {
+      this.reset();
+      this.notifier.resetSensorView()
     });
     this.reserveList = [];
     this.showSensors = true;
@@ -98,6 +103,7 @@ export class ReservePanelComponent implements OnInit {
       //reset
       this.selectedDeviceID = "";
       this.notifier.resetSensorView()
+      this.currentdevice = "";
     }
     else {
       //click on
@@ -110,12 +116,15 @@ export class ReservePanelComponent implements OnInit {
           this.selectedDeviceID = "";
           this.notifier.resetSensorView()
         }
+        else {
+          this.currentdevice = device.deviceName;
+        }
       }
 
     }
   }
 
-  viewsensor(deviceid:string){
+  viewsensor(deviceid: string) {
     if (deviceid == this.selectedDeviceID) {
       this.selectedDeviceID = "";
     }
@@ -138,7 +147,7 @@ export class ReservePanelComponent implements OnInit {
           this.selectedDeviceID = gatewayID;
           this.notifier.locateGateway(gatewayID);
         }
-        else{
+        else {
           alert("No location data found");
         }
       }
@@ -161,7 +170,7 @@ export class ReservePanelComponent implements OnInit {
   }
 
 
-  viewSensor(event:{id:string,name: string}):void{
+  viewSensor(event: { id: string, name: string }): void {
     this.currentSensor = {
       name: event.name,
       id: event.id,
@@ -169,7 +178,7 @@ export class ReservePanelComponent implements OnInit {
     this.openSensor = true;
   }
 
-  viewGateway(event:{id:string,name: string, eui: string}):void{
+  viewGateway(event: { id: string, name: string, eui: string }): void {
     this.currentGateway = {
       name: event.name,
       id: event.id,
@@ -183,8 +192,14 @@ export class ReservePanelComponent implements OnInit {
     console.log("changed");
   }
 
-  typechange(event:any){
+  typechange(event: any) {
     this.proccessingTypeChange.emit(event);
+  }
+
+  reset(): void {
+    this.selectedDeviceID = "";
+    this.notifier.resetSensorView();
+    this.currentdevice = "";
   }
 
 }

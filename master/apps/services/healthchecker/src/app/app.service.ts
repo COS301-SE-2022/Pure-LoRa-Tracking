@@ -36,7 +36,7 @@ export class AppService {
           if (input == 401 || input == 200) return true;
           return false
         }}),
-      () => this.http.pingCheck(JSON.stringify({name: "Thingsboard Client",url:"http://thingsboard.loratracking.co.za"}), "http://localhost:9090"),
+      // () => this.http.pingCheck(JSON.stringify({name: "Thingsboard Client",url:"http://thingsboard.loratracking.co.za"}), "http://localhost:9090"),
       () => this.http.pingCheck(JSON.stringify({name: "Chirpstack API"}), "http://localhost:8080/api"),
       () => this.http.pingCheck(JSON.stringify({name: "Chirpstack Client",url: "https://chirpstack.loratracking.co.za"}), "http://localhost:8080"),
       () => this.http.pingCheck(JSON.stringify({ name: "RabbitMQ Client", url: "https://rabbitmq.loratracking.co.za" }), "http://localhost:15672"),
