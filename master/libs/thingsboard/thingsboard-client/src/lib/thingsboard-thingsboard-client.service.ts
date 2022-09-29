@@ -1508,16 +1508,20 @@ export class ThingsboardThingsboardClientService {
         furtherExplain: userinfo.explanation,
       };
 
-    let additionalinfo; 
+    let additionalinfo = userinfo.data.additionalInfo; 
     if (reserves != undefined) {
       const reserveList = (await this.getReserveList()).data;
+      const newReserves = new Array<{tenantID:string, reserveID: string, reserveName: string}>();
       reserves.forEach(reserve => {
         let i = 0;
         while (reserve.reserveID != reserveList[i].reserveID) i++;
-        reserve['tenantID'] = reserveList[i].tenantID;
+        newReserves.push({tenantID:reserveList[i].tenantID, reserveID: reserveList[i].reserveID, reserveName: reserveList[i].reserveName});
+        //reserve['tenantID'] = reserveList[i].tenantID;
       });
-      delete additionalinfo.reserves
-      additionalinfo.reserves = reserves
+      //console.log(reserves)
+      //console.log(additionalinfo)
+      delete additionalinfo.reserves;
+      additionalinfo.reserves = newReserves;
     } else {
       additionalinfo = userinfo.data.additionalInfo;
     }
