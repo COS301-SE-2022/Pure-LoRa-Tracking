@@ -94,6 +94,21 @@ describe('ProcessingApiProcessingBusService', () => {
     ).toBeUndefined();
   });
 
+  it('deleteDeviceData -> success', async () => {
+    expect(
+      await service.deleteDeviceData({ deviceEUI: 'TEST', timestamp: 0 })
+    ).toBeUndefined();
+  });
+
+  it('deleteDeviceData -> fail', async () => {
+    jest.spyOn(dbProxy, 'deleteDeviceData').mockImplementationOnce(() => {
+      throw new Error('delete Error');
+    });
+    expect(
+      await service.deleteDeviceData({ deviceEUI: 'TEST', timestamp: 0 })
+    ).toBeUndefined();
+  });
+
   ///////////////////////////////////////////////
 
   it('Location service process -> fail', async () => {
