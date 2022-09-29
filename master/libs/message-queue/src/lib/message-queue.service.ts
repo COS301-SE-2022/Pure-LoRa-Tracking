@@ -33,6 +33,7 @@ export class MessageQueueService {
             });
             connec.on("disconnect", ({ err: r }) => {
                 console.log("Disconnect error ", r);
+                MessageQueueService.amqpconnection = amqp.connect([`amqp://${process.env.RABBITMQ_USERNAME}:${process.env.RABBITMQ_PASSWORD}@localhost:5672`]);
             });
         }
         MessageQueueService.amqpconnection?.once("connect",()=>{
@@ -89,15 +90,6 @@ export class MessageQueueService {
             // console.log("Consumed",msg);
             const routingkey=msg.fields.routingKey;
             const deveui=routingkey.substring(routingkey.indexOf("device.")+7,routingkey.indexOf(".event"));
-            // const msgdata=JSON.parse(msg.content.toString());
-            // this.processbus.forwardChirpstackData({
-            //     data:msgdata,
-            //     deviceEUI:routingkey.substring(routingkey.indexOf("device.")+7,routingkey.indexOf(".event")),
-            //     eventtype:routingkey.substring(routingkey.indexOf("event.")+6),
-            //     timestamp:msgdata.rxInfo[0]?.time
-            // }).then(curr=>{
-            //     console.log(curr);
-            // });
             const uplinkData = UplinkEvent.deserializeBinary(msg.content);
             const uplinkDataJson = JSON.stringify(uplinkData.toObject());
             const uplinkStore = JSON.stringify(msg.content);

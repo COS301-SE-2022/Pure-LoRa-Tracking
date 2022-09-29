@@ -22,18 +22,31 @@ export class ApiLoginEndpointService {
                 status:200,
                 explain:"Login successful. 2fa",
                 token:loginResponse.Token,
-                has2fa:true
+                enabled2fa:true
             }
         }
         else if(loginResponse.refreshToken!=null&&loginResponse.status=="ok"){
-            //get 2fa secret
-            const secret=await this.thingsboardClient.generate2FA(loginResponse.Token);
-            return{
-                status:200,
-                explain:"Login failed. No 2fa",
-                token:loginResponse.Token,
-                authURL:secret.data.authUrl,
-                has2fa:false
+            //check if 2fa is enabled
+            const enabled=await this.thingsboardClient.check2FAEnabled(loginResponse.Token);
+            if(enabled){
+                //get 2fa secret
+                const secret=await this.thingsboardClient.generate2FA(loginResponse.Token);
+                return{
+                    status:200,
+                    explain:"Login failed. No 2fa",
+                    token:loginResponse.Token,
+                    authURL:secret.data.authUrl,
+                    enabled2fa:true
+                }
+            }
+            else {
+                return{
+                    status:200,
+                    explain:"Login successful. 2fa not enabled",
+                    token:loginResponse.Token,
+                    refreshToken:loginResponse.refreshToken,
+                    enabled2fa:false
+                }
             }
         }
 
@@ -131,6 +144,7 @@ export class ApiLoginEndpointService {
             status : 403,
             explain : "no email provided"
         }
+        
 
         this.thingsboardClient.resetLogin(content.email);
 

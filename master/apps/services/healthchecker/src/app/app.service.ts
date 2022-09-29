@@ -22,7 +22,7 @@ export class AppService {
 
   async checkServices() {
     return this.healthcheck.check([
-      () => this.http.pingCheck(JSON.stringify({name: "Pure Lora client",url:"https://loratracking.co.za"}), "http://localhost:4200"),
+      // () => this.http.pingCheck(JSON.stringify({name: "Pure Lora client",url:"https://loratracking.co.za"}), "http://localhost:4200"),
       () => this.http.pingCheck(JSON.stringify({name: "Pure Lora API"}), "http://localhost:3333/api", {
         validateStatus: (input) => {
           if (input == 400 || input == 200) return true;

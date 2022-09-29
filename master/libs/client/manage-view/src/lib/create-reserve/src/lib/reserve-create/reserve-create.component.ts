@@ -24,6 +24,7 @@ export class ReserveCreateComponent implements OnInit {
   }
 
   createReserve():void {
+    console.log("Triggered");
       if(this.mapgeojson!=""){
       //api call
       this.http.post("/api/reserve/admin/create",{

@@ -20,13 +20,13 @@ export class StatusPageComponent implements OnInit {
   timeLeft = 10;
   ngOnInit(): void {
     this.reload();
-    setInterval(() => {
-      this.timeLeft--;
-      if (this.timeLeft <= 0) {
-        this.timeLeft = 10;
-        this.reload();
-      }
-    }, 1000)
+    // this.reload();
+    // setInterval(() => {
+    //   this.timeLeft--;
+    //   if (this.timeLeft <= 0) {
+    //     this.timeLeft = 10;
+    //   }
+    // }, 1000) to many requests for now
   }
 
   reload() {

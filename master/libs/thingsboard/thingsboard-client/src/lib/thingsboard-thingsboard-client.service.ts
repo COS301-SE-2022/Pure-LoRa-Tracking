@@ -1215,7 +1215,7 @@ export class ThingsboardThingsboardClientService {
       login.data.authority,
       login.data.firstName,
       login.data.lastName,
-      Object.assign(login.data.additionalInfo, { reserves: reserveList })
+      Object.assign(login.data.additionalInfo, { reserves: reserveList }),
     );
 
     if (resp.status != 200)
@@ -1486,6 +1486,7 @@ export class ThingsboardThingsboardClientService {
   async updateUser(userID: string, details: {
     firstName: string,
     lastName: string,
+    email: string,
   }, reserves?: { tenantID?: string, reserveName: string, reserveID: string }[]): Promise<thingsboardResponse> {
     const user = await this.userService.userInfo(this.token);
 
@@ -1507,31 +1508,35 @@ export class ThingsboardThingsboardClientService {
         furtherExplain: userinfo.explanation,
       };
 
-    let additionalinfo; 
+    let additionalinfo = userinfo.data.additionalInfo; 
     if (reserves != undefined) {
       const reserveList = (await this.getReserveList()).data;
+      const newReserves = new Array<{tenantID:string, reserveID: string, reserveName: string}>();
       reserves.forEach(reserve => {
         let i = 0;
         while (reserve.reserveID != reserveList[i].reserveID) i++;
-        reserve['tenantID'] = reserveList[i].tenantID;
+        newReserves.push({tenantID:reserveList[i].tenantID, reserveID: reserveList[i].reserveID, reserveName: reserveList[i].reserveName});
+        //reserve['tenantID'] = reserveList[i].tenantID;
       });
-      delete additionalinfo.reserves
-      additionalinfo.reserves = reserves
+      //console.log(reserves)
+      //console.log(additionalinfo)
+      delete additionalinfo.reserves;
+      additionalinfo.reserves = newReserves;
     } else {
       additionalinfo = userinfo.data.additionalInfo;
     }
-
     const resp = await this.userService.UpdateUserInfo(
       this.token,
       userID,
       userinfo.data.tenantId.id,
       userinfo.data.customerId.id,
-      userinfo.data.email,
+      details.email,
       userinfo.data.authority,
       details.firstName,
       details.lastName,
-      additionalinfo
+      additionalinfo,
     );
+      // console.log("details is ",details.email," and user is ",userinfo.data.email);
 
     if (resp.status != 200)
       return {
@@ -1608,7 +1613,6 @@ export class ThingsboardThingsboardClientService {
         explanation: 'get',
         furtherExplain: response.explanation,
       };
-
     const retArray = new Array<any>();
     for (let i = 0; i < response.data.data.length; i++) {
       if (
@@ -1617,7 +1621,8 @@ export class ThingsboardThingsboardClientService {
       )
         retArray.push({
           deviceID: response.data.data[i].id.id,
-          deviceName: response.data.data[i].name,
+          hardwareid: response.data.data[i].name,
+          deviceName: response.data.data[i].label,
           isGateway: response.data.data[i].additionalInfo.gateway,
         });
     }
@@ -1751,6 +1756,13 @@ export class ThingsboardThingsboardClientService {
   async resetLogin(email:string) {
     const response = await this.userService.resetLogin(email);
     Logger.log("Login Reset Attempted:\n"+response.explanation);
+  }
+
+  //////////////////////////////////////////////////////////////////
+
+  async check2FAEnabled(token:string): Promise<boolean> {
+    const resp= await this.userService.check2FAEnabled(token);
+    return resp;
   }
 }
   /* data is required to be any due to the many possible response data types */

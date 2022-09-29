@@ -19,6 +19,7 @@ export interface Reserve {
 export class ReserveDetailComponent implements OnInit {
   reserves: Reserve[] = [];
 
+  tableColumns:string[] = ['id','name','email','delete',"edit"];
 
   constructor(private router: Router, private http: HttpClient, private confirmDialog: MatDialog,private snackbar:MatSnackBar) {
     this.reserves = []

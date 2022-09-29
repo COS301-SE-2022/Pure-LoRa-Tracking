@@ -91,6 +91,7 @@ describe('ReserveMapComponent', () => {
     deviceID: "sens-11",
     deviceName: "sens-11-test",
     type: "sensor",
+    hardwareid: "sens-11ID",
     locationData: [
       {
         timeStamp: Date.now() - 6000,
@@ -113,6 +114,7 @@ describe('ReserveMapComponent', () => {
     deviceID: "sens-2",
     deviceName: "sens-2-test",
     type: "sensor",
+    hardwareid: "sens-22ID",
     locationData: [
       {
         timeStamp: Date.now() - 6000,

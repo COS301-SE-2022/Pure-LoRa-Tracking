@@ -199,7 +199,9 @@ export class ApiMapEndpointService {
                 explanation: "Invalid username or password",
                 data: [],
             }
-            if (item.data.telemetryResults == undefined)
+            if(item.data==undefined)
+                item.data.telemetryResults = [];
+            else if (item.data.telemetryResults == undefined)
                 item.data.telemetryResults = [];
 
             if (item.status == 'fail') {
@@ -208,7 +210,8 @@ export class ApiMapEndpointService {
                 data.push({
                     pType:content.pType,
                     deviceID: item.name,
-                    deviceName: item.furtherExplain,
+                    deviceName: item.explanation,
+                    hardwareid:item.furtherExplain,
                     type: "sensor",
                     locationData: item.data
                 })
@@ -216,7 +219,8 @@ export class ApiMapEndpointService {
                 data.push({
                     pType:content.pType,
                     deviceID: item['name'],
-                    deviceName: item.furtherExplain,
+                    deviceName: item.explanation,
+                    hardwareid:item.furtherExplain,
                     type: "sensor",
                     locationData: item.data.data.telemetryResults
                 })
