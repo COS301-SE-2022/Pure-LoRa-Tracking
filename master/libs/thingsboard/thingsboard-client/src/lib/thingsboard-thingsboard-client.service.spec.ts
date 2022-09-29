@@ -1,6 +1,6 @@
 import { ThingsboardThingsboardAssetModule } from '@lora/thingsboard-asset';
 import { ThingsboardThingsboardDeviceModule } from '@lora/thingsboard-device';
-import { ThingsboardThingsboardTelemetryModule } from '@lora/thingsboard-telemetry';
+import { ThingsboardThingsboardTelemetryModule, ThingsboardThingsboardTelemetryService } from '@lora/thingsboard-telemetry';
 import { ThingsboardThingsboardUserModule } from '@lora/thingsboard-user';
 import { Test } from '@nestjs/testing';
 import { HttpService } from '@nestjs/axios';
@@ -18,6 +18,7 @@ describe('ThingsboardThingsboardClientService', () => {
   let service: ThingsboardThingsboardClientService;
   let httpService: HttpService;
   let tests: ThingsboardThingsboardTestsService;
+  let telemetry: ThingsboardThingsboardTelemetryService;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
@@ -37,6 +38,7 @@ describe('ThingsboardThingsboardClientService', () => {
     service = module.get(ThingsboardThingsboardClientService);
     httpService = module.get(HttpService);
     tests = module.get(ThingsboardThingsboardTestsService);
+    telemetry = module.get(ThingsboardThingsboardTelemetryService);
   });
 
   it('should be defined', () => {
@@ -2546,6 +2548,14 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
   /*it('v1 send telemetry -> live test', async () => {
     service.v1SendTelemetry("wzBhcYgAjRUs8conbhCG",{longitude:3, latitude:4,pType:'TRI'})
   });*/
+
+  it('Delete Data -> live', async () => {
+    const data = await service.loginUserReturnToken('isak@lora.co.za', 'reserve');
+    telemetry.setToken(data.Token);
+    console.log(data);
+    console.log((await telemetry.clearTelemetry('b2447230-3ebb-11ed-b1e3-f5d6da106fe9')))
+  });
+
 });
 
 //////////////////////////////////////////////////////////////////////

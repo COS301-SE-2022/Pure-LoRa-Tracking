@@ -157,7 +157,7 @@ export class ProcessingApiProcessingBusService {
 
     async LocationServiceProcess(data: any, deviceToken: string) {
         try {
-            return this.locationService.calculateLocation(data, deviceToken);
+            return await this.locationService.calculateLocation(data, deviceToken);
         } catch (error) {
             Logger.log('Location Service Error');
             Logger.log(error);

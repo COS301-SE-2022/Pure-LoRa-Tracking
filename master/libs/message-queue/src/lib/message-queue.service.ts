@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import amqp, { AmqpConnectionManager, Channel, ChannelWrapper } from "amqp-connection-manager"
 import { ProcessingApiProcessingBusService } from '@processing/bus';
 import type * as amqplib from 'amqplib';
@@ -39,16 +39,16 @@ export class MessageQueueService {
             this.readychannel=MessageQueueService.amqpconnection?.createChannel({
                 name: "PURELORA_READY_CONSUME_CHANNEL",
                 confirm: true,
-                setup: function (ch: any) {
-                    ch.assertQueue("PURELORA_READYQUEUE");
+                setup: async function (ch: any) {
+                    await ch.assertQueue("PURELORA_READYQUEUE");
                     return true;
                 }
             });
             this.readygetchannel=MessageQueueService.amqpconnection?.createChannel({
                 name: "PURELORA_READY_GET_CHANNEL",
                 confirm: true,
-                setup: function (ch: any) {
-                    ch.assertQueue("PURELORA_READYQUEUE");
+                setup: async function (ch: any) {
+                    await ch.assertQueue("PURELORA_READYQUEUE");
                     return true;
                 }
             });
@@ -80,7 +80,7 @@ export class MessageQueueService {
         })
 
         //MAIN CONSUMER
-        channel.consume("PURELORA_MAINLINE", (msg) => {
+        channel.consume("PURELORA_MAINLINE", async (msg) => {
             //might need to decode from base64
             //this method will run when data is pushed
             
@@ -102,7 +102,8 @@ export class MessageQueueService {
             const uplinkDataJson = JSON.stringify(uplinkData.toObject());
             const uplinkStore = JSON.stringify(msg.content);
 
-            this.processbus.forwardChirpstackData({
+            Logger.log("forwardChirpstackData");
+            await this.processbus.forwardChirpstackData({
                 data: uplinkDataJson,
                 deviceEUI: deveui,
                 eventtype: routingkey.substring(routingkey.indexOf("event.")+6),
@@ -113,6 +114,7 @@ export class MessageQueueService {
                     //send to service
                     if(this.processlist.get(deveui)!=false){
                         //we can send
+                        Logger.log(uplinkDataJson);
                         this.aiProcessing.forwardData(uplinkData, this.serviceready);
                         this.processlist.set(deveui, false);
                     }
@@ -160,11 +162,12 @@ export class MessageQueueService {
 
         //OBSERVER
         this.serviceready.asObservable().subscribe(async (curr)=>{
+            console.log("HERE");
             this.processlist.delete(curr);
 
             //ready to be processed by the database. check if any are waiting
             if (await this.processbus.checkCountReady(curr) > 0) {
-                console.log("Found Data, sending to latest to server");
+                console.warn("Found Data, sending to latest to server");
                 const data = await this.processbus.getLastReady(curr); 
                 const uplinkData = UplinkEvent.deserializeBinary(Buffer.from(JSON.parse(data.data).data));
                 this.aiProcessing.forwardData(uplinkData, this.serviceready);
