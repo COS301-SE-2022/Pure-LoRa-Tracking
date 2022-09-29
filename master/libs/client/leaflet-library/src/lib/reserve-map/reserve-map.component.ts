@@ -264,7 +264,7 @@ export class ReserveMapComponent implements OnInit, OnChanges {
           "color": "#0000FF",
           "pulseColor": "#FFFFFF",
           "paused": false,
-          "reverse": false,
+          "reverse": true,
           "hardwareAccelerated": true
         });
         this.hideHistoricalExceptMarker(deviceID);
