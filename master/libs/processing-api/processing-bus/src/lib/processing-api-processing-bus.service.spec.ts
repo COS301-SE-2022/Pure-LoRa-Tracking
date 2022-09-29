@@ -109,6 +109,17 @@ describe('ProcessingApiProcessingBusService', () => {
     ).toBeUndefined();
   });
 
+  it('getLastReady -> success', async () => {
+    expect(await service.getLastReady('TEST')).toBeUndefined();
+  });
+
+  it('getLastReady -> fail', async () => {
+    jest.spyOn(dbProxy, 'deleteReadyAt').mockImplementationOnce(() => {
+      throw new Error('Error');
+    });
+    expect(await service.getLastReady('TEST')).toBeUndefined();
+  });
+
   ///////////////////////////////////////////////
 
   it('Location service process -> fail', async () => {
