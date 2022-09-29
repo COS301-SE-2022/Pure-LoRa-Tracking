@@ -5,6 +5,7 @@ import { ProcessingApiProcessingBusService } from '@processing/bus';
 import { UplinkEvent } from '@chirpstack/chirpstack-api/as/integration/integration_pb';
 import { UplinkRXInfo } from '@chirpstack/chirpstack-api/gw/gw_pb';
 import { Subject } from 'rxjs';
+import { AiHeatmapAverageService } from '@lora/ai/average';
 // import { MessageQueueService } from '@master/message-queue';
 
 @Injectable()
@@ -40,7 +41,7 @@ export class AiAiProcessingService {
     }
 
     async forwardData(uplinkData: UplinkEvent, next: Subject<string>) {
-
+        const devEui = Buffer.from(uplinkData.getDevEui_asB64(), 'base64').toString('hex');
         /* filter faulty results */
         let gatewayData = uplinkData.getRxInfoList();
         gatewayData = gatewayData.filter(gateway =>
@@ -50,27 +51,35 @@ export class AiAiProcessingService {
         );
 
         /* zero gateway fail */
-        if (gatewayData.length == 0)
-            next.next(uplinkData.getDevEui.toString());
+        if (gatewayData.length == 0) {
+            next.next(devEui);
+            return;
+        }
 
         /* convert to AI readable format */
         const deviceData = this.convertRXData(gatewayData);
         deviceData.deviceToken = uplinkData.getTagsMap().get("deviceToken");
 
         /* resolve device */
-        // const device = await this.resolveDevice(deviceData);
-
+        const device = await this.resolveDevice(deviceData);
+        Logger.log(deviceData.RSSI);
         /* perform process */
         const resLatLong = await this.serviceBus.LocationServiceProcess(uplinkData.getRxInfoList(), deviceData.deviceToken);
-
+        if (resLatLong == undefined) {
+            next.next(devEui);
+            return;
+        }
         // rssi PF
-        // await device.strategy[0].processData({ rssi: deviceData.RSSI, gateways: deviceData.gateways});
+        // await device.strategy[0].processData({ rssi: deviceData.RSSI, gateways: deviceData.gateways, deviceToken: deviceData.deviceToken });
 
         // lat long PF
-        // await device.strategy[1].processData({ latitude: resLatLong.latitude, longitude: resLatLong.longitude});
+        const PF = await device.strategy[0].processData({ latitude: resLatLong.latitude, longitude: resLatLong.longitude, deviceToken: deviceData.deviceToken });
+
+        await device.strategy[1].processData({ latitude: resLatLong.latitude, longitude: resLatLong.longitude, deviceToken: deviceData.deviceToken, procType: "ANN", pType: "HM" });
+        await device.strategy[2].processData({ latitude: PF.latitude, longitude: PF.longitude, deviceToken: deviceData.deviceToken, procType: "ANN", pType: "PF" });
 
         /* call next */
-        next.next(uplinkData.getDevEui.toString());
+        next.next(devEui);
 
     }
 
@@ -85,11 +94,13 @@ export class AiAiProcessingService {
 
             // add relevant strategies
             // TODO add relevant strategies as they become available
-            device.strategy.push(new particleFilterRSSIMultinomialService(this.serviceBus.locationService, this.serviceBus));
+            // device.strategy.push(new particleFilterRSSIMultinomialService(this.serviceBus.locationService, this.serviceBus));
             device.strategy.push(new particleFilterMultinomialService(this.serviceBus.locationService, this.serviceBus));
-
+            device.strategy.push(new AiHeatmapAverageService(this.serviceBus));
+            device.strategy.push(new AiHeatmapAverageService(this.serviceBus));
             // get init parameters
             const perimeter = await this.serviceBus.getDevicePerimeter(deviceData.deviceToken);
+            Logger.log(perimeter);
             const pfInit: {
                 reservePolygon: number[],
                 gateways: { latitude: number, longitude: number }[],
@@ -98,8 +109,7 @@ export class AiAiProcessingService {
 
             // initialize strategies
             device.strategy[0].configureInitialParameters(pfInit);
-            device.strategy[1].configureInitialParameters(pfInit);
-
+            // device.strategy[1].configureInitialParameters(pfInit);
         }
         else {
             device = find;
@@ -108,7 +118,7 @@ export class AiAiProcessingService {
     }
 
     convertRXData(data: UplinkRXInfo[]): { deviceToken: string, RSSI: number[], gateways: { longitude: number, latitude: number }[] } {
-        console.log(data);
+        
         const deviceData = { deviceToken: '', RSSI: [], gateways: [] };
         deviceData.gateways = new Array<{ longitude: number, latitude: number }>();
         deviceData.RSSI = new Array<number>();

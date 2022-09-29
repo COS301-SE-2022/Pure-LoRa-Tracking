@@ -53,13 +53,16 @@ export class AiHeatmapAverageService extends AiProcessingStrategyService {
   async processData(
     data: {
       deviceID: string;
-      reading: { latitude: number; longitude: number };
+      latitude: number; 
+      longitude: number;
+      deviceToken: string;
+      pType: "HM" | "PF";
     },
     procType?: string
   ): Promise<number[]> {
     if (this.currentFive.length >= 5) this.currentFive.shift();
 
-    this.currentFive.push(data.reading);
+    this.currentFive.push({ longitude: data.longitude, latitude: data.latitude });
 
     if (this.currentFive.length != 5) return [];
 
@@ -67,27 +70,28 @@ export class AiHeatmapAverageService extends AiProcessingStrategyService {
       const result = this.calculateAverageCoodirnateComputationally(
         this.currentFive
       );
+      const data_ = await this.serviceBus.sendProcessedDatatoTB(data.deviceToken, { latitude: result.latitude, longitude: result.longitude, pType: data.pType });
       return [result.longitude, result.latitude];
     }
 
-    const normalizedFive = this.normalizePoints(
-      this.deconstructData(this.currentFive)
-    );
-    const normalizedReading = this.normalizePoints(
-      this.deconstructData([data.reading])
-    );
+    // const normalizedFive = this.normalizePoints(
+    //   this.deconstructData(this.currentFive)
+    // );
+    // const normalizedReading = this.normalizePoints(
+    //   this.deconstructData([data.reading])
+    // );
 
-    this.fitModel(normalizedFive, normalizedReading);
-    const result = await this.predictData(normalizedFive);
+    // this.fitModel(normalizedFive, normalizedReading);
+    // const result = await this.predictData(normalizedFive);
 
-    this.serviceBus.sendProcessedDatatoTB(this.deviceToken, {
-      pType: 'HM',
-      longitude: result[0], latitude: result[1] ,
-    });
+    // this.serviceBus.sendProcessedDatatoTB(this.deviceToken, {
+    //   pType: 'HM',
+    //   longitude: result[0], latitude: result[1] ,
+    // });
 
-    this.saveModel(this.saveFilePath);
+    // this.saveModel(this.saveFilePath);
 
-    return result;
+    // return result;
   }
 
   calculateAverageCoodirnateComputationally(
