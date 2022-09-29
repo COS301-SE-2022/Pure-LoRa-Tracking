@@ -118,7 +118,7 @@
 // the webserver and it will be stored in SPIFF
 // NOTE: The frequency is set in the loraModem.h file and is default 868100000 Hz.
 #if !defined _SPREADING
-#	define _SPREADING SF9
+#	define _SPREADING SF7
 #endif
 
 // Channel Activity Detection
@@ -128,7 +128,7 @@
 // continuous listen mode.
 // Using this function means that we HAVE to use more dio pins on the RFM95/sx1276
 // device and also connect enable dio1 to detect this state. 
-#define _CAD 1
+#define _CAD 0
 
 
 // CRCCHECK
@@ -153,7 +153,7 @@
 // the firmware on your router witout having to be really close to the gateway and 
 // connect with USB.
 #if !defined _OTA
-#	define _OTA 1
+#	define _OTA 0
 #endif
 
 
@@ -200,7 +200,7 @@
 // Also, normally the server will respond with SF12 in the RX2 timeslot.
 // For TTN, the RX2 timeslot is SF9, so we should use that one for TTN
 #if !defined _RX2_SF
-#	define _RX2_SF 7
+#	define _RX2_SF 9
 #endif
 
 
@@ -218,6 +218,7 @@
 // _OLED==0;	No Oled display connected
 // _OLED==1;	0.9" Oled Screen based on SSD1306
 // _OLED==2;	1.3" Oled screens for Wemos, 128x64 SH1106
+// _OLED==3;  0.9" Oled Screen for TTGO T-beam
 #if !defined _OLED
 #	define _OLED 3
 #endif
@@ -265,7 +266,7 @@
 
 // ntp
 // Please add daylight saving time to NTP_TIMEZONES when desired
-#define NTP_TIMESERVER "nl.pool.ntp.org"	// Country and region specific
+#define NTP_TIMESERVER "ntp.is.co.za"	// Country and region specific
 #define NTP_TIMEZONES	2					// How far is our Timezone from UTC (excl daylight saving/summer time)
 #define SECS_IN_HOUR	3600
 #define _NTP_INTR 0							// Do NTP processing with interrupts or in loop();
@@ -334,7 +335,7 @@
 
 
 // Timing
-#define _PULL_INTERVAL 16					// PULL_DATA messages to server to get downstream in seconds
+#define _PULL_INTERVAL 60					// PULL_DATA messages to server to get downstream in seconds
 #define _STAT_INTERVAL 120					// Send a 'stat' message to server
 #define _NTP_INTERVAL 3600					// How often do we want time NTP synchronization
 #define _WWW_INTERVAL 60					// Number of seconds before we refresh the WWW page

@@ -160,7 +160,7 @@ void msg_oLED(String mesg)
   
   display.sendBuffer();
   yield();
-#elif _OLED>=1 && 
+#elif _OLED>=1
   display.clear();
   display.flipScreenVertically();
   display.setFont(ArialMT_Plain_24);

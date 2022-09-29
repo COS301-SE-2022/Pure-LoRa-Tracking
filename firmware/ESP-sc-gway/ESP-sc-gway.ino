@@ -24,7 +24,7 @@
 //
 // ----------------------------------------------------------------------------------------
 
-char* version_harbinger = "sc-gway v1.0.9"; // Tracking if updates are applied
+char* version_harbinger = "sc-gway v1.0.12 "; // Tracking if updates are applied
 String gw_addr="";
 
 #if defined (ARDUINO_ARCH_ESP32) || defined(ESP32)
@@ -714,8 +714,10 @@ void loop ()
         Serial.println("location available");
         printFloat(gps.location.lat(), gps.location.isValid(), 11, 6);
         printFloat(gps.location.lng(), gps.location.isValid(), 12, 6);
-      
       } 
+      if (gps.date.isValid()) {
+        setTime(gps.time.hour(), gps.time.minute(), gps.time.second(), gps.date.day(), gps.date.month(), gps.date.year()); //int hr,int min,int sec,int day, int month, int yr
+      }
     }
       
     
@@ -971,10 +973,12 @@ void loop ()
 static void smartDelay(unsigned long ms)
 {
   unsigned long start = millis();
-  do 
+  do
   {
-    while (sGps.available())
+    while (sGps.available()) {
       gps.encode(sGps.read());
+    }
+    yield(); 
   } while (millis() - start < ms);
 }
 
