@@ -77,7 +77,8 @@
   *ngIf="openSensor === true"
   [openView]="openSensor"
   (viewChange)="openSensor = $event"
-  [sensorInfo]="currentSensor"
+  [sensorInfo]="currentSensor" 
+  class="margin-panels"
 >
 </master-sensor-view-detail>
 <master-gateway-view-detail
@@ -85,6 +86,7 @@
   [openView]="openGateway"
   (viewChange)="openGateway = $event"
   [gatewayInfo]="currentGateway"
+  class="margin-panels"
 ></master-gateway-view-detail>
 
 <!-- <master-sensor-detail-view *ngIf="openSensor === true" [openView]="openSensor" (viewChange)="openSensor=$event" [sensorInfo]="currentSensor" >

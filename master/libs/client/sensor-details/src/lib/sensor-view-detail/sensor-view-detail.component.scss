@@ -22,10 +22,10 @@
 
 
 mat-card{
+    flex: 1 1 auto;
+    border-radius: 0.5rem;
     display: flex;
     flex-direction: column;
-    height: 100%;
-    margin-bottom: 1rem;
 }
 
 #card-content{ 

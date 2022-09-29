@@ -2,7 +2,9 @@ mat-card {
     padding-top: 0.3em;
     flex: 1 1 auto;
     border-radius: 0.5rem;
-    }
+    display: flex;
+    flex-direction: column;
+}
 
 mat-card-title {
     font-weight: 500;
@@ -66,7 +68,7 @@ cdk-virtual-scroll-viewport {
 }
 
 #card-content {
-    height:70%
+    height:100%;
 }
 
 .reserve-select .mat-select-arrow {
@@ -93,14 +95,20 @@ master-gateway-view-detail {
     height: 100%;
 }
 
-master-sensor-view-detail{
-    height: 100%
-}
-
 .mat-chip.mat-standard-chip.mat-chip-selected.mat-primary{
     box-shadow: 2px 2px 2px grey;
 }
 
 #currentdev{
     text-align: center;
+}
+
+mat-divider{
+    position: unset !important;
+}
+
+.margin-panels{
+    display: flex;
+    flex-flow: column;
+    height: 100%;
 }
