@@ -38,6 +38,22 @@ describe('ServiceBusService', () => {
       })
     ).toBeUndefined();
   });
+
+  it('sendMongoDevicePermieter -> fail', async () => {
+    jest
+      .spyOn(httpService, 'post')
+      .mockImplementationOnce(() => of(errorExample1));
+    expect(
+      await service.sendMongoDevicePerimeter({
+        device: 'TEST',
+        location: 'Disney Land',
+        action: 'TEST',
+      })
+    ).toEqual({
+      status: errorExample1.status,
+      explanation: errorExample1.explanation,
+    });
+  });
 });
 
 const successExample = {
@@ -46,4 +62,18 @@ const successExample = {
   status: 200,
   statusText: 'OK',
   data: 'TEST SUCCESS',
+};
+
+const errorExample1 = {
+  headers: {},
+  config: {},
+  status: 500,
+  statusText: 'OK',
+  response: 'ECONNREFUSED',
+  explanation: 'ECONNREFUSED',
+  data: {},
+};
+
+const eConRefusedExample = {
+  response: 'ECONNREFUSED',
 };
