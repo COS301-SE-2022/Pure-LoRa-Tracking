@@ -8,7 +8,7 @@ describe('ServiceBusService', () => {
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      imports:[HttpModule,DatabaseProxyModule],
+      imports: [HttpModule, DatabaseProxyModule],
       providers: [ServiceBusService],
     }).compile();
 
@@ -17,5 +17,9 @@ describe('ServiceBusService', () => {
 
   it('should be defined', () => {
     expect(service).toBeTruthy();
+  });
+
+  it('should be get device info', async () => {
+    expect(await service.getMoreInfo('TEST')).toBeUndefined();
   });
 });
