@@ -167,10 +167,10 @@ describe('ApiMapEndpointService', () => {
     
   });
 
-  it('historical process -> live test', async () => {
-    const login = tbClient.loginUserReturnToken('isak@lora.co.za', 'reserve');
-    console.log(await service.HistoricalProcess({deviceID:["029cb9a0-3d35-11ed-9f1a-879a3b706658"], pType:"PF", reserveID:"8c486ca0-3d2e-11ed-9f1a-879a3b706658", token:(await login).Token, startTime:0, endTime:17000000000000}))
-  });
+  // it('historical process -> live test', async () => {
+  //   const login = tbClient.loginUserReturnToken('isak@lora.co.za', 'reserve');
+  //   console.log(await service.HistoricalProcess({deviceID:["029cb9a0-3d35-11ed-9f1a-879a3b706658"], pType:"PF", reserveID:"8c486ca0-3d2e-11ed-9f1a-879a3b706658", token:(await login).Token, startTime:0, endTime:17000000000000}))
+  // });
   ////////////////////////////////////////////////////////////////////////////////////
 
   ////////////////////////////////////////////////////////////////////////////////////
