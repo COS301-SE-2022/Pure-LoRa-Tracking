@@ -7,18 +7,20 @@
                     <mat-icon class="btn-icon">person</mat-icon> 
                     <span>Profile</span>
                 </button>
-                <button  mat-button class="nav-buttons" color="primary"  [routerLink]="[{outlets:{managecontent:['users']}}]">
-                    <mat-icon class="btn-icon">groups</mat-icon> 
-                    <span>Users</span>
-                </button>
-                <button  mat-button class="nav-buttons" color="primary" [routerLink]="[{outlets:{managecontent:['reserves']}}]">
-                    <mat-icon class="btn-icon">nature_people</mat-icon> 
-                    <span>Reserves</span>
-                </button>
-                <button  mat-button class="nav-buttons" color="primary" [routerLink]="[{outlets:{managecontent:['manage-devices']}}]">
-                    <mat-icon class="btn-icon">hub</mat-icon> 
-                    <span>Devices</span>
-                </button>
+                <div *ngIf="admin">
+                    <button  mat-button class="nav-buttons" color="primary"  [routerLink]="[{outlets:{managecontent:['users']}}]">
+                        <mat-icon class="btn-icon">groups</mat-icon> 
+                        <span>Users</span>
+                    </button>
+                    <button  mat-button class="nav-buttons" color="primary" [routerLink]="[{outlets:{managecontent:['reserves']}}]">
+                        <mat-icon class="btn-icon">nature_people</mat-icon> 
+                        <span>Reserves</span>
+                    </button>
+                    <button  mat-button class="nav-buttons" color="primary" [routerLink]="[{outlets:{managecontent:['manage-devices']}}]">
+                        <mat-icon class="btn-icon">hub</mat-icon> 
+                        <span>Devices</span>
+                    </button>
+                </div>
                 <button  mat-button class="nav-buttons" color="primary" [routerLink]="[{outlets:{managecontent:['status']}}]">
                     <mat-icon class="btn-icon">tips_and_updates</mat-icon> 
                     <span>Services</span>

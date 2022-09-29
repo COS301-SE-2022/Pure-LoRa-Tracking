@@ -19,7 +19,8 @@ export interface userInitLoginResponse {
     explain: string,
     authURL?: string,
     token?: string,
-    has2fa?: boolean,
+    refreshToken?: string,
+    enabled2fa?: boolean,
 }
 
 

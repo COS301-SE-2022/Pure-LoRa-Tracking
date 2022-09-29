@@ -10,6 +10,7 @@ import { Component } from '@angular/core';
 export class MapPanelComponent{
   @Output() ShowPolygon = new EventEmitter<boolean>();
   @Output() ViewType = new EventEmitter<string>();
+  @Output() GatewayShow = new EventEmitter<boolean>();
 
   constructor() {
     this.ShowPolygon.emit(true);
@@ -21,5 +22,9 @@ export class MapPanelComponent{
 
   updateViewType(newval: string) {
     this.ViewType.emit(newval);
+  }
+
+  updateGateways(newval: boolean) {
+    this.GatewayShow.emit(newval);
   }
 }

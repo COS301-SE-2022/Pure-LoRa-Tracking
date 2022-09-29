@@ -9,10 +9,15 @@
       </mat-button-toggle>
     </mat-button-toggle-group>
   </div>
-  <div class="margin shadow" id="border-option">
+  <div class="margin shadow border-option">
       <mat-checkbox class="padding" color="primary" #border (change)="updateBorder(border.checked)" checked="true">
           Show Border
       </mat-checkbox>
-  </div>
-
+    </div>
+    <div class="margin shadow border-option">
+      <mat-checkbox class="padding" color="primary" #gatway (change)="updateGateways(gatway.checked)" checked="true">
+        Show Gateways
+      </mat-checkbox>
+    </div>
+    
 </div>

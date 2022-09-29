@@ -447,9 +447,10 @@ describe('ThingsboardThingsboardTelemetryService', () => {
   });
 
   /*it('send telemetry V1 -> Mock Data', async () => {
-    expect(await service.V1sendJsonTelemetry("hZQ9lFxS0Bk6Ic8nSBlV", {
-      latitude: -25.802363957922285,
-      longitude: 28.206281661987305
+    expect(await service.V1sendJsonTelemetry("4uplfXfbFS2q4U4FuHbn", {
+      latitude:-25.75550768038334,
+      longitude: 28.232975006103516,
+      pType: "PF"
     })).toEqual(200);
   });*/
 });

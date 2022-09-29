@@ -134,6 +134,9 @@ export class DeviceAddComponent implements OnInit {
             if(curr.explanation=="call finished"){
               this.snackbar.openFromComponent(SnackbarAlertComponent,{duration: 5000, panelClass: ['green-snackbar'], data: {message:"Device Added", icon:"check_circle"}});
             }
+            else {
+              this.snackbar.openFromComponent(SnackbarAlertComponent,{duration: 5000, panelClass: ['red-snackbar'], data: {message:"Device Added", icon:"error_outline"}});
+            }
           })
         }
 

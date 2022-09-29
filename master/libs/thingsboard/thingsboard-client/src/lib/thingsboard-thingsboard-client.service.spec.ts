@@ -2292,7 +2292,7 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
         throwError(() => tests.axiosECONNFailureExample)
       );
     expect(
-      await service.updateUser('', { firstName: '', lastName: '' })
+      await service.updateUser('', { firstName: '', lastName: '' , email: ''})
     ).toMatchObject({
       status: 'fail',
       explanation: 'token',
@@ -2309,7 +2309,7 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
         throwError(() => tests.axiosECONNFailureExample)
       );
     expect(
-      await service.updateUser('', { firstName: '', lastName: '' })
+      await service.updateUser('', { firstName: '', lastName: '' , email: ''})
     ).toMatchObject({
       status: 'fail',
       explanation: 'user to update',
@@ -2329,7 +2329,7 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
         throwError(() => tests.axiosECONNFailureExample)
       );
     expect(
-      await service.updateUser('', { firstName: '', lastName: '' })
+      await service.updateUser('', { firstName: '', lastName: '', email: '' })
     ).toMatchObject({
       status: 'fail',
       explanation: 'update',
@@ -2347,7 +2347,7 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
       .spyOn(httpService, 'post')
       .mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
     expect(
-      await service.updateUser('', { firstName: '', lastName: '' })
+      await service.updateUser('', { firstName: '', lastName: '', email: '' })
     ).toMatchObject({
       status: 'ok',
       explanation: 'call finished',
@@ -2444,7 +2444,7 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
       data: [
         {
           deviceID: '784f394c-42b6-435a-983c-b7beff2784f9',
-          deviceName: 'A4B72CCDFF33',
+          deviceName: 'Room 234 Sensor',
         },
       ],
     });
@@ -2475,7 +2475,7 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
       .mockImplementationOnce(() => of(tests.axiosDeviceSuccessExample));
 
     //Device Success
-    jest
+    jest 
       .spyOn(httpService, 'get')
       .mockImplementationOnce(() => of(tests.axiosSensorKeysExample));
 

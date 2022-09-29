@@ -115,6 +115,12 @@ export class ReservePanelComponent implements OnInit {
     }
   }
 
+  viewsensor(deviceid:string){
+    if (deviceid == this.selectedDeviceID) {
+      this.selectedDeviceID = "";
+    }
+  }
+
   selectedGateway(gatewayID: string) {
     const device = this.Devices.find(val => val.deviceID == this.selectedDeviceID);
     if (device != undefined) {
