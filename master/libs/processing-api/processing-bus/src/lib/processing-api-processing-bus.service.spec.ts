@@ -79,6 +79,21 @@ describe('ProcessingApiProcessingBusService', () => {
     expect(await service.getRssiInfo('TEST', 1)).toEqual(false);
   });
 
+  it('markProcessed -> success', async () => {
+    expect(
+      await service.markProcessed([{ deviceEUI: 'TEST', timestamp: '0' }])
+    ).toBeUndefined();
+  });
+
+  it('markProcessed -> fail', async () => {
+    jest.spyOn(dbProxy, 'markAsProcessed').mockImplementationOnce(() => {
+      throw new Error('delete Error');
+    });
+    expect(
+      await service.markProcessed([{ deviceEUI: 'TEST', timestamp: '0' }])
+    ).toBeUndefined();
+  });
+
   ///////////////////////////////////////////////
 
   it('Location service process -> fail', async () => {
