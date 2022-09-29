@@ -11,7 +11,7 @@ export class HeaderUiComponent implements OnInit{
   constructor(private cookieservice:CookieService, private router:Router){}
 
   ngOnInit() :void {
-    
+    console.log("Header loaded");
   }
 
   logout() {
