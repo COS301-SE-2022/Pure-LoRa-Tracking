@@ -1,18 +1,18 @@
 <div id="box">
     <master-header-nav></master-header-nav>
     <div id="layoutContainer" *ngIf="reservesList.length > 0; else noReserves">
-      <div id="leftContainer">
-        <master-date-time-selection></master-date-time-selection>
-        <div *ngIf="Reserve" class="mapContainer">
-            <master-reserve-map id="mapComponent" #reservemap [Reserve]="Reserve" [ShowPolygon]="ShowPolygon" [LatestData]="LastestHistorical" [ShowGateway]="ShowGateway" [ViewMapTypeInput]="ViewMapTypeInput" ></master-reserve-map>
-            <div id="mapOptions">
-                <master-map-panel class="panel" (ShowPolygon)="ShowPolygon=$event" (ViewType)="updateViewMapType($event)" (GatewayShow)="ShowGateway=$event"></master-map-panel>
+        <div id="leftContainer">
+            <master-date-time-selection></master-date-time-selection>
+            <div *ngIf="Reserve" class="mapContainer">
+                <master-reserve-map id="mapComponent" #reservemap [Reserve]="Reserve" [ShowPolygon]="ShowPolygon" [LatestData]="LastestHistorical" [ViewMapTypeInput]="ViewMapTypeInput"  [ShowGateway]="ShowGateway"></master-reserve-map>
+                <div id="mapOptions">
+                    <master-map-panel class="panel" (ShowPolygon)="ShowPolygon=$event" (ViewType)="updateViewMapType($event)" (GatewayShow)="ShowGateway=$event"></master-map-panel>
+                </div>
             </div>
         </div>
-      </div>
-      <div id="container">
+        <div id="container">
           <master-reserve-panel id="reservePanel" class="panel" [Devices]="LastestHistorical" [GateWays]="Gateways" [selectedReserve]="selectedReserveId" (selectedReserveChange)="updateReserve($event)" (proccessingTypeChange)="typeChange($event)" [reserveList]="reservesList"></master-reserve-panel>
-      </div>
+        </div>
     </div>
     <ng-template  #noReserves>
         <div id="no-reserves">
