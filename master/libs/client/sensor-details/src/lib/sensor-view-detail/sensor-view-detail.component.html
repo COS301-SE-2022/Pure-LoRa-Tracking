@@ -1,29 +1,35 @@
 <mat-card id="sensorCard">
-    <mat-card-header class="headerText">
+  <mat-card-header class="headerText">
+    <button id="locateButton" mat-button (click)="locateSensor()">
+      <div class="button-icon-text">
+        Locate<mat-icon id="locateIcon">my_location</mat-icon>
+      </div>
+    </button>
+    <span id="spacer"></span>
+    <button id="backButton" mat-icon-button (click)="closeSensor()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <mat-card-title id="sensor-title-text" style="order: 3">
+      {{ sensorInfo.name }}
+    </mat-card-title>
+  </mat-card-header>
+  <mat-divider></mat-divider>
 
-        <button id="locateButton" mat-button (click)="locateSensor()"><div class="button-icon-text">Locate<mat-icon id="locateIcon">my_location</mat-icon></div></button>
-        <span id="spacer"></span>
-        <button id="backButton"  mat-icon-button (click)="closeSensor()"><mat-icon>arrow_back</mat-icon></button>
-        <mat-card-title id="sensor-title-text" style="order: 3;">
-            {{sensorInfo.name}}
-        </mat-card-title>
-    </mat-card-header>
-    <mat-divider></mat-divider>
-
-    <mat-card-content id="card-content">     
-        <mat-tab-group mat-align-tabs="center" class="sensor-tabs">
-            <!-- <mat-tab label="Info">
-                <div id="field-list">
-                    <p>
-                        <span>{{sensorInfo.id}}</span>
-                        <br>
-                        <span class="field-label">Device UEI</span>
-                    </p>  
-                    <p>
-                        <span>Sensor</span>
-                        <br>
-                        <span class="field-label">Device Type</span>
-                    </p>    
+  <mat-card-content id="card-content">
+    <mat-tab-group mat-align-tabs="center" class="sensor-tabs">
+      <mat-tab label="Info">
+        <div id="field-list">
+          <p>
+            <span class="field-label">Device EUI</span>
+            <br />
+            <span>{{ sensorInfo.id }}</span>
+          </p>
+          <p>
+            <span class="field-label">Device Type</span>
+            <br />
+            <span>Sensor</span>
+          </p>
+          <!-- 
                     <p>
                         <span>{{aditionalInfo.lastPing}}</span>
                         <br>
@@ -38,16 +44,20 @@
                         <span>{{aditionalInfo.signals}}</span>
                         <br>
                         <span class="field-label">Signals sent</span>
-                    </p>
-                </div>
-            </mat-tab> -->
-            <mat-tab label="Activity">
-                <master-sensor-activity [RawGraphData]="rawGraphdata"></master-sensor-activity>
-            </mat-tab>
-            <mat-tab  label="Communication">
-                <master-sensor-communication [colnames]="colnames" [tabledata]="tabledata"></master-sensor-communication>
-            </mat-tab>
-        </mat-tab-group>
-        
-    </mat-card-content>
+                    </p>-->
+        </div>
+      </mat-tab>
+      <mat-tab label="Activity">
+        <master-sensor-activity
+          [RawGraphData]="rawGraphdata"
+        ></master-sensor-activity>
+      </mat-tab>
+      <mat-tab label="Communication">
+        <master-sensor-communication
+          [colnames]="colnames"
+          [tabledata]="tabledata"
+        ></master-sensor-communication>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card-content>
 </mat-card>
