@@ -110,7 +110,7 @@ describe('ProcessingApiProcessingBusService', () => {
   });
 
   it('getLastReady -> success', async () => {
-    expect(await service.getLastReady('TEST')).toBeUndefined();
+    expect(await service.getLastReady('TEST')).toBeDefined();
   });
 
   it('getLastReady -> fail', async () => {
