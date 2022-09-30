@@ -38,7 +38,7 @@ export class ThingsboardThingsboardTelemetryService {
         timeStart +
         '&endTs=' +
         timeStop +
-        '&keys=ts,latitude,longitude,pType';
+        '&keys=ts,latitude,longitude,pType&limit=1000';
     } else {
       url =
         this.ThingsBoardURL +
@@ -310,15 +310,15 @@ export class ThingsboardThingsboardTelemetryService {
   ////////////////////////////////////////////////////////////////////
 
   async clearTelemetry(deviceID:string) {
-    const headersReq = {
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + this.token,
-    };
+    // const headersReq = {
+    //   'Content-Type': 'application/json',
+    //   Authorization: 'Bearer ' + this.token,
+    // };
 
-    const url = this.ThingsBoardURL + '/plugins/telemetry/DEVICE/'+deviceID+'/timeseries/delete?deleteAllDataForKeys=true';
+    const url = this.ThingsBoardURL + '/plugins/telemetry/DEVICE/'+deviceID+'/timeseries/delete?deleteAllDataForKeys=true&keys=longitude,latitude,pType';
 
     const resp = await lastValueFrom(
-      this.httpService.delete(url, { headers: headersReq })
+      this.httpService.delete(url, { headers: this.headersReq })
     ).catch((error) => {
       if (error.response == undefined) return error.code;
       return error;
