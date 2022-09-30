@@ -16,6 +16,8 @@ export class ReserveEditComponent implements OnInit {
   reserveInfo: UntypedFormGroup = new UntypedFormGroup({});
   mapgeojson="";
 
+  fileName = "";
+
   constructor(private activeRoute: ActivatedRoute, private formBuilder: UntypedFormBuilder, private router:Router,private http:HttpClient,private snackbar:MatSnackBar) { 
    this.id="";
    this.email="";
@@ -76,6 +78,7 @@ export class ReserveEditComponent implements OnInit {
     if (file){
       console.log( file);
       this.mapgeojson=await file.text();
+      this.fileName = file.name;
     }
   }
 }
