@@ -46,6 +46,7 @@ The stored data will be processed using the location of each tower to calculate 
 ### User Manual
 - :page_facing_up: [User Manual](https://drive.google.com/file/d/1tIHMw2GaSdJPM_yBbQfdWs-VHG6oBDFK/view?usp=sharing)
 - :page_facing_up: [User Manual v2](https://drive.google.com/file/d/1Q0IboY49GKq2uQH7XBC-ogj1sUDCe1e-/view?usp=sharing)
+- :page_facing_up: [User Manual v3](https://drive.google.com/file/d/1yaWqrU-hl_zkINPrM5schs3FpcdRzvTO/view?usp=sharing)
 
 ### Technical Installation Manual
 - :page_facing_up: [Technical Installation Manual](https://docs.google.com/document/d/1C9NbFtZF1AaECv-r9lJ2Hz2xMDL-6hCEVVsvSA1ZF-w/edit?usp=sharing)
