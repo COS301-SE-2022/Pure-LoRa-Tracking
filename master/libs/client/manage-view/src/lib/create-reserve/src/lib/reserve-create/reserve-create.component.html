@@ -14,6 +14,7 @@
             <span>Perimeter (Please upload a geojson file.)</span>
             <br>
             <button mat-flat-button color="primary" (click)="fileUpload.click()" type="button"><div class="button-icon-text"><mat-icon id="uploadIcon">upload</mat-icon>Upload</div></button>
+            <span style="vertical-align: super; padding-left:1rem;">{{fileName}}</span>
             <input #fileUpload formControlName="geojson" type="file" (change)="fileSelected($event)" id="upload-input">
         </mat-label>
         <div id="button-wrapper">
