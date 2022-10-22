@@ -60,6 +60,11 @@ export class AiAiProcessingService {
         const deviceData = this.convertRXData(gatewayData);
         deviceData.deviceToken = uplinkData.getTagsMap().get("deviceToken");
 
+        // I assume this var will be a lat long json object
+        const gpsData = null;
+        this.serviceBus.sendProcessedDatatoTB(deviceData.deviceToken, {latitude:gpsData.latitude, longitude:gpsData.longitude, pType:"gps"})
+
+
         /* resolve device */
         const device = await this.resolveDevice(deviceData);
         Logger.log(deviceData.RSSI);
