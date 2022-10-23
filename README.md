@@ -32,8 +32,9 @@ The stored data will be processed using the location of each tower to calculate 
 
 ## Documentation
 ### Project Day
-- :page_facing_up: [Project Slideshow]()
+- :camera_flash: [Project Day Demo]()
 - :camera_flash: [Video Advertisement]()
+- :page_facing_up: [Project Slideshow]()
 - :page_facing_up: [Contribute to Development]()
 
 
@@ -51,7 +52,7 @@ The stored data will be processed using the location of each tower to calculate 
 ### Code Standards
 - :page_facing_up: [Code Standards](https://docs.google.com/document/d/1G3QiqZOcYkADzISHjRgRgyD78xO2hYdl-uxM_Y1mKHc/edit?usp=sharing)
 
-### User Manual
+### User Manual - System Tutorials
 - :page_facing_up: [User Manual](https://drive.google.com/file/d/1tIHMw2GaSdJPM_yBbQfdWs-VHG6oBDFK/view?usp=sharing)
 - :page_facing_up: [User Manual v2](https://drive.google.com/file/d/1Q0IboY49GKq2uQH7XBC-ogj1sUDCe1e-/view?usp=sharing)
 - :page_facing_up: [User Manual v3](https://drive.google.com/file/d/1yaWqrU-hl_zkINPrM5schs3FpcdRzvTO/view?usp=sharing)
