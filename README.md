@@ -24,17 +24,18 @@ Pure LoRa tracking is a system used to track and monitor endangered wildlife thr
 The stored data will be processed using the location of each tower to calculate the approximate location of each sensor. The management portal is used to view the maps, sensors and tracking data of diffent parks and to manage parks, LoRaWAN Devices and staff.
 
 ## Recordings
-
-- :camera_flash: [Harbinger - Demo 1](https://drive.google.com/file/d/1zug-8h2NstFJNKIpBGP23iTfKXIWgtUo/view?usp=sharing)
-- :camera_flash: [Harbinger - Demo 2](https://drive.google.com/file/d/1Pe_EokRQlYhefhzOU6qfEsrA-hvo5QeV/view?usp=sharing)
-- :camera_flash: [Harbinger - Demo 3](https://drive.google.com/file/d/1Lxx42RLoIJ9rDvSbeuKfnR4WLwDHWXwt/view?usp=sharing)
+- :camera_flash: [Harbinger - Demo 4](https://drive.google.com/file/d/1A0oEvMFgdpZlGHGqn4_1DEZmf4qh1Bdb/view?usp=sharing)
 
 ## Documentation
-### Software Requirements Specification
+### Project Day
+- :camera_flash: [Project Day Demo]()
+- :camera_flash: [Video Advertisement]()
+- :page_facing_up: [Project Slideshow]()
+- :star2: [Contribute to Development](https://docs.google.com/presentation/d/1Xg2rLFotRDr9CMayeEgEbc1e1qsAP8r0/edit?usp=sharing&ouid=115817973913814270069&rtpof=true&sd=true)
 
-- :page_facing_up: [SRS](https://drive.google.com/file/d/1a1RQ9-xLiTGsoO_IeGYjuLcxdcRsmpWq/view?usp=sharing)
-- :page_facing_up: [SRSv2](https://docs.google.com/document/d/1iB8b3PwAmHHcAPs7BiSs-qX_pEkU6hwMHUP7TDdyNbw/edit?usp=sharing)
-- :page_facing_up: [SRSv3](https://docs.google.com/document/d/15dGFRXU--YrdW5iTKfGhxVrCDs4SI2uyBP4ti5icebU/edit?usp=sharing)
+
+
+### Software Requirements Specification
 - :page_facing_up: [SRSv4](https://docs.google.com/document/d/1EXYqSd1CSD0NvPRx88TdZufyfpVsIMZTPP0TLqD-MiY/edit?usp=sharing)
 
 ### Architecture Document
@@ -43,19 +44,21 @@ The stored data will be processed using the location of each tower to calculate 
 ### Code Standards
 - :page_facing_up: [Code Standards](https://docs.google.com/document/d/1G3QiqZOcYkADzISHjRgRgyD78xO2hYdl-uxM_Y1mKHc/edit?usp=sharing)
 
-### User Manual
-- :page_facing_up: [User Manual](https://drive.google.com/file/d/1tIHMw2GaSdJPM_yBbQfdWs-VHG6oBDFK/view?usp=sharing)
-- :page_facing_up: [User Manual v2](https://drive.google.com/file/d/1Q0IboY49GKq2uQH7XBC-ogj1sUDCe1e-/view?usp=sharing)
+### User Manual - System Tutorials
 - :page_facing_up: [User Manual v3](https://drive.google.com/file/d/1yaWqrU-hl_zkINPrM5schs3FpcdRzvTO/view?usp=sharing)
 
 ### Technical Installation Manual
 - :page_facing_up: [Technical Installation Manual](https://docs.google.com/document/d/1C9NbFtZF1AaECv-r9lJ2Hz2xMDL-6hCEVVsvSA1ZF-w/edit?usp=sharing)
 
+### Deployment Diagram
+- :framed_picture: [Deployment Diagram](https://drive.google.com/file/d/1h_yJZsODrYJAuGuNhiIK-Jc_l3dxHRV5/view?usp=sharing)
+
 ### Testing Policy
 - :page_facing_up: [Testing Policy Document](https://docs.google.com/document/d/1fNwmNPXSUINUTJFpM4AYDoQOlVFcwa7v5H2654s1r-s/edit?usp=sharing)
 
-### Additional Documents
+### Research and Development
 - :page_facing_up: [Particle Filter](https://drive.google.com/file/d/11dHkNii90tG5GDsM2Ddf-iLNLSQO3qi2/view?usp=sharing)
+- :page_facing_up: [Event Driven Architecture](https://docs.google.com/document/d/1ui1-1CP86BinF7Xw1uFRZERU1tWD7FzVw0wEppvhfKs/edit?usp=sharing)
 
 ## Project Management
 
