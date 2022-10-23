@@ -24,7 +24,7 @@ Pure LoRa tracking is a system used to track and monitor endangered wildlife thr
 The stored data will be processed using the location of each tower to calculate the approximate location of each sensor. The management portal is used to view the maps, sensors and tracking data of diffent parks and to manage parks, LoRaWAN Devices and staff.
 
 ## Complete ReadMe
-- :bluebook: [Wiki ReadMe](https://github.com/COS301-SE-2022/Pure-LoRa-Tracking/wiki/Complete-ReadMe-Documentation)
+- :blue_book: [Wiki ReadMe](https://github.com/COS301-SE-2022/Pure-LoRa-Tracking/wiki/Complete-ReadMe-Documentation)
 
 ## Recordings
 - :camera_flash: [Harbinger - Demo 4](https://drive.google.com/file/d/1A0oEvMFgdpZlGHGqn4_1DEZmf4qh1Bdb/view?usp=sharing)
