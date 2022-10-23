@@ -24,10 +24,6 @@ Pure LoRa tracking is a system used to track and monitor endangered wildlife thr
 The stored data will be processed using the location of each tower to calculate the approximate location of each sensor. The management portal is used to view the maps, sensors and tracking data of diffent parks and to manage parks, LoRaWAN Devices and staff.
 
 ## Recordings
-
-- :camera_flash: [Harbinger - Demo 1](https://drive.google.com/file/d/1zug-8h2NstFJNKIpBGP23iTfKXIWgtUo/view?usp=sharing)
-- :camera_flash: [Harbinger - Demo 2](https://drive.google.com/file/d/1Pe_EokRQlYhefhzOU6qfEsrA-hvo5QeV/view?usp=sharing)
-- :camera_flash: [Harbinger - Demo 3](https://drive.google.com/file/d/1Lxx42RLoIJ9rDvSbeuKfnR4WLwDHWXwt/view?usp=sharing)
 - :camera_flash: [Harbinger - Demo 4](https://drive.google.com/file/d/1A0oEvMFgdpZlGHGqn4_1DEZmf4qh1Bdb/view?usp=sharing)
 
 ## Documentation
@@ -40,9 +36,6 @@ The stored data will be processed using the location of each tower to calculate 
 
 
 ### Software Requirements Specification
-- :page_facing_up: [SRS](https://drive.google.com/file/d/1a1RQ9-xLiTGsoO_IeGYjuLcxdcRsmpWq/view?usp=sharing)
-- :page_facing_up: [SRSv2](https://docs.google.com/document/d/1iB8b3PwAmHHcAPs7BiSs-qX_pEkU6hwMHUP7TDdyNbw/edit?usp=sharing)
-- :page_facing_up: [SRSv3](https://docs.google.com/document/d/15dGFRXU--YrdW5iTKfGhxVrCDs4SI2uyBP4ti5icebU/edit?usp=sharing)
 - :page_facing_up: [SRSv4](https://docs.google.com/document/d/1EXYqSd1CSD0NvPRx88TdZufyfpVsIMZTPP0TLqD-MiY/edit?usp=sharing)
 
 ### Architecture Document
@@ -52,8 +45,6 @@ The stored data will be processed using the location of each tower to calculate 
 - :page_facing_up: [Code Standards](https://docs.google.com/document/d/1G3QiqZOcYkADzISHjRgRgyD78xO2hYdl-uxM_Y1mKHc/edit?usp=sharing)
 
 ### User Manual - System Tutorials
-- :page_facing_up: [User Manual](https://drive.google.com/file/d/1tIHMw2GaSdJPM_yBbQfdWs-VHG6oBDFK/view?usp=sharing)
-- :page_facing_up: [User Manual v2](https://drive.google.com/file/d/1Q0IboY49GKq2uQH7XBC-ogj1sUDCe1e-/view?usp=sharing)
 - :page_facing_up: [User Manual v3](https://drive.google.com/file/d/1yaWqrU-hl_zkINPrM5schs3FpcdRzvTO/view?usp=sharing)
 
 ### Technical Installation Manual
