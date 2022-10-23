@@ -60,7 +60,7 @@ The stored data will be processed using the location of each tower to calculate 
 - :page_facing_up: [Technical Installation Manual](https://docs.google.com/document/d/1C9NbFtZF1AaECv-r9lJ2Hz2xMDL-6hCEVVsvSA1ZF-w/edit?usp=sharing)
 
 ### Deployment Diagram
-- :page_facing_up: [Deployment Diagram]()
+- :framed_picture: [Deployment Diagram]()
 
 ### Testing Policy
 - :page_facing_up: [Testing Policy Document](https://docs.google.com/document/d/1fNwmNPXSUINUTJFpM4AYDoQOlVFcwa7v5H2654s1r-s/edit?usp=sharing)
