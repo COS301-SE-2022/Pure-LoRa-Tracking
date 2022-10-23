@@ -28,8 +28,16 @@ The stored data will be processed using the location of each tower to calculate 
 - :camera_flash: [Harbinger - Demo 1](https://drive.google.com/file/d/1zug-8h2NstFJNKIpBGP23iTfKXIWgtUo/view?usp=sharing)
 - :camera_flash: [Harbinger - Demo 2](https://drive.google.com/file/d/1Pe_EokRQlYhefhzOU6qfEsrA-hvo5QeV/view?usp=sharing)
 - :camera_flash: [Harbinger - Demo 3](https://drive.google.com/file/d/1Lxx42RLoIJ9rDvSbeuKfnR4WLwDHWXwt/view?usp=sharing)
+- :camera_flash: [Harbinger - Demo 4]()
 
 ## Documentation
+### Project Day
+- :page_facing_up: [Project Slideshow]()
+- :camera_flash: [Video Advertisement]()
+- :page_facing_up: [Contribute to Development]()
+
+
+
 ### Software Requirements Specification
 
 - :page_facing_up: [SRS](https://drive.google.com/file/d/1a1RQ9-xLiTGsoO_IeGYjuLcxdcRsmpWq/view?usp=sharing)
@@ -51,11 +59,15 @@ The stored data will be processed using the location of each tower to calculate 
 ### Technical Installation Manual
 - :page_facing_up: [Technical Installation Manual](https://docs.google.com/document/d/1C9NbFtZF1AaECv-r9lJ2Hz2xMDL-6hCEVVsvSA1ZF-w/edit?usp=sharing)
 
+### Deployment Diagram
+- :page_facing_up: [Deployment Diagram]()
+
 ### Testing Policy
 - :page_facing_up: [Testing Policy Document](https://docs.google.com/document/d/1fNwmNPXSUINUTJFpM4AYDoQOlVFcwa7v5H2654s1r-s/edit?usp=sharing)
 
-### Additional Documents
+### Research and Development
 - :page_facing_up: [Particle Filter](https://drive.google.com/file/d/11dHkNii90tG5GDsM2Ddf-iLNLSQO3qi2/view?usp=sharing)
+- :page_facing_up: [Event Driven Architecture]()
 
 ## Project Management
 
