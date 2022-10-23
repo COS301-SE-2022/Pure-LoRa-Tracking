@@ -35,12 +35,11 @@ The stored data will be processed using the location of each tower to calculate 
 - :camera_flash: [Project Day Demo]()
 - :camera_flash: [Video Advertisement]()
 - :page_facing_up: [Project Slideshow]()
-- :page_facing_up: [Contribute to Development]()
+- :star2: [Contribute to Development]()
 
 
 
 ### Software Requirements Specification
-
 - :page_facing_up: [SRS](https://drive.google.com/file/d/1a1RQ9-xLiTGsoO_IeGYjuLcxdcRsmpWq/view?usp=sharing)
 - :page_facing_up: [SRSv2](https://docs.google.com/document/d/1iB8b3PwAmHHcAPs7BiSs-qX_pEkU6hwMHUP7TDdyNbw/edit?usp=sharing)
 - :page_facing_up: [SRSv3](https://docs.google.com/document/d/15dGFRXU--YrdW5iTKfGhxVrCDs4SI2uyBP4ti5icebU/edit?usp=sharing)
