@@ -33,6 +33,7 @@ The stored data will be processed using the location of each tower to calculate 
 ### Project Day
 - :camera_flash: [Project Day Demo]()
 - :camera_flash: [Video Advertisement]()
+- :camera_flash: [System tutorials](https://youtube.com/playlist?list=PLRP-vb5C0Pj7iGPewzxt5jTsHkN4ixUTn)
 - :page_facing_up: [Project Slideshow](https://docs.google.com/presentation/d/1PDztnCXTWk_e4KuTDBxs5RhoyZ7XidUZ/edit?usp=sharing&ouid=115817973913814270069&rtpof=true&sd=true)
 - :star2: [Contribute to Development](https://docs.google.com/presentation/d/1Xg2rLFotRDr9CMayeEgEbc1e1qsAP8r0/edit?usp=sharing&ouid=115817973913814270069&rtpof=true&sd=true)
 
