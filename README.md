@@ -82,7 +82,8 @@ The stored data will be processed using the location of each tower to calculate 
 &nbsp;&nbsp;&nbsp;&nbsp;[![image](https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:cos301capstone@gmail.com?subject[GitHub])
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cos301capstone@gmail.com
 
-### Members
+<details>
+<summary><h1>Members<h1></summary>
 
 | Member | Links | Profile |
 |:-:|-|-|
@@ -91,6 +92,8 @@ The stored data will be processed using the location of each tower to calculate 
 |Teddy Thobane <br> ![Profile](https://drive.google.com/uc?export=view&id=1fNcv90m_aKA_c8yvIj1WAcyIqyJhlgQD)<br> u20493836| [![image](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white "LinkedIn Profile")](https://www.linkedin.com/in/theodore-thobane-02018b238/) <br> [![image](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white "Github Profile")](https://github.com/0x0L0RD) | Teddy is very well-versed in low-level programming and reverse engineering. He has experience working with embedded systems and firmware, and he is familiar with multiple CPU architectures.  |
 |Adir Miller <br> ![Profile](https://drive.google.com/uc?export=view&id=1qRxiK2-Gk64bCutIAO6jq8w7z9NsyZud)<br> u20692286| [![image](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white "LinkedIn Profile")](https://www.linkedin.com/in/adir-miller/) <br> [![image](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white "Github Profile")](https://github.com/MildogMiller) | His passion lies in backend development and backend web development as well as wireless technologies such as WiFi, Bluetooth and various others. He prides himself on being a quick learner and a problem solver.  |
 |Brandon Kruger <br> ![Profile](https://drive.google.com/uc?export=view&id=1TkCZOTRm0SdvbHlVEQDa-3k8XzIzMtSj)<br> u18019499| [![image](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white "LinkedIn Profile")](https://www.linkedin.com/in/brandon-kruger/) <br> [![image](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white "Github Profile")](https://github.com/brandon-c-k) | Brandon has experience as a full-stack developer, he currently works part-time as a front-end web developer. I enjoy sailing and solving problems. |
+
+</details>
 
 ## Stakeholders
 
