@@ -1,0 +1,21 @@
+server {        
+        client_max_body_size 20M;
+
+        server_name <<DOMAIN>>;
+
+        root /srv/Pure-LoRa-Tracking/master/dist/apps/lora-tracking;
+        add_header Strict-Transport-Security "max-age=2592000; includeSubDomains" always;
+        add_header X-Frame-Options "SAMEORIGIN" always;
+        add_header X-Content-Type-Options "nosniff" always;
+        add_header Referrer-Policy "strict-origin" always;
+        add_header Permissions-Policy "geolocation=(self)" always;
+        add_header Content-Security-Policy "default-src 'self';img-src 'self' *.tile.openstreetmap.org server.arcgisonline.com data:;font-src 'self' https: data: fonts.gstatic.com;style-src 'unsafe-inline' 'self' https: fonts.googleapis.com";
+
+        location / {
+                try_files $uri $uri/ /index.html;
+        }
+
+        location /api {
+                proxy_pass http://localhost:3333/api;
+        }
+}

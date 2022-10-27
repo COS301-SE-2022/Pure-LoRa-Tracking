@@ -9,7 +9,14 @@
         "outputPath": "dist/apps/services/cp-message-queue",
         "main": "apps/services/cp-message-queue/src/main.ts",
         "tsConfig": "apps/services/cp-message-queue/tsconfig.app.json",
-        "assets": ["apps/services/cp-message-queue/src/assets"]
+        "assets": [
+          "apps/services/cp-message-queue/src/assets",
+          {
+            "input": ".",
+            "glob": ".env",
+            "output": "."
+          }
+        ]
       },
       "configurations": {
         "production": {
