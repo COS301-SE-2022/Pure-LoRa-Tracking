@@ -1,5 +1,3 @@
-#include <Time.h>
-
 //
 #include <lmic.h>
 #include <hal/hal.h>
@@ -7,11 +5,15 @@
 #include <Wire.h>
 #include <U8g2lib.h>
 #include <axp20x.h>
+#include <TinyGPS++.h>
+#include <TimeLib.h>  
 
 AXP20X_Class axp;
+TinyGPSPlus gps;
+HardwareSerial sGps(1);
 U8G2_SSD1306_128X64_NONAME_1_HW_I2C u8g2(U8G2_R0, /* reset=*/ U8X8_PIN_NONE);
 
-char* version = "ttn-abp v1.0.37";
+char* version = "ttn-abp v1.0.40";
 
 //
 // LoRaWAN NwkSKey, network session key
@@ -37,13 +39,13 @@ void os_getArtEui (u1_t* buf) { }
 void os_getDevEui (u1_t* buf) { }
 void os_getDevKey (u1_t* buf) { }
 
-static uint8_t mydata[] = "Hello, world!";
+//static uint8_t mydata[] = "Hello";
+uint8_t mydata[128];
 static osjob_t sendjob;
 
 // Schedule TX every this many seconds (might become longer due to duty
 // cycle limitations).
 const unsigned TX_INTERVAL = 10;
-
 
 const lmic_pinmap lmic_pins = {
   .nss =  18,
@@ -51,6 +53,7 @@ const lmic_pinmap lmic_pins = {
   .rst =  23,
   .dio = {26, 33, 32},
 };
+
 void onEvent (ev_t ev) {
   Serial.print(os_getTime());
   Serial.print(": ");
@@ -122,7 +125,7 @@ void do_send(osjob_t* j) {
     Serial.println(F("OP_TXRXPEND, not sending"));
   } else {
     // Prepare upstream data transmission at the next possible time.
-    LMIC_setTxData2(1, mydata, sizeof(mydata) - 1, 0);
+    LMIC_setTxData2(1, mydata, sizeof(double)*2, 0);
     Serial.println(F("Packet queued"));
   }
   // Next TX is scheduled after TX_COMPLETE event.
@@ -135,15 +138,21 @@ void setup() {
   if(axp.begin(Wire, AXP192_SLAVE_ADDRESS) == AXP_FAIL) {
     Serial.println(F("error communicating with AXP192 power chip"));
   }
+
+  
   axp.adc1Enable(AXP202_VBUS_VOL_ADC1 |
                    AXP202_VBUS_CUR_ADC1 |
                    AXP202_BATT_CUR_ADC1 |
                    AXP202_BATT_VOL_ADC1,
                    true);
+                   
+  sGps.begin(9600, SERIAL_8N1, 34, 12);    // PIN 12-TX 34-RX
   
   Serial.begin(115200);
+  Serial.print("double size: ");
+  Serial.println(sizeof(double));
   Serial.println(F("Starting"));
-  
+    
   Serial.println(F(version));
   Serial.println(F("Device addr: "));
   Serial.print(dev_addr);
@@ -251,11 +260,38 @@ void loop() {
     if (!digitalRead(38)) {
       state = (state < 3? state+1:0);
     }
-    Serial.print("battery: ");
-    Serial.print(axp.getBattVoltage()/1000);
-    Serial.print(" V, ");
-    Serial.print(axp.getBattPercentage());
-    Serial.println(" %");
+
+    while (sGps.available()) {
+      gps.encode(sGps.read());
+      yield();
+    }
+ 
+    if (gps.location.isValid()) {
+        double lat = gps.location.lat();
+        double lng = gps.location.lng();
+        Serial.println("location available");
+        int64_t lat_val = lat * 10000000;
+        int64_t lng_val = lng * 10000000;
+      
+        mydata[0] = lat_val >> 24;
+        mydata[1] = lat_val >> 16;
+        mydata[2] = lat_val >> 8;
+        mydata[3] = lat_val;
+
+        mydata[4] = lng_val >> 24;
+        mydata[5] = lng_val >> 16;
+        mydata[6] = lng_val >> 8;
+        mydata[7] = lng_val;
+      } 
+      if (gps.date.isValid()) {
+        setTime(gps.time.hour(), gps.time.minute(), gps.time.second(), gps.date.day(), gps.date.month(), gps.date.year()); //int hr,int min,int sec,int day, int month, int yr
+      }
+    
+//    Serial.print("battery: ");
+//    Serial.print(axp.getBattVoltage()/1000);
+//    Serial.print(" V, ");
+//    Serial.print(axp.getBattPercentage());
+//    Serial.println(" %");
     u8g2.firstPage();
     do {
       
@@ -270,11 +306,21 @@ void loop() {
 
       
       double batt = axp.getBattVoltage()/1000;
+      int voltage = axp.getBattVoltage();
+      mydata[8] = (voltage & 0xFF);
+      mydata[9] = (voltage>>8);
+//      mydata[1] = ((batt-mydata[0]) * 100);
+//      mydata[2] = ((batt-mydata[0]) * 100);
+//      Serial.println(test);
+//      Serial.print("Battery: ");
+//      Serial.println(mydata[0]);
+//      Serial.print("Battery[1]: ");
+//      Serial.println(mydata[1]);
       u8g2.setFontDirection(1);
       if (axp.isChargeing()) {
         u8g2.setFont(u8g2_font_siji_t_6x10);
         u8g2.drawGlyph(30, 55, 0xe215);
-        Serial.println("Charging");
+//        Serial.println("Charging");
       } 
 
       u8g2.setFont(u8g2_font_battery19_tn);
@@ -296,10 +342,10 @@ void loop() {
       u8g2.setFontDirection(0);  
 
       u8g2.setFont(u8g2_font_ncenR12_tr);
-      Serial.print("Charging: ");
-      Serial.println(axp.getBattChargeCurrent());
-      Serial.print("Usage: ");
-      Serial.println(axp.getBattDischargeCurrent());
+//      Serial.print("Charging: ");
+//      Serial.println(axp.getBattChargeCurrent());
+//      Serial.print("Usage: ");
+//      Serial.println(axp.getBattDischargeCurrent());
       switch (state) {
         case 0:    
           sprintf(batt_v, "Battery %g V", axp.getBattVoltage()/1000); //,%d %% axp.getBattPercentage()
