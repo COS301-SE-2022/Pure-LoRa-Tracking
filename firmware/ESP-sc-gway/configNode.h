@@ -170,6 +170,7 @@ struct wpas {
 //
 wpas wpa[] = {
 //	{ "delta", "test"},
+//    { "harbinger", "579cd82da1d9"},
     { "dvdw", "silentbanana598"}
 };
 

@@ -378,6 +378,6 @@
 //#	define _TTNSERVER "router.eu.thethings.network"
 //
 // TTN Version 3:
-#define _TTNSERVER "192.168.2.27"
+#define _TTNSERVER "34.175.168.176"
 #define _TTNPORT 1700
 #endif
