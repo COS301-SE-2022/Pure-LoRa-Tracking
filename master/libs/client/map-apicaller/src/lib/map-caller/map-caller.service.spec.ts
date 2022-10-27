@@ -45,7 +45,7 @@ describe('MapCallerService', () => {
   describe("getHistoricalWithTime", ()=>{
     it("Should return a promise with the correct value",async ()=>{
       jest.spyOn(client,"post").mockImplementation(()=>of(true))
-      expect(await service.getHistoricalWithTime("sd","sd",[],0,0)).toEqual(true);
+      expect(await service.getHistoricalWithTime("sd","sd",[],0,0, "TRI")).toEqual(true);
     })
   })
 

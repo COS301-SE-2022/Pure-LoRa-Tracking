@@ -4,9 +4,17 @@
 }
 
 #formContainer {
-    margin: 1rem;
+    margin: 3rem;
 }
 
 .action-buttons {
     margin: 1rem 0.5rem 0.5rem 0em;
+}
+
+#uploadIcon{
+    margin-right: 0.2em;
+}
+
+#upload-input{
+    display: none;
 }

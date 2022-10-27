@@ -1,0 +1,21 @@
+<div class="container">
+    <div class="wrapper">
+        <img id="login-logo" src="assets/Logos/logo.svg" alt="Logo">
+        <div class="loginform">
+                <form [formGroup]="twofactorgroup" id="auth-content">
+                    <qrcode *ngIf="qrcodeid!==''"  [errorCorrectionLevel]="'M'" [qrdata]="qrcodeid"></qrcode>
+                    <p id="intruction" [align]="'center'">
+                        Please set up 2FA before using your account <br/>
+                        Please scan the QR code with your authenticator app and enter the code below. <br/>
+                        <span *ngIf="rawsecret">Alternatively use the secret {{rawsecret}}<br> with your authenticator app.</span>
+                    </p>
+                    <mat-form-field>
+                        <input matInput formControlName="authcode" type="text" id="auth-code">
+                    </mat-form-field>
+                    <div id="login-button">
+                        <button mat-flat-button color="primary" (click)="auth()">Submit</button>
+                    </div>
+                </form>
+        </div>
+    </div>
+</div>

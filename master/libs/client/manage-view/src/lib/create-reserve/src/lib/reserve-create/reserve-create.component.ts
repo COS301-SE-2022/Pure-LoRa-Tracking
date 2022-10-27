@@ -14,6 +14,7 @@ export class ReserveCreateComponent implements OnInit {
   reserveInfo: UntypedFormGroup = new UntypedFormGroup({});
   constructor(private formBuilder: UntypedFormBuilder, private router:Router, private http: HttpClient,private snackbar:MatSnackBar) {}
   mapgeojson="";
+  fileName = "";
 
   ngOnInit(): void {
     this.reserveInfo = this.formBuilder.group({
@@ -24,6 +25,7 @@ export class ReserveCreateComponent implements OnInit {
   }
 
   createReserve():void {
+    console.log("Triggered");
       if(this.mapgeojson!=""){
       //api call
       this.http.post("/api/reserve/admin/create",{
@@ -53,10 +55,10 @@ export class ReserveCreateComponent implements OnInit {
 
   async fileSelected(event:any): Promise<void> {
     const file: File = event?.target.files[0];
-    console.log(file);
     if (file){
       console.log(await file.text());
       this.mapgeojson=await file.text();
+      this.fileName = file.name;
     }
   }
 

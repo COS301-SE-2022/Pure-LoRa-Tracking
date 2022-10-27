@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ActivationKeys } from "@master/shared-interfaces"
+import { ActivationKeys } from "./chirpstack-chirpstack-sensor.interface"
 import * as grpc from '@grpc/grpc-js';
 
 import { InternalServiceClient } from '@chirpstack/chirpstack-api/as/external/api/internal_grpc_pb';

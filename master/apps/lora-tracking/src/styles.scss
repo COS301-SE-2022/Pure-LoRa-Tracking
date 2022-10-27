@@ -176,6 +176,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-
   color: black;
 }
 
+
 mat-tab-group.mat-tab-group.sensor-tabs.mat-primary div.mat-tab-body-wrapper{
   height: 100%;
 }
@@ -195,4 +196,13 @@ mat-card-header.mat-card-header.headerText div.mat-card-header-text {
 .button-icon-text {
   display: flex;
   align-items: center;
+}
+
+.horizontal-chips div.mat-chip-list-wrapper{
+  flex-wrap: nowrap !important;
+}
+
+@font-face {
+  font-family: 'Bai Jamjuree', sans-serif;
+  src: url(https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@400;500;600;700&display=swap);
 }

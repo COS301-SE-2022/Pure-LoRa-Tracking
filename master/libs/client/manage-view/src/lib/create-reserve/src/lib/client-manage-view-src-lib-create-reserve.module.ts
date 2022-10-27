@@ -7,6 +7,8 @@ import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
+import { MatIconModule } from '@angular/material/icon';
+
 export const clientManageViewSrcLibCreateReserveRoutes: Route[] = [
 
   {path:'', pathMatch: 'full', component:ReserveCreateComponent}
@@ -22,6 +24,7 @@ export const clientManageViewSrcLibCreateReserveRoutes: Route[] = [
     FormsModule,
     MatButtonModule,
     MatSnackBarModule,
+    MatIconModule,
     RouterModule.forChild(clientManageViewSrcLibCreateReserveRoutes)
   ],
   declarations: [ReserveCreateComponent],

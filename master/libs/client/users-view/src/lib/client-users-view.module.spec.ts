@@ -1,10 +1,11 @@
 import { async, TestBed } from '@angular/core/testing';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ClientUsersViewModule } from './client-users-view.module';
 
 describe('ClientUsersViewModule', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [ClientUsersViewModule],
+      imports: [ClientUsersViewModule,MatSnackBarModule],
     }).compileComponents();
   }));
 

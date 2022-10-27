@@ -17,10 +17,12 @@ import {
   GetGatewaysInput,
   RemoveDevice,
   UnassignDevice,
+  GetMoreInfoInput
 } from './../api-device.interface';
 import { Injectable, Logger } from '@nestjs/common';
 import { DeviceProfile } from '@chirpstack/chirpstack-api/as/external/api/profiles_pb';
 import { UserSenserDataInput } from '../api-device.interface';
+import { ServiceBusService } from '@lora/serviceBus';
 
 @Injectable()
 export class ApiDeviceEndpointService {
@@ -28,6 +30,7 @@ export class ApiDeviceEndpointService {
     private thingsboardClient: ThingsboardThingsboardClientService,
     private chirpstackGateway: ChirpstackChirpstackGatewayService,
     private chirpstackSensor: ChirpstackChirpstackSensorService,
+    private serivebus: ServiceBusService,
   ) { }
 
   ///////////////////////////////////////////////////////////////////////////
@@ -470,7 +473,7 @@ export class ApiDeviceEndpointService {
 
     this.thingsboardClient.setToken(body.token);
     const response = await this.thingsboardClient.getCustomerDevices(body.customerID);
-    console.log(response)
+    //console.log(response)
     if (response.status != "ok") {
       return {
         status: 500,
@@ -622,4 +625,24 @@ export class ApiDeviceEndpointService {
       data: response.data.data,
     };
   }
+
+  async processGetMoreInfo(content: GetMoreInfoInput): Promise<deviceResponse> {
+    if (content.token == undefined || content.token == '')
+    return {
+      status: 401,
+      explanation: 'token missing',
+    };
+
+    if (content.deviceEUI == undefined || content.deviceEUI == '')
+      return {
+        status: 400,
+        explanation: 'device EUI not defined',
+      };
+
+    const other=this.serivebus.getMoreInfo(content.deviceEUI);
+
+  }
+
+
+
 }

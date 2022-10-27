@@ -1,5 +1,3 @@
-import { string } from "@tensorflow/tfjs-node";
-import { ActivationKeys } from "@master/shared-interfaces"
 
 export interface deviceResponse {
   status: number;
@@ -24,6 +22,21 @@ export interface deviceAvailable {
   token: string;
 }
 
+export interface ActivationKeys {
+  isABP: boolean,
+  lora1_1: boolean,
+
+  devAddr?: string;
+  appSKey?: string;
+  nwkSKey?: string;
+  nwkSEncKey?: string; // Network session key at backend
+
+  fNwkSIntKey?: string;
+  sNwkSIntKey?: string;
+
+  appKey?: string;
+  nwkKey?: string;
+};
 
 export interface AddSensorDevice {
   token: string;
@@ -86,6 +99,10 @@ export interface GetGatewaysInput {
   customerID: string;
 }
 
+export interface GetMoreInfoInput {
+  token : string;
+  deviceEUI: string;
+}
 
 export interface UserSenserDataInput {
   token: string;

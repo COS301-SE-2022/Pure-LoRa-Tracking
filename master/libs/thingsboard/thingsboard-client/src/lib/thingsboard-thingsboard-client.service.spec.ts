@@ -1,6 +1,6 @@
 import { ThingsboardThingsboardAssetModule } from '@lora/thingsboard-asset';
 import { ThingsboardThingsboardDeviceModule } from '@lora/thingsboard-device';
-import { ThingsboardThingsboardTelemetryModule } from '@lora/thingsboard-telemetry';
+import { ThingsboardThingsboardTelemetryModule, ThingsboardThingsboardTelemetryService } from '@lora/thingsboard-telemetry';
 import { ThingsboardThingsboardUserModule } from '@lora/thingsboard-user';
 import { Test } from '@nestjs/testing';
 import { HttpService } from '@nestjs/axios';
@@ -13,12 +13,12 @@ import {
   ThingsboardThingsboardTestsService,
 } from '@lora/thingsboard/tests';
 import { ServiceBusModule } from '@lora/serviceBus';
-import { isMapIterator } from 'util/types';
 
 describe('ThingsboardThingsboardClientService', () => {
   let service: ThingsboardThingsboardClientService;
   let httpService: HttpService;
   let tests: ThingsboardThingsboardTestsService;
+  let telemetry: ThingsboardThingsboardTelemetryService;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
@@ -38,6 +38,7 @@ describe('ThingsboardThingsboardClientService', () => {
     service = module.get(ThingsboardThingsboardClientService);
     httpService = module.get(HttpService);
     tests = module.get(ThingsboardThingsboardTestsService);
+    telemetry = module.get(ThingsboardThingsboardTelemetryService);
   });
 
   it('should be defined', () => {
@@ -351,7 +352,7 @@ it(' -> HTTP ERROR', async () => {
       .mockImplementationOnce(() =>
         throwError(() => tests.axiosECONNFailureExample)
       );
-    expect(await service.getDeviceHistoricalData('1', 2, 3)).toMatchObject({
+    expect(await service.getDeviceHistoricalData('1', "tri", 2, 3)).toMatchObject({
       ...tests.TBFailureResponse,
       ...{ explanation: 'token' },
     });
@@ -367,7 +368,7 @@ it(' -> HTTP ERROR', async () => {
       .mockImplementationOnce(() =>
         throwError(() => tests.axiosECONNFailureExample)
       );
-    expect(await service.getDeviceHistoricalData('1', 2, 3)).toMatchObject({
+    expect(await service.getDeviceHistoricalData('1', "tri", 2, 3)).toMatchObject({
       ...tests.TBFailureResponse,
       ...{ explanation: 'device with ID not found for user token combination' },
     });
@@ -380,7 +381,7 @@ it(' -> HTTP ERROR', async () => {
     jest
       .spyOn(httpService, 'get')
       .mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
-    expect(await service.getDeviceHistoricalData('1', 2, 3)).toMatchObject({
+    expect(await service.getDeviceHistoricalData('1', "tri", 2, 3)).toMatchObject({
       ...tests.TBFailureResponse,
       ...{ explanation: 'device with ID not found for user token combination' },
     });
@@ -399,7 +400,7 @@ it(' -> HTTP ERROR', async () => {
       .mockImplementationOnce(() =>
         throwError(() => tests.axiosECONNFailureExample)
       );
-    expect(await service.getDeviceHistoricalData('1', 2, 3)).toMatchObject({
+    expect(await service.getDeviceHistoricalData('1', "tri", 2, 3)).toMatchObject({
       ...tests.TBFailureResponse,
       ...{ explanation: 'ECONNREFUSED' },
     });
@@ -416,7 +417,7 @@ it(' -> HTTP ERROR', async () => {
     jest
       .spyOn(httpService, 'get')
       .mockImplementationOnce(() => of(tests.axiosTelemetrySuccessExample));
-    expect(await service.getDeviceHistoricalData('1', 2, 3)).toMatchObject({
+    expect(await service.getDeviceHistoricalData('1', "tri", 2, 3)).toMatchObject({
       status: 'ok',
       name: '1',
       explanation: 'Room 234 Sensor',
@@ -898,6 +899,21 @@ it(' -> HTTP ERROR', async () => {
 
   //////////////////////////////////////////////////////////////////////////////////////////
 
+  /*it('add user to reserve -> live', async () => {
+    await service.loginUser('reserveadmin@reserve.com', 'reserve')
+    console.table(await service.addUserToReserve('a0436390-0845-11ed-bc6e-a50062f6cdba', 'reserveuserthree@reserve.com', 'reserveuserthree', 'reserve',
+      [
+        {
+          reserveID: "a0436390-0845-11ed-bc6e-a50062f6cdba",
+          reserveName: "Rietvlei"
+        },
+        {
+          reserveID: "92291e40-0844-11ed-bc6e-a50062f6cdba",
+          reserveName: "Groenkloof"
+        },
+      ]))
+  });*/
+
   it('add user to reserve -> login fail', async () => {
     expect(await service.addUserToReserve('1', '', '', '', [])).toMatchObject({
       status: 'fail',
@@ -942,6 +958,8 @@ it(' -> HTTP ERROR', async () => {
       explanation: 'ok',
     });
   });
+
+
   //////////////////////////////////////////////////////////////////////////////////////////
 
   it('change reserve for user -> login fail', async () => {
@@ -1259,36 +1277,36 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
 
   //////////////////////////////////////////////////////////////////////////////////////////
 
-  it('v1 send telemetry -> pass', async () => {
-    /*expect(await service.loginUser('reserveadmin@reserve.com', 'reserve')).toBe(
-      true
-    );
-    console.log(await service.removeReserveUser("cf0afc80-e63d-11ec-9a49-9105980e5c8a"));*/
+  // it('v1 send telemetry -> pass', async () => {
+  //   /*expect(await service.loginUser('reserveadmin@reserve.com', 'reserve')).toBe(
+  //     true
+  //   );
+  //   console.log(await service.removeReserveUser("cf0afc80-e63d-11ec-9a49-9105980e5c8a"));*/
 
-    jest
-      .spyOn(httpService, 'post')
-      .mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
+  //   jest
+  //     .spyOn(httpService, 'post')
+  //     .mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
 
-    expect(
-      await service.v1SendTelemetry('sadfj-assen-12xed-esawf', { rssi: 2000 })
-    ).toEqual({ status: 200, explanation: 'call finished' });
-  });
+  //   expect(
+  //     await service.v1SendTelemetry('sadfj-assen-12xed-esawf', { rssi: 2000 })
+  //   ).toEqual({ status: 200, explanation: 'call finished' });
+  // });
 
-  it('v1 send telemetry -> fail', async () => {
-    /*expect(await service.loginUser('reserveadmin@reserve.com', 'reserve')).toBe(
-      true
-    );
-    console.log(await service.removeReserveUser("cf0afc80-e63d-11ec-9a49-9105980e5c8a"));*/
+  // it('v1 send telemetry -> fail', async () => {
+  //   /*expect(await service.loginUser('reserveadmin@reserve.com', 'reserve')).toBe(
+  //     true
+  //   );
+  //   console.log(await service.removeReserveUser("cf0afc80-e63d-11ec-9a49-9105980e5c8a"));*/
 
-    jest
-      .spyOn(httpService, 'post')
-      .mockImplementationOnce(() =>
-        throwError(() => tests.axiosECONNFailureExample)
-      );
-    expect(
-      await service.v1SendTelemetry('sadfj-assen-12xed-esawf', { rssi: 2000 })
-    ).toEqual({ status: 500, explanation: 'send telemetry failed' });
-  });
+  //   jest
+  //     .spyOn(httpService, 'post')
+  //     .mockImplementationOnce(() =>
+  //       throwError(() => tests.axiosECONNFailureExample)
+  //     );
+  //   expect(
+  //     await service.v1SendTelemetry('sadfj-assen-12xed-esawf', { rssi: 2000 })
+  //   ).toEqual({ status: 500, explanation: 'send telemetry failed' });
+  // });
 
   //////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1682,6 +1700,10 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
   });
 
   //////////////////////////////////////////////////////////////////////
+  it('gen admin reserve list -> live', async () => {
+    /*await service.loginUser('reserveadmintwo@reserve.com', 'reserve');
+    console.table(await service.generateReserveList_ReserveAdmin());*/
+  })
 
   it('generate reserve list -> login fail', async () => {
     /*await service.loginUser('server@thingsboard.org', 'thingsboardserveraccountissecure')
@@ -1827,7 +1849,7 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
   it('generate reserve list sys admin -> not admin', async () => {
     jest
       .spyOn(httpService, 'get')
-      .mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
+      .mockImplementationOnce(() => of(tests.axiosUserSuccessExample));
     expect(await service.generateReserveList_SystemAdmin()).toMatchObject({
       status: 'fail',
       explanation: 'user not system admin',
@@ -1862,6 +1884,11 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
       .mockImplementationOnce(() =>
         throwError(() => tests.axiosECONNFailureExample)
       );
+    jest
+      .spyOn(httpService, 'post')
+      .mockImplementationOnce(() =>
+        throwError(() => tests.axiosECONNFailureExample)
+      );
     expect(await service.generateReserveList_SystemAdmin()).toMatchObject({
       status: 'fail',
       explanation: 'ECONNREFUSED',
@@ -1875,6 +1902,11 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
     jest
       .spyOn(httpService, 'get')
       .mockImplementationOnce(() => of(tests.axiosTenantsSuccessExample));
+    jest
+      .spyOn(httpService, 'post')
+      .mockImplementationOnce(() =>
+        throwError(() => tests.axiosECONNFailureExample)
+      );
     jest
       .spyOn(httpService, 'post')
       .mockImplementationOnce(() => of(tests.axiosUserSuccessExample));
@@ -2262,7 +2294,7 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
         throwError(() => tests.axiosECONNFailureExample)
       );
     expect(
-      await service.updateUser('', { firstName: '', lastName: '' })
+      await service.updateUser('', { firstName: '', lastName: '' , email: ''})
     ).toMatchObject({
       status: 'fail',
       explanation: 'token',
@@ -2279,7 +2311,7 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
         throwError(() => tests.axiosECONNFailureExample)
       );
     expect(
-      await service.updateUser('', { firstName: '', lastName: '' })
+      await service.updateUser('', { firstName: '', lastName: '' , email: ''})
     ).toMatchObject({
       status: 'fail',
       explanation: 'user to update',
@@ -2299,7 +2331,7 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
         throwError(() => tests.axiosECONNFailureExample)
       );
     expect(
-      await service.updateUser('', { firstName: '', lastName: '' })
+      await service.updateUser('', { firstName: '', lastName: '', email: '' })
     ).toMatchObject({
       status: 'fail',
       explanation: 'update',
@@ -2317,7 +2349,7 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
       .spyOn(httpService, 'post')
       .mockImplementationOnce(() => of(tests.axiosAdminSuccessExample));
     expect(
-      await service.updateUser('', { firstName: '', lastName: '' })
+      await service.updateUser('', { firstName: '', lastName: '', email: '' })
     ).toMatchObject({
       status: 'ok',
       explanation: 'call finished',
@@ -2414,7 +2446,7 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
       data: [
         {
           deviceID: '784f394c-42b6-435a-983c-b7beff2784f9',
-          deviceName: 'A4B72CCDFF33',
+          deviceName: 'Room 234 Sensor',
         },
       ],
     });
@@ -2445,7 +2477,7 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
       .mockImplementationOnce(() => of(tests.axiosDeviceSuccessExample));
 
     //Device Success
-    jest
+    jest 
       .spyOn(httpService, 'get')
       .mockImplementationOnce(() => of(tests.axiosSensorKeysExample));
 
@@ -2507,6 +2539,23 @@ console.log(await service.addUserToReserve("ef55ff40-dfe8-11ec-bdb3-750ce7ed2451
 
     console.log(await service.getDeviceSensorData('DEVID', 0, 1));
   });
+
+  it('Historical Data -> live', async () => {
+    console.log(await service.loginUser('reserveadmin@reserve.com', 'reserveaccountissecure.'))
+    console.log((await service.getDeviceHistoricalData('8ee47c40-3cd6-11ed-879e-15327a14b2fd','TRI', 0, 1754072587463)).data)
+  });
+
+  /*it('v1 send telemetry -> live test', async () => {
+    service.v1SendTelemetry("wzBhcYgAjRUs8conbhCG",{longitude:3, latitude:4,pType:'TRI'})
+  });*/
+
+  // it('Delete Data -> live', async () => {
+  //   const data = await service.loginUserReturnToken('isak@lora.co.za', 'reserve');
+  //   telemetry.setToken(data.Token);
+  //   console.log(data);
+  //   console.log((await telemetry.clearTelemetry('b2447230-3ebb-11ed-b1e3-f5d6da106fe9')))
+  // });
+
 });
 
 //////////////////////////////////////////////////////////////////////

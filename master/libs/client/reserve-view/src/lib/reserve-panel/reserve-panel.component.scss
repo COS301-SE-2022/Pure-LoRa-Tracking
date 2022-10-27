@@ -1,9 +1,10 @@
-@import "apps/lora-tracking/src/styles.scss";
-
 mat-card {
-    height: 100%;
     padding-top: 0.3em;
-    }
+    flex: 1 1 auto;
+    border-radius: 0.5rem;
+    display: flex;
+    flex-direction: column;
+}
 
 mat-card-title {
     font-weight: 500;
@@ -40,12 +41,13 @@ mat-action-list {
     justify-content: space-around;
     align-items: baseline;
     align-content: center;
-    flex-wrap: wrap;
+    flex-direction: row;
+    padding: 0.5rem;
 }
 
 mat-action-list > mat-form-field {
-    margin-left: 1%;
-    margin-right: 1%;
+    padding-left: 2%;
+    padding-right: 2%;
 }
 
 
@@ -66,15 +68,16 @@ cdk-virtual-scroll-viewport {
 }
 
 #card-content {
-    height:70%
+    height:100%;
 }
 
 .reserve-select .mat-select-arrow {
     border: none;
 }
 
-#switchIcon {
-    // vertical-align: sub;
+.reserve-select {
+    font-weight: 500;
+    font-family:  'Bai Jamjuree', sans-serif;
 }
 
 ::ng-deep .reserve-select-field .mat-form-field-wrapper {
@@ -92,6 +95,20 @@ master-gateway-view-detail {
     height: 100%;
 }
 
-master-sensor-view-detail{
-    height: 100%
+.mat-chip.mat-standard-chip.mat-chip-selected.mat-primary{
+    box-shadow: 2px 2px 2px grey;
+}
+
+#currentdev{
+    text-align: center;
+}
+
+mat-divider{
+    position: unset !important;
+}
+
+.margin-panels{
+    display: flex;
+    flex-flow: column;
+    height: 100%;
 }

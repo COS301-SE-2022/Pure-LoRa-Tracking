@@ -1,19 +1,11 @@
-import { HttpModule, HttpService } from '@nestjs/axios';
+import { ThingsboardThingsboardDeviceService, ThingsboardThingsboardDeviceModule } from "@lora/thingsboard-device";
+import { ThingsboardThingsboardUserService, ThingsboardThingsboardUserModule } from "@lora/thingsboard-user";
+import { ThingsboardThingsboardTestsService, ThingsboardThingsboardTestsModule } from "@lora/thingsboard/tests";
+import { HttpService, HttpModule } from "@nestjs/axios";
+import { of, throwError } from "rxjs";
+import { ThingsboardThingsboardTelemetryService } from "./thingsboard-thingsboard-telemetry.service";
 import { Test } from '@nestjs/testing';
-import { ThingsboardThingsboardTelemetryService } from './thingsboard-thingsboard-telemetry.service';
-import {
-  ThingsboardThingsboardUserModule,
-  ThingsboardThingsboardUserService,
-} from '@lora/thingsboard-user';
-import {
-  ThingsboardThingsboardDeviceModule,
-  ThingsboardThingsboardDeviceService,
-} from '@lora/thingsboard-device';
-import { of, throwError } from 'rxjs';
-import {
-  ThingsboardThingsboardTestsModule,
-  ThingsboardThingsboardTestsService,
-} from '@lora/thingsboard/tests';
+
 
 describe('ThingsboardThingsboardTelemetryService', () => {
   let service: ThingsboardThingsboardTelemetryService;
@@ -22,7 +14,7 @@ describe('ThingsboardThingsboardTelemetryService', () => {
   let httpService: HttpService;
   let tests: ThingsboardThingsboardTestsService;
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     const module = await Test.createTestingModule({
       providers: [ThingsboardThingsboardTelemetryService],
       imports: [
@@ -53,7 +45,7 @@ describe('ThingsboardThingsboardTelemetryService', () => {
       .spyOn(httpService, 'get')
       .mockImplementationOnce(() => of(tests.axiosTelemetrySuccessExample));
     expect(
-      await service.getTelemetry('deviceID', 'deviceType', 0, 1654072587463)
+      await service.getTelemetry('deviceID', 'deviceType', 'TRI', 0, 1654072587463)
     ).toMatchObject(tests.SuccessResponse);
 
     expect(
@@ -88,7 +80,7 @@ describe('ThingsboardThingsboardTelemetryService', () => {
         throwError(() => tests.axiosECONNFailureExample)
       );
     expect(
-      await service.getTelemetry('deviceID', 'deviceType', 0, 1654072587463)
+      await service.getTelemetry('deviceID', 'deviceType', 'tri', 0, 1654072587463)
     ).toMatchObject(tests.ECONNResponse);
   });
 
@@ -102,7 +94,7 @@ describe('ThingsboardThingsboardTelemetryService', () => {
         throwError(() => tests.axiosFailureExample)
       );
     expect(
-      await service.getTelemetry('deviceID', 'deviceType', 0, 1654072587463)
+      await service.getTelemetry('deviceID', 'deviceType', 'tri', 0, 1654072587463)
     ).toMatchObject(tests.FailResponse);
   });
 
@@ -135,7 +127,7 @@ describe('ThingsboardThingsboardTelemetryService', () => {
     ).toMatchObject(tests.SuccessResponse);
   });
 
-  
+
 
   it('get sensor data -> return info, no time start', async () => {
     service.setToken('token');
@@ -163,7 +155,7 @@ describe('ThingsboardThingsboardTelemetryService', () => {
 
   it('get sensor data -> ECONNREFUSED', async () => {
     service.setToken('token');
-    jest.spyOn(httpService,'get').mockImplementationOnce(()=>of(tests.TBkeysTimeseries))
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.TBkeysTimeseries))
     jest
       .spyOn(httpService, 'get')
       .mockImplementationOnce(() =>
@@ -172,6 +164,55 @@ describe('ThingsboardThingsboardTelemetryService', () => {
     expect(
       await service.getSensorData('deviceID', 'deviceType', 0, 1654072587463)
     ).toMatchObject(tests.ECONNResponse);
+  });
+
+  it('get sensor data -> HTTP ERROR', async () => {
+    service.setToken('token');
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(tests.TBkeysTimeseries))
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() =>
+        throwError(() => tests.axiosFailureExample)
+      );
+    expect(
+      await service.getSensorData('deviceID', 'deviceType', 0, 1654072587463)
+    ).toMatchObject({status:400, explanation:"Not Authorized"});
+  });
+
+  it('get sensor data -> Keys ECONNREFUSED', async () => {
+    service.setToken('token');
+    jest
+      .spyOn(httpService, 'get')
+      .mockImplementationOnce(() =>
+        throwError(() => tests.axiosECONNFailureExample)
+      );
+    expect(
+      await service.getSensorData('deviceID', 'deviceType', 0, 1654072587463)
+    ).toMatchObject(tests.ECONNResponse);
+  });
+
+  it('get sensor data -> key undefined or null', async () => {
+    service.setToken('token');
+    const resp = tests.TBkeysTimeseries;
+    resp.data = null;
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(resp))
+    expect(
+      await service.getSensorData('deviceID', 'deviceType', 0, 1654072587463)
+    ).toMatchObject({
+      status:200,
+      data:"",
+      explanation:"No Keys Found"
+    });
+
+    resp.data = undefined;
+    jest.spyOn(httpService, 'get').mockImplementationOnce(() => of(resp))
+    expect(
+      await service.getSensorData('deviceID', 'deviceType', 0, 1654072587463)
+    ).toMatchObject({
+      status:200,
+      data:"",
+      explanation:"No Keys Found"
+    });
   });
 
   it('get sensor data -> HTTP ERROR', async () => {
@@ -359,10 +400,57 @@ describe('ThingsboardThingsboardTelemetryService', () => {
   });
   ////////////////////////////////////////////////////////////////////////////////
 
+  it('clear telemetry -> return info', async () => {
+    //const data = await loginService.login(tests.user, tests.userPassword);
+    //service.setToken(data.token);
+    service.setToken('token');
+    jest
+      .spyOn(httpService, 'delete')
+      .mockImplementationOnce(() => of(tests.axiosTokenSuccessExample));
+      expect(
+        await service.clearTelemetry(
+          'acf22a00-ce06-11ec-b2d0-bd829ba84846'
+        )
+    ).toMatchObject(tests.SuccessResponse);
+  });
+
+  it('clear telemetry -> ECONNREFUSED', async () => {
+    //const data = await loginService.login(tests.user, tests.userPassword);
+    //service.setToken(data.token);
+    service.setToken('token');
+    jest
+      .spyOn(httpService, 'delete')
+      .mockImplementationOnce(() =>
+        throwError(() => tests.axiosECONNFailureExample)
+      );
+      expect(
+        await service.clearTelemetry(
+          'acf22a00-ce06-11ec-b2d0-bd829ba84846'
+        )
+    ).toMatchObject(tests.ECONNResponse);
+  });
+
+  it('clear telemetry -> HTTP ERROR', async () => {
+    //const data = await loginService.login(tests.user, tests.userPassword);
+    //service.setToken(data.token);
+    service.setToken('token');
+    jest
+      .spyOn(httpService, 'delete')
+      .mockImplementationOnce(() =>
+        throwError(() => tests.axiosFailureExample)
+      );
+    expect(
+      await service.clearTelemetry(
+        'acf22a00-ce06-11ec-b2d0-bd829ba84846'
+      )
+    ).toMatchObject(tests.FailResponse);
+  });
+
   /*it('send telemetry V1 -> Mock Data', async () => {
-    expect(await service.V1sendJsonTelemetry("hZQ9lFxS0Bk6Ic8nSBlV", {
-      latitude: -25.802363957922285,
-      longitude: 28.206281661987305
+    expect(await service.V1sendJsonTelemetry("4uplfXfbFS2q4U4FuHbn", {
+      latitude:-25.75550768038334,
+      longitude: 28.232975006103516,
+      pType: "PF"
     })).toEqual(200);
   });*/
 });

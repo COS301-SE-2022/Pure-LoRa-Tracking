@@ -472,6 +472,7 @@ export class ThingsboardThingsboardTestsService {
   };
 
   TelemetryResultExample = {
+    pType : [{value:'TRI'},{value:'TRI'}],
     longitude: [
       { value: 1, ts: 22 },
       { value: 2, ts: 22 },

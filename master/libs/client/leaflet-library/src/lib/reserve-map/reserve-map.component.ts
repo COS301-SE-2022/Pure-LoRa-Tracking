@@ -1,17 +1,33 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, Input, OnChanges, SimpleChanges, } from '@angular/core';
 import { MapApiHistoricalData, MapApiHistoricalResponse, MapApiLatestResponse, MapApiReserveResponse, MapHistoricalPoints, MapRender, MarkerView, ViewMapType, Device, Gateway} from '@master/shared-interfaces';
-import * as L from 'leaflet';
 import * as geojson from 'geojson';
 // This library does not declare a module type, we we need to ignore this
 // error for a successful import
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { antPath } from "leaflet-ant-path"
+import * as L from 'leaflet';
 import { DeviceNotifierService } from '@master/client/shared-services';
 import { SnackbarAlertComponent } from '@master/client/shared-ui/components-ui';
 import { MatSnackBar } from '@angular/material/snack-bar';
+// import 'leaflet/dist/leaflet.css';
 // import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css';
+// import 'leaflet-defaulticon-compatibility';
+import { icon, Marker } from 'leaflet';
+//this fixes the marker shadow issue
+const iconDefault = icon({
+  iconRetinaUrl:'assets/cell_tower.png',
+  iconUrl:'assets/cell_tower.png',
+  shadowUrl:'assets/marker-shadow.png',
+  iconSize: [20, 35],
+  tooltipAnchor: [10, -26],
+  popupAnchor: [1, -50],
+  iconAnchor: [10, 40],
+  shadowSize: [31, 31]
+});
+Marker.prototype.options.icon = iconDefault;
+
 
 @Component({
   selector: 'master-reserve-map',
@@ -29,6 +45,7 @@ export class ReserveMapComponent implements OnInit, OnChanges {
   @Input() ShowMarkers: boolean;
   @Input() ShowPolygon: boolean;
   @Input() HistoricalMode: boolean;
+  @Input() ShowGateway:boolean;
   // @Input() HistoricalDataID:number;
   public mainmap: any = null;
   public maptiles: any = null;
@@ -52,6 +69,7 @@ export class ReserveMapComponent implements OnInit, OnChanges {
     this.ShowMarkers = true;
     this.ShowPolygon = true;
     this.HistoricalMode = false;
+    this.ShowGateway = true;
     // this.HistoricalDataID=-1;
     this.mappolygons = new L.GeoJSON();
     this.currentHistoricalId = -1;
@@ -79,6 +97,17 @@ export class ReserveMapComponent implements OnInit, OnChanges {
       console.log();
       if (this.mainmap != null && this.mappolygons != null) this.mainmap.fitBounds(this.mappolygons.getBounds())
     })
+    this.notifier.getVisibilityChange().subscribe(params=>{
+      if(params.hide){
+        this.hideSensor(params.deviceid);
+      }
+      else{
+        this.unhideSensor(params.deviceid);
+      }
+    })
+    // this.notifier.getTimeStamps().subscribe(params=>{
+    //   this.resetData();
+    // })
 
     
   }
@@ -108,15 +137,23 @@ export class ReserveMapComponent implements OnInit, OnChanges {
           this.hidepolygon();
         }
       }
+      else if (Object.prototype.hasOwnProperty.call(changes, "ShowGateway")) {
+        if (this.ShowGateway) {
+          this.showAllGateways();
+        } else {
+          this.hideAllGateways();
+        }
+      }
+      
       else if (Object.prototype.hasOwnProperty.call(changes, "HistoricalDataID")) {
         console.log("change historical when moved to live");
       }
     }
 
   }
+  
 
   //MAP
-
   public loadmap(): void {
     if (this.Reserve?.data != null) {
       if (this.mainmap != null) this.mainmap.remove();//if change to main map reload
@@ -129,7 +166,6 @@ export class ReserveMapComponent implements OnInit, OnChanges {
   }
 
   //MAPTILES
-
   public loadmaptiles(): void {
     if (this.mainmap != null) {
       if (this.maptiles != null) {
@@ -228,7 +264,7 @@ export class ReserveMapComponent implements OnInit, OnChanges {
           "color": "#0000FF",
           "pulseColor": "#FFFFFF",
           "paused": false,
-          "reverse": false,
+          "reverse": true,
           "hardwareAccelerated": true
         });
         this.hideHistoricalExceptMarker(deviceID);
@@ -281,8 +317,26 @@ export class ReserveMapComponent implements OnInit, OnChanges {
     this.loadInnitial(deviceIDs);
   }
 
+  public hideSensor(deviceid:string){
+    console.log("called");
+    const current=this.historicalpath.find(curr=>curr.deviceID==deviceid);
+    if(current!=null){
+      current.markers.forEach(other=>other.remove());
+      current.polyline.remove();
+    }
+  }
+
+  public unhideSensor(deviceid:string){
+    const current=this.historicalpath.find(curr=>curr.deviceID==deviceid);
+    if(current!=null){
+      current.markers.forEach(other=>other.addTo(this.mainmap));
+      current.polyline.addTo(this.mainmap);
+    }
+  }
+
   //loop through and add all things back to map
   public resetData(): void {
+    if(this.currentantpath!=null) this.currentantpath.remove();
     this.HistoricalMode = false;
     this.historicalpath.forEach(val => this.addToMap(val))
     if (this.currentantpath != null) {
@@ -317,7 +371,7 @@ export class ReserveMapComponent implements OnInit, OnChanges {
 
   public showGateway(deviceID:string){
     const device=this.gatewayMarkers.find(curr=>curr.gatewayID==deviceID);
-
+    
     if(device!=undefined){
       if(this.mainmap!=null) this.mainmap.panTo(device.marker.getLatLng());
     }
@@ -326,10 +380,18 @@ export class ReserveMapComponent implements OnInit, OnChanges {
     }
   }
 
+  hideAllGateways() {
+    this.gatewayMarkers.forEach(curr=>curr.marker.remove());
+  }
+
+  showAllGateways() {
+    this.gatewayMarkers.forEach(curr=>curr.marker.addTo(this.mainmap));
+  }
+
   //reset all data
   public changeReserve(){
     this.mappolygons.remove();
-    // this.mappolygons=L.polygon([]);
+    if(this.currentantpath!=null) this.currentantpath.remove();
     this.historicalpath.forEach(val => {
       val.markers.forEach(curr => curr.remove())
       val.polyline.remove();

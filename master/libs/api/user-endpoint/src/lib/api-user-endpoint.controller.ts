@@ -62,7 +62,7 @@ export class ApiUserEndpointController {
     return this.apiUserEndpointService.UserInfoProcess(content);
   }
 
-  /* Get user info from token/cookie */
+  /* update user info from token/cookie */
   @Post('info/details')
   async UserInfoUpdateEndpoint(
     @Body() content: userUpdateInput

@@ -3,22 +3,32 @@
     <div id="banner">
         <div id="banner-content">
             <mat-icon id="profile-icon">account_circle</mat-icon>
-            {{name}}
+            <div>
+                <span class="values">{{name}}</span>
+                <br>
+                <span class="values">{{id}}</span>
+            </div>
         </div>
         <span id="banner-spacer"></span>
         <div id="button-wrapper">
 
             <button mat-raised-button id="edit-button" color="white" (click)="openEdit()">
-                <span><mat-icon>edit</mat-icon>Edit</span>
+                <div class="button-icon-text"><mat-icon class="btn-icon">edit</mat-icon>Edit</div>
             </button>
         </div>
     </div>
     <div id="content">
-        Role: {{role}}
+        <span class="content-padding">
+            Role: <span class="values">{{role}}</span>
+        </span>
         <br>
-        E-mail: {{email}}
+        <span class="content-padding">
+            E-mail: <span class="values">{{email}}</span>
+        </span>
         <br>
-        CustomerID: {{id}}
+        <span class="content-padding">
+            CustomerID: <span class="values">{{id}}</span>
+        </span>
     </div>
    
 </div>

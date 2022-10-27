@@ -57,7 +57,7 @@ export class ApiMapEndpointService {
         } else {
             data = await this.thingsboardClient.getReservePerimeter();
         }
-        console.log('data :>> ', data.data);
+        //console.log('data :>> ', data.data);
         if (data.code == 401) {
             return {
                 code: 401,
@@ -140,8 +140,8 @@ export class ApiMapEndpointService {
         if (content.startTime == undefined || content.endTime == undefined) {
             content.startTime = Date.now() - 24 * 60 * 60 * 1000;
             content.endTime = Date.now();
-            console.log(content.startTime);
-            console.log(content.endTime);
+            //console.log(content.startTime);
+            //console.log(content.endTime);
         }
 
         this.thingsboardClient.setToken(content.token);
@@ -165,18 +165,18 @@ export class ApiMapEndpointService {
         if (content.deviceID != undefined && content.deviceID.length > 0) {
             content.deviceID.forEach((device) => {
                 /* await array -> telem results */
-                awaitArray.push(this.thingsboardClient.getDeviceHistoricalData(device, content.startTime, content.endTime))
+                awaitArray.push(this.thingsboardClient.getDeviceHistoricalData(device, content.pType, content.startTime, content.endTime))
             })
         } else {
             let devices;
             if(content.reserveID==undefined) devices = await this.thingsboardClient.getDeviceInfos();
             else devices = await this.thingsboardClient.getDeviceInfos([],content.reserveID);
 
-            console.log(devices);
+            //console.log(devices);
             const other = devices.data.filter(val => val.isGateway == false);
             other.forEach((device) => {
                 /* await array -> telem results */
-                awaitArray.push(this.thingsboardClient.getDeviceHistoricalData(device.deviceID, content.startTime, content.endTime))
+                awaitArray.push(this.thingsboardClient.getDeviceHistoricalData(device.deviceID, content.pType, content.startTime, content.endTime))
             })
 
         }
@@ -199,22 +199,28 @@ export class ApiMapEndpointService {
                 explanation: "Invalid username or password",
                 data: [],
             }
-            if (item.data.telemetryResults == undefined)
+            if(item.data==undefined)
+                item.data.telemetryResults = [];
+            else if (item.data.telemetryResults == undefined)
                 item.data.telemetryResults = [];
 
             if (item.status == 'fail') {
                 explanationOfCall = "some devices are missing results";
                 furtherExplain = item.explanation;
                 data.push({
+                    pType:content.pType,
                     deviceID: item.name,
-                    deviceName: item.furtherExplain,
+                    deviceName: item.explanation,
+                    hardwareid:item.furtherExplain,
                     type: "sensor",
                     locationData: item.data
                 })
             } else if (item['status'] == 'ok') {
                 data.push({
+                    pType:content.pType,
                     deviceID: item['name'],
-                    deviceName: item.furtherExplain,
+                    deviceName: item.explanation,
+                    hardwareid:item.furtherExplain,
                     type: "sensor",
                     locationData: item.data.data.telemetryResults
                 })

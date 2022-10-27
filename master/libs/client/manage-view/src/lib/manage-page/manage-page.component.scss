@@ -25,3 +25,14 @@
     height: 100%;
     border-radius: 0.5rem;
 }
+
+#box{
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+}
+
+#admin-nav{
+    display: flex;
+    flex-direction: column;
+}
