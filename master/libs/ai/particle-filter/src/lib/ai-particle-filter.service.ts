@@ -1,16 +1,18 @@
 import { AiProcessingStrategyService } from '@lora/ai/strategy';
 import { LocationService } from '@lora/location';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { ProcessingApiProcessingBusService } from '@processing/bus';
 import randomPositionInPolygon = require('random-position-in-polygon');
 @Injectable()
 export class AiParticleFilterService extends AiProcessingStrategyService {
 
-    async processData(reading: any): Promise<boolean> {
-        console.log("Particle filter strategy")
+    async processData(reading: any): Promise<any> {
+        Logger.log("Particle filter strategy")
         const result = await this.particleFilter(reading);
-        this.serviceBus.sendProcessedDatatoTB(reading.deviceToken, { result: { latitude: result[1], longitude: result[0] }, processingType: this.pType});
-        return false;
+        const obj = {latitude: result[1], longitude: result[0], pType: this.pType}
+        // this.serviceBus.sendProcessedDatatoTB(reading.deviceToken,  obj);
+        return obj;
+        // return false;
     }
 
     /* considerations: 
@@ -43,7 +45,7 @@ export class AiParticleFilterService extends AiProcessingStrategyService {
             this.gatewayLocations.push([gateway.longitude, gateway.latitude])
         })
         initialParameters.reservePolygon.forEach((location) => {
-            this.reservePolygon.push([location.longitude, location.latitude]);
+            this.reservePolygon.push([location[0], location[1]]);
         })
 
         this.generatePolygonSamples(initialParameters.numberOfSamples)
@@ -119,8 +121,10 @@ export class AiParticleFilterService extends AiProcessingStrategyService {
         const newPoints = new Array<number[]>();
         points.forEach(point => {
 
-            const randOne = Math.random() * (0.02 - 0.0001) + 0.0001;
-            const randTwo = Math.random() * (0.02 - 0.0001) + 0.0001;
+            // const randOne = Math.random() * (0.02 - 0.0001) + 0.0001;
+            // const randTwo = Math.random() * (0.02 - 0.0001) + 0.0001;
+            const randOne = Math.random() * (0.0001 - 0.00001) + 0.00001;
+            const randTwo = Math.random() * (0.0001 - 0.00001) + 0.00001;
             const choice = Math.floor(Math.random() * (4 - 0) + 0);
 
             switch (choice) {
@@ -313,7 +317,7 @@ export class AiParticleFilterService extends AiProcessingStrategyService {
 export class particleFilterStratifiedService extends AiParticleFilterService {
     constructor(locationComputations: LocationService, protected serviceBus: ProcessingApiProcessingBusService) {
         super(locationComputations, serviceBus);
-        this.pType = "PF_LOC_STRAT";
+        this.pType = "PF";
     }
 
     // consider : https://github.com/stdlib-js/random-base-uniform
@@ -342,7 +346,7 @@ export class particleFilterStratifiedService extends AiParticleFilterService {
 export class particleFilterMultinomialService extends AiParticleFilterService {
     constructor(locationComputations: LocationService, protected serviceBus: ProcessingApiProcessingBusService) {
         super(locationComputations, serviceBus);
-        this.pType = "PF_LOC_MULTI";
+        this.pType = "PF";
     }
 
     // consider : https://github.com/stdlib-js/random-base-uniform
@@ -370,7 +374,7 @@ export class particleFilterMultinomialService extends AiParticleFilterService {
 export class particleFilterRSSIMultinomialService extends particleFilterMultinomialService {
     constructor(locationComputations: LocationService, protected serviceBus: ProcessingApiProcessingBusService) {
         super(locationComputations, serviceBus);
-        this.pType = "PF_RSSI_MULTI";
+        this.pType = "PF";
     }
 
     weightsMeasuredRelativeToOriginal(originalPoint: number[]): number[] {

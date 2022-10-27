@@ -30,18 +30,20 @@ export class ReserveViewComponent {
   Reserve: MapApiReserveResponse | null = null;
   LastestHistorical: Device[];
   ShowPolygon: boolean;
+  ShowGateway:boolean;
   Gateways: Gateway[];
   ReserveName = "";
   token = "";
   isadmin = false;
-
+  processingType="TRI";
   reservesList: ReserveInfo[];
   selectedReserveId = "";
-
+  noReservesMessage = "You do not belong to any reserves.\nPlease contact your reserve administrator.";
   constructor(public apicaller: MapCallerService, private tokenmanager: TokenManagerService, private notifier: DeviceNotifierService, private http: HttpClient, private cookiemanager: CookieService) {
     this.LastestHistorical = [];
     this.Gateways = [];
     this.ShowPolygon = true;
+    this.ShowGateway = true;
     this.ViewMapTypeInput = ViewMapType.NORMAL_OPEN_STREET_VIEW;
     this.token = this.tokenmanager.getToken();
     this.notifier.getSensorDeleted().subscribe(val => {
@@ -49,7 +51,7 @@ export class ReserveViewComponent {
     })
     this.reservesList = [];
     this.notifier.getTimeStamps().subscribe((val: StartEndTimestamps) => {
-      this.apicaller.getHistoricalWithTime(this.token, this.selectedReserveId, [], val.startTime, val.endTime).then(val => {
+      this.apicaller.getHistoricalWithTime(this.token, this.selectedReserveId, [], val.startTime, val.endTime,this.processingType).then(val => {
         // console.table(val['data'])
         this.reservemap?.reload(val.data);
         this.LastestHistorical = val.data;
@@ -139,6 +141,18 @@ export class ReserveViewComponent {
     }
   }
 
+  typeChange(event:string){
+    console.log("type change",event);
+    this.processingType=event;
+    this.apicaller.getHistoricalWithTime(this.token, this.selectedReserveId, [], this.notifier.getTimeStampsValue().startTime, this.notifier.getTimeStampsValue().endTime,this.processingType).then(val => {
+      // console.table(val['data'])
+      console.log("returned ",val);
+      this.reservemap?.reload(val.data);
+      this.LastestHistorical = val.data;
+    });
+  }
+
+
   loadreserve(newReserveId: string) {
     this.selectedReserveId = newReserveId;
     this.apicaller.getReserve().then(val => {
@@ -169,7 +183,7 @@ export class ReserveViewComponent {
       });
     }
     else{
-      this.apicaller.getHistoricalWithTime(this.token, this.selectedReserveId, [], this.notifier.getTimeStampsValue().startTime, this.notifier.getTimeStampsValue().endTime).then(val => {
+      this.apicaller.getHistoricalWithTime(this.token, this.selectedReserveId, [], this.notifier.getTimeStampsValue().startTime, this.notifier.getTimeStampsValue().endTime,this.processingType).then(val => {
         // console.table(val['data'])
         this.LastestHistorical = val.data;
         this.reservemap?.loadInnitial(this.LastestHistorical);

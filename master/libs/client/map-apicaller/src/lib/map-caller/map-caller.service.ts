@@ -34,9 +34,9 @@ export class MapCallerService {
     })
   }
 
-  getHistoricalWithTime(token:string,reserveID:string,deviceID:string[],startTime:number,endTime:number):Promise<any>{
+  getHistoricalWithTime(token:string,reserveID:string,deviceID:string[],startTime:number,endTime:number,type:string):Promise<any>{
     return new Promise((res,rej)=>{
-      this.http.post("/api/map/historical",{"token":token,"reserveID":reserveID,"deviceID":deviceID,"startTime":startTime,"endTime":endTime}).subscribe(val=>{
+      this.http.post("/api/map/historical",{"token":token,"reserveID":reserveID,"deviceID":deviceID,"startTime":startTime,"endTime":endTime,"pType":type}).subscribe(val=>{
         res(val);
       });
     })

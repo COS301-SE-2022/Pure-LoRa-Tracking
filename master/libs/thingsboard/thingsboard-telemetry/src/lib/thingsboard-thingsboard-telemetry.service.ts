@@ -21,7 +21,7 @@ export class ThingsboardThingsboardTelemetryService {
   async getTelemetry(
     DeviceID: string,
     DeviceProfile: string,
-    ptype = 'tri',
+    ptype = 'TRI',
     timeStart?: number,
     timeStop?: number
   ): Promise<TelemetryResponse> {
@@ -38,7 +38,7 @@ export class ThingsboardThingsboardTelemetryService {
         timeStart +
         '&endTs=' +
         timeStop +
-        '&keys=ts,latitude,longitude,pType';
+        '&keys=ts,latitude,longitude,pType&limit=1000';
     } else {
       url =
         this.ThingsBoardURL +
@@ -48,6 +48,8 @@ export class ThingsboardThingsboardTelemetryService {
         DeviceID +
         '/values/timeseries';
     }
+
+    //console.log(url)
 
     const resp = await lastValueFrom(
       this.httpService.get(url, { headers: this.headersReq })
@@ -181,11 +183,12 @@ export class ThingsboardThingsboardTelemetryService {
 
   //////////////////////////////////////////////////////////////////
 
-  buildTelemetryResults(items, pType='tri'): TelemetryResult[] {
+  buildTelemetryResults(items, pType='TRI'): TelemetryResult[] {
+    console.log(items)
     if (items['longitude'] == undefined) return [];
     const TelList: TelemetryResult[] = new Array<TelemetryResult>();
     for (let i = 0; i < items['longitude'].length; i++) {
-      if(items['pType']==pType)
+      if(items['pType'][i]['value']==pType)
       TelList.push({
         longitude: items['longitude'][i]['value'],
         latitude: items['latitude'][i]['value'],
@@ -293,7 +296,6 @@ export class ThingsboardThingsboardTelemetryService {
       this.httpService.post(
         this.ThingsBoardURL + '/v1/' + accessToken + '/telemetry',
         {
-          timestamp: +new Date(),
           ...TelemetryJSON,
         },
         {}
@@ -308,15 +310,15 @@ export class ThingsboardThingsboardTelemetryService {
   ////////////////////////////////////////////////////////////////////
 
   async clearTelemetry(deviceID:string) {
-    const headersReq = {
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + this.token,
-    };
+    // const headersReq = {
+    //   'Content-Type': 'application/json',
+    //   Authorization: 'Bearer ' + this.token,
+    // };
 
-    const url = this.ThingsBoardURL + '/plugins/telemetry/DEVICE/'+deviceID+'/timeseries/delete?deleteAllDataForKeys=true';
+    const url = this.ThingsBoardURL + '/plugins/telemetry/DEVICE/'+deviceID+'/timeseries/delete?deleteAllDataForKeys=true&keys=longitude,latitude,pType';
 
     const resp = await lastValueFrom(
-      this.httpService.delete(url, { headers: headersReq })
+      this.httpService.delete(url, { headers: this.headersReq })
     ).catch((error) => {
       if (error.response == undefined) return error.code;
       return error;

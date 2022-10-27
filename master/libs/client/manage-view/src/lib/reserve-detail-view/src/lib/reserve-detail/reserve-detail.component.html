@@ -1,13 +1,61 @@
 <div id="content-wrapper">
-  <mat-form-field appearance="legacy" class="padding-content" id="search-field">
+  <!-- <mat-form-field appearance="legacy" class="padding-content" id="search-field">
     <mat-label>Search</mat-label>
     <input matInput placeholder="Search">
     <mat-icon matSuffix>search</mat-icon>
-  </mat-form-field>
-
-  <button mat-raised-button (click)="openCreateReserve()" class="padding-content">Create</button>
-  
-  <mat-list>
+  </mat-form-field> -->
+  <div id="banner-container">
+    <h1>Reserves</h1>
+    <span id="spacer"></span>
+    <div>
+      <button mat-raised-button color="primary" (click)="openCreateReserve()" class="padding-content">Create</button>
+    </div>
+  </div>
+  <table mat-table [dataSource]="reserves">
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef>
+          ID
+      </th>
+      <td mat-cell *matCellDef="let element">
+          {{element.id}}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>
+          Name
+      </th>
+      <td mat-cell *matCellDef="let element">
+          {{element.name}}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef>
+          E-mail
+      </th>
+      <td mat-cell *matCellDef="let element">
+          {{element.email}}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="edit">
+      <th mat-header-cell *matHeaderCellDef>
+          
+      </th>
+      <td mat-cell *matCellDef="let element">
+          <button mat-icon-button (click)="editReseve(element.id)"><mat-icon>edit</mat-icon></button>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="delete">
+      <th mat-header-cell *matHeaderCellDef>
+          
+      </th>
+      <td mat-cell *matCellDef="let element">
+          <button mat-icon-button color="warn" (click)="deleteReserve(element.id)"><mat-icon>delete</mat-icon></button>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="tableColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: tableColumns;"></tr>
+  </table>
+  <!-- <mat-list>
     <mat-list-item *ngFor="let reserve of reserves">
       <div mat-line>
         {{reserve.name}}({{reserve.email}})
@@ -18,6 +66,6 @@
       <button mat-button (click)="editReseve(reserve.id)">Edit</button>
       <button mat-button (click)="deleteReserve(reserve.id)">Delete</button>
     </mat-list-item>
-  </mat-list>
+  </mat-list> -->
 
 </div>

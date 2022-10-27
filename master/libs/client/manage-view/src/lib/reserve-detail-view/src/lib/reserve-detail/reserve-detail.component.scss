@@ -1,5 +1,6 @@
 #content-wrapper {
-    margin: 0.5rem;
+    margin: 1rem;
+    display: block;
 }
 
 .padding-content {
@@ -8,4 +9,27 @@
 
 #search-field {
     margin-left: 1.1em;
+}
+
+
+#banner-container{
+    margin: 1rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+#spacer{
+    flex: 1 1 auto;
+}
+
+h1{
+    font-family: 'Bai Jamjuree', sans-serif;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin: 0;
+}
+
+table{
+    width: 100%;
 }

@@ -16,6 +16,7 @@ export class DeviceNotifierService {
   public LocatedGateway:Subject<string>=new Subject<string>();
   public ResetSensor:EventEmitter<void>=new EventEmitter();
   public Pantomap:EventEmitter<void>=new EventEmitter();
+  public VisibilityChange:EventEmitter<{deviceid:string,hide:boolean}>=new EventEmitter<{deviceid:string,hide:boolean}>();
   public StartEndTimestamps:BehaviorSubject<StartEndTimestamps>=new BehaviorSubject<StartEndTimestamps>({
     startTime:0,
     endTime:0
@@ -84,10 +85,12 @@ export class DeviceNotifierService {
     this.Pantomap.emit();
   }
 
+  getVisibilityChange():Observable<{deviceid:string,hide:boolean}>{
+    return this.VisibilityChange.asObservable();
+  }
 
-
-
-
-  
+  changeVisibility(deviceid:string,hide:boolean):void{
+    this.VisibilityChange.emit({deviceid,hide});
+  }
 
 }

@@ -7,3 +7,5 @@ export * from './lib/reserve-panel/reserve-panel.component';
 export * from './lib/map-panel/map-panel.component';
 
 export * from './lib/device-list-item/device-list-item.component';
+
+export * from './lib/date-time-selection/date-time-selection.component';

@@ -12,6 +12,7 @@ export interface DeviceInterface {
 export interface SensorGatewayInterface{
   id: string,
   name: string,
+  hardwareid: string,
   reserve: string,
   status: boolean
 }
@@ -23,9 +24,9 @@ export interface SensorGatewayInterface{
 
 export class DevicesListComponent implements OnInit {
 
-  sensorColumns:string[] = ["id", "name","reserve","status","delete"];
+  sensorColumns:string[] = ["id", "name","hardwareid","reserve","status","delete"];
 
-  gatewayColumns:string[] = ["id", "name","reserve","status","delete","edit"];
+  gatewayColumns:string[] = ["id", "name", "hardwareid","reserve","status","delete","edit"];
 
   gatewayData:SensorGatewayInterface[] = [];
 
@@ -57,6 +58,7 @@ export class DevicesListComponent implements OnInit {
               id:other.deviceID,
               name:other.deviceName,
               reserve:curr.id,
+              hardwareid:other.hardwareid,
               status:true
             }
           }));
@@ -70,8 +72,9 @@ export class DevicesListComponent implements OnInit {
           this.gatewayData=this.gatewayData.concat(val.data.map((other:any)=>{
             return {
               id:other.deviceID,
-              name:other.deviceName,
+              name:other.humanName,
               reserve:curr.id,
+              hardwareid:other.deviceName,
               status:true
             }
           }));
@@ -86,13 +89,16 @@ export class DevicesListComponent implements OnInit {
           id:curr.deviceID,
           name:curr.deviceName,
           reserve:"",
+          hardwareid:curr.hardwareid,
           status:false
         }
       }));
       this.gatewayData=this.gatewayData.concat(val.data.filter((curr:any)=>curr.isGateway).map((curr:any)=>{
+        console.log("curr",curr);
         return {
           id:curr.deviceID,
-          name:curr.deviceName,
+          name:curr.humanName,
+          hardwareid:curr.deviceName,
           reserve:"",
           status:false
         }

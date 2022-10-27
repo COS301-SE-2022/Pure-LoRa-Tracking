@@ -5,7 +5,6 @@ import tf = require('@tensorflow/tfjs-node');
 
 @Injectable()
 export class AiHeatmapAverageService extends AiProcessingStrategyService {
-  private EarthRadius = 6371;
   private model: tf.Sequential;
   private targetEpochs = 5;
   private loadFilePath: string;
@@ -53,13 +52,16 @@ export class AiHeatmapAverageService extends AiProcessingStrategyService {
   async processData(
     data: {
       deviceID: string;
-      reading: { latitude: number; longitude: number };
+      latitude: number; 
+      longitude: number;
+      deviceToken: string;
+      pType: "HM" | "PF";
     },
     procType?: string
   ): Promise<number[]> {
     if (this.currentFive.length >= 5) this.currentFive.shift();
 
-    this.currentFive.push(data.reading);
+    this.currentFive.push({ longitude: data.longitude, latitude: data.latitude });
 
     if (this.currentFive.length != 5) return [];
 
@@ -67,27 +69,28 @@ export class AiHeatmapAverageService extends AiProcessingStrategyService {
       const result = this.calculateAverageCoodirnateComputationally(
         this.currentFive
       );
+      const data_ = await this.serviceBus.sendProcessedDatatoTB(data.deviceToken, { latitude: result.latitude, longitude: result.longitude, pType: data.pType });
       return [result.longitude, result.latitude];
     }
 
-    const normalizedFive = this.normalizePoints(
-      this.deconstructData(this.currentFive)
-    );
-    const normalizedReading = this.normalizePoints(
-      this.deconstructData([data.reading])
-    );
+    // const normalizedFive = this.normalizePoints(
+    //   this.deconstructData(this.currentFive)
+    // );
+    // const normalizedReading = this.normalizePoints(
+    //   this.deconstructData([data.reading])
+    // );
 
-    this.fitModel(normalizedFive, normalizedReading);
-    const result = await this.predictData(normalizedFive);
+    // this.fitModel(normalizedFive, normalizedReading);
+    // const result = await this.predictData(normalizedFive);
 
-    this.serviceBus.sendProcessedDatatoTB(this.deviceToken, {
-      processingType: 'ANN',
-      result: { longitude: result[0], latitude: result[1] },
-    });
+    // this.serviceBus.sendProcessedDatatoTB(this.deviceToken, {
+    //   pType: 'HM',
+    //   longitude: result[0], latitude: result[1] ,
+    // });
 
-    this.saveModel(this.saveFilePath);
+    // this.saveModel(this.saveFilePath);
 
-    return result;
+    // return result;
   }
 
   calculateAverageCoodirnateComputationally(
@@ -179,15 +182,6 @@ export class AiHeatmapAverageService extends AiProcessingStrategyService {
       {
         epochs: this.targetEpochs,
         verbose: 0,
-        /*callbacks: {
-          onEpochEnd: async (epoch, logs) => {
-            console.log('Epoch ' + epoch);
-            console.log('Loss: ' + logs.loss + ' accuracy: ' + logs.acc);
-          },
-          onTrainEnd: async (logs: tf.Logs) => {
-            console.log(logs);
-          },
-        },*/
       }
     );
   }
@@ -200,49 +194,5 @@ export class AiHeatmapAverageService extends AiProcessingStrategyService {
         ).array()) as number[][]
       )[0]
     );
-  }
-
-  LatLongToGeometric(
-    latitude: number,
-    longitude: number
-  ): { x: number; y: number; z: number } {
-    return {
-      x: Math.cos(latitude) * Math.cos(longitude),
-      y: Math.cos(latitude) * Math.sin(longitude),
-      z: Math.sin(latitude),
-    };
-  }
-
-  GeometricAverage(GeomSet: { x: number; y: number; z: number }[]): {
-    x: number;
-    y: number;
-    z: number;
-  } {
-    let Xtot: number, Ytot: number, Ztot: number;
-    Xtot = 0;
-    Ytot = 0;
-    Ztot = 0;
-    GeomSet.forEach((item) => {
-      Xtot += item.x;
-      Ytot += item.y;
-      Ztot += item.z;
-    });
-
-    return {
-      x: Xtot / GeomSet.length,
-      y: Ytot / GeomSet.length,
-      z: Ztot / GeomSet.length,
-    };
-  }
-
-  GeometricToLatLong(GeomSet: { x: number; y: number; z: number }): {
-    latitude: number;
-    longitude: number;
-  } {
-    const hyp = Math.sqrt(GeomSet.x * GeomSet.x + GeomSet.y * GeomSet.y);
-    return {
-      longitude: Math.atan2(GeomSet.y, GeomSet.x),
-      latitude: Math.atan2(GeomSet.z, hyp),
-    };
   }
 }

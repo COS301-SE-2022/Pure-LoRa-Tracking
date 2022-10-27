@@ -1,108 +1,22 @@
-<mat-card>
-    <mat-card-content>
-      <div id="map-options-wrap">
-        <section>
-            <mat-checkbox color="primary" #border (change)="updateBorder(border.checked)" checked="true">
-                Show Border
-            </mat-checkbox>
-        </section>
-        <mat-button-toggle-group #group="matButtonToggleGroup">
-          <mat-button-toggle value="sat" (change)="updateViewType($event.source.value)">
-            Satellite
-          </mat-button-toggle>
-          <mat-button-toggle checked="true" value="norm" (change)="updateViewType($event.source.value)">
-            Normal
-          </mat-button-toggle>
-        </mat-button-toggle-group>
-      </div>
-      <div>
-        
-      <div id="datetime-wrap">
-       <!-- TODO fix formatting -->
-        <mat-form-field appearance="standard" style="margin-right: 0.5em; width: 14em;" >
-          <mat-label>Please enter in the dates</mat-label>
-          <mat-date-range-input [rangePicker]="picker" [formGroup]="daterange">
-            <input matInput matStartDate placeholder="Start date"  formControlName="startdateform">
-            <input matEndDate placeholder="End date" formControlName="enddateform">
-          </mat-date-range-input>
-          <mat-hint>MM/DD/YYYY - MM/DD/YYYY</mat-hint>
-          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-date-range-picker #picker></mat-date-range-picker>
-        </mat-form-field>
-        <div>
-          <mat-form-field appearance="standard" style="margin-right: 0.5em;" class="time-input">
-            <mat-label>Start Time</mat-label>
-            <mat-select [(value)]="starttime" >
-              <mat-option value="0">00:00</mat-option>
-              <mat-option value="1">01:00</mat-option>
-              <mat-option value="2">02:00</mat-option>
-              <mat-option value="3">03:00</mat-option>
-              <mat-option value="4">04:00</mat-option>
-              <mat-option value="5">05:00</mat-option>
-              <mat-option value="6">06:00</mat-option>
-              <mat-option value="7">07:00</mat-option>
-              <mat-option value="8">08:00</mat-option>
-              <mat-option value="9">09:00</mat-option>
-              <mat-option value="10">10:00</mat-option>
-              <mat-option value="11">11:00</mat-option>
-              <mat-option value="12">12:00</mat-option>
-              <mat-option value="13">13:00</mat-option>
-              <mat-option value="14">14:00</mat-option>
-              <mat-option value="15">15:00</mat-option>
-              <mat-option value="16">16:00</mat-option>
-              <mat-option value="17">17:00</mat-option>
-              <mat-option value="18">18:00</mat-option>
-              <mat-option value="19">19:00</mat-option>
-              <mat-option value="20">20:00</mat-option>
-              <mat-option value="21">21:00</mat-option>
-              <mat-option value="22">22:00</mat-option>
-              <mat-option value="23">23:00</mat-option>
-              <mat-option value="24">23:59</mat-option>
-              <!-- gives one minute of next day -->
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field appearance="standard" class="time-input">
-            <mat-label>End Time</mat-label>
-            <mat-select [(value)]="endtime">
-              <mat-option value="0">00:00</mat-option>
-              <mat-option value="1">01:00</mat-option>
-              <mat-option value="2">02:00</mat-option>
-              <mat-option value="3">03:00</mat-option>
-              <mat-option value="4">04:00</mat-option>
-              <mat-option value="5">05:00</mat-option>
-              <mat-option value="6">06:00</mat-option>
-              <mat-option value="7">07:00</mat-option>
-              <mat-option value="8">08:00</mat-option>
-              <mat-option value="9">09:00</mat-option>
-              <mat-option value="10">10:00</mat-option>
-              <mat-option value="11">11:00</mat-option>
-              <mat-option value="12">12:00</mat-option>
-              <mat-option value="13">13:00</mat-option>
-              <mat-option value="14">14:00</mat-option>
-              <mat-option value="15">15:00</mat-option>
-              <mat-option value="16">16:00</mat-option>
-              <mat-option value="17">17:00</mat-option>
-              <mat-option value="18">18:00</mat-option>
-              <mat-option value="19">19:00</mat-option>
-              <mat-option value="20">20:00</mat-option>
-              <mat-option value="21">21:00</mat-option>
-              <mat-option value="22">22:00</mat-option>
-              <mat-option value="23">23:00</mat-option>
-              <mat-option value="24">23:59</mat-option>
-               <!-- gives one minute of next day -->
-            </mat-select>
-          </mat-form-field>
-        </div>
-       
-        <div id="date-action-wrapper">
-          <div>
-            <button mat-button (click)="apply()">Apply</button>
-          </div>
-          <div>
-            <button mat-button (click)="reset()">Reset</button> 
-          </div>
-        </div>
-      </div>
+<div id="map-options-wrap">
+    <div class="margin" id="type-option">
+    <mat-button-toggle-group #group="matButtonToggleGroup" class="shadow" id="type-toggle">
+      <mat-button-toggle value="sat" (change)="updateViewType($event.source.value)">
+        Satellite
+      </mat-button-toggle>
+      <mat-button-toggle checked="true" value="norm" (change)="updateViewType($event.source.value)">
+        Normal
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+  <div class="margin shadow border-option">
+    <mat-checkbox class="padding" color="primary" #gatway (change)="updateGateways(gatway.checked)" checked="true">
+      Gateways
+    </mat-checkbox>
+  </div>
+  <div class="margin shadow border-option">
+      <mat-checkbox class="padding" color="primary" #border (change)="updateBorder(border.checked)" checked="true">
+          Border
+      </mat-checkbox>
     </div>
- </mat-card-content>       
-</mat-card>
+</div>

@@ -692,7 +692,7 @@ describe('ApiReserveEndpointService', () => {
   });
   
   it('reserve list -> live test', async () => {
-    const login = await thingsboardClient.loginUserReturnToken('reserveadmin@reserve.com', 'reserve');
+    const login = await thingsboardClient.loginUserReturnToken('reserveadmin@reserve.com', 'reserveaccountissecure.');
     console.table((await service.processReserveList({token:login.Token})).data)
   });
   /////////////////////////////////////////////////////////////////////////////////////////////
